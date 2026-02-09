@@ -81,79 +81,20 @@
 
         // 初始數據（已匿名化）
         const initialTrials = [
-          {
-            id: 1,
-            cancerType: "肝癌",
-            line: "二、三線",
-            studyTitle: "一項第II期、多中心、開放性試驗，在患有晚期/轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305",
-            code: "DB1311-201",
-            phase: "I",
-            sponsor: "國際藥廠A",
-            targetNum: 6,
-            enrolled: 0,
-            monthSigned: 0,
-            monthEnrolled: 0,
-            pi: "王醫師",
-            nurse: "護理師A",
-            phone: "分機2935",
-            status: "進行中",
-            criteria: "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL"
-          },
-          {
-            id: 2,
-            cancerType: "胃癌",
-            line: "Adjuvant",
-            studyTitle: "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗",
-            code: "TTY-001",
-            phase: "4",
-            sponsor: "國內藥廠B",
-            targetNum: 150,
-            enrolled: 16,
-            monthSigned: 1,
-            monthEnrolled: 1,
-            pi: "李醫師",
-            nurse: "護理師B",
-            phone: "分機2999",
-            status: "進行中",
-            criteria: "胃癌術後使用健保S-1 病患"
-          },
-          {
-            id: 3,
-            cancerType: "胃癌",
-            line: "一線",
-            studyTitle: "一項隨機分配、第 III 期試驗，評估新型藥物併用化療作為 HER2 陽性胃癌第一線治療的效果",
-            code: "D702AC00001",
-            phase: "III",
-            sponsor: "國際藥廠C",
-            targetNum: 5,
-            enrolled: 0,
-            monthSigned: 0,
-            monthEnrolled: 0,
-            pi: "陳醫師",
-            nurse: "護理師C",
-            phone: "分機7328",
-            status: "進行中",
-            criteria: "1. HER2 (+)需送國外驗證 2. 體重 >= 35 KG 3. Measurable lesion by RECIST 1.1"
-          },
-          {
-            id: 4,
-            cancerType: "大腸癌",
-            line: "一線",
-            studyTitle: "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估標靶藥物併用化療用於轉移性大腸癌",
-            code: "MK-1082-012",
-            phase: "III",
-            sponsor: "國際藥廠D",
-            targetNum: 4,
-            enrolled: 2,
-            monthSigned: 2,
-            monthEnrolled: 2,
-            pi: "林醫師",
-            nurse: "護理師D",
-            phone: "分機1090",
-            status: "進行中",
-            criteria: "Stage III or IV, KRAS G12C mutation (+) CRC"
-          }
-        ];
+  {"id": 1, "cancerType": "肝癌", "line": "二、三線", "studyTitle": "一項第II期、多中心、開放性試驗，在患有晚期/轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305", "code": "DB1311-201", "phase": "I", "sponsor": "", "targetNum": 6, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "Abby", "phone": "82935/82999", "status": "進行中", "criteria": "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL"},
+  {"id": 2, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗", "code": "TTY", "phase": "4", "sponsor": "TTY", "targetNum": 150, "enrolled": 16, "monthSigned": 1, "monthEnrolled": 1, "pi": "洪逸平", "nurse": "宋秀薇", "phone": "2935/2999", "status": "進行中", "criteria": "胃癌術後使用健保S-1 病患"},
+  {"id": 3, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "一項在 HER2 表現胃癌患者評估治療性癌症疫苗 (AST-301, pNGVL3-hICD) 安全性及免疫療效的第二期試驗 (CORNERSTONE-003)", "code": "PN-301-22", "phase": "2", "sponsor": "諾佛葛", "targetNum": 6, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "賴姵妤", "phone": "0919801912", "status": "進行中", "criteria": "1.胃癌術後D2、R0、STAGE 2、3 ，並使用過預防性化療後完全沒有腫瘤復發的病人。2.必須用完最後一次預防性化療後，間隔兩周並在八周內接受第一次AST-301治療。3.HbsAg (+)可收，但需 HBV DNA is undetectable。"},
+  {"id": 4, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項隨機分配、第 III 期試驗，評估 Rilvegostomig 併用Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果", "code": "D702AC00001", "phase": "III", "sponsor": "AZ", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "進行中", "criteria": "1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告) 2. 體重 >= 35 KG 3. Measurable lesion by RECIST 1.1"},
+  {"id": 5, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估 ABBV-400 合併 Fluorouracil、Leucovorin 和 Budigalimab 作為第一線治療", "code": "M24-977", "phase": "II", "sponsor": "ABBVIE", "targetNum": 10, "enrolled": 10, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "暫停收案", "criteria": "1.HER2(-) 2.C肝不收 3.Slide*15 (4-5u)"},
+  {"id": 6, "cancerType": "胃癌", "line": "二線", "studyTitle": "HERTHENA-PanTumor01：一項第 2 期、多中心、多群組、開放標記、概念驗證試驗，探討 Patritumab Deruxtecan 運用於局部晚期或轉移性固體腫瘤的受試者", "code": "U31402-277", "phase": "II", "sponsor": "第一三共", "targetNum": 10, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "邱琳琳", "phone": "0976107317", "status": "進行中", "criteria": "1.HER 2 (-) 2.需要PD後的切片(8片) 3.第一線的化療要以 5-FU-based"},
+  {"id": 7, "cancerType": "胃癌", "line": "三線", "studyTitle": "一項第二期、開放性、多中心試驗，評估 AZD0901 作為單一療法和併用抗癌藥物使用於表現 Claudin 18.2 之晚期實體腫瘤受試者", "code": "D9802C00001", "phase": "III", "sponsor": "AZ", "targetNum": 17, "enrolled": 12, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "吳佳勳", "phone": "0918696523", "status": "進行中", "criteria": "收案即將進入尾聲 (3/31)，動起來再加碼收 5人~"},
+  {"id": 8, "cancerType": "食道癌", "line": "一線", "studyTitle": "一項針對罹患局部晚期不可切除／轉移性食道癌 ( ESCC) 的第一線治療受試者，使用研究性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療", "code": "MK-3475-06E", "phase": "I/II", "sponsor": "MSD", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方", "phone": "0981764403", "status": "進行中", "criteria": "經過組織學或細胞學確診為第 1 線治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌"},
+  {"id": 9, "cancerType": "食道癌", "line": "二線", "studyTitle": "一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性食道鱗狀細胞癌 (ESCC) 受試者之第三期試驗", "code": "DS7300-202", "phase": "III", "sponsor": "DAIICHI SANKYO", "targetNum": 4, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方", "phone": "0981764403", "status": "進行中", "criteria": "Has disease progression post platinum-based and ICI treatment"},
+  {"id": 10, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項第 2b/3 期、隨機分配、雙盲試驗,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者", "code": "C3651021", "phase": "2b/3", "sponsor": "輝瑞", "targetNum": 15, "enrolled": 1, "monthSigned": 1, "monthEnrolled": 0, "pi": "李重賓", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "criteria": "資料顯示有轉移性胰管腺癌，尚未接受過治療"},
+  {"id": 11, "cancerType": "膽道癌", "line": "一線", "studyTitle": "一項第 III 期、隨機分配、開放性、全球多中心試驗，評估Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療", "code": "D702NC00001", "phase": "III", "sponsor": "AZ", "targetNum": 15, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "林韋秀", "phone": "0963501682", "status": "進行中", "criteria": "經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌"},
+  {"id": 12, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估 MK-1084、Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用Bevacizumab", "code": "MK-1082-012", "phase": "III", "sponsor": "MSD", "targetNum": 4, "enrolled": 2, "monthSigned": 2, "monthEnrolled": 2, "pi": "鄧豪偉", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "criteria": "Stage III or IV, KRAS G12C mutation (+) CRC"},
+  {"id": 13, "cancerType": "大腸癌", "line": "二線", "studyTitle": "一項第2 期、隨機分配試驗，對於曾接受治療之無法切除轉移性結腸直腸癌受試者，評估ABBV-400 合併Fluorouracil、Folinic Acid 和Bevacizumab", "code": "M24-311", "phase": "II", "sponsor": "Abbvie", "targetNum": 5, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲", "phone": "0988660381", "status": "進行中", "criteria": "BRAF V600E no mutation and microsatellite stable, MSS"}
+];
 
         // 訪問密碼驗證組件
         function AccessPasswordScreen({ onAccessGranted }) {
