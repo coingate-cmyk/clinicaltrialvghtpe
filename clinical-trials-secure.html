@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臨床試驗管理系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.5s; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <div id="app"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // 安全配置
+        const SECURITY_CONFIG = {
+            ACCESS_PASSWORD: 'clinical2026',  // 訪問密碼（可以改成任何你想要的）
+            ADMIN_USERNAME: 'admin',          // 管理員帳號
+            ADMIN_PASSWORD: 'admin123',       // 管理員密碼
+            ENCRYPTION_KEY: 'clinical-trials-secret-key-2026' // 加密金鑰
+        };
+
+        // 加密函數
+        const encryptData = (data) => {
+            try {
+                return CryptoJS.AES.encrypt(JSON.stringify(data), SECURITY_CONFIG.ENCRYPTION_KEY).toString();
+            } catch (error) {
+                console.error('加密失敗:', error);
+                return null;
+            }
+        };
+
+        // 解密函數
+        const decryptData = (encryptedData) => {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedData, SECURITY_CONFIG.ENCRYPTION_KEY);
+                const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+                return JSON.parse(decryptedString);
+            } catch (error) {
+                console.error('解密失敗:', error);
+                return null;
+            }
+        };
+
+        // SVG Icons
+        const SearchIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>;
+        const FilterIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>;
+        const LoginIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>;
+        const LogoutIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
+        const EditIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>;
+        const PlusIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
+        const TrashIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
+        const SaveIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>;
+        const XIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+        const CheckCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const XCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const AlertCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const DownloadIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>;
+        const FileTextIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
+        const LockIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
+        const ShieldIcon = () => <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>;
+
+        // 初始數據（已匿名化）
+        const initialTrials = [
+          {
+            id: 1,
+            cancerType: "肝癌",
+            line: "二、三線",
+            studyTitle: "一項第II期、多中心、開放性試驗，在患有晚期/轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305",
+            code: "DB1311-201",
+            phase: "I",
+            sponsor: "國際藥廠A",
+            targetNum: 6,
+            enrolled: 0,
+            monthSigned: 0,
+            monthEnrolled: 0,
+            pi: "王醫師",
+            nurse: "護理師A",
+            phone: "分機2935",
+            status: "進行中",
+            criteria: "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL"
+          },
+          {
+            id: 2,
+            cancerType: "胃癌",
+            line: "Adjuvant",
+            studyTitle: "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗",
+            code: "TTY-001",
+            phase: "4",
+            sponsor: "國內藥廠B",
+            targetNum: 150,
+            enrolled: 16,
+            monthSigned: 1,
+            monthEnrolled: 1,
+            pi: "李醫師",
+            nurse: "護理師B",
+            phone: "分機2999",
+            status: "進行中",
+            criteria: "胃癌術後使用健保S-1 病患"
+          },
+          {
+            id: 3,
+            cancerType: "胃癌",
+            line: "一線",
+            studyTitle: "一項隨機分配、第 III 期試驗，評估新型藥物併用化療作為 HER2 陽性胃癌第一線治療的效果",
+            code: "D702AC00001",
+            phase: "III",
+            sponsor: "國際藥廠C",
+            targetNum: 5,
+            enrolled: 0,
+            monthSigned: 0,
+            monthEnrolled: 0,
+            pi: "陳醫師",
+            nurse: "護理師C",
+            phone: "分機7328",
+            status: "進行中",
+            criteria: "1. HER2 (+)需送國外驗證 2. 體重 >= 35 KG 3. Measurable lesion by RECIST 1.1"
+          },
+          {
+            id: 4,
+            cancerType: "大腸癌",
+            line: "一線",
+            studyTitle: "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估標靶藥物併用化療用於轉移性大腸癌",
+            code: "MK-1082-012",
+            phase: "III",
+            sponsor: "國際藥廠D",
+            targetNum: 4,
+            enrolled: 2,
+            monthSigned: 2,
+            monthEnrolled: 2,
+            pi: "林醫師",
+            nurse: "護理師D",
+            phone: "分機1090",
+            status: "進行中",
+            criteria: "Stage III or IV, KRAS G12C mutation (+) CRC"
+          }
+        ];
+
+        // 訪問密碼驗證組件
+        function AccessPasswordScreen({ onAccessGranted }) {
+          const [password, setPassword] = useState('');
+          const [error, setError] = useState(false);
+
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            if (password === SECURITY_CONFIG.ACCESS_PASSWORD) {
+              sessionStorage.setItem('access_granted', 'true');
+              onAccessGranted();
+            } else {
+              setError(true);
+              setPassword('');
+              setTimeout(() => setError(false), 500);
+            }
+          };
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
+              <div className={`bg-white rounded-3xl shadow-2xl p-12 max-w-md w-full ${error ? 'shake' : ''}`}>
+                <div className="text-center mb-8">
+                  <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mb-6">
+                    <ShieldIcon />
+                  </div>
+                  <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                    臨床試驗管理系統
+                  </h1>
+                  <p className="text-slate-600">此系統受密碼保護</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      <div className="flex items-center gap-2">
+                        <LockIcon />
+                        訪問密碼
+                      </div>
+                    </label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={`w-full px-4 py-3 border-2 ${error ? 'border-red-500' : 'border-slate-300'} rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg`}
+                      placeholder="請輸入訪問密碼"
+                      autoFocus
+                    />
+                    {error && (
+                      <p className="text-red-500 text-sm mt-2">❌ 密碼錯誤，請重試</p>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
+                  >
+                    進入系統
+                  </button>
+                </form>
+
+                <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <p className="text-xs text-slate-600 text-center">
+                    🔒 此系統使用 AES-256 加密保護數據<br/>
+                    如忘記密碼請聯繫系統管理員
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function ClinicalTrialsManager() {
+          const [hasAccess, setHasAccess] = useState(false);
+          const [trials, setTrials] = useState([]);
+          const [filteredTrials, setFilteredTrials] = useState([]);
+          const [searchTerm, setSearchTerm] = useState('');
+          const [selectedCancer, setSelectedCancer] = useState('全部');
+          const [selectedLine, setSelectedLine] = useState('全部');
+          const [selectedStatus, setSelectedStatus] = useState('全部');
+          const [isLoggedIn, setIsLoggedIn] = useState(false);
+          const [showLoginModal, setShowLoginModal] = useState(false);
+          const [username, setUsername] = useState('');
+          const [password, setPassword] = useState('');
+          const [editingTrial, setEditingTrial] = useState(null);
+          const [showAddModal, setShowAddModal] = useState(false);
+          const [loading, setLoading] = useState(true);
+
+          useEffect(() => {
+            // 檢查是否已通過訪問密碼驗證
+            const accessGranted = sessionStorage.getItem('access_granted');
+            if (accessGranted === 'true') {
+              setHasAccess(true);
+              loadTrialsFromStorage();
+            } else {
+              setLoading(false);
+            }
+          }, []);
+
+          const loadTrialsFromStorage = async () => {
+            try {
+              const result = await window.storage.get('clinical-trials-encrypted');
+              if (result && result.value) {
+                const decryptedTrials = decryptData(result.value);
+                if (decryptedTrials) {
+                  setTrials(decryptedTrials);
+                  setFilteredTrials(decryptedTrials);
+                } else {
+                  // 解密失敗，使用初始數據
+                  await saveTrialsToStorage(initialTrials);
+                  setTrials(initialTrials);
+                  setFilteredTrials(initialTrials);
+                }
+              } else {
+                await saveTrialsToStorage(initialTrials);
+                setTrials(initialTrials);
+                setFilteredTrials(initialTrials);
+              }
+            } catch (error) {
+              await saveTrialsToStorage(initialTrials);
+              setTrials(initialTrials);
+              setFilteredTrials(initialTrials);
+            } finally {
+              setLoading(false);
+            }
+          };
+
+          const saveTrialsToStorage = async (trialsData) => {
+            try {
+              const encrypted = encryptData(trialsData);
+              if (encrypted) {
+                await window.storage.set('clinical-trials-encrypted', encrypted);
+              }
+            } catch (error) {
+              console.error('保存失敗:', error);
+            }
+          };
+
+          useEffect(() => {
+            let filtered = trials;
+
+            if (selectedCancer !== '全部') {
+              filtered = filtered.filter(t => t.cancerType === selectedCancer);
+            }
+
+            if (selectedLine !== '全部') {
+              filtered = filtered.filter(t => t.line.includes(selectedLine));
+            }
+
+            if (selectedStatus !== '全部') {
+              filtered = filtered.filter(t => t.status === selectedStatus);
+            }
+
+            if (searchTerm) {
+              filtered = filtered.filter(t =>
+                t.studyTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.sponsor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.pi.toLowerCase().includes(searchTerm.toLowerCase())
+              );
+            }
+
+            setFilteredTrials(filtered);
+          }, [trials, selectedCancer, selectedLine, selectedStatus, searchTerm]);
+
+          const handleLogin = () => {
+            if (username === SECURITY_CONFIG.ADMIN_USERNAME && password === SECURITY_CONFIG.ADMIN_PASSWORD) {
+              setIsLoggedIn(true);
+              setShowLoginModal(false);
+              setUsername('');
+              setPassword('');
+            } else {
+              alert('帳號或密碼錯誤');
+            }
+          };
+
+          const handleLogout = () => {
+            setIsLoggedIn(false);
+          };
+
+          const handleEdit = (trial) => {
+            setEditingTrial({ ...trial });
+          };
+
+          const handleSaveEdit = async () => {
+            const updatedTrials = trials.map(t =>
+              t.id === editingTrial.id ? editingTrial : t
+            );
+            setTrials(updatedTrials);
+            await saveTrialsToStorage(updatedTrials);
+            setEditingTrial(null);
+          };
+
+          const handleDelete = async (id) => {
+            if (window.confirm('確定要刪除此試驗嗎？')) {
+              const updatedTrials = trials.filter(t => t.id !== id);
+              setTrials(updatedTrials);
+              await saveTrialsToStorage(updatedTrials);
+            }
+          };
+
+          const handleAdd = async (newTrial) => {
+            const trialWithId = {
+              ...newTrial,
+              id: Math.max(...trials.map(t => t.id), 0) + 1
+            };
+            const updatedTrials = [...trials, trialWithId];
+            setTrials(updatedTrials);
+            await saveTrialsToStorage(updatedTrials);
+            setShowAddModal(false);
+          };
+
+          const downloadCSV = () => {
+            const headers = ['癌症類型', '治療線別', '試驗名稱', '代號', '期別', '贊助商', '目標人數', '已收案', '當月簽署', '當月入案', '主持人', '研究護士', '電話', '狀態', '收案條件'];
+            
+            const csvContent = [
+              headers.join(','),
+              ...filteredTrials.map(trial => [
+                trial.cancerType,
+                trial.line,
+                `"${trial.studyTitle.replace(/"/g, '""')}"`,
+                trial.code,
+                trial.phase,
+                trial.sponsor,
+                trial.targetNum,
+                trial.enrolled,
+                trial.monthSigned,
+                trial.monthEnrolled,
+                trial.pi,
+                trial.nurse,
+                trial.phone,
+                trial.status,
+                `"${trial.criteria.replace(/"/g, '""')}"`
+              ].join(','))
+            ].join('\n');
+
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+          };
+
+          const generatePDF = () => {
+            const printWindow = window.open('', '_blank');
+            const htmlContent = `
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <meta charset="UTF-8">
+                  <title>臨床試驗列表</title>
+                  <style>
+                    @page { size: A4 landscape; margin: 1cm; }
+                    body { font-family: "Microsoft JhengHei", Arial, sans-serif; font-size: 9pt; }
+                    h1 { text-align: center; color: #1e40af; margin-bottom: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th { background-color: #1e40af; color: white; padding: 8px; text-align: left; font-weight: bold; border: 1px solid #ddd; }
+                    td { padding: 6px; border: 1px solid #ddd; font-size: 8pt; }
+                    tr:nth-child(even) { background-color: #f9fafb; }
+                    .status-active { color: #059669; font-weight: bold; }
+                    .status-paused { color: #d97706; font-weight: bold; }
+                    .status-full { color: #dc2626; font-weight: bold; }
+                    .header-info { text-align: center; margin-bottom: 15px; color: #64748b; }
+                  </style>
+                </head>
+                <body>
+                  <h1>臨床試驗管理列表</h1>
+                  <div class="header-info">匯出日期: ${new Date().toLocaleDateString('zh-TW')} | 共 ${filteredTrials.length} 項試驗</div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>癌症類型</th>
+                        <th>線別</th>
+                        <th>試驗名稱</th>
+                        <th>代號</th>
+                        <th>期別</th>
+                        <th>贊助商</th>
+                        <th>目標人數</th>
+                        <th>已收案</th>
+                        <th>主持人</th>
+                        <th>護士</th>
+                        <th>狀態</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${filteredTrials.map(trial => `
+                        <tr>
+                          <td>${trial.cancerType}</td>
+                          <td>${trial.line}</td>
+                          <td style="max-width: 250px;">${trial.studyTitle}</td>
+                          <td>${trial.code}</td>
+                          <td>${trial.phase}</td>
+                          <td>${trial.sponsor}</td>
+                          <td>${trial.enrolled}/${trial.targetNum}</td>
+                          <td>${trial.targetNum > 0 ? ((trial.enrolled/trial.targetNum)*100).toFixed(0) : 0}%</td>
+                          <td>${trial.pi}</td>
+                          <td>${trial.nurse}</td>
+                          <td class="status-${trial.status === '進行中' ? 'active' : trial.status === '暫停收案' ? 'paused' : 'full'}">${trial.status}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </body>
+              </html>
+            `;
+            
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.onload = () => {
+              printWindow.print();
+            };
+          };
+
+          if (!hasAccess) {
+            return <AccessPasswordScreen onAccessGranted={() => setHasAccess(true)} />;
+          }
+
+          const cancerTypes = ['全部', '肝癌', '胃癌', '食道癌', '胰臟癌', '膽道癌', '大腸癌'];
+          const lineTypes = ['全部', '一線', '二線', '三線', 'Adjuvant'];
+          const statusTypes = ['全部', '進行中', '暫停收案', '名額已滿'];
+
+          const getStatusColor = (status) => {
+            switch (status) {
+              case '進行中': return 'text-emerald-600 bg-emerald-50';
+              case '暫停收案': return 'text-amber-600 bg-amber-50';
+              case '名額已滿': return 'text-rose-600 bg-rose-50';
+              default: return 'text-gray-600 bg-gray-50';
+            }
+          };
+
+          const getStatusIcon = (status) => {
+            switch (status) {
+              case '進行中': return <CheckCircleIcon />;
+              case '暫停收案': return <AlertCircleIcon />;
+              case '名額已滿': return <XCircleIcon />;
+              default: return null;
+            }
+          };
+
+          if (loading) {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+                  <div className="text-2xl font-semibold text-slate-600">載入中...</div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+              <header className="bg-white shadow-md border-b-4 border-blue-500">
+                <div className="max-w-7xl mx-auto px-6 py-6">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                          臨床試驗管理系統
+                        </h1>
+                        <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full flex items-center gap-1">
+                          <LockIcon className="w-3 h-3" />
+                          已加密
+                        </span>
+                      </div>
+                      <p className="text-slate-600 mt-2">Clinical Trials Management System - Secure Edition</p>
+                    </div>
+                    <div className="flex gap-3">
+                      {isLoggedIn && (
+                        <button
+                          onClick={() => setShowAddModal(true)}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                          title="新增臨床試驗"
+                        >
+                          <PlusIcon />
+                          新增試驗
+                        </button>
+                      )}
+                      {isLoggedIn ? (
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        >
+                          <LogoutIcon />
+                          登出
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setShowLoginModal(true)}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        >
+                          <LoginIcon />
+                          管理員登入
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-slate-200">
+                  <div className="flex items-center gap-3 mb-6">
+                    <FilterIcon />
+                    <h2 className="text-2xl font-bold text-slate-800">篩選條件</h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="md:col-span-4">
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                          <SearchIcon />
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="搜尋試驗名稱、代號、贊助商、主持人..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">癌症種類</label>
+                      <select
+                        value={selectedCancer}
+                        onChange={(e) => setSelectedCancer(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {cancerTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">治療線別</label>
+                      <select
+                        value={selectedLine}
+                        onChange={(e) => setSelectedLine(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {lineTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">收案狀態</label>
+                      <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {statusTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-6 flex items-center justify-between">
+                  <p className="text-slate-600 text-lg">
+                    共找到 <span className="font-bold text-blue-600 text-2xl">{filteredTrials.length}</span> 項試驗
+                  </p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={downloadCSV}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                      title="下載為Excel格式"
+                    >
+                      <DownloadIcon />
+                      下載 Excel
+                    </button>
+                    <button
+                      onClick={generatePDF}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl hover:from-red-600 hover:to-rose-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                      title="匯出為PDF"
+                    >
+                      <FileTextIcon />
+                      匯出 PDF
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {filteredTrials.map(trial => (
+                    <TrialCard
+                      key={trial.id}
+                      trial={trial}
+                      isLoggedIn={isLoggedIn}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      getStatusColor={getStatusColor}
+                      getStatusIcon={getStatusIcon}
+                      editingTrial={editingTrial}
+                      setEditingTrial={setEditingTrial}
+                      handleSaveEdit={handleSaveEdit}
+                    />
+                  ))}
+                </div>
+
+                {filteredTrials.length === 0 && (
+                  <div className="text-center py-20">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <p className="text-2xl text-slate-400 font-semibold">未找到符合條件的試驗</p>
+                  </div>
+                )}
+              </div>
+
+              {showLoginModal && (
+                <LoginModal
+                  username={username}
+                  password={password}
+                  setUsername={setUsername}
+                  setPassword={setPassword}
+                  onLogin={handleLogin}
+                  onClose={() => setShowLoginModal(false)}
+                />
+              )}
+
+              {showAddModal && (
+                <AddTrialModal
+                  onAdd={handleAdd}
+                  onClose={() => setShowAddModal(false)}
+                />
+              )}
+            </div>
+          );
+        }
+
+        function TrialCard({ trial, isLoggedIn, onEdit, onDelete, getStatusColor, getStatusIcon, editingTrial, setEditingTrial, handleSaveEdit }) {
+          const [expanded, setExpanded] = useState(false);
+          const enrollmentPercentage = trial.targetNum > 0 ? (trial.enrolled / trial.targetNum * 100) : 0;
+
+          if (editingTrial && editingTrial.id === trial.id) {
+            return (
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+                <EditTrialForm
+                  trial={editingTrial}
+                  setTrial={setEditingTrial}
+                  onSave={handleSaveEdit}
+                  onCancel={() => setEditingTrial(null)}
+                />
+              </div>
+            );
+          }
+
+          return (
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-slate-200 transform hover:-translate-y-1 fade-in">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-bold rounded-full shadow-md">
+                        {trial.cancerType}
+                      </span>
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-full shadow-md">
+                        {trial.line}
+                      </span>
+                      <span className={`px-4 py-1.5 text-sm font-bold rounded-full flex items-center gap-1.5 shadow-md ${getStatusColor(trial.status)}`}>
+                        {getStatusIcon(trial.status)}
+                        {trial.status}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2 leading-relaxed">
+                      {trial.studyTitle}
+                    </h3>
+                    <div className="flex items-center gap-6 text-sm text-slate-600">
+                      <span className="font-semibold">代號: <span className="text-blue-600">{trial.code}</span></span>
+                      <span className="font-semibold">期別: <span className="text-purple-600">Phase {trial.phase}</span></span>
+                      <span className="font-semibold">贊助商: {trial.sponsor}</span>
+                    </div>
+                  </div>
+                  {isLoggedIn && (
+                    <div className="flex gap-2 ml-4">
+                      <button
+                        onClick={() => onEdit(trial)}
+                        className="p-2.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="編輯"
+                      >
+                        <EditIcon />
+                      </button>
+                      <button
+                        onClick={() => onDelete(trial.id)}
+                        className="p-2.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                        title="刪除"
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="font-semibold text-slate-700">收案進度</span>
+                    <span className="font-bold text-blue-600">{trial.enrolled} / {trial.targetNum}</span>
+                  </div>
+                  <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 rounded-full"
+                      style={{ width: `${Math.min(enrollmentPercentage, 100)}%` }}
+                    />
+                  </div>
+                  <div className="text-right text-xs text-slate-600 mt-1 font-medium">
+                    {enrollmentPercentage.toFixed(1)}%
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                  <InfoBox label="主持人" value={trial.pi} />
+                  <InfoBox label="研究護士" value={trial.nurse} />
+                  <InfoBox label="當月簽署" value={trial.monthSigned} />
+                  <InfoBox label="當月入案" value={trial.monthEnrolled} />
+                </div>
+
+                {expanded && (
+                  <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 className="font-bold text-slate-800 mb-2">收案條件</h4>
+                    <p className="text-slate-700 leading-relaxed">{trial.criteria}</p>
+                    {trial.phone && (
+                      <p className="text-sm text-slate-600 mt-3">
+                        <span className="font-semibold">聯絡電話:</span> {trial.phone}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="mt-4 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+                >
+                  {expanded ? '收起詳情 ▲' : '展開詳情 ▼'}
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        function InfoBox({ label, value }) {
+          return (
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-3 rounded-lg border border-slate-200">
+              <div className="text-xs text-slate-600 font-semibold mb-1">{label}</div>
+              <div className="text-lg font-bold text-slate-800">{value}</div>
+            </div>
+          );
+        }
+
+        function EditTrialForm({ trial, setTrial, onSave, onCancel }) {
+          return (
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <EditIcon />
+                編輯試驗
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <FormField label="試驗名稱" value={trial.studyTitle} onChange={(v) => setTrial({ ...trial, studyTitle: v })} />
+                <FormField label="代號" value={trial.code} onChange={(v) => setTrial({ ...trial, code: v })} />
+                <FormField label="癌症類型" value={trial.cancerType} onChange={(v) => setTrial({ ...trial, cancerType: v })} />
+                <FormField label="治療線別" value={trial.line} onChange={(v) => setTrial({ ...trial, line: v })} />
+                <FormField label="期別" value={trial.phase} onChange={(v) => setTrial({ ...trial, phase: v })} />
+                <FormField label="贊助商" value={trial.sponsor} onChange={(v) => setTrial({ ...trial, sponsor: v })} />
+                <FormField label="目標人數" type="number" value={trial.targetNum} onChange={(v) => setTrial({ ...trial, targetNum: parseInt(v) || 0 })} />
+                <FormField label="已收案" type="number" value={trial.enrolled} onChange={(v) => setTrial({ ...trial, enrolled: parseInt(v) || 0 })} />
+                <FormField label="當月簽署" type="number" value={trial.monthSigned} onChange={(v) => setTrial({ ...trial, monthSigned: parseInt(v) || 0 })} />
+                <FormField label="當月入案" type="number" value={trial.monthEnrolled} onChange={(v) => setTrial({ ...trial, monthEnrolled: parseInt(v) || 0 })} />
+                <FormField label="主持人" value={trial.pi} onChange={(v) => setTrial({ ...trial, pi: v })} />
+                <FormField label="研究護士" value={trial.nurse} onChange={(v) => setTrial({ ...trial, nurse: v })} />
+                <FormField label="電話" value={trial.phone} onChange={(v) => setTrial({ ...trial, phone: v })} />
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">狀態</label>
+                  <select
+                    value={trial.status}
+                    onChange={(e) => setTrial({ ...trial, status: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="進行中">進行中</option>
+                    <option value="暫停收案">暫停收案</option>
+                    <option value="名額已滿">名額已滿</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">收案條件</label>
+                <textarea
+                  value={trial.criteria}
+                  onChange={(e) => setTrial({ ...trial, criteria: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                  rows={4}
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={onSave}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold"
+                >
+                  <SaveIcon />
+                  儲存
+                </button>
+                <button
+                  onClick={onCancel}
+                  className="flex items-center gap-2 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                >
+                  <XIcon />
+                  取消
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        function FormField({ label, value, onChange, type = "text" }) {
+          return (
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">{label}</label>
+              <input
+                type={type}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          );
+        }
+
+        function LoginModal({ username, password, setUsername, setPassword, onLogin, onClose }) {
+          return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+              <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                <h2 className="text-3xl font-bold text-slate-800 mb-6">管理員登入</h2>
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">帳號</label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                      placeholder="請輸入帳號"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">密碼</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && onLogin()}
+                      className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                      placeholder="請輸入密碼"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={onLogin}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg font-semibold"
+                  >
+                    登入
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                  >
+                    取消
+                  </button>
+                </div>
+                <p className="text-sm text-slate-500 mt-4 text-center">
+                  預設帳號: admin / 密碼: admin123
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        function AddTrialModal({ onAdd, onClose }) {
+          const [newTrial, setNewTrial] = useState({
+            cancerType: '胃癌',
+            line: '一線',
+            studyTitle: '',
+            code: '',
+            phase: 'III',
+            sponsor: '',
+            targetNum: 0,
+            enrolled: 0,
+            monthSigned: 0,
+            monthEnrolled: 0,
+            pi: '',
+            nurse: '',
+            phone: '',
+            status: '進行中',
+            criteria: ''
+          });
+
+          const handleSubmit = () => {
+            if (!newTrial.studyTitle || !newTrial.code) {
+              alert('請填寫試驗名稱和代號');
+              return;
+            }
+            onAdd(newTrial);
+          };
+
+          return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm overflow-y-auto">
+              <div className="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 my-8 shadow-2xl">
+                <h2 className="text-3xl font-bold text-slate-800 mb-6">新增試驗</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-h-96 overflow-y-auto">
+                  <FormField label="試驗名稱 *" value={newTrial.studyTitle} onChange={(v) => setNewTrial({ ...newTrial, studyTitle: v })} />
+                  <FormField label="代號 *" value={newTrial.code} onChange={(v) => setNewTrial({ ...newTrial, code: v })} />
+                  <FormField label="癌症類型" value={newTrial.cancerType} onChange={(v) => setNewTrial({ ...newTrial, cancerType: v })} />
+                  <FormField label="治療線別" value={newTrial.line} onChange={(v) => setNewTrial({ ...newTrial, line: v })} />
+                  <FormField label="期別" value={newTrial.phase} onChange={(v) => setNewTrial({ ...newTrial, phase: v })} />
+                  <FormField label="贊助商" value={newTrial.sponsor} onChange={(v) => setNewTrial({ ...newTrial, sponsor: v })} />
+                  <FormField label="目標人數" type="number" value={newTrial.targetNum} onChange={(v) => setNewTrial({ ...newTrial, targetNum: parseInt(v) || 0 })} />
+                  <FormField label="已收案" type="number" value={newTrial.enrolled} onChange={(v) => setNewTrial({ ...newTrial, enrolled: parseInt(v) || 0 })} />
+                  <FormField label="主持人" value={newTrial.pi} onChange={(v) => setNewTrial({ ...newTrial, pi: v })} />
+                  <FormField label="研究護士" value={newTrial.nurse} onChange={(v) => setNewTrial({ ...newTrial, nurse: v })} />
+                  <FormField label="電話" value={newTrial.phone} onChange={(v) => setNewTrial({ ...newTrial, phone: v })} />
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">狀態</label>
+                    <select
+                      value={newTrial.status}
+                      onChange={(e) => setNewTrial({ ...newTrial, status: e.target.value })}
+                      className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    >
+                      <option value="進行中">進行中</option>
+                      <option value="暫停收案">暫停收案</option>
+                      <option value="名額已滿">名額已滿</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">收案條件</label>
+                  <textarea
+                    value={newTrial.criteria}
+                    onChange={(e) => setNewTrial({ ...newTrial, criteria: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    rows={4}
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSubmit}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold"
+                  >
+                    <PlusIcon />
+                    新增
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                  >
+                    取消
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        ReactDOM.render(<ClinicalTrialsManager />, document.getElementById('app'));
+    </script>
+</body>
+</html>
