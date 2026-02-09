@@ -252,27 +252,30 @@
             }
           }, []);
 
-          const loadTrialsFromStorage = async () => {
+          const loadTrialsFromStorage = () => {
             try {
-              const result = await window.storage.get('clinical-trials-encrypted');
-              if (result && result.value) {
-                const decryptedTrials = decryptData(result.value);
-                if (decryptedTrials) {
+              const storedData = localStorage.getItem('clinical-trials-encrypted');
+              if (storedData) {
+                const decryptedTrials = decryptData(storedData);
+                if (decryptedTrials && Array.isArray(decryptedTrials)) {
                   setTrials(decryptedTrials);
                   setFilteredTrials(decryptedTrials);
                 } else {
                   // 解密失敗，使用初始數據
-                  await saveTrialsToStorage(initialTrials);
+                  saveTrialsToStorage(initialTrials);
                   setTrials(initialTrials);
                   setFilteredTrials(initialTrials);
                 }
               } else {
-                await saveTrialsToStorage(initialTrials);
+                // 第一次使用，保存初始數據
+                saveTrialsToStorage(initialTrials);
                 setTrials(initialTrials);
                 setFilteredTrials(initialTrials);
               }
             } catch (error) {
-              await saveTrialsToStorage(initialTrials);
+              console.error('載入失敗:', error);
+              // 出錯時使用初始數據
+              saveTrialsToStorage(initialTrials);
               setTrials(initialTrials);
               setFilteredTrials(initialTrials);
             } finally {
@@ -280,11 +283,11 @@
             }
           };
 
-          const saveTrialsToStorage = async (trialsData) => {
+          const saveTrialsToStorage = (trialsData) => {
             try {
               const encrypted = encryptData(trialsData);
               if (encrypted) {
-                await window.storage.set('clinical-trials-encrypted', encrypted);
+                localStorage.setItem('clinical-trials-encrypted', encrypted);
               }
             } catch (error) {
               console.error('保存失敗:', error);
@@ -337,31 +340,31 @@
             setEditingTrial({ ...trial });
           };
 
-          const handleSaveEdit = async () => {
+          const handleSaveEdit = () => {
             const updatedTrials = trials.map(t =>
               t.id === editingTrial.id ? editingTrial : t
             );
             setTrials(updatedTrials);
-            await saveTrialsToStorage(updatedTrials);
+            saveTrialsToStorage(updatedTrials);
             setEditingTrial(null);
           };
 
-          const handleDelete = async (id) => {
+          const handleDelete = (id) => {
             if (window.confirm('確定要刪除此試驗嗎？')) {
               const updatedTrials = trials.filter(t => t.id !== id);
               setTrials(updatedTrials);
-              await saveTrialsToStorage(updatedTrials);
+              saveTrialsToStorage(updatedTrials);
             }
           };
 
-          const handleAdd = async (newTrial) => {
+          const handleAdd = (newTrial) => {
             const trialWithId = {
               ...newTrial,
               id: Math.max(...trials.map(t => t.id), 0) + 1
             };
             const updatedTrials = [...trials, trialWithId];
             setTrials(updatedTrials);
-            await saveTrialsToStorage(updatedTrials);
+            saveTrialsToStorage(updatedTrials);
             setShowAddModal(false);
           };
 
