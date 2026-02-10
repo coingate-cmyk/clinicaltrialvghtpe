@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>臨床試驗管理系統 v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
@@ -1048,15 +1051,17 @@
                     setTrials(decryptedTrials);
                     setFilteredTrials(decryptedTrials);
                   } else {
-                    // 解密失敗或數據無效，使用初始數據
-                    console.log('解密數據無效，使用初始數據');
+                    // 解密失敗或數據無效，清除並使用初始數據
+                    console.log('解密數據無效，清除並使用初始數據');
+                    localStorage.removeItem('clinical-trials-encrypted');
                     setTrials(initialTrials);
                     setFilteredTrials(initialTrials);
                     saveTrialsToStorage(initialTrials);
                   }
                 } catch (decryptError) {
                   console.error('解密錯誤:', decryptError);
-                  // 解密失敗，使用初始數據
+                  // 解密失敗，清除損壞數據並使用初始數據
+                  localStorage.removeItem('clinical-trials-encrypted');
                   setTrials(initialTrials);
                   setFilteredTrials(initialTrials);
                   saveTrialsToStorage(initialTrials);
@@ -1071,6 +1076,7 @@
             } catch (error) {
               console.error('載入失敗:', error);
               // 任何錯誤都使用初始數據作為 fallback
+              console.log('發生錯誤，使用初始數據 fallback');
               setTrials(initialTrials);
               setFilteredTrials(initialTrials);
             } finally {
@@ -1388,15 +1394,52 @@
                       <p>• localStorage 可用: {typeof(Storage) !== "undefined" ? '✅ 是' : '❌ 否'}</p>
                       <p>• CryptoJS 載入: {typeof CryptoJS !== 'undefined' ? '✅ 是' : '❌ 否'}</p>
                       <p>• 初始數據: {initialTrials.length} 個試驗</p>
+                      <div className="flex gap-2 mt-3">
+                        <button
+                          onClick={() => {
+                            console.log('強制重新載入初始數據');
+                            setTrials(initialTrials);
+                            setFilteredTrials(initialTrials);
+                          }}
+                          className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+                        >
+                          🔄 重新載入數據
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm('這將清除所有快取數據並重新整理頁面。確定要繼續嗎？')) {
+                              localStorage.clear();
+                              sessionStorage.clear();
+                              location.reload(true);
+                            }
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          🗑️ 清除快取並重新載入
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 版本更新提示 */}
+                {trials.length > 0 && (
+                  <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-blue-700">
+                        📌 版本: v2.0 | 最後更新: 2026-02-10 | 試驗總數: {trials.length}
+                      </span>
                       <button
                         onClick={() => {
-                          console.log('強制重新載入初始數據');
-                          setTrials(initialTrials);
-                          setFilteredTrials(initialTrials);
+                          if (confirm('如果看到的數據不是最新的，請點擊確定清除快取。\n\n這將清除瀏覽器快取並重新載入最新版本。')) {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            location.reload(true);
+                          }
                         }}
-                        className="mt-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
                       >
-                        🔄 重新載入數據
+                        🔄 更新到最新版
                       </button>
                     </div>
                   </div>
