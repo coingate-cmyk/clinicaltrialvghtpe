@@ -1,0 +1,77 @@
+name: 每日備份臨床試驗數據
+
+on:
+  schedule:
+    # 每天 UTC 18:00 執行（台灣時間凌晨 2:00）
+    - cron: '0 18 * * *'
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: 設定時間
+      run: |
+        echo "BACKUP_DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
+        echo "BACKUP_TIME=$(TZ=Asia/Taipei date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+    
+    - name: 創建備份目錄
+      run: mkdir -p backups
+    
+    - name: 備份 HTML 檔案
+      run: |
+        cp index.html "backups/backup_${BACKUP_TIME}.html"
+        
+    - name: 創建備份摘要
+      run: |
+        cat > "backups/backup_${BACKUP_DATE}_README.md" << EOF
+        # 臨床試驗數據備份
+        
+        **備份時間**: ${BACKUP_TIME}
+        **備份檔案**: backup_${BACKUP_TIME}.html
+        
+        ## 如何還原
+        1. 下載 backup_${BACKUP_TIME}.html
+        2. 重新命名為 index.html
+        3. 上傳到 GitHub 或本地使用
+        
+        ## 備份內容
+        - 所有 44 個臨床試驗數據
+        - 收案條件和排除條件
+        - 研究護士聯絡資訊
+        - 系統設定
+        EOF
+    
+    - name: 提交備份
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add backups/
+        git commit -m "自動備份 - ${BACKUP_TIME}" || echo "沒有變更需要提交"
+        git push
+
+    - name: 發送郵件通知
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: 臨床試驗系統每日備份 - ${{ env.BACKUP_DATE }}
+        to: coingate@gmail.com
+        from: 臨床試驗系統
+        body: |
+          臨床試驗管理系統已完成每日備份
+          
+          備份時間: ${{ env.BACKUP_TIME }}
+          備份檔案: backup_${{ env.BACKUP_TIME }}.html
+          
+          查看備份: https://github.com/coingate-cmyk/clinicaltrialvghtpe/tree/main/backups
+          
+          系統狀態: 正常運行
+          下次備份: 明天凌晨 2:00
+        attachments: backups/backup_${{ env.BACKUP_TIME }}.html
