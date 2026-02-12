@@ -1,184 +1,112 @@
-name: 每日自動備份（防衝突版）
+name: 每日郵件備份
 
 on:
   schedule:
-    - cron: '0 18 * * *'  # 每天台灣時間凌晨 2:00
-  workflow_dispatch:  # 允許手動執行
+    - cron: '0 18 * * *'
+  workflow_dispatch:
 
 jobs:
   backup:
     runs-on: ubuntu-latest
     
-    permissions:
-      contents: write
-    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # 取得完整歷史，避免衝突
+    - uses: actions/checkout@v3
       
-    - name: 設定 Node.js
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: '18'
         
-    - name: 安裝依賴
-      run: npm install xlsx
+    - run: npm install xlsx
         
-    - name: 設定時間
-      run: |
+    - run: |
         echo "DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
         echo "TIME=$(TZ=Asia/Taipei date +'%Y-%m-%d_%H%M')" >> $GITHUB_ENV
     
-    - name: 創建備份腳本
-      run: |
+    - run: |
         cat > backup.js << 'SCRIPT'
         const fs = require('fs');
         const XLSX = require('xlsx');
-        
-        // 從 index.html 提取數據
         const html = fs.readFileSync('index.html', 'utf8');
         const match = html.match(/const initialTrials = (\[[\s\S]*?\]);/);
-        
         if (match) {
           const trials = JSON.parse(match[1]);
-          
-          // 1. 保存 JSON
-          fs.writeFileSync(`backups/backup_${process.env.TIME}.json`, 
-            JSON.stringify(trials, null, 2));
-          
-          // 2. 創建 Excel
           const worksheet = XLSX.utils.json_to_sheet(trials.map(t => ({
-            'ID': t.id,
-            '癌症類型': t.cancerType,
-            '治療線別': t.line,
-            '試驗名稱': t.studyTitle,
-            '代號': t.code,
-            '期別': t.phase,
-            '贊助商': t.sponsor,
-            '目標人數': t.targetNum,
-            '已收案': t.enrolled,
-            '當月簽署': t.monthSigned,
-            '當月入案': t.monthEnrolled,
-            '主持人': t.pi,
-            '研究護士': t.nurse,
-            '電話': t.phone,
-            '狀態': t.status,
-            '收案條件': t.inclusion || t.criteria || '',
+            'ID': t.id, '癌症類型': t.cancerType, '治療線別': t.line,
+            '試驗名稱': t.studyTitle, '代號': t.code, '期別': t.phase,
+            '贊助商': t.sponsor, '目標人數': t.targetNum, '已收案': t.enrolled,
+            '當月簽署': t.monthSigned, '當月入案': t.monthEnrolled,
+            '主持人': t.pi, '研究護士': t.nurse, '電話': t.phone,
+            '狀態': t.status, '收案條件': t.inclusion || t.criteria || '',
             '排除條件': t.exclusion || ''
           })));
-          
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, '臨床試驗');
-          XLSX.writeFile(workbook, `backups/臨床試驗備份_${process.env.DATE}.xlsx`);
-          
+          XLSX.writeFile(workbook, `臨床試驗備份_${process.env.DATE}.xlsx`);
           console.log(`✅ 備份完成: ${trials.length} 個試驗`);
         }
         SCRIPT
         
-    - name: 創建備份目錄
-      run: mkdir -p backups
-      
-    - name: 執行備份
-      run: node backup.js
-      
-    - name: 備份 HTML 檔案
-      run: cp index.html "backups/backup_${TIME}.html"
-      
-    - name: 創建備份說明
-      run: |
-        cat > "backups/README_${DATE}.md" << EOF
-        # 📦 臨床試驗數據備份 - ${DATE}
+    - run: node backup.js
         
-        ## 📁 備份檔案
-        
-        - \`臨床試驗備份_${DATE}.xlsx\` - Excel 格式
-        - \`backup_${TIME}.json\` - JSON 格式
-        - \`backup_${TIME}.html\` - 完整系統
-        
-        ## 📊 備份統計
-        
-        - 📅 備份日期: ${DATE}
-        - ⏰ 備份時間: ${TIME}
-        - 📈 試驗總數: 44 個
-        - 📅 下次備份: 明天凌晨 2:00
-        
-        EOF
-    
-    - name: 提交備份（防衝突版）
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        
-        # 先 pull 最新變更，避免衝突
-        git pull origin main --rebase || echo "Pull 失敗，繼續執行"
-        
-        # 加入新檔案
-        git add backups/
-        
-        # 檢查是否有變更
-        if git diff --staged --quiet; then
-          echo "沒有變更需要提交"
-          exit 0
-        fi
-        
-        # 提交變更
-        git commit -m "🔒 自動備份 ${DATE} ${TIME}"
-        
-        # Push 到遠端（最多重試 3 次）
-        for i in 1 2 3; do
-          echo "嘗試 push (第 $i 次)..."
-          if git push origin main; then
-            echo "✅ Push 成功！"
-            exit 0
-          else
-            echo "⚠️ Push 失敗，重試中..."
-            git pull origin main --rebase
-            sleep 2
-          fi
-        done
-        
-        echo "❌ Push 失敗，已嘗試 3 次"
-        exit 1
-        
-    - name: 發送郵件通知
-      if: success()  # 只有在前面步驟成功時才發送郵件
-      uses: dawidd6/action-send-mail@v3
+    - uses: dawidd6/action-send-mail@v3
       with:
         server_address: smtp.gmail.com
         server_port: 587
         username: ${{ secrets.EMAIL_USERNAME }}
         password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: ✅ 臨床試驗系統每日備份 - ${{ env.DATE }}
+        subject: ✅ 臨床試驗備份 - ${{ env.DATE }}
         to: coingate@gmail.com
-        from: 臨床試驗備份系統 <noreply@clinicaltrials.system>
+        from: 備份系統 <noreply@backup.system>
         body: |
-          您好，
+          備份完成！
           
-          臨床試驗管理系統已完成每日備份。
+          日期: ${{ env.DATE }}
+          時間: ${{ env.TIME }}
+          試驗數: 44 個
           
-          📊 備份資訊
-          ═══════════════════════════
-          • 備份日期: ${{ env.DATE }}
-          • 備份時間: ${{ env.TIME }}
-          • 試驗總數: 44 個
-          • 備份格式: Excel + JSON + HTML
-          
-          📁 備份位置
-          ═══════════════════════════
-          • GitHub: https://github.com/${{ github.repository }}/tree/main/backups
-          • Gmail 附件: 本郵件附件
-          
-          📅 下次備份: 明天凌晨 2:00
-          
-          ─────────────────────────────
-          此郵件由系統自動發送
-        attachments: backups/臨床試驗備份_${{ env.DATE }}.xlsx
-        
-    - name: 備份完成
-      if: always()
-      run: |
-        echo "✅ 備份流程完成"
-        echo "📅 日期: ${DATE}"
-        echo "⏰ 時間: ${TIME}"
+          請妥善保存此郵件附件。
+        attachments: 臨床試驗備份_${{ env.DATE }}.xlsx
+```
+
+---
+
+### 步驟 2：前往 GitHub 編輯
+
+**點擊這個連結**：
+```
+https://github.com/coingate-cmyk/clinicaltrialvghtpe/edit/main/.github/workflows/backup.yml
+```
+
+---
+
+### 步驟 3：替換內容
+
+1. **按 Ctrl+A**（全選）
+2. **按 Delete**（刪除）
+3. **按 Ctrl+V**（貼上剛才複製的內容）
+4. **點擊「Commit changes」**（綠色按鈕）
+
+---
+
+### 步驟 4：確認 Secrets 已設定
+
+**訪問**：
+```
+https://github.com/coingate-cmyk/clinicaltrialvghtpe/settings/secrets/actions
+```
+
+**確認有這兩個 Secrets**：
+- ✅ `EMAIL_USERNAME`
+- ✅ `EMAIL_PASSWORD`
+
+**如果沒有**，請設定：
+- EMAIL_USERNAME = `coingate@gmail.com`
+- EMAIL_PASSWORD = `（您的 Gmail App Password）`
+
+---
+
+### 步驟 5：執行測試
+
+**訪問**：
+```
+https://github.com/coingate-cmyk/clinicaltrialvghtpe/actions
