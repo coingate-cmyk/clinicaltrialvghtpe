@@ -1,4 +1,4 @@
-name: 郵件備份
+name: backup
 
 on:
   schedule:
@@ -8,85 +8,55 @@ on:
 jobs:
   backup:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
           
-      - name: Install dependencies
-        run: npm install xlsx
+      - run: npm install xlsx
         
-      - name: Set date
-        run: echo "DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - run: echo "DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
         
-      - name: Create backup script
-        run: |
-          cat > backup.js << 'ENDOFFILE'
+      - run: |
+          cat > backup.js << 'SCRIPTEND'
           const fs = require('fs');
           const XLSX = require('xlsx');
           const html = fs.readFileSync('index.html', 'utf8');
           const match = html.match(/const initialTrials = (\[[\s\S]*?\]);/);
           if (match) {
             const trials = JSON.parse(match[1]);
-            const worksheet = XLSX.utils.json_to_sheet(trials.map(t => ({
-              'ID': t.id,
-              '癌症類型': t.cancerType,
-              '試驗名稱': t.studyTitle,
-              '代號': t.code,
-              '期別': t.phase,
-              '贊助商': t.sponsor,
-              '目標人數': t.targetNum,
-              '已收案': t.enrolled,
-              '主持人': t.pi,
-              '研究護士': t.nurse,
-              '電話': t.phone,
-              '狀態': t.status,
-              '收案條件': t.inclusion || t.criteria || '',
-              '排除條件': t.exclusion || ''
+            const ws = XLSX.utils.json_to_sheet(trials.map(t => ({
+              ID: t.id,
+              Type: t.cancerType,
+              Title: t.studyTitle,
+              Code: t.code,
+              Phase: t.phase,
+              Sponsor: t.sponsor,
+              Target: t.targetNum,
+              Enrolled: t.enrolled,
+              PI: t.pi,
+              Nurse: t.nurse,
+              Phone: t.phone,
+              Status: t.status
             })));
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, '臨床試驗');
-            XLSX.writeFile(workbook, 'backup.xlsx');
-            console.log('Backup created');
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Trials');
+            XLSX.writeFile(wb, 'backup.xlsx');
           }
-          ENDOFFILE
+          SCRIPTEND
           
-      - name: Run backup
-        run: node backup.js
+      - run: node backup.js
         
-      - name: Send email
-        uses: dawidd6/action-send-mail@v3
+      - uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: 臨床試驗備份 ${{ env.DATE }}
+          subject: Backup ${{ env.DATE }}
           to: coingate@gmail.com
-          from: Backup System <backup@system.local>
-          body: 備份完成
+          from: backup@system.local
+          body: Done
           attachments: backup.xlsx
-```
-
----
-
-## ✅ 提交後應該會成功
-
-**這個版本**：
-- ✅ 正確的 YAML 格式
-- ✅ 正確的縮排
-- ✅ 沒有 Git 操作
-- ✅ 只生成 Excel + 發郵件
-
----
-
-## 🎯 確認 Secrets
-
-**訪問**：
-```
-https://github.com/coingate-cmyk/clinicaltrialvghtpe/settings/secrets/actions
