@@ -8,115 +8,85 @@ on:
 jobs:
   backup:
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    - run: npm install xlsx
-    - run: |
-        echo "DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
-    - run: |
-        cat > backup.js << 'EOF'
-        const fs = require('fs');
-        const XLSX = require('xlsx');
-        const html = fs.readFileSync('index.html', 'utf8');
-        const match = html.match(/const initialTrials = (\[[\s\S]*?\]);/);
-        if (match) {
-          const trials = JSON.parse(match[1]);
-          const ws = XLSX.utils.json_to_sheet(trials.map(t => ({
-            'ID': t.id, '癌症類型': t.cancerType, '試驗名稱': t.studyTitle,
-            '代號': t.code, '期別': t.phase, '贊助商': t.sponsor,
-            '目標人數': t.targetNum, '已收案': t.enrolled,
-            '主持人': t.pi, '研究護士': t.nurse, '電話': t.phone,
-            '狀態': t.status, '收案條件': t.inclusion || '',
-            '排除條件': t.exclusion || ''
-          })));
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, '臨床試驗');
-          XLSX.writeFile(wb, `備份_${process.env.DATE}.xlsx`);
-        }
-        EOF
-    - run: node backup.js
-    - uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: smtp.gmail.com
-        server_port: 587
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: 臨床試驗備份 ${{ env.DATE }}
-        to: coingate@gmail.com
-        from: 備份 <backup@system.local>
-        body: 備份完成
-        attachments: 備份_${{ env.DATE }}.xlsx
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install xlsx
+        
+      - name: Set date
+        run: echo "DATE=$(TZ=Asia/Taipei date +'%Y-%m-%d')" >> $GITHUB_ENV
+        
+      - name: Create backup script
+        run: |
+          cat > backup.js << 'ENDOFFILE'
+          const fs = require('fs');
+          const XLSX = require('xlsx');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const match = html.match(/const initialTrials = (\[[\s\S]*?\]);/);
+          if (match) {
+            const trials = JSON.parse(match[1]);
+            const worksheet = XLSX.utils.json_to_sheet(trials.map(t => ({
+              'ID': t.id,
+              '癌症類型': t.cancerType,
+              '試驗名稱': t.studyTitle,
+              '代號': t.code,
+              '期別': t.phase,
+              '贊助商': t.sponsor,
+              '目標人數': t.targetNum,
+              '已收案': t.enrolled,
+              '主持人': t.pi,
+              '研究護士': t.nurse,
+              '電話': t.phone,
+              '狀態': t.status,
+              '收案條件': t.inclusion || t.criteria || '',
+              '排除條件': t.exclusion || ''
+            })));
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, '臨床試驗');
+            XLSX.writeFile(workbook, 'backup.xlsx');
+            console.log('Backup created');
+          }
+          ENDOFFILE
+          
+      - name: Run backup
+        run: node backup.js
+        
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: 臨床試驗備份 ${{ env.DATE }}
+          to: coingate@gmail.com
+          from: Backup System <backup@system.local>
+          body: 備份完成
+          attachments: backup.xlsx
 ```
 
 ---
 
-### 步驟 4：儲存
+## ✅ 提交後應該會成功
 
-**往下滾動，點擊綠色按鈕**：
-- **「Commit changes」**
+**這個版本**：
+- ✅ 正確的 YAML 格式
+- ✅ 正確的縮排
+- ✅ 沒有 Git 操作
+- ✅ 只生成 Excel + 發郵件
 
 ---
 
-### 步驟 5：確認 Secrets
+## 🎯 確認 Secrets
 
-**點擊這個連結**：
+**訪問**：
 ```
 https://github.com/coingate-cmyk/clinicaltrialvghtpe/settings/secrets/actions
-```
-
-**確認有這兩個**：
-- ✅ `EMAIL_USERNAME`
-- ✅ `EMAIL_PASSWORD`
-
-**如果沒有，請新增**：
-1. 點擊「New repository secret」
-2. Name: `EMAIL_USERNAME`，Value: `coingate@gmail.com`
-3. 再新增一個
-4. Name: `EMAIL_PASSWORD`，Value: `（您的 Gmail App Password）`
-
----
-
-### 步驟 6：執行測試
-
-**點擊這個連結**：
-```
-https://github.com/coingate-cmyk/clinicaltrialvghtpe/actions
-```
-
-1. 點擊左側「郵件備份」
-2. 點擊「Run workflow」
-3. 再點綠色的「Run workflow」
-4. 等待 2 分鐘
-5. **應該會成功！** ✅
-
----
-
-## ✅ 成功的標誌
-
-### 如果成功，您會看到：
-
-**在 GitHub Actions**：
-- ✅ 綠色勾勾（不是紅色叉叉）
-- ✅ 所有步驟都完成
-- ✅ **沒有「提交備份」步驟**（因為新版本不需要）
-
-**在 Gmail**：
-- ✅ 收到郵件
-- ✅ 主旨：「臨床試驗備份 2026-02-12」
-- ✅ 附件：Excel 檔案
-
----
-
-## 🔍 這個版本和之前的差異
-
-### 舊版本（一直失敗的）：
-```
-生成備份 → 存到 GitHub ❌ 失敗 → 發郵件
-```
-
-### 新版本（超簡化）：
-```
-生成備份 → 發郵件 ✅ 成功
