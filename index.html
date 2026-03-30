@@ -1674,33 +1674,31 @@
                                 )}
                             </div>
 
-                            <div className="flex gap-2 ml-4">
-                                <button
-                                    onClick={() => onManageSubjects(trial)}
-                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                                    title="管理受試者"
-                                >
-                                    <UsersIcon />
-                                </button>
-                                {isLoggedIn && (
-                                    <>
-                                        <button
-                                            onClick={() => onEdit(trial)}
-                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                                            title="編輯試驗"
-                                        >
-                                            <EditIcon />
-                                        </button>
-                                        <button
-                                            onClick={() => onDelete(trial.id)}
-                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                            title="刪除試驗"
-                                        >
-                                            <TrashIcon />
-                                        </button>
-                                    </>
-                                )}
-                            </div>
+                            <button
+                                onClick={() => onManageSubjects(trial)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg ml-4"
+                                title="管理受試者"
+                            >
+                                <UsersIcon />
+                            </button>
+                            {isLoggedIn && (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => onEdit(trial)}
+                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                                        title="編輯試驗"
+                                    >
+                                        <EditIcon />
+                                    </button>
+                                    <button
+                                        onClick={() => onDelete(trial.id)}
+                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                        title="刪除試驗"
+                                    >
+                                        <TrashIcon />
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
                         <button
