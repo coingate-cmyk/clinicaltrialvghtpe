@@ -3,19 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 強力緩存控制 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Last-Modified" content="0">
-    <meta name="cache-control" content="no-cache">
-    <meta name="expires" content="0">
-    <meta name="pragma" content="no-cache">
-    <!-- 版本號 -->
-    <meta name="version" content="v3.0-nocache-20260330">
-    <title>臨床試驗管理系統 v3.0 (無緩存版)</title>
-    <script src="https://cdn.tailwindcss.com?v=1774880924"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=1774880924"></script>
+    <title>臨床試驗管理系統 v3.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -29,117 +22,27 @@
             20%, 40%, 60%, 80% { transform: translateX(10px); }
         }
         .shake { animation: shake 0.5s; }
-        
-        .tag-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin: 0.25rem;
-        }
-        
-        .line-tag {
-            display: inline-block;
-            padding: 0.375rem 0.875rem;
-            margin: 0.25rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-        
-        .line-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .line-tag.selected {
-            border-color: #3b82f6;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-        }
-        
-        .line-tag.unselected {
-            background: #f1f5f9;
-            color: #64748b;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
-    <!-- 強制清除緩存腳本 -->
-    <script>
-        (function() {
-            // 檢查版本號，如果不匹配則強制刷新
-            const currentVersion = 'v3.0-nocache-20260330';
-            const storedVersion = localStorage.getItem('app-version');
-            
-            if (storedVersion !== currentVersion) {
-                console.log('版本更新，清除緩存並重新載入...');
-                localStorage.setItem('app-version', currentVersion);
-                
-                // 清除所有可能的緩存
-                if ('caches' in window) {
-                    caches.keys().then(function(names) {
-                        for (let name of names) {
-                            caches.delete(name);
-                        }
-                    });
-                }
-                
-                // 只刷新一次，避免無限循環
-                const refreshed = sessionStorage.getItem('page-refreshed');
-                if (!refreshed) {
-                    sessionStorage.setItem('page-refreshed', 'true');
-                    window.location.reload(true);
-                }
-            }
-            
-            // 清除 sessionStorage 標記（頁面載入成功後）
-            window.addEventListener('load', function() {
-                setTimeout(function() {
-                    sessionStorage.removeItem('page-refreshed');
-                }, 1000);
-            });
-        })();
-    </script>
     <div id="app"></div>
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js?v=1774880924"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js?v=1774880924"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js?v=1774880924"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect } = React;
 
         // 安全配置
         const SECURITY_CONFIG = {
-            ACCESS_PASSWORD: 'clinical2026',
-            ADMIN_USERNAME: 'admin',
-            ADMIN_PASSWORD: 'admin123',
-            ENCRYPTION_KEY: 'clinical-trials-secret-key-2026'
+            ACCESS_PASSWORD: 'clinical2026',  // 訪問密碼（可以改成任何你想要的）
+            ADMIN_USERNAME: 'admin',          // 管理員帳號
+            ADMIN_PASSWORD: 'admin123',       // 管理員密碼
+            ENCRYPTION_KEY: 'clinical-trials-secret-key-2026' // 加密金鑰
         };
 
-        // 預設癌症種類
-        const DEFAULT_CANCER_TYPES = [
-            '肝癌', '胃癌', '食道癌', '胰臟癌', '膽道癌', '大腸癌', '頭頸癌', '卵巢癌'
-        ];
-
-        // 治療線選項
-        const TREATMENT_LINES = [
-            '第一線', '第一線後', '第二線', '第二線後',
-            '第三線', '第三線後', '第四線', '第四線後', '不限', 'Adjuvant'
-        ];
-
-        // 受試者狀態選項
-        const SUBJECT_STATUS_OPTIONS = [
-            '待聯繫', '已聯繫', '評估中', '已加入', '不適合', '退出試驗', '尚待國外確認名額'
-        ];
-
-        // 加密解密函數
+        // 加密函數
         const encryptData = (data) => {
             try {
                 return CryptoJS.AES.encrypt(JSON.stringify(data), SECURITY_CONFIG.ENCRYPTION_KEY).toString();
@@ -149,6 +52,7 @@
             }
         };
 
+        // 解密函數
         const decryptData = (encryptedData) => {
             try {
                 const bytes = CryptoJS.AES.decrypt(encryptedData, SECURITY_CONFIG.ENCRYPTION_KEY);
@@ -170,14 +74,15 @@
         const TrashIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
         const SaveIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>;
         const XIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
-        const CheckIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
-        const UserIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
-        const UsersIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
-        const SettingsIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
-        const ClipboardIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>;
+        const CheckCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const XCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const AlertCircleIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+        const DownloadIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>;
+        const FileTextIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
+        const LockIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
+        const ShieldIcon = () => <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>;
 
-
-        // 初始試驗數據（v3.0 格式 - 已修復）
+        // 初始數據（已匿名化）
         const initialTrials = [
   {
     "id": 1,
@@ -1414,1787 +1319,1022 @@
   }
 ];
 
+        // 訪問密碼驗證組件
+        function AccessPasswordScreen({ onAccessGranted }) {
+          const [password, setPassword] = useState('');
+          const [error, setError] = useState(false);
 
-        // ==================== 組件開始 ====================
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            if (password === SECURITY_CONFIG.ACCESS_PASSWORD) {
+              sessionStorage.setItem('access_granted', 'true');
+              onAccessGranted();
+            } else {
+              setError(true);
+              setPassword('');
+              setTimeout(() => setError(false), 500);
+            }
+          };
 
-        // 訪問密碼Modal
-        function AccessPasswordModal({ onAuth }) {
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if (onAuth(password)) {
-                    setError('');
-                } else {
-                    setError('密碼錯誤');
-                    setPassword('');
-                }
-            };
-
-            return (
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-                        <div className="text-center mb-8">
-                            <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
-                                <svg className="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <h2 className="text-3xl font-bold text-gray-800">臨床試驗管理系統</h2>
-                            <p className="text-gray-600 mt-2">請輸入訪問密碼</p>
-                        </div>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                                    placeholder="請輸入密碼"
-                                    autoFocus
-                                />
-                                {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
-                            >
-                                進入系統
-                            </button>
-                        </form>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
+              <div className={`bg-white rounded-3xl shadow-2xl p-12 max-w-md w-full ${error ? 'shake' : ''}`}>
+                <div className="text-center mb-8">
+                  <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mb-6">
+                    <ShieldIcon />
+                  </div>
+                  <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                    臨床試驗管理系統
+                  </h1>
+                  <p className="text-slate-600">此系統受密碼保護</p>
                 </div>
-            );
-        }
 
-        // 管理員登入Modal
-        function AdminLoginModal({ onClose, onLogin }) {
-            const [username, setUsername] = useState('');
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if (onLogin(username, password)) {
-                    setError('');
-                } else {
-                    setError('帳號或密碼錯誤');
-                }
-            };
-
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold">管理員登入</h2>
-                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                                <XIcon />
-                            </button>
-                        </div>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">帳號</label>
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    autoFocus
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">密碼</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            {error && <p className="text-red-600 text-sm">{error}</p>}
-                            <button
-                                type="submit"
-                                className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
-                            >
-                                登入
-                            </button>
-                        </form>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
-                </div>
-            );
-        }
-
-        // 試驗列表視圖
-        function TrialsView({
-            trials, allTrials, searchTerm, setSearchTerm,
-            selectedCancerType, setSelectedCancerType,
-            selectedLine, setSelectedLine,
-            selectedStatus, setSelectedStatus,
-            isLoggedIn, onEdit, onDelete, onManageSubjects,
-            allCancerTypes
-        }) {
-            const uniqueCancerTypes = ['全部', ...allCancerTypes];
-            const uniqueLines = ['全部', ...TREATMENT_LINES];
-            const uniqueStatuses = ['全部', ...Array.from(new Set(allTrials.map(t => t.status)))];
-
-            return (
-                <div>
-                    {/* 搜尋和篩選 */}
-                    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                        <div className="mb-4">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="搜尋試驗名稱、代號、贊助商、主持人、研究護士..."
-                                    className="w-full px-4 py-3 pl-12 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                                />
-                                <div className="absolute left-4 top-3.5 text-gray-400">
-                                    <SearchIcon />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">癌症類型</label>
-                                <select
-                                    value={selectedCancerType}
-                                    onChange={(e) => setSelectedCancerType(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                >
-                                    {uniqueCancerTypes.map(type => (
-                                        <option key={type} value={type}>{type}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">治療線別</label>
-                                <select
-                                    value={selectedLine}
-                                    onChange={(e) => setSelectedLine(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                >
-                                    {uniqueLines.map(line => (
-                                        <option key={line} value={line}>{line}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">狀態</label>
-                                <select
-                                    value={selectedStatus}
-                                    onChange={(e) => setSelectedStatus(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                >
-                                    {uniqueStatuses.map(status => (
-                                        <option key={status} value={status}>{status}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="mt-4 text-sm text-gray-600">
-                            顯示 {trials.length} / {allTrials.length} 個試驗
-                        </div>
-                    </div>
-
-                    {/* 試驗卡片列表 */}
-                    <div className="grid grid-cols-1 gap-6">
-                        {trials.map(trial => (
-                            <TrialCard
-                                key={trial.id}
-                                trial={trial}
-                                isLoggedIn={isLoggedIn}
-                                onEdit={onEdit}
-                                onDelete={onDelete}
-                                onManageSubjects={onManageSubjects}
-                            />
-                        ))}
-                    </div>
-
-                    {trials.length === 0 && (
-                        <div className="text-center py-12 text-gray-500">
-                            <p className="text-lg">沒有找到符合條件的試驗</p>
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        // 試驗卡片組件
-        function TrialCard({ trial, isLoggedIn, onEdit, onDelete, onManageSubjects }) {
-            const [expanded, setExpanded] = useState(false);
-            const subjectCount = trial.subjects?.length || 0;
-            const enrolledCount = trial.subjects?.filter(s => s.enrolled).length || 0;
-            const eligibleCount = trial.subjects?.filter(s => s.eligibility).length || 0;
-
-            return (
-                <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden">
-                    <div className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <h3 className="text-xl font-bold text-gray-800">{trial.code}</h3>
-                                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                        trial.status === '進行中' ? 'bg-green-100 text-green-800' :
-                                        trial.status === '暫停收案' ? 'bg-yellow-100 text-yellow-800' :
-                                        'bg-gray-100 text-gray-800'
-                                    }`}>
-                                        {trial.status}
-                                    </span>
-                                </div>
-                                <p className="text-gray-700 mb-3">{trial.studyTitle}</p>
-
-                                {/* 癌種-治療線標籤 */}
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                    {trial.cancerTypes && trial.cancerTypes.map((ct, idx) => (
-                                        ct.lines && ct.lines.map((line, lineIdx) => (
-                                            <span
-                                                key={`${idx}-${lineIdx}`}
-                                                className="tag-badge bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
-                                            >
-                                                {ct.type} - {line}
-                                            </span>
-                                        ))
-                                    ))}
-                                </div>
-
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                    <div>
-                                        <span className="text-gray-500">期別：</span>
-                                        <span className="font-semibold">{trial.phase}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">贊助商：</span>
-                                        <span className="font-semibold">{trial.sponsor}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">主持人：</span>
-                                        <span className="font-semibold">{trial.pi}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">研究護士：</span>
-                                        <span className="font-semibold">{trial.nurse}</span>
-                                    </div>
-                                </div>
-
-                                {/* 受試者統計 */}
-                                {subjectCount > 0 && (
-                                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                                        <div className="flex items-center gap-4 text-sm">
-                                            <span className="font-semibold text-blue-800">
-                                                受試者：{subjectCount} 人
-                                            </span>
-                                            <span className="text-blue-600">
-                                                符合資格：{eligibleCount}
-                                            </span>
-                                            <span className="text-blue-600">
-                                                已加入：{enrolledCount}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            {isLoggedIn && (
-                                <div className="flex gap-2 ml-4">
-                                    <button
-                                        onClick={() => onManageSubjects(trial)}
-                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                                        title="管理受試者"
-                                    >
-                                        <UsersIcon />
-                                    </button>
-                                    <button
-                                        onClick={() => onEdit(trial)}
-                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                                    >
-                                        <EditIcon />
-                                    </button>
-                                    <button
-                                        onClick={() => onDelete(trial.id)}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                    >
-                                        <TrashIcon />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-
-                        <button
-                            onClick={() => setExpanded(!expanded)}
-                            className="text-blue-600 hover:text-blue-800 text-sm font-semibold"
-                        >
-                            {expanded ? '收起詳情 ▲' : '展開詳情 ▼'}
-                        </button>
-
-                        {expanded && (
-                            <div className="mt-4 pt-4 border-t space-y-3">
-                                {trial.inclusion && (
-                                    <div>
-                                        <h4 className="font-semibold text-green-700 mb-2">✅ 收案條件</h4>
-                                        <p className="text-sm text-gray-700 whitespace-pre-wrap">{trial.inclusion}</p>
-                                    </div>
-                                )}
-                                {trial.exclusion && (
-                                    <div>
-                                        <h4 className="font-semibold text-red-700 mb-2">❌ 排除條件</h4>
-                                        <p className="text-sm text-gray-700 whitespace-pre-wrap">{trial.exclusion}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
-                </div>
-            );
-        }
-
-
-
-        // 試驗表單Modal（新增/編輯試驗）
-        function TrialFormModal({ trial, onClose, onSave, allCancerTypes }) {
-            const [formData, setFormData] = useState({
-                studyTitle: '',
-                code: '',
-                phase: '',
-                sponsor: '',
-                targetNum: 0,
-                enrolled: 0,
-                monthSigned: 0,
-                monthEnrolled: 0,
-                pi: '',
-                nurse: '',
-                phone: '',
-                status: '進行中',
-                inclusion: '',
-                exclusion: '',
-                cancerTypes: [],
-                ...trial
-            });
-
-            const [selectedCancerType, setSelectedCancerType] = useState('');
-            const [selectedLines, setSelectedLines] = useState([]);
-
-            const handleAddCancerType = () => {
-                if (selectedCancerType && selectedLines.length > 0) {
-                    const newCancerType = {
-                        type: selectedCancerType,
-                        lines: selectedLines
-                    };
-                    setFormData(prev => ({
-                        ...prev,
-                        cancerTypes: [...prev.cancerTypes, newCancerType]
-                    }));
-                    setSelectedCancerType('');
-                    setSelectedLines([]);
-                }
-            };
-
-            const handleRemoveCancerType = (index) => {
-                setFormData(prev => ({
-                    ...prev,
-                    cancerTypes: prev.cancerTypes.filter((_, i) => i !== index)
-                }));
-            };
-
-            const toggleLine = (line) => {
-                setSelectedLines(prev =>
-                    prev.includes(line)
-                        ? prev.filter(l => l !== line)
-                        : [...prev, line]
-                );
-            };
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if (formData.cancerTypes.length === 0) {
-                    alert('請至少選擇一個癌種和治療線');
-                    return;
-                }
-                onSave(formData);
-            };
-
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto my-8">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold">{trial ? '編輯試驗' : '新增試驗'}</h2>
-                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                                <XIcon />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* 癌種和治療線選擇 */}
-                            <div>
-                                <label className="block text-lg font-semibold text-gray-700 mb-3">
-                                    適用癌種和治療線
-                                </label>
-
-                                {/* 已選擇的癌種 */}
-                                <div className="mb-4 min-h-[60px] p-4 bg-gray-50 rounded-lg">
-                                    {formData.cancerTypes.length === 0 ? (
-                                        <p className="text-gray-400 text-center">尚未選擇癌種和治療線</p>
-                                    ) : (
-                                        <div className="flex flex-wrap gap-2">
-                                            {formData.cancerTypes.map((ct, idx) => (
-                                                <div key={idx} className="flex items-center gap-2">
-                                                    {ct.lines.map((line, lineIdx) => (
-                                                        <span
-                                                            key={lineIdx}
-                                                            className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm"
-                                                        >
-                                                            {ct.type} - {line}
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleRemoveCancerType(idx)}
-                                                                className="hover:bg-blue-600 rounded-full p-0.5"
-                                                            >
-                                                                <XIcon />
-                                                            </button>
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* 新增癌種 */}
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                選擇癌種
-                                            </label>
-                                            <select
-                                                value={selectedCancerType}
-                                                onChange={(e) => setSelectedCancerType(e.target.value)}
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                            >
-                                                <option value="">-- 選擇癌種 --</option>
-                                                {allCancerTypes.map(type => (
-                                                    <option key={type} value={type}>{type}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                選擇治療線（可多選）
-                                            </label>
-                                            <div className="flex flex-wrap gap-2">
-                                                {TREATMENT_LINES.map(line => (
-                                                    <button
-                                                        key={line}
-                                                        type="button"
-                                                        onClick={() => toggleLine(line)}
-                                                        className={`line-tag ${selectedLines.includes(line) ? 'selected' : 'unselected'}`}
-                                                    >
-                                                        {line}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        onClick={handleAddCancerType}
-                                        disabled={!selectedCancerType || selectedLines.length === 0}
-                                        className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                                    >
-                                        <PlusIcon /> 新增此癌種配對
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* 其他欄位 */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">試驗名稱 *</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={formData.studyTitle}
-                                        onChange={(e) => setFormData({...formData, studyTitle: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">代號 *</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={formData.code}
-                                        onChange={(e) => setFormData({...formData, code: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">期別</label>
-                                    <input
-                                        type="text"
-                                        value={formData.phase}
-                                        onChange={(e) => setFormData({...formData, phase: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">贊助商</label>
-                                    <input
-                                        type="text"
-                                        value={formData.sponsor}
-                                        onChange={(e) => setFormData({...formData, sponsor: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">主持人</label>
-                                    <input
-                                        type="text"
-                                        value={formData.pi}
-                                        onChange={(e) => setFormData({...formData, pi: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">研究護士</label>
-                                    <input
-                                        type="text"
-                                        value={formData.nurse}
-                                        onChange={(e) => setFormData({...formData, nurse: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">電話</label>
-                                    <input
-                                        type="text"
-                                        value={formData.phone}
-                                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">狀態</label>
-                                    <select
-                                        value={formData.status}
-                                        onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option>進行中</option>
-                                        <option>暫停收案</option>
-                                        <option>名額已滿</option>
-                                        <option>已結案</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-green-700 mb-2">收案條件</label>
-                                <textarea
-                                    value={formData.inclusion}
-                                    onChange={(e) => setFormData({...formData, inclusion: e.target.value})}
-                                    rows={4}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-red-700 mb-2">排除條件</label>
-                                <textarea
-                                    value={formData.exclusion}
-                                    onChange={(e) => setFormData({...formData, exclusion: e.target.value})}
-                                    rows={4}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-
-                            <div className="flex gap-4">
-                                <button
-                                    type="submit"
-                                    className="flex-1 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
-                                >
-                                    <SaveIcon /> 儲存
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={onClose}
-                                    className="flex-1 py-3 bg-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-400"
-                                >
-                                    取消
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
-                </div>
-            );
-        }
-
-
-
-        // 受試者管理Modal
-        function SubjectsManagementModal({ trial, onClose, onAddSubject, onUpdateSubject, onDeleteSubject, allTrials }) {
-            const [subjects, setSubjects] = useState(trial.subjects || []);
-            const [editingSubject, setEditingSubject] = useState(null);
-            const [showAddForm, setShowAddForm] = useState(false);
-            const [selectedSubjects, setSelectedSubjects] = useState([]);
-            const [searchTerm, setSearchTerm] = useState('');
-            const [filterStatus, setFilterStatus] = useState('全部');
-            const [filterEligibility, setFilterEligibility] = useState('全部');
-            const [copyingSubject, setCopyingSubject] = useState(null);
-
-            useEffect(() => {
-                setSubjects(trial.subjects || []);
-            }, [trial]);
-
-            const filteredSubjects = useMemo(() => {
-                return subjects.filter(s => {
-                    if (searchTerm && !s.name.includes(searchTerm) && !s.chartNo.includes(searchTerm)) {
-                        return false;
-                    }
-                    if (filterStatus !== '全部' && s.status !== filterStatus) {
-                        return false;
-                    }
-                    if (filterEligibility === '符合' && !s.eligibility) {
-                        return false;
-                    }
-                    if (filterEligibility === '不符合' && s.eligibility) {
-                        return false;
-                    }
-                    return true;
-                });
-            }, [subjects, searchTerm, filterStatus, filterEligibility]);
-
-            const handleSaveSubject = (subjectData) => {
-                if (editingSubject) {
-                    onUpdateSubject(trial.id, editingSubject.id, subjectData);
-                    setEditingSubject(null);
-                } else {
-                    onAddSubject(trial.id, subjectData);
-                    setShowAddForm(false);
-                }
-            };
-
-            const handleCopySubject = (targetTrialId, subjectData) => {
-                onAddSubject(targetTrialId, subjectData);
-                setCopyingSubject(null);
-            };
-
-            const handleDeleteSelected = () => {
-                if (confirm(`確定要刪除選中的 ${selectedSubjects.length} 位受試者？`)) {
-                    selectedSubjects.forEach(id => {
-                        onDeleteSubject(trial.id, id);
-                    });
-                    setSelectedSubjects([]);
-                }
-            };
-
-            const toggleSelectSubject = (id) => {
-                setSelectedSubjects(prev =>
-                    prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
-                );
-            };
-
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
-                        <div className="p-6 border-b flex justify-between items-center">
-                            <div>
-                                <h2 className="text-2xl font-bold">{trial.code} - 受試者管理</h2>
-                                <p className="text-gray-600 text-sm mt-1">{trial.studyTitle}</p>
-                            </div>
-                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                                <XIcon />
-                            </button>
-                        </div>
-
-                        {!showAddForm && !editingSubject && (
-                            <div className="p-6 border-b space-y-4">
-                                <div className="flex gap-4 items-end">
-                                    <div className="flex-1">
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">搜尋</label>
-                                        <input
-                                            type="text"
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            placeholder="姓名、病歷號..."
-                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">狀態</label>
-                                        <select
-                                            value={filterStatus}
-                                            onChange={(e) => setFilterStatus(e.target.value)}
-                                            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        >
-                                            <option>全部</option>
-                                            {SUBJECT_STATUS_OPTIONS.map(status => (
-                                                <option key={status}>{status}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">資格</label>
-                                        <select
-                                            value={filterEligibility}
-                                            onChange={(e) => setFilterEligibility(e.target.value)}
-                                            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        >
-                                            <option>全部</option>
-                                            <option>符合</option>
-                                            <option>不符合</option>
-                                        </select>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowAddForm(true)}
-                                        className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-                                    >
-                                        <PlusIcon /> 新增受試者
-                                    </button>
-                                </div>
-
-                                {selectedSubjects.length > 0 && (
-                                    <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                                        <span className="text-blue-800 font-semibold">
-                                            已選擇 {selectedSubjects.length} 筆
-                                        </span>
-                                        <button
-                                            onClick={handleDeleteSelected}
-                                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                                        >
-                                            <TrashIcon /> 批次刪除
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        <div className="flex-1 overflow-y-auto p-6">
-                            {showAddForm || editingSubject ? (
-                                <SubjectForm
-                                    subject={editingSubject}
-                                    onSave={handleSaveSubject}
-                                    onCancel={() => {
-                                        setShowAddForm(false);
-                                        setEditingSubject(null);
-                                    }}
-                                />
-                            ) : (
-                                <div className="space-y-3">
-                                    {filteredSubjects.length === 0 ? (
-                                        <div className="text-center py-12 text-gray-500">
-                                            <p>尚無受試者資料</p>
-                                        </div>
-                                    ) : (
-                                        filteredSubjects.map(subject => (
-                                            <div
-                                                key={subject.id}
-                                                className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer"
-                                                onClick={() => setEditingSubject(subject)}
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-4 flex-1">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedSubjects.includes(subject.id)}
-                                                            onChange={(e) => {
-                                                                e.stopPropagation();
-                                                                toggleSelectSubject(subject.id);
-                                                            }}
-                                                            className="w-5 h-5"
-                                                        />
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-3">
-                                                                <span className="font-semibold text-lg">{subject.name}</span>
-                                                                <span className="text-gray-600">
-                                                                    {subject.gender} {subject.age}歲
-                                                                </span>
-                                                                <span className="text-gray-500">{subject.chartNo}</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-3 mt-2 text-sm">
-                                                                {subject.eligibility && (
-                                                                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
-                                                                        ✓ 符合資格
-                                                                    </span>
-                                                                )}
-                                                                {subject.enrolled && (
-                                                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
-                                                                        ✓ 已加入
-                                                                    </span>
-                                                                )}
-                                                                <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded">
-                                                                    {subject.status}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setCopyingSubject(subject);
-                                                            }}
-                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                                                            title="複製到其他試驗"
-                                                        >
-                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                            </svg>
-                                                        </button>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                if (confirm('確定要刪除此受試者？')) {
-                                                                    onDeleteSubject(trial.id, subject.id);
-                                                                }
-                                                            }}
-                                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                                        >
-                                                            <TrashIcon />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
-                </div>
-            );
-        }
-
-        // 受試者表單
-        function SubjectForm({ subject, onSave, onCancel }) {
-            const [formData, setFormData] = useState({
-                name: '',
-                chartNo: '',
-                gender: '男',
-                age: '',
-                phone: '',
-                email: '',
-                physician: '',
-                medicalHistory: '',
-                eligibility: false,
-                enrolled: false,
-                status: '待聯繫',
-                notes: '',
-                ...subject
-            });
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                onSave(formData);
-            };
-
-            return (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-lg mb-4">基本資料</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">姓名 *</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">病歷號 *</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.chartNo}
-                                    onChange={(e) => setFormData({...formData, chartNo: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">性別</label>
-                                <select
-                                    value={formData.gender}
-                                    onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option>男</option>
-                                    <option>女</option>
-                                    <option>其他</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">年齡</label>
-                                <input
-                                    type="number"
-                                    value={formData.age}
-                                    onChange={(e) => setFormData({...formData, age: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">電話</label>
-                                <input
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">主治醫師</label>
-                                <input
-                                    type="text"
-                                    value={formData.physician}
-                                    onChange={(e) => setFormData({...formData, physician: e.target.value})}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      <div className="flex items-center gap-2">
+                        <LockIcon />
+                        訪問密碼
+                      </div>
+                    </label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={`w-full px-4 py-3 border-2 ${error ? 'border-red-500' : 'border-slate-300'} rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg`}
+                      placeholder="請輸入訪問密碼"
+                      autoFocus
+                    />
+                    {error && (
+                      <p className="text-red-500 text-sm mt-2">❌ 密碼錯誤，請重試</p>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
+                  >
+                    進入系統
+                  </button>
+                </form>
+
+                <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <p className="text-xs text-slate-600 text-center">
+                    🔒 此系統使用 AES-256 加密保護數據<br/>
+                    如忘記密碼請聯繫系統管理員
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function ClinicalTrialsManager() {
+          const [hasAccess, setHasAccess] = useState(false);
+          const [trials, setTrials] = useState([]);
+          const [filteredTrials, setFilteredTrials] = useState([]);
+          const [searchTerm, setSearchTerm] = useState('');
+          const [selectedCancer, setSelectedCancer] = useState('全部');
+          const [selectedLine, setSelectedLine] = useState('全部');
+          const [selectedStatus, setSelectedStatus] = useState('全部');
+          const [isLoggedIn, setIsLoggedIn] = useState(false);
+          const [showLoginModal, setShowLoginModal] = useState(false);
+          const [username, setUsername] = useState('');
+          const [password, setPassword] = useState('');
+          const [editingTrial, setEditingTrial] = useState(null);
+          const [showAddModal, setShowAddModal] = useState(false);
+          const [loading, setLoading] = useState(true);
+
+          useEffect(() => {
+            // 檢查是否已通過訪問密碼驗證
+            const accessGranted = sessionStorage.getItem('access_granted');
+            if (accessGranted === 'true') {
+              setHasAccess(true);
+              loadTrialsFromStorage();
+            } else {
+              setLoading(false);
+            }
+          }, []);
+
+          const loadTrialsFromStorage = () => {
+            console.log('開始載入數據...');
+            console.log('初始數據長度:', initialTrials.length);
+            
+            try {
+              // 先檢查 localStorage 是否可用
+              const storageAvailable = typeof(Storage) !== "undefined";
+              console.log('localStorage 可用:', storageAvailable);
+              
+              if (!storageAvailable) {
+                // localStorage 不可用，直接使用初始數據
+                console.log('localStorage 不可用，使用初始數據');
+                setTrials(initialTrials);
+                setFilteredTrials(initialTrials);
+                setLoading(false);
+                return;
+              }
+
+              const storedData = localStorage.getItem('clinical-trials-encrypted');
+              console.log('儲存的數據存在:', !!storedData);
+              
+              if (storedData) {
+                // 嘗試解密
+                try {
+                  const decryptedTrials = decryptData(storedData);
+                  console.log('解密結果:', decryptedTrials ? '成功' : '失敗');
+                  
+                  if (decryptedTrials && Array.isArray(decryptedTrials) && decryptedTrials.length > 0) {
+                    console.log('使用已保存的數據，數量:', decryptedTrials.length);
+                    setTrials(decryptedTrials);
+                    setFilteredTrials(decryptedTrials);
+                  } else {
+                    // 解密失敗或數據無效，清除並使用初始數據
+                    console.log('解密數據無效，清除並使用初始數據');
+                    localStorage.removeItem('clinical-trials-encrypted');
+                    setTrials(initialTrials);
+                    setFilteredTrials(initialTrials);
+                    saveTrialsToStorage(initialTrials);
+                  }
+                } catch (decryptError) {
+                  console.error('解密錯誤:', decryptError);
+                  // 解密失敗，清除損壞數據並使用初始數據
+                  localStorage.removeItem('clinical-trials-encrypted');
+                  setTrials(initialTrials);
+                  setFilteredTrials(initialTrials);
+                  saveTrialsToStorage(initialTrials);
+                }
+              } else {
+                // 第一次使用，使用初始數據
+                console.log('第一次使用，載入初始數據');
+                setTrials(initialTrials);
+                setFilteredTrials(initialTrials);
+                saveTrialsToStorage(initialTrials);
+              }
+            } catch (error) {
+              console.error('載入失敗:', error);
+              // 任何錯誤都使用初始數據作為 fallback
+              console.log('發生錯誤，使用初始數據 fallback');
+              setTrials(initialTrials);
+              setFilteredTrials(initialTrials);
+            } finally {
+              setLoading(false);
+              console.log('數據載入完成');
+            }
+          };
+
+          const saveTrialsToStorage = (trialsData) => {
+            try {
+              // 檢查 localStorage 是否可用
+              if (typeof(Storage) === "undefined") {
+                console.warn('localStorage 不可用，無法保存數據');
+                return;
+              }
+
+              // 檢查 CryptoJS 是否可用
+              if (typeof CryptoJS === 'undefined') {
+                console.warn('CryptoJS 未載入，使用明文保存（開發模式）');
+                localStorage.setItem('clinical-trials-plain', JSON.stringify(trialsData));
+                return;
+              }
+
+              const encrypted = encryptData(trialsData);
+              if (encrypted) {
+                localStorage.setItem('clinical-trials-encrypted', encrypted);
+                console.log('數據已加密保存');
+              } else {
+                console.warn('加密失敗，使用明文保存');
+                localStorage.setItem('clinical-trials-plain', JSON.stringify(trialsData));
+              }
+            } catch (error) {
+              console.error('保存失敗:', error);
+              // 嘗試使用明文保存作為 fallback
+              try {
+                localStorage.setItem('clinical-trials-plain', JSON.stringify(trialsData));
+                console.log('使用明文模式保存成功');
+              } catch (fallbackError) {
+                console.error('明文保存也失敗:', fallbackError);
+              }
+            }
+          };
+
+          useEffect(() => {
+            let filtered = trials;
+
+            if (selectedCancer !== '全部') {
+              filtered = filtered.filter(t => t.cancerType === selectedCancer);
+            }
+
+            if (selectedLine !== '全部') {
+              filtered = filtered.filter(t => t.line.includes(selectedLine));
+            }
+
+            if (selectedStatus !== '全部') {
+              filtered = filtered.filter(t => t.status === selectedStatus);
+            }
+
+            if (searchTerm) {
+              filtered = filtered.filter(t =>
+                t.studyTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.sponsor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.pi.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                t.nurse.toLowerCase().includes(searchTerm.toLowerCase())
+              );
+            }
+
+            setFilteredTrials(filtered);
+          }, [trials, selectedCancer, selectedLine, selectedStatus, searchTerm]);
+
+          const handleLogin = () => {
+            if (username === SECURITY_CONFIG.ADMIN_USERNAME && password === SECURITY_CONFIG.ADMIN_PASSWORD) {
+              setIsLoggedIn(true);
+              setShowLoginModal(false);
+              setUsername('');
+              setPassword('');
+            } else {
+              alert('帳號或密碼錯誤');
+            }
+          };
+
+          const handleLogout = () => {
+            setIsLoggedIn(false);
+          };
+
+          const handleEdit = (trial) => {
+            setEditingTrial({ ...trial });
+          };
+
+          const handleSaveEdit = () => {
+            const updatedTrials = trials.map(t =>
+              t.id === editingTrial.id ? editingTrial : t
+            );
+            setTrials(updatedTrials);
+            saveTrialsToStorage(updatedTrials);
+            setEditingTrial(null);
+          };
+
+          const handleDelete = (id) => {
+            if (window.confirm('確定要刪除此試驗嗎？')) {
+              const updatedTrials = trials.filter(t => t.id !== id);
+              setTrials(updatedTrials);
+              saveTrialsToStorage(updatedTrials);
+            }
+          };
+
+          const handleAdd = (newTrial) => {
+            const trialWithId = {
+              ...newTrial,
+              id: Math.max(...trials.map(t => t.id), 0) + 1
+            };
+            const updatedTrials = [...trials, trialWithId];
+            setTrials(updatedTrials);
+            saveTrialsToStorage(updatedTrials);
+            setShowAddModal(false);
+          };
+
+          const downloadCSV = () => {
+            const headers = ['癌症類型', '治療線別', '試驗名稱', '代號', '期別', '贊助商', '目標人數', '已收案', '當月簽署', '當月入案', '主持人', '研究護士', '電話', '狀態', '收案條件'];
+            
+            const csvContent = [
+              headers.join(','),
+              ...filteredTrials.map(trial => [
+                trial.cancerType,
+                trial.line,
+                `"${trial.studyTitle.replace(/"/g, '""')}"`,
+                trial.code,
+                trial.phase,
+                trial.sponsor,
+                trial.targetNum,
+                trial.enrolled,
+                trial.monthSigned,
+                trial.monthEnrolled,
+                trial.pi,
+                trial.nurse,
+                trial.phone,
+                trial.status,
+                `"${trial.criteria.replace(/"/g, '""')}"`
+              ].join(','))
+            ].join('\n');
+
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+          };
+
+          const generatePDF = () => {
+            const printWindow = window.open('', '_blank');
+            const htmlContent = `
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <meta charset="UTF-8">
+                  <title>臨床試驗列表</title>
+                  <style>
+                    @page { size: A4 landscape; margin: 1cm; }
+                    body { font-family: "Microsoft JhengHei", Arial, sans-serif; font-size: 9pt; }
+                    h1 { text-align: center; color: #1e40af; margin-bottom: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th { background-color: #1e40af; color: white; padding: 8px; text-align: left; font-weight: bold; border: 1px solid #ddd; }
+                    td { padding: 6px; border: 1px solid #ddd; font-size: 8pt; }
+                    tr:nth-child(even) { background-color: #f9fafb; }
+                    .status-active { color: #059669; font-weight: bold; }
+                    .status-paused { color: #d97706; font-weight: bold; }
+                    .status-full { color: #dc2626; font-weight: bold; }
+                    .header-info { text-align: center; margin-bottom: 15px; color: #64748b; }
+                  </style>
+                </head>
+                <body>
+                  <h1>臨床試驗管理列表</h1>
+                  <div class="header-info">匯出日期: ${new Date().toLocaleDateString('zh-TW')} | 共 ${filteredTrials.length} 項試驗</div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>癌症類型</th>
+                        <th>線別</th>
+                        <th>試驗名稱</th>
+                        <th>代號</th>
+                        <th>期別</th>
+                        <th>贊助商</th>
+                        <th>目標人數</th>
+                        <th>已收案</th>
+                        <th>主持人</th>
+                        <th>護士</th>
+                        <th>狀態</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${filteredTrials.map(trial => `
+                        <tr>
+                          <td>${trial.cancerType}</td>
+                          <td>${trial.line}</td>
+                          <td style="max-width: 250px;">${trial.studyTitle}</td>
+                          <td>${trial.code}</td>
+                          <td>${trial.phase}</td>
+                          <td>${trial.sponsor}</td>
+                          <td>${trial.enrolled}/${trial.targetNum}</td>
+                          <td>${trial.targetNum > 0 ? ((trial.enrolled/trial.targetNum)*100).toFixed(0) : 0}%</td>
+                          <td>${trial.pi}</td>
+                          <td>${trial.nurse}</td>
+                          <td class="status-${trial.status === '進行中' ? 'active' : trial.status === '暫停收案' ? 'paused' : 'full'}">${trial.status}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </body>
+              </html>
+            `;
+            
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.onload = () => {
+              printWindow.print();
+            };
+          };
+
+          if (!hasAccess) {
+            return <AccessPasswordScreen onAccessGranted={() => setHasAccess(true)} />;
+          }
+
+          const cancerTypes = ['全部', '肝癌', '胃癌', '食道癌', '胰臟癌', '膽道癌', '大腸癌'];
+          const lineTypes = ['全部', '一線', '二線', '三線', 'Adjuvant'];
+          const statusTypes = ['全部', '進行中', '暫停收案', '名額已滿'];
+
+          const getStatusColor = (status) => {
+            switch (status) {
+              case '進行中': return 'text-emerald-600 bg-emerald-50';
+              case '暫停收案': return 'text-amber-600 bg-amber-50';
+              case '名額已滿': return 'text-rose-600 bg-rose-50';
+              default: return 'text-gray-600 bg-gray-50';
+            }
+          };
+
+          const getStatusIcon = (status) => {
+            switch (status) {
+              case '進行中': return <CheckCircleIcon />;
+              case '暫停收案': return <AlertCircleIcon />;
+              case '名額已滿': return <XCircleIcon />;
+              default: return null;
+            }
+          };
+
+          if (loading) {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+                  <div className="text-2xl font-semibold text-slate-600">載入中...</div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+              <header className="bg-white shadow-md border-b-4 border-blue-500">
+                <div className="max-w-7xl mx-auto px-6 py-6">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                          臨床試驗管理系統
+                        </h1>
+                        <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full flex items-center gap-1">
+                          <LockIcon className="w-3 h-3" />
+                          已加密
+                        </span>
+                      </div>
+                      <p className="text-slate-600 mt-2">Clinical Trials Management System - Secure Edition</p>
+                    </div>
+                    <div className="flex gap-3">
+                      {isLoggedIn && (
+                        <button
+                          onClick={() => setShowAddModal(true)}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                          title="新增臨床試驗"
+                        >
+                          <PlusIcon />
+                          新增試驗
+                        </button>
+                      )}
+                      {isLoggedIn ? (
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        >
+                          <LogoutIcon />
+                          登出
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setShowLoginModal(true)}
+                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        >
+                          <LoginIcon />
+                          管理員登入
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              <div className="max-w-7xl mx-auto px-6 py-8">
+                {/* 調試信息 - 開發時使用 */}
+                {trials.length === 0 && !loading && (
+                  <div className="mb-6 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-xl">
+                    <h3 className="font-bold text-yellow-800 mb-2">⚠️ 調試信息</h3>
+                    <div className="text-sm text-yellow-700 space-y-1">
+                      <p>• 試驗數量: {trials.length}</p>
+                      <p>• localStorage 可用: {typeof(Storage) !== "undefined" ? '✅ 是' : '❌ 否'}</p>
+                      <p>• CryptoJS 載入: {typeof CryptoJS !== 'undefined' ? '✅ 是' : '❌ 否'}</p>
+                      <p>• 初始數據: {initialTrials.length} 個試驗</p>
+                      <div className="flex gap-2 mt-3">
+                        <button
+                          onClick={() => {
+                            console.log('強制重新載入初始數據');
+                            setTrials(initialTrials);
+                            setFilteredTrials(initialTrials);
+                          }}
+                          className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+                        >
+                          🔄 重新載入數據
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm('這將清除所有快取數據並重新整理頁面。確定要繼續嗎？')) {
+                              localStorage.clear();
+                              sessionStorage.clear();
+                              location.reload(true);
+                            }
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          🗑️ 清除快取並重新載入
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 版本更新提示 */}
+                {trials.length > 0 && (
+                  <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-blue-700">
+                        📌 版本: v3.0 | 最後更新: 2026-02-10 | 試驗總數: {trials.length}
+                      </span>
+                      <button
+                        onClick={() => {
+                          if (confirm('如果看到的數據不是最新的，請點擊確定清除快取。\n\n這將清除瀏覽器快取並重新載入最新版本。')) {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            location.reload(true);
+                          }
+                        }}
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
+                      >
+                        🔄 更新到最新版
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-slate-200">
+                  <div className="flex items-center gap-3 mb-6">
+                    <FilterIcon />
+                    <h2 className="text-2xl font-bold text-slate-800">篩選條件</h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="md:col-span-4">
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                          <SearchIcon />
                         </div>
+                        <input
+                          type="text"
+                          placeholder="搜尋試驗名稱、代號、贊助商、主持人、研究護士..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">病史資料</label>
-                        <textarea
-                            value={formData.medicalHistory}
-                            onChange={(e) => setFormData({...formData, medicalHistory: e.target.value})}
-                            rows={4}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                            placeholder="可貼上詳細病史或資料..."
-                        />
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">癌症種類</label>
+                      <select
+                        value={selectedCancer}
+                        onChange={(e) => setSelectedCancer(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {cancerTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
                     </div>
 
-                    <div className="bg-green-50 p-4 rounded-lg space-y-3">
-                        <h3 className="font-semibold text-lg mb-3">收案評估</h3>
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={formData.eligibility}
-                                onChange={(e) => setFormData({...formData, eligibility: e.target.checked})}
-                                className="w-5 h-5"
-                            />
-                            <span className="font-medium">符合收案資格 (Eligibility)</span>
-                        </label>
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={formData.enrolled}
-                                onChange={(e) => setFormData({...formData, enrolled: e.target.checked})}
-                                className="w-5 h-5"
-                            />
-                            <span className="font-medium">已加入試驗 (Enrolled)</span>
-                        </label>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">治療線別</label>
+                      <select
+                        value={selectedLine}
+                        onChange={(e) => setSelectedLine(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {lineTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">目前狀態</label>
-                            <select
-                                value={formData.status}
-                                onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                            >
-                                {SUBJECT_STATUS_OPTIONS.map(status => (
-                                    <option key={status}>{status}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">備註</label>
-                            <input
-                                type="text"
-                                value={formData.notes}
-                                onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">收案狀態</label>
+                      <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg font-medium"
+                      >
+                        {statusTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
                     </div>
-
-                    <div className="flex gap-4">
-                        <button
-                            type="submit"
-                            className="flex-1 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
-                        >
-                            <SaveIcon /> 儲存
-                        </button>
-                        <button
-                            type="button"
-                            onClick={onCancel}
-                            className="flex-1 py-3 bg-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-400"
-                        >
-                            取消
-                        </button>
-                    </div>
-                </form>
-            );
-        }
-
-
-        // 複製受試者到其他試驗的 Modal
-        function CopySubjectModal({ subject, currentTrialId, trials, onCopy, onClose }) {
-            const [selectedTrialId, setSelectedTrialId] = useState('');
-            
-            // 過濾掉當前試驗
-            const availableTrials = trials.filter(t => t.id !== currentTrialId);
-            
-            const handleCopy = () => {
-                if (selectedTrialId) {
-                    // 複製受試者資料，但重置 ID 和一些狀態
-                    const copiedSubject = {
-                        ...subject,
-                        id: undefined,  // 會在 addSubject 中重新生成
-                        status: '待聯繫',  // 重置狀態
-                        eligibility: false,  // 重置資格
-                        enrolled: false,  // 重置加入狀態
-                        notes: `從 ${trials.find(t => t.id === currentTrialId)?.code} 複製`
-                    };
-                    onCopy(parseInt(selectedTrialId), copiedSubject);
-                    onClose();
-                }
-            };
-            
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-bold">複製受試者到其他試驗</h3>
-                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                                <XIcon />
-                            </button>
-                        </div>
-                        
-                        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                            <div className="font-semibold text-lg mb-2">{subject.name}</div>
-                            <div className="text-sm text-gray-600">
-                                {subject.gender} {subject.age}歲 | {subject.chartNo}
-                            </div>
-                        </div>
-                        
-                        <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                選擇目標試驗 *
-                            </label>
-                            <select
-                                value={selectedTrialId}
-                                onChange={(e) => setSelectedTrialId(e.target.value)}
-                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="">-- 請選擇試驗 --</option>
-                                {availableTrials.map(trial => (
-                                    <option key={trial.id} value={trial.id}>
-                                        {trial.code} - {trial.studyTitle.substring(0, 50)}...
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        
-                        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-                            <div className="font-semibold text-yellow-800 mb-1">📋 複製說明</div>
-                            <ul className="text-yellow-700 space-y-1 text-xs">
-                                <li>• 受試者的基本資料和病史會被複製</li>
-                                <li>• 狀態會重置為「待聯繫」</li>
-                                <li>• Eligibility 和 Enrolled 會重置</li>
-                                <li>• 可用於同時 screening 多個試驗</li>
-                            </ul>
-                        </div>
-                        
-                        <div className="flex gap-3">
-                            <button
-                                onClick={handleCopy}
-                                disabled={!selectedTrialId}
-                                className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                            >
-                                確認複製
-                            </button>
-                            <button
-                                onClick={onClose}
-                                className="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-                            >
-                                取消
-                            </button>
-                        </div>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
+                  </div>
                 </div>
-            );
+
+                <div className="mb-6 flex items-center justify-between">
+                  <p className="text-slate-600 text-lg">
+                    共找到 <span className="font-bold text-blue-600 text-2xl">{filteredTrials.length}</span> 項試驗
+                  </p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={downloadCSV}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                      title="下載為Excel格式"
+                    >
+                      <DownloadIcon />
+                      下載 Excel
+                    </button>
+                    <button
+                      onClick={generatePDF}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl hover:from-red-600 hover:to-rose-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+                      title="匯出為PDF"
+                    >
+                      <FileTextIcon />
+                      匯出 PDF
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {filteredTrials.map(trial => (
+                    <TrialCard
+                      key={trial.id}
+                      trial={trial}
+                      isLoggedIn={isLoggedIn}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      getStatusColor={getStatusColor}
+                      getStatusIcon={getStatusIcon}
+                      editingTrial={editingTrial}
+                      setEditingTrial={setEditingTrial}
+                      handleSaveEdit={handleSaveEdit}
+                    />
+                  ))}
+                </div>
+
+                {filteredTrials.length === 0 && (
+                  <div className="text-center py-20">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <p className="text-2xl text-slate-400 font-semibold">未找到符合條件的試驗</p>
+                  </div>
+                )}
+              </div>
+
+              {showLoginModal && (
+                <LoginModal
+                  username={username}
+                  password={password}
+                  setUsername={setUsername}
+                  setPassword={setPassword}
+                  onLogin={handleLogin}
+                  onClose={() => setShowLoginModal(false)}
+                />
+              )}
+
+              {showAddModal && (
+                <AddTrialModal
+                  onAdd={handleAdd}
+                  onClose={() => setShowAddModal(false)}
+                />
+              )}
+            </div>
+          );
         }
 
-        // 所有受試者視圖
-        function AllSubjectsView({ trials, onEditSubject, onDeleteSubject }) {
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedTrial, setSelectedTrial] = useState('全部');
+        function TrialCard({ trial, isLoggedIn, onEdit, onDelete, getStatusColor, getStatusIcon, editingTrial, setEditingTrial, handleSaveEdit }) {
+          const [expanded, setExpanded] = useState(false);
+          const enrollmentPercentage = trial.targetNum > 0 ? (trial.enrolled / trial.targetNum * 100) : 0;
 
-            const allSubjects = useMemo(() => {
-                return trials.flatMap(trial =>
-                    (trial.subjects || []).map(subject => ({
-                        ...subject,
-                        trialCode: trial.code,
-                        trialTitle: trial.studyTitle,
-                        trialId: trial.id
-                    }))
-                );
-            }, [trials]);
-
-            const filteredSubjects = useMemo(() => {
-                return allSubjects.filter(s => {
-                    if (searchTerm && !s.name.includes(searchTerm) && !s.chartNo.includes(searchTerm)) {
-                        return false;
-                    }
-                    if (selectedTrial !== '全部' && s.trialCode !== selectedTrial) {
-                        return false;
-                    }
-                    return true;
-                });
-            }, [allSubjects, searchTerm, selectedTrial]);
-
+          if (editingTrial && editingTrial.id === trial.id) {
             return (
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+                <EditTrialForm
+                  trial={editingTrial}
+                  setTrial={setEditingTrial}
+                  onSave={handleSaveEdit}
+                  onCancel={() => setEditingTrial(null)}
+                />
+              </div>
+            );
+          }
+
+          return (
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-slate-200 transform hover:-translate-y-1 fade-in">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-bold rounded-full shadow-md">
+                        {trial.cancerType}
+                      </span>
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-full shadow-md">
+                        {trial.line}
+                      </span>
+                      <span className={`px-4 py-1.5 text-sm font-bold rounded-full flex items-center gap-1.5 shadow-md ${getStatusColor(trial.status)}`}>
+                        {getStatusIcon(trial.status)}
+                        {trial.status}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2 leading-relaxed">
+                      {trial.studyTitle}
+                    </h3>
+                    <div className="flex items-center gap-6 text-sm text-slate-600">
+                      <span className="font-semibold">代號: <span className="text-blue-600">{trial.code}</span></span>
+                      <span className="font-semibold">期別: <span className="text-purple-600">Phase {trial.phase}</span></span>
+                      <span className="font-semibold">贊助商: {trial.sponsor}</span>
+                    </div>
+                  </div>
+                  {isLoggedIn && (
+                    <div className="flex gap-2 ml-4">
+                      <button
+                        onClick={() => onEdit(trial)}
+                        className="p-2.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="編輯"
+                      >
+                        <EditIcon />
+                      </button>
+                      <button
+                        onClick={() => onDelete(trial.id)}
+                        className="p-2.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                        title="刪除"
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="font-semibold text-slate-700">收案進度</span>
+                    <span className="font-bold text-blue-600">{trial.enrolled} / {trial.targetNum}</span>
+                  </div>
+                  <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 rounded-full"
+                      style={{ width: `${Math.min(enrollmentPercentage, 100)}%` }}
+                    />
+                  </div>
+                  <div className="text-right text-xs text-slate-600 mt-1 font-medium">
+                    {enrollmentPercentage.toFixed(1)}%
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                  <InfoBox label="主持人" value={trial.pi} />
+                  <InfoBox label="研究護士" value={trial.nurse} />
+                  <InfoBox label="當月簽署" value={trial.monthSigned} />
+                  <InfoBox label="當月入案" value={trial.monthEnrolled} />
+                </div>
+
+                {expanded && (
+                  <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <div>
+                      <h4 className="font-bold text-green-700 mb-2 flex items-center gap-2">
+                        ✅ 收案條件
+                      </h4>
+                      <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{trial.inclusion || trial.criteria}</p>
+                    </div>
+                    
+                    {trial.exclusion && (
+                      <div className="mt-3 pt-3 border-t border-slate-300">
+                        <h4 className="font-bold text-red-700 mb-2 flex items-center gap-2">
+                          ❌ 排除條件
+                        </h4>
+                        <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{trial.exclusion}</p>
+                      </div>
+                    )}
+                    
+                    {trial.phone && (
+                      <div className="mt-3 pt-3 border-t border-slate-300">
+                        <p className="text-sm text-slate-600">
+                          <span className="font-semibold">聯絡電話:</span> {trial.phone}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="mt-4 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+                >
+                  {expanded ? '收起詳情 ▲' : '展開詳情 ▼'}
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        function InfoBox({ label, value }) {
+          return (
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-3 rounded-lg border border-slate-200">
+              <div className="text-xs text-slate-600 font-semibold mb-1">{label}</div>
+              <div className="text-lg font-bold text-slate-800">{value}</div>
+            </div>
+          );
+        }
+
+        function EditTrialForm({ trial, setTrial, onSave, onCancel }) {
+          return (
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <EditIcon />
+                編輯試驗
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <FormField label="試驗名稱" value={trial.studyTitle} onChange={(v) => setTrial({ ...trial, studyTitle: v })} />
+                <FormField label="代號" value={trial.code} onChange={(v) => setTrial({ ...trial, code: v })} />
+                <FormField label="癌症類型" value={trial.cancerType} onChange={(v) => setTrial({ ...trial, cancerType: v })} />
+                <FormField label="治療線別" value={trial.line} onChange={(v) => setTrial({ ...trial, line: v })} />
+                <FormField label="期別" value={trial.phase} onChange={(v) => setTrial({ ...trial, phase: v })} />
+                <FormField label="贊助商" value={trial.sponsor} onChange={(v) => setTrial({ ...trial, sponsor: v })} />
+                <FormField label="目標人數" type="number" value={trial.targetNum} onChange={(v) => setTrial({ ...trial, targetNum: parseInt(v) || 0 })} />
+                <FormField label="已收案" type="number" value={trial.enrolled} onChange={(v) => setTrial({ ...trial, enrolled: parseInt(v) || 0 })} />
+                <FormField label="當月簽署" type="number" value={trial.monthSigned} onChange={(v) => setTrial({ ...trial, monthSigned: parseInt(v) || 0 })} />
+                <FormField label="當月入案" type="number" value={trial.monthEnrolled} onChange={(v) => setTrial({ ...trial, monthEnrolled: parseInt(v) || 0 })} />
+                <FormField label="主持人" value={trial.pi} onChange={(v) => setTrial({ ...trial, pi: v })} />
+                <FormField label="研究護士" value={trial.nurse} onChange={(v) => setTrial({ ...trial, nurse: v })} />
+                <FormField label="電話" value={trial.phone} onChange={(v) => setTrial({ ...trial, phone: v })} />
                 <div>
-                    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                        <h2 className="text-2xl font-bold mb-4">所有受試者查詢</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">搜尋</label>
-                                <input
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="姓名、病歷號..."
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">試驗</label>
-                                <select
-                                    value={selectedTrial}
-                                    onChange={(e) => setSelectedTrial(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option>全部</option>
-                                    {trials.map(trial => (
-                                        <option key={trial.id} value={trial.code}>{trial.code}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        <div className="mt-4 text-sm text-gray-600">
-                            共 {filteredSubjects.length} 位受試者
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        {filteredSubjects.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
-                                <p>尚無受試者資料</p>
-                            </div>
-                        ) : (
-                            filteredSubjects.map(subject => (
-                                <div key={`${subject.trialId}-${subject.id}`} className="bg-white rounded-xl shadow-lg p-6">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <h3 className="text-xl font-bold">{subject.name}</h3>
-                                                <span className="text-gray-600">{subject.gender} {subject.age}歲</span>
-                                                <span className="text-gray-500">{subject.chartNo}</span>
-                                            </div>
-                                            <div className="mb-3">
-                                                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                                                    {subject.trialCode}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-3 mb-3">
-                                                {subject.eligibility && (
-                                                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
-                                                        ✓ 符合資格
-                                                    </span>
-                                                )}
-                                                {subject.enrolled && (
-                                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
-                                                        ✓ 已加入
-                                                    </span>
-                                                )}
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
-                                                    {subject.status}
-                                                </span>
-                                            </div>
-                                            <div className="text-sm text-gray-600 space-y-1">
-                                                {subject.phone && <div>電話：{subject.phone}</div>}
-                                                {subject.physician && <div>主治醫師：{subject.physician}</div>}
-                                                {subject.registeredDate && <div>登記日期：{subject.registeredDate}</div>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">狀態</label>
+                  <select
+                    value={trial.status}
+                    onChange={(e) => setTrial({ ...trial, status: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="進行中">進行中</option>
+                    <option value="暫停收案">暫停收案</option>
+                    <option value="名額已滿">名額已滿</option>
+                  </select>
                 </div>
-            );
+              </div>
+              <div className="mb-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-green-700 mb-2">✅ 收案條件</label>
+                  <textarea
+                    value={trial.inclusion || trial.criteria || ''}
+                    onChange={(e) => setTrial({ ...trial, inclusion: e.target.value, criteria: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    rows={4}
+                    placeholder="請輸入收案條件..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-red-700 mb-2">❌ 排除條件</label>
+                  <textarea
+                    value={trial.exclusion || ''}
+                    onChange={(e) => setTrial({ ...trial, exclusion: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    rows={3}
+                    placeholder="請輸入排除條件（可選）..."
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={onSave}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold"
+                >
+                  <SaveIcon />
+                  儲存
+                </button>
+                <button
+                  onClick={onCancel}
+                  className="flex items-center gap-2 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                >
+                  <XIcon />
+                  取消
+                </button>
+              </div>
+            </div>
+          );
         }
 
-        // 設定頁面
-        function SettingsView({ customCancerTypes, onSaveCancerTypes }) {
-            const [newCancerType, setNewCancerType] = useState('');
-            const [types, setTypes] = useState(customCancerTypes);
-
-            const handleAdd = () => {
-                if (newCancerType.trim() && !DEFAULT_CANCER_TYPES.includes(newCancerType) && !types.includes(newCancerType)) {
-                    const updated = [...types, newCancerType.trim()];
-                    setTypes(updated);
-                    onSaveCancerTypes(updated);
-                    setNewCancerType('');
-                }
-            };
-
-            const handleDelete = (type) => {
-                if (confirm(`確定要刪除「${type}」？`)) {
-                    const updated = types.filter(t => t !== type);
-                    setTypes(updated);
-                    onSaveCancerTypes(updated);
-                }
-            };
-
-            return (
-                <div className="max-w-4xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-lg p-8">
-                        <h2 className="text-2xl font-bold mb-6">系統設定</h2>
-
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4">癌症種類管理</h3>
-                            <p className="text-gray-600 mb-4">
-                                預設種類：{DEFAULT_CANCER_TYPES.join('、')}
-                            </p>
-
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">新增自訂癌症種類</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={newCancerType}
-                                        onChange={(e) => setNewCancerType(e.target.value)}
-                                        placeholder="輸入癌症種類名稱..."
-                                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
-                                    />
-                                    <button
-                                        onClick={handleAdd}
-                                        className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-                                    >
-                                        <PlusIcon /> 新增
-                                    </button>
-                                </div>
-                            </div>
-
-                            {types.length > 0 && (
-                                <div>
-                                    <h4 className="font-semibold mb-3">自訂癌症種類</h4>
-                                    <div className="space-y-2">
-                                        {types.map(type => (
-                                            <div key={type} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                                <span className="font-medium">{type}</span>
-                                                <button
-                                                    onClick={() => handleDelete(type)}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                                >
-                                                    <TrashIcon />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {types.length === 0 && (
-                                <div className="text-center py-6 text-gray-500">
-                                    尚無自訂癌症種類
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    {copyingSubject && (
-                        <CopySubjectModal
-                            subject={copyingSubject}
-                            currentTrialId={trial.id}
-                            trials={allTrials}
-                            onCopy={handleCopySubject}
-                            onClose={() => setCopyingSubject(null)}
-                        />
-                    )}
-                </div>
-            );
+        function FormField({ label, value, onChange, type = "text" }) {
+          return (
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">{label}</label>
+              <input
+                type={type}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          );
         }
 
-        // ==================== 組件結束 ====================
+        function LoginModal({ username, password, setUsername, setPassword, onLogin, onClose }) {
+          return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+              <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                <h2 className="text-3xl font-bold text-slate-800 mb-6">管理員登入</h2>
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">帳號</label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                      placeholder="請輸入帳號"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">密碼</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && onLogin()}
+                      className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                      placeholder="請輸入密碼"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={onLogin}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg font-semibold"
+                  >
+                    登入
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                  >
+                    取消
+                  </button>
+                </div>
+                <p className="text-sm text-slate-500 mt-4 text-center">
+                  預設帳號: admin / 密碼: admin123
+                </p>
+              </div>
+            </div>
+          );
+        }
 
+        function AddTrialModal({ onAdd, onClose }) {
+          const [newTrial, setNewTrial] = useState({
+            cancerType: '胃癌',
+            line: '一線',
+            studyTitle: '',
+            code: '',
+            phase: 'III',
+            sponsor: '',
+            targetNum: 0,
+            enrolled: 0,
+            monthSigned: 0,
+            monthEnrolled: 0,
+            pi: '',
+            nurse: '',
+            phone: '',
+            status: '進行中',
+            criteria: ''
+          });
 
-        // 主應用程式組件
-        function ClinicalTrialsApp() {
-            const [isAuthenticated, setIsAuthenticated] = useState(false);
-            const [isLoggedIn, setIsLoggedIn] = useState(false);
-            const [trials, setTrials] = useState([]);
-            const [filteredTrials, setFilteredTrials] = useState([]);
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedCancerType, setSelectedCancerType] = useState('全部');
-            const [selectedLine, setSelectedLine] = useState('全部');
-            const [selectedStatus, setSelectedStatus] = useState('全部');
-            const [showLoginModal, setShowLoginModal] = useState(false);
-            const [showAddModal, setShowAddModal] = useState(false);
-            const [editingTrial, setEditingTrial] = useState(null);
-            const [loading, setLoading] = useState(true);
-            const [currentView, setCurrentView] = useState('trials');
-            const [selectedTrial, setSelectedTrial] = useState(null);
-            const [subjects, setSubjects] = useState([]);
-            const [customCancerTypes, setCustomCancerTypes] = useState([]);
-
-            useEffect(() => {
-                loadTrialsFromStorage();
-                loadCustomCancerTypes();
-            }, []);
-
-            const loadTrialsFromStorage = () => {
-                try {
-                    const storedData = localStorage.getItem('clinical-trials-encrypted');
-                    if (storedData) {
-                        const decryptedTrials = decryptData(storedData);
-                        if (decryptedTrials && Array.isArray(decryptedTrials)) {
-                            setTrials(decryptedTrials);
-                            setFilteredTrials(decryptedTrials);
-                        } else {
-                            setTrials(initialTrials);
-                            setFilteredTrials(initialTrials);
-                            saveTrialsToStorage(initialTrials);
-                        }
-                    } else {
-                        setTrials(initialTrials);
-                        setFilteredTrials(initialTrials);
-                        saveTrialsToStorage(initialTrials);
-                    }
-                } catch (error) {
-                    console.error('載入失敗:', error);
-                    setTrials(initialTrials);
-                    setFilteredTrials(initialTrials);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            const saveTrialsToStorage = (trialsData) => {
-                try {
-                    const encrypted = encryptData(trialsData);
-                    if (encrypted) {
-                        localStorage.setItem('clinical-trials-encrypted', encrypted);
-                    }
-                } catch (error) {
-                    console.error('儲存失敗:', error);
-                }
-            };
-
-            const loadCustomCancerTypes = () => {
-                try {
-                    const stored = localStorage.getItem('custom-cancer-types');
-                    if (stored) {
-                        setCustomCancerTypes(JSON.parse(stored));
-                    }
-                } catch (error) {
-                    console.error('載入自訂癌種失敗:', error);
-                }
-            };
-
-            const saveCustomCancerTypes = (types) => {
-                try {
-                    localStorage.setItem('custom-cancer-types', JSON.stringify(types));
-                    setCustomCancerTypes(types);
-                } catch (error) {
-                    console.error('儲存自訂癌種失敗:', error);
-                }
-            };
-
-            const allCancerTypes = useMemo(() => {
-                return [...DEFAULT_CANCER_TYPES, ...customCancerTypes].sort();
-            }, [customCancerTypes]);
-
-            useEffect(() => {
-                let filtered = trials;
-
-                if (searchTerm) {
-                    filtered = filtered.filter(t =>
-                        t.studyTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.sponsor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.pi.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.nurse.toLowerCase().includes(searchTerm.toLowerCase())
-                    );
-                }
-
-                if (selectedCancerType !== '全部') {
-                    filtered = filtered.filter(t =>
-                        t.cancerTypes && t.cancerTypes.some(ct => ct.type === selectedCancerType)
-                    );
-                }
-
-                if (selectedLine !== '全部') {
-                    filtered = filtered.filter(t =>
-                        t.cancerTypes && t.cancerTypes.some(ct =>
-                            ct.lines && ct.lines.some(line => line.includes(selectedLine))
-                        )
-                    );
-                }
-
-                if (selectedStatus !== '全部') {
-                    filtered = filtered.filter(t => t.status === selectedStatus);
-                }
-
-                setFilteredTrials(filtered);
-            }, [searchTerm, selectedCancerType, selectedLine, selectedStatus, trials]);
-
-            const addSubject = (trialId, subjectData) => {
-                const updatedTrials = trials.map(t => {
-                    if (t.id === trialId) {
-                        const newSubject = {
-                            ...subjectData,
-                            id: Date.now(),
-                            trialId: trialId,
-                            registeredDate: new Date().toISOString().split('T')[0],
-                            registeredBy: 'admin'
-                        };
-                        return {
-                            ...t,
-                            subjects: [...(t.subjects || []), newSubject]
-                        };
-                    }
-                    return t;
-                });
-                setTrials(updatedTrials);
-                saveTrialsToStorage(updatedTrials);
-            };
-
-            const updateSubject = (trialId, subjectId, subjectData) => {
-                const updatedTrials = trials.map(t => {
-                    if (t.id === trialId) {
-                        return {
-                            ...t,
-                            subjects: t.subjects.map(s =>
-                                s.id === subjectId ? { ...s, ...subjectData } : s
-                            )
-                        };
-                    }
-                    return t;
-                });
-                setTrials(updatedTrials);
-                saveTrialsToStorage(updatedTrials);
-            };
-
-            const deleteSubject = (trialId, subjectId) => {
-                const updatedTrials = trials.map(t => {
-                    if (t.id === trialId) {
-                        return {
-                            ...t,
-                            subjects: t.subjects.filter(s => s.id !== subjectId)
-                        };
-                    }
-                    return t;
-                });
-                setTrials(updatedTrials);
-                saveTrialsToStorage(updatedTrials);
-            };
-
-            const addTrial = (trialData) => {
-                const newTrial = {
-                    ...trialData,
-                    id: Math.max(...trials.map(t => t.id), 0) + 1,
-                    subjects: []
-                };
-                const updatedTrials = [...trials, newTrial];
-                setTrials(updatedTrials);
-                saveTrialsToStorage(updatedTrials);
-                setShowAddModal(false);
-            };
-
-            const updateTrial = (trialData) => {
-                const updatedTrials = trials.map(t =>
-                    t.id === trialData.id ? { ...t, ...trialData } : t
-                );
-                setTrials(updatedTrials);
-                saveTrialsToStorage(updatedTrials);
-                setEditingTrial(null);
-            };
-
-            const deleteTrial = (id) => {
-                if (confirm('確定要刪除此試驗？此操作無法復原。')) {
-                    const updatedTrials = trials.filter(t => t.id !== id);
-                    setTrials(updatedTrials);
-                    saveTrialsToStorage(updatedTrials);
-                }
-            };
-
-            const handleAccessAuth = (password) => {
-                if (password === SECURITY_CONFIG.ACCESS_PASSWORD) {
-                    setIsAuthenticated(true);
-                    return true;
-                }
-                return false;
-            };
-
-            const handleAdminLogin = (username, password) => {
-                if (username === SECURITY_CONFIG.ADMIN_USERNAME &&
-                    password === SECURITY_CONFIG.ADMIN_PASSWORD) {
-                    setIsLoggedIn(true);
-                    setShowLoginModal(false);
-                    return true;
-                }
-                return false;
-            };
-
-            const handleLogout = () => {
-                setIsLoggedIn(false);
-            };
-
-            if (!isAuthenticated) {
-                return <AccessPasswordModal onAuth={handleAccessAuth} />;
+          const handleSubmit = () => {
+            if (!newTrial.studyTitle || !newTrial.code) {
+              alert('請填寫試驗名稱和代號');
+              return;
             }
+            onAdd(newTrial);
+          };
 
-            if (loading) {
-                return (
-                    <div className="min-h-screen flex items-center justify-center">
-                        <div className="text-center">
-                            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
-                            <p className="mt-4 text-gray-600">載入中...</p>
-                        </div>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="min-h-screen pb-20">
-                    <div className="bg-white shadow-lg sticky top-0 z-50">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-4">
-                                    <div className="flex items-center">
-                                        <ClipboardIcon />
-                                        <h1 className="text-2xl font-bold text-slate-800 ml-2">
-                                            臨床試驗管理系統
-                                        </h1>
-                                    </div>
-                                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                                        v3.0
-                                    </span>
-                                </div>
-                                <div className="flex items-center space-x-3">
-                                    <button
-                                        onClick={() => setCurrentView('trials')}
-                                        className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
-                                            currentView === 'trials'
-                                                ? 'bg-blue-600 text-white'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                    >
-                                        <ClipboardIcon />
-                                        <span>試驗列表</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setCurrentView('subjects')}
-                                        className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
-                                            currentView === 'subjects'
-                                                ? 'bg-blue-600 text-white'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                    >
-                                        <UsersIcon />
-                                        <span>受試者管理</span>
-                                    </button>
-                                    {isLoggedIn && (
-                                        <>
-                                            <button
-                                                onClick={() => setCurrentView('settings')}
-                                                className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
-                                                    currentView === 'settings'
-                                                        ? 'bg-blue-600 text-white'
-                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                }`}
-                                            >
-                                                <SettingsIcon />
-                                                <span>系統設定</span>
-                                            </button>
-                                            <button
-                                                onClick={() => setShowAddModal(true)}
-                                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg"
-                                            >
-                                                <PlusIcon />
-                                                新增試驗
-                                            </button>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all shadow-lg"
-                                            >
-                                                <LogoutIcon />
-                                                登出
-                                            </button>
-                                        </>
-                                    )}
-                                    {!isLoggedIn && (
-                                        <button
-                                            onClick={() => setShowLoginModal(true)}
-                                            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg"
-                                        >
-                                            <LoginIcon />
-                                            管理員登入
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        {currentView === 'trials' && (
-                            <TrialsView
-                                trials={filteredTrials}
-                                allTrials={trials}
-                                searchTerm={searchTerm}
-                                setSearchTerm={setSearchTerm}
-                                selectedCancerType={selectedCancerType}
-                                setSelectedCancerType={setSelectedCancerType}
-                                selectedLine={selectedLine}
-                                setSelectedLine={setSelectedLine}
-                                selectedStatus={selectedStatus}
-                                setSelectedStatus={setSelectedStatus}
-                                isLoggedIn={isLoggedIn}
-                                onEdit={setEditingTrial}
-                                onDelete={deleteTrial}
-                                onManageSubjects={setSelectedTrial}
-                                allCancerTypes={allCancerTypes}
-                            />
-                        )}
-                        {currentView === 'subjects' && (
-                            <AllSubjectsView
-                                trials={trials}
-                                onEditSubject={updateSubject}
-                                onDeleteSubject={deleteSubject}
-                            />
-                        )}
-                        {currentView === 'settings' && isLoggedIn && (
-                            <SettingsView
-                                customCancerTypes={customCancerTypes}
-                                onSaveCancerTypes={saveCustomCancerTypes}
-                            />
-                        )}
-                    </div>
-
-                    {showLoginModal && (
-                        <AdminLoginModal
-                            onClose={() => setShowLoginModal(false)}
-                            onLogin={handleAdminLogin}
-                        />
-                    )}
-                    {showAddModal && (
-                        <TrialFormModal
-                            onClose={() => setShowAddModal(false)}
-                            onSave={addTrial}
-                            allCancerTypes={allCancerTypes}
-                        />
-                    )}
-                    {editingTrial && (
-                        <TrialFormModal
-                            trial={editingTrial}
-                            onClose={() => setEditingTrial(null)}
-                            onSave={updateTrial}
-                            allCancerTypes={allCancerTypes}
-                        />
-                    )}
-                    {selectedTrial && (
-                        <SubjectsManagementModal
-                            trial={selectedTrial}
-                            onClose={() => setSelectedTrial(null)}
-                            onAddSubject={addSubject}
-                            onUpdateSubject={updateSubject}
-                            onDeleteSubject={deleteSubject}
-                            allTrials={trials}
-                        />
-                    )}
+          return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm overflow-y-auto">
+              <div className="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 my-8 shadow-2xl">
+                <h2 className="text-3xl font-bold text-slate-800 mb-6">新增試驗</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-h-96 overflow-y-auto">
+                  <FormField label="試驗名稱 *" value={newTrial.studyTitle} onChange={(v) => setNewTrial({ ...newTrial, studyTitle: v })} />
+                  <FormField label="代號 *" value={newTrial.code} onChange={(v) => setNewTrial({ ...newTrial, code: v })} />
+                  <FormField label="癌症類型" value={newTrial.cancerType} onChange={(v) => setNewTrial({ ...newTrial, cancerType: v })} />
+                  <FormField label="治療線別" value={newTrial.line} onChange={(v) => setNewTrial({ ...newTrial, line: v })} />
+                  <FormField label="期別" value={newTrial.phase} onChange={(v) => setNewTrial({ ...newTrial, phase: v })} />
+                  <FormField label="贊助商" value={newTrial.sponsor} onChange={(v) => setNewTrial({ ...newTrial, sponsor: v })} />
+                  <FormField label="目標人數" type="number" value={newTrial.targetNum} onChange={(v) => setNewTrial({ ...newTrial, targetNum: parseInt(v) || 0 })} />
+                  <FormField label="已收案" type="number" value={newTrial.enrolled} onChange={(v) => setNewTrial({ ...newTrial, enrolled: parseInt(v) || 0 })} />
+                  <FormField label="主持人" value={newTrial.pi} onChange={(v) => setNewTrial({ ...newTrial, pi: v })} />
+                  <FormField label="研究護士" value={newTrial.nurse} onChange={(v) => setNewTrial({ ...newTrial, nurse: v })} />
+                  <FormField label="電話" value={newTrial.phone} onChange={(v) => setNewTrial({ ...newTrial, phone: v })} />
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">狀態</label>
+                    <select
+                      value={newTrial.status}
+                      onChange={(e) => setNewTrial({ ...newTrial, status: e.target.value })}
+                      className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    >
+                      <option value="進行中">進行中</option>
+                      <option value="暫停收案">暫停收案</option>
+                      <option value="名額已滿">名額已滿</option>
+                    </select>
+                  </div>
                 </div>
-            );
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">收案條件</label>
+                  <textarea
+                    value={newTrial.criteria}
+                    onChange={(e) => setNewTrial({ ...newTrial, criteria: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                    rows={4}
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSubmit}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold"
+                  >
+                    <PlusIcon />
+                    新增
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold"
+                  >
+                    取消
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
         }
 
-        ReactDOM.render(<ClinicalTrialsApp />, document.getElementById('app'));
+        ReactDOM.render(<ClinicalTrialsManager />, document.getElementById('app'));
     </script>
 </body>
 </html>
