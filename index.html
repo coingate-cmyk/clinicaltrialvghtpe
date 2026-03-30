@@ -42,15 +42,6 @@
             ENCRYPTION_KEY: 'clinical-trials-secret-key-2026' // 加密金鑰
         };
 
-        // v3.0 受試者管理
-        const SUBJECT_STATUS_OPTIONS = [
-            '待聯繫', '已聯繫', '評估中', '已加入', '不適合', '退出試驗', '尚待國外確認名額'
-        ];
-        
-        // 全局受試者存儲（使用 trial 標籤模式）
-        const SUBJECTS_STORAGE_KEY = 'clinical-trials-subjects';
-
-
         // 加密函數
         const encryptData = (data) => {
             try {
@@ -1420,7 +1411,6 @@
             if (accessGranted === 'true') {
               setHasAccess(true);
               loadTrialsFromStorage();
-        loadSubjects();
             } else {
               setLoading(false);
             }
@@ -1491,51 +1481,6 @@
               console.log('數據載入完成');
             }
           };
-
-    // 全局受試者管理函數
-    const loadSubjects = () => {
-        try {
-            const stored = localStorage.getItem(SUBJECTS_STORAGE_KEY);
-            if (stored) {
-                const decrypted = decryptData(stored);
-                if (decrypted && Array.isArray(decrypted)) {
-                    setSubjects(decrypted);
-                }
-            }
-        } catch (error) {
-            console.error('載入受試者失敗:', error);
-        }
-    };
-
-    const saveSubjects = (subjectsData) => {
-        try {
-            const encrypted = encryptData(subjectsData);
-            if (encrypted) {
-                localStorage.setItem(SUBJECTS_STORAGE_KEY, encrypted);
-                setSubjects(subjectsData);
-            }
-        } catch (error) {
-            console.error('儲存受試者失敗:', error);
-        }
-    };
-
-    const addSubject = (trialId, subjectData) => {
-        const newSubject = {
-            ...subjectData,
-            id: Date.now(),
-            trialIds: [trialId],  // 標籤陣列
-            createdAt: new Date().toISOString()
-        };
-
-    const handleManageSubjects = (trial) => {
-        setSelectedTrial(trial);
-        setShowSubjectsModal(true);
-    };
-
-        const updated = [...subjects, newSubject];
-        saveSubjects(updated);
-    };
-
 
           const saveTrialsToStorage = (trialsData) => {
             try {
@@ -1997,8 +1942,7 @@
                       editingTrial={editingTrial}
                       setEditingTrial={setEditingTrial}
                       handleSaveEdit={handleSaveEdit}
-                    
-                                onManageSubjects={onManageSubjects}/>
+                    />
                   ))}
                 </div>
 
@@ -2074,15 +2018,7 @@
                       <span className="font-semibold">贊助商: {trial.sponsor}</span>
                     </div>
                   </div>
-                  <button
-                                    onClick={() => onManageSubjects(trial)}
-                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg ml-4"
-                                    title="管理受試者"
-                                >
-                                    <UsersIcon />
-                                </button>
-                            
-                            {isLoggedIn && (
+                  {isLoggedIn && (
                     <div className="flex gap-2 ml-4">
                       <button
                         onClick={() => onEdit(trial)}
