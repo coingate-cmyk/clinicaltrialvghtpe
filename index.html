@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <!-- 強力緩存控制 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>臨床試驗管理系統 v3.0</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <meta http-equiv="Last-Modified" content="0">
+    <meta name="cache-control" content="no-cache">
+    <meta name="expires" content="0">
+    <meta name="pragma" content="no-cache">
+    <!-- 版本號 -->
+    <meta name="version" content="v3.0-nocache-20260330">
+    <title>臨床試驗管理系統 v3.0 (無緩存版)</title>
+    <script src="https://cdn.tailwindcss.com?v=1774880924"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=1774880924"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -63,11 +70,47 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <!-- 強制清除緩存腳本 -->
+    <script>
+        (function() {
+            // 檢查版本號，如果不匹配則強制刷新
+            const currentVersion = 'v3.0-nocache-20260330';
+            const storedVersion = localStorage.getItem('app-version');
+            
+            if (storedVersion !== currentVersion) {
+                console.log('版本更新，清除緩存並重新載入...');
+                localStorage.setItem('app-version', currentVersion);
+                
+                // 清除所有可能的緩存
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) {
+                            caches.delete(name);
+                        }
+                    });
+                }
+                
+                // 只刷新一次，避免無限循環
+                const refreshed = sessionStorage.getItem('page-refreshed');
+                if (!refreshed) {
+                    sessionStorage.setItem('page-refreshed', 'true');
+                    window.location.reload(true);
+                }
+            }
+            
+            // 清除 sessionStorage 標記（頁面載入成功後）
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    sessionStorage.removeItem('page-refreshed');
+                }, 1000);
+            });
+        })();
+    </script>
     <div id="app"></div>
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js?v=1774880924"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js?v=1774880924"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js?v=1774880924"></script>
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
