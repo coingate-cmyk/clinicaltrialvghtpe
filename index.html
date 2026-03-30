@@ -88,7 +88,7 @@
         // 治療線選項
         const TREATMENT_LINES = [
             '第一線', '第一線後', '第二線', '第二線後',
-            '第三線', '第三線後', '第四線', '第四線後', '不限'
+            '第三線', '第三線後', '第四線', '第四線後', '不限', 'Adjuvant'
         ];
 
         // 受試者狀態選項
@@ -134,7 +134,7 @@
         const ClipboardIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>;
 
 
-        // 初始試驗數據（v3.0 格式）
+        // 初始試驗數據（v3.0 格式 - 已修復）
         const initialTrials = [
   {
     "id": 1,
@@ -158,7 +158,8 @@
       {
         "type": "肝癌",
         "lines": [
-          "二"
+          "第二線",
+          "第三線"
         ]
       }
     ],
@@ -242,7 +243,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -270,7 +271,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -298,7 +299,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -326,7 +327,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -354,7 +355,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -382,7 +383,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -410,7 +411,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -438,7 +439,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -466,7 +467,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -494,7 +495,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "一線後"
+          "第一線後"
         ]
       }
     ],
@@ -522,7 +523,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "三線"
+          "第三線"
         ]
       }
     ],
@@ -550,7 +551,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "三線"
+          "第三線"
         ]
       }
     ],
@@ -578,7 +579,7 @@
       {
         "type": "胃癌",
         "lines": [
-          "三線"
+          "第三線"
         ]
       }
     ],
@@ -606,7 +607,7 @@
       {
         "type": "食道癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -634,7 +635,7 @@
       {
         "type": "食道癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -662,7 +663,7 @@
       {
         "type": "食道癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -690,7 +691,7 @@
       {
         "type": "食道癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -718,7 +719,7 @@
       {
         "type": "胰臟癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -746,7 +747,7 @@
       {
         "type": "胰臟癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -774,7 +775,7 @@
       {
         "type": "胰臟癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -802,7 +803,7 @@
       {
         "type": "膽道癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -830,7 +831,7 @@
       {
         "type": "膽道癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -858,7 +859,7 @@
       {
         "type": "膽道癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -914,7 +915,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -942,7 +943,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -970,7 +971,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -998,7 +999,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -1026,7 +1027,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -1054,7 +1055,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -1082,7 +1083,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -1110,7 +1111,7 @@
       {
         "type": "大腸癌",
         "lines": [
-          "二線/三線"
+          "第二線"
         ]
       }
     ],
@@ -1194,7 +1195,7 @@
       {
         "type": "多種癌症",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -1306,7 +1307,7 @@
       {
         "type": "多種癌症",
         "lines": [
-          "二線"
+          "第二線"
         ]
       }
     ],
@@ -1362,7 +1363,7 @@
       {
         "type": "肝癌",
         "lines": [
-          "一線"
+          "第一線"
         ]
       }
     ],
@@ -1420,6 +1421,15 @@
                             </button>
                         </form>
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
@@ -1477,6 +1487,15 @@
                             </button>
                         </form>
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
@@ -1704,9 +1723,19 @@
                             </div>
                         )}
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
+
 
 
         // 試驗表單Modal（新增/編輯試驗）
@@ -1773,8 +1802,8 @@
             };
 
             return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl my-8">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto my-8">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-bold">{trial ? '編輯試驗' : '新增試驗'}</h2>
                             <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -1986,13 +2015,23 @@
                             </div>
                         </form>
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
 
 
+
         // 受試者管理Modal
-        function SubjectsManagementModal({ trial, onClose, onAddSubject, onUpdateSubject, onDeleteSubject }) {
+        function SubjectsManagementModal({ trial, onClose, onAddSubject, onUpdateSubject, onDeleteSubject, allTrials }) {
             const [subjects, setSubjects] = useState(trial.subjects || []);
             const [editingSubject, setEditingSubject] = useState(null);
             const [showAddForm, setShowAddForm] = useState(false);
@@ -2000,6 +2039,7 @@
             const [searchTerm, setSearchTerm] = useState('');
             const [filterStatus, setFilterStatus] = useState('全部');
             const [filterEligibility, setFilterEligibility] = useState('全部');
+            const [copyingSubject, setCopyingSubject] = useState(null);
 
             useEffect(() => {
                 setSubjects(trial.subjects || []);
@@ -2031,6 +2071,11 @@
                     onAddSubject(trial.id, subjectData);
                     setShowAddForm(false);
                 }
+            };
+
+            const handleCopySubject = (targetTrialId, subjectData) => {
+                onAddSubject(targetTrialId, subjectData);
+                setCopyingSubject(null);
             };
 
             const handleDeleteSelected = () => {
@@ -2182,17 +2227,31 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            if (confirm('確定要刪除此受試者？')) {
-                                                                onDeleteSubject(trial.id, subject.id);
-                                                            }
-                                                        }}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                                    >
-                                                        <TrashIcon />
-                                                    </button>
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setCopyingSubject(subject);
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                            title="複製到其他試驗"
+                                                        >
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                            </svg>
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                if (confirm('確定要刪除此受試者？')) {
+                                                                    onDeleteSubject(trial.id, subject.id);
+                                                                }
+                                                            }}
+                                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                                        >
+                                                            <TrashIcon />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))
@@ -2201,6 +2260,15 @@
                             )}
                         </div>
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
@@ -2380,6 +2448,104 @@
             );
         }
 
+
+        // 複製受試者到其他試驗的 Modal
+        function CopySubjectModal({ subject, currentTrialId, trials, onCopy, onClose }) {
+            const [selectedTrialId, setSelectedTrialId] = useState('');
+            
+            // 過濾掉當前試驗
+            const availableTrials = trials.filter(t => t.id !== currentTrialId);
+            
+            const handleCopy = () => {
+                if (selectedTrialId) {
+                    // 複製受試者資料，但重置 ID 和一些狀態
+                    const copiedSubject = {
+                        ...subject,
+                        id: undefined,  // 會在 addSubject 中重新生成
+                        status: '待聯繫',  // 重置狀態
+                        eligibility: false,  // 重置資格
+                        enrolled: false,  // 重置加入狀態
+                        notes: `從 ${trials.find(t => t.id === currentTrialId)?.code} 複製`
+                    };
+                    onCopy(parseInt(selectedTrialId), copiedSubject);
+                    onClose();
+                }
+            };
+            
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold">複製受試者到其他試驗</h3>
+                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                                <XIcon />
+                            </button>
+                        </div>
+                        
+                        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                            <div className="font-semibold text-lg mb-2">{subject.name}</div>
+                            <div className="text-sm text-gray-600">
+                                {subject.gender} {subject.age}歲 | {subject.chartNo}
+                            </div>
+                        </div>
+                        
+                        <div className="mb-6">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                選擇目標試驗 *
+                            </label>
+                            <select
+                                value={selectedTrialId}
+                                onChange={(e) => setSelectedTrialId(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">-- 請選擇試驗 --</option>
+                                {availableTrials.map(trial => (
+                                    <option key={trial.id} value={trial.id}>
+                                        {trial.code} - {trial.studyTitle.substring(0, 50)}...
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+                            <div className="font-semibold text-yellow-800 mb-1">📋 複製說明</div>
+                            <ul className="text-yellow-700 space-y-1 text-xs">
+                                <li>• 受試者的基本資料和病史會被複製</li>
+                                <li>• 狀態會重置為「待聯繫」</li>
+                                <li>• Eligibility 和 Enrolled 會重置</li>
+                                <li>• 可用於同時 screening 多個試驗</li>
+                            </ul>
+                        </div>
+                        
+                        <div className="flex gap-3">
+                            <button
+                                onClick={handleCopy}
+                                disabled={!selectedTrialId}
+                                className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                            >
+                                確認複製
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                            >
+                                取消
+                            </button>
+                        </div>
+                    </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
+                </div>
+            );
+        }
+
         // 所有受試者視圖
         function AllSubjectsView({ trials, onEditSubject, onDeleteSubject }) {
             const [searchTerm, setSearchTerm] = useState('');
@@ -2411,7 +2577,7 @@
             return (
                 <div>
                     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                        <h2 className="text-2xl font-bold mb-4">所有受試者</h2>
+                        <h2 className="text-2xl font-bold mb-4">所有受試者查詢</h2>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">搜尋</label>
@@ -2488,6 +2654,15 @@
                             ))
                         )}
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
@@ -2571,15 +2746,24 @@
                             )}
                         </div>
                     </div>
+                    {copyingSubject && (
+                        <CopySubjectModal
+                            subject={copyingSubject}
+                            currentTrialId={trial.id}
+                            trials={allTrials}
+                            onCopy={handleCopySubject}
+                            onClose={() => setCopyingSubject(null)}
+                        />
+                    )}
                 </div>
             );
         }
 
         // ==================== 組件結束 ====================
 
-        // 主應用程式組件（開始）
+
+        // 主應用程式組件
         function ClinicalTrialsApp() {
-            // 狀態管理
             const [isAuthenticated, setIsAuthenticated] = useState(false);
             const [isLoggedIn, setIsLoggedIn] = useState(false);
             const [trials, setTrials] = useState([]);
@@ -2592,12 +2776,11 @@
             const [showAddModal, setShowAddModal] = useState(false);
             const [editingTrial, setEditingTrial] = useState(null);
             const [loading, setLoading] = useState(true);
-            const [currentView, setCurrentView] = useState('trials'); // trials, subjects, settings
+            const [currentView, setCurrentView] = useState('trials');
             const [selectedTrial, setSelectedTrial] = useState(null);
             const [subjects, setSubjects] = useState([]);
             const [customCancerTypes, setCustomCancerTypes] = useState([]);
 
-            // 載入數據
             useEffect(() => {
                 loadTrialsFromStorage();
                 loadCustomCancerTypes();
@@ -2661,12 +2844,10 @@
                 }
             };
 
-            // 獲取所有可用的癌症種類
             const allCancerTypes = useMemo(() => {
                 return [...DEFAULT_CANCER_TYPES, ...customCancerTypes].sort();
             }, [customCancerTypes]);
 
-            // 篩選邏輯
             useEffect(() => {
                 let filtered = trials;
 
@@ -2701,7 +2882,6 @@
                 setFilteredTrials(filtered);
             }, [searchTerm, selectedCancerType, selectedLine, selectedStatus, trials]);
 
-            // 受試者相關函數
             const addSubject = (trialId, subjectData) => {
                 const updatedTrials = trials.map(t => {
                     if (t.id === trialId) {
@@ -2753,7 +2933,6 @@
                 saveTrialsToStorage(updatedTrials);
             };
 
-            // 試驗相關函數
             const addTrial = (trialData) => {
                 const newTrial = {
                     ...trialData,
@@ -2783,7 +2962,6 @@
                 }
             };
 
-            // 認證相關
             const handleAccessAuth = (password) => {
                 if (password === SECURITY_CONFIG.ACCESS_PASSWORD) {
                     setIsAuthenticated(true);
@@ -2806,12 +2984,10 @@
                 setIsLoggedIn(false);
             };
 
-            // 如果未認證，顯示密碼輸入頁面
             if (!isAuthenticated) {
                 return <AccessPasswordModal onAuth={handleAccessAuth} />;
             }
 
-            // 如果正在載入
             if (loading) {
                 return (
                     <div className="min-h-screen flex items-center justify-center">
@@ -2823,10 +2999,8 @@
                 );
             }
 
-            // 主界面
             return (
                 <div className="min-h-screen pb-20">
-                    {/* 頂部導航列 */}
                     <div className="bg-white shadow-lg sticky top-0 z-50">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                             <div className="flex items-center justify-between">
@@ -2844,38 +3018,38 @@
                                 <div className="flex items-center space-x-3">
                                     <button
                                         onClick={() => setCurrentView('trials')}
-                                        className={`px-4 py-2 rounded-lg transition-all ${
+                                        className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
                                             currentView === 'trials'
                                                 ? 'bg-blue-600 text-white'
                                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                     >
                                         <ClipboardIcon />
-                                        <span className="ml-2">試驗列表</span>
+                                        <span>試驗列表</span>
                                     </button>
                                     <button
                                         onClick={() => setCurrentView('subjects')}
-                                        className={`px-4 py-2 rounded-lg transition-all ${
+                                        className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
                                             currentView === 'subjects'
                                                 ? 'bg-blue-600 text-white'
                                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                     >
                                         <UsersIcon />
-                                        <span className="ml-2">受試者管理</span>
+                                        <span>受試者管理</span>
                                     </button>
                                     {isLoggedIn && (
                                         <>
                                             <button
                                                 onClick={() => setCurrentView('settings')}
-                                                className={`px-4 py-2 rounded-lg transition-all ${
+                                                className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
                                                     currentView === 'settings'
                                                         ? 'bg-blue-600 text-white'
                                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                 }`}
                                             >
                                                 <SettingsIcon />
-                                                <span className="ml-2">系統設定</span>
+                                                <span>系統設定</span>
                                             </button>
                                             <button
                                                 onClick={() => setShowAddModal(true)}
@@ -2907,7 +3081,6 @@
                         </div>
                     </div>
 
-                    {/* 主內容區 */}
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                         {currentView === 'trials' && (
                             <TrialsView
@@ -2943,7 +3116,6 @@
                         )}
                     </div>
 
-                    {/* 各種 Modal */}
                     {showLoginModal && (
                         <AdminLoginModal
                             onClose={() => setShowLoginModal(false)}
@@ -2972,13 +3144,13 @@
                             onAddSubject={addSubject}
                             onUpdateSubject={updateSubject}
                             onDeleteSubject={deleteSubject}
+                            allTrials={trials}
                         />
                     )}
                 </div>
             );
         }
 
-        // 渲染應用
         ReactDOM.render(<ClinicalTrialsApp />, document.getElementById('app'));
     </script>
 </body>
