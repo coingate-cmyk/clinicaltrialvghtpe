@@ -114,7 +114,36 @@ function TrialCard(props) {
                 }
             })()
         ),
-        e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
+                        e('div', {className: 'flex gap-3 mb-6'},
+                    isAdmin && e('button', {
+                        onClick: () => setShowAddModal(true),
+                        className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg font-semibold'
+                    },
+                        e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                            e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M12 4v16m8-8H4'})
+                        ),
+                        '新增試驗'
+                    ),
+                    e('button', {
+                        onClick: downloadCSV,
+                        className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
+                    },
+                        e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                            e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'})
+                        ),
+                        '下載 Excel'
+                    ),
+                    e('button', {
+                        onClick: generatePDF,
+                        className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl hover:from-red-600 hover:to-rose-600 transition-all shadow-lg font-semibold'
+                    },
+                        e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                            e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'})
+                        ),
+                        '匯出 PDF'
+                    )
+                ),
+                e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
             e('div', null,
                 e('span', {className: 'text-gray-600'}, 'PI: '),
                 e('span', {className: 'font-semibold'}, trial.pi)
@@ -377,7 +406,265 @@ function SubjectsListModal(props) {
     );
 }
 
-function App() {
+
+function TrialFormModal(props) {
+    const isEdit = !!props.trial;
+    const [form, setForm] = useState(props.trial || {
+        code: '',
+        studyTitle: '',
+        phase: '',
+        sponsor: '',
+        targetNum: '',
+        enrolled: 0,
+        pi: '',
+        nurse: '',
+        phone: '',
+        status: '進行中',
+        inclusion: '',
+        exclusion: ''
+    });
+    
+    const [cancerLines, setCancerLines] = useState(() => {
+        if (props.trial && props.trial.cancerTypes) {
+            return props.trial.cancerTypes.map(ct => ({
+                type: ct.type,
+                lines: ct.lines ? ct.lines.join(', ') : ''
+            }));
+        }
+        return [{type: '', lines: ''}];
+    });
+    
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        
+        if (!form.code || !form.studyTitle) {
+            alert('請填寫試驗代碼和標題');
+            return;
+        }
+        
+        const cancerTypes = cancerLines
+            .filter(cl => cl.type && cl.lines)
+            .map(cl => ({
+                type: cl.type,
+                lines: cl.lines.split(',').map(l => l.trim()).filter(Boolean)
+            }));
+        
+        if (cancerTypes.length === 0) {
+            alert('請至少添加一個癌症類型和治療線');
+            return;
+        }
+        
+        const trialData = {
+            ...form,
+            cancerTypes: cancerTypes,
+            id: isEdit ? form.id : Date.now(),
+            targetNum: parseInt(form.targetNum) || 0,
+            enrolled: parseInt(form.enrolled) || 0
+        };
+        
+        props.onSave(trialData);
+    };
+    
+    const update = (field, value) => {
+        setForm({...form, [field]: value});
+    };
+    
+    const addCancerLine = () => {
+        setCancerLines([...cancerLines, {type: '', lines: ''}]);
+    };
+    
+    const removeCancerLine = (index) => {
+        if (cancerLines.length > 1) {
+            setCancerLines(cancerLines.filter((_, i) => i !== index));
+        }
+    };
+    
+    const updateCancerLine = (index, field, value) => {
+        const updated = [...cancerLines];
+        updated[index][field] = value;
+        setCancerLines(updated);
+    };
+    
+    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl my-8'},
+            e('div', {className: 'flex justify-between items-center mb-6'},
+                e('h3', {className: 'text-2xl font-bold text-slate-800'}, isEdit ? '編輯試驗' : '新增試驗'),
+                e('button', {
+                    onClick: props.onClose,
+                    className: 'text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none'
+                }, '×')
+            ),
+            e('form', {onSubmit: handleSubmit, className: 'space-y-5'},
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗代碼 *'),
+                        e('input', {
+                            type: 'text',
+                            required: true,
+                            value: form.code,
+                            onChange: (ev) => update('code', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗期別'),
+                        e('input', {
+                            type: 'text',
+                            value: form.phase,
+                            onChange: (ev) => update('phase', ev.target.value),
+                            placeholder: '例：III',
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    )
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗標題 *'),
+                    e('textarea', {
+                        required: true,
+                        value: form.studyTitle,
+                        onChange: (ev) => update('studyTitle', ev.target.value),
+                        rows: 2,
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', {className: 'border-t-2 border-slate-200 pt-4'},
+                    e('div', {className: 'flex justify-between items-center mb-3'},
+                        e('label', {className: 'text-sm font-semibold text-slate-700'}, '癌症類型與治療線 *'),
+                        e('button', {
+                            type: 'button',
+                            onClick: addCancerLine,
+                            className: 'px-3 py-1.5 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors'
+                        }, '+ 添加')
+                    ),
+                    e('div', {className: 'space-y-2'},
+                        cancerLines.map((cl, idx) =>
+                            e('div', {key: idx, className: 'flex gap-2 items-start'},
+                                e('div', {className: 'flex-1'},
+                                    e('input', {
+                                        type: 'text',
+                                        placeholder: '癌症類型（例：胃癌）',
+                                        value: cl.type,
+                                        onChange: (ev) => updateCancerLine(idx, 'type', ev.target.value),
+                                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none'
+                                    })
+                                ),
+                                e('div', {className: 'flex-[2]'},
+                                    e('input', {
+                                        type: 'text',
+                                        placeholder: '治療線（例：第一線, 第二線 - 用逗號分隔）',
+                                        value: cl.lines,
+                                        onChange: (ev) => updateCancerLine(idx, 'lines', ev.target.value),
+                                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none'
+                                    })
+                                ),
+                                cancerLines.length > 1 && e('button', {
+                                    type: 'button',
+                                    onClick: () => removeCancerLine(idx),
+                                    className: 'px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-bold'
+                                }, '×')
+                            )
+                        )
+                    )
+                ),
+                e('div', {className: 'grid grid-cols-3 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, 'PI'),
+                        e('input', {
+                            type: 'text',
+                            value: form.pi,
+                            onChange: (ev) => update('pi', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '研究護士'),
+                        e('input', {
+                            type: 'text',
+                            value: form.nurse,
+                            onChange: (ev) => update('nurse', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '電話'),
+                        e('input', {
+                            type: 'text',
+                            value: form.phone,
+                            onChange: (ev) => update('phone', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    )
+                ),
+                e('div', {className: 'grid grid-cols-3 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '贊助商'),
+                        e('input', {
+                            type: 'text',
+                            value: form.sponsor,
+                            onChange: (ev) => update('sponsor', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目標收案數'),
+                        e('input', {
+                            type: 'number',
+                            value: form.targetNum,
+                            onChange: (ev) => update('targetNum', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '狀態'),
+                        e('select', {
+                            value: form.status,
+                            onChange: (ev) => update('status', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        },
+                            ['進行中', '暫停收案', '名額已滿', '停止收案'].map(s =>
+                                e('option', {key: s, value: s}, s)
+                            )
+                        )
+                    )
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '收案條件'),
+                    e('textarea', {
+                        value: form.inclusion,
+                        onChange: (ev) => update('inclusion', ev.target.value),
+                        rows: 3,
+                        placeholder: '請輸入收案條件...',
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '排除條件'),
+                    e('textarea', {
+                        value: form.exclusion,
+                        onChange: (ev) => update('exclusion', ev.target.value),
+                        rows: 2,
+                        placeholder: '請輸入排除條件...',
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', {className: 'flex gap-3 pt-4 border-t-2 border-slate-200'},
+                    e('button', {
+                        type: 'submit',
+                        className: 'flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
+                    }, '儲存'),
+                    e('button', {
+                        type: 'button',
+                        onClick: props.onClose,
+                        className: 'flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold'
+                    }, '取消')
+                )
+            )
+        )
+    );
+}
+
+
+        function App() {
     const [isAuth, setIsAuth] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [trials, setTrials] = useState([]);
@@ -388,6 +675,8 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [selectedTrial, setSelectedTrial] = useState(null);
     const [showSubjects, setShowSubjects] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(null);
     
     useEffect(() => {
         try {
@@ -425,6 +714,134 @@ function App() {
             localStorage.setItem('clinical-trials-encrypted', encrypted);
         }
     };
+
+    const handleSaveTrial = (trialData) => {
+        const existing = trials.find(t => t.id === trialData.id);
+        let updatedTrials;
+        
+        if (existing) {
+            updatedTrials = trials.map(t => t.id === trialData.id ? trialData : t);
+        } else {
+            updatedTrials = [...trials, trialData];
+        }
+        
+        setTrials(updatedTrials);
+        saveTrials(updatedTrials);
+        setShowAddModal(false);
+        setShowEditModal(null);
+        alert(existing ? '試驗已更新！' : '試驗已新增！');
+    };
+    
+    const downloadCSV = () => {
+        const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
+        const rows = filteredTrials.map(trial => {
+            const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
+                `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
+            ).join('; ') : '';
+            
+            return [
+                trial.code || '',
+                trial.studyTitle || '',
+                cancerInfo,
+                trial.phase || '',
+                trial.pi || '',
+                trial.nurse || '',
+                trial.phone || '',
+                trial.status || '',
+                `${trial.enrolled || 0}/${trial.targetNum || 0}`
+            ];
+        });
+        
+        const csvContent = [headers, ...rows]
+            .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+        
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+    };
+    
+    const generatePDF = () => {
+        const printWindow = window.open('', '_blank');
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="UTF-8">
+                <title>臨床試驗管理列表</title>
+                <style>
+                  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 20px; }
+                  h1 { text-align: center; color: #1e293b; margin-bottom: 10px; }
+                  .header-info { text-align: center; margin-bottom: 15px; color: #64748b; }
+                  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                  th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; font-size: 11px; }
+                  th { background-color: #f1f5f9; font-weight: bold; color: #1e293b; }
+                  tr:nth-child(even) { background-color: #f8fafc; }
+                  .status-active { color: #059669; font-weight: bold; }
+                  .status-paused { color: #f59e0b; font-weight: bold; }
+                  .status-full { color: #dc2626; font-weight: bold; }
+                  @media print {
+                    body { margin: 10px; }
+                    table { font-size: 10px; }
+                  }
+                </style>
+              </head>
+              <body>
+                <h1>臨床試驗管理列表</h1>
+                <div class="header-info">匯出日期: ${new Date().toLocaleDateString('zh-TW')} | 共 ${filteredTrials.length} 項試驗</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>代碼</th>
+                      <th>試驗標題</th>
+                      <th>癌症類型與治療線</th>
+                      <th>期別</th>
+                      <th>PI</th>
+                      <th>護理師</th>
+                      <th>電話</th>
+                      <th>狀態</th>
+                      <th>收案進度</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${filteredTrials.map(trial => {
+                        const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
+                            `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
+                        ).join('<br>') : '';
+                        
+                        const statusClass = trial.status === '進行中' ? 'status-active' : 
+                                          trial.status === '暫停收案' ? 'status-paused' : 'status-full';
+                        
+                        return `
+                          <tr>
+                            <td>${trial.code || ''}</td>
+                            <td>${trial.studyTitle || ''}</td>
+                            <td>${cancerInfo}</td>
+                            <td>${trial.phase || ''}</td>
+                            <td>${trial.pi || ''}</td>
+                            <td>${trial.nurse || ''}</td>
+                            <td>${trial.phone || ''}</td>
+                            <td class="${statusClass}">${trial.status || ''}</td>
+                            <td>${trial.enrolled || 0}/${trial.targetNum || 0}</td>
+                          </tr>
+                        `;
+                    }).join('')}
+                  </tbody>
+                </table>
+                <script>
+                  window.onload = function() {
+                    window.print();
+                  };
+                </script>
+              </body>
+            </html>
+        `;
+        printWindow.document.write(htmlContent);
+        printWindow.document.close();
+    };
     
     const saveSubjects = (data) => {
         const encrypted = encryptData(data);
@@ -453,7 +870,7 @@ function App() {
     };
     
     const handleEdit = (trial) => {
-        alert('編輯功能開發中');
+        setShowEditModal(trial);
     };
     
     const handleDelete = (id) => {
@@ -626,7 +1043,16 @@ function App() {
                 setSelectedTrial(null);
             },
             onAddSubject: handleAddSubject
-        })
+        }),
+            showAddModal && e(TrialFormModal, {
+                onSave: handleSaveTrial,
+                onClose: () => setShowAddModal(false)
+            }),
+            showEditModal && e(TrialFormModal, {
+                trial: showEditModal,
+                onSave: handleSaveTrial,
+                onClose: () => setShowEditModal(null)
+            })
     );
 }
 
