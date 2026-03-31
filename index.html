@@ -480,8 +480,8 @@ function TrialFormModal(props) {
         setCancerLines(updated);
     };
     
-    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto'},
-        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl my-8'},
+    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-24 pb-8 px-4 overflow-y-auto'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl max-h-[calc(100vh-8rem)] overflow-y-auto'},
             e('div', {className: 'flex justify-between items-center mb-6'},
                 e('h3', {className: 'text-2xl font-bold text-slate-800'}, isEdit ? '編輯試驗' : '新增試驗'),
                 e('button', {
