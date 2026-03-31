@@ -93,18 +93,26 @@ function TrialCard(props) {
             }, trial.status)
         ),
         e('div', {className: 'flex flex-wrap gap-2 mb-4'},
-            trial.cancerTypes && trial.cancerTypes.length > 0
-                ? trial.cancerTypes.map((ct, idx) => 
-                    ct.lines ? ct.lines.map((line, lineIdx) =>
-                        e('span', {
-                            key: idx + '-' + lineIdx,
-                            className: 'px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
-                        }, ct.type + ' - ' + line)
-                    ) : null
-                  ).flat().filter(Boolean)
-                : e('span', {className: 'px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm'},
-                    trial.cancerType + ' - ' + trial.line
-                  )
+            (() => {
+                if (trial.cancerTypes && trial.cancerTypes.length > 0) {
+                    const tags = [];
+                    trial.cancerTypes.forEach((ct, idx) => {
+                        if (ct.lines) {
+                            ct.lines.forEach((line, lineIdx) => {
+                                tags.push(e('span', {
+                                    key: idx + '-' + lineIdx,
+                                    className: 'px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
+                                }, ct.type + ' - ' + line));
+                            });
+                        }
+                    });
+                    return tags;
+                } else {
+                    return e('span', {className: 'px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm'},
+                        trial.cancerType + ' - ' + trial.line
+                    );
+                }
+            })()
         ),
         e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
             e('div', null,
@@ -475,6 +483,7 @@ function App() {
     const filtered = useMemo(() => {
         let result = trials;
         
+        // 搜尋篩選
         if (search) {
             result = result.filter(t =>
                 t.studyTitle.toLowerCase().includes(search.toLowerCase()) ||
@@ -483,6 +492,7 @@ function App() {
             );
         }
         
+        // 癌症類型篩選
         if (cancerType !== '全部') {
             result = result.filter(t =>
                 t.cancerTypes && t.cancerTypes.some(ct => ct.type === cancerType) ||
@@ -490,24 +500,43 @@ function App() {
             );
         }
         
+        // 治療線篩選
         if (selectedLine !== '全部') {
             result = result.filter(t => {
-                // 檢查新格式（cancerTypes.lines）
+                const matchRules = {
+                    '第一線': ['第一線', '一線'],
+                    '第二線': ['第二線', '二線', '第一線後', '一線後', '二/三線', '二、三線', '二線/三線'],
+                    '第三線': ['第三線', '三線', '第二線後', '二線後', '二/三線', '二、三線', '二線/三線'],
+                    'Adjuvant': ['Adjuvant', '觀察性'],
+                    '多線': ['多線']
+                };
+                
+                const rulesToMatch = matchRules[selectedLine] || [selectedLine];
+                
+                // 檢查 cancerTypes[].lines[]
                 if (t.cancerTypes && t.cancerTypes.length > 0) {
-                    return t.cancerTypes.some(ct => 
-                        ct.lines && ct.lines.length > 0 && ct.lines.includes(selectedLine)
-                    );
+                    for (let ct of t.cancerTypes) {
+                        if (ct.lines && ct.lines.length > 0) {
+                            for (let line of ct.lines) {
+                                if (rulesToMatch.includes(line)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
-                // 檢查舊格式（line）
-                if (t.line) {
-                    return t.line === selectedLine;
+                
+                // 檢查 line
+                if (t.line && rulesToMatch.includes(t.line)) {
+                    return true;
                 }
+                
                 return false;
             });
         }
         
         return result;
-    }, [trials, search, cancerType]);
+    }, [trials, search, cancerType, selectedLine]);
     
     const cancerTypes = useMemo(() => {
         const types = new Set();
@@ -522,39 +551,7 @@ function App() {
     }, [trials]);
     
     const treatmentLines = useMemo(() => {
-        const lines = new Set();
-        trials.forEach(trial => {
-            if (trial.cancerTypes && trial.cancerTypes.length > 0) {
-                trial.cancerTypes.forEach(ct => {
-                    if (ct.lines && ct.lines.length > 0) {
-                        ct.lines.forEach(line => lines.add(line));
-                    }
-                });
-            } else if (trial.line) {
-                lines.add(trial.line);
-            }
-        });
-        
-        // 自定義排序：第一線、第二線、第三線優先
-        const lineOrder = {
-            '第一線': 1,
-            '第二線': 2,
-            '第三線': 3,
-            'Adjuvant': 4,
-            '多線': 5,
-            '二/三線': 6
-        };
-        
-        const sortedLines = Array.from(lines).sort((a, b) => {
-            const orderA = lineOrder[a] || 999;
-            const orderB = lineOrder[b] || 999;
-            if (orderA !== orderB) {
-                return orderA - orderB;
-            }
-            return a.localeCompare(b);
-        });
-        
-        return ['全部', ...sortedLines];
+        return ['全部', '第一線', '第二線', '第三線', 'Adjuvant', '多線'];
     }, [trials]);
     
     if (!isAuth) {
