@@ -1,98 +1,1081 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>臨床試驗管理系統 v3 (Realtime DB)</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin:0; background:#f5f7fb; }
-    header { background:#1e40af; color:#fff; padding:16px; }
-    .container { max-width:1000px; margin:20px auto; padding:16px; background:#fff; border-radius:8px; }
-    input, button { padding:8px; margin:4px; }
-    button { cursor:pointer; background:#2563eb; color:#fff; border:none; border-radius:4px; }
-    table { width:100%; border-collapse: collapse; margin-top:12px; }
-    th, td { border:1px solid #ddd; padding:8px; }
-    th { background:#f1f5f9; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臨床試驗管理系統 v3.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 </head>
-<body>
-<header>
-  <h2>臨床試驗管理系統 v3（Realtime DB版）</h2>
-</header>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <div id="app"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script>
+const {useState, useEffect, useMemo} = React;
+const e = React.createElement;
 
-<div class="container">
-  <h3>登入</h3>
-  <input id="pwd" type="password" placeholder="輸入密碼"/>
-  <button onclick="login()">登入</button>
-
-  <div id="app" style="display:none;">
-    <h3>新增試驗</h3>
-    <input id="title" placeholder="試驗名稱"/>
-    <input id="pi" placeholder="PI"/>
-    <button onclick="addTrial()">新增</button>
-
-    <h3>試驗列表</h3>
-    <table>
-      <thead>
-        <tr><th>名稱</th><th>PI</th></tr>
-      </thead>
-      <tbody id="list"></tbody>
-    </table>
-  </div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
-<script>
-const PASSWORD = "clinical2026";
-
-function login(){
-  const p = document.getElementById("pwd").value;
-  if(p === PASSWORD){
-    document.getElementById("app").style.display = "block";
-  } else {
-    alert("密碼錯誤");
-  }
-}
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og",
-  authDomain: "clinicaltrial-vghtpe.firebaseapp.com",
-  databaseURL: "https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com/",
-  projectId: "clinicaltrial-vghtpe",
-  storageBucket: "clinicaltrial-vghtpe.firebasestorage.app",
-  messagingSenderId: "220821651319",
-  appId: "1:220821651319:web:19dbfbaea0ea999472eb72"
+const CONFIG = {
+    ACCESS_PASSWORD: 'clinical2026',
+    ADMIN_USERNAME: 'admin',
+    ADMIN_PASSWORD: 'admin123',
+    ENCRYPTION_KEY: 'clinical-trials-secret-key-2026'
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+// Firebase Realtime Database 設定
+const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og",
+    authDomain: "clinicaltrial-vghtpe.firebaseapp.com",
+    databaseURL: "https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com",
+    projectId: "clinicaltrial-vghtpe",
+    storageBucket: "clinicaltrial-vghtpe.firebasestorage.app",
+    messagingSenderId: "220821651319",
+    appId: "1:220821651319:web:19dbfbaea0ea999472eb72"
+};
 
-db.ref("clinicalTrialApp/trials").on("value", snapshot => {
-  const data = snapshot.val() || {};
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-  Object.values(data).forEach(t => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${t.title}</td><td>${t.pi}</td>`;
-    list.appendChild(tr);
-  });
-});
+const RTDB_PATH = {
+    root: 'clinicalTrialApp'
+};
 
-function addTrial(){
-  const title = document.getElementById("title").value;
-  const pi = document.getElementById("pi").value;
+let __db = null;
 
-  if(!title) return alert("請輸入試驗名稱");
+const encryptData = (data) => {
+    try {
+        return CryptoJS.AES.encrypt(JSON.stringify(data), CONFIG.ENCRYPTION_KEY).toString();
+    } catch (error) {
+        return null;
+    }
+};
 
-  const id = Date.now();
-  db.ref("clinicalTrialApp/trials/" + id).set({
-    title,
-    pi,
-    createdAt: new Date().toISOString()
-  });
+const decryptData = (encrypted) => {
+    try {
+        const bytes = CryptoJS.AES.decrypt(encrypted, CONFIG.ENCRYPTION_KEY);
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    } catch (error) {
+        return null;
+    }
+};
+
+const INITIAL_TRIALS = [{"id": 1, "cancerType": "肝癌", "line": "二、三線", "studyTitle": "一項第II期、多中心、開放性試驗，在患有晚期/轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305", "code": "DB1311-201", "phase": "I", "sponsor": "", "targetNum": 6, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "Abby", "phone": "82935/82999", "status": "進行中", "inclusion": "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL", "exclusion": "", "cancerTypes": [{"type": "肝癌", "lines": ["第二線", "第三線"]}], "subjects": []}, {"id": 2, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗", "code": "TTY", "phase": "4", "sponsor": "TTY", "targetNum": 150, "enrolled": 16, "monthSigned": 1, "monthEnrolled": 1, "pi": "洪逸平", "nurse": "宋秀薇", "phone": "2935/2999", "status": "進行中", "inclusion": "胃癌術後使用健保S-1 病患", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["Adjuvant"]}], "subjects": []}, {"id": 3, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "一項在 HER2 表現胃癌患者評估治療性癌症疫苗 (AST-301, pNGVL3-hICD) 安全性及免疫療效的第二期試驗 (CORNERSTONE-003)", "code": "PN-301-22", "phase": "2", "sponsor": "諾佛葛", "targetNum": 6, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "賴姵妤", "phone": "0919801912", "status": "進行中", "inclusion": "1.胃癌術後D2、R0、STAGE 2、3 ，並使用過預防性化療後完全沒有腫瘤復發的病人。2.必須用完最後一次預防性化療後，間隔兩周並在八周內接受第一次AST-301治療。3.HbsAg (+)可收，但需 HBV DNA is undetectable。", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["Adjuvant"]}], "subjects": []}, {"id": 4, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項隨機分配、第 III 期試驗，評估 Rilvegostomig 併用Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果 (ARTEMIDE-Gastric01)", "code": "D702AC00001", "phase": "III", "sponsor": "AZ", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "進行中", "inclusion": "1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告) 2. 體重 >= 35 KG 3. Measurable lesion by RECIST 1.1 4.ECOG 0-1 5. 可收B肝.治療後的C肝 病毒量驗不到 6.僅收一線病人 7. CCr>=60, CPS > 1", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 5, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估 ABBV-400 合併 Fluorouracil、Leucovorin 和 Budigalimab 作為第一線治療的安全性、療效和最佳劑量 (AndroMETa-GEA-977)", "code": "M24-977", "phase": "II", "sponsor": "ABBVIE", "targetNum": 10, "enrolled": 10, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "暫停收案", "inclusion": "1.HER2(-) 2.C肝不收 3.Slide*15 (4-5u) ,C1D1前需寄出 4.可收B肝,病毒量需小於500 IU/mL 5.需有Target Lesion (Recist 1.1) 6.ILD or Pneumonitis 病史不能收 7.全肺切除者不能收 8.C1D1前不能使用抗生素", "exclusion": "C肝, ILD或Pneumonitis病史, 全肺切除者", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 6, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項評估AB598單一療法與併用療法對晚期惡性腫瘤參與者之安全性及耐受性的第1/1b期試驗", "code": "ARC-25", "phase": "1b", "sponsor": "NOVOTECH", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "名額已滿", "inclusion": "1.HER2(-) 2.禁用藥(CD39) 3.Slide*15 (4-5u) ,C1D1前需寄到美國 4.可收B肝,病毒量需小於2000 IU/mL 可收C肝,病毒量需小於15 IU/mL 5.需有Target Lesion (Recist 1.1)", "exclusion": "使用CD39禁用藥", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 7, "cancerType": "胃癌", "line": "一線", "studyTitle": "多中心、一項第 1b/2 期開放性、劑量遞增和劑量延伸試驗，評估Trastuzumab Deruxtecan (T-Dxd) 單一療法與併用療法對於帶有 HER2 表現胃癌成人受試者的安全性、耐受性、藥物動力學、免疫原性和抗腫瘤活性 (DESTINY-Gastric03)", "code": "D967LC0001", "phase": "1b/2", "sponsor": "AZ", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "周淑慧", "phone": "82935/82999", "status": "暫停收案", "inclusion": "目前 4A,4B cohort已滿,暫停收案。1. 僅收一線病人 2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative ) --> Arm 4B 用藥: T-Dxd + capecitabine + rilvegostomig 3. HER2 high ( IHC 3+ / IHC 2+ with FISH-positive ) --> Arm 4A 4. HBsAg(-) , anti-HBc(+) --> B肝不能收 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion", "exclusion": "B肝", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 8, "cancerType": "胃癌", "line": "一線", "studyTitle": "Zolbetuximab 合併 Pembrolizumab 和化療（CAPOX 或mFOLFOX6），用於罹患局部晚期無法切除或轉移性胃或胃食道交界腺癌，腫瘤為 HER2 陰性、Claudin (CLDN) 18.2 陽性且計畫性凋亡配體-1 (PD-L1) 陽性的參與者之第一線治療的一項第 3 期、雙盲、隨機分配試驗", "code": "8951-CL-0305", "phase": "III", "sponsor": "Astellas", "targetNum": 2, "enrolled": 0, "monthSigned": 2, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "賴姵妤, 宋秀薇", "phone": "82935/82999", "status": "進行中", "inclusion": "1. Histologically confirmed gastric or GEJ adenocarcinoma 2. HER2-negative,(可以院內驗) 3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗) 4. HBsAg(-) ; HCV(-) ; CCr >=30 5. Slide片*9 ( 4-5u),10個工作天發報告 6. At least one measurable lesion", "exclusion": "HBsAg(+), HCV(+)", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 9, "cancerType": "胃癌", "line": "一線", "studyTitle": "評估 Trastuzumab Deruxtecan (Enhertu®) 併用化療（加或不加Pembrolizumab）相較於化療併用 Trastuzumab（加或不加Pembrolizumab）作為不可切除、局部晚期或轉移性 HER2-陽性胃癌或胃食道接合處 (GEJ) 癌受試者第一線治療的一項多中心、隨機分配、開放標記、第 III 期試驗 (DESTINY-Gastric05)", "code": "DS8201-724", "phase": "III", "sponsor": "第一三共", "targetNum": 7, "enrolled": 0, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇, 賴姵妤", "phone": "82935/82999", "status": "進行中", "inclusion": "1. 必須可以吞Xeloda 2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive) 3. LVEF >=50 % , CCr >=60 4. HBsAg(+) ,HBV DNA<2000 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion 7. Slide片*16 ( 4-5u),10個工作天發報告", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 10, "cancerType": "胃癌", "line": "二線", "studyTitle": "HERTHENA-PanTumor01 (U31402-277)：一項第 2 期、多中心、多群組、開放標記、概念驗證試驗，探討 Patritumab Deruxtecan (HER3-DXd; U3-1402) 運用於局部晚期或轉移性固體腫瘤的受試者", "code": "U31402-277", "phase": "II", "sponsor": "第一三共", "targetNum": 10, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "邱琳琳", "phone": "0976107317", "status": "進行中", "inclusion": "1.HER 2 (-) 2.需要PD後的切片(8片) 3.第一線的化療要以 5-FU-based 4.HbsAg(+)可以收,DNA<2000 IU/mL", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 11, "cancerType": "胃癌", "line": "二線", "studyTitle": "使用Ramucirumab (Cyramza)、nal-IRI (Onivyde) 和Trifluridine /Tipiracil (Lonsurf) 作為二線治療，用於轉移性胃癌的第 Ib期和第II 期臨床試驗（COOL臨床試驗）", "code": "T1223", "phase": "Ib/II", "sponsor": "IIT", "targetNum": 25, "enrolled": 9, "monthSigned": 0, "monthEnrolled": 1, "pi": "陳明晃", "nurse": "林韋秀", "phone": "0963501682", "status": "進行中", "inclusion": "1. 不限her 2 ( - or +)，但如為her 2 (+) 一線治療必須用過Herceptin 2. Measurable lesion by RECIST 1.1 3.沒有排除 B C肝", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 12, "cancerType": "胃癌", "line": "二線", "studyTitle": "一項第 1b 期、多中心、開放性試驗，評估 CHS-114 合併Toripalimab 加上或不加其他治療用於晚期或轉移性實體腫瘤參與者的安全性和療效", "code": "CHS-114-02", "phase": "Ib", "sponsor": "美捷", "targetNum": 6, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "林韋秀, 王秋眉", "phone": "0963501682", "status": "進行中", "inclusion": "1.C2需要再次切片 2.Slide*15 (4-5u) ,C1D1前需寄出 4.需有Target Lesion (Recist 1.1) 5.ILD or Pneumonitis 病史不能收 Cohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma)", "exclusion": "ILD或Pneumonitis病史", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 13, "cancerType": "胃癌", "line": "一線後", "studyTitle": "一項第二期、開放性、多中心試驗，評估 AZD0901 作為單一療法和併用抗癌藥物使用於表現 Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "code": "D9800C00001", "phase": "Ib/II", "sponsor": "AZ", "targetNum": 10, "enrolled": 3, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 吳佳勳", "phone": "0927751328", "status": "進行中", "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌 (1)胰臟癌 ,一線治療 (2)胃癌,正二.三線治療 (3)膽管癌,正二.三線治療 2. HER2 (-) 3. 胃癌需PD後再次切片,C3要再切片一次 4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<2000 需使用抗病毒用藥 ,排除C肝及HIV(+) 7.ECOG 0-1 8.體重 >= 35 KG", "exclusion": "C肝, HIV(+)", "cancerTypes": [{"type": "胃癌", "lines": ["第一線後"]}], "subjects": []}, {"id": 14, "cancerType": "胃癌", "line": "三線", "studyTitle": "一項第二期、開放性、多中心試驗，評估 AZD0901 作為單一療法和併用抗癌藥物使用於表現 Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "code": "D9802C00001", "phase": "III", "sponsor": "AZ", "targetNum": 17, "enrolled": 12, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "吳佳勳", "phone": "0918696523", "status": "進行中", "inclusion": "1.正三線及三線後 都可以收，一線需用過 Fluoropyrimidine/ platinum 2. HER2 (-) 3. archival tissue <24 months送國外驗Claudin18.2切片*15(10天出報告) 4. 與上一線治療需 washout 28天或5個半衰期 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<100.治療後的C肝 病毒量驗不到 !!!!! 收案即將進入尾聲 (3/31)，動起來再加碼收 5人~", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 15, "cancerType": "胃癌", "line": "三線", "studyTitle": "一項第3期、多中心、開放性、隨機分配試驗，比較 MK-2870與醫師選擇之治療，對於 3L+晚期／轉移性胃食道腺癌（胃腺癌、胃食道交接處腺癌和食道腺癌）的療效和安全性", "code": "MK2870-015", "phase": "III", "sponsor": "MSD", "targetNum": 4, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 王秋眉, 吳佳勳", "phone": "7270#268", "status": "暫停收案", "inclusion": "1.可收食道癌及胃癌 正三線及三線後 2.需要20片切片,要等10天報告出來才能 Random 3.必須使用過fluoropyrimidine and platinum doublet 4.HER2+ must have previously received trastuzumab 5.Brain meta需要接受治療且確認為 stable 6.B,C肝, HIV只要有病史都不收 7.試驗藥物只能從周邊血管施打", "exclusion": "B肝, C肝, HIV病史", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 16, "cancerType": "胃癌", "line": "三線", "studyTitle": "BDC-4182 作為單一藥物於晚期胃癌及胃食道癌患者之第 1/2 期、首次使用於人體之劑量遞增與擴展試驗", "code": "BBI-4182-101", "phase": "I/II", "sponsor": "Bolt", "targetNum": 2, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 林韋秀", "phone": "0927751328", "status": "進行中", "inclusion": "1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。5. 腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 17, "cancerType": "食道癌", "line": "一線", "studyTitle": "一項針對罹患局部晚期不可切除／轉移性食道癌 ( ESCC) 的第一線治療受試者，使用研究性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療的第 1／2 期開放標示、傘式平台設計試驗 KEYMAKER-U06：06E 子試驗", "code": "MK-3475-06E", "phase": "I/II", "sponsor": "MSD", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1- 您必須經過組織學或細胞學確診為第 1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。2- ccr > =50 ml/min", "exclusion": "1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加 2. 在使用試驗治療前 4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。3. QTcF value >470 msec / LVEF < 50", "cancerTypes": [{"type": "食道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 18, "cancerType": "食道癌", "line": "一線", "studyTitle": "一項針對罹患局部晚期無法切除 /轉移性胃食道腺癌 (胃腺癌、胃食道交接處腺癌與食道腺癌 ) 的第一線治療受試者，使用 MK-2870搭配Pembrolizumab (MK-3475) 和化療的第1/2期開放標示、傘式平台設計試驗： 06C子試驗", "code": "MK-3475-06C", "phase": "I/II", "sponsor": "MSD", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲", "phone": "0981764403", "status": "進行中", "inclusion": "1. 經組織學和/或細胞學確診為先前未經治療的局部晚期 不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。2. 患有非HER2/neu陽性的胃食道腺癌。3.ccr > =50 ml/min", "exclusion": "1-在第一劑研究介入前 3 個月內體重減輕 >20%。2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。", "cancerTypes": [{"type": "食道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 19, "cancerType": "食道癌", "line": "二線", "studyTitle": "一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性 食道鱗狀細胞癌 (ESCC) 受試者之第三期、多中心、隨機分配、開放標記試驗 (IDeate-Esophageal01)", "code": "DS7300-202", "phase": "III", "sponsor": "DAIICHI SANKYO", "targetNum": 4, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC. 2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ).", "exclusion": "1.受試者患有 <50 bpm 的心搏過緩，除非受試者裝有心律調節器 2. Has received prior treatment with orlotamab, enoblituzumab, or other B7-H3 targeted agents, including I-DXd. 3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.", "cancerTypes": [{"type": "食道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 20, "cancerType": "食道癌", "line": "二線", "studyTitle": "一項第1⁄2期開放標示、傘式平台設計試驗，評估 MK-2870合併Paclitaxel作為二線治療罹患晚期 /轉移性胃食道腺癌 的受試者的安全與療效性： 06D子試驗", "code": "MK-3475-06D", "phase": "I/II", "sponsor": "MSD", "targetNum": 6, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma. 2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.", "exclusion": "1. Has squamous cell or undifferentiated esophageal gastric cancer. 2. Received prior treatment with a TROP2-targeted ADC", "cancerTypes": [{"type": "食道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 21, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項第 2b/3 期、隨機分配、雙盲試驗 ,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者 ,探討 PONSEGROMAB (PF-06946860) 相較於安慰劑的療效、安全性和耐受性", "code": "C3651021", "phase": "2b/3", "sponsor": "輝瑞", "targetNum": 15, "enrolled": 1, "monthSigned": 1, "monthEnrolled": 0, "pi": "李重賓", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "1. 資料顯示有轉移性胰管腺癌 2. 尚未接受過治療 (一線治療) 3. Measurable lesion by RECIST 1.1 4. Fearon 定義的惡病質: BMI < 20 kg/m2 且篩選前六個月 內自願性體重減輕 > 2% 或者 篩選前過去六個月 內非自願體重減輕 > 5% 5. ECOG : 0-1 6. 不需要送腫瘤切片 7. LVEF > 50%", "exclusion": "", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 22, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項第 1b 期試驗，評估 AMG 193 合併其他療法用於晚期同合子甲硫腺苷磷酸化 酶 (MTAP) 缺失胃腸道癌、膽管癌、胰臟癌受試者的安全性、耐受性、藥物動力學及療效 – 主試驗計畫", "code": "20230023", "phase": "IB", "sponsor": "Amgen Inc.", "targetNum": 5, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王昭蘋", "phone": "0919377185", "status": "停止收案", "inclusion": "105 依當地或中央次世代定序檢測，評估為 MTAP 缺失。106 有能力吞服口服之試驗治療，不會吐出來，並願意記錄試驗藥 品的每天服藥情況。107 經試驗主持人判定，患有實體腫瘤治療反應評估標準第 1.1 版 (RECIST v1.1) 定義的可測量病灶。108 美國東岸癌症臨床研究合作組織 (ECOG) 體能狀態為 0 或1 分 目前只開放收 胰臟癌一線", "exclusion": "", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 23, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項隨機分配、第 2/3期試驗，針對未接受過治療、且具有同源性MTAP缺失的轉移性胰管腺癌受試者，以 BMS-986504併用Nabpaclitaxel及Gemcitabine，相較於安慰劑併用 Nab-paclitaxel及Gemcitabine的療效", "code": "CA2400030", "phase": "2/3", "sponsor": "必治妥", "targetNum": 5, "enrolled": 3, "monthSigned": 1, "monthEnrolled": 0, "pi": "姜乃榕", "nurse": "王昭蘋", "phone": "0919377185", "status": "進行中", "inclusion": "● 經組織學或細胞學方法確診患有轉移性 PDAC。● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。", "exclusion": "排除b,c肝", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 24, "cancerType": "膽道癌", "line": "一線", "studyTitle": "一項第 III 期、隨機分配、開放性、全球多中心試驗，評估Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療 (ARTEMIDE-Biliary02)", "code": "D702NC00001", "phase": "III", "sponsor": "AZ", "targetNum": 15, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "林韋秀, 王秋眉", "phone": "0963501682", "status": "進行中", "inclusion": "1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。2. 需提供12個月內的切片檢體，random前需有PDL-1 報告(Central review) 。3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打 GCSF。4. 暫不收B、C肝。", "exclusion": "B肝, C肝, 壺腹癌", "cancerTypes": [{"type": "膽道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 25, "cancerType": "膽道癌", "line": "一線", "studyTitle": "DESTINY-Biliary Tract Cancer-01：一項第三期試驗，評估Trastuzumab Deruxtecan (T-DXd) 和 Rilvegostomig 相較於標準照護 Gemcitabine、Cisplatin 和 Durvalumab 作為第一線治療局部晚期或轉移性HER2表現型的膽道癌", "code": "DESTINY-Biliary Tract", "phase": "3", "sponsor": "AZ", "targetNum": 6, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋", "phone": "0927751328", "status": "進行中", "inclusion": "1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌 2.尚未接受過治療 (一線治療) 3.Adjuvant結束超過6個月後復發，不在此限 4.HER 2 表現型IHC2+或3+ 5.B肝患者可收，但與 C肝交叉感染者不可收案。6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1", "exclusion": "B肝與C肝交叉感染", "cancerTypes": [{"type": "膽道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 26, "cancerType": "膽道癌", "line": "二線", "studyTitle": "一項第三期、隨機分配、對照、全球多中心試驗，針對纖維母細胞生長因子受體 (FGFR)變異、化療和FGFR抑制劑難治型/復發型膽管癌受試者，評估口服Tinengotinib相較於醫師選定療法的療效與安全性 (FIRST-308)", "code": "TT420C2308", "phase": "3", "sponsor": "藥捷安康", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "周淑慧", "phone": "82935/82999", "status": "進行中", "inclusion": "1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥 2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要 ≥1.5cm 3. Gemcitabine+Cisplatin washout period > 21days 4. HBsAg(+), HBV DNA<500 IU/mL 5. Anti-HCV(+), HCV RNA(-)", "exclusion": "", "cancerTypes": [{"type": "膽道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 27, "cancerType": "膽道癌", "line": "觀察性", "studyTitle": "一項真實世界證據研究，評估 Pemigatinib用於先前已治療過之局部晚期、轉移性或無法切除膽管癌之治療成效", "code": "PG2401", "phase": "觀察性研究", "sponsor": "東洋 TTY", "targetNum": 15, "enrolled": 7, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇", "phone": "0936385216", "status": "暫停收案", "inclusion": "(1)經組織學或細胞學確認之局部晚期或轉移性膽管癌，且對先前之全身性抗癌療法具有腫瘤惡化證據 (2)當地基因檢測具有FGFR2融合或重組之證據 (3)使用Pemigatinib治療 (2021年5月至2025年9月間開始使用) (4)能提供次世代基因定序(Next Generation Sequencing, NGS)完整報告", "exclusion": "", "cancerTypes": [{"type": "膽道癌", "lines": ["觀察性"]}], "subjects": []}, {"id": 28, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估 MK-1084、 Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用Bevacizumab，做為 KRAS G12C 突變局部晚期不可切除或轉移性大腸直腸癌受試者之第一線治療的安全性和療效（KANDLELIT-012）", "code": "MK-1082-012", "phase": "III", "sponsor": "MSD", "targetNum": 4, "enrolled": 2, "monthSigned": 2, "monthEnrolled": 2, "pi": "鄧豪偉", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "Part 1 (Safety Lead-In) 收案條件簡述: • Stage III or IV, KRAS G12C mutation (+) CRC • Part 1: Treatment Naïve 或用過一線治療 (一線或二線皆可, 不可用到oxaliplatin) 已收滿 Target • Part 2: Treatment Naïve ( 預計 2026 開放名額 )", "exclusion": "", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 29, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第 2 期、開放性、隨機分配、主試驗計畫書試驗，評估 Telisotuzumab Adizutecan 併用多種治療組合在轉移性大腸直腸癌受試者中的安全性和療效 (AndroMETa-CRC-533)", "code": "M24-533", "phase": "2", "sponsor": "Abbive", "targetNum": 3, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 吳佳勳, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1.right side:KRAS/NRAS wildtype or mutation ,BRAFV600E wildtype 2. left side :KRAS/NRAS mutation,BRAF V600F wild type 3.tumor is not dMMR+/MSI-H. 4.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1. 5.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1. 6.HCV negative.", "exclusion": "HCV(+)", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 30, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項多中心、隨機分配、開放標記、有效藥物對照的第 3 期試驗， Sotorasib、Panitumumab 及 FOLFIRI 與 FOLFIRI 併用或無併用Bevacizumab-awwb，用於未曾接受過治療且帶有 KRAS p.G12C 突變的轉移性大腸直腸癌受試者之比較 (CodeBreaK 301)", "code": "20210081", "phase": "3", "sponsor": "Amgen Inc", "targetNum": 2, "enrolled": 1, "monthSigned": 1, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "1. KRAS G12C: Positive and MSS 2. FIGO Stage: IV 準備要接受第一線化療 or FIGO Stage: I ~ III 治療後六個月(轉移) PD 預計化療. 3. Eastern Cooperative Oncolgy Group (ECOG) Performance Status of 1. 4. 5 年內 Tumor Slide: 15片 6. Corrected QT interval (QTcF) 470 msec. 7. 沒有 B / C 型肝炎", "exclusion": "B肝, C肝", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 31, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項評估 Tucatinib併用Trastuzumab 和 mFOLFOX6 對照mFOLFOX6併用或不併用Cetuximab 或 Bevacizumab 作為患有HER2+轉移性結直腸癌受試者的一線治療療法的開放性、隨機分配、第3 期試驗", "code": "SGNTUC-029", "phase": "III", "sponsor": "Seagen", "targetNum": 6, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1 Send tissue slide 25 and Central confirmed HER2 3+ or ISH + and confirmed RAS status. 2.LVEF > 50%. 3.Previously treated brain metastases which are asystamatic", "exclusion": "1.Have previously been treated with anti-HER2 therapy 2.Have a history of GI perforation within 12 months of enrollment. 3.Have ongoing grade 2 diarrhea of any etiology at screening. 4.HBsAg positive or chronic liver disesase", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 32, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第I/Ib期全球性、多中心、開放性、傘狀試驗，用以評估標靶療法對轉移性大腸直腸癌病患子族群的安全性與療效(INTRINSIC)", "code": "WO42758", "phase": "I/Ib", "sponsor": "Roche", "targetNum": 10, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1.KRAS G12C mututation arm, mCRC 1 line Diva + Bevacizumab +FOLFOX General Inclusion Criteria: 1.Histologically confirmed adenocarcinoma originating from the colon or rectum 2.Metastatic disease 3.Measurable disease General Exclusion Criteria: 1.Symptomatic, untreated, or actively progressing CNS metastases 2.History of malignancy other than CRC within 2 years prior to screening", "exclusion": "Symptomatic CNS metastases, 其他惡性腫瘤病史(2年內)", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 33, "cancerType": "大腸癌", "line": "二線", "studyTitle": "一項第2 期、隨機分配試驗，對於曾接受治療之無法切除轉移性結腸直腸癌受試者，評估ABBV-400 合併Fluorouracil、Folinic Acid 和Bevacizumab 的安全性、療效和最佳劑量，以及評估ABBV 400", "code": "M24-311", "phase": "II", "sponsor": "Abbvie", "targetNum": 5, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1. BRAF V600E no mutation and microsatellite stable, MSS 2.Tumor tissue (archived and fresh biopsy during screening phase),一定要同意接受一線 PD後未治療的Fresh biopsy. 3First line FOLFOX or CAPOX 加上或不加上抗 EGFR抗體(不限於Cetuximab or panitumumab) 或抗VEGF單株抗體(不限於Bevacizumab or Ramucirumab) 4.未曾接受過irinotecan or C-Met 標靶抗體0r ADC的全身性療法 5.無謂治療的腦部轉移 ,或根治性治療後臨床上或影像上穩定至少14天. 6.HCV RNA (-) .7.開始試驗治療前 35天HBV DNA <500第一劑治療前14天開始使用抗HBV治療", "exclusion": "使用過irinotecan或C-Met標靶抗體", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 34, "cancerType": "大腸癌", "line": "二線", "studyTitle": "一項隨機分配、開放性、第 3 期試驗，旨在比較 Amivantamab + FOLFIRI 與 Cetuximab/Bevacizumab + FOLFIRI 在先前曾接受過化學治療的 KRAS/NRAS 和 BRAF 野生型之復發性、無法手術切除或轉移性大腸直腸癌參與者中的療效", "code": "61186372COR3002", "phase": "III", "sponsor": "J & J", "targetNum": 5, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1. have received 1 line of systemic therapy for mCRC 2. KRAS, NRAS, and BRAF WT tumor 3. Measurable lesion 4. dMMR /MSI-H 須接受免疫治療", "exclusion": "1. prior exposure to irinotecan, any agents that target EGFR or MET 2. any component of FOLFIRI 3. dMMR/MSI-H status who has not received immunotherapy treatments. 4. HER2-positive/amplified tumor 6. Diabetes mellitus 7. Ongoing or active infection 8. HBV or HCV infection 9. symptomatic or untreated brain metastasis", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 35, "cancerType": "大腸癌", "line": "二線/三線", "studyTitle": "AndroMETa-CRC-064：一項開放性、隨機分配、對照、全球第 3 期試驗，比較ABBV-400 單一療法與LONSURF（Trifluridine 和Tipiracil）加上Bevacizumab 用於c-Met 過度表現的難治型轉移性結腸直腸癌受試者", "code": "M24-064", "phase": "3", "sponsor": "Abbvie", "targetNum": 5, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "Pre-screening: 1. Prior treatment regimens must have included a fluoropyrimidine , irinotecan, oxaliplatin, and an anti-VEGF monoclonal antibody and an anti-EGFR antibody if indicated. 2. Prior treatment of Regorafenib and/or Fruquintinib is allowed. 3. Must not have received prior LONSURF (Trifluridine/Tipiracil) treatment. 4. BRAFV600E or HER2 amplified should have received approved target therapy . 5. MSI-high/dMMR should have received approved immunotherapy 6. primary tumor site and/or metastatic sites slide 6-22 7. c-Met ICH staining: 3+ intensity, ≥ 10% tumor cell (result about 14 days)", "exclusion": "使用過LONSURF", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 36, "cancerType": "多種癌症", "line": "多線", "studyTitle": "T-1301膠囊用於晚期實體腫瘤患者之臨床一期安全性、耐受性與藥物動力學研究", "code": "TAI-301", "phase": "1", "sponsor": "泰瑋", "targetNum": 15, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇, 王秋眉", "phone": "7270#268", "status": "進行中", "inclusion": "1 HBV(-),HCV(+)RNA(-) 2.血壓不能超過SBP160/DBP100 3.二線或二線以上之病人。4.Measurable lesion by RECIST 1.1 5.調整劑量 : 100 mg/day, 優先招募GIST、melanoma with c-KIT mutation 6. CCr: >=50ml/min", "exclusion": "HBV(+)", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 37, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項第 1/1b/2 期試驗，評估單獨使用 AMG 193 及合併 docetaxel 用於晚期 MTAP 缺失實體腫瘤受試者的安全性、耐受性、藥物動力學、藥效學及療效", "code": "AMG193", "phase": "1/1b/2", "sponsor": "Amgen Inc", "targetNum": 10, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王昭蘋", "phone": "7270#262", "status": "進行中", "inclusion": "1.以 NGS 確認 MTAP 缺失 2.Measurable lesion by RECIST 1.1 只剩肺癌有名額", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 38, "cancerType": "多種癌症", "line": "二線", "studyTitle": "一項第1／2期試驗，評估Patritumab Deruxtecan對於胃腸道癌症的安全性和療效", "code": "MK-1022", "phase": "1/2", "sponsor": "MSD", "targetNum": 6, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "進行中", "inclusion": "1.收膽管癌正二.線及大腸癌二線 . 肝癌 2.前線PD後需要重新切片 ,在送出20片 3.CT必須得到廠商確認 (預計5天)才能C1D1 4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量 5.心超LVEF > 50%", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["第二線"]}], "subjects": []}, {"id": 39, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項在晚期或轉移性實體腫瘤病患使用 PEP07 (檢查點激酶 1抑制劑 )的第一期試驗", "code": "PEP07-102", "phase": "I", "sponsor": "智擎生技", "targetNum": 20, "enrolled": 2, "monthSigned": 0, "monthEnrolled": 0, "pi": "姜乃榕", "nurse": "王昭蘋", "phone": "7270#262", "status": "進行中", "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治療、或任何試驗治療，或在30天內接受過免疫治療。 3 收案前後都要再切片 . 4.需詢問SLOT", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 40, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項第二期、多中心、開放性試驗，評估以Trastuzumab Deruxtecan (T-DXd, DS-8201a) 治療選定 HER2 表現腫瘤之療效與安全性 (DESTINY-PanTumor02)", "code": "D967VC00001", "phase": "2", "sponsor": "AZ", "targetNum": 7, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王秋眉", "phone": "0927751328", "status": "暫停收案", "inclusion": "1.有一顆可測量的腫瘤 2.HER2(2+) 3.prescreen Slides 4-5mu 12片 screen 在 Slides 4-5mu 15片 4.HBsAg(-), HCV RNA(-) 5. 可收組別 a:HER2,IHC3+ any tumor type(額滿) b:HER2,IHC2+/ISH- positive any tumor type (額滿) c:HER2,IHC2+ or 1+ endometrial cancer (額滿) d:HER2,IHC2+ or 1+ ovarian cancer (額滿) e:HER2,IHC2+ or 1+ cervical cancer (額滿) 6.同意書改版Anti-HBc(+) 可以收", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 41, "cancerType": "多種癌症", "line": "二/三線", "studyTitle": "一項第1／2期試驗，針對胃腸道癌症評估 MK-2870單一療法或與其他抗癌藥物合併使用的安全性與療效", "code": "MK-9999-02A", "phase": "II", "sponsor": "MSD", "targetNum": 4, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "名額已滿", "inclusion": "1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 2.需要20片切片 3.CT必須得到廠商確認才能用藥 4.試驗藥物只能從周邊血管施打 5.HIV只要有病史不收 6.心超LVEF > 50%", "exclusion": "HIV病史", "cancerTypes": [{"type": "多種癌症", "lines": ["二/三線"]}], "subjects": []}, {"id": 42, "cancerType": "多種癌症", "line": "二線", "studyTitle": "一項第2期、非隨機分配、開放性、多中心試驗，評估 Raludotatug Deruxtecan用於胃腸道癌症受試者的安全和療效性", "code": "MK5909-005", "phase": "II", "sponsor": "MSD", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "進行中", "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線 、胃癌3L以上 2.需要21片切片 3.CT必須得到廠商確認才能用藥 4.HIV只要有病史不收 5.心超LVEF > 50%", "exclusion": "HIV病史", "cancerTypes": [{"type": "多種癌症", "lines": ["第二線"]}], "subjects": []}, {"id": 43, "cancerType": "肝癌", "line": "多線", "studyTitle": "一項多中心 ` 開放標記 ` 首次於人體執行之試驗 , 旨在研究TYRA-430 用於治療晚期肝癌或具有活化 FGF/GFGR 途徑變異的其他實體腫瘤 (SUFR-431)", "code": "TYR430-101", "phase": "I", "sponsor": "Tyra Biosciences", "targetNum": 15, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "李重賓", "nurse": "張台依", "phone": "0972811090", "status": "停止收案", "inclusion": "1. 局部晚期無法切除 /轉移性肝細胞癌 (HCC) 或經組織學證實晚期實體腫瘤帶有 FGF/FGFR 基因突變 。2. 受試者之前可接受任何次數的先前治療 , 收多線後 。3.ccr > =60 ml/min", "exclusion": "1-篩選前四週曾接受重大手術。2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。) 3-活動性 ` 症狀性或未經治療的腦部轉移。", "cancerTypes": [{"type": "肝癌", "lines": ["多線"]}], "subjects": []}, {"id": 44, "cancerType": "肝癌", "line": "一線", "studyTitle": "一項二期、劑量隨機、開放性臨床試驗評估PTS100用於治療不適合手術切除或局部區域治療的原發性肝癌（ HCC）患者的安全性與療效- PTS100, intra-liver tumor injection", "code": "GW-020202", "phase": "II", "sponsor": "共信", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "黃怡翔", "nurse": "李杰如, 吳佳勳", "phone": "0939859265", "status": "進行中", "inclusion": "Major protocol amedmnet in processing.", "exclusion": "", "cancerTypes": [{"type": "肝癌", "lines": ["第一線"]}], "subjects": []}];
+
+function AccessPasswordModal(props) {
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+    
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        if (props.onAuth(password)) {
+            setError(false);
+        } else {
+            setError(true);
+        }
+    };
+    
+    return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
+            e('div', null,
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.0'),
+                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
+            ),
+            e('form', {onSubmit: handleSubmit},
+                e('input', {
+                    type: 'password',
+                    value: password,
+                    onChange: (ev) => setPassword(ev.target.value),
+                    placeholder: '請輸入密碼',
+                    className: 'w-full px-4 py-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500',
+                    autoFocus: true
+                }),
+                error && e('div', {className: 'text-red-600 text-sm mb-4'}, '密碼錯誤'),
+                e('button', {
+                    type: 'submit',
+                    className: 'w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold'
+                }, '進入系統')
+            )
+        )
+    );
 }
-</script>
+
+function TrialCard(props) {
+
+    const [expanded, setExpanded] = useState(false);
+    const trial = props.trial;
+    
+    return e('div', {className: 'bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow'},
+        e('div', {className: 'flex justify-between items-start mb-4'},
+            e('div', null,
+                e('h3', {className: 'text-xl font-bold text-gray-800'}, trial.code),
+                e('p', {className: 'text-gray-600 mt-1'}, trial.studyTitle.substring(0, 100) + '...')
+            ),
+            e('span', {
+                className: trial.status === '進行中' 
+                    ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
+                    : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
+            }, trial.status)
+        ),
+        e('div', {className: 'flex flex-wrap gap-2 mb-4'},
+            (() => {
+                if (trial.cancerTypes && trial.cancerTypes.length > 0) {
+                    const tags = [];
+                    trial.cancerTypes.forEach((ct, idx) => {
+                        if (ct.lines) {
+                            ct.lines.forEach((line, lineIdx) => {
+                                tags.push(e('span', {
+                                    key: idx + '-' + lineIdx,
+                                    className: 'px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
+                                }, ct.type + ' - ' + line));
+                            });
+                        }
+                    });
+                    return tags;
+                } else {
+                    return e('span', {className: 'px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm'},
+                        trial.cancerType + ' - ' + trial.line
+                    );
+                }
+            })()
+        ),
+
+                e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
+            e('div', null,
+                e('span', {className: 'text-gray-600'}, 'PI: '),
+                e('span', {className: 'font-semibold'}, trial.pi)
+            ),
+            e('div', null,
+                e('span', {className: 'text-gray-600'}, '護理師: '),
+                e('span', {className: 'font-semibold'}, trial.nurse)
+            )
+        ),
+        expanded && e('div', {className: 'mt-4 pt-4 border-t space-y-2 text-sm'},
+            e('div', null,
+                e('span', {className: 'text-gray-600'}, '試驗期別: '),
+                e('span', null, trial.phase)
+            ),
+            e('div', null,
+                e('span', {className: 'text-gray-600'}, '目標收案: '),
+                e('span', null, trial.targetNum)
+            ),
+            trial.inclusion && e('div', null,
+                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '收案條件:'),
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap'}, trial.inclusion)
+            )
+        ),
+        e('div', {className: 'mt-4 flex gap-2'},
+            e('button', {
+                onClick: () => setExpanded(!expanded),
+                className: 'text-blue-600 hover:text-blue-800 text-sm font-semibold'
+            }, expanded ? '收起詳情 ▲' : '展開詳情 ▼'),
+            props.onManageSubjects && e('button', {
+                onClick: () => props.onManageSubjects(trial),
+                className: 'ml-auto px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm'
+            }, '👥 受試者'),
+            props.isLoggedIn && e('button', {
+                onClick: () => props.onEdit(trial),
+                className: 'px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm'
+            }, '編輯'),
+            props.isLoggedIn && e('button', {
+                onClick: () => props.onDelete(trial.id),
+                className: 'px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm'
+            }, '刪除')
+        )
+    );
+}
+
+function SubjectFormModal(props) {
+    const [form, setForm] = useState({
+        name: '', chartNo: '', gender: '男', age: '', phone: '',
+        physician: '', medicalHistory: '', status: '待聯繫',
+        eligibility: false, enrolled: false
+    });
+    
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        props.onSave(form);
+    };
+    
+    const update = (field, value) => {
+        setForm({...form, [field]: value});
+    };
+    
+    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto'},
+            e('div', {className: 'flex justify-between items-center mb-4'},
+                e('h3', {className: 'text-xl font-bold'}, '新增受試者 - ' + props.trial.code),
+                e('button', {
+                    onClick: props.onClose,
+                    className: 'text-gray-500 hover:text-gray-700 text-2xl'
+                }, '×')
+            ),
+            e('form', {onSubmit: handleSubmit, className: 'space-y-4'},
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '姓名 *'),
+                        e('input', {
+                            type: 'text',
+                            required: true,
+                            value: form.name,
+                            onChange: (ev) => update('name', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '病歷號 *'),
+                        e('input', {
+                            type: 'text',
+                            required: true,
+                            value: form.chartNo,
+                            onChange: (ev) => update('chartNo', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '性別'),
+                        e('select', {
+                            value: form.gender,
+                            onChange: (ev) => update('gender', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        },
+                            e('option', {value: '男'}, '男'),
+                            e('option', {value: '女'}, '女')
+                        )
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '年齡'),
+                        e('input', {
+                            type: 'number',
+                            value: form.age,
+                            onChange: (ev) => update('age', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '電話'),
+                        e('input', {
+                            type: 'tel',
+                            value: form.phone,
+                            onChange: (ev) => update('phone', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '主治醫師'),
+                        e('input', {
+                            type: 'text',
+                            value: form.physician,
+                            onChange: (ev) => update('physician', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        })
+                    )
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-medium mb-1'}, '病史資料'),
+                    e('textarea', {
+                        value: form.medicalHistory,
+                        onChange: (ev) => update('medicalHistory', ev.target.value),
+                        rows: 3,
+                        placeholder: '可貼上病史...',
+                        className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                    })
+                ),
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-medium mb-1'}, '狀態'),
+                        e('select', {
+                            value: form.status,
+                            onChange: (ev) => update('status', ev.target.value),
+                            className: 'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                        },
+                            ['待聯繫', '已聯繫', '評估中', '已加入', '不適合', '退出試驗', '尚待國外確認名額'].map(s =>
+                                e('option', {key: s, value: s}, s)
+                            )
+                        )
+                    ),
+                    e('div', {className: 'flex items-center gap-4 pt-6'},
+                        e('label', {className: 'flex items-center gap-2 cursor-pointer'},
+                            e('input', {
+                                type: 'checkbox',
+                                checked: form.eligibility,
+                                onChange: (ev) => update('eligibility', ev.target.checked),
+                                className: 'w-4 h-4'
+                            }),
+                            e('span', {className: 'text-sm'}, '符合資格')
+                        ),
+                        e('label', {className: 'flex items-center gap-2 cursor-pointer'},
+                            e('input', {
+                                type: 'checkbox',
+                                checked: form.enrolled,
+                                onChange: (ev) => update('enrolled', ev.target.checked),
+                                className: 'w-4 h-4'
+                            }),
+                            e('span', {className: 'text-sm'}, '已加入')
+                        )
+                    )
+                ),
+                e('div', {className: 'flex gap-3 pt-4'},
+                    e('button', {
+                        type: 'submit',
+                        className: 'flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+                    }, '儲存'),
+                    e('button', {
+                        type: 'button',
+                        onClick: props.onClose,
+                        className: 'flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400'
+                    }, '取消')
+                )
+            )
+        )
+    );
+}
+
+function SubjectsListModal(props) {
+    const [showForm, setShowForm] = useState(false);
+    const trialSubjects = props.subjects.filter(s => s.trialIds && s.trialIds.includes(props.trial.id));
+    
+    const handleSave = (data) => {
+        props.onAddSubject(props.trial.id, data);
+        setShowForm(false);
+    };
+    
+    if (showForm) {
+        return e(SubjectFormModal, {
+            trial: props.trial,
+            onClose: () => setShowForm(false),
+            onSave: handleSave
+        });
+    }
+    
+    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col'},
+            e('div', {className: 'p-6 border-b flex justify-between items-center'},
+                e('div', null,
+                    e('h2', {className: 'text-2xl font-bold'}, props.trial.code + ' - 受試者管理'),
+                    e('p', {className: 'text-sm text-gray-600 mt-1'}, 
+                        props.trial.studyTitle.substring(0, 80) + '...'
+                    )
+                ),
+                e('button', {
+                    onClick: props.onClose,
+                    className: 'text-gray-500 hover:text-gray-700 text-2xl'
+                }, '×')
+            ),
+            e('div', {className: 'flex-1 overflow-y-auto p-6'},
+                e('div', {className: 'mb-4'},
+                    e('button', {
+                        onClick: () => setShowForm(true),
+                        className: 'px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2'
+                    }, '+ 新增受試者')
+                ),
+                trialSubjects.length === 0 
+                    ? e('div', {className: 'text-center py-12 text-gray-500'},
+                        e('p', null, '尚無受試者')
+                      )
+                    : e('div', {className: 'space-y-3'},
+                        trialSubjects.map(subject =>
+                            e('div', {
+                                key: subject.id,
+                                className: 'border rounded-lg p-4 hover:bg-gray-50'
+                            },
+                                e('div', {className: 'font-semibold text-lg'}, subject.name),
+                                e('div', {className: 'text-sm text-gray-600 mt-1'},
+                                    subject.gender + ' ' + subject.age + '歲 | 病歷號：' + subject.chartNo +
+                                    (subject.physician ? ' | 主治：' + subject.physician : '')
+                                ),
+                                e('div', {className: 'flex flex-wrap gap-2 mt-2'},
+                                    subject.eligibility && e('span', {
+                                        className: 'px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium'
+                                    }, '✓ 符合資格'),
+                                    subject.enrolled && e('span', {
+                                        className: 'px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium'
+                                    }, '✓ 已加入'),
+                                    e('span', {
+                                        className: 'px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium'
+                                    }, subject.status)
+                                )
+                            )
+                        )
+                      )
+            )
+        )
+    );
+}
+
+
+function TrialFormModal(props) {
+    const isEdit = !!props.trial;
+    const [form, setForm] = useState(props.trial || {
+        code: '',
+        studyTitle: '',
+        phase: '',
+        sponsor: '',
+        targetNum: '',
+        enrolled: 0,
+        pi: '',
+        nurse: '',
+        phone: '',
+        status: '進行中',
+        inclusion: '',
+        exclusion: ''
+    });
+    
+    const [cancerLines, setCancerLines] = useState(() => {
+        if (props.trial && props.trial.cancerTypes) {
+            return props.trial.cancerTypes.map(ct => ({
+                type: ct.type,
+                lines: ct.lines ? ct.lines.join(', ') : ''
+            }));
+        }
+        return [{type: '', lines: ''}];
+    });
+    
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        
+        if (!form.code || !form.studyTitle) {
+            alert('請填寫試驗代碼和標題');
+            return;
+        }
+        
+        const cancerTypes = cancerLines
+            .filter(cl => cl.type && cl.lines)
+            .map(cl => ({
+                type: cl.type,
+                lines: cl.lines.split(',').map(l => l.trim()).filter(Boolean)
+            }));
+        
+        if (cancerTypes.length === 0) {
+            alert('請至少添加一個癌症類型和治療線');
+            return;
+        }
+        
+        const trialData = {
+            ...form,
+            cancerTypes: cancerTypes,
+            id: isEdit ? form.id : Date.now(),
+            targetNum: parseInt(form.targetNum) || 0,
+            enrolled: parseInt(form.enrolled) || 0
+        };
+        
+        props.onSave(trialData);
+    };
+    
+    const update = (field, value) => {
+        setForm({...form, [field]: value});
+    };
+    
+    const addCancerLine = () => {
+        setCancerLines([...cancerLines, {type: '', lines: ''}]);
+    };
+    
+    const removeCancerLine = (index) => {
+        if (cancerLines.length > 1) {
+            setCancerLines(cancerLines.filter((_, i) => i !== index));
+        }
+    };
+    
+    const updateCancerLine = (index, field, value) => {
+        const updated = [...cancerLines];
+        updated[index][field] = value;
+        setCancerLines(updated);
+    };
+    
+    return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto'},
+        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl my-8'},
+            e('div', {className: 'flex justify-between items-center mb-6'},
+                e('h3', {className: 'text-2xl font-bold text-slate-800'}, isEdit ? '編輯試驗' : '新增試驗'),
+                e('button', {
+                    onClick: props.onClose,
+                    className: 'text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none'
+                }, '×')
+            ),
+            e('form', {onSubmit: handleSubmit, className: 'space-y-5'},
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗代碼 *'),
+                        e('input', {
+                            type: 'text',
+                            required: true,
+                            value: form.code,
+                            onChange: (ev) => update('code', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗期別'),
+                        e('input', {
+                            type: 'text',
+                            value: form.phase,
+                            onChange: (ev) => update('phase', ev.target.value),
+                            placeholder: '例：III',
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    )
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '試驗標題 *'),
+                    e('textarea', {
+                        required: true,
+                        value: form.studyTitle,
+                        onChange: (ev) => update('studyTitle', ev.target.value),
+                        rows: 2,
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', {className: 'border-t-2 border-slate-200 pt-4'},
+                    e('div', {className: 'flex justify-between items-center mb-3'},
+                        e('label', {className: 'text-sm font-semibold text-slate-700'}, '癌症類型與治療線 *'),
+                        e('button', {
+                            type: 'button',
+                            onClick: addCancerLine,
+                            className: 'px-3 py-1.5 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors'
+                        }, '+ 添加')
+                    ),
+                    e('div', {className: 'space-y-2'},
+                        cancerLines.map((cl, idx) =>
+                            e('div', {key: idx, className: 'flex gap-2 items-start'},
+                                e('div', {className: 'flex-1'},
+                                    e('input', {
+                                        type: 'text',
+                                        placeholder: '癌症類型（例：胃癌）',
+                                        value: cl.type,
+                                        onChange: (ev) => updateCancerLine(idx, 'type', ev.target.value),
+                                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none'
+                                    })
+                                ),
+                                e('div', {className: 'flex-[2]'},
+                                    e('input', {
+                                        type: 'text',
+                                        placeholder: '治療線（例：第一線, 第二線 - 用逗號分隔）',
+                                        value: cl.lines,
+                                        onChange: (ev) => updateCancerLine(idx, 'lines', ev.target.value),
+                                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none'
+                                    })
+                                ),
+                                cancerLines.length > 1 && e('button', {
+                                    type: 'button',
+                                    onClick: () => removeCancerLine(idx),
+                                    className: 'px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-bold'
+                                }, '×')
+                            )
+                        )
+                    )
+                ),
+                e('div', {className: 'grid grid-cols-3 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, 'PI'),
+                        e('input', {
+                            type: 'text',
+                            value: form.pi,
+                            onChange: (ev) => update('pi', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '研究護士'),
+                        e('input', {
+                            type: 'text',
+                            value: form.nurse,
+                            onChange: (ev) => update('nurse', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '電話'),
+                        e('input', {
+                            type: 'text',
+                            value: form.phone,
+                            onChange: (ev) => update('phone', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    )
+                ),
+                e('div', {className: 'grid grid-cols-3 gap-4'},
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '贊助商'),
+                        e('input', {
+                            type: 'text',
+                            value: form.sponsor,
+                            onChange: (ev) => update('sponsor', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目標收案數'),
+                        e('input', {
+                            type: 'number',
+                            value: form.targetNum,
+                            onChange: (ev) => update('targetNum', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        })
+                    ),
+                    e('div', null,
+                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '狀態'),
+                        e('select', {
+                            value: form.status,
+                            onChange: (ev) => update('status', ev.target.value),
+                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                        },
+                            ['進行中', '暫停收案', '名額已滿', '停止收案'].map(s =>
+                                e('option', {key: s, value: s}, s)
+                            )
+                        )
+                    )
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '收案條件'),
+                    e('textarea', {
+                        value: form.inclusion,
+                        onChange: (ev) => update('inclusion', ev.target.value),
+                        rows: 3,
+                        placeholder: '請輸入收案條件...',
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', null,
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '排除條件'),
+                    e('textarea', {
+                        value: form.exclusion,
+                        onChange: (ev) => update('exclusion', ev.target.value),
+                        rows: 2,
+                        placeholder: '請輸入排除條件...',
+                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', {className: 'flex gap-3 pt-4 border-t-2 border-slate-200'},
+                    e('button', {
+                        type: 'submit',
+                        className: 'flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
+                    }, '儲存'),
+                    e('button', {
+                        type: 'button',
+                        onClick: props.onClose,
+                        className: 'flex-1 px-6 py-3 bg-slate-300 text-slate-700 rounded-xl hover:bg-slate-400 transition-all font-semibold'
+                    }, '取消')
+                )
+            )
+        )
+    );
+}
+
+
+        function App() {
+    const [isAuth, setIsAuth] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [trials, setTrials] = useState([]);
+    const [subjects, setSubjects] = useState([]);
+    const [search, setSearch] = useState('');
+    const [cancerType, setCancerType] = useState('全部');
+    const [selectedLine, setSelectedLine] = useState('全部');
+    const [loading, setLoading] = useState(true);
+    const [selectedTrial, setSelectedTrial] = useState(null);
+    const [showSubjects, setShowSubjects] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(null);
+    
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem('clinical-trials-encrypted');
+            if (stored) {
+                const decrypted = decryptData(stored);
+                if (decrypted && Array.isArray(decrypted)) {
+                    setTrials(decrypted);
+                } else {
+                    setTrials(INITIAL_TRIALS);
+                    saveTrials(INITIAL_TRIALS);
+                }
+            } else {
+                setTrials(INITIAL_TRIALS);
+                saveTrials(INITIAL_TRIALS);
+            }
+            
+            const storedSubjects = localStorage.getItem('clinical-trials-subjects');
+            if (storedSubjects) {
+                const decryptedSubjects = decryptData(storedSubjects);
+                if (decryptedSubjects && Array.isArray(decryptedSubjects)) {
+                    setSubjects(decryptedSubjects);
+                }
+            }
+        } catch (error) {
+            setTrials(INITIAL_TRIALS);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+    
+    const saveTrials = (data) => {
+        const encrypted = encryptData(data);
+        if (encrypted) {
+            localStorage.setItem('clinical-trials-encrypted', encrypted);
+        }
+    };
+
+    const handleSaveTrial = async (trialData) => {
+        const existing = trials.find(t => t.id === trialData.id);
+        let updatedTrials;
+        
+        if (existing) {
+            updatedTrials = trials.map(t => t.id === trialData.id ? trialData : t);
+        } else {
+            updatedTrials = [...trials, trialData];
+        }
+        
+        setTrials(updatedTrials);
+        await saveTrials(updatedTrials);
+        setShowAddModal(false);
+        setShowEditModal(null);
+        alert(existing ? '試驗已更新！' : '試驗已新增！');
+    };
+    
+    const downloadCSV = () => {
+        const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
+        const rows = filtered.map(trial => {
+            const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
+                `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
+            ).join('; ') : '';
+            
+            return [
+                trial.code || '',
+                trial.studyTitle || '',
+                cancerInfo,
+                trial.phase || '',
+                trial.pi || '',
+                trial.nurse || '',
+                trial.phone || '',
+                trial.status || '',
+                `${trial.enrolled || 0}/${trial.targetNum || 0}`
+            ];
+        });
+        
+        const csvContent = [headers, ...rows]
+            .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+        
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+    };
+    
+    const generatePDF = () => {
+        const printWindow = window.open('', '_blank');
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="UTF-8">
+                <title>臨床試驗管理列表</title>
+                <style>
+                  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 20px; }
+                  h1 { text-align: center; color: #1e293b; margin-bottom: 10px; }
+                  .header-info { text-align: center; margin-bottom: 15px; color: #64748b; }
+                  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                  th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; font-size: 11px; }
+                  th { background-color: #f1f5f9; font-weight: bold; color: #1e293b; }
+                  tr:nth-child(even) { background-color: #f8fafc; }
+                  .status-active { color: #059669; font-weight: bold; }
+                  .status-paused { color: #f59e0b; font-weight: bold; }
+                  .status-full { color: #dc2626; font-weight: bold; }
+                  @media print {
+                    body { margin: 10px; }
+                    table { font-size: 10px; }
+                  }
+                </style>
+              </head>
+              <body>
+                <h1>臨床試驗管理列表</h1>
+                <div class="header-info">匯出日期: ${new Date().toLocaleDateString('zh-TW')} | 共 ${filtered.length} 項試驗</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>代碼</th>
+                      <th>試驗標題</th>
+                      <th>癌症類型與治療線</th>
+                      <th>期別</th>
+                      <th>PI</th>
+                      <th>護理師</th>
+                      <th>電話</th>
+                      <th>狀態</th>
+                      <th>收案進度</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${filtered.map(trial => {
+                        const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
+                            `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
+                        ).join('<br>') : '';
+                        
+                        const statusClass = trial.status === '進行中' ? 'status-active' : 
+                                          trial.status === '暫停收案' ? 'status-paused' : 'status-full';
+                        
+                        return `
+                          <tr>
+                            <td>${trial.code || ''}</td>
+                            <td>${trial.studyTitle || ''}</td>
+                            <td>${cancerInfo}</td>
+                            <td>${trial.phase || ''}</td>
+                            <td>${trial.pi || ''}</td>
+                            <td>${trial.nurse || ''}</td>
+                            <td>${trial.phone || ''}</td>
+                            <td class="${statusClass}">${trial.status || ''}</td>
+                            <td>${trial.enrolled || 0}/${trial.targetNum || 0}</td>
+                          </tr>
+                        `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </body>
+            </html>
+        `;
+        printWindow.document.write(htmlContent);
+        printWindow.document.close();
+        setTimeout(() => {
+            try { printWindow.focus(); printWindow.print(); } catch (e) {}
+        }, 300);
+    };
+    
+    const saveSubjects = async (data) => {
+        setSubjects(data);
+        await saveAllData(trials, data);
+    };
+    
+    const handleAuth = (password) => {
+        if (password === CONFIG.ACCESS_PASSWORD) {
+            setIsAuth(true);
+            return true;
+        }
+        return false;
+    };
+    
+    const handleLogin = () => {
+        const username = prompt('帳號:');
+        const password = prompt('密碼:');
+        if (username === CONFIG.ADMIN_USERNAME && password === CONFIG.ADMIN_PASSWORD) {
+            setIsAdmin(true);
+        } else {
+            alert('帳號或密碼錯誤');
+        }
+    };
+    
+    const handleEdit = (trial) => {
+        setShowEditModal(trial);
+    };
+    
+    const handleDelete = async (id) => {
+        if (confirm('確定要刪除此試驗？')) {
+            const updated = trials.filter(t => t.id !== id);
+            setTrials(updated);
+            await saveTrials(updated);
+        }
+    };
+    
+    const handleManageSubjects = (trial) => {
+        setSelectedTrial(trial);
+        setShowSubjects(true);
+    };
+    
+    const handleAddSubject = async (trialId, data) => {
+        const newSubject = {
+            ...data,
+            id: Date.now(),
+            trialIds: [trialId],
+            createdAt: new Date().toISOString()
+        };
+        const updated = [...subjects, newSubject];
+        await saveSubjects(updated);
+    };
+    
+    const filtered = useMemo(() => {
+        let result = trials;
+        
+        // 搜尋篩選
+        if (search) {
+            result = result.filter(t =>
+                t.studyTitle.toLowerCase().includes(search.toLowerCase()) ||
+                t.code.toLowerCase().includes(search.toLowerCase()) ||
+                t.pi.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+        
+        // 癌症類型篩選
+        if (cancerType !== '全部') {
+            result = result.filter(t =>
+                t.cancerTypes && t.cancerTypes.some(ct => ct.type === cancerType) ||
+                t.cancerType === cancerType
+            );
+        }
+        
+        // 治療線篩選
+        if (selectedLine !== '全部') {
+            result = result.filter(t => {
+                const matchRules = {
+                    '第一線': ['第一線', '一線'],
+                    '第二線': ['第二線', '二線', '第一線後', '一線後', '二/三線', '二、三線', '二線/三線'],
+                    '第三線': ['第三線', '三線', '第二線後', '二線後', '二/三線', '二、三線', '二線/三線'],
+                    'Adjuvant': ['Adjuvant', '觀察性'],
+                    '多線': ['多線']
+                };
+                
+                const rulesToMatch = matchRules[selectedLine] || [selectedLine];
+                
+                // 檢查 cancerTypes[].lines[]
+                if (t.cancerTypes && t.cancerTypes.length > 0) {
+                    for (let ct of t.cancerTypes) {
+                        if (ct.lines && ct.lines.length > 0) {
+                            for (let line of ct.lines) {
+                                if (rulesToMatch.includes(line)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // 檢查 line
+                if (t.line && rulesToMatch.includes(t.line)) {
+                    return true;
+                }
+                
+                return false;
+            });
+        }
+        
+        return result;
+    }, [trials, search, cancerType, selectedLine]);
+    
+    const cancerTypes = useMemo(() => {
+        const types = new Set();
+        trials.forEach(trial => {
+            if (trial.cancerTypes && trial.cancerTypes.length > 0) {
+                trial.cancerTypes.forEach(ct => types.add(ct.type));
+            } else if (trial.cancerType) {
+                types.add(trial.cancerType);
+            }
+        });
+        return ['全部', ...Array.from(types).sort()];
+    }, [trials]);
+    
+    const treatmentLines = useMemo(() => {
+        return ['全部', '第一線', '第二線', '第三線', 'Adjuvant', '多線'];
+    }, [trials]);
+    
+    if (!isAuth) {
+        return e(AccessPasswordModal, {onAuth: handleAuth});
+    }
+    
+    if (loading) {
+        return e('div', {className: 'min-h-screen flex items-center justify-center'},
+            e('div', {className: 'text-xl'}, '載入中...')
+        );
+    }
+    
+    return e('div', {className: 'min-h-screen'},
+        e('div', {className: 'bg-white shadow-lg sticky top-0 z-50'},
+            e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
+                e('div', {className: 'flex items-center justify-between'},
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.0'),
+                    e('button', {
+                        onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
+                        className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+                    }, isAdmin ? '登出' : '管理員登入')
+                )
+            )
+        ),
+        e('div', {className: 'max-w-7xl mx-auto px-4 py-8'},
+            e('div', {className: 'flex gap-3 mb-6'},
+                isAdmin && e('button', {
+                    onClick: () => setShowAddModal(true),
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg font-semibold'
+                },
+                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M12 4v16m8-8H4'})
+                    ),
+                    '新增試驗'
+                ),
+                e('button', {
+                    onClick: downloadCSV,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
+                },
+                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'})
+                    ),
+                    '下載 Excel'
+                ),
+                e('button', {
+                    onClick: generatePDF,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl hover:from-red-600 hover:to-rose-600 transition-all shadow-lg font-semibold'
+                },
+                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'})
+                    ),
+                    '匯出 PDF'
+                )
+            ),
+            e('div', {className: 'mb-6 space-y-4'},
+                e('input', {
+                    type: 'text',
+                    value: search,
+                    onChange: (ev) => setSearch(ev.target.value),
+                    placeholder: '搜尋試驗代碼、標題、PI...',
+                    className: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500'
+                }),
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('select', {
+                        value: cancerType,
+                        onChange: (ev) => setCancerType(ev.target.value),
+                        className: 'w-full px-4 py-2 border rounded-lg'
+                    }, cancerTypes.map(type =>
+                        e('option', {key: type, value: type}, type)
+                    )),
+                    e('select', {
+                        value: selectedLine,
+                        onChange: (ev) => setSelectedLine(ev.target.value),
+                        className: 'w-full px-4 py-2 border rounded-lg'
+                    }, treatmentLines.map(line =>
+                        e('option', {key: line, value: line}, line)
+                    ))
+                )
+            ),
+            e('div', {className: 'text-gray-600 mb-4'},
+                '找到 ' + filtered.length + ' 個試驗'
+            ),
+            e('div', {className: 'grid gap-6'},
+                filtered.map(trial =>
+                    e(TrialCard, {
+                        key: trial.id,
+                        trial: trial,
+                        isLoggedIn: isAdmin,
+                        onEdit: handleEdit,
+                        onDelete: handleDelete,
+                        onManageSubjects: handleManageSubjects
+                    })
+                )
+            )
+        ),
+        showSubjects && selectedTrial && e(SubjectsListModal, {
+            trial: selectedTrial,
+            subjects: subjects,
+            onClose: () => {
+                setShowSubjects(false);
+                setSelectedTrial(null);
+            },
+            onAddSubject: handleAddSubject
+        }),
+            showAddModal && e(TrialFormModal, {
+                onSave: handleSaveTrial,
+                onClose: () => setShowAddModal(false)
+            }),
+            showEditModal && e(TrialFormModal, {
+                trial: showEditModal,
+                onSave: handleSaveTrial,
+                onClose: () => setShowEditModal(null)
+            })
+    );
+}
+
+ReactDOM.render(e(App), document.getElementById('app'));
+    </script>
 </body>
 </html>
