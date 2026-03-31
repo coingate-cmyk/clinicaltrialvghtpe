@@ -6,6 +6,8 @@
     <title>臨床試驗管理系統 v3.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
     <div id="app"></div>
@@ -22,19 +24,19 @@ const CONFIG = {
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026'
 };
 
-const GITHUB_DB = {
-    owner: 'coingate-cmyk',
-    repo: 'clinicaltrialvghtpe',
-    branch: 'main',
-    path: 'data.json',
-    tokenStorageKey: 'clinical-trials-github-token'
+const FIREBASE_CONFIG = {
+    apiKey: "REPLACE_WITH_YOUR_API_KEY",
+    authDomain: "REPLACE_WITH_YOUR_PROJECT.firebaseapp.com",
+    projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
+    storageBucket: "REPLACE_WITH_YOUR_PROJECT.appspot.com",
+    messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
+    appId: "REPLACE_WITH_YOUR_APP_ID"
 };
 
-const getGitHubDbUrl = () =>
-    `https://raw.githubusercontent.com/${GITHUB_DB.owner}/${GITHUB_DB.repo}/${GITHUB_DB.branch}/${GITHUB_DB.path}`;
-
-const getGitHubApiUrl = () =>
-    `https://api.github.com/repos/${GITHUB_DB.owner}/${GITHUB_DB.repo}/contents/${GITHUB_DB.path}`;
+const FIREBASE_PATH = {
+    collection: 'clinicalTrialApp',
+    document: 'sharedData'
+};
 
 const encryptData = (data) => {
     try {
@@ -70,7 +72,10 @@ function AccessPasswordModal(props) {
     
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
-            e('h2', {className: 'text-2xl font-bold text-center mb-6'}, '臨床試驗管理系統 v3.0'),
+            e('div', null,
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.0'),
+                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firebase 協作版')
+            ),
             e('form', {onSubmit: handleSubmit},
                 e('input', {
                     type: 'password',
@@ -666,84 +671,40 @@ function TrialFormModal(props) {
     const [showEditModal, setShowEditModal] = useState(null);
     
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const resp = await fetch(getGitHubDbUrl(), { cache: 'no-store' });
-                if (resp.ok) {
-                    const remote = await resp.json();
-                    setTrials(Array.isArray(remote.trials) ? remote.trials : INITIAL_TRIALS);
-                    setSubjects(Array.isArray(remote.subjects) ? remote.subjects : []);
+        try {
+            const stored = localStorage.getItem('clinical-trials-encrypted');
+            if (stored) {
+                const decrypted = decryptData(stored);
+                if (decrypted && Array.isArray(decrypted)) {
+                    setTrials(decrypted);
                 } else {
                     setTrials(INITIAL_TRIALS);
-                    setSubjects([]);
+                    saveTrials(INITIAL_TRIALS);
                 }
-            } catch (error) {
-                console.error('讀取 GitHub 資料失敗，改用初始資料：', error);
+            } else {
                 setTrials(INITIAL_TRIALS);
-                setSubjects([]);
-            } finally {
-                setLoading(false);
+                saveTrials(INITIAL_TRIALS);
             }
-        };
-        loadData();
-    }, []);
-
-    const saveRemoteData = async (nextTrials, nextSubjects) => {
-        const token = localStorage.getItem(GITHUB_DB.tokenStorageKey);
-        if (!token) {
-            alert('尚未設定 GitHub Token。請用管理員登入後先設定。');
-            return false;
-        }
-
-        const payload = {
-            trials: nextTrials,
-            subjects: nextSubjects,
-            updatedAt: new Date().toISOString()
-        };
-
-        let sha = undefined;
-        try {
-            const current = await fetch(getGitHubApiUrl(), {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/vnd.github+json'
+            
+            const storedSubjects = localStorage.getItem('clinical-trials-subjects');
+            if (storedSubjects) {
+                const decryptedSubjects = decryptData(storedSubjects);
+                if (decryptedSubjects && Array.isArray(decryptedSubjects)) {
+                    setSubjects(decryptedSubjects);
                 }
-            });
-            if (current.ok) {
-                const currentJson = await current.json();
-                sha = currentJson.sha;
             }
-
-            const putResp = await fetch(getGitHubApiUrl(), {
-                method: 'PUT',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/vnd.github+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: 'Update clinical trial data',
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2)))),
-                    branch: GITHUB_DB.branch,
-                    sha: sha
-                })
-            });
-
-            if (!putResp.ok) {
-                const errText = await putResp.text();
-                throw new Error(errText);
-            }
-            return true;
         } catch (error) {
-            console.error('寫入 GitHub 失敗：', error);
-            alert('寫入 GitHub 失敗，請檢查 Token 是否有 Contents 寫入權限。');
-            return false;
+            setTrials(INITIAL_TRIALS);
+        } finally {
+            setLoading(false);
         }
-    };
-
-    const saveTrials = async (data) => {
-        setTrials(data);
-        return await saveRemoteData(data, subjects);
+    }, []);
+    
+    const saveTrials = (data) => {
+        const encrypted = encryptData(data);
+        if (encrypted) {
+            localStorage.setItem('clinical-trials-encrypted', encrypted);
+        }
     };
 
     const handleSaveTrial = (trialData) => {
@@ -874,7 +835,7 @@ function TrialFormModal(props) {
     
     const saveSubjects = async (data) => {
         setSubjects(data);
-        return await saveRemoteData(trials, data);
+        await saveAllData(trials, data);
     };
     
     const handleAuth = (password) => {
@@ -890,13 +851,6 @@ function TrialFormModal(props) {
         const password = prompt('密碼:');
         if (username === CONFIG.ADMIN_USERNAME && password === CONFIG.ADMIN_PASSWORD) {
             setIsAdmin(true);
-            const existingToken = localStorage.getItem(GITHUB_DB.tokenStorageKey) || '';
-            if (!existingToken) {
-                const token = prompt('請輸入 GitHub Personal Access Token（需有 repo contents 讀寫權限）:');
-                if (token) {
-                    localStorage.setItem(GITHUB_DB.tokenStorageKey, token.trim());
-                }
-            }
         } else {
             alert('帳號或密碼錯誤');
         }
@@ -1019,19 +973,10 @@ function TrialFormModal(props) {
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
                     e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.0'),
-                    e('div', {className: 'flex items-center gap-2'},
-                        isAdmin && e('button', {
-                            onClick: () => {
-                                const token = prompt('更新 GitHub Token：', localStorage.getItem(GITHUB_DB.tokenStorageKey) || '');
-                                if (token !== null) localStorage.setItem(GITHUB_DB.tokenStorageKey, token.trim());
-                            },
-                            className: 'px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700'
-                        }, '設定 Token'),
-                        e('button', {
-                            onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
-                            className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
-                        }, isAdmin ? '登出' : '管理員登入')
-                    )
+                    e('button', {
+                        onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
+                        className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+                    }, isAdmin ? '登出' : '管理員登入')
                 )
             )
         ),
