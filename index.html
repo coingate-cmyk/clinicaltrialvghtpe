@@ -490,6 +490,15 @@ function App() {
             );
         }
         
+        if (selectedLine !== '全部') {
+            result = result.filter(t =>
+                t.cancerTypes && t.cancerTypes.some(ct => 
+                    ct.lines && ct.lines.includes(selectedLine)
+                ) ||
+                t.line === selectedLine
+            );
+        }
+        
         return result;
     }, [trials, search, cancerType]);
     
@@ -503,6 +512,22 @@ function App() {
             }
         });
         return ['全部', ...Array.from(types).sort()];
+    }, [trials]);
+    
+    const treatmentLines = useMemo(() => {
+        const lines = new Set();
+        trials.forEach(trial => {
+            if (trial.cancerTypes && trial.cancerTypes.length > 0) {
+                trial.cancerTypes.forEach(ct => {
+                    if (ct.lines) {
+                        ct.lines.forEach(line => lines.add(line));
+                    }
+                });
+            } else if (trial.line) {
+                lines.add(trial.line);
+            }
+        });
+        return ['全部', ...Array.from(lines).sort()];
     }, [trials]);
     
     if (!isAuth) {
@@ -536,13 +561,22 @@ function App() {
                     placeholder: '搜尋試驗代碼、標題、PI...',
                     className: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500'
                 }),
-                e('select', {
-                    value: cancerType,
-                    onChange: (ev) => setCancerType(ev.target.value),
-                    className: 'w-full px-4 py-2 border rounded-lg'
-                }, cancerTypes.map(type =>
-                    e('option', {key: type, value: type}, type)
-                ))
+                e('div', {className: 'grid grid-cols-2 gap-4'},
+                    e('select', {
+                        value: cancerType,
+                        onChange: (ev) => setCancerType(ev.target.value),
+                        className: 'w-full px-4 py-2 border rounded-lg'
+                    }, cancerTypes.map(type =>
+                        e('option', {key: type, value: type}, type)
+                    )),
+                    e('select', {
+                        value: selectedLine,
+                        onChange: (ev) => setSelectedLine(ev.target.value),
+                        className: 'w-full px-4 py-2 border rounded-lg'
+                    }, treatmentLines.map(line =>
+                        e('option', {key: line, value: line}, line)
+                    ))
+                )
             ),
             e('div', {className: 'text-gray-600 mb-4'},
                 '找到 ' + filtered.length + ' 個試驗'
