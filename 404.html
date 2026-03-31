@@ -77,6 +77,7 @@ function AccessPasswordModal(props) {
 }
 
 function TrialCard(props) {
+
     const [expanded, setExpanded] = useState(false);
     const trial = props.trial;
     
@@ -114,6 +115,7 @@ function TrialCard(props) {
                 }
             })()
         ),
+
                 e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
             e('div', null,
                 e('span', {className: 'text-gray-600'}, 'PI: '),
@@ -802,16 +804,14 @@ function TrialFormModal(props) {
                     }).join('')}
                   </tbody>
                 </table>
-                <script>
-                  window.onload = function() {
-                    window.print();
-                  };
-                </script>
               </body>
             </html>
         `;
         printWindow.document.write(htmlContent);
         printWindow.document.close();
+        setTimeout(() => {
+            try { printWindow.focus(); printWindow.print(); } catch (e) {}
+        }, 300);
     };
     
     const saveSubjects = (data) => {
