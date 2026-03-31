@@ -491,12 +491,19 @@ function App() {
         }
         
         if (selectedLine !== '全部') {
-            result = result.filter(t =>
-                t.cancerTypes && t.cancerTypes.some(ct => 
-                    ct.lines && ct.lines.includes(selectedLine)
-                ) ||
-                t.line === selectedLine
-            );
+            result = result.filter(t => {
+                // 檢查新格式（cancerTypes.lines）
+                if (t.cancerTypes && t.cancerTypes.length > 0) {
+                    return t.cancerTypes.some(ct => 
+                        ct.lines && ct.lines.length > 0 && ct.lines.includes(selectedLine)
+                    );
+                }
+                // 檢查舊格式（line）
+                if (t.line) {
+                    return t.line === selectedLine;
+                }
+                return false;
+            });
         }
         
         return result;
@@ -519,7 +526,7 @@ function App() {
         trials.forEach(trial => {
             if (trial.cancerTypes && trial.cancerTypes.length > 0) {
                 trial.cancerTypes.forEach(ct => {
-                    if (ct.lines) {
+                    if (ct.lines && ct.lines.length > 0) {
                         ct.lines.forEach(line => lines.add(line));
                     }
                 });
@@ -527,7 +534,27 @@ function App() {
                 lines.add(trial.line);
             }
         });
-        return ['全部', ...Array.from(lines).sort()];
+        
+        // 自定義排序：第一線、第二線、第三線優先
+        const lineOrder = {
+            '第一線': 1,
+            '第二線': 2,
+            '第三線': 3,
+            'Adjuvant': 4,
+            '多線': 5,
+            '二/三線': 6
+        };
+        
+        const sortedLines = Array.from(lines).sort((a, b) => {
+            const orderA = lineOrder[a] || 999;
+            const orderB = lineOrder[b] || 999;
+            if (orderA !== orderB) {
+                return orderA - orderB;
+            }
+            return a.localeCompare(b);
+        });
+        
+        return ['全部', ...sortedLines];
     }, [trials]);
     
     if (!isAuth) {
