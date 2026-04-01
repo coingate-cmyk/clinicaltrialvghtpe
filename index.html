@@ -892,10 +892,13 @@ function TrialFormModal(props) {
         
         // 搜尋篩選
         if (search) {
+            const q = search.toLowerCase();
             result = result.filter(t =>
-                t.studyTitle.toLowerCase().includes(search.toLowerCase()) ||
-                t.code.toLowerCase().includes(search.toLowerCase()) ||
-                t.pi.toLowerCase().includes(search.toLowerCase())
+                (t.studyTitle || '').toLowerCase().includes(q) ||
+                (t.code || '').toLowerCase().includes(q) ||
+                (t.sponsor || '').toLowerCase().includes(q) ||
+                (t.pi || '').toLowerCase().includes(q) ||
+                (t.nurse || '').toLowerCase().includes(q)
             );
         }
         
