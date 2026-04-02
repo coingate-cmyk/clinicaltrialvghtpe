@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.1</title>
+    <title>臨床試驗管理系統 v3.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -16,6 +16,19 @@
     <script>
 const {useState, useEffect, useMemo} = React;
 const e = React.createElement;
+const APP_VERSION = 'v3.2';
+try {
+    const prevVersion = localStorage.getItem('clinicaltrial_app_version');
+    if (prevVersion !== APP_VERSION) {
+        localStorage.setItem('clinicaltrial_app_version', APP_VERSION);
+        const url = new URL(window.location.href);
+        url.searchParams.set('v', APP_VERSION + '-' + Date.now());
+        if (!sessionStorage.getItem('clinicaltrial_version_reloaded')) {
+            sessionStorage.setItem('clinicaltrial_version_reloaded', '1');
+            window.location.replace(url.toString());
+        }
+    }
+} catch (error) {}
 
 const CONFIG = {
     ACCESS_PASSWORD: 'clinical2026',
@@ -170,7 +183,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.0'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.2'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
