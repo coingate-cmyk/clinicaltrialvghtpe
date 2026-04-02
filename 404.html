@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.5.3</title>
+    <title>臨床試驗管理系統 v3.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
     <div id="app"></div>
@@ -16,19 +17,6 @@
     <script>
 const {useState, useEffect, useMemo} = React;
 const e = React.createElement;
-const APP_VERSION = 'v3.5.3';
-try {
-    const prevVersion = localStorage.getItem('clinicaltrial_app_version');
-    if (prevVersion !== APP_VERSION) {
-        localStorage.setItem('clinicaltrial_app_version', APP_VERSION);
-        const url = new URL(window.location.href);
-        url.searchParams.set('v', APP_VERSION + '-' + Date.now());
-        if (!sessionStorage.getItem('clinicaltrial_version_reloaded')) {
-            sessionStorage.setItem('clinicaltrial_version_reloaded', '1');
-            window.location.replace(url.toString());
-        }
-    }
-} catch (e) {}
 
 const CONFIG = {
     ACCESS_PASSWORD: 'clinical2026',
@@ -183,7 +171,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.5.3'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.0'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -214,11 +202,7 @@ function TrialCard(props) {
         e('div', {className: 'flex justify-between items-start mb-4'},
             e('div', null,
                 e('h3', {className: 'text-xl font-bold text-gray-800'}, trial.code),
-                e('p', {
-                    className: expanded
-                        ? 'text-gray-600 mt-1 whitespace-pre-wrap break-words'
-                        : 'text-gray-600 mt-1'
-                }, expanded ? trial.studyTitle : (trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : trial.studyTitle))
+                e('p', {className: 'text-gray-600 mt-1'}, trial.studyTitle.substring(0, 100) + '...')
             ),
             e('span', {
                 className: trial.status === '進行中' 
@@ -260,10 +244,6 @@ function TrialCard(props) {
             )
         ),
         expanded && e('div', {className: 'mt-4 pt-4 border-t space-y-2 text-sm'},
-            e('div', null,
-                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '完整試驗名稱:'),
-                e('div', {className: 'text-gray-800 whitespace-pre-wrap break-words'}, trial.studyTitle)
-            ),
             e('div', null,
                 e('span', {className: 'text-gray-600'}, '試驗期別: '),
                 e('span', null, trial.phase)
@@ -774,6 +754,16 @@ function TrialFormModal(props) {
 }
 
 
+
+const parseExcelFile = async (file) => {
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+    if (!rows.length) return [];
+    const text = rows.map(r => r.join('\t')).join('\n');
+    return parseStudyStatusCsv(text);
+};
 function ImportStatusModal(props) {
     const [csvText, setCsvText] = useState('');
     const [previewCount, setPreviewCount] = useState(0);
@@ -1167,7 +1157,7 @@ function ImportStatusModal(props) {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.5.3'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.0'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1185,15 +1175,6 @@ function ImportStatusModal(props) {
                         e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M12 4v16m8-8H4'})
                     ),
                     '新增試驗'
-                ),
-                isAdmin && e('button', {
-                    onClick: () => setShowImportModal(true),
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl hover:from-violet-600 hover:to-fuchsia-600 transition-all shadow-lg font-semibold'
-                },
-                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
-                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12V3m0 9l-3-3m3 3l3-3'})
-                    ),
-                    '匯入 Status'
                 ),
                 e('button', {
                     onClick: downloadCSV,
