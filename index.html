@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.6.0</title>
+    <title>臨床試驗管理系統 v3.6.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -41,6 +41,43 @@ const RTDB_PATH = {
 };
 
 let __db = null;
+
+const getDb = () => {
+    try {
+        if (__db) return __db;
+        if (!firebase.apps.length) {
+            firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        __db = firebase.database();
+        return __db;
+    } catch (error) {
+        console.error('Firebase init error:', error);
+        return null;
+    }
+};
+
+const getRootRef = () => {
+    const db = getDb();
+    return db ? db.ref(RTDB_PATH.root) : null;
+};
+
+const saveAllData = async (trialsData, subjectsData) => {
+    const encryptedTrials = encryptData(trialsData || []);
+    const encryptedSubjects = encryptData(subjectsData || []);
+    if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
+    if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
+
+    const rootRef = getRootRef();
+    if (!rootRef) return false;
+
+    await rootRef.set({
+        trials: encryptedTrials,
+        subjects: encryptedSubjects,
+        updatedAt: new Date().toISOString()
+    });
+    return true;
+};
+
 
 const encryptData = (data) => {
     try {
@@ -181,7 +218,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.0'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.1'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -212,11 +249,7 @@ function TrialCard(props) {
         e('div', {className: 'flex justify-between items-start mb-4'},
             e('div', null,
                 e('h3', {className: 'text-xl font-bold text-gray-800'}, trial.code),
-                e('p', {
-                    className: expanded
-                        ? 'text-gray-600 mt-1 whitespace-pre-wrap break-words'
-                        : 'text-gray-600 mt-1'
-                }, expanded ? trial.studyTitle : (trial.studyTitle && trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : (trial.studyTitle || '')))
+                e('p', {className: 'text-gray-600 mt-1'}, trial.studyTitle.substring(0, 100) + '...')
             ),
             e('span', {
                 className: trial.status === '進行中' 
@@ -247,7 +280,7 @@ function TrialCard(props) {
             })()
         ),
 
-                e('div', {className: 'grid grid-cols-3 gap-4 text-sm'},
+                e('div', {className: 'grid grid-cols-2 gap-4 text-sm'},
             e('div', null,
                 e('span', {className: 'text-gray-600'}, 'PI: '),
                 e('span', {className: 'font-semibold'}, trial.pi)
@@ -255,70 +288,20 @@ function TrialCard(props) {
             e('div', null,
                 e('span', {className: 'text-gray-600'}, '護理師: '),
                 e('span', {className: 'font-semibold'}, trial.nurse)
-            ),
-            e('div', null,
-                e('span', {className: 'text-gray-600'}, '收案進度: '),
-                e('span', {className: 'font-semibold'}, `${trial.enrolled || 0}/${trial.targetNum || 0}`)
             )
         ),
-        expanded && e('div', {className: 'mt-4 pt-4 border-t space-y-3 text-sm'},
+        expanded && e('div', {className: 'mt-4 pt-4 border-t space-y-2 text-sm'},
             e('div', null,
-                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '完整試驗名稱:'),
-                e('div', {className: 'text-gray-800 whitespace-pre-wrap break-words'}, trial.studyTitle)
-            ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '試驗期別: '),
-                    e('span', null, trial.phase || '')
-                ),
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '贊助商: '),
-                    e('span', null, trial.sponsor || '')
-                )
-            ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '研究護士: '),
-                    e('span', null, trial.nurse || '')
-                ),
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '聯絡方式: '),
-                    e('span', null, trial.phone || '')
-                )
-            ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '目標收案: '),
-                    e('span', null, trial.targetNum || 0)
-                ),
-                e('div', null,
-                    e('span', {className: 'text-gray-600'}, '目前已收案: '),
-                    e('span', null, trial.enrolled || 0)
-                )
+                e('span', {className: 'text-gray-600'}, '試驗期別: '),
+                e('span', null, trial.phase)
             ),
             e('div', null,
-                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '收案進度:'),
-                e('div', {className: 'w-full bg-slate-200 rounded-full h-3 overflow-hidden'},
-                    e('div', {
-                        className: 'bg-gradient-to-r from-blue-500 to-emerald-500 h-3 rounded-full',
-                        style: { width: `${Math.min(100, Math.round(((Number(trial.enrolled)||0) / Math.max(1, Number(trial.targetNum)||0)) * 100))}%` }
-                    })
-                ),
-                e('div', {className: 'text-xs text-slate-600 mt-1'},
-                    `${trial.enrolled || 0} / ${trial.targetNum || 0}（${Math.min(100, Math.round(((Number(trial.enrolled)||0) / Math.max(1, Number(trial.targetNum)||0)) * 100))}%）`
-                )
+                e('span', {className: 'text-gray-600'}, '目標收案: '),
+                e('span', null, trial.targetNum)
             ),
             trial.inclusion && e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '收案條件:'),
-                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.inclusion)
-            ),
-            trial.exclusion && e('div', null,
-                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '排除條件:'),
-                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.exclusion)
-            ),
-            trial.comments && e('div', null,
-                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '附註:'),
-                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.comments)
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap'}, trial.inclusion)
             )
         ),
         e('div', {className: 'mt-4 flex gap-2'},
@@ -573,7 +556,6 @@ function TrialFormModal(props) {
         pi: '',
         nurse: '',
         phone: '',
-        comments: '',
         status: '進行中',
         inclusion: '',
         exclusion: ''
@@ -750,7 +732,7 @@ function TrialFormModal(props) {
                         })
                     )
                 ),
-                e('div', {className: 'grid grid-cols-4 gap-4'},
+                e('div', {className: 'grid grid-cols-3 gap-4'},
                     e('div', null,
                         e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '贊助商'),
                         e('input', {
@@ -766,16 +748,6 @@ function TrialFormModal(props) {
                             type: 'number',
                             value: form.targetNum,
                             onChange: (ev) => update('targetNum', ev.target.value),
-                            className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
-                        })
-                    ),
-                    e('div', null,
-                        e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目前已收案'),
-                        e('input', {
-                            type: 'number',
-                            min: '0',
-                            value: form.enrolled,
-                            onChange: (ev) => update('enrolled', ev.target.value),
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                         })
                     ),
@@ -809,16 +781,6 @@ function TrialFormModal(props) {
                         onChange: (ev) => update('exclusion', ev.target.value),
                         rows: 2,
                         placeholder: '請輸入排除條件...',
-                        className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
-                    })
-                ),
-                e('div', null,
-                    e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '附註 / comments'),
-                    e('textarea', {
-                        value: form.comments || '',
-                        onChange: (ev) => update('comments', ev.target.value),
-                        rows: 2,
-                        placeholder: '請輸入備註、slot、line ID 或其他說明...',
                         className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                     })
                 ),
@@ -985,11 +947,9 @@ function App() {
         }
     }, []);
     
-    const saveTrials = (data) => {
-        const encrypted = encryptData(data);
-        if (encrypted) {
-            localStorage.setItem('clinical-trials-encrypted', encrypted);
-        }
+    const saveTrials = async (data) => {
+        setTrials(data);
+        return await saveAllData(data, subjects);
     };
 
     const handleSaveTrial = async (trialData) => {
@@ -1273,7 +1233,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.0'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.1'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1291,15 +1251,6 @@ function App() {
                         e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M12 4v16m8-8H4'})
                     ),
                     '新增試驗'
-                ),
-                isAdmin && e('button', {
-                    onClick: () => setShowImportModal(true),
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl hover:from-violet-600 hover:to-fuchsia-600 transition-all shadow-lg font-semibold'
-                },
-                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
-                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12V3m0 9l-3-3m3 3l3-3'})
-                    ),
-                    '匯入資料'
                 ),
                 e('button', {
                     onClick: downloadCSV,
