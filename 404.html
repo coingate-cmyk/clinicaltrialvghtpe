@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.6.3</title>
+    <title>臨床試驗管理系統 v3.6.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -130,6 +130,9 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             nurse: normalizeText(incoming.nurse || prev.nurse),
             phone: normalizeText(incoming.phone || prev.phone),
             comments: normalizeText(incoming.comments || prev.comments),
+            isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
+            archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
+            archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
             targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
             enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
             monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
@@ -225,7 +228,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.3'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.4'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -262,11 +265,16 @@ function TrialCard(props) {
                         : 'text-gray-600 mt-1'
                 }, expanded ? trial.studyTitle : (trial.studyTitle && trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : (trial.studyTitle || '')))
             ),
-            e('span', {
-                className: trial.status === '進行中' 
-                    ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
-                    : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
-            }, trial.status)
+            e('div', {className: 'flex items-center gap-2'},
+                e('span', {
+                    className: trial.status === '進行中' 
+                        ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
+                        : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
+                }, trial.status),
+                trial.isArchived && e('span', {
+                    className: 'px-3 py-1 bg-slate-500 text-white rounded-full text-sm'
+                }, '已封存')
+            )
         ),
         e('div', {className: 'flex flex-wrap gap-2 mb-4'},
             (() => {
@@ -363,6 +371,12 @@ function TrialCard(props) {
             trial.comments && e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '附註:'),
                 e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.comments)
+            ),
+            trial.isArchived && e('div', null,
+                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '封存資訊:'),
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'},
+                    `封存日期：${trial.archiveDate || ''}` + (trial.archiveReason ? `；原因：${trial.archiveReason}` : '')
+                )
             )
         ),
         e('div', {className: 'mt-4 flex gap-2'},
@@ -619,6 +633,9 @@ function TrialFormModal(props) {
         phone: '',
         comments: '',
         status: '進行中',
+        isArchived: false,
+        archiveDate: '',
+        archiveReason: '',
         inclusion: '',
         exclusion: ''
     });
@@ -658,7 +675,10 @@ function TrialFormModal(props) {
             cancerTypes: cancerTypes,
             id: isEdit ? form.id : Date.now(),
             targetNum: parseInt(form.targetNum) || 0,
-            enrolled: parseInt(form.enrolled) || 0
+            enrolled: parseInt(form.enrolled) || 0,
+            isArchived: !!form.isArchived,
+            archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
+            archiveReason: form.isArchived ? (form.archiveReason || '') : ''
         };
         
         props.onSave(trialData);
@@ -866,6 +886,38 @@ function TrialFormModal(props) {
                         className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                     })
                 ),
+                e('div', {className: 'grid grid-cols-1 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200'},
+                    e('label', {className: 'flex items-center gap-3 cursor-pointer'},
+                        e('input', {
+                            type: 'checkbox',
+                            checked: !!form.isArchived,
+                            onChange: (ev) => update('isArchived', ev.target.checked),
+                            className: 'w-4 h-4'
+                        }),
+                        e('span', {className: 'text-sm font-semibold text-slate-700'}, '試驗已結束 / 封存（主列表預設隱藏）')
+                    ),
+                    form.isArchived && e('div', {className: 'grid grid-cols-2 gap-4'},
+                        e('div', null,
+                            e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '封存日期'),
+                            e('input', {
+                                type: 'date',
+                                value: form.archiveDate ? String(form.archiveDate).slice(0,10) : '',
+                                onChange: (ev) => update('archiveDate', ev.target.value),
+                                className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                            })
+                        ),
+                        e('div', null,
+                            e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '封存原因'),
+                            e('input', {
+                                type: 'text',
+                                value: form.archiveReason || '',
+                                onChange: (ev) => update('archiveReason', ev.target.value),
+                                placeholder: '例：試驗結束、停止收案、close-out',
+                                className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                            })
+                        )
+                    )
+                ),
                 e('div', {className: 'flex gap-3 pt-4 border-t-2 border-slate-200'},
                     e('button', {
                         type: 'submit',
@@ -999,6 +1051,7 @@ function App() {
     const [showEditModal, setShowEditModal] = useState(null);
     const [showImportModal, setShowImportModal] = useState(false);
     const [syncStatus, setSyncStatus] = useState('');
+    const [showArchived, setShowArchived] = useState(false);
     
     useEffect(() => {
         let rootRef = null;
@@ -1296,6 +1349,9 @@ function App() {
     
     const filtered = useMemo(() => {
         let result = trials;
+        if (!showArchived) {
+            result = result.filter(t => !t.isArchived);
+        }
         
         // 搜尋篩選
         if (search) {
@@ -1358,7 +1414,7 @@ function App() {
         }
         
         return result;
-    }, [trials, search, cancerType, selectedLine]);
+    }, [trials, search, cancerType, selectedLine, showArchived]);
     
     const cancerTypes = useMemo(() => {
         const types = new Set();
@@ -1390,7 +1446,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.3'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.4'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1438,6 +1494,17 @@ function App() {
                 )
             ),
             syncStatus && e('div', {className: 'mb-4 text-sm text-slate-600'}, syncStatus),
+            e('div', {className: 'mb-4 flex items-center gap-3 text-sm text-slate-700'},
+                e('label', {className: 'flex items-center gap-2 cursor-pointer'},
+                    e('input', {
+                        type: 'checkbox',
+                        checked: showArchived,
+                        onChange: (ev) => setShowArchived(ev.target.checked),
+                        className: 'w-4 h-4'
+                    }),
+                    e('span', null, '顯示已封存試驗')
+                )
+            ),
             e('div', {className: 'mb-6 space-y-4'},
                 e('input', {
                     type: 'text',
