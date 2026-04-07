@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.7.3.0.5</title>
+    <title>臨床試驗管理系統 v3.7.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -25,67 +25,55 @@ const CONFIG = {
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026'
 };
 
-// GitHub JSON 資料庫設定
-const GITHUB_CONFIG = {
+// GitHub public JSON source（只讀）；寫回 GitHub 由你這端處理
+const GITHUB_SOURCE = {
     owner: 'coingate-cmyk',
     repo: 'clinicaltrialvghtpe',
     branch: 'main',
-    token: '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',
-    trialsPath: 'data/trials.json',
-    subjectsPath: 'data/subjects.json',
-    metaPath: 'data/meta.json'
+    trialsUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/trials.json',
+    subjectsUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/subjects.json',
+    metaUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/meta.json'
 };
 
-let __githubCache = {
-    trialsSha: null,
-    subjectsSha: null,
-    metaSha: null
-};
+const loadRemoteDataOnce = async () => {
+    const [trialsResp, subjectsResp, metaResp] = await Promise.allSettled([
+        fetch(GITHUB_SOURCE.trialsUrl, { cache: 'no-store' }),
+        fetch(GITHUB_SOURCE.subjectsUrl, { cache: 'no-store' }),
+        fetch(GITHUB_SOURCE.metaUrl, { cache: 'no-store' })
+    ]);
 
-const ghHeaders = () => ({
-    'Accept': 'application/vnd.github+json',
-    'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
-    'X-GitHub-Api-Version': '2022-11-28'
-});
-
-const pathToCacheKey = (path) => {
-    if (path === GITHUB_CONFIG.trialsPath) return 'trialsSha';
-    if (path === GITHUB_CONFIG.subjectsPath) return 'subjectsSha';
-    return 'metaSha';
-};
-
-const getGitHubFile = async (path) => {
-    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}?ref=${GITHUB_CONFIG.branch}`;
-    const resp = await fetch(url, { headers: ghHeaders() });
-    if (resp.status === 404) return null;
-    if (!resp.ok) throw new Error(`GitHub read failed: ${resp.status}`);
-    const data = await resp.json();
-    __githubCache[pathToCacheKey(path)] = data.sha || null;
-    const decoded = atob((data.content || '').replace(/\n/g, ''));
-    return JSON.parse(decoded || 'null');
-};
-
-const putGitHubFile = async (path, payload, message) => {
-    const key = pathToCacheKey(path);
-    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}`;
-    const body = {
-        message,
-        branch: GITHUB_CONFIG.branch,
-        content: btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))))
+    const readJson = async (resp) => {
+        if (!resp || resp.status !== 'fulfilled' || !resp.value.ok) return null;
+        try {
+            return await resp.value.json();
+        } catch (error) {
+            return null;
+        }
     };
-    if (__githubCache[key]) body.sha = __githubCache[key];
-    const resp = await fetch(url, {
-        method: 'PUT',
-        headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    });
-    if (!resp.ok) {
-        const err = await resp.text();
-        throw new Error(`GitHub write failed: ${resp.status} ${err}`);
-    }
-    const data = await resp.json();
-    __githubCache[key] = data?.content?.sha || __githubCache[key] || null;
-    return data;
+
+    const trialsFile = await readJson(trialsResp);
+    const subjectsFile = await readJson(subjectsResp);
+    const metaFile = await readJson(metaResp);
+
+    return {
+        trials: trialsFile?.encrypted || null,
+        subjects: subjectsFile?.encrypted || null,
+        meta: metaFile || null
+    };
+};
+
+const saveAllData = async (trialsData, subjectsData) => {
+    const encryptedTrials = encryptData(trialsData || []);
+    const encryptedSubjects = encryptData(subjectsData || []);
+    if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
+    if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
+    localStorage.setItem('clinical-trials-meta', JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        trialsCount: (trialsData || []).length,
+        subjectsCount: (subjectsData || []).length,
+        source: 'local-github-ready'
+    }));
+    return true;
 };
 
 const encryptData = (data) => {
@@ -132,8 +120,9 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             nurse: normalizeText(incoming.nurse || prev.nurse),
             phone: normalizeText(incoming.phone || prev.phone),
             comments: normalizeText(incoming.comments || prev.comments),
-            inclusion: String(incoming.inclusion || prev.inclusion || ''),
-            exclusion: String(incoming.exclusion || prev.exclusion || ''),
+            isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
+            archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
+            archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
             targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
             enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
             monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
@@ -175,70 +164,30 @@ const parseCsvLine = (line) => {
     return result.map(v => v.trim());
 };
 
-
-const renderStructuredText = (text, baseClass='text-gray-700') => {
-    const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
-    return e('div', {className: `${baseClass} whitespace-pre-wrap break-words`},
-        lines.map((line, i) => {
-            const trimmed = String(line || '').trim();
-            const isCohort = /^(cohort\s*[A-Z0-9]+|[A-D]\s*[:：\-]|part\s*[A-Z0-9]+)/i.test(trimmed);
-            const isBlank = !trimmed;
-            return e('div', {
-                key: i,
-                className: isCohort ? 'font-semibold text-slate-800 mt-2' : '',
-                style: isBlank ? { minHeight: '0.85rem' } : {}
-            }, isBlank ? ' ' : line);
-        })
-    );
-};
-
-const mapImportedRow = (header, row) => {
-    const headerMap = {
-        code: ['code', '代號', '試驗代碼'],
-        studyTitle: ['studytitle', 'study title', '試驗名稱', '試驗標題', 'title'],
-        phase: ['phase', '期別', '試驗期別'],
-        sponsor: ['sponsor', '贊助商'],
-        targetNum: ['targetnum', 'target', '目標收案', '目標收案數'],
-        enrolled: ['enrolled', '已收案', '收案數', '目前已收案'],
-        monthSigned: ['monthsigned', '本月簽署', '當月簽署', '簽署'],
-        monthEnrolled: ['monthenrolled', '本月入案', '當月入案', '入案'],
-        pi: ['pi', '主持人', 'pi name', 'investigator'],
-        nurse: ['nurse', 'sc', 'study nurse', '研究護士', '護理師'],
-        phone: ['phone', '電話', '分機', 'line id', '聯絡方式'],
-        comments: ['comments', 'comment', '備註', '附註', '狀態', 'comments/status'],
-        inclusion: ['inclusion', '收案條件', '納入條件', '主要收案條件'],
-        exclusion: ['exclusion', '排除條件']
-    };
-    const findIndex = (keys) => header.findIndex(h => keys.includes(normalizeText(h).toLowerCase()));
-    const get = (keys) => {
-        const i = findIndex(keys);
-        return i >= 0 ? row[i] : '';
-    };
-    return {
-        code: get(headerMap.code),
-        studyTitle: get(headerMap.studyTitle),
-        phase: get(headerMap.phase),
-        sponsor: get(headerMap.sponsor),
-        targetNum: get(headerMap.targetNum),
-        enrolled: get(headerMap.enrolled),
-        monthSigned: get(headerMap.monthSigned),
-        monthEnrolled: get(headerMap.monthEnrolled),
-        pi: get(headerMap.pi),
-        nurse: get(headerMap.nurse),
-        phone: get(headerMap.phone),
-        comments: get(headerMap.comments),
-        inclusion: get(headerMap.inclusion),
-        exclusion: get(headerMap.exclusion)
-    };
-};
-
 const parseStudyStatusCsv = (csvText) => {
     const lines = String(csvText || '').replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean);
     if (lines.length < 2) return [];
     const headers = parseCsvLine(lines[0]);
     const rows = lines.slice(1).map(parseCsvLine);
-    return rows.map((row) => mapImportedRow(headers, row))
-        .filter(item => normalizeCode(item.code));
+    const idx = (name) => headers.findIndex(h => normalizeText(h).toLowerCase() === name.toLowerCase());
+    const get = (row, name) => {
+        const i = idx(name);
+        return i >= 0 ? row[i] : '';
+    };
+    return rows.map((row) => ({
+        code: get(row, 'code'),
+        studyTitle: get(row, 'studyTitle'),
+        phase: get(row, 'phase'),
+        sponsor: get(row, 'sponsor'),
+        targetNum: get(row, 'targetNum'),
+        enrolled: get(row, 'enrolled'),
+        monthSigned: get(row, 'monthSigned'),
+        monthEnrolled: get(row, 'monthEnrolled'),
+        pi: get(row, 'pi'),
+        nurse: get(row, 'nurse'),
+        phone: get(row, 'phone'),
+        comments: get(row, 'comments')
+    })).filter(item => normalizeCode(item.code));
 };
 
 
@@ -247,51 +196,8 @@ const parseExcelFile = async (file) => {
     const wb = XLSX.read(data, { type: 'array' });
     const sheet = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-    const header = (rows[0] || []).map(v => normalizeText(v));
-    const parsed = rows.slice(1).map(row => mapImportedRow(header, row)).filter(item => normalizeCode(item.code));
     const text = rows.map(r => r.map(v => (v ?? '')).join('\t')).join('\n');
-    return { rows, text, parsed };
-};
-
-
-const saveAllData = async (trialsData, subjectsData) => {
-    const encryptedTrials = encryptData(trialsData || []);
-    const encryptedSubjects = encryptData(subjectsData || []);
-    if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
-    if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
-
-    await putGitHubFile(GITHUB_CONFIG.trialsPath, {
-        updatedAt: new Date().toISOString(),
-        count: (trialsData || []).length,
-        encrypted: encryptedTrials
-    }, `Update trials (${(trialsData || []).length})`);
-
-    await putGitHubFile(GITHUB_CONFIG.subjectsPath, {
-        updatedAt: new Date().toISOString(),
-        count: (subjectsData || []).length,
-        encrypted: encryptedSubjects
-    }, `Update subjects (${(subjectsData || []).length})`);
-
-    await putGitHubFile(GITHUB_CONFIG.metaPath, {
-        updatedAt: new Date().toISOString(),
-        trialsCount: (trialsData || []).length,
-        subjectsCount: (subjectsData || []).length,
-        source: 'github-json-db'
-    }, 'Update metadata');
-    return true;
-};
-
-const loadRemoteDataOnce = async () => {
-    const [trialsFile, subjectsFile, metaFile] = await Promise.all([
-        getGitHubFile(GITHUB_CONFIG.trialsPath),
-        getGitHubFile(GITHUB_CONFIG.subjectsPath),
-        getGitHubFile(GITHUB_CONFIG.metaPath).catch(() => null)
-    ]);
-    return {
-        trials: trialsFile?.encrypted || null,
-        subjects: subjectsFile?.encrypted || null,
-        meta: metaFile || null
-    };
+    return { rows, text };
 };
 
 const INITIAL_TRIALS = [{"id": 1, "cancerType": "肝癌", "line": "二、三線", "studyTitle": "一項第II期、多中心、開放性試驗，在患有晚期/轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305", "code": "DB1311-201", "phase": "I", "sponsor": "", "targetNum": 6, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "Abby", "phone": "82935/82999", "status": "進行中", "inclusion": "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL", "exclusion": "", "cancerTypes": [{"type": "肝癌", "lines": ["第二線", "第三線"]}], "subjects": []}, {"id": 2, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗", "code": "TTY", "phase": "4", "sponsor": "TTY", "targetNum": 150, "enrolled": 16, "monthSigned": 1, "monthEnrolled": 1, "pi": "洪逸平", "nurse": "宋秀薇", "phone": "2935/2999", "status": "進行中", "inclusion": "胃癌術後使用健保S-1 病患", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["Adjuvant"]}], "subjects": []}, {"id": 3, "cancerType": "胃癌", "line": "Adjuvant", "studyTitle": "一項在 HER2 表現胃癌患者評估治療性癌症疫苗 (AST-301, pNGVL3-hICD) 安全性及免疫療效的第二期試驗 (CORNERSTONE-003)", "code": "PN-301-22", "phase": "2", "sponsor": "諾佛葛", "targetNum": 6, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "賴姵妤", "phone": "0919801912", "status": "進行中", "inclusion": "1.胃癌術後D2、R0、STAGE 2、3 ，並使用過預防性化療後完全沒有腫瘤復發的病人。2.必須用完最後一次預防性化療後，間隔兩周並在八周內接受第一次AST-301治療。3.HbsAg (+)可收，但需 HBV DNA is undetectable。", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["Adjuvant"]}], "subjects": []}, {"id": 4, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項隨機分配、第 III 期試驗，評估 Rilvegostomig 併用Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果 (ARTEMIDE-Gastric01)", "code": "D702AC00001", "phase": "III", "sponsor": "AZ", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "進行中", "inclusion": "1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告) 2. 體重 >= 35 KG 3. Measurable lesion by RECIST 1.1 4.ECOG 0-1 5. 可收B肝.治療後的C肝 病毒量驗不到 6.僅收一線病人 7. CCr>=60, CPS > 1", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 5, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估 ABBV-400 合併 Fluorouracil、Leucovorin 和 Budigalimab 作為第一線治療的安全性、療效和最佳劑量 (AndroMETa-GEA-977)", "code": "M24-977", "phase": "II", "sponsor": "ABBVIE", "targetNum": 10, "enrolled": 10, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "暫停收案", "inclusion": "1.HER2(-) 2.C肝不收 3.Slide*15 (4-5u) ,C1D1前需寄出 4.可收B肝,病毒量需小於500 IU/mL 5.需有Target Lesion (Recist 1.1) 6.ILD or Pneumonitis 病史不能收 7.全肺切除者不能收 8.C1D1前不能使用抗生素", "exclusion": "C肝, ILD或Pneumonitis病史, 全肺切除者", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 6, "cancerType": "胃癌", "line": "一線", "studyTitle": "一項評估AB598單一療法與併用療法對晚期惡性腫瘤參與者之安全性及耐受性的第1/1b期試驗", "code": "ARC-25", "phase": "1b", "sponsor": "NOVOTECH", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉", "phone": "0927751328", "status": "名額已滿", "inclusion": "1.HER2(-) 2.禁用藥(CD39) 3.Slide*15 (4-5u) ,C1D1前需寄到美國 4.可收B肝,病毒量需小於2000 IU/mL 可收C肝,病毒量需小於15 IU/mL 5.需有Target Lesion (Recist 1.1)", "exclusion": "使用CD39禁用藥", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 7, "cancerType": "胃癌", "line": "一線", "studyTitle": "多中心、一項第 1b/2 期開放性、劑量遞增和劑量延伸試驗，評估Trastuzumab Deruxtecan (T-Dxd) 單一療法與併用療法對於帶有 HER2 表現胃癌成人受試者的安全性、耐受性、藥物動力學、免疫原性和抗腫瘤活性 (DESTINY-Gastric03)", "code": "D967LC0001", "phase": "1b/2", "sponsor": "AZ", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "周淑慧", "phone": "82935/82999", "status": "暫停收案", "inclusion": "目前 4A,4B cohort已滿,暫停收案。1. 僅收一線病人 2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative ) --> Arm 4B 用藥: T-Dxd + capecitabine + rilvegostomig 3. HER2 high ( IHC 3+ / IHC 2+ with FISH-positive ) --> Arm 4A 4. HBsAg(-) , anti-HBc(+) --> B肝不能收 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion", "exclusion": "B肝", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 8, "cancerType": "胃癌", "line": "一線", "studyTitle": "Zolbetuximab 合併 Pembrolizumab 和化療（CAPOX 或mFOLFOX6），用於罹患局部晚期無法切除或轉移性胃或胃食道交界腺癌，腫瘤為 HER2 陰性、Claudin (CLDN) 18.2 陽性且計畫性凋亡配體-1 (PD-L1) 陽性的參與者之第一線治療的一項第 3 期、雙盲、隨機分配試驗", "code": "8951-CL-0305", "phase": "III", "sponsor": "Astellas", "targetNum": 2, "enrolled": 0, "monthSigned": 2, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "賴姵妤, 宋秀薇", "phone": "82935/82999", "status": "進行中", "inclusion": "1. Histologically confirmed gastric or GEJ adenocarcinoma 2. HER2-negative,(可以院內驗) 3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗) 4. HBsAg(-) ; HCV(-) ; CCr >=30 5. Slide片*9 ( 4-5u),10個工作天發報告 6. At least one measurable lesion", "exclusion": "HBsAg(+), HCV(+)", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 9, "cancerType": "胃癌", "line": "一線", "studyTitle": "評估 Trastuzumab Deruxtecan (Enhertu®) 併用化療（加或不加Pembrolizumab）相較於化療併用 Trastuzumab（加或不加Pembrolizumab）作為不可切除、局部晚期或轉移性 HER2-陽性胃癌或胃食道接合處 (GEJ) 癌受試者第一線治療的一項多中心、隨機分配、開放標記、第 III 期試驗 (DESTINY-Gastric05)", "code": "DS8201-724", "phase": "III", "sponsor": "第一三共", "targetNum": 7, "enrolled": 0, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇, 賴姵妤", "phone": "82935/82999", "status": "進行中", "inclusion": "1. 必須可以吞Xeloda 2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive) 3. LVEF >=50 % , CCr >=60 4. HBsAg(+) ,HBV DNA<2000 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion 7. Slide片*16 ( 4-5u),10個工作天發報告", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第一線"]}], "subjects": []}, {"id": 10, "cancerType": "胃癌", "line": "二線", "studyTitle": "HERTHENA-PanTumor01 (U31402-277)：一項第 2 期、多中心、多群組、開放標記、概念驗證試驗，探討 Patritumab Deruxtecan (HER3-DXd; U3-1402) 運用於局部晚期或轉移性固體腫瘤的受試者", "code": "U31402-277", "phase": "II", "sponsor": "第一三共", "targetNum": 10, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "楊慕華", "nurse": "邱琳琳", "phone": "0976107317", "status": "進行中", "inclusion": "1.HER 2 (-) 2.需要PD後的切片(8片) 3.第一線的化療要以 5-FU-based 4.HbsAg(+)可以收,DNA<2000 IU/mL", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 11, "cancerType": "胃癌", "line": "二線", "studyTitle": "使用Ramucirumab (Cyramza)、nal-IRI (Onivyde) 和Trifluridine /Tipiracil (Lonsurf) 作為二線治療，用於轉移性胃癌的第 Ib期和第II 期臨床試驗（COOL臨床試驗）", "code": "T1223", "phase": "Ib/II", "sponsor": "IIT", "targetNum": 25, "enrolled": 9, "monthSigned": 0, "monthEnrolled": 1, "pi": "陳明晃", "nurse": "林韋秀", "phone": "0963501682", "status": "進行中", "inclusion": "1. 不限her 2 ( - or +)，但如為her 2 (+) 一線治療必須用過Herceptin 2. Measurable lesion by RECIST 1.1 3.沒有排除 B C肝", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 12, "cancerType": "胃癌", "line": "二線", "studyTitle": "一項第 1b 期、多中心、開放性試驗，評估 CHS-114 合併Toripalimab 加上或不加其他治療用於晚期或轉移性實體腫瘤參與者的安全性和療效", "code": "CHS-114-02", "phase": "Ib", "sponsor": "美捷", "targetNum": 6, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "林韋秀, 王秋眉", "phone": "0963501682", "status": "進行中", "inclusion": "1.C2需要再次切片 2.Slide*15 (4-5u) ,C1D1前需寄出 4.需有Target Lesion (Recist 1.1) 5.ILD or Pneumonitis 病史不能收 Cohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma)", "exclusion": "ILD或Pneumonitis病史", "cancerTypes": [{"type": "胃癌", "lines": ["第二線"]}], "subjects": []}, {"id": 13, "cancerType": "胃癌", "line": "一線後", "studyTitle": "一項第二期、開放性、多中心試驗，評估 AZD0901 作為單一療法和併用抗癌藥物使用於表現 Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "code": "D9800C00001", "phase": "Ib/II", "sponsor": "AZ", "targetNum": 10, "enrolled": 3, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 吳佳勳", "phone": "0927751328", "status": "進行中", "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌 (1)胰臟癌 ,一線治療 (2)胃癌,正二.三線治療 (3)膽管癌,正二.三線治療 2. HER2 (-) 3. 胃癌需PD後再次切片,C3要再切片一次 4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<2000 需使用抗病毒用藥 ,排除C肝及HIV(+) 7.ECOG 0-1 8.體重 >= 35 KG", "exclusion": "C肝, HIV(+)", "cancerTypes": [{"type": "胃癌", "lines": ["第一線後"]}], "subjects": []}, {"id": 14, "cancerType": "胃癌", "line": "三線", "studyTitle": "一項第二期、開放性、多中心試驗，評估 AZD0901 作為單一療法和併用抗癌藥物使用於表現 Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "code": "D9802C00001", "phase": "III", "sponsor": "AZ", "targetNum": 17, "enrolled": 12, "monthSigned": 1, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "吳佳勳", "phone": "0918696523", "status": "進行中", "inclusion": "1.正三線及三線後 都可以收，一線需用過 Fluoropyrimidine/ platinum 2. HER2 (-) 3. archival tissue <24 months送國外驗Claudin18.2切片*15(10天出報告) 4. 與上一線治療需 washout 28天或5個半衰期 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<100.治療後的C肝 病毒量驗不到 !!!!! 收案即將進入尾聲 (3/31)，動起來再加碼收 5人~", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 15, "cancerType": "胃癌", "line": "三線", "studyTitle": "一項第3期、多中心、開放性、隨機分配試驗，比較 MK-2870與醫師選擇之治療，對於 3L+晚期／轉移性胃食道腺癌（胃腺癌、胃食道交接處腺癌和食道腺癌）的療效和安全性", "code": "MK2870-015", "phase": "III", "sponsor": "MSD", "targetNum": 4, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 王秋眉, 吳佳勳", "phone": "7270#268", "status": "暫停收案", "inclusion": "1.可收食道癌及胃癌 正三線及三線後 2.需要20片切片,要等10天報告出來才能 Random 3.必須使用過fluoropyrimidine and platinum doublet 4.HER2+ must have previously received trastuzumab 5.Brain meta需要接受治療且確認為 stable 6.B,C肝, HIV只要有病史都不收 7.試驗藥物只能從周邊血管施打", "exclusion": "B肝, C肝, HIV病史", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 16, "cancerType": "胃癌", "line": "三線", "studyTitle": "BDC-4182 作為單一藥物於晚期胃癌及胃食道癌患者之第 1/2 期、首次使用於人體之劑量遞增與擴展試驗", "code": "BBI-4182-101", "phase": "I/II", "sponsor": "Bolt", "targetNum": 2, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 林韋秀", "phone": "0927751328", "status": "進行中", "inclusion": "1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。5. 腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。", "exclusion": "", "cancerTypes": [{"type": "胃癌", "lines": ["第三線"]}], "subjects": []}, {"id": 17, "cancerType": "食道癌", "line": "一線", "studyTitle": "一項針對罹患局部晚期不可切除／轉移性食道癌 ( ESCC) 的第一線治療受試者，使用研究性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療的第 1／2 期開放標示、傘式平台設計試驗 KEYMAKER-U06：06E 子試驗", "code": "MK-3475-06E", "phase": "I/II", "sponsor": "MSD", "targetNum": 5, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1- 您必須經過組織學或細胞學確診為第 1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。2- ccr > =50 ml/min", "exclusion": "1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加 2. 在使用試驗治療前 4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。3. QTcF value >470 msec / LVEF < 50", "cancerTypes": [{"type": "食道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 18, "cancerType": "食道癌", "line": "一線", "studyTitle": "一項針對罹患局部晚期無法切除 /轉移性胃食道腺癌 (胃腺癌、胃食道交接處腺癌與食道腺癌 ) 的第一線治療受試者，使用 MK-2870搭配Pembrolizumab (MK-3475) 和化療的第1/2期開放標示、傘式平台設計試驗： 06C子試驗", "code": "MK-3475-06C", "phase": "I/II", "sponsor": "MSD", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲", "phone": "0981764403", "status": "進行中", "inclusion": "1. 經組織學和/或細胞學確診為先前未經治療的局部晚期 不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。2. 患有非HER2/neu陽性的胃食道腺癌。3.ccr > =50 ml/min", "exclusion": "1-在第一劑研究介入前 3 個月內體重減輕 >20%。2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。", "cancerTypes": [{"type": "食道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 19, "cancerType": "食道癌", "line": "二線", "studyTitle": "一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性 食道鱗狀細胞癌 (ESCC) 受試者之第三期、多中心、隨機分配、開放標記試驗 (IDeate-Esophageal01)", "code": "DS7300-202", "phase": "III", "sponsor": "DAIICHI SANKYO", "targetNum": 4, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 陳秀玲, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC. 2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ).", "exclusion": "1.受試者患有 <50 bpm 的心搏過緩，除非受試者裝有心律調節器 2. Has received prior treatment with orlotamab, enoblituzumab, or other B7-H3 targeted agents, including I-DXd. 3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.", "cancerTypes": [{"type": "食道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 20, "cancerType": "食道癌", "line": "二線", "studyTitle": "一項第1⁄2期開放標示、傘式平台設計試驗，評估 MK-2870合併Paclitaxel作為二線治療罹患晚期 /轉移性胃食道腺癌 的受試者的安全與療效性： 06D子試驗", "code": "MK-3475-06D", "phase": "I/II", "sponsor": "MSD", "targetNum": 6, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "孔亭方, 王秋眉", "phone": "0981764403", "status": "進行中", "inclusion": "1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma. 2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.", "exclusion": "1. Has squamous cell or undifferentiated esophageal gastric cancer. 2. Received prior treatment with a TROP2-targeted ADC", "cancerTypes": [{"type": "食道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 21, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項第 2b/3 期、隨機分配、雙盲試驗 ,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者 ,探討 PONSEGROMAB (PF-06946860) 相較於安慰劑的療效、安全性和耐受性", "code": "C3651021", "phase": "2b/3", "sponsor": "輝瑞", "targetNum": 15, "enrolled": 1, "monthSigned": 1, "monthEnrolled": 0, "pi": "李重賓", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "1. 資料顯示有轉移性胰管腺癌 2. 尚未接受過治療 (一線治療) 3. Measurable lesion by RECIST 1.1 4. Fearon 定義的惡病質: BMI < 20 kg/m2 且篩選前六個月 內自願性體重減輕 > 2% 或者 篩選前過去六個月 內非自願體重減輕 > 5% 5. ECOG : 0-1 6. 不需要送腫瘤切片 7. LVEF > 50%", "exclusion": "", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 22, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項第 1b 期試驗，評估 AMG 193 合併其他療法用於晚期同合子甲硫腺苷磷酸化 酶 (MTAP) 缺失胃腸道癌、膽管癌、胰臟癌受試者的安全性、耐受性、藥物動力學及療效 – 主試驗計畫", "code": "20230023", "phase": "IB", "sponsor": "Amgen Inc.", "targetNum": 5, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王昭蘋", "phone": "0919377185", "status": "停止收案", "inclusion": "105 依當地或中央次世代定序檢測，評估為 MTAP 缺失。106 有能力吞服口服之試驗治療，不會吐出來，並願意記錄試驗藥 品的每天服藥情況。107 經試驗主持人判定，患有實體腫瘤治療反應評估標準第 1.1 版 (RECIST v1.1) 定義的可測量病灶。108 美國東岸癌症臨床研究合作組織 (ECOG) 體能狀態為 0 或1 分 目前只開放收 胰臟癌一線", "exclusion": "", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 23, "cancerType": "胰臟癌", "line": "一線", "studyTitle": "一項隨機分配、第 2/3期試驗，針對未接受過治療、且具有同源性MTAP缺失的轉移性胰管腺癌受試者，以 BMS-986504併用Nabpaclitaxel及Gemcitabine，相較於安慰劑併用 Nab-paclitaxel及Gemcitabine的療效", "code": "CA2400030", "phase": "2/3", "sponsor": "必治妥", "targetNum": 5, "enrolled": 3, "monthSigned": 1, "monthEnrolled": 0, "pi": "姜乃榕", "nurse": "王昭蘋", "phone": "0919377185", "status": "進行中", "inclusion": "● 經組織學或細胞學方法確診患有轉移性 PDAC。● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。", "exclusion": "排除b,c肝", "cancerTypes": [{"type": "胰臟癌", "lines": ["第一線"]}], "subjects": []}, {"id": 24, "cancerType": "膽道癌", "line": "一線", "studyTitle": "一項第 III 期、隨機分配、開放性、全球多中心試驗，評估Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療 (ARTEMIDE-Biliary02)", "code": "D702NC00001", "phase": "III", "sponsor": "AZ", "targetNum": 15, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "林韋秀, 王秋眉", "phone": "0963501682", "status": "進行中", "inclusion": "1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。2. 需提供12個月內的切片檢體，random前需有PDL-1 報告(Central review) 。3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打 GCSF。4. 暫不收B、C肝。", "exclusion": "B肝, C肝, 壺腹癌", "cancerTypes": [{"type": "膽道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 25, "cancerType": "膽道癌", "line": "一線", "studyTitle": "DESTINY-Biliary Tract Cancer-01：一項第三期試驗，評估Trastuzumab Deruxtecan (T-DXd) 和 Rilvegostomig 相較於標準照護 Gemcitabine、Cisplatin 和 Durvalumab 作為第一線治療局部晚期或轉移性HER2表現型的膽道癌", "code": "DESTINY-Biliary Tract", "phase": "3", "sponsor": "AZ", "targetNum": 6, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋", "phone": "0927751328", "status": "進行中", "inclusion": "1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌 2.尚未接受過治療 (一線治療) 3.Adjuvant結束超過6個月後復發，不在此限 4.HER 2 表現型IHC2+或3+ 5.B肝患者可收，但與 C肝交叉感染者不可收案。6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1", "exclusion": "B肝與C肝交叉感染", "cancerTypes": [{"type": "膽道癌", "lines": ["第一線"]}], "subjects": []}, {"id": 26, "cancerType": "膽道癌", "line": "二線", "studyTitle": "一項第三期、隨機分配、對照、全球多中心試驗，針對纖維母細胞生長因子受體 (FGFR)變異、化療和FGFR抑制劑難治型/復發型膽管癌受試者，評估口服Tinengotinib相較於醫師選定療法的療效與安全性 (FIRST-308)", "code": "TT420C2308", "phase": "3", "sponsor": "藥捷安康", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "周淑慧", "phone": "82935/82999", "status": "進行中", "inclusion": "1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥 2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要 ≥1.5cm 3. Gemcitabine+Cisplatin washout period > 21days 4. HBsAg(+), HBV DNA<500 IU/mL 5. Anti-HCV(+), HCV RNA(-)", "exclusion": "", "cancerTypes": [{"type": "膽道癌", "lines": ["第二線"]}], "subjects": []}, {"id": 27, "cancerType": "膽道癌", "line": "觀察性", "studyTitle": "一項真實世界證據研究，評估 Pemigatinib用於先前已治療過之局部晚期、轉移性或無法切除膽管癌之治療成效", "code": "PG2401", "phase": "觀察性研究", "sponsor": "東洋 TTY", "targetNum": 15, "enrolled": 7, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇", "phone": "0936385216", "status": "暫停收案", "inclusion": "(1)經組織學或細胞學確認之局部晚期或轉移性膽管癌，且對先前之全身性抗癌療法具有腫瘤惡化證據 (2)當地基因檢測具有FGFR2融合或重組之證據 (3)使用Pemigatinib治療 (2021年5月至2025年9月間開始使用) (4)能提供次世代基因定序(Next Generation Sequencing, NGS)完整報告", "exclusion": "", "cancerTypes": [{"type": "膽道癌", "lines": ["觀察性"]}], "subjects": []}, {"id": 28, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估 MK-1084、 Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用Bevacizumab，做為 KRAS G12C 突變局部晚期不可切除或轉移性大腸直腸癌受試者之第一線治療的安全性和療效（KANDLELIT-012）", "code": "MK-1082-012", "phase": "III", "sponsor": "MSD", "targetNum": 4, "enrolled": 2, "monthSigned": 2, "monthEnrolled": 2, "pi": "鄧豪偉", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "Part 1 (Safety Lead-In) 收案條件簡述: • Stage III or IV, KRAS G12C mutation (+) CRC • Part 1: Treatment Naïve 或用過一線治療 (一線或二線皆可, 不可用到oxaliplatin) 已收滿 Target • Part 2: Treatment Naïve ( 預計 2026 開放名額 )", "exclusion": "", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 29, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第 2 期、開放性、隨機分配、主試驗計畫書試驗，評估 Telisotuzumab Adizutecan 併用多種治療組合在轉移性大腸直腸癌受試者中的安全性和療效 (AndroMETa-CRC-533)", "code": "M24-533", "phase": "2", "sponsor": "Abbive", "targetNum": 3, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 吳佳勳, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1.right side:KRAS/NRAS wildtype or mutation ,BRAFV600E wildtype 2. left side :KRAS/NRAS mutation,BRAF V600F wild type 3.tumor is not dMMR+/MSI-H. 4.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1. 5.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1. 6.HCV negative.", "exclusion": "HCV(+)", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 30, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項多中心、隨機分配、開放標記、有效藥物對照的第 3 期試驗， Sotorasib、Panitumumab 及 FOLFIRI 與 FOLFIRI 併用或無併用Bevacizumab-awwb，用於未曾接受過治療且帶有 KRAS p.G12C 突變的轉移性大腸直腸癌受試者之比較 (CodeBreaK 301)", "code": "20210081", "phase": "3", "sponsor": "Amgen Inc", "targetNum": 2, "enrolled": 1, "monthSigned": 1, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "張台依", "phone": "0972811090", "status": "進行中", "inclusion": "1. KRAS G12C: Positive and MSS 2. FIGO Stage: IV 準備要接受第一線化療 or FIGO Stage: I ~ III 治療後六個月(轉移) PD 預計化療. 3. Eastern Cooperative Oncolgy Group (ECOG) Performance Status of 1. 4. 5 年內 Tumor Slide: 15片 6. Corrected QT interval (QTcF) 470 msec. 7. 沒有 B / C 型肝炎", "exclusion": "B肝, C肝", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 31, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項評估 Tucatinib併用Trastuzumab 和 mFOLFOX6 對照mFOLFOX6併用或不併用Cetuximab 或 Bevacizumab 作為患有HER2+轉移性結直腸癌受試者的一線治療療法的開放性、隨機分配、第3 期試驗", "code": "SGNTUC-029", "phase": "III", "sponsor": "Seagen", "targetNum": 6, "enrolled": 3, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1 Send tissue slide 25 and Central confirmed HER2 3+ or ISH + and confirmed RAS status. 2.LVEF > 50%. 3.Previously treated brain metastases which are asystamatic", "exclusion": "1.Have previously been treated with anti-HER2 therapy 2.Have a history of GI perforation within 12 months of enrollment. 3.Have ongoing grade 2 diarrhea of any etiology at screening. 4.HBsAg positive or chronic liver disesase", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 32, "cancerType": "大腸癌", "line": "一線", "studyTitle": "一項第I/Ib期全球性、多中心、開放性、傘狀試驗，用以評估標靶療法對轉移性大腸直腸癌病患子族群的安全性與療效(INTRINSIC)", "code": "WO42758", "phase": "I/Ib", "sponsor": "Roche", "targetNum": 10, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1.KRAS G12C mututation arm, mCRC 1 line Diva + Bevacizumab +FOLFOX General Inclusion Criteria: 1.Histologically confirmed adenocarcinoma originating from the colon or rectum 2.Metastatic disease 3.Measurable disease General Exclusion Criteria: 1.Symptomatic, untreated, or actively progressing CNS metastases 2.History of malignancy other than CRC within 2 years prior to screening", "exclusion": "Symptomatic CNS metastases, 其他惡性腫瘤病史(2年內)", "cancerTypes": [{"type": "大腸癌", "lines": ["第一線"]}], "subjects": []}, {"id": 33, "cancerType": "大腸癌", "line": "二線", "studyTitle": "一項第2 期、隨機分配試驗，對於曾接受治療之無法切除轉移性結腸直腸癌受試者，評估ABBV-400 合併Fluorouracil、Folinic Acid 和Bevacizumab 的安全性、療效和最佳劑量，以及評估ABBV 400", "code": "M24-311", "phase": "II", "sponsor": "Abbvie", "targetNum": 5, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1. BRAF V600E no mutation and microsatellite stable, MSS 2.Tumor tissue (archived and fresh biopsy during screening phase),一定要同意接受一線 PD後未治療的Fresh biopsy. 3First line FOLFOX or CAPOX 加上或不加上抗 EGFR抗體(不限於Cetuximab or panitumumab) 或抗VEGF單株抗體(不限於Bevacizumab or Ramucirumab) 4.未曾接受過irinotecan or C-Met 標靶抗體0r ADC的全身性療法 5.無謂治療的腦部轉移 ,或根治性治療後臨床上或影像上穩定至少14天. 6.HCV RNA (-) .7.開始試驗治療前 35天HBV DNA <500第一劑治療前14天開始使用抗HBV治療", "exclusion": "使用過irinotecan或C-Met標靶抗體", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 34, "cancerType": "大腸癌", "line": "二線", "studyTitle": "一項隨機分配、開放性、第 3 期試驗，旨在比較 Amivantamab + FOLFIRI 與 Cetuximab/Bevacizumab + FOLFIRI 在先前曾接受過化學治療的 KRAS/NRAS 和 BRAF 野生型之復發性、無法手術切除或轉移性大腸直腸癌參與者中的療效", "code": "61186372COR3002", "phase": "III", "sponsor": "J & J", "targetNum": 5, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "1. have received 1 line of systemic therapy for mCRC 2. KRAS, NRAS, and BRAF WT tumor 3. Measurable lesion 4. dMMR /MSI-H 須接受免疫治療", "exclusion": "1. prior exposure to irinotecan, any agents that target EGFR or MET 2. any component of FOLFIRI 3. dMMR/MSI-H status who has not received immunotherapy treatments. 4. HER2-positive/amplified tumor 6. Diabetes mellitus 7. Ongoing or active infection 8. HBV or HCV infection 9. symptomatic or untreated brain metastasis", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 35, "cancerType": "大腸癌", "line": "二線/三線", "studyTitle": "AndroMETa-CRC-064：一項開放性、隨機分配、對照、全球第 3 期試驗，比較ABBV-400 單一療法與LONSURF（Trifluridine 和Tipiracil）加上Bevacizumab 用於c-Met 過度表現的難治型轉移性結腸直腸癌受試者", "code": "M24-064", "phase": "3", "sponsor": "Abbvie", "targetNum": 5, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "鄧豪偉", "nurse": "陳秀玲, 孔亭方", "phone": "0988660381", "status": "進行中", "inclusion": "Pre-screening: 1. Prior treatment regimens must have included a fluoropyrimidine , irinotecan, oxaliplatin, and an anti-VEGF monoclonal antibody and an anti-EGFR antibody if indicated. 2. Prior treatment of Regorafenib and/or Fruquintinib is allowed. 3. Must not have received prior LONSURF (Trifluridine/Tipiracil) treatment. 4. BRAFV600E or HER2 amplified should have received approved target therapy . 5. MSI-high/dMMR should have received approved immunotherapy 6. primary tumor site and/or metastatic sites slide 6-22 7. c-Met ICH staining: 3+ intensity, ≥ 10% tumor cell (result about 14 days)", "exclusion": "使用過LONSURF", "cancerTypes": [{"type": "大腸癌", "lines": ["第二線"]}], "subjects": []}, {"id": 36, "cancerType": "多種癌症", "line": "多線", "studyTitle": "T-1301膠囊用於晚期實體腫瘤患者之臨床一期安全性、耐受性與藥物動力學研究", "code": "TAI-301", "phase": "1", "sponsor": "泰瑋", "targetNum": 15, "enrolled": 6, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "宋秀薇, 王秋眉", "phone": "7270#268", "status": "進行中", "inclusion": "1 HBV(-),HCV(+)RNA(-) 2.血壓不能超過SBP160/DBP100 3.二線或二線以上之病人。4.Measurable lesion by RECIST 1.1 5.調整劑量 : 100 mg/day, 優先招募GIST、melanoma with c-KIT mutation 6. CCr: >=50ml/min", "exclusion": "HBV(+)", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 37, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項第 1/1b/2 期試驗，評估單獨使用 AMG 193 及合併 docetaxel 用於晚期 MTAP 缺失實體腫瘤受試者的安全性、耐受性、藥物動力學、藥效學及療效", "code": "AMG193", "phase": "1/1b/2", "sponsor": "Amgen Inc", "targetNum": 10, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王昭蘋", "phone": "7270#262", "status": "進行中", "inclusion": "1.以 NGS 確認 MTAP 缺失 2.Measurable lesion by RECIST 1.1 只剩肺癌有名額", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 38, "cancerType": "多種癌症", "line": "二線", "studyTitle": "一項第1／2期試驗，評估Patritumab Deruxtecan對於胃腸道癌症的安全性和療效", "code": "MK-1022", "phase": "1/2", "sponsor": "MSD", "targetNum": 6, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "進行中", "inclusion": "1.收膽管癌正二.線及大腸癌二線 . 肝癌 2.前線PD後需要重新切片 ,在送出20片 3.CT必須得到廠商確認 (預計5天)才能C1D1 4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量 5.心超LVEF > 50%", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["第二線"]}], "subjects": []}, {"id": 39, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項在晚期或轉移性實體腫瘤病患使用 PEP07 (檢查點激酶 1抑制劑 )的第一期試驗", "code": "PEP07-102", "phase": "I", "sponsor": "智擎生技", "targetNum": 20, "enrolled": 2, "monthSigned": 0, "monthEnrolled": 0, "pi": "姜乃榕", "nurse": "王昭蘋", "phone": "7270#262", "status": "進行中", "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治療、或任何試驗治療，或在30天內接受過免疫治療。 3 收案前後都要再切片 . 4.需詢問SLOT", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 40, "cancerType": "多種癌症", "line": "多線", "studyTitle": "一項第二期、多中心、開放性試驗，評估以Trastuzumab Deruxtecan (T-DXd, DS-8201a) 治療選定 HER2 表現腫瘤之療效與安全性 (DESTINY-PanTumor02)", "code": "D967VC00001", "phase": "2", "sponsor": "AZ", "targetNum": 7, "enrolled": 5, "monthSigned": 0, "monthEnrolled": 0, "pi": "洪逸平", "nurse": "王秋眉", "phone": "0927751328", "status": "暫停收案", "inclusion": "1.有一顆可測量的腫瘤 2.HER2(2+) 3.prescreen Slides 4-5mu 12片 screen 在 Slides 4-5mu 15片 4.HBsAg(-), HCV RNA(-) 5. 可收組別 a:HER2,IHC3+ any tumor type(額滿) b:HER2,IHC2+/ISH- positive any tumor type (額滿) c:HER2,IHC2+ or 1+ endometrial cancer (額滿) d:HER2,IHC2+ or 1+ ovarian cancer (額滿) e:HER2,IHC2+ or 1+ cervical cancer (額滿) 6.同意書改版Anti-HBc(+) 可以收", "exclusion": "", "cancerTypes": [{"type": "多種癌症", "lines": ["多線"]}], "subjects": []}, {"id": 41, "cancerType": "多種癌症", "line": "二/三線", "studyTitle": "一項第1／2期試驗，針對胃腸道癌症評估 MK-2870單一療法或與其他抗癌藥物合併使用的安全性與療效", "code": "MK-9999-02A", "phase": "II", "sponsor": "MSD", "targetNum": 4, "enrolled": 1, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "名額已滿", "inclusion": "1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 2.需要20片切片 3.CT必須得到廠商確認才能用藥 4.試驗藥物只能從周邊血管施打 5.HIV只要有病史不收 6.心超LVEF > 50%", "exclusion": "HIV病史", "cancerTypes": [{"type": "多種癌症", "lines": ["二/三線"]}], "subjects": []}, {"id": 42, "cancerType": "多種癌症", "line": "二線", "studyTitle": "一項第2期、非隨機分配、開放性、多中心試驗，評估 Raludotatug Deruxtecan用於胃腸道癌症受試者的安全和療效性", "code": "MK5909-005", "phase": "II", "sponsor": "MSD", "targetNum": 6, "enrolled": 4, "monthSigned": 0, "monthEnrolled": 0, "pi": "陳明晃", "nurse": "王秋眉, 王昭蘋, 陳秀玲", "phone": "0927751328", "status": "進行中", "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線 、胃癌3L以上 2.需要21片切片 3.CT必須得到廠商確認才能用藥 4.HIV只要有病史不收 5.心超LVEF > 50%", "exclusion": "HIV病史", "cancerTypes": [{"type": "多種癌症", "lines": ["第二線"]}], "subjects": []}, {"id": 43, "cancerType": "肝癌", "line": "多線", "studyTitle": "一項多中心 ` 開放標記 ` 首次於人體執行之試驗 , 旨在研究TYRA-430 用於治療晚期肝癌或具有活化 FGF/GFGR 途徑變異的其他實體腫瘤 (SUFR-431)", "code": "TYR430-101", "phase": "I", "sponsor": "Tyra Biosciences", "targetNum": 15, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "李重賓", "nurse": "張台依", "phone": "0972811090", "status": "停止收案", "inclusion": "1. 局部晚期無法切除 /轉移性肝細胞癌 (HCC) 或經組織學證實晚期實體腫瘤帶有 FGF/FGFR 基因突變 。2. 受試者之前可接受任何次數的先前治療 , 收多線後 。3.ccr > =60 ml/min", "exclusion": "1-篩選前四週曾接受重大手術。2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。) 3-活動性 ` 症狀性或未經治療的腦部轉移。", "cancerTypes": [{"type": "肝癌", "lines": ["多線"]}], "subjects": []}, {"id": 44, "cancerType": "肝癌", "line": "一線", "studyTitle": "一項二期、劑量隨機、開放性臨床試驗評估PTS100用於治療不適合手術切除或局部區域治療的原發性肝癌（ HCC）患者的安全性與療效- PTS100, intra-liver tumor injection", "code": "GW-020202", "phase": "II", "sponsor": "共信", "targetNum": 3, "enrolled": 0, "monthSigned": 0, "monthEnrolled": 0, "pi": "黃怡翔", "nurse": "李杰如, 吳佳勳", "phone": "0939859265", "status": "進行中", "inclusion": "Major protocol amedmnet in processing.", "exclusion": "", "cancerTypes": [{"type": "肝癌", "lines": ["第一線"]}], "subjects": []}];
@@ -312,7 +218,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.7.3.0.5'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.7.4'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -347,13 +253,18 @@ function TrialCard(props) {
                     className: expanded
                         ? 'text-gray-600 mt-1 whitespace-pre-wrap break-words'
                         : 'text-gray-600 mt-1'
-                }, expanded ? trial.studyTitle : ((trial.studyTitle || '').replace(/\s+/g, ' ').trim().length > 120 ? (trial.studyTitle || '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : (trial.studyTitle || '').replace(/\s+/g, ' ').trim()))
+                }, expanded ? trial.studyTitle : (trial.studyTitle && trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : (trial.studyTitle || '')))
             ),
-            e('span', {
-                className: trial.status === '進行中' 
-                    ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
-                    : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
-            }, trial.status)
+            e('div', {className: 'flex items-center gap-2'},
+                e('span', {
+                    className: trial.status === '進行中' 
+                        ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
+                        : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
+                }, trial.status),
+                trial.isArchived && e('span', {
+                    className: 'px-3 py-1 bg-slate-500 text-white rounded-full text-sm'
+                }, '已封存')
+            )
         ),
         e('div', {className: 'flex flex-wrap gap-2 mb-4'},
             (() => {
@@ -395,7 +306,7 @@ function TrialCard(props) {
         expanded && e('div', {className: 'mt-4 pt-4 border-t space-y-3 text-sm'},
             e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '完整試驗名稱:'),
-                renderStructuredText(trial.studyTitle, 'text-gray-800')
+                e('div', {className: 'text-gray-800 whitespace-pre-wrap break-words'}, trial.studyTitle)
             ),
             e('div', {className: 'grid grid-cols-2 gap-4'},
                 e('div', null,
@@ -441,15 +352,21 @@ function TrialCard(props) {
             ),
             trial.inclusion && e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '收案條件:'),
-                renderStructuredText(trial.inclusion)
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.inclusion)
             ),
             trial.exclusion && e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '排除條件:'),
-                renderStructuredText(trial.exclusion)
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.exclusion)
             ),
             trial.comments && e('div', null,
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '附註:'),
-                renderStructuredText(trial.comments)
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'}, trial.comments)
+            ),
+            trial.isArchived && e('div', null,
+                e('div', {className: 'text-gray-600 font-semibold mb-1'}, '封存資訊:'),
+                e('div', {className: 'text-gray-700 whitespace-pre-wrap break-words'},
+                    `封存日期：${trial.archiveDate || ''}` + (trial.archiveReason ? `；原因：${trial.archiveReason}` : '')
+                )
             )
         ),
         e('div', {className: 'mt-4 flex gap-2'},
@@ -706,6 +623,9 @@ function TrialFormModal(props) {
         phone: '',
         comments: '',
         status: '進行中',
+        isArchived: false,
+        archiveDate: '',
+        archiveReason: '',
         inclusion: '',
         exclusion: ''
     });
@@ -745,7 +665,10 @@ function TrialFormModal(props) {
             cancerTypes: cancerTypes,
             id: isEdit ? form.id : Date.now(),
             targetNum: parseInt(form.targetNum) || 0,
-            enrolled: parseInt(form.enrolled) || 0
+            enrolled: parseInt(form.enrolled) || 0,
+            isArchived: !!form.isArchived,
+            archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
+            archiveReason: form.isArchived ? (form.archiveReason || '') : ''
         };
         
         props.onSave(trialData);
@@ -953,6 +876,38 @@ function TrialFormModal(props) {
                         className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                     })
                 ),
+                e('div', {className: 'grid grid-cols-1 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200'},
+                    e('label', {className: 'flex items-center gap-3 cursor-pointer'},
+                        e('input', {
+                            type: 'checkbox',
+                            checked: !!form.isArchived,
+                            onChange: (ev) => update('isArchived', ev.target.checked),
+                            className: 'w-4 h-4'
+                        }),
+                        e('span', {className: 'text-sm font-semibold text-slate-700'}, '試驗已結束 / 封存（主列表預設隱藏）')
+                    ),
+                    form.isArchived && e('div', {className: 'grid grid-cols-2 gap-4'},
+                        e('div', null,
+                            e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '封存日期'),
+                            e('input', {
+                                type: 'date',
+                                value: form.archiveDate ? String(form.archiveDate).slice(0,10) : '',
+                                onChange: (ev) => update('archiveDate', ev.target.value),
+                                className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                            })
+                        ),
+                        e('div', null,
+                            e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '封存原因'),
+                            e('input', {
+                                type: 'text',
+                                value: form.archiveReason || '',
+                                onChange: (ev) => update('archiveReason', ev.target.value),
+                                placeholder: '例：試驗結束、停止收案、close-out',
+                                className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                            })
+                        )
+                    )
+                ),
                 e('div', {className: 'flex gap-3 pt-4 border-t-2 border-slate-200'},
                     e('button', {
                         type: 'submit',
@@ -975,10 +930,9 @@ function ImportStatusModal(props) {
     const [previewCount, setPreviewCount] = useState(0);
     const [fileName, setFileName] = useState('');
     const [busy, setBusy] = useState(false);
-    const [parsedRows, setParsedRows] = useState(null);
 
     const handlePreview = () => {
-        const parsed = parsedRows || parseStudyStatusCsv(csvText);
+        const parsed = parseStudyStatusCsv(csvText);
         setPreviewCount(parsed.length);
     };
 
@@ -993,13 +947,12 @@ function ImportStatusModal(props) {
             if (file.name.match(/\.(xlsx|xls)$/i)) {
                 const result = await parseExcelFile(file);
                 setCsvText(result.text);
-                setParsedRows(result.parsed || null);
-                setPreviewCount((result.parsed || []).length);
-                alert(`Excel讀取成功：${(result.parsed || []).length} 筆`);
+                const parsed = parseStudyStatusCsv(result.text);
+                setPreviewCount(parsed.length);
+                alert(`Excel讀取成功：${parsed.length} 筆`);
             } else {
                 const text = await file.text();
                 setCsvText(text);
-                setParsedRows(null);
                 const parsed = parseStudyStatusCsv(text);
                 setPreviewCount(parsed.length);
                 alert(`CSV讀取成功：${parsed.length} 筆`);
@@ -1013,7 +966,7 @@ function ImportStatusModal(props) {
     };
 
     const handleImport = async () => {
-        const parsed = parsedRows || parseStudyStatusCsv(csvText);
+        const parsed = parseStudyStatusCsv(csvText);
         if (!parsed.length) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
@@ -1049,7 +1002,7 @@ function ImportStatusModal(props) {
             ),
             e('textarea', {
                 value: csvText,
-                onChange: (ev) => { setCsvText(ev.target.value); setParsedRows(null); },
+                onChange: (ev) => setCsvText(ev.target.value),
                 rows: 14,
                 placeholder: '可直接貼上 Excel 內容或 CSV 內容…',
                 className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none font-mono text-sm'
@@ -1088,6 +1041,7 @@ function App() {
     const [showEditModal, setShowEditModal] = useState(null);
     const [showImportModal, setShowImportModal] = useState(false);
     const [syncStatus, setSyncStatus] = useState('');
+    const [showArchived, setShowArchived] = useState(false);
     
     useEffect(() => {
         let cancelled = false;
@@ -1099,6 +1053,7 @@ function App() {
                 const storedSubjects = localStorage.getItem('clinical-trials-subjects');
                 const localTrials = stored ? decryptData(stored) : null;
                 const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
+
                 const fallbackTrials = Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS;
                 const fallbackSubjects = Array.isArray(localSubjects) ? localSubjects : [];
 
@@ -1112,7 +1067,7 @@ function App() {
 
                 const remote = await loadRemoteDataOnce();
                 if (cancelled) return;
-                clearTimeout(timeoutId);
+                if (timeoutId) clearTimeout(timeoutId);
 
                 const remoteTrials = remote?.trials ? decryptData(remote.trials) : null;
                 const remoteSubjects = remote?.subjects ? decryptData(remote.subjects) : null;
@@ -1122,20 +1077,13 @@ function App() {
                     setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
                     localStorage.setItem('clinical-trials-encrypted', remote.trials);
                     if (remote.subjects) localStorage.setItem('clinical-trials-subjects', remote.subjects);
-                    setSyncStatus(`GitHub 同步中（${remoteTrials.length} 個試驗）`);
-                    setLoading(false);
+                    setSyncStatus(`GitHub 讀取成功（${remoteTrials.length} 個試驗）`);
                 } else {
                     setTrials(fallbackTrials);
                     setSubjects(fallbackSubjects);
-                    setLoading(false);
-                    try {
-                        await saveAllData(fallbackTrials, fallbackSubjects);
-                        setSyncStatus(`已推送本機資料到 GitHub（${fallbackTrials.length} 個試驗）`);
-                    } catch (e) {
-                        console.error(e);
-                        setSyncStatus('GitHub 推送失敗，暫用本機資料');
-                    }
+                    setSyncStatus('GitHub 尚未建立資料檔，使用本機資料');
                 }
+                setLoading(false);
             } catch (error) {
                 console.error('GitHub load error:', error);
                 const stored = localStorage.getItem('clinical-trials-encrypted');
@@ -1159,7 +1107,7 @@ function App() {
     const saveTrials = async (data) => {
         setTrials(data);
         await saveAllData(data, subjects);
-        setSyncStatus(`已同步到雲端（${data.length} 個試驗）`);
+        setSyncStatus(`已儲存到本機資料（${data.length} 個試驗）`);
     };
 
     const handleSaveTrial = async (trialData) => {
@@ -1191,11 +1139,11 @@ function App() {
     const handlePushToCloud = async () => {
         try {
             await saveAllData(trials, subjects);
-            setSyncStatus(`已手動推送到 GitHub（${trials.length} 個試驗）`);
-            alert('已同步到 GitHub');
+            setSyncStatus(`已匯出為 GitHub-ready 資料（${trials.length} 個試驗）`);
+            alert('已匯出為 GitHub-ready 資料');
         } catch (error) {
             console.error(error);
-            alert('GitHub 同步失敗');
+            alert('匯出 GitHub JSON 失敗');
         }
     };
 
@@ -1207,10 +1155,89 @@ function App() {
             if (Array.isArray(remoteTrials)) {
                 setTrials(remoteTrials);
                 setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
+                setSyncStatus(`已從GitHub 重載（${remoteTrials.length} 個試驗）`);
+                alert('已從 GitHub 重新載入');
+            } else {
+                alert('GitHub 目前沒有有效資料檔');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('GitHub 重載失敗');
+        }
+    };
+
+
+    const handleExportGitHubJson = () => {
+        const bundle = {
+            meta: {
+                updatedAt: new Date().toISOString(),
+                trialsCount: trials.length,
+                subjectsCount: subjects.length,
+                source: 'clinicaltrial-github-ready'
+            },
+            trials: {
+                updatedAt: new Date().toISOString(),
+                count: trials.length,
+                encrypted: encryptData(trials) || ''
+            },
+            subjects: {
+                updatedAt: new Date().toISOString(),
+                count: subjects.length,
+                encrypted: encryptData(subjects) || ''
+            }
+        };
+        const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `clinicaltrial_github_bundle_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    const handleImportGitHubJson = async (ev) => {
+        const file = ev.target.files && ev.target.files[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const bundle = JSON.parse(text);
+            const remoteTrials = bundle?.trials?.encrypted ? decryptData(bundle.trials.encrypted) : null;
+            const remoteSubjects = bundle?.subjects?.encrypted ? decryptData(bundle.subjects.encrypted) : null;
+
+            if (!Array.isArray(remoteTrials)) {
+                alert('JSON 格式不正確，找不到 trials 資料');
+                return;
+            }
+
+            setTrials(remoteTrials);
+            setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
+            localStorage.setItem('clinical-trials-encrypted', bundle.trials.encrypted || '');
+            if (bundle?.subjects?.encrypted) localStorage.setItem('clinical-trials-subjects', bundle.subjects.encrypted);
+            localStorage.setItem('clinical-trials-meta', JSON.stringify(bundle.meta || {}));
+            setSyncStatus(`已匯入 GitHub JSON（${remoteTrials.length} 個試驗）`);
+            alert('已匯入 GitHub JSON');
+        } catch (error) {
+            console.error(error);
+            alert('GitHub JSON 匯入失敗');
+        } finally {
+            ev.target.value = '';
+        }
+    };
+
+    const handleReloadFromCloud = async () => {
+        try {
+            const remote = await loadRemoteDataOnce();
+            const remoteTrials = remote?.trials ? decryptData(remote.trials) : null;
+            const remoteSubjects = remote?.subjects ? decryptData(remote.subjects) : null;
+            if (Array.isArray(remoteTrials) && remoteTrials.length > 0) {
+                setTrials(remoteTrials);
+                setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
+                localStorage.setItem('clinical-trials-encrypted', remote.trials);
+                if (remote.subjects) localStorage.setItem('clinical-trials-subjects', remote.subjects);
                 setSyncStatus(`已從 GitHub 重載（${remoteTrials.length} 個試驗）`);
                 alert('已從 GitHub 重新載入');
             } else {
-                alert('GitHub 目前沒有有效資料');
+                alert('GitHub 目前沒有有效資料檔');
             }
         } catch (error) {
             console.error(error);
@@ -1330,7 +1357,7 @@ function App() {
     const saveSubjects = async (data) => {
         setSubjects(data);
         await saveAllData(trials, data);
-        setSyncStatus('受試者資料已同步到 GitHub');
+        setSyncStatus('受試者資料已儲存到本機資料');
     };
     
     const handleAuth = (password) => {
@@ -1381,6 +1408,9 @@ function App() {
     
     const filtered = useMemo(() => {
         let result = trials;
+        if (!showArchived) {
+            result = result.filter(t => !t.isArchived);
+        }
         
         // 搜尋篩選
         if (search) {
@@ -1443,7 +1473,7 @@ function App() {
         }
         
         return result;
-    }, [trials, search, cancerType, selectedLine]);
+    }, [trials, search, cancerType, selectedLine, showArchived]);
     
     const cancerTypes = useMemo(() => {
         const types = new Set();
@@ -1475,7 +1505,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.7.3.0.5'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.7.4'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1504,23 +1534,24 @@ function App() {
                     '匯入資料'
                 ),
                 isAdmin && e('button', {
-                    onClick: handlePushToCloud,
+                    onClick: handleExportGitHubJson,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
+                }, '匯出 GitHub JSON'),
+                isAdmin && e('label', {
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg font-semibold cursor-pointer'
                 },
-                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
-                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 4v5h.582m14.253 2A8 8 0 006.338 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'})
-                    ),
-                    '同步到 GitHub'
+                    '匯入 GitHub JSON',
+                    e('input', {
+                        type: 'file',
+                        accept: '.json,application/json',
+                        onChange: handleImportGitHubJson,
+                        className: 'hidden'
+                    })
                 ),
                 isAdmin && e('button', {
                     onClick: handleReloadFromCloud,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-sky-500 text-white rounded-xl hover:from-cyan-600 hover:to-sky-600 transition-all shadow-lg font-semibold'
-                },
-                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
-                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0111.95-4.95L20 7M19 15a7 7 0 01-11.95 4.95L4 17'})
-                    ),
-                    'GitHub 重載'
-                ),
+                }, 'GitHub 重載'),
                 e('button', {
                     onClick: downloadCSV,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
@@ -1541,6 +1572,17 @@ function App() {
                 )
             ),
             syncStatus && e('div', {className: 'mb-4 text-sm text-slate-600'}, syncStatus),
+            e('div', {className: 'mb-4 flex items-center gap-3 text-sm text-slate-700'},
+                e('label', {className: 'flex items-center gap-2 cursor-pointer'},
+                    e('input', {
+                        type: 'checkbox',
+                        checked: showArchived,
+                        onChange: (ev) => setShowArchived(ev.target.checked),
+                        className: 'w-4 h-4'
+                    }),
+                    e('span', null, '顯示已封存試驗')
+                )
+            ),
             e('div', {className: 'mb-6 space-y-4'},
                 e('input', {
                     type: 'text',
