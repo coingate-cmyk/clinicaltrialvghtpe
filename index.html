@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.7.4</title>
+    <title>臨床試驗管理系統 v3.6.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -228,7 +228,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.7.4'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.4'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1167,47 +1167,26 @@ function App() {
         }
     };
 
-    const handleReloadFromCloud = async () => {
-        try {
-            const val = await loadRemoteDataOnce();
-            const remoteTrials = val && val.trials ? decryptData(val.trials) : null;
-            const remoteSubjects = val && val.subjects ? decryptData(val.subjects) : null;
-            if (Array.isArray(remoteTrials)) {
-                setTrials(remoteTrials);
-                setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-                setSyncStatus(`已從雲端重載（${remoteTrials.length} 個試驗）`);
-                alert('已從 Firebase 重新載入');
-            } else {
-                alert('雲端目前沒有有效資料');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('雲端重載失敗');
-        }
-    };
+    
 
     
-const handleExportGitHubJson = () => {
-    const bundle = {
-        trials: trials,
-        subjects: subjects,
-        updatedAt: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(bundle,null,2)],{type:'application/json'});
+const handleExportJSON = () => {
+    const data = {trials, subjects, updatedAt:new Date().toISOString()};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
-    a.download='clinicaltrial_export.json';
+    a.download='clinicaltrial.json';
     a.click();
 };
 
-const handleImportGitHubJson = async (e) => {
+const handleImportJSON = async (e)=>{
     const f=e.target.files[0];
     if(!f) return;
     const txt=await f.text();
     const data=JSON.parse(txt);
     if(data.trials) setTrials(data.trials);
     if(data.subjects) setSubjects(data.subjects);
-    alert('JSON匯入完成');
+    alert('匯入完成');
 };
 const downloadCSV = () => {
         const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
@@ -1469,7 +1448,7 @@ const downloadCSV = () => {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.7.4'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.4'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1497,9 +1476,9 @@ const downloadCSV = () => {
                     ),
                     '匯入資料'
                 ),
-                isAdmin && e('button',{onClick:handleExportGitHubJson,className:'px-4 py-2 bg-orange-500 text-white rounded'},'匯出JSON'),
-                isAdmin && e('label',{className:'px-4 py-2 bg-teal-500 text-white rounded cursor-pointer'},
-                '匯入JSON',e('input',{type:'file',accept:'.json',onChange:handleImportGitHubJson,className:'hidden'})),
+isAdmin && e('button',{onClick:handleExportJSON,className:'px-3 py-2 bg-orange-500 text-white rounded'},'匯出JSON'),
+isAdmin && e('label',{className:'px-3 py-2 bg-teal-500 text-white rounded cursor-pointer'},
+'匯入JSON',e('input',{type:'file',onChange:handleImportJSON,className:'hidden'})),
 
                 e('button', {
                     onClick: downloadCSV,
