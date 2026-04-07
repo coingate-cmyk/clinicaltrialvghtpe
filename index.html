@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.0 Firebase版</title>
+    <title>臨床試驗管理系統 v4.0.1 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -27,8 +27,17 @@ const CONFIG = {
     FIREBASE_ENABLED_KEY: 'clinical-trials-firebase-enabled-v4'
 };
 
-// Firebase Realtime Database 設定
-// Local-only mode（不使用 Firebase）
+const DEFAULT_FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og',
+    authDomain: 'clinicaltrial-vghtpe.firebaseapp.com',
+    databaseURL: 'https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com',
+    projectId: 'clinicaltrial-vghtpe',
+    storageBucket: 'clinicaltrial-vghtpe.firebasestorage.app',
+    messagingSenderId: '220821651319',
+    appId: '1:220821651319:web:19dbfbaea0ea999472eb72'
+};
+
+// Firebase Firestore 自動同步設定（已內建，不需每台電腦手動輸入）
 const saveAllData = async (trialsData, subjectsData) => {
     const encryptedTrials = encryptData(trialsData || []);
     const encryptedSubjects = encryptData(subjectsData || []);
@@ -66,18 +75,20 @@ const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
 const getStoredFirebaseConfig = () => {
     try {
         const raw = localStorage.getItem(CONFIG.FIREBASE_CONFIG_KEY);
-        return raw ? JSON.parse(raw) : null;
+        const parsed = raw ? JSON.parse(raw) : null;
+        return parsed && parsed.apiKey && parsed.projectId && parsed.appId ? parsed : DEFAULT_FIREBASE_CONFIG;
     } catch (error) {
-        return null;
+        return DEFAULT_FIREBASE_CONFIG;
     }
 };
 
 const setStoredFirebaseConfig = (cfg) => {
-    localStorage.setItem(CONFIG.FIREBASE_CONFIG_KEY, JSON.stringify(cfg || {}));
+    const merged = { ...DEFAULT_FIREBASE_CONFIG, ...(cfg || {}) };
+    localStorage.setItem(CONFIG.FIREBASE_CONFIG_KEY, JSON.stringify(merged));
     localStorage.setItem(CONFIG.FIREBASE_ENABLED_KEY, 'true');
 };
 
-const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY) === 'true';
+const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY) !== 'false';
 
 let firebaseAppInstance = null;
 let firestoreInstance = null;
@@ -347,7 +358,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.0 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.1 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1183,7 +1194,7 @@ function FirebaseConfigModal(props) {
                 field('messagingSenderId', 'messagingSenderId'),
                 field('appId', 'appId')
             ),
-            e('div', {className: 'mt-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800'}, '至少需填 apiKey / projectId / appId。儲存後會直接切換到 Firebase 同步模式。'),
+            e('div', {className: 'mt-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800'}, '正式版已內建雲端設定，通常不需要修改。只有管理者更換專案時才需要調整。'),
             e('div', {className: 'mt-5 flex gap-3'},
                 e('button', {
                     onClick: () => props.onSave(form),
@@ -1192,7 +1203,7 @@ function FirebaseConfigModal(props) {
                 e('button', {
                     onClick: props.onDisable,
                     className: 'px-5 py-3 bg-slate-200 text-slate-700 rounded-xl hover:bg-slate-300 font-semibold'
-                }, '停用 Firebase'),
+                }, '停用雲端同步'),
                 e('button', {
                     onClick: props.onClose,
                     className: 'px-5 py-3 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 font-semibold'
@@ -1218,8 +1229,8 @@ function App() {
     const [showImportModal, setShowImportModal] = useState(false);
     const [syncStatus, setSyncStatus] = useState('');
     const [showArchived, setShowArchived] = useState(false);
-    const [firebaseConfig, setFirebaseConfig] = useState(getStoredFirebaseConfig());
-    const [firebaseEnabled, setFirebaseEnabled] = useState(isFirebaseEnabled());
+    const [firebaseConfig, setFirebaseConfig] = useState(DEFAULT_FIREBASE_CONFIG);
+    const [firebaseEnabled, setFirebaseEnabled] = useState(true);
     const [showFirebaseModal, setShowFirebaseModal] = useState(false);
     const unsubscribeRef = useRef(null);
     
@@ -1234,8 +1245,8 @@ function App() {
             setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
             setLoading(false);
             setSyncStatus(Array.isArray(localTrials) && localTrials.length > 0
-                ? `本機快取已載入（${localTrials.length} 個試驗）`
-                : `本機初始資料（${INITIAL_TRIALS.length} 個試驗）`);
+                ? `本機快取已載入（${localTrials.length} 個試驗），正在連線雲端...`
+                : `本機初始資料（${INITIAL_TRIALS.length} 個試驗），正在連線雲端...`);
         } catch (error) {
             console.error('Local load error:', error);
             setTrials(INITIAL_TRIALS);
@@ -1268,7 +1279,11 @@ function App() {
                 setSyncStatus(`Firebase 同步失敗：${error.message || error}`);
             }
         });
-        seedInitialTrialsToFirestore(firebaseConfig, INITIAL_TRIALS).catch((error) => console.error('Seed failed', error));
+        seedInitialTrialsToFirestore(firebaseConfig, INITIAL_TRIALS)
+            .then((seeded) => {
+                if (seeded) setSyncStatus(`已初始化雲端主資料（${INITIAL_TRIALS.length} 個試驗）`);
+            })
+            .catch((error) => console.error('Seed failed', error));
         return () => {
             if (unsubscribeRef.current) {
                 try { unsubscribeRef.current(); } catch (e) {}
@@ -1713,7 +1728,7 @@ function App() {
                 isAdmin && e('button', {
                     onClick: () => setShowFirebaseModal(true),
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-xl hover:from-sky-600 hover:to-cyan-600 transition-all shadow-lg font-semibold'
-                }, firebaseEnabled ? 'Firebase設定（已啟用）' : 'Firebase設定'),
+                }, firebaseEnabled ? '雲端同步（已啟用）' : '雲端同步'),
                 e('button', {
                     onClick: downloadCSV,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
