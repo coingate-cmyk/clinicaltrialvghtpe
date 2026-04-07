@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.7.2.0.5</title>
+    <title>臨床試驗管理系統 v3.7.3.0.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -312,7 +312,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.7.2.0.5'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.7.3.0.5'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1475,7 +1475,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.7.2.0.5'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.7.3.0.5'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1502,6 +1502,24 @@ function App() {
                         e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12V3m0 9l-3-3m3 3l3-3'})
                     ),
                     '匯入資料'
+                ),
+                isAdmin && e('button', {
+                    onClick: handlePushToCloud,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
+                },
+                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 4v5h.582m14.253 2A8 8 0 006.338 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'})
+                    ),
+                    '同步到 GitHub'
+                ),
+                isAdmin && e('button', {
+                    onClick: handleReloadFromCloud,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-sky-500 text-white rounded-xl hover:from-cyan-600 hover:to-sky-600 transition-all shadow-lg font-semibold'
+                },
+                    e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
+                        e('path', {strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: 2, d: 'M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0111.95-4.95L20 7M19 15a7 7 0 01-11.95 4.95L4 17'})
+                    ),
+                    'GitHub 重載'
                 ),
                 e('button', {
                     onClick: downloadCSV,
