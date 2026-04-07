@@ -25,41 +25,40 @@ const CONFIG = {
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026'
 };
 
-// GitHub public JSON source（只讀）；寫回 GitHub 由你這端處理
-const GITHUB_SOURCE = {
-    owner: 'coingate-cmyk',
-    repo: 'clinicaltrialvghtpe',
-    branch: 'main',
-    trialsUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/trials.json',
-    subjectsUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/subjects.json',
-    metaUrl: 'https://raw.githubusercontent.com/coingate-cmyk/clinicaltrialvghtpe/main/data/meta.json'
+// Firebase Realtime Database 設定
+const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og",
+    authDomain: "clinicaltrial-vghtpe.firebaseapp.com",
+    databaseURL: "https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com",
+    projectId: "clinicaltrial-vghtpe",
+    storageBucket: "clinicaltrial-vghtpe.firebasestorage.app",
+    messagingSenderId: "220821651319",
+    appId: "1:220821651319:web:19dbfbaea0ea999472eb72"
 };
 
-const loadRemoteDataOnce = async () => {
-    const [trialsResp, subjectsResp, metaResp] = await Promise.allSettled([
-        fetch(GITHUB_SOURCE.trialsUrl, { cache: 'no-store' }),
-        fetch(GITHUB_SOURCE.subjectsUrl, { cache: 'no-store' }),
-        fetch(GITHUB_SOURCE.metaUrl, { cache: 'no-store' })
-    ]);
+const RTDB_PATH = {
+    root: 'clinicalTrialApp'
+};
 
-    const readJson = async (resp) => {
-        if (!resp || resp.status !== 'fulfilled' || !resp.value.ok) return null;
-        try {
-            return await resp.value.json();
-        } catch (error) {
-            return null;
+let __db = null;
+
+const getDb = () => {
+    try {
+        if (__db) return __db;
+        if (!firebase.apps.length) {
+            firebase.initializeApp(FIREBASE_CONFIG);
         }
-    };
+        __db = firebase.database();
+        return __db;
+    } catch (error) {
+        console.error('Firebase init error:', error);
+        return null;
+    }
+};
 
-    const trialsFile = await readJson(trialsResp);
-    const subjectsFile = await readJson(subjectsResp);
-    const metaFile = await readJson(metaResp);
-
-    return {
-        trials: trialsFile?.encrypted || null,
-        subjects: subjectsFile?.encrypted || null,
-        meta: metaFile || null
-    };
+const getRootRef = () => {
+    const db = getDb();
+    return db ? db.ref(RTDB_PATH.root) : null;
 };
 
 const saveAllData = async (trialsData, subjectsData) => {
@@ -67,14 +66,25 @@ const saveAllData = async (trialsData, subjectsData) => {
     const encryptedSubjects = encryptData(subjectsData || []);
     if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
     if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
-    localStorage.setItem('clinical-trials-meta', JSON.stringify({
-        updatedAt: new Date().toISOString(),
-        trialsCount: (trialsData || []).length,
-        subjectsCount: (subjectsData || []).length,
-        source: 'local-github-ready'
-    }));
+
+    const rootRef = getRootRef();
+    if (!rootRef) return false;
+
+    await rootRef.set({
+        trials: encryptedTrials,
+        subjects: encryptedSubjects,
+        updatedAt: new Date().toISOString()
+    });
     return true;
 };
+
+const loadRemoteDataOnce = async () => {
+    const rootRef = getRootRef();
+    if (!rootRef) return null;
+    const snapshot = await rootRef.once('value');
+    return snapshot.val();
+};
+
 
 const encryptData = (data) => {
     try {
@@ -1044,8 +1054,8 @@ function App() {
     const [showArchived, setShowArchived] = useState(false);
     
     useEffect(() => {
-        let cancelled = false;
-        let timeoutId = null;
+        let rootRef = null;
+        let handler = null;
 
         const loadData = async () => {
             try {
@@ -1054,60 +1064,70 @@ function App() {
                 const localTrials = stored ? decryptData(stored) : null;
                 const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
 
-                const fallbackTrials = Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS;
-                const fallbackSubjects = Array.isArray(localSubjects) ? localSubjects : [];
+                rootRef = getRootRef();
 
-                timeoutId = setTimeout(() => {
-                    if (cancelled) return;
-                    setTrials(fallbackTrials);
-                    setSubjects(fallbackSubjects);
+                if (!rootRef) {
+                    setTrials(Array.isArray(localTrials) ? localTrials : INITIAL_TRIALS);
+                    setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
                     setLoading(false);
-                    setSyncStatus('GitHub 連線較慢，已改用本機資料');
-                }, 7000);
-
-                const remote = await loadRemoteDataOnce();
-                if (cancelled) return;
-                if (timeoutId) clearTimeout(timeoutId);
-
-                const remoteTrials = remote?.trials ? decryptData(remote.trials) : null;
-                const remoteSubjects = remote?.subjects ? decryptData(remote.subjects) : null;
-
-                if (Array.isArray(remoteTrials) && remoteTrials.length > 0) {
-                    setTrials(remoteTrials);
-                    setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-                    localStorage.setItem('clinical-trials-encrypted', remote.trials);
-                    if (remote.subjects) localStorage.setItem('clinical-trials-subjects', remote.subjects);
-                    setSyncStatus(`GitHub 讀取成功（${remoteTrials.length} 個試驗）`);
-                } else {
-                    setTrials(fallbackTrials);
-                    setSubjects(fallbackSubjects);
-                    setSyncStatus('GitHub 尚未建立資料檔，使用本機資料');
+                    setSyncStatus('未連上雲端，使用本機資料');
+                    return;
                 }
-                setLoading(false);
+
+                handler = async (snapshot) => {
+                    const val = snapshot.val();
+                    const remoteTrials = val && val.trials ? decryptData(val.trials) : null;
+                    const remoteSubjects = val && val.subjects ? decryptData(val.subjects) : null;
+
+                    if (Array.isArray(remoteTrials) && remoteTrials.length > 0) {
+                        setTrials(remoteTrials);
+                        setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
+                        localStorage.setItem('clinical-trials-encrypted', val.trials);
+                        if (val.subjects) localStorage.setItem('clinical-trials-subjects', val.subjects);
+                        setSyncStatus(`雲端同步中（${remoteTrials.length} 個試驗）`);
+                    } else {
+                        const fallbackTrials = Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS;
+                        const fallbackSubjects = Array.isArray(localSubjects) ? localSubjects : [];
+                        setTrials(fallbackTrials);
+                        setSubjects(fallbackSubjects);
+                        try {
+                            await saveAllData(fallbackTrials, fallbackSubjects);
+                            setSyncStatus(`已推送本機資料到雲端（${fallbackTrials.length} 個試驗）`);
+                        } catch (e) {
+                            console.error(e);
+                            setSyncStatus('雲端推送失敗，暫用本機資料');
+                        }
+                    }
+                    setLoading(false);
+                };
+
+                rootRef.on('value', handler, (error) => {
+                    console.error('Firebase read error:', error);
+                    setTrials(Array.isArray(localTrials) ? localTrials : INITIAL_TRIALS);
+                    setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
+                    setLoading(false);
+                    setSyncStatus('雲端讀取失敗，改用本機資料');
+                });
             } catch (error) {
-                console.error('GitHub load error:', error);
-                const stored = localStorage.getItem('clinical-trials-encrypted');
-                const storedSubjects = localStorage.getItem('clinical-trials-subjects');
-                const localTrials = stored ? decryptData(stored) : null;
-                const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
-                setTrials(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS);
-                setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
+                console.error('Load error:', error);
+                setTrials(INITIAL_TRIALS);
+                setSubjects([]);
                 setLoading(false);
-                setSyncStatus('GitHub 讀取失敗，改用本機資料');
+                setSyncStatus('讀取失敗，改用預設資料');
             }
         };
 
         loadData();
+
         return () => {
-            cancelled = true;
-            if (timeoutId) clearTimeout(timeoutId);
+            if (rootRef && handler) rootRef.off('value', handler);
         };
     }, []);
     
     const saveTrials = async (data) => {
         setTrials(data);
         await saveAllData(data, subjects);
-        setSyncStatus(`已儲存到本機資料（${data.length} 個試驗）`);
+        setSyncStatus(`已同步到雲端（${data.length} 個試驗）`);
     };
 
     const handleSaveTrial = async (trialData) => {
@@ -1139,11 +1159,11 @@ function App() {
     const handlePushToCloud = async () => {
         try {
             await saveAllData(trials, subjects);
-            setSyncStatus(`已匯出為 GitHub-ready 資料（${trials.length} 個試驗）`);
-            alert('已匯出為 GitHub-ready 資料');
+            setSyncStatus(`已手動推送到雲端（${trials.length} 個試驗）`);
+            alert('已手動同步到 Firebase');
         } catch (error) {
             console.error(error);
-            alert('匯出 GitHub JSON 失敗');
+            alert('手動同步失敗');
         }
     };
 
@@ -1155,97 +1175,41 @@ function App() {
             if (Array.isArray(remoteTrials)) {
                 setTrials(remoteTrials);
                 setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-                setSyncStatus(`已從GitHub 重載（${remoteTrials.length} 個試驗）`);
-                alert('已從 GitHub 重新載入');
+                setSyncStatus(`已從雲端重載（${remoteTrials.length} 個試驗）`);
+                alert('已從 Firebase 重新載入');
             } else {
-                alert('GitHub 目前沒有有效資料檔');
+                alert('雲端目前沒有有效資料');
             }
         } catch (error) {
             console.error(error);
-            alert('GitHub 重載失敗');
+            alert('雲端重載失敗');
         }
     };
 
-
-    const handleExportGitHubJson = () => {
-        const bundle = {
-            meta: {
-                updatedAt: new Date().toISOString(),
-                trialsCount: trials.length,
-                subjectsCount: subjects.length,
-                source: 'clinicaltrial-github-ready'
-            },
-            trials: {
-                updatedAt: new Date().toISOString(),
-                count: trials.length,
-                encrypted: encryptData(trials) || ''
-            },
-            subjects: {
-                updatedAt: new Date().toISOString(),
-                count: subjects.length,
-                encrypted: encryptData(subjects) || ''
-            }
-        };
-        const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `clinicaltrial_github_bundle_${new Date().toISOString().slice(0,10)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+    
+const handleExportGitHubJson = () => {
+    const bundle = {
+        trials: trials,
+        subjects: subjects,
+        updatedAt: new Date().toISOString()
     };
+    const blob = new Blob([JSON.stringify(bundle,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='clinicaltrial_export.json';
+    a.click();
+};
 
-    const handleImportGitHubJson = async (ev) => {
-        const file = ev.target.files && ev.target.files[0];
-        if (!file) return;
-        try {
-            const text = await file.text();
-            const bundle = JSON.parse(text);
-            const remoteTrials = bundle?.trials?.encrypted ? decryptData(bundle.trials.encrypted) : null;
-            const remoteSubjects = bundle?.subjects?.encrypted ? decryptData(bundle.subjects.encrypted) : null;
-
-            if (!Array.isArray(remoteTrials)) {
-                alert('JSON 格式不正確，找不到 trials 資料');
-                return;
-            }
-
-            setTrials(remoteTrials);
-            setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-            localStorage.setItem('clinical-trials-encrypted', bundle.trials.encrypted || '');
-            if (bundle?.subjects?.encrypted) localStorage.setItem('clinical-trials-subjects', bundle.subjects.encrypted);
-            localStorage.setItem('clinical-trials-meta', JSON.stringify(bundle.meta || {}));
-            setSyncStatus(`已匯入 GitHub JSON（${remoteTrials.length} 個試驗）`);
-            alert('已匯入 GitHub JSON');
-        } catch (error) {
-            console.error(error);
-            alert('GitHub JSON 匯入失敗');
-        } finally {
-            ev.target.value = '';
-        }
-    };
-
-    const handleReloadFromCloud = async () => {
-        try {
-            const remote = await loadRemoteDataOnce();
-            const remoteTrials = remote?.trials ? decryptData(remote.trials) : null;
-            const remoteSubjects = remote?.subjects ? decryptData(remote.subjects) : null;
-            if (Array.isArray(remoteTrials) && remoteTrials.length > 0) {
-                setTrials(remoteTrials);
-                setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-                localStorage.setItem('clinical-trials-encrypted', remote.trials);
-                if (remote.subjects) localStorage.setItem('clinical-trials-subjects', remote.subjects);
-                setSyncStatus(`已從 GitHub 重載（${remoteTrials.length} 個試驗）`);
-                alert('已從 GitHub 重新載入');
-            } else {
-                alert('GitHub 目前沒有有效資料檔');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('GitHub 重載失敗');
-        }
-    };
-
-    const downloadCSV = () => {
+const handleImportGitHubJson = async (e) => {
+    const f=e.target.files[0];
+    if(!f) return;
+    const txt=await f.text();
+    const data=JSON.parse(txt);
+    if(data.trials) setTrials(data.trials);
+    if(data.subjects) setSubjects(data.subjects);
+    alert('JSON匯入完成');
+};
+const downloadCSV = () => {
         const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
         const rows = filtered.map(trial => {
             const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
@@ -1357,7 +1321,7 @@ function App() {
     const saveSubjects = async (data) => {
         setSubjects(data);
         await saveAllData(trials, data);
-        setSyncStatus('受試者資料已儲存到本機資料');
+        setSyncStatus('受試者資料已同步到雲端');
     };
     
     const handleAuth = (password) => {
@@ -1533,25 +1497,10 @@ function App() {
                     ),
                     '匯入資料'
                 ),
-                isAdmin && e('button', {
-                    onClick: handleExportGitHubJson,
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
-                }, '匯出 GitHub JSON'),
-                isAdmin && e('label', {
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg font-semibold cursor-pointer'
-                },
-                    '匯入 GitHub JSON',
-                    e('input', {
-                        type: 'file',
-                        accept: '.json,application/json',
-                        onChange: handleImportGitHubJson,
-                        className: 'hidden'
-                    })
-                ),
-                isAdmin && e('button', {
-                    onClick: handleReloadFromCloud,
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-sky-500 text-white rounded-xl hover:from-cyan-600 hover:to-sky-600 transition-all shadow-lg font-semibold'
-                }, 'GitHub 重載'),
+                isAdmin && e('button',{onClick:handleExportGitHubJson,className:'px-4 py-2 bg-orange-500 text-white rounded'},'匯出JSON'),
+                isAdmin && e('label',{className:'px-4 py-2 bg-teal-500 text-white rounded cursor-pointer'},
+                '匯入JSON',e('input',{type:'file',accept:'.json',onChange:handleImportGitHubJson,className:'hidden'})),
+
                 e('button', {
                     onClick: downloadCSV,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
