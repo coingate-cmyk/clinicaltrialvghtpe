@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.8.0.0</title>
+    <title>臨床試驗管理系統 v3.8.1.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
@@ -60,48 +58,148 @@ const decryptData = (encrypted) => {
 
 const normalizeCode = (v) => String(v || '').trim().toUpperCase();
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
-
-const upsertTrialsByCode = (existingTrials, incomingTrials) => {
+const isNonEmptyValue = (v) => {
+    if (v === null || v === undefined) return false;
+    if (typeof v === 'string') return normalizeText(v) !== '';
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+};
+const toComparableValue = (value) => {
+    if (Array.isArray(value) || (value && typeof value === 'object')) {
+        try {
+            return JSON.stringify(value);
+        } catch (error) {
+            return String(value);
+        }
+    }
+    return String(value ?? '');
+};
+const valuesEqual = (a, b) => toComparableValue(a) === toComparableValue(b);
+const safeIsoTime = (value) => {
+    const t = Date.parse(value || '');
+    return Number.isNaN(t) ? null : t;
+};
+const pickMergedValue = (prevValue, incomingValue, preferIncoming = true) => {
+    if (preferIncoming) {
+        return isNonEmptyValue(incomingValue) ? incomingValue : prevValue;
+    }
+    return isNonEmptyValue(prevValue) ? prevValue : incomingValue;
+};
+const pickMergedNumber = (prevValue, incomingValue, preferIncoming = true) => {
+    const prevNum = Number(prevValue);
+    const incomingNum = Number(incomingValue);
+    const hasPrev = Number.isFinite(prevNum);
+    const hasIncoming = Number.isFinite(incomingNum);
+    if (preferIncoming) {
+        if (hasIncoming) return incomingNum;
+        if (hasPrev) return prevNum;
+        return 0;
+    }
+    if (hasPrev) return prevNum;
+    if (hasIncoming) return incomingNum;
+    return 0;
+};
+const buildMergedTrial = (prev, incoming, options = {}) => {
+    const now = new Date().toISOString();
+    const incomingTime = safeIsoTime(incoming.updatedAt);
+    const prevTime = safeIsoTime(prev.updatedAt);
+    const preferIncoming = incomingTime !== null && prevTime !== null ? incomingTime >= prevTime : true;
+    const merged = {
+        ...prev,
+        ...incoming,
+        id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
+        code: normalizeCode(incoming.code || prev.code),
+        studyTitle: normalizeText(pickMergedValue(prev.studyTitle, incoming.studyTitle, preferIncoming) || ''),
+        cancerType: normalizeText(pickMergedValue(prev.cancerType, incoming.cancerType, preferIncoming) || ''),
+        line: normalizeText(pickMergedValue(prev.line, incoming.line, preferIncoming) || ''),
+        phase: normalizeText(pickMergedValue(prev.phase, incoming.phase, preferIncoming) || ''),
+        sponsor: normalizeText(pickMergedValue(prev.sponsor, incoming.sponsor, preferIncoming) || ''),
+        pi: normalizeText(pickMergedValue(prev.pi, incoming.pi, preferIncoming) || ''),
+        nurse: normalizeText(pickMergedValue(prev.nurse, incoming.nurse, preferIncoming) || ''),
+        phone: normalizeText(pickMergedValue(prev.phone, incoming.phone, preferIncoming) || ''),
+        status: normalizeText(pickMergedValue(prev.status, incoming.status, preferIncoming) || ''),
+        inclusion: pickMergedValue(prev.inclusion, incoming.inclusion, preferIncoming) || '',
+        exclusion: pickMergedValue(prev.exclusion, incoming.exclusion, preferIncoming) || '',
+        comments: normalizeText(pickMergedValue(prev.comments, incoming.comments, preferIncoming) || ''),
+        isArchived: Boolean(pickMergedValue(prev.isArchived, incoming.isArchived, preferIncoming) ?? false),
+        archiveDate: normalizeText(pickMergedValue(prev.archiveDate, incoming.archiveDate, preferIncoming) || ''),
+        archiveReason: normalizeText(pickMergedValue(prev.archiveReason, incoming.archiveReason, preferIncoming) || ''),
+        targetNum: pickMergedNumber(prev.targetNum, incoming.targetNum, preferIncoming),
+        enrolled: pickMergedNumber(prev.enrolled, incoming.enrolled, preferIncoming),
+        monthSigned: pickMergedNumber(prev.monthSigned, incoming.monthSigned, preferIncoming),
+        monthEnrolled: pickMergedNumber(prev.monthEnrolled, incoming.monthEnrolled, preferIncoming),
+        cancerTypes: Array.isArray(pickMergedValue(prev.cancerTypes, incoming.cancerTypes, preferIncoming))
+            ? pickMergedValue(prev.cancerTypes, incoming.cancerTypes, preferIncoming)
+            : (Array.isArray(prev.cancerTypes) ? prev.cancerTypes : []),
+        subjects: Array.isArray(pickMergedValue(prev.subjects, incoming.subjects, preferIncoming))
+            ? pickMergedValue(prev.subjects, incoming.subjects, preferIncoming)
+            : (Array.isArray(prev.subjects) ? prev.subjects : []),
+        updatedAt: options.forceUpdatedAt || incoming.updatedAt || prev.updatedAt || now
+    };
+    return merged;
+};
+const mergeTrialsByCode = (existingTrials, incomingTrials, options = {}) => {
     const map = new Map();
+    const stats = { added: 0, updated: 0, skipped: 0 };
 
     (existingTrials || []).forEach((trial) => {
         const key = normalizeCode(trial.code);
-        if (key) map.set(key, { ...trial });
+        if (key) map.set(key, { ...trial, code: key });
     });
 
     (incomingTrials || []).forEach((incoming) => {
         const key = normalizeCode(incoming.code);
-        if (!key) return;
-
-        const prev = map.get(key) || {};
-        const merged = {
-            ...prev,
-            ...incoming,
-            id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
-            code: key,
-            studyTitle: normalizeText(incoming.studyTitle || prev.studyTitle),
-            sponsor: normalizeText(incoming.sponsor || prev.sponsor),
-            pi: normalizeText(incoming.pi || prev.pi),
-            nurse: normalizeText(incoming.nurse || prev.nurse),
-            phone: normalizeText(incoming.phone || prev.phone),
-            comments: normalizeText(incoming.comments || prev.comments),
-            isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
-            archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
-            archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
-            targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
-            enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
-            monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
-            monthEnrolled: Number.isFinite(Number(incoming.monthEnrolled)) ? Number(incoming.monthEnrolled) : (prev.monthEnrolled || 0),
-        };
-
-        if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
-            merged.cancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
+        if (!key) {
+            stats.skipped += 1;
+            return;
         }
 
+        const normalizedIncoming = { ...incoming, code: key };
+        const prev = map.get(key);
+        if (!prev) {
+            const addedTrial = buildMergedTrial({}, normalizedIncoming, {
+                forceUpdatedAt: normalizedIncoming.updatedAt || new Date().toISOString()
+            });
+            map.set(key, addedTrial);
+            stats.added += 1;
+            return;
+        }
+
+        const merged = buildMergedTrial(prev, normalizedIncoming, options);
+        if (valuesEqual(prev, merged)) {
+            stats.skipped += 1;
+            return;
+        }
+        if (!safeIsoTime(normalizedIncoming.updatedAt) && !valuesEqual(prev, merged)) {
+            merged.updatedAt = new Date().toISOString();
+        }
         map.set(key, merged);
+        stats.updated += 1;
     });
 
-    return Array.from(map.values()).sort((a, b) => normalizeCode(a.code).localeCompare(normalizeCode(b.code)));
+    return {
+        trials: Array.from(map.values()).sort((a, b) => normalizeCode(a.code).localeCompare(normalizeCode(b.code))),
+        stats
+    };
+};
+const upsertTrialsByCode = (existingTrials, incomingTrials) => mergeTrialsByCode(existingTrials, incomingTrials).trials;
+const mergeSubjectsForImport = (existingSubjects, incomingSubjects) => {
+    const map = new Map();
+    const makeSubjectKey = (subject) => {
+        if (subject && subject.id) return `id:${subject.id}`;
+        const chartNo = normalizeText(subject && subject.chartNo);
+        const name = normalizeText(subject && subject.name);
+        const trialIds = Array.isArray(subject && subject.trialIds) ? [...subject.trialIds].sort((a, b) => Number(a) - Number(b)).join(',') : '';
+        return `fallback:${chartNo}|${name}|${trialIds}`;
+    };
+
+    (existingSubjects || []).forEach((subject) => {
+        map.set(makeSubjectKey(subject), { ...subject });
+    });
+    (incomingSubjects || []).forEach((subject) => {
+        map.set(makeSubjectKey(subject), { ...subject });
+    });
+    return Array.from(map.values());
 };
 
 const parseCsvLine = (line) => {
@@ -1038,12 +1136,17 @@ function App() {
 
     const handleSaveTrial = async (trialData) => {
         const existing = trials.find(t => t.id === trialData.id);
+        const stampedTrial = {
+            ...trialData,
+            code: normalizeCode(trialData.code),
+            updatedAt: new Date().toISOString()
+        };
         let updatedTrials;
         
         if (existing) {
-            updatedTrials = trials.map(t => t.id === trialData.id ? trialData : t);
+            updatedTrials = trials.map(t => t.id === trialData.id ? stampedTrial : t);
         } else {
-            updatedTrials = [...trials, trialData];
+            updatedTrials = [...trials, stampedTrial];
         }
         
         setTrials(updatedTrials);
@@ -1054,11 +1157,11 @@ function App() {
     };
 
     const handleImportStudyStatus = async (incomingRows) => {
-        const merged = upsertTrialsByCode(trials, incomingRows);
-        setTrials(merged);
-        await saveTrials(merged);
+        const result = mergeTrialsByCode(trials, incomingRows);
+        setTrials(result.trials);
+        await saveTrials(result.trials);
         setShowImportModal(false);
-        alert(`已完成匯入，共處理 ${incomingRows.length} 筆；以 code 自動合併更新。`);
+        alert(`已完成匯入：新增 ${result.stats.added} 筆、更新 ${result.stats.updated} 筆、跳過 ${result.stats.skipped} 筆。`);
     };
 
 
@@ -1088,11 +1191,16 @@ function App() {
                 alert('JSON 格式不正確，缺少 trials 陣列');
                 return;
             }
-            setTrials(data.trials);
-            setSubjects(Array.isArray(data.subjects) ? data.subjects : []);
-            await saveAllData(data.trials, Array.isArray(data.subjects) ? data.subjects : []);
-            setSyncStatus(`已匯入 JSON（${data.trials.length} 個試驗）`);
-            alert('匯入 JSON 完成');
+            const trialResult = mergeTrialsByCode(trials, data.trials);
+            const mergedSubjects = mergeSubjectsForImport(subjects, Array.isArray(data.subjects) ? data.subjects : []);
+            setTrials(trialResult.trials);
+            setSubjects(mergedSubjects);
+            await saveAllData(trialResult.trials, mergedSubjects);
+            setSyncStatus(`已自動合併 JSON（新增 ${trialResult.stats.added}、更新 ${trialResult.stats.updated}、跳過 ${trialResult.stats.skipped}）`);
+            alert(`JSON 自動合併完成
+新增：${trialResult.stats.added} 筆
+更新：${trialResult.stats.updated} 筆
+跳過：${trialResult.stats.skipped} 筆`);
         } catch (error) {
             console.error(error);
             alert('匯入 JSON 失敗');
@@ -1396,7 +1504,7 @@ function App() {
                 isAdmin && e('label', {
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg font-semibold cursor-pointer'
                 },
-                    '匯入 JSON',
+                    '匯入 JSON（自動合併）',
                     e('input', {
                         type: 'file',
                         accept: '.json,application/json',
