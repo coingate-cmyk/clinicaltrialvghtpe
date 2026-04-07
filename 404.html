@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v3.6.4</title>
+    <title>臨床試驗管理系統 v3.8.0.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -26,65 +26,20 @@ const CONFIG = {
 };
 
 // Firebase Realtime Database 設定
-const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og",
-    authDomain: "clinicaltrial-vghtpe.firebaseapp.com",
-    databaseURL: "https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com",
-    projectId: "clinicaltrial-vghtpe",
-    storageBucket: "clinicaltrial-vghtpe.firebasestorage.app",
-    messagingSenderId: "220821651319",
-    appId: "1:220821651319:web:19dbfbaea0ea999472eb72"
-};
-
-const RTDB_PATH = {
-    root: 'clinicalTrialApp'
-};
-
-let __db = null;
-
-const getDb = () => {
-    try {
-        if (__db) return __db;
-        if (!firebase.apps.length) {
-            firebase.initializeApp(FIREBASE_CONFIG);
-        }
-        __db = firebase.database();
-        return __db;
-    } catch (error) {
-        console.error('Firebase init error:', error);
-        return null;
-    }
-};
-
-const getRootRef = () => {
-    const db = getDb();
-    return db ? db.ref(RTDB_PATH.root) : null;
-};
-
+// Local-only mode（不使用 Firebase）
 const saveAllData = async (trialsData, subjectsData) => {
     const encryptedTrials = encryptData(trialsData || []);
     const encryptedSubjects = encryptData(subjectsData || []);
     if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
     if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
-
-    const rootRef = getRootRef();
-    if (!rootRef) return false;
-
-    await rootRef.set({
-        trials: encryptedTrials,
-        subjects: encryptedSubjects,
-        updatedAt: new Date().toISOString()
-    });
+    localStorage.setItem('clinical-trials-meta', JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        trialsCount: (trialsData || []).length,
+        subjectsCount: (subjectsData || []).length,
+        source: 'local-only'
+    }));
     return true;
 };
-
-const loadRemoteDataOnce = async () => {
-    const rootRef = getRootRef();
-    if (!rootRef) return null;
-    const snapshot = await rootRef.once('value');
-    return snapshot.val();
-};
-
 
 const encryptData = (data) => {
     try {
@@ -228,7 +183,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.6.4'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v3.8.0.0'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Realtime Database 協作完整版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1054,80 +1009,31 @@ function App() {
     const [showArchived, setShowArchived] = useState(false);
     
     useEffect(() => {
-        let rootRef = null;
-        let handler = null;
+        try {
+            const stored = localStorage.getItem('clinical-trials-encrypted');
+            const storedSubjects = localStorage.getItem('clinical-trials-subjects');
+            const localTrials = stored ? decryptData(stored) : null;
+            const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
 
-        const loadData = async () => {
-            try {
-                const stored = localStorage.getItem('clinical-trials-encrypted');
-                const storedSubjects = localStorage.getItem('clinical-trials-subjects');
-                const localTrials = stored ? decryptData(stored) : null;
-                const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
-
-                rootRef = getRootRef();
-
-                if (!rootRef) {
-                    setTrials(Array.isArray(localTrials) ? localTrials : INITIAL_TRIALS);
-                    setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
-                    setLoading(false);
-                    setSyncStatus('未連上雲端，使用本機資料');
-                    return;
-                }
-
-                handler = async (snapshot) => {
-                    const val = snapshot.val();
-                    const remoteTrials = val && val.trials ? decryptData(val.trials) : null;
-                    const remoteSubjects = val && val.subjects ? decryptData(val.subjects) : null;
-
-                    if (Array.isArray(remoteTrials) && remoteTrials.length > 0) {
-                        setTrials(remoteTrials);
-                        setSubjects(Array.isArray(remoteSubjects) ? remoteSubjects : []);
-                        localStorage.setItem('clinical-trials-encrypted', val.trials);
-                        if (val.subjects) localStorage.setItem('clinical-trials-subjects', val.subjects);
-                        setSyncStatus(`雲端同步中（${remoteTrials.length} 個試驗）`);
-                    } else {
-                        const fallbackTrials = Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS;
-                        const fallbackSubjects = Array.isArray(localSubjects) ? localSubjects : [];
-                        setTrials(fallbackTrials);
-                        setSubjects(fallbackSubjects);
-                        try {
-                            await saveAllData(fallbackTrials, fallbackSubjects);
-                            setSyncStatus(`已推送本機資料到雲端（${fallbackTrials.length} 個試驗）`);
-                        } catch (e) {
-                            console.error(e);
-                            setSyncStatus('雲端推送失敗，暫用本機資料');
-                        }
-                    }
-                    setLoading(false);
-                };
-
-                rootRef.on('value', handler, (error) => {
-                    console.error('Firebase read error:', error);
-                    setTrials(Array.isArray(localTrials) ? localTrials : INITIAL_TRIALS);
-                    setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
-                    setLoading(false);
-                    setSyncStatus('雲端讀取失敗，改用本機資料');
-                });
-            } catch (error) {
-                console.error('Load error:', error);
-                setTrials(INITIAL_TRIALS);
-                setSubjects([]);
-                setLoading(false);
-                setSyncStatus('讀取失敗，改用預設資料');
-            }
-        };
-
-        loadData();
-
-        return () => {
-            if (rootRef && handler) rootRef.off('value', handler);
-        };
+            setTrials(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS);
+            setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
+            setLoading(false);
+            setSyncStatus(Array.isArray(localTrials) && localTrials.length > 0
+                ? `本機資料模式（${localTrials.length} 個試驗）`
+                : `本機資料模式（${INITIAL_TRIALS.length} 個試驗）`);
+        } catch (error) {
+            console.error('Local load error:', error);
+            setTrials(INITIAL_TRIALS);
+            setSubjects([]);
+            setLoading(false);
+            setSyncStatus('本機資料模式');
+        }
     }, []);
     
     const saveTrials = async (data) => {
         setTrials(data);
         await saveAllData(data, subjects);
-        setSyncStatus(`已同步到雲端（${data.length} 個試驗）`);
+        setSyncStatus(`已儲存到本機資料（${data.length} 個試驗）`);
     };
 
     const handleSaveTrial = async (trialData) => {
@@ -1154,41 +1060,48 @@ function App() {
         setShowImportModal(false);
         alert(`已完成匯入，共處理 ${incomingRows.length} 筆；以 code 自動合併更新。`);
     };
-    
 
-    const handlePushToCloud = async () => {
+
+    const handleExportJSON = () => {
         try {
-            await saveAllData(trials, subjects);
-            setSyncStatus(`已手動推送到雲端（${trials.length} 個試驗）`);
-            alert('已手動同步到 Firebase');
+            const data = { trials: trials || [], subjects: subjects || [], updatedAt: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `clinicaltrial_export_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
         } catch (error) {
             console.error(error);
-            alert('手動同步失敗');
+            alert('匯出 JSON 失敗');
         }
     };
 
-    
+    const handleImportJSON = async (ev) => {
+        const file = ev.target.files && ev.target.files[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            if (!Array.isArray(data.trials)) {
+                alert('JSON 格式不正確，缺少 trials 陣列');
+                return;
+            }
+            setTrials(data.trials);
+            setSubjects(Array.isArray(data.subjects) ? data.subjects : []);
+            await saveAllData(data.trials, Array.isArray(data.subjects) ? data.subjects : []);
+            setSyncStatus(`已匯入 JSON（${data.trials.length} 個試驗）`);
+            alert('匯入 JSON 完成');
+        } catch (error) {
+            console.error(error);
+            alert('匯入 JSON 失敗');
+        } finally {
+            ev.target.value = '';
+        }
+    };
 
-    
-const handleExportJSON = () => {
-    const data = {trials, subjects, updatedAt:new Date().toISOString()};
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download='clinicaltrial.json';
-    a.click();
-};
-
-const handleImportJSON = async (e)=>{
-    const f=e.target.files[0];
-    if(!f) return;
-    const txt=await f.text();
-    const data=JSON.parse(txt);
-    if(data.trials) setTrials(data.trials);
-    if(data.subjects) setSubjects(data.subjects);
-    alert('匯入完成');
-};
-const downloadCSV = () => {
+    const downloadCSV = () => {
         const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
         const rows = filtered.map(trial => {
             const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
@@ -1300,7 +1213,7 @@ const downloadCSV = () => {
     const saveSubjects = async (data) => {
         setSubjects(data);
         await saveAllData(trials, data);
-        setSyncStatus('受試者資料已同步到雲端');
+        setSyncStatus('受試者資料已儲存到本機資料');
     };
     
     const handleAuth = (password) => {
@@ -1448,7 +1361,7 @@ const downloadCSV = () => {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.6.4'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v3.8.0.0'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1476,10 +1389,21 @@ const downloadCSV = () => {
                     ),
                     '匯入資料'
                 ),
-isAdmin && e('button',{onClick:handleExportJSON,className:'px-3 py-2 bg-orange-500 text-white rounded'},'匯出JSON'),
-isAdmin && e('label',{className:'px-3 py-2 bg-teal-500 text-white rounded cursor-pointer'},
-'匯入JSON',e('input',{type:'file',onChange:handleImportJSON,className:'hidden'})),
-
+                isAdmin && e('button', {
+                    onClick: handleExportJSON,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
+                }, '匯出 JSON'),
+                isAdmin && e('label', {
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg font-semibold cursor-pointer'
+                },
+                    '匯入 JSON',
+                    e('input', {
+                        type: 'file',
+                        accept: '.json,application/json',
+                        onChange: handleImportJSON,
+                        className: 'hidden'
+                    })
+                ),
                 e('button', {
                     onClick: downloadCSV,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
