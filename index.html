@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.4 Firebase版</title>
+    <title>臨床試驗管理系統 v4.0.5 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -199,6 +199,21 @@ const saveTrialToFirestore = async (firebaseConfig, trialData) => {
 const deleteTrialFromFirestore = async (firebaseConfig, code) => {
     const db = initializeFirebaseApp(firebaseConfig);
     await db.collection('trials').doc(normalizeCode(code)).delete();
+};
+
+const clearTrialsFromFirestore = async (firebaseConfig) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    let total = 0;
+    while (true) {
+        const snapshot = await db.collection('trials').limit(400).get();
+        if (snapshot.empty) break;
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+        await batch.commit();
+        total += snapshot.size;
+        if (snapshot.size < 400) break;
+    }
+    return total;
 };
 
 const saveSubjectsToFirestore = async (firebaseConfig, data) => {
@@ -500,7 +515,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.4 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1214,6 +1229,7 @@ function ImportStatusModal(props) {
     const [parsedRows, setParsedRows] = useState([]);
     const [importInfo, setImportInfo] = useState(null);
     const [busy, setBusy] = useState(false);
+    const [replaceCloud, setReplaceCloud] = useState(false);
 
     const handlePreview = () => {
         const parsed = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
@@ -1268,7 +1284,7 @@ function ImportStatusModal(props) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
         }
-        await props.onImport(parsed);
+        await props.onImport(parsed, { replaceCloud });
     };
 
     return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-24 pb-8 px-4 overflow-y-auto'},
@@ -1281,7 +1297,7 @@ function ImportStatusModal(props) {
                 }, '×')
             ),
             e('div', {className: 'mb-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800'},
-                '可直接上傳 Excel / CSV，或貼上 Excel 複製內容。欄位順序可亂、標題可用常見別名；系統會自動辨識並用 code 當唯一鍵 upsert。'
+                '可直接上傳 Excel / CSV，或貼上 Excel 複製內容。欄位順序可亂、標題可用常見別名；系統會自動辨識並用 code 當唯一鍵 upsert；若雲端已有舊的重複殘留，可勾選「以本檔重建雲端主資料」清空後重匯。'
             ),
             e('div', {className: 'mb-4 p-4 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50'},
                 e('div', {className: 'font-semibold mb-2 text-slate-800'}, '上傳檔案'),
@@ -1314,6 +1330,15 @@ function ImportStatusModal(props) {
                     previewCount ? `已解析 ${previewCount} 筆` : '尚未預覽'
                 ),
                 importInfo && e('div', {className: 'text-sm text-amber-700'}, `有效 ${importInfo.validCount} 筆；重複 code 已合併 ${importInfo.duplicateCount} 筆；實際匯入 ${importInfo.uniqueCount} 筆`),
+                e('label', {className: 'flex items-center gap-2 text-sm text-red-700 bg-red-50 px-3 py-2 rounded-lg border border-red-200'},
+                    e('input', {
+                        type: 'checkbox',
+                        checked: replaceCloud,
+                        onChange: (ev) => setReplaceCloud(ev.target.checked),
+                        className: 'w-4 h-4'
+                    }),
+                    e('span', null, '以本檔重建雲端主資料（先清空 Firestore trials，再匯入本檔）')
+                ),
                 e('button', {
                     type: 'button',
                     onClick: handleImport,
@@ -1476,14 +1501,27 @@ function App() {
         alert(existing ? '試驗已更新！' : '試驗已新增！');
     };
 
-    const handleImportStudyStatus = async (incomingRows) => {
+    const handleImportStudyStatus = async (incomingRows, options = {}) => {
         const importAnalysis = analyzeParsedTrials(incomingRows);
         const uniqueRows = importAnalysis.rows;
-        const merged = upsertTrialsByCode(trials, uniqueRows);
+        const replaceCloud = !!options.replaceCloud;
+        let baseTrials = trials || [];
+        let cleared = 0;
+
+        if (replaceCloud) {
+            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Firestore trials collection，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
+            if (firebaseEnabled && firebaseConfig) {
+                setSyncStatus('正在清空 Firestore trials...');
+                cleared = await clearTrialsFromFirestore(firebaseConfig);
+            }
+            baseTrials = [];
+        }
+
+        const merged = upsertTrialsByCode(baseTrials, uniqueRows);
         setTrials(merged);
         await saveAllData(merged, subjects);
         let added = 0, updated = 0, skipped = 0;
-        const existingMap = new Map((trials || []).map(t => [normalizeCode(t.code), t]));
+        const existingMap = new Map((baseTrials || []).map(t => [normalizeCode(t.code), t]));
         for (const row of uniqueRows) {
             const key = normalizeCode(row.code);
             if (!key) { skipped++; continue; }
@@ -1492,12 +1530,33 @@ function App() {
                 await saveTrialToFirestore(firebaseConfig, { ...existingMap.get(key), ...row });
             }
         }
-        const msg = `已匯入：新增 ${added} / 更新 ${updated} / 跳過 ${skipped}；重複 code 已合併 ${importAnalysis.duplicateCount} 筆`;
-        setSyncStatus(firebaseEnabled ? `Firebase ${msg}` : `本機 ${msg}`);
+        const prefix = replaceCloud ? ('已清空 ' + cleared + ' 筆後重建；') : '';
+        const msg = prefix + '已匯入：新增 ' + added + ' / 更新 ' + updated + ' / 跳過 ' + skipped + '；重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆';
+        setSyncStatus(firebaseEnabled ? ('Firebase ' + msg) : ('本機 ' + msg));
         setShowImportModal(false);
-        alert(`已完成匯入：新增 ${added} 筆、更新 ${updated} 筆、跳過 ${skipped} 筆。重複 code 已合併 ${importAnalysis.duplicateCount} 筆。`);
+        alert('已完成匯入：' + (replaceCloud ? ('已清空 ' + cleared + ' 筆；') : '') + '新增 ' + added + ' 筆、更新 ' + updated + ' 筆、跳過 ' + skipped + ' 筆。重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆。');
     };
 
+
+    const handleClearCloudTrials = async () => {
+        if (!firebaseEnabled || !firebaseConfig) {
+            alert('Firebase 尚未啟用，無法清空雲端資料。');
+            return;
+        }
+        const ok = window.confirm('確定要清空 Firestore 的 trials collection？\n\n這會刪除雲端全部試驗資料；建議清空後立刻用最新版 Excel「匯入資料」重建。');
+        if (!ok) return;
+        try {
+            setSyncStatus('正在清空 Firestore trials...');
+            const cleared = await clearTrialsFromFirestore(firebaseConfig);
+            setTrials([]);
+            await saveAllData([], subjects);
+            setSyncStatus('已清空 Firestore trials：' + cleared + ' 筆。請接著匯入最新版 Excel 重建主資料。');
+            alert('已清空 ' + cleared + ' 筆雲端試驗資料。請接著匯入最新版 Excel。');
+        } catch (error) {
+            console.error(error);
+            alert('清空雲端資料失敗：' + (error.message || error));
+        }
+    };
 
     const handleExportJSON = () => {
         try {
@@ -1829,7 +1888,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.4 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1857,6 +1916,10 @@ function App() {
                     ),
                     '匯入資料'
                 ),
+                isAdmin && e('button', {
+                    onClick: handleClearCloudTrials,
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-700 to-red-800 text-white rounded-xl hover:from-red-800 hover:to-red-900 transition-all shadow-lg font-semibold'
+                }, '清空雲端 trials'),
                 isAdmin && e('button', {
                     onClick: handleExportJSON,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
