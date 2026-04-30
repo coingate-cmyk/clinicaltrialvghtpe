@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.3 Firebase版</title>
+    <title>臨床試驗管理系統 v4.0.4 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -71,6 +71,19 @@ const decryptData = (encrypted) => {
 
 const normalizeCode = (v) => String(v || '').trim().toUpperCase();
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
+const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）]+/g, '').trim();
+const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
+const lineMatchesSelection = (line, selected) => {
+    if (!selected || selected === '全部') return true;
+    const n = normalizeFilterValue(line);
+    if (!n) return false;
+    if (selected === '第一線') return n.includes('第一線') || n.includes('一線') || n.includes('1l') || n.includes('firstline') || n.includes('一腺');
+    if (selected === '第二線') return n.includes('第二線') || n.includes('二線') || n.includes('2l') || n.includes('一線後') || n.includes('二三線');
+    if (selected === '第三線') return n.includes('第三線') || n.includes('三線') || n.includes('3l') || n.includes('二線後') || n.includes('二三線');
+    if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
+    if (selected === '多線') return n.includes('多線') || n.includes('multi') || n.includes('後線') || n.includes('laterline');
+    return normalizeFilterValue(selected) === n || n.includes(normalizeFilterValue(selected));
+};
 
 const getStoredFirebaseConfig = () => {
     try {
@@ -271,6 +284,56 @@ const normalizeCancerLine = (cancerType, line) => {
     return { cancerType: c, line: l };
 };
 
+
+const consolidateParsedTrials = (rows) => {
+    const map = new Map();
+    let duplicateCount = 0;
+    (rows || []).forEach((row) => {
+        const key = normalizeCode(row && row.code);
+        if (!key) return;
+        const current = map.get(key);
+        if (!current) {
+            map.set(key, { ...row, code: key });
+            return;
+        }
+        duplicateCount++;
+        const merged = { ...current };
+        Object.entries(row || {}).forEach(([field, value]) => {
+            if (field === 'cancerTypes') return;
+            if (value !== undefined && value !== null && String(value).trim() !== '') merged[field] = value;
+        });
+        const ctMap = new Map();
+        const addCt = (ct) => {
+            if (!ct) return;
+            const type = normalizeCellText(ct.type || '');
+            const lines = Array.isArray(ct.lines) ? ct.lines.map(normalizeCellText).filter(Boolean) : [];
+            if (!type && !lines.length) return;
+            const k = normalizeFilterValue(type || '未分類');
+            const prev = ctMap.get(k) || { type: type || '', lines: [] };
+            lines.forEach(line => {
+                if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
+            });
+            if (!prev.type && type) prev.type = type;
+            ctMap.set(k, prev);
+        };
+        (Array.isArray(current.cancerTypes) ? current.cancerTypes : []).forEach(addCt);
+        (Array.isArray(row.cancerTypes) ? row.cancerTypes : []).forEach(addCt);
+        if (row.cancerType || row.line) addCt({ type: row.cancerType || '', lines: [row.line || ''].filter(Boolean) });
+        merged.cancerTypes = Array.from(ctMap.values());
+        if (!merged.cancerType && merged.cancerTypes[0]) merged.cancerType = merged.cancerTypes[0].type;
+        if (!merged.line && merged.cancerTypes[0] && merged.cancerTypes[0].lines[0]) merged.line = merged.cancerTypes[0].lines[0];
+        merged.code = key;
+        map.set(key, merged);
+    });
+    return { rows: Array.from(map.values()), duplicateCount };
+};
+
+const analyzeParsedTrials = (rows) => {
+    const valid = (rows || []).filter(item => normalizeCode(item && item.code));
+    const consolidated = consolidateParsedTrials(valid);
+    return { rows: consolidated.rows, rawCount: (rows || []).length, validCount: valid.length, uniqueCount: consolidated.rows.length, duplicateCount: consolidated.duplicateCount };
+};
+
 const parseRowsWithHeaderMapping = (rows) => {
     if (!rows || rows.length < 2) return [];
     let mappedFields = null;
@@ -325,7 +388,7 @@ const parseRowsWithHeaderMapping = (rows) => {
         parsed.push(item);
     }
 
-    return parsed.filter(item => normalizeCode(item.code));
+    return consolidateParsedTrials(parsed.filter(item => normalizeCode(item.code))).rows;
 };
 
 
@@ -437,7 +500,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.3 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.4 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1149,11 +1212,15 @@ function ImportStatusModal(props) {
     const [previewCount, setPreviewCount] = useState(0);
     const [fileName, setFileName] = useState('');
     const [parsedRows, setParsedRows] = useState([]);
+    const [importInfo, setImportInfo] = useState(null);
     const [busy, setBusy] = useState(false);
 
     const handlePreview = () => {
         const parsed = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
-        setPreviewCount(parsed.length);
+        const info = analyzeParsedTrials(parsed);
+        setParsedRows(info.rows);
+        setImportInfo(info);
+        setPreviewCount(info.uniqueCount);
     };
 
     const handleFile = async (ev) => {
@@ -1168,16 +1235,20 @@ function ImportStatusModal(props) {
                 const result = await parseExcelFile(file);
                 setCsvText(result.text);
                 const parsed = result.parsed && result.parsed.length ? result.parsed : parseStudyStatusCsv(result.text);
-                setParsedRows(parsed);
-                setPreviewCount(parsed.length);
-                alert(`Excel讀取成功：${parsed.length} 筆`);
+                const info = analyzeParsedTrials(parsed);
+                setParsedRows(info.rows);
+                setImportInfo(info);
+                setPreviewCount(info.uniqueCount);
+                alert(`Excel讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆`);
             } else {
                 const text = await file.text();
                 setCsvText(text);
                 const parsed = parseStudyStatusCsv(text);
-                setParsedRows(parsed);
-                setPreviewCount(parsed.length);
-                alert(`CSV讀取成功：${parsed.length} 筆`);
+                const info = analyzeParsedTrials(parsed);
+                setParsedRows(info.rows);
+                setImportInfo(info);
+                setPreviewCount(info.uniqueCount);
+                alert(`CSV讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆`);
             }
         } catch (e) {
             console.error(e);
@@ -1188,7 +1259,11 @@ function ImportStatusModal(props) {
     };
 
     const handleImport = async () => {
-        const parsed = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
+        const raw = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
+        const info = analyzeParsedTrials(raw);
+        const parsed = info.rows;
+        setImportInfo(info);
+        setPreviewCount(info.uniqueCount);
         if (!parsed.length) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
@@ -1224,7 +1299,7 @@ function ImportStatusModal(props) {
             ),
             e('textarea', {
                 value: csvText,
-                onChange: (ev) => { setCsvText(ev.target.value); setParsedRows([]); },
+                onChange: (ev) => { setCsvText(ev.target.value); setParsedRows([]); setImportInfo(null); },
                 rows: 14,
                 placeholder: '可直接貼上 Excel 內容或 CSV 內容…',
                 className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none font-mono text-sm'
@@ -1238,6 +1313,7 @@ function ImportStatusModal(props) {
                 e('div', {className: 'text-sm text-slate-700'},
                     previewCount ? `已解析 ${previewCount} 筆` : '尚未預覽'
                 ),
+                importInfo && e('div', {className: 'text-sm text-amber-700'}, `有效 ${importInfo.validCount} 筆；重複 code 已合併 ${importInfo.duplicateCount} 筆；實際匯入 ${importInfo.uniqueCount} 筆`),
                 e('button', {
                     type: 'button',
                     onClick: handleImport,
@@ -1401,12 +1477,14 @@ function App() {
     };
 
     const handleImportStudyStatus = async (incomingRows) => {
-        const merged = upsertTrialsByCode(trials, incomingRows);
+        const importAnalysis = analyzeParsedTrials(incomingRows);
+        const uniqueRows = importAnalysis.rows;
+        const merged = upsertTrialsByCode(trials, uniqueRows);
         setTrials(merged);
         await saveAllData(merged, subjects);
         let added = 0, updated = 0, skipped = 0;
         const existingMap = new Map((trials || []).map(t => [normalizeCode(t.code), t]));
-        for (const row of incomingRows) {
+        for (const row of uniqueRows) {
             const key = normalizeCode(row.code);
             if (!key) { skipped++; continue; }
             if (existingMap.has(key)) updated++; else added++;
@@ -1414,9 +1492,10 @@ function App() {
                 await saveTrialToFirestore(firebaseConfig, { ...existingMap.get(key), ...row });
             }
         }
-        if (!firebaseEnabled) setSyncStatus(`已匯入並更新本機資料：新增 ${added} / 更新 ${updated} / 跳過 ${skipped}`);
+        const msg = `已匯入：新增 ${added} / 更新 ${updated} / 跳過 ${skipped}；重複 code 已合併 ${importAnalysis.duplicateCount} 筆`;
+        setSyncStatus(firebaseEnabled ? `Firebase ${msg}` : `本機 ${msg}`);
         setShowImportModal(false);
-        alert(`已完成匯入：新增 ${added} 筆、更新 ${updated} 筆、跳過 ${skipped} 筆。`);
+        alert(`已完成匯入：新增 ${added} 筆、更新 ${updated} 筆、跳過 ${skipped} 筆。重複 code 已合併 ${importAnalysis.duplicateCount} 筆。`);
     };
 
 
@@ -1665,44 +1744,25 @@ function App() {
         
         // 癌症類型篩選
         if (cancerType !== '全部') {
-            result = result.filter(t =>
-                t.cancerTypes && t.cancerTypes.some(ct => ct.type === cancerType) ||
-                t.cancerType === cancerType
-            );
+            result = result.filter(t => {
+                const candidates = [];
+                if (Array.isArray(t.cancerTypes)) t.cancerTypes.forEach(ct => candidates.push(ct.type));
+                if (t.cancerType) candidates.push(t.cancerType);
+                return candidates.some(type => valueMatches(type, cancerType));
+            });
         }
         
-        // 治療線篩選
+        // 治療線篩選：會先正規化空白/換行/斜線，所以「一\n線」「二、三線」也能正確命中
         if (selectedLine !== '全部') {
             result = result.filter(t => {
-                const matchRules = {
-                    '第一線': ['第一線', '一線'],
-                    '第二線': ['第二線', '二線', '第一線後', '一線後', '二/三線', '二、三線', '二線/三線'],
-                    '第三線': ['第三線', '三線', '第二線後', '二線後', '二/三線', '二、三線', '二線/三線'],
-                    'Adjuvant': ['Adjuvant', '觀察性'],
-                    '多線': ['多線']
-                };
-                
-                const rulesToMatch = matchRules[selectedLine] || [selectedLine];
-                
-                // 檢查 cancerTypes[].lines[]
-                if (t.cancerTypes && t.cancerTypes.length > 0) {
-                    for (let ct of t.cancerTypes) {
-                        if (ct.lines && ct.lines.length > 0) {
-                            for (let line of ct.lines) {
-                                if (rulesToMatch.includes(line)) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                const lineCandidates = [];
+                if (Array.isArray(t.cancerTypes)) {
+                    t.cancerTypes.forEach(ct => {
+                        if (Array.isArray(ct.lines)) ct.lines.forEach(line => lineCandidates.push(line));
+                    });
                 }
-                
-                // 檢查 line
-                if (t.line && rulesToMatch.includes(t.line)) {
-                    return true;
-                }
-                
-                return false;
+                if (t.line) lineCandidates.push(t.line);
+                return lineCandidates.some(line => lineMatchesSelection(line, selectedLine));
             });
         }
         
@@ -1710,15 +1770,20 @@ function App() {
     }, [trials, search, cancerType, selectedLine, showArchived]);
     
     const cancerTypes = useMemo(() => {
-        const types = new Set();
+        const map = new Map();
         trials.forEach(trial => {
+            const addType = (type) => {
+                const label = normalizeText(type);
+                if (!label) return;
+                const key = normalizeFilterValue(label);
+                if (!map.has(key)) map.set(key, label);
+            };
             if (trial.cancerTypes && trial.cancerTypes.length > 0) {
-                trial.cancerTypes.forEach(ct => types.add(ct.type));
-            } else if (trial.cancerType) {
-                types.add(trial.cancerType);
+                trial.cancerTypes.forEach(ct => addType(ct.type));
             }
+            if (trial.cancerType) addType(trial.cancerType);
         });
-        return ['全部', ...Array.from(types).sort()];
+        return ['全部', ...Array.from(map.values()).sort()];
     }, [trials]);
     
     const treatmentLines = useMemo(() => {
@@ -1764,7 +1829,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.3 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.4 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1873,7 +1938,7 @@ function App() {
             e('div', {className: 'grid gap-6'},
                 filtered.map(trial =>
                     e(TrialCard, {
-                        key: trial.id,
+                        key: normalizeCode(trial.code) || trial.id,
                         trial: trial,
                         isLoggedIn: isAdmin,
                         onEdit: handleEdit,
