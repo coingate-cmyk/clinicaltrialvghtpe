@@ -3,18 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.5 Firebase版</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <title>臨床試驗管理系統 v4.10 Realtime Database版</title>
+    <script src="./vendor/tailwindcss-3.4.17.js"></script>
+    <script src="./vendor/crypto-js-4.1.1.min.js"></script>
+    <script src="./vendor/firebase-app-10.12.2-compat.js"></script>
+    <script src="./vendor/firebase-database-10.12.2-compat.js"></script>
+    <script src="./vendor/xlsx-0.18.5.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <div id="boot-error" class="min-h-screen flex items-center justify-center text-xl text-slate-700">系統載入中...</div>
     <div id="app"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="./vendor/react-18.production.min.js"></script>
+    <script src="./vendor/react-dom-18.production.min.js"></script>
     <script>
+const missingDependencies = [
+    ['React', window.React],
+    ['ReactDOM', window.ReactDOM],
+    ['CryptoJS', window.CryptoJS],
+    ['Firebase', window.firebase],
+    ['XLSX', window.XLSX]
+].filter((item) => !item[1]).map((item) => item[0]);
+if (missingDependencies.length) {
+    document.getElementById('boot-error').textContent =
+        `系統元件載入失敗：${missingDependencies.join('、')}。請重新整理或聯絡管理者。`;
+    throw new Error(`Missing dependencies: ${missingDependencies.join(', ')}`);
+}
+
 const {useState, useEffect, useMemo, useRef} = React;
 const e = React.createElement;
 
@@ -23,8 +37,7 @@ const CONFIG = {
     ADMIN_USERNAME: 'admin',
     ADMIN_PASSWORD: 'admin123',
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026',
-    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4',
-    FIREBASE_ENABLED_KEY: 'clinical-trials-firebase-enabled-v4'
+    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4'
 };
 
 const DEFAULT_FIREBASE_CONFIG = {
@@ -37,18 +50,22 @@ const DEFAULT_FIREBASE_CONFIG = {
     appId: '1:220821651319:web:19dbfbaea0ea999472eb72'
 };
 
-// Firebase Firestore 自動同步設定（已內建，不需每台電腦手動輸入）
+// 本機資料只作為離線快取；Firebase Realtime Database 是唯一的多人同步來源。
 const saveAllData = async (trialsData, subjectsData) => {
-    const encryptedTrials = encryptData(trialsData || []);
-    const encryptedSubjects = encryptData(subjectsData || []);
-    if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
-    if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
-    localStorage.setItem('clinical-trials-meta', JSON.stringify({
-        updatedAt: new Date().toISOString(),
-        trialsCount: (trialsData || []).length,
-        subjectsCount: (subjectsData || []).length,
-        source: 'local-only'
-    }));
+    try {
+        const encryptedTrials = encryptData(trialsData || []);
+        const encryptedSubjects = encryptData(subjectsData || []);
+        if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
+        if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
+        localStorage.setItem('clinical-trials-meta', JSON.stringify({
+            updatedAt: new Date().toISOString(),
+            trialsCount: (trialsData || []).length,
+            subjectsCount: (subjectsData || []).length,
+            source: 'firebase-realtime-database-cache'
+        }));
+    } catch (error) {
+        console.warn('Local cache write failed:', error);
+    }
     return true;
 };
 
@@ -98,16 +115,13 @@ const getStoredFirebaseConfig = () => {
 const setStoredFirebaseConfig = (cfg) => {
     const merged = { ...DEFAULT_FIREBASE_CONFIG, ...(cfg || {}) };
     localStorage.setItem(CONFIG.FIREBASE_CONFIG_KEY, JSON.stringify(merged));
-    localStorage.setItem(CONFIG.FIREBASE_ENABLED_KEY, 'true');
 };
 
-const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY) !== 'false';
-
 let firebaseAppInstance = null;
-let firestoreInstance = null;
+let realtimeDatabaseInstance = null;
 
 const initializeFirebaseApp = (firebaseConfig) => {
-    if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
+    if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.databaseURL || !firebaseConfig.projectId || !firebaseConfig.appId) {
         throw new Error('Firebase 設定不完整');
     }
     if (!firebaseAppInstance) {
@@ -115,11 +129,25 @@ const initializeFirebaseApp = (firebaseConfig) => {
             ? firebase.app()
             : firebase.initializeApp(firebaseConfig);
     }
-    if (!firestoreInstance) {
-        firestoreInstance = firebase.firestore();
+    if (!realtimeDatabaseInstance) {
+        realtimeDatabaseInstance = firebase.database();
     }
-    return firestoreInstance;
+    return realtimeDatabaseInstance;
 };
+
+const reinitializeFirebaseApp = async (firebaseConfig) => {
+    if (firebaseAppInstance) {
+        await firebaseAppInstance.delete();
+        firebaseAppInstance = null;
+        realtimeDatabaseInstance = null;
+    }
+    return initializeFirebaseApp(firebaseConfig);
+};
+
+const firebaseTrialKey = (code) =>
+    encodeURIComponent(normalizeCode(code)).replace(/\./g, '%2E');
+
+const toFirebaseValue = (value) => JSON.parse(JSON.stringify(value));
 
 const cleanTrialForSave = (trial) => {
     const cleaned = { ...(trial || {}) };
@@ -143,7 +171,7 @@ const cleanTrialForSave = (trial) => {
     return cleaned;
 };
 
-const normalizeFirestoreTrial = (raw) => {
+const normalizeFirebaseTrial = (raw) => {
     const trial = { ...(raw || {}) };
     trial.code = normalizeCode(trial.code);
     trial.studyTitle = normalizeText(trial.studyTitle);
@@ -163,24 +191,47 @@ const normalizeFirestoreTrial = (raw) => {
     return trial;
 };
 
-const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
+const subscribeRealtimeData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
     try {
         const db = initializeFirebaseApp(firebaseConfig);
-        const unsubTrials = db.collection('trials').onSnapshot((snapshot) => {
-            const list = snapshot.docs.map((doc) => normalizeFirestoreTrial({ ...doc.data(), code: doc.id }));
-            const merged = list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS;
-            onTrials(merged);
-            onStatus && onStatus(`Firebase 同步中（${merged.length} 個試驗）`);
-        }, onError);
-
-        const unsubSubjects = db.collection('meta').doc('subjects').onSnapshot((doc) => {
-            const data = doc.exists ? doc.data() : {};
-            onSubjects(Array.isArray(data.items) ? data.items : []);
-        }, onError);
+        const trialsRef = db.ref('trials');
+        const subjectsRef = db.ref('subjects');
+        const handleTrials = (snapshot) => {
+            const data = snapshot.val() || {};
+            const list = Object.values(data)
+                .map((trial) => normalizeFirebaseTrial(trial))
+                .filter((trial) => trial.code);
+            onTrials(list);
+            onStatus && onStatus(`Firebase Realtime Database 已同步（${list.length} 個試驗）`);
+        };
+        const handleSubjects = async (snapshot) => {
+            try {
+                const data = snapshot.val();
+                if (Array.isArray(data)) {
+                    onSubjects(data);
+                    return;
+                }
+                if (typeof data === 'string') {
+                    const decryptedSubjects = decryptData(data);
+                    onSubjects(Array.isArray(decryptedSubjects) ? decryptedSubjects : []);
+                    return;
+                }
+                // 舊版曾把受試者陣列加密後放在 clinicalTrialApp/subjects。
+                // 新版只讀取它作相容 fallback，不會再寫回舊路徑。
+                const legacySnapshot = await db.ref('clinicalTrialApp/subjects').once('value');
+                const legacySubjects = legacySnapshot.exists() ? decryptData(legacySnapshot.val()) : null;
+                onSubjects(Array.isArray(legacySubjects) ? legacySubjects : []);
+            } catch (error) {
+                onError && onError(error);
+            }
+        };
+        const handleError = (error) => onError && onError(error);
+        trialsRef.on('value', handleTrials, handleError);
+        subjectsRef.on('value', handleSubjects, handleError);
 
         return () => {
-            try { unsubTrials && unsubTrials(); } catch (e) {}
-            try { unsubSubjects && unsubSubjects(); } catch (e) {}
+            trialsRef.off('value', handleTrials);
+            subjectsRef.off('value', handleSubjects);
         };
     } catch (error) {
         onError && onError(error);
@@ -188,54 +239,62 @@ const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus
     }
 };
 
-const saveTrialToFirestore = async (firebaseConfig, trialData) => {
+const saveTrialToRealtimeDatabase = async (firebaseConfig, trialData) => {
     const db = initializeFirebaseApp(firebaseConfig);
     const cleaned = cleanTrialForSave(trialData);
     if (!cleaned) throw new Error('trial code 不可空白');
-    await db.collection('trials').doc(cleaned.code).set(cleaned, { merge: true });
+    await db.ref(`trials/${firebaseTrialKey(cleaned.code)}`).set(toFirebaseValue(cleaned));
     return cleaned;
 };
 
-const deleteTrialFromFirestore = async (firebaseConfig, code) => {
+const saveTrialsToRealtimeDatabase = async (firebaseConfig, trialsData) => {
     const db = initializeFirebaseApp(firebaseConfig);
-    await db.collection('trials').doc(normalizeCode(code)).delete();
-};
-
-const clearTrialsFromFirestore = async (firebaseConfig) => {
-    const db = initializeFirebaseApp(firebaseConfig);
-    let total = 0;
-    while (true) {
-        const snapshot = await db.collection('trials').limit(400).get();
-        if (snapshot.empty) break;
-        const batch = db.batch();
-        snapshot.docs.forEach((doc) => batch.delete(doc.ref));
-        await batch.commit();
-        total += snapshot.size;
-        if (snapshot.size < 400) break;
-    }
-    return total;
-};
-
-const saveSubjectsToFirestore = async (firebaseConfig, data) => {
-    const db = initializeFirebaseApp(firebaseConfig);
-    await db.collection('meta').doc('subjects').set({
-        items: Array.isArray(data) ? data : [],
-        updatedAt: new Date().toISOString()
-    }, { merge: true });
-};
-
-const seedInitialTrialsToFirestore = async (firebaseConfig, trialsData) => {
-    const db = initializeFirebaseApp(firebaseConfig);
-    const existing = await db.collection('trials').limit(1).get();
-    if (!existing.empty) return false;
-    const batch = db.batch();
+    const updates = {};
     (trialsData || []).forEach((trial) => {
         const cleaned = cleanTrialForSave(trial);
         if (cleaned && cleaned.code) {
-            batch.set(db.collection('trials').doc(cleaned.code), cleaned, { merge: true });
+            updates[firebaseTrialKey(cleaned.code)] = toFirebaseValue(cleaned);
         }
     });
-    await batch.commit();
+    if (Object.keys(updates).length) {
+        await db.ref('trials').update(updates);
+    }
+};
+
+const deleteTrialFromRealtimeDatabase = async (firebaseConfig, code) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    await db.ref(`trials/${firebaseTrialKey(code)}`).remove();
+};
+
+const clearTrialsFromRealtimeDatabase = async (firebaseConfig) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    const ref = db.ref('trials');
+    const snapshot = await ref.once('value');
+    const total = snapshot.numChildren();
+    await ref.remove();
+    return total;
+};
+
+const saveSubjectsToRealtimeDatabase = async (firebaseConfig, data) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    const encrypted = encryptData(Array.isArray(data) ? data : []);
+    if (!encrypted) throw new Error('受試者資料加密失敗');
+    await db.ref('subjects').set(encrypted);
+};
+
+const seedInitialTrialsToRealtimeDatabase = async (firebaseConfig, trialsData) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    const initialMap = {};
+    (trialsData || []).forEach((trial) => {
+        const cleaned = cleanTrialForSave(trial);
+        if (cleaned && cleaned.code) {
+            initialMap[firebaseTrialKey(cleaned.code)] = toFirebaseValue(cleaned);
+        }
+    });
+    const ref = db.ref('trials');
+    const existing = await ref.once('value');
+    if (existing.exists()) return false;
+    await ref.transaction((current) => current || initialMap);
     return true;
 };
 
@@ -515,8 +574,8 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
-                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
+        e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.10 Realtime Database版'),
+        e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firebase Realtime Database 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
                 e('input', {
@@ -618,11 +677,11 @@ function TrialCard(props) {
             e('div', {className: 'grid grid-cols-2 gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '研究護士: '),
-                    e('span', null, trial.nurse || '')
+                    e('span', {className: 'whitespace-pre-wrap break-words'}, trial.nurse || '')
                 ),
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '聯絡方式: '),
-                    e('span', null, trial.phone || '')
+                    e('span', {className: 'whitespace-pre-wrap break-words'}, trial.phone || '')
                 )
             ),
             e('div', {className: 'grid grid-cols-2 gap-4'},
@@ -1284,7 +1343,12 @@ function ImportStatusModal(props) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
         }
-        await props.onImport(parsed, { replaceCloud });
+        try {
+            await props.onImport(parsed, { replaceCloud });
+        } catch (error) {
+            console.error('Import failed:', error);
+            alert(`匯入失敗：${error.message || error}`);
+        }
     };
 
     return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-24 pb-8 px-4 overflow-y-auto'},
@@ -1337,7 +1401,7 @@ function ImportStatusModal(props) {
                         onChange: (ev) => setReplaceCloud(ev.target.checked),
                         className: 'w-4 h-4'
                     }),
-                    e('span', null, '以本檔重建雲端主資料（先清空 Firestore trials，再匯入本檔）')
+                    e('span', null, '以本檔重建雲端主資料（先清空 Realtime Database trials，再匯入本檔）')
                 ),
                 e('button', {
                     type: 'button',
@@ -1372,6 +1436,7 @@ function FirebaseConfigModal(props) {
             e('div', {className: 'grid grid-cols-1 md:grid-cols-2 gap-4'},
                 field('apiKey', 'apiKey'),
                 field('authDomain', 'authDomain', 'xxx.firebaseapp.com'),
+                field('databaseURL', 'databaseURL', 'https://xxx-default-rtdb.firebaseio.com'),
                 field('projectId', 'projectId'),
                 field('storageBucket', 'storageBucket', 'xxx.appspot.com'),
                 field('messagingSenderId', 'messagingSenderId'),
@@ -1383,10 +1448,6 @@ function FirebaseConfigModal(props) {
                     onClick: () => props.onSave(form),
                     className: 'flex-1 px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold'
                 }, '儲存並啟用'),
-                e('button', {
-                    onClick: props.onDisable,
-                    className: 'px-5 py-3 bg-slate-200 text-slate-700 rounded-xl hover:bg-slate-300 font-semibold'
-                }, '停用雲端同步'),
                 e('button', {
                     onClick: props.onClose,
                     className: 'px-5 py-3 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 font-semibold'
@@ -1412,8 +1473,7 @@ function App() {
     const [showImportModal, setShowImportModal] = useState(false);
     const [syncStatus, setSyncStatus] = useState('');
     const [showArchived, setShowArchived] = useState(false);
-    const [firebaseConfig, setFirebaseConfig] = useState(DEFAULT_FIREBASE_CONFIG);
-    const [firebaseEnabled, setFirebaseEnabled] = useState(true);
+    const [firebaseConfig, setFirebaseConfig] = useState(() => getStoredFirebaseConfig());
     const [showFirebaseModal, setShowFirebaseModal] = useState(false);
     const unsubscribeRef = useRef(null);
     
@@ -1444,9 +1504,9 @@ function App() {
             try { unsubscribeRef.current(); } catch (e) {}
             unsubscribeRef.current = null;
         }
-        if (!firebaseEnabled || !firebaseConfig) return;
-        setSyncStatus('Firebase 連線中...');
-        unsubscribeRef.current = subscribeFirestoreData({
+        if (!firebaseConfig) return;
+        setSyncStatus('Firebase Realtime Database 連線中...');
+        unsubscribeRef.current = subscribeRealtimeData({
             firebaseConfig,
             onTrials: async (remoteTrials) => {
                 setTrials(remoteTrials);
@@ -1462,7 +1522,7 @@ function App() {
                 setSyncStatus(`Firebase 同步失敗：${error.message || error}`);
             }
         });
-        seedInitialTrialsToFirestore(firebaseConfig, INITIAL_TRIALS)
+        seedInitialTrialsToRealtimeDatabase(firebaseConfig, INITIAL_TRIALS)
             .then((seeded) => {
                 if (seeded) setSyncStatus(`已初始化雲端主資料（${INITIAL_TRIALS.length} 個試驗）`);
             })
@@ -1473,12 +1533,12 @@ function App() {
                 unsubscribeRef.current = null;
             }
         };
-    }, [firebaseEnabled, firebaseConfig]);
+    }, [firebaseConfig]);
     
     const saveTrials = async (data) => {
         setTrials(data);
         await saveAllData(data, subjects);
-        setSyncStatus(firebaseEnabled ? `已更新本機快取，等待 Firebase 同步（${data.length} 個試驗）` : `已儲存到本機資料（${data.length} 個試驗）`);
+        setSyncStatus(`已更新本機快取，等待 Firebase 同步（${data.length} 個試驗）`);
     };
 
     const handleSaveTrial = async (trialData) => {
@@ -1487,18 +1547,19 @@ function App() {
             updatedBy: isAdmin ? CONFIG.ADMIN_USERNAME : 'user'
         });
         const existing = trials.find(t => normalizeCode(t.code) === normalizeCode(prepared.code));
-        let updatedTrials = upsertTrialsByCode(trials, [prepared]);
-        setTrials(updatedTrials);
-        await saveAllData(updatedTrials, subjects);
-        if (firebaseEnabled && firebaseConfig) {
-            await saveTrialToFirestore(firebaseConfig, prepared);
+        try {
+            await saveTrialToRealtimeDatabase(firebaseConfig, prepared);
+            const updatedTrials = upsertTrialsByCode(trials, [prepared]);
+            setTrials(updatedTrials);
+            await saveAllData(updatedTrials, subjects);
             setSyncStatus(`已同步到 Firebase：${prepared.code}`);
-        } else {
-            setSyncStatus(`已儲存到本機資料：${prepared.code}`);
+            setShowAddModal(false);
+            setShowEditModal(null);
+            alert(existing ? '試驗已更新！' : '試驗已新增！');
+        } catch (error) {
+            console.error('Save trial failed:', error);
+            alert(`儲存失敗，資料未寫入 Firebase：${error.message || error}`);
         }
-        setShowAddModal(false);
-        setShowEditModal(null);
-        alert(existing ? '試驗已更新！' : '試驗已新增！');
     };
 
     const handleImportStudyStatus = async (incomingRows, options = {}) => {
@@ -1509,48 +1570,46 @@ function App() {
         let cleared = 0;
 
         if (replaceCloud) {
-            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Firestore trials collection，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
-            if (firebaseEnabled && firebaseConfig) {
-                setSyncStatus('正在清空 Firestore trials...');
-                cleared = await clearTrialsFromFirestore(firebaseConfig);
+            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Realtime Database trials，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
+            if (firebaseConfig) {
+                setSyncStatus('正在清空 Realtime Database trials...');
+                cleared = await clearTrialsFromRealtimeDatabase(firebaseConfig);
             }
             baseTrials = [];
         }
 
         const merged = upsertTrialsByCode(baseTrials, uniqueRows);
-        setTrials(merged);
-        await saveAllData(merged, subjects);
         let added = 0, updated = 0, skipped = 0;
         const existingMap = new Map((baseTrials || []).map(t => [normalizeCode(t.code), t]));
         for (const row of uniqueRows) {
             const key = normalizeCode(row.code);
             if (!key) { skipped++; continue; }
             if (existingMap.has(key)) updated++; else added++;
-            if (firebaseEnabled && firebaseConfig) {
-                await saveTrialToFirestore(firebaseConfig, { ...existingMap.get(key), ...row });
-            }
         }
+        await saveTrialsToRealtimeDatabase(
+            firebaseConfig,
+            uniqueRows.map((row) => ({ ...existingMap.get(normalizeCode(row.code)), ...row }))
+        );
+        setTrials(merged);
+        await saveAllData(merged, subjects);
         const prefix = replaceCloud ? ('已清空 ' + cleared + ' 筆後重建；') : '';
         const msg = prefix + '已匯入：新增 ' + added + ' / 更新 ' + updated + ' / 跳過 ' + skipped + '；重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆';
-        setSyncStatus(firebaseEnabled ? ('Firebase ' + msg) : ('本機 ' + msg));
+        setSyncStatus('Firebase ' + msg);
         setShowImportModal(false);
         alert('已完成匯入：' + (replaceCloud ? ('已清空 ' + cleared + ' 筆；') : '') + '新增 ' + added + ' 筆、更新 ' + updated + ' 筆、跳過 ' + skipped + ' 筆。重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆。');
     };
 
 
     const handleClearCloudTrials = async () => {
-        if (!firebaseEnabled || !firebaseConfig) {
-            alert('Firebase 尚未啟用，無法清空雲端資料。');
-            return;
-        }
-        const ok = window.confirm('確定要清空 Firestore 的 trials collection？\n\n這會刪除雲端全部試驗資料；建議清空後立刻用最新版 Excel「匯入資料」重建。');
+        if (!firebaseConfig) return;
+        const ok = window.confirm('確定要清空 Realtime Database 的 trials？\n\n這會刪除雲端全部試驗資料；建議清空後立刻用最新版 Excel「匯入資料」重建。');
         if (!ok) return;
         try {
-            setSyncStatus('正在清空 Firestore trials...');
-            const cleared = await clearTrialsFromFirestore(firebaseConfig);
+            setSyncStatus('正在清空 Realtime Database trials...');
+            const cleared = await clearTrialsFromRealtimeDatabase(firebaseConfig);
             setTrials([]);
             await saveAllData([], subjects);
-            setSyncStatus('已清空 Firestore trials：' + cleared + ' 筆。請接著匯入最新版 Excel 重建主資料。');
+            setSyncStatus('已清空 Realtime Database trials：' + cleared + ' 筆。請接著匯入最新版 Excel 重建主資料。');
             alert('已清空 ' + cleared + ' 筆雲端試驗資料。請接著匯入最新版 Excel。');
         } catch (error) {
             console.error(error);
@@ -1586,15 +1645,11 @@ function App() {
             }
             const mergedTrials = upsertTrialsByCode(trials, data.trials);
             const mergedSubjects = Array.isArray(data.subjects) ? data.subjects : subjects;
+            await saveTrialsToRealtimeDatabase(firebaseConfig, data.trials);
+            await saveSubjectsToRealtimeDatabase(firebaseConfig, mergedSubjects);
             setTrials(mergedTrials);
             setSubjects(mergedSubjects);
             await saveAllData(mergedTrials, mergedSubjects);
-            if (firebaseEnabled && firebaseConfig) {
-                for (const trial of data.trials) {
-                    await saveTrialToFirestore(firebaseConfig, trial);
-                }
-                await saveSubjectsToFirestore(firebaseConfig, mergedSubjects);
-            }
             setSyncStatus(`已匯入 JSON 並自動合併（${data.trials.length} 個試驗）`);
             alert('匯入 JSON 完成');
         } catch (error) {
@@ -1605,36 +1660,45 @@ function App() {
         }
     };
 
-    const downloadCSV = () => {
-        const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
+    const downloadExcel = () => {
         const rows = filtered.map(trial => {
             const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
                 `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
             ).join('; ') : '';
-            
-            return [
-                trial.code || '',
-                trial.studyTitle || '',
-                cancerInfo,
-                trial.phase || '',
-                trial.pi || '',
-                trial.nurse || '',
-                trial.phone || '',
-                trial.status || '',
-                `${trial.enrolled || 0}/${trial.targetNum || 0}`
-            ];
+
+            return {
+                '試驗代碼': trial.code || '',
+                '試驗標題': trial.studyTitle || '',
+                '癌症類型與治療線': cancerInfo,
+                '期別': trial.phase || '',
+                '贊助商': trial.sponsor || '',
+                'PI': trial.pi || '',
+                '研究護士': trial.nurse || '',
+                '聯絡方式': trial.phone || '',
+                '狀態': trial.status || '',
+                '目前已收案': trial.enrolled || 0,
+                '目標收案': trial.targetNum || 0,
+                '本月簽署': trial.monthSigned || 0,
+                '本月收案': trial.monthEnrolled || 0,
+                '收案條件': trial.inclusion || '',
+                '排除條件': trial.exclusion || '',
+                '備註': trial.comments || '',
+                '是否封存': trial.isArchived ? '是' : '否',
+                '封存日期': trial.archiveDate || '',
+                '封存原因': trial.archiveReason || ''
+            };
         });
-        
-        const csvContent = [headers, ...rows]
-            .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-            .join('\n');
-        
-        const BOM = '\uFEFF';
-        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
+
+        const sheet = XLSX.utils.json_to_sheet(rows);
+        sheet['!cols'] = [
+            {wch: 18}, {wch: 55}, {wch: 28}, {wch: 10}, {wch: 18},
+            {wch: 14}, {wch: 24}, {wch: 20}, {wch: 12}, {wch: 12},
+            {wch: 12}, {wch: 12}, {wch: 12}, {wch: 55}, {wch: 55},
+            {wch: 40}, {wch: 10}, {wch: 14}, {wch: 30}
+        ];
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, sheet, '臨床試驗');
+        XLSX.writeFile(workbook, `臨床試驗列表_${new Date().toISOString().split('T')[0]}.xlsx`);
     };
     
     const generatePDF = () => {
@@ -1715,13 +1779,14 @@ function App() {
     };
     
     const saveSubjects = async (data) => {
-        setSubjects(data);
-        await saveAllData(trials, data);
-        if (firebaseEnabled && firebaseConfig) {
-            await saveSubjectsToFirestore(firebaseConfig, data);
+        try {
+            await saveSubjectsToRealtimeDatabase(firebaseConfig, data);
+            setSubjects(data);
+            await saveAllData(trials, data);
             setSyncStatus('受試者資料已同步到 Firebase');
-        } else {
-            setSyncStatus('受試者資料已儲存到本機資料');
+        } catch (error) {
+            console.error('Save subjects failed:', error);
+            alert(`受試者資料儲存失敗：${error.message || error}`);
         }
     };
     
@@ -1751,13 +1816,15 @@ function App() {
         if (confirm('確定要刪除此試驗？')) {
             const target = trials.find(t => t.id === id);
             const updated = trials.filter(t => t.id !== id);
-            setTrials(updated);
-            await saveAllData(updated, subjects);
-            if (firebaseEnabled && firebaseConfig && target && target.code) {
-                await deleteTrialFromFirestore(firebaseConfig, target.code);
+            try {
+                if (!target || !target.code) throw new Error('找不到試驗代碼');
+                await deleteTrialFromRealtimeDatabase(firebaseConfig, target.code);
+                setTrials(updated);
+                await saveAllData(updated, subjects);
                 setSyncStatus(`已自 Firebase 刪除：${target.code}`);
-            } else {
-                await saveTrials(updated);
+            } catch (error) {
+                console.error('Delete trial failed:', error);
+                alert(`刪除失敗，Firebase 資料未變更：${error.message || error}`);
             }
         }
     };
@@ -1851,29 +1918,25 @@ function App() {
     
     const handleSaveFirebaseConfig = async (cfg) => {
         try {
-            if (!cfg.apiKey || !cfg.projectId || !cfg.appId) {
-                alert('請至少填 apiKey / projectId / appId');
+            if (!cfg.apiKey || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
+                alert('請至少填 apiKey / databaseURL / projectId / appId');
                 return;
             }
-            initializeFirebaseApp(cfg);
+            if (unsubscribeRef.current) {
+                try { unsubscribeRef.current(); } catch (e) {}
+                unsubscribeRef.current = null;
+            }
+            await reinitializeFirebaseApp(cfg);
             setStoredFirebaseConfig(cfg);
             setFirebaseConfig(cfg);
-            setFirebaseEnabled(true);
             setShowFirebaseModal(false);
-            setSyncStatus('Firebase 已啟用，正在同步...');
+            setSyncStatus('Firebase Realtime Database 正在同步...');
         } catch (error) {
             console.error(error);
             alert(`Firebase 設定失敗：${error.message || error}`);
         }
     };
 
-    const handleDisableFirebase = () => {
-        localStorage.removeItem(CONFIG.FIREBASE_ENABLED_KEY);
-        setFirebaseEnabled(false);
-        setShowFirebaseModal(false);
-        setSyncStatus('已切回本機模式');
-    };
-    
     if (!isAuth) {
         return e(AccessPasswordModal, {onAuth: handleAuth});
     }
@@ -1888,7 +1951,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.10 Realtime Database版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -1938,9 +2001,9 @@ function App() {
                 isAdmin && e('button', {
                     onClick: () => setShowFirebaseModal(true),
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-xl hover:from-sky-600 hover:to-cyan-600 transition-all shadow-lg font-semibold'
-                }, firebaseEnabled ? '雲端同步（已啟用）' : '雲端同步'),
+                }, 'Firebase 同步設定'),
                 e('button', {
-                    onClick: downloadCSV,
+                    onClick: downloadExcel,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
                 },
                     e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
@@ -2036,12 +2099,12 @@ function App() {
             showFirebaseModal && e(FirebaseConfigModal, {
                 initialConfig: firebaseConfig || {},
                 onClose: () => setShowFirebaseModal(false),
-                onSave: handleSaveFirebaseConfig,
-                onDisable: handleDisableFirebase
+                onSave: handleSaveFirebaseConfig
             })
     );
 }
 
+document.getElementById('boot-error').style.display = 'none';
 ReactDOM.render(e(App), document.getElementById('app'));
     </script>
 </body>
