@@ -1,0 +1,43 @@
+name: Prepare v4.10 dependencies
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vendorize.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendorize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pinned dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p vendor
+          rm -f vendor/.keep
+          curl --fail --location --retry 3 'https://cdn.tailwindcss.com/3.4.17' -o vendor/tailwindcss-3.4.17.js
+          curl --fail --location --retry 3 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js' -o vendor/crypto-js-4.1.1.min.js
+          curl --fail --location --retry 3 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js' -o vendor/firebase-app-10.12.2-compat.js
+          curl --fail --location --retry 3 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js' -o vendor/firebase-database-10.12.2-compat.js
+          curl --fail --location --retry 3 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js' -o vendor/xlsx-0.18.5.full.min.js
+          curl --fail --location --retry 3 'https://unpkg.com/react@18/umd/react.production.min.js' -o vendor/react-18.production.min.js
+          curl --fail --location --retry 3 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js' -o vendor/react-dom-18.production.min.js
+      - name: Commit dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vendor
+          if git diff --cached --quiet; then
+            echo 'Pinned dependencies already present.'
+          else
+            git commit -m 'Vendor pinned frontend dependencies for v4.10'
+            git push
+          fi
