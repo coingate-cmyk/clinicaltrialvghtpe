@@ -41,3 +41,5 @@ jobs:
             git commit -m 'Vendor pinned frontend dependencies for v4.10'
             git push
           fi
+
+# Triggered after write authorization was confirmed.
