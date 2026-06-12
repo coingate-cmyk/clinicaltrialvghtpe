@@ -106,15 +106,33 @@ const decryptData = (encrypted) => {
 const normalizeCode = (v) => String(v || '').trim().toUpperCase();
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
 const normalizeMultilineText = (v) => String(v ?? '').replace(/\r\n/g, '\n').trim();
+const normalizeTreatmentLine = (value) => {
+    let line = normalizeText(value);
+    if (!line) return '';
+    const compactLine = line.replace(/\s+/g, '');
+    if (/adjuv|輔助|術後|觀察性/i.test(compactLine)) return 'Adjuvant';
+    if (line === '一' || line === '線') return '一線';
+    const numerals = { '1': '一', '2': '二', '3': '三', '4': '四' };
+    line = line
+        .replace(/第\s*([一二三四1-4])/g, '$1')
+        .replace(/[1-4]/g, digit => numerals[digit])
+        .replace(/([一二三四])\s*l\b/gi, '$1線')
+        .replace(/([一二三四])\s*線/g, '$1線');
+    return line
+        .replace(/一腺/g, '一線')
+        .replace(/\s*([、,，/／-])\s*/g, '$1')
+        .trim();
+};
 const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）]+/g, '').trim();
 const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
 const lineMatchesSelection = (line, selected) => {
     if (!selected || selected === '全部') return true;
     const n = normalizeFilterValue(line);
     if (!n) return false;
-    if (selected === '第一線') return n.includes('第一線') || n.includes('一線') || n.includes('1l') || n.includes('firstline') || n.includes('一腺');
-    if (selected === '第二線') return n.includes('第二線') || n.includes('二線') || n.includes('2l') || n.includes('一線後') || n.includes('二三線');
-    if (selected === '第三線') return n.includes('第三線') || n.includes('三線') || n.includes('3l') || n.includes('二線後') || n.includes('二三線');
+    if (selected === '一線') return n.includes('第一線') || n.includes('一線') || n.includes('1l') || n.includes('firstline') || n.includes('一腺');
+    if (selected === '二線') return n.includes('第二線') || n.includes('二線') || n.includes('2l') || n.includes('一線後') || n.includes('二三線');
+    if (selected === '三線') return n.includes('第三線') || n.includes('三線') || n.includes('3l') || n.includes('二線後') || n.includes('二三線');
+    if (selected === '四線') return n.includes('第四線') || n.includes('四線') || n.includes('4l');
     if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
     if (selected === '多線') return n.includes('多線') || n.includes('multi') || n.includes('後線') || n.includes('laterline');
     return normalizeFilterValue(selected) === n || n.includes(normalizeFilterValue(selected));
@@ -187,6 +205,15 @@ const cleanTrialForSave = (trial) => {
     cleaned.enrolled = normalizeMultilineText(cleaned.enrolled);
     cleaned.monthSigned = normalizeMultilineText(cleaned.monthSigned);
     cleaned.monthEnrolled = normalizeMultilineText(cleaned.monthEnrolled);
+    cleaned.line = normalizeTreatmentLine(cleaned.line);
+    if (Array.isArray(cleaned.cancerTypes)) {
+        cleaned.cancerTypes = cleaned.cancerTypes.map((ct) => ({
+            ...ct,
+            lines: Array.isArray(ct.lines)
+                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
+                : []
+        }));
+    }
     cleaned.updatedAt = new Date().toISOString();
     return cleaned;
 };
@@ -207,6 +234,15 @@ const normalizeFirebaseTrial = (raw) => {
     trial.enrolled = normalizeMultilineText(trial.enrolled);
     trial.monthSigned = normalizeMultilineText(trial.monthSigned);
     trial.monthEnrolled = normalizeMultilineText(trial.monthEnrolled);
+    trial.line = normalizeTreatmentLine(trial.line);
+    if (Array.isArray(trial.cancerTypes)) {
+        trial.cancerTypes = trial.cancerTypes.map((ct) => ({
+            ...ct,
+            lines: Array.isArray(ct.lines)
+                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
+                : []
+        }));
+    }
     if (!Array.isArray(trial.cancerTypes)) trial.cancerTypes = Array.isArray(trial.cancerTypes) ? trial.cancerTypes : [];
     return trial;
 };
@@ -370,7 +406,7 @@ const detectStatusFromRow = (row) => {
 
 const normalizeCancerLine = (cancerType, line) => {
     let c = normalizeCellText(cancerType);
-    let l = normalizeCellText(line);
+    let l = normalizeTreatmentLine(line);
     if (!c && l.startsWith('肝癌')) {
         c = '肝癌';
         l = l.replace(/^肝癌/, '').trim();
@@ -400,7 +436,7 @@ const consolidateParsedTrials = (rows) => {
         const addCt = (ct) => {
             if (!ct) return;
             const type = normalizeCellText(ct.type || '');
-            const lines = Array.isArray(ct.lines) ? ct.lines.map(normalizeCellText).filter(Boolean) : [];
+            const lines = Array.isArray(ct.lines) ? ct.lines.map(normalizeTreatmentLine).filter(Boolean) : [];
             if (!type && !lines.length) return;
             const k = normalizeFilterValue(type || '未分類');
             const prev = ctMap.get(k) || { type: type || '', lines: [] };
@@ -548,6 +584,13 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
             merged.cancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
         }
+        merged.line = normalizeTreatmentLine(merged.line);
+        merged.cancerTypes = merged.cancerTypes.map((ct) => ({
+            ...ct,
+            lines: Array.isArray(ct.lines)
+                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
+                : []
+        }));
 
         map.set(key, merged);
     });
@@ -1034,7 +1077,7 @@ function TrialFormModal(props) {
             .filter(cl => cl.type && cl.lines)
             .map(cl => ({
                 type: cl.type,
-                lines: cl.lines.split(',').map(l => l.trim()).filter(Boolean)
+                lines: cl.lines.split(/[,，]/).map(normalizeTreatmentLine).filter(Boolean)
             }));
         
         if (cancerTypes.length === 0) {
@@ -1315,6 +1358,9 @@ function ImportStatusModal(props) {
     const [parsedRows, setParsedRows] = useState([]);
     const [importInfo, setImportInfo] = useState(null);
     const [busy, setBusy] = useState(false);
+    const [importing, setImporting] = useState(false);
+    const [importProgress, setImportProgress] = useState(0);
+    const [importMessage, setImportMessage] = useState('');
     const [replaceCloud, setReplaceCloud] = useState(false);
 
     const handlePreview = () => {
@@ -1361,6 +1407,7 @@ function ImportStatusModal(props) {
     };
 
     const handleImport = async () => {
+        if (importing) return;
         const raw = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
         const info = analyzeParsedTrials(raw);
         const parsed = info.rows;
@@ -1370,10 +1417,27 @@ function ImportStatusModal(props) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
         }
+        setImporting(true);
+        setImportProgress(10);
+        setImportMessage(`已確認 ${info.uniqueCount} 筆資料，準備上傳...`);
         try {
-            await props.onImport(parsed, { replaceCloud });
+            const completed = await props.onImport(parsed, {
+                replaceCloud,
+                onProgress: (progress, message) => {
+                    setImportProgress(progress);
+                    setImportMessage(message);
+                }
+            });
+            if (completed === false) {
+                setImportProgress(0);
+                setImportMessage('');
+                setImporting(false);
+            }
         } catch (error) {
             console.error('Import failed:', error);
+            setImportProgress(0);
+            setImportMessage('');
+            setImporting(false);
             alert(`匯入失敗：${error.message || error}`);
         }
     };
@@ -1384,6 +1448,7 @@ function ImportStatusModal(props) {
                 e('h3', {className: 'text-2xl font-bold text-slate-800'}, '匯入 Study Status'),
                 e('button', {
                     onClick: props.onClose,
+                    disabled: importing,
                     className: 'text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none'
                 }, '×')
             ),
@@ -1400,6 +1465,19 @@ function ImportStatusModal(props) {
                 }),
                 fileName && e('div', {className: 'text-xs text-slate-500 mt-2'}, `已選擇：${fileName}`),
                 busy && e('div', {className: 'text-xs text-blue-600 mt-2'}, '讀取中...')
+            ),
+            importing && e('div', {className: 'mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl'},
+                e('div', {className: 'flex justify-between text-sm font-semibold text-blue-800 mb-2'},
+                    e('span', null, importMessage || '正在處理匯入...'),
+                    e('span', null, `${importProgress}%`)
+                ),
+                e('div', {className: 'w-full h-3 bg-blue-100 rounded-full overflow-hidden'},
+                    e('div', {
+                        className: 'h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-300',
+                        style: {width: `${importProgress}%`}
+                    })
+                ),
+                e('div', {className: 'text-xs text-blue-700 mt-2'}, '請保持此視窗開啟；完成後會自動關閉並顯示結果。')
             ),
             e('div', {className: 'mb-3 p-3 bg-slate-50 rounded-lg text-xs text-slate-700 whitespace-pre-wrap'},
                 '核心欄位至少需能辨識 code。其餘欄位可自由丟：studyTitle / sponsor / phase / targetNum / enrolled / pi / nurse / phone / status / comments 等。'
@@ -1425,6 +1503,7 @@ function ImportStatusModal(props) {
                     e('input', {
                         type: 'checkbox',
                         checked: replaceCloud,
+                        disabled: importing,
                         onChange: (ev) => setReplaceCloud(ev.target.checked),
                         className: 'w-4 h-4'
                     }),
@@ -1433,8 +1512,13 @@ function ImportStatusModal(props) {
                 e('button', {
                     type: 'button',
                     onClick: handleImport,
-                    className: 'ml-auto px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg hover:from-emerald-600 hover:to-green-700 font-semibold'
-                }, '匯入並自動合併更新')
+                    disabled: importing || busy,
+                    className: `ml-auto px-5 py-2 text-white rounded-lg font-semibold transition-all ${
+                        importing || busy
+                            ? 'bg-slate-400 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700'
+                    }`
+                }, importing ? `匯入處理中 ${importProgress}%` : '匯入並自動合併更新')
             )
         )
     );
@@ -1596,6 +1680,10 @@ function App() {
     };
 
     const handleImportStudyStatus = async (incomingRows, options = {}) => {
+        const reportProgress = typeof options.onProgress === 'function'
+            ? options.onProgress
+            : () => {};
+        reportProgress(20, '正在整理與統一治療線別...');
         const activeFirebaseConfig = resolveFirebaseConfig(firebaseConfig);
         setStoredFirebaseConfig(activeFirebaseConfig);
         const importAnalysis = analyzeParsedTrials(incomingRows);
@@ -1605,8 +1693,9 @@ function App() {
         let cleared = 0;
 
         if (replaceCloud) {
-            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Realtime Database trials，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
+            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Realtime Database trials，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return false;
             if (activeFirebaseConfig) {
+                reportProgress(35, '正在清空舊的雲端試驗資料...');
                 setSyncStatus('正在清空 Realtime Database trials...');
                 cleared = await clearTrialsFromRealtimeDatabase(activeFirebaseConfig);
             }
@@ -1621,17 +1710,22 @@ function App() {
             if (!key) { skipped++; continue; }
             if (existingMap.has(key)) updated++; else added++;
         }
+        reportProgress(55, `正在寫入 Firebase（${uniqueRows.length} 筆）...`);
         await saveTrialsToRealtimeDatabase(
             activeFirebaseConfig,
             uniqueRows.map((row) => ({ ...existingMap.get(normalizeCode(row.code)), ...row }))
         );
+        reportProgress(85, '雲端寫入完成，正在更新畫面與本機快取...');
         setTrials(merged);
         await saveAllData(merged, subjects);
         const prefix = replaceCloud ? ('已清空 ' + cleared + ' 筆後重建；') : '';
         const msg = prefix + '已匯入：新增 ' + added + ' / 更新 ' + updated + ' / 跳過 ' + skipped + '；重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆';
         setSyncStatus('Firebase ' + msg);
+        reportProgress(100, '匯入完成');
+        await new Promise(resolve => setTimeout(resolve, 300));
         setShowImportModal(false);
         alert('已完成匯入：' + (replaceCloud ? ('已清空 ' + cleared + ' 筆；') : '') + '新增 ' + added + ' 筆、更新 ' + updated + ' 筆、跳過 ' + skipped + ' 筆。重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆。');
+        return true;
     };
 
 
@@ -1948,7 +2042,7 @@ function App() {
     }, [trials]);
     
     const treatmentLines = useMemo(() => {
-        return ['全部', '第一線', '第二線', '第三線', 'Adjuvant', '多線'];
+        return ['全部', '一線', '二線', '三線', '四線', 'Adjuvant', '多線'];
     }, [trials]);
     
     const handleSaveFirebaseConfig = async (cfg) => {
