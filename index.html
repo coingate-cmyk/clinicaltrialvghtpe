@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.10 Realtime Database版</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>臨床試驗管理系統 v4.10.1 Realtime Database版</title>
     <script src="./vendor/tailwindcss-3.4.17.js"></script>
     <script src="./vendor/crypto-js-4.1.1.min.js"></script>
     <script src="./vendor/firebase-app-10.12.2-compat.js"></script>
@@ -37,7 +40,7 @@ const CONFIG = {
     ADMIN_USERNAME: 'admin',
     ADMIN_PASSWORD: 'admin123',
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026',
-    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4'
+    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4.10.1'
 };
 
 const DEFAULT_FIREBASE_CONFIG = {
@@ -51,13 +54,17 @@ const DEFAULT_FIREBASE_CONFIG = {
 };
 
 const resolveFirebaseConfig = (config) => {
-    const resolved = { ...DEFAULT_FIREBASE_CONFIG };
-    Object.entries(config || {}).forEach(([key, value]) => {
-        if (typeof value === 'string' ? value.trim() : value) {
-            resolved[key] = typeof value === 'string' ? value.trim() : value;
-        }
-    });
-    return resolved;
+    const candidate = Object.fromEntries(
+        Object.entries(config || {}).map(([key, value]) => [
+            key,
+            typeof value === 'string' ? value.trim() : value
+        ])
+    );
+    const isComplete = candidate.apiKey && candidate.databaseURL &&
+        candidate.projectId && candidate.appId;
+    return isComplete
+        ? { ...DEFAULT_FIREBASE_CONFIG, ...candidate }
+        : { ...DEFAULT_FIREBASE_CONFIG };
 };
 
 // 本機資料只作為離線快取；Firebase Realtime Database 是唯一的多人同步來源。
@@ -98,6 +105,7 @@ const decryptData = (encrypted) => {
 
 const normalizeCode = (v) => String(v || '').trim().toUpperCase();
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
+const normalizeMultilineText = (v) => String(v ?? '').replace(/\r\n/g, '\n').trim();
 const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）]+/g, '').trim();
 const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
 const lineMatchesSelection = (line, selected) => {
@@ -175,10 +183,10 @@ const cleanTrialForSave = (trial) => {
     cleaned.status = normalizeText(cleaned.status);
     cleaned.inclusion = cleaned.inclusion || '';
     cleaned.exclusion = cleaned.exclusion || '';
-    cleaned.targetNum = normalizeText(cleaned.targetNum);
-    cleaned.enrolled = normalizeText(cleaned.enrolled);
-    cleaned.monthSigned = normalizeText(cleaned.monthSigned);
-    cleaned.monthEnrolled = normalizeText(cleaned.monthEnrolled);
+    cleaned.targetNum = normalizeMultilineText(cleaned.targetNum);
+    cleaned.enrolled = normalizeMultilineText(cleaned.enrolled);
+    cleaned.monthSigned = normalizeMultilineText(cleaned.monthSigned);
+    cleaned.monthEnrolled = normalizeMultilineText(cleaned.monthEnrolled);
     cleaned.updatedAt = new Date().toISOString();
     return cleaned;
 };
@@ -195,10 +203,10 @@ const normalizeFirebaseTrial = (raw) => {
     trial.phase = trial.phase || '';
     trial.status = trial.status || '';
     trial.id = trial.id || trial.code || Date.now();
-    trial.targetNum = normalizeText(trial.targetNum);
-    trial.enrolled = normalizeText(trial.enrolled);
-    trial.monthSigned = normalizeText(trial.monthSigned);
-    trial.monthEnrolled = normalizeText(trial.monthEnrolled);
+    trial.targetNum = normalizeMultilineText(trial.targetNum);
+    trial.enrolled = normalizeMultilineText(trial.enrolled);
+    trial.monthSigned = normalizeMultilineText(trial.monthSigned);
+    trial.monthEnrolled = normalizeMultilineText(trial.monthEnrolled);
     if (!Array.isArray(trial.cancerTypes)) trial.cancerTypes = Array.isArray(trial.cancerTypes) ? trial.cancerTypes : [];
     return trial;
 };
@@ -531,10 +539,10 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
             archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
             archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
-            targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
-            enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
-            monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
-            monthEnrolled: Number.isFinite(Number(incoming.monthEnrolled)) ? Number(incoming.monthEnrolled) : (prev.monthEnrolled || 0),
+            targetNum: normalizeMultilineText(incoming.targetNum ?? prev.targetNum),
+            enrolled: normalizeMultilineText(incoming.enrolled ?? prev.enrolled),
+            monthSigned: normalizeMultilineText(incoming.monthSigned ?? prev.monthSigned),
+            monthEnrolled: normalizeMultilineText(incoming.monthEnrolled ?? prev.monthEnrolled),
         };
 
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
@@ -586,7 +594,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-        e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.10 Realtime Database版'),
+        e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.10.1 Realtime Database版'),
         e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firebase Realtime Database 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1519,6 +1527,12 @@ function App() {
     }, []);
 
     useEffect(() => {
+        const resolvedConfig = resolveFirebaseConfig(firebaseConfig);
+        setStoredFirebaseConfig(resolvedConfig);
+        if (JSON.stringify(resolvedConfig) !== JSON.stringify(firebaseConfig)) {
+            setFirebaseConfig(resolvedConfig);
+            return;
+        }
         if (unsubscribeRef.current) {
             try { unsubscribeRef.current(); } catch (e) {}
             unsubscribeRef.current = null;
@@ -1582,6 +1596,8 @@ function App() {
     };
 
     const handleImportStudyStatus = async (incomingRows, options = {}) => {
+        const activeFirebaseConfig = resolveFirebaseConfig(firebaseConfig);
+        setStoredFirebaseConfig(activeFirebaseConfig);
         const importAnalysis = analyzeParsedTrials(incomingRows);
         const uniqueRows = importAnalysis.rows;
         const replaceCloud = !!options.replaceCloud;
@@ -1590,9 +1606,9 @@ function App() {
 
         if (replaceCloud) {
             if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Realtime Database trials，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
-            if (firebaseConfig) {
+            if (activeFirebaseConfig) {
                 setSyncStatus('正在清空 Realtime Database trials...');
-                cleared = await clearTrialsFromRealtimeDatabase(firebaseConfig);
+                cleared = await clearTrialsFromRealtimeDatabase(activeFirebaseConfig);
             }
             baseTrials = [];
         }
@@ -1606,7 +1622,7 @@ function App() {
             if (existingMap.has(key)) updated++; else added++;
         }
         await saveTrialsToRealtimeDatabase(
-            firebaseConfig,
+            activeFirebaseConfig,
             uniqueRows.map((row) => ({ ...existingMap.get(normalizeCode(row.code)), ...row }))
         );
         setTrials(merged);
@@ -1971,7 +1987,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.10 Realtime Database版'),
+                e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.10.1 Realtime Database版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
