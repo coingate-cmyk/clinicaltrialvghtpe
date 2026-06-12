@@ -356,11 +356,11 @@ const seedInitialTrialsToRealtimeDatabase = async (firebaseConfig, trialsData) =
 
 
 const FIELD_ALIASES = {
-    cancerType: ['cancertype','cancer type','癌別','疾病別','適應症','fff'],
-    line: ['line','treatment line','線別','治療線別'],
-    code: ['code','trial code','study code','protocol','protocol no','protocol number','試驗代碼','計畫代碼','案號','代號'],
-    studyTitle: ['studytitle','study title','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
-    inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','inclusion','eligibility','主要條件'],
+    cancerType: ['cancertype','cancer type','cancer','tumor type','癌別','癌症別','疾病別','疾病','適應症','fff'],
+    line: ['line','treatment line','therapy line','線別','治療線別','治療線'],
+    code: ['code','trial code','study code','protocol','protocol no','protocol number','protocol id','試驗代碼','試驗編號','計畫代碼','計畫編號','案號','代號'],
+    studyTitle: ['studytitle','study title','title','trial title','protocol title','study name','試驗名稱','試驗標題','計畫名稱','研究名稱'],
+    inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','納入條件','inclusion','inclusion criteria','eligibility','主要條件'],
     phase: ['phase','期別'],
     sponsor: ['sponsor','贊助商','廠商'],
     targetNum: ['targetnum','target','target number','target no','sample size','目標收案','目標個案數','目標數','target人數'],
@@ -368,7 +368,7 @@ const FIELD_ALIASES = {
     monthSigned: ['monthsigned','signed this month','本月簽署','本月簽同意書','本月簽署數','當月簽署人數'],
     monthEnrolled: ['monthenrolled','enrolled this month','本月收案','本月入組','當月入案人數'],
     pi: ['pi','principal investigator','主持人'],
-    nurse: ['nurse','crc','study nurse','study nurse/ phone','studynurse/phone','研究護理師','個管師'],
+    nurse: ['nurse','crc','study nurse','study nurse/ phone','studynurse/phone','research nurse','研究護理師','研究護士','個管師'],
     phone: ['phone','tel','電話','分機','聯絡電話'],
     status: ['status','狀態','收案狀態'],
     comments: ['comments','comment','note','notes','remark','備註','說明','comments (相關sae)','comments相關sae'],
@@ -377,20 +377,85 @@ const FIELD_ALIASES = {
 
 const STATUS_KEYWORDS = ['暫停收案','名額已滿','停止收案','試驗結束','試驗終了','還未SIV','未SIV','預備中','close-out','closed','paused','suspended'];
 
-const normalizeHeader = (value) => String(value || '').toLowerCase().replace(/[\s_\-（）()\/]+/g, '').trim();
+const normalizeHeader = (value) => String(value || '')
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[：:、，,.。;；'"`~!！?？\s_\-（）()\/\\]+/g, '')
+    .trim();
 const normalizeCellText = (value) => String(value ?? '').replace(/\r\n/g, '\n').trim();
 
-const inferFieldFromHeader = (header) => {
-    const normalized = normalizeHeader(header);
-    for (const [field, aliases] of Object.entries(FIELD_ALIASES)) {
-        if (aliases.some(alias => normalizeHeader(alias) === normalized)) return field;
+const editDistance = (left, right) => {
+    const a = String(left || '');
+    const b = String(right || '');
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const previous = Array.from({length: b.length + 1}, (_, index) => index);
+    for (let i = 1; i <= a.length; i++) {
+        let diagonal = previous[0];
+        previous[0] = i;
+        for (let j = 1; j <= b.length; j++) {
+            const above = previous[j];
+            previous[j] = Math.min(
+                previous[j] + 1,
+                previous[j - 1] + 1,
+                diagonal + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+            diagonal = above;
+        }
     }
-    return null;
+    return previous[b.length];
+};
+
+const headerAliasScore = (header, alias) => {
+    const value = normalizeHeader(header);
+    const target = normalizeHeader(alias);
+    if (!value || !target) return 0;
+    if (value === target) return 1;
+
+    const shorter = Math.min(value.length, target.length);
+    const longer = Math.max(value.length, target.length);
+    if (shorter >= 3 && (value.includes(target) || target.includes(value))) {
+        return 0.9 * (shorter / longer) + 0.08;
+    }
+
+    const distance = editDistance(value, target);
+    if (value.length === target.length && distance === 2) {
+        for (let index = 0; index < value.length - 1; index++) {
+            if (
+                value[index] === target[index + 1] &&
+                value[index + 1] === target[index] &&
+                value.slice(0, index) === target.slice(0, index) &&
+                value.slice(index + 2) === target.slice(index + 2)
+            ) return 0.86;
+        }
+    }
+    if (longer <= 2) return 0;
+    if (longer <= 5) return distance === 1 ? 0.82 : 0;
+    const similarity = 1 - distance / longer;
+    return similarity >= 0.72 ? similarity : 0;
+};
+
+const inferFieldDetails = (header) => {
+    let best = { field: null, score: 0, alias: '' };
+    for (const [field, aliases] of Object.entries(FIELD_ALIASES)) {
+        for (const alias of aliases) {
+            const score = headerAliasScore(header, alias);
+            if (score > best.score) best = { field, score, alias };
+        }
+    }
+    return best.score >= 0.72 ? best : { field: null, score: best.score, alias: best.alias };
+};
+
+const inferFieldFromHeader = (header) => {
+    return inferFieldDetails(header).field;
 };
 
 const isHeaderRow = (row) => {
     const mapped = (row || []).map(inferFieldFromHeader);
-    return mapped.includes('code') && mapped.includes('studyTitle');
+    const recognized = new Set(mapped.filter(Boolean));
+    return recognized.has('code') &&
+        (recognized.has('studyTitle') || recognized.size >= 3);
 };
 
 const isMetaCancerCell = (value) => {
@@ -419,16 +484,28 @@ const consolidateParsedTrials = (rows) => {
     const map = new Map();
     let duplicateCount = 0;
     (rows || []).forEach((row) => {
-        const key = normalizeCode(row && row.code);
+        const preparedRow = {
+            ...(row || {}),
+            line: normalizeTreatmentLine(row && row.line),
+            cancerTypes: Array.isArray(row && row.cancerTypes)
+                ? row.cancerTypes.map((ct) => ({
+                    ...ct,
+                    lines: Array.isArray(ct.lines)
+                        ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
+                        : []
+                }))
+                : row && row.cancerTypes
+        };
+        const key = normalizeCode(preparedRow.code);
         if (!key) return;
         const current = map.get(key);
         if (!current) {
-            map.set(key, { ...row, code: key });
+            map.set(key, { ...preparedRow, code: key });
             return;
         }
         duplicateCount++;
         const merged = { ...current };
-        Object.entries(row || {}).forEach(([field, value]) => {
+        Object.entries(preparedRow).forEach(([field, value]) => {
             if (field === 'cancerTypes') return;
             if (value !== undefined && value !== null && String(value).trim() !== '') merged[field] = value;
         });
@@ -447,8 +524,8 @@ const consolidateParsedTrials = (rows) => {
             ctMap.set(k, prev);
         };
         (Array.isArray(current.cancerTypes) ? current.cancerTypes : []).forEach(addCt);
-        (Array.isArray(row.cancerTypes) ? row.cancerTypes : []).forEach(addCt);
-        if (row.cancerType || row.line) addCt({ type: row.cancerType || '', lines: [row.line || ''].filter(Boolean) });
+        (Array.isArray(preparedRow.cancerTypes) ? preparedRow.cancerTypes : []).forEach(addCt);
+        if (preparedRow.cancerType || preparedRow.line) addCt({ type: preparedRow.cancerType || '', lines: [preparedRow.line || ''].filter(Boolean) });
         merged.cancerTypes = Array.from(ctMap.values());
         if (!merged.cancerType && merged.cancerTypes[0]) merged.cancerType = merged.cancerTypes[0].type;
         if (!merged.line && merged.cancerTypes[0] && merged.cancerTypes[0].lines[0]) merged.line = merged.cancerTypes[0].lines[0];
