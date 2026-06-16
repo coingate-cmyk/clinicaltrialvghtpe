@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.6 Firebase版</title>
+    <title>臨床試驗管理系統 v4.0.5 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -98,6 +98,77 @@ const extractTreatmentLineNumbers = (line) => {
     return numbers;
 };
 
+const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
+const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
+
+const addUniqueLineValue = (list, line) => {
+    const normalized = normalizeTreatmentLine(line);
+    if (normalized && !list.some(x => valueMatches(x, normalized))) list.push(normalized);
+};
+
+const nextChineseLineNumber = (n) => {
+    const cn = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(n || '').toLowerCase()] || n);
+    const idx = LINE_ORDER.indexOf(cn);
+    if (idx >= 0 && idx + 1 < LINE_ORDER.length) return LINE_ORDER[idx + 1];
+    return cn;
+};
+
+const extractLooseLineNumbers = (value) => {
+    const text = String(value || '').replace(/腺/g, '線').replace(/正/g, '');
+    const nums = [];
+    const add = (v) => {
+        const n = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(v || '').toLowerCase()] || v);
+        if (n && LINE_ORDER.includes(n) && !nums.includes(n)) nums.push(n);
+    };
+    extractTreatmentLineNumbers(text).forEach(add);
+    text.replace(new RegExp('(' + LINE_NUMERAL_REGEX + '(?:\\s*[、，,\\/／\\.．\\-–—~～至和及或]\\s*' + LINE_NUMERAL_REGEX + ')+)\\s*(?:線|l)', 'ig'), (_, seq) => { (seq.match(new RegExp(LINE_NUMERAL_REGEX, 'g')) || []).forEach(add); return ''; });
+    text.replace(/\b([1-9１２３４５６７８９])\s+lines?\b/ig, (_, n) => { add(n); return ''; });
+    text.replace(/\b(one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig, (_, n) => { add(n); return ''; });
+    text.replace(/\b([1-9１２３４５６７８９])\s*(?:or|and|to|through|-)\s*([1-9１２３４５６７８９])\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
+    text.replace(/\b(one|two|three|four|five|six|seven|eight|nine)\s*(?:or|and|to|through|-)\s*(one|two|three|four|five|six|seven|eight|nine)\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
+    return nums.sort((a, b) => LINE_ORDER.indexOf(a) - LINE_ORDER.indexOf(b));
+};
+
+const shiftPriorTherapyExpressionToCurrentLines = (expr) => {
+    const src = String(expr || '');
+    const suffix = /以上|\+/.test(src) ? '以上' : '';
+    const lines = [];
+    extractLooseLineNumbers(src).forEach(n => addUniqueLineValue(lines, `${nextChineseLineNumber(n)}線${suffix}`));
+    return lines;
+};
+
+const isPriorTherapyLineContext = (src, start, end) => {
+    const text = String(src || '');
+    const matched = text.slice(start, end);
+    const local = text.slice(Math.max(0, start - 55), Math.min(text.length, end + 70)).toLowerCase();
+    // 否定語或 treatment-naive 是「尚未接受」，不可往後推。
+    if (/(未曾|未接受|未經|未使用|不曾接受|尚未接受|先前未曾|沒有接受|無接受|treatment\s*[- ]?na[iï]ve|treatment\s*naive|untreated|no\s+prior|without\s+prior|not\s+received|has\s+not\s+received|have\s+not\s+received|previously\s+untreated)/i.test(local)) {
+        return false;
+    }
+    if (/後\s*$/.test(matched)) return true;
+    return /(已接受|已經接受|曾接受|曾經接受|先前接受|接受過|用過|已用過|曾用過|既往.{0,12}治療|標準療法.{0,12}失敗|治療失敗|一線失敗|二線失敗|三線失敗|復發.{0,12}後|惡化.{0,12}後|progressed\s+(?:on|after)|progression\s+(?:on|after)|after\s+(?:receiving|received|failure|progression)|following\s+(?:prior|previous)|prior\s+(?:line|lines|therapy|therapies|treatment|treatments|systemic)|previous(?:ly)?\s+(?:treated|received)|received\s+(?:at\s+least|prior|previous|one|two|three|four|five|\d+)|have\s+received|has\s+received|failed\s+(?:after|prior|previous)?|relapsed\s+(?:after|following))/i.test(local);
+};
+
+const extractCurrentLinesFromPriorTherapyContext = (context) => {
+    const src = String(context || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    const results = [];
+    const priorPatterns = [
+        /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
+        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig,
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
+    ];
+    priorPatterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.exec(src)) !== null) {
+            if (isPriorTherapyLineContext(src, match.index, match.index + String(match[0] || '').length)) {
+                shiftPriorTherapyExpressionToCurrentLines(match[0]).forEach(line => addUniqueLineValue(results, line));
+            }
+            if (match[0] === '') pattern.lastIndex++;
+        }
+    });
+    return results;
+};
+
 const normalizeTreatmentLine = (line) => {
     let text = normalizeCellText(line).replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
     if (!text) return '';
@@ -105,11 +176,19 @@ const normalizeTreatmentLine = (line) => {
     text = text.replace(/\b([1-9])\s*l(\+)?\b/ig, (_, n, plus) => `${toChineseLineNumber(n)}線${plus ? '以上' : ''}`);
     text = text.replace(/第\s*([1-9一二三四五六七八九])\s*線/g, (_, n) => `${toChineseLineNumber(n)}線`);
 
+    const priorShifted = extractCurrentLinesFromPriorTherapyContext(text);
+    if (priorShifted.length) return priorShifted.join('、');
+
     const numbers = extractTreatmentLineNumbers(text);
     const compact = text.replace(/[\s　]/g, '').replace(/第/g, '');
     const simplePattern = new RegExp('^(' + LINE_NUMERAL_REGEX + ')([、，,\/／\\.\\-–—~～至和及+]*' + LINE_NUMERAL_REGEX + ')*線?(以上|後|\\+)?$');
     if (numbers.length && simplePattern.test(compact)) {
-        const suffix = /以上|\+/.test(compact) ? '以上' : (/後/.test(compact) ? '後' : '');
+        if (/後/.test(compact)) {
+            const shifted = [];
+            numbers.forEach(n => addUniqueLineValue(shifted, `${nextChineseLineNumber(n)}線`));
+            return shifted.join('、');
+        }
+        const suffix = /以上|\+/.test(compact) ? '以上' : '';
         return numbers.map(n => `${n}線${suffix}`).join('、');
     }
     return text;
@@ -377,16 +456,6 @@ const expandNormalizedLines = (value) => {
         .filter(Boolean);
 };
 
-const TREATMENT_LINE_ORDER = { 'Adjuvant': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
-const getTreatmentLineOrderKey = (line) => {
-    const n = extractTreatmentLineNumbers(line)[0];
-    if (n && TREATMENT_LINE_ORDER[n] !== undefined) return TREATMENT_LINE_ORDER[n];
-    const normalized = normalizeFilterValue(line);
-    if (normalized.includes('adjuv') || normalized.includes('輔助') || normalized.includes('術後')) return 0;
-    if (normalized.includes('多線') || normalized.includes('後線') || normalized.includes('later')) return 20;
-    return 99;
-};
-
 const extractTreatmentLinesFromContext = (context) => {
     const src = String(context || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
     const results = [];
@@ -397,12 +466,17 @@ const extractTreatmentLinesFromContext = (context) => {
     };
     const patterns = [
         /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
-        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig
+        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig,
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
     ];
     patterns.forEach(pattern => {
         let match;
         while ((match = pattern.exec(src)) !== null) {
-            addLine(match[0]);
+            if (isPriorTherapyLineContext(src, match.index, match.index + String(match[0] || '').length)) {
+                shiftPriorTherapyExpressionToCurrentLines(match[0]).forEach(addLine);
+            } else {
+                addLine(match[0]);
+            }
             if (match[0] === '') pattern.lastIndex++;
         }
     });
@@ -428,9 +502,7 @@ const mergeCancerTypes = (items) => {
         if (!prev.type && type) prev.type = type;
         map.set(key, prev);
     });
-    return Array.from(map.values())
-        .map(ct => ({ ...ct, lines: (ct.lines || []).slice().sort((a, b) => getTreatmentLineOrderKey(a) - getTreatmentLineOrderKey(b) || String(a).localeCompare(String(b))) }))
-        .filter(ct => ct.type || (ct.lines && ct.lines.length));
+    return Array.from(map.values()).filter(ct => ct.type || (ct.lines && ct.lines.length));
 };
 
 const inferCancerLinePairsFromText = (value) => {
@@ -475,7 +547,7 @@ const normalizeImportedTrialFields = (item, options = {}) => {
     if (out.line) out.line = normalizeTreatmentLine(out.line);
     if (Array.isArray(out.cancerTypes)) out.cancerTypes = normalizeCancerTypes(out.cancerTypes);
 
-    const rowText = [out.cancerType, out.line, out.studyTitle, out.inclusion, out.exclusion, out.comments, out.sponsor, out.status].filter(Boolean).join(' ');
+    const rowText = [out.studyTitle, out.inclusion, out.exclusion, out.comments, out.sponsor, out.code, out.nurse, out.monthSigned, out.monthEnrolled, out.enrolled].filter(Boolean).join(' ');
     const inferred = inferCancerTypeFromText(rowText);
     const inferredPairs = inferCancerLinePairsFromText(rowText);
     const explicitCancerOnRow = Boolean(options.explicitCancerOnRow);
@@ -485,19 +557,9 @@ const normalizeImportedTrialFields = (item, options = {}) => {
         out.cancerType = inferred;
     }
 
-    const explicitCancerMentions = collectCancerMentions(out.cancerType || '');
-    const explicitLineList = expandNormalizedLines(out.line || '');
-    const distributedExplicitPairs = (explicitCancerMentions.length > 1 && explicitLineList.length)
-        ? explicitCancerMentions.map(m => ({ type: m.type, lines: explicitLineList }))
-        : [];
-    // 若 cancerType 欄本身是「胰臟癌二、三線 + 胃癌二線 + 膽管癌一線」這種多適應症描述，
-    // 不要把整串文字當成一個癌別；改用 inferredPairs/distributedExplicitPairs 的結構化結果。
-    const explicitLooksLikeMultiDescription = explicitCancerMentions.length > 1 || (inferredPairs.length > 1 && collectCancerMentions([out.cancerType, out.line].join(' ')).length > 1);
-    const explicitPair = (!explicitLooksLikeMultiDescription && (out.cancerType || out.line))
-        ? [{ type: out.cancerType || '', lines: [out.line || ''].filter(Boolean) }]
-        : [];
+    const explicitPair = (out.cancerType || out.line) ? [{ type: out.cancerType || '', lines: [out.line || ''].filter(Boolean) }] : [];
     const existingPairs = Array.isArray(out.cancerTypes) ? out.cancerTypes : [];
-    const mergedPairs = mergeCancerTypes([...inferredPairs, ...distributedExplicitPairs, ...existingPairs, ...explicitPair]);
+    const mergedPairs = mergeCancerTypes([...inferredPairs, ...existingPairs, ...explicitPair]);
     if (mergedPairs.length) {
         out.cancerTypes = mergedPairs;
         out.cancerType = mergedPairs[0].type || out.cancerType || '';
@@ -738,150 +800,6 @@ const parseExcelFile = async (file) => {
     return { rows, text, parsed };
 };
 
-
-const GOOGLE_FORM_EXTRA_FIELD_ALIASES = {
-    code: ['試驗編號', '計畫編號', '研究編號', 'Protocol No', 'Protocol Number', 'Protocol ID', 'Study Code', 'Study ID', 'Trial Code', 'Clinical Trial Code'],
-    studyTitle: ['試驗名稱', '試驗題目', '研究名稱', '計畫名稱', 'Protocol Title', 'Study Title', 'Trial Title', 'Clinical Trial Title'],
-    cancerType: ['癌別', '癌症別', '癌症種類', '疾病別', '適應症', 'Indication', 'Disease', 'Cancer Type', 'Tumor Type'],
-    line: ['治療線數', '線數', 'Line of Therapy', 'Therapy Line', 'Treatment Line', 'LOT'],
-    inclusion: ['主要收案條件', '收案條件', '納入條件', 'Inclusion Criteria', 'Eligibility Criteria', 'Eligibility'],
-    exclusion: ['主要排除條件', '排除條件', 'Exclusion Criteria'],
-    phase: ['試驗期別', '期別', 'Phase'],
-    sponsor: ['藥廠', '廠商', '贊助商', 'Sponsor'],
-    targetNum: ['目標收案人數', '目標收案', 'Target Number', 'Target Accrual', 'Planned Enrollment'],
-    enrolled: ['目前收案人數', '已收案人數', '目前收案', '已收案', 'Current Accrual', 'Enrolled'],
-    monthSigned: ['本月簽署', '本月簽署人數', '本月簽同意書', 'Signed This Month'],
-    monthEnrolled: ['本月收案', '本月入組', 'Enrolled This Month'],
-    pi: ['主持人', 'Principal Investigator', 'PI'],
-    nurse: ['研究護理師', 'Study Nurse', 'CRC', '個管師'],
-    phone: ['聯絡電話', '電話', '分機', 'Phone', 'Tel'],
-    status: ['收案狀態', '狀態', 'Status'],
-    comments: ['備註', '說明', '其他說明', 'Comments', 'Remarks', 'Notes'],
-    contractNo: ['合約編號', 'Contract No', 'Contract Number']
-};
-
-const buildGoogleFormFieldEntries = () => {
-    const entries = [];
-    const add = (field, alias) => {
-        const raw = String(alias || '').trim();
-        const normalized = normalizeHeader(raw);
-        if (!field || !raw || !normalized) return;
-        entries.push({ field, alias: raw, normalized });
-    };
-    Object.entries(FIELD_ALIASES || {}).forEach(([field, aliases]) => (aliases || []).forEach(alias => add(field, alias)));
-    Object.entries(GOOGLE_FORM_EXTRA_FIELD_ALIASES || {}).forEach(([field, aliases]) => (aliases || []).forEach(alias => add(field, alias)));
-    const seen = new Set();
-    return entries
-        .filter(entry => {
-            const key = entry.field + '|' + entry.normalized;
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-        })
-        .sort((a, b) => b.normalized.length - a.normalized.length);
-};
-
-const GOOGLE_FORM_FIELD_ENTRIES = buildGoogleFormFieldEntries();
-
-const stripGoogleFormQuestionPrefix = (value) => String(value || '')
-    .replace(/^\s*(?:\d+\s*[\.、\)]\s*)+/, '')
-    .replace(/^\s*[＊*]\s*/, '')
-    .trim();
-
-const escapeRegExp = (value) => String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const detectGoogleFormFieldLine = (line) => {
-    const cleaned = stripGoogleFormQuestionPrefix(line).replace(/\s*必填\s*$/g, '').trim();
-    if (!cleaned) return null;
-    const normalized = normalizeHeader(cleaned);
-    const colonMatch = cleaned.match(/^(.{1,80}?)[：:]\s*(.*)$/);
-    for (const entry of GOOGLE_FORM_FIELD_ENTRIES) {
-        if (colonMatch && normalizeHeader(colonMatch[1]) === entry.normalized) {
-            return { field: entry.field, answer: normalizeCellText(colonMatch[2] || '') };
-        }
-        if (normalized === entry.normalized) {
-            return { field: entry.field, answer: '' };
-        }
-        if (normalized.startsWith(entry.normalized) && normalized.length > entry.normalized.length) {
-            const aliasRegex = new RegExp('^\\s*' + escapeRegExp(entry.alias).replace(/\\\s\+/g, '\\s*') + '\\s*[：:\\-–—]?\\s*', 'i');
-            const answer = cleaned.replace(aliasRegex, '').trim();
-            if (answer && answer !== cleaned && normalizeHeader(answer) !== entry.normalized) {
-                return { field: entry.field, answer: normalizeCellText(answer) };
-            }
-        }
-    }
-    return null;
-};
-
-const appendGoogleFormField = (fields, field, value) => {
-    const v = normalizeCellText(value);
-    if (!field || !v) return;
-    fields[field] = fields[field] ? `${fields[field]}\n${v}` : v;
-};
-
-const splitGoogleFormPdfChunks = (text) => {
-    const src = String(text || '').replace(/\r/g, '\n');
-    const chunks = src
-        .split(/\n(?=(?:\d+\s*[\.、\)]\s*)?(?:時間戳記|提交時間|填寫時間|Timestamp|Submitted at)\b)/i)
-        .map(v => v.trim())
-        .filter(Boolean);
-    return chunks.length > 1 ? chunks : [src.trim()].filter(Boolean);
-};
-
-const extractCodeFromFreeText = (text) => {
-    const src = String(text || '');
-    const labeled = src.match(/(?:試驗編號|計畫編號|研究編號|protocol\s*(?:no\.?|number|id)?|study\s*(?:code|id)|trial\s*code|code)\s*[：:]?\s*([A-Z0-9][A-Z0-9_\-\/]{3,})/i);
-    if (labeled && labeled[1]) return normalizeCode(labeled[1]);
-    const candidates = src.match(/\b[A-Z]{1,6}[A-Z0-9]{0,6}[\-_\/][A-Z0-9][A-Z0-9\-_\/]{2,}\b|\b[A-Z]{1,4}\d{2,}[A-Z0-9\-_\/]*\b|\b\d{4,}[A-Z]{1,4}\d*[A-Z0-9\-_\/]*\b/g) || [];
-    const bad = /^(?:LINE|PHONE|TEL|FAX|HTTP|HTTPS|HBV|HCV|HER2|KRAS|NRAS|BRAF|ECOG|RECIST|CPS|PD|DNA|RNA)$/i;
-    const found = candidates.find(c => !bad.test(c) && !/^09\d{8}$/.test(c) && !/^\d{7,}$/.test(c));
-    return found ? normalizeCode(found) : '';
-};
-
-const extractStudyTitleFromFreeText = (text) => {
-    const lines = String(text || '').split(/\n+/).map(v => normalizeCellText(v)).filter(Boolean);
-    const direct = lines.find(line => /(?:一項|試驗|研究|trial|study|phase|期)/i.test(line) && line.length >= 18 && !detectGoogleFormFieldLine(line));
-    if (direct) return direct;
-    return lines.sort((a, b) => b.length - a.length).find(line => line.length >= 24) || '';
-};
-
-const parseGoogleFormFieldsFromChunk = (chunk) => {
-    const fields = {};
-    const lines = String(chunk || '')
-        .replace(/\r/g, '\n')
-        .split(/\n+/)
-        .map(v => normalizeCellText(v))
-        .filter(Boolean)
-        .filter(line => !/^(?:第\s*\d+\s*頁|page\s*\d+|回覆|response)$/i.test(line));
-    let currentField = null;
-    lines.forEach(line => {
-        const detected = detectGoogleFormFieldLine(line);
-        if (detected) {
-            currentField = detected.field;
-            appendGoogleFormField(fields, currentField, detected.answer);
-        } else if (currentField) {
-            appendGoogleFormField(fields, currentField, line);
-        }
-    });
-    return fields;
-};
-
-const parseGoogleFormPdfText = (text) => {
-    const chunks = splitGoogleFormPdfChunks(text);
-    const parsed = [];
-    chunks.forEach(chunk => {
-        const fields = parseGoogleFormFieldsFromChunk(chunk);
-        const item = { ...fields };
-        if (!item.code) item.code = extractCodeFromFreeText(chunk);
-        if (!item.studyTitle) item.studyTitle = extractStudyTitleFromFreeText(chunk);
-        if (!item.status) item.status = '進行中';
-        item.code = normalizeCode(item.code);
-        if (!item.code) return;
-        parsed.push(normalizeImportedTrialFields(item, { explicitCancerOnRow: Boolean(item.cancerType) }));
-    });
-    return consolidateParsedTrials(parsed).rows;
-};
-
 const pdfTextItemsToRows = (pages) => {
     const allRows = [];
     (pages || []).forEach((items) => {
@@ -946,12 +864,8 @@ const parsePdfFile = async (file) => {
     }
     const rows = pdfTextItemsToRows(pages);
     const text = rows.map(r => r.join('\t')).join('\n');
-    const tableParsed = parseRowsWithHeaderMapping(rows);
-    // Google 表單下載的 PDF 通常是文字型「題目/答案」格式，不一定有 Excel 表頭；
-    // 因此 PDF 走獨立 fallback parser，不修改 Excel/CSV parser。
-    const formParsed = tableParsed.length ? [] : parseGoogleFormPdfText(text);
-    const parsed = tableParsed.length ? tableParsed : formParsed;
-    return { rows, text, parsed, source: tableParsed.length ? 'pdf-table' : 'google-form-pdf' };
+    const parsed = parseRowsWithHeaderMapping(rows);
+    return { rows, text, parsed };
 };
 
 
@@ -973,7 +887,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.6 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -1722,7 +1636,7 @@ function ImportStatusModal(props) {
                 setParsedRows(info.rows);
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
-                alert(`PDF讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。Google 表單文字型 PDF 會走獨立 parser；若筆數為 0，請確認 PDF 內有試驗編號/code。`);
+                alert(`PDF讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。若筆數為 0，請改用原始 Excel 或先把 PDF 轉成可複製文字。`);
             } else {
                 const text = await file.text();
                 setCsvText(text);
@@ -2356,7 +2270,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.6 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
