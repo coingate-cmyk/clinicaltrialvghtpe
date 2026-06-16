@@ -489,6 +489,61 @@ const normalizeCancerLine = (cancerType, line) => {
     return { cancerType: c, line: l };
 };
 
+const getTrialCancerEntries = (trial) => {
+    const entries = [];
+    const addEntry = (type, line) => {
+        const normalizedType = normalizeCellText(type || '');
+        const normalizedLine = normalizeTreatmentLine(line || '');
+        if (!normalizedType && !normalizedLine) return;
+        if (entries.some(entry =>
+            valueMatches(entry.type, normalizedType) &&
+            lineMatchesSelection(entry.line || '', normalizedLine || '')
+        )) return;
+        entries.push({ type: normalizedType, line: normalizedLine });
+    };
+
+    if (Array.isArray(trial && trial.cancerTypes)) {
+        trial.cancerTypes.forEach((ct) => {
+            const type = normalizeCellText(ct && ct.type);
+            const lines = Array.isArray(ct && ct.lines)
+                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
+                : [];
+            if (lines.length) {
+                lines.forEach(line => addEntry(type, line));
+            } else {
+                addEntry(type, '');
+            }
+        });
+    }
+
+    if (trial && (trial.cancerType || trial.line)) {
+        addEntry(trial.cancerType || '', trial.line || '');
+    }
+
+    return entries;
+};
+
+const buildCancerTypesFromEntries = (entries) => {
+    const map = new Map();
+    (entries || []).forEach((entry) => {
+        const type = normalizeCellText(entry && entry.type);
+        const line = normalizeTreatmentLine(entry && entry.line);
+        if (!type && !line) return;
+        const key = normalizeFilterValue(type || '未分類');
+        const prev = map.get(key) || { type: type || '', lines: [] };
+        if (line && !prev.lines.some(existing => lineMatchesSelection(existing, line))) {
+            prev.lines.push(line);
+        }
+        if (!prev.type && type) prev.type = type;
+        map.set(key, prev);
+    });
+    return Array.from(map.values()).filter(ct => ct.type || ct.lines.length);
+};
+
+const mergeCancerTypes = (...trials) => buildCancerTypesFromEntries(
+    trials.flatMap(trial => getTrialCancerEntries(trial || {}))
+);
+
 
 const consolidateParsedTrials = (rows) => {
     const map = new Map();
@@ -519,24 +574,7 @@ const consolidateParsedTrials = (rows) => {
             if (field === 'cancerTypes') return;
             if (value !== undefined && value !== null && String(value).trim() !== '') merged[field] = value;
         });
-        const ctMap = new Map();
-        const addCt = (ct) => {
-            if (!ct) return;
-            const type = normalizeCellText(ct.type || '');
-            const lines = Array.isArray(ct.lines) ? ct.lines.map(normalizeTreatmentLine).filter(Boolean) : [];
-            if (!type && !lines.length) return;
-            const k = normalizeFilterValue(type || '未分類');
-            const prev = ctMap.get(k) || { type: type || '', lines: [] };
-            lines.forEach(line => {
-                if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
-            });
-            if (!prev.type && type) prev.type = type;
-            ctMap.set(k, prev);
-        };
-        (Array.isArray(current.cancerTypes) ? current.cancerTypes : []).forEach(addCt);
-        (Array.isArray(preparedRow.cancerTypes) ? preparedRow.cancerTypes : []).forEach(addCt);
-        if (preparedRow.cancerType || preparedRow.line) addCt({ type: preparedRow.cancerType || '', lines: [preparedRow.line || ''].filter(Boolean) });
-        merged.cancerTypes = Array.from(ctMap.values());
+        merged.cancerTypes = mergeCancerTypes(current, preparedRow);
         if (!merged.cancerType && merged.cancerTypes[0]) merged.cancerType = merged.cancerTypes[0].type;
         if (!merged.line && merged.cancerTypes[0] && merged.cancerTypes[0].lines[0]) merged.line = merged.cancerTypes[0].lines[0];
         merged.code = key;
@@ -676,11 +714,11 @@ const upsertTrialsByCode = (existingTrials, incomingTrials, options = {}) => {
         if (shouldPreserveCancerTypes) {
             merged.cancerType = prev.cancerType;
             merged.line = prev.line;
-            merged.cancerTypes = prev.cancerTypes;
+            merged.cancerTypes = mergeCancerTypes(prev, incoming);
         }
 
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
-            merged.cancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
+            merged.cancerTypes = mergeCancerTypes(prev, incoming);
         }
         merged.line = normalizeTreatmentLine(merged.line);
         merged.cancerTypes = merged.cancerTypes.map((ct) => ({
@@ -873,9 +911,27 @@ const extractPdfTextWithPdfJs = async (data) => {
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
         const page = await pdf.getPage(pageNumber);
         const content = await page.getTextContent();
-        const pageText = content.items
-            .map((item) => item && item.str ? item.str : '')
-            .join('\t');
+        const rows = [];
+        content.items.forEach((item) => {
+            const text = String(item && item.str ? item.str : '').trim();
+            if (!text) return;
+            const transform = item.transform || [];
+            const x = Number(transform[4]) || 0;
+            const y = Number(transform[5]) || 0;
+            let row = rows.find((candidate) => Math.abs(candidate.y - y) <= 3);
+            if (!row) {
+                row = { y, cells: [] };
+                rows.push(row);
+            }
+            row.cells.push({ x, text });
+        });
+        const pageText = rows
+            .sort((a, b) => b.y - a.y)
+            .map((row) => row.cells
+                .sort((a, b) => a.x - b.x)
+                .map((cell) => cell.text)
+                .join('\t'))
+            .join('\n');
         pageTexts.push(pageText);
     }
     return normalizePdfExtractedText(pageTexts.join('\n'));
@@ -2327,26 +2383,29 @@ function App() {
         }
         
         // 癌症類型篩選
-        if (cancerType !== '全部') {
+        if (cancerType !== '全部' && selectedLine === '全部') {
             result = result.filter(t => {
-                const candidates = [];
-                if (Array.isArray(t.cancerTypes)) t.cancerTypes.forEach(ct => candidates.push(ct.type));
-                if (t.cancerType) candidates.push(t.cancerType);
-                return candidates.some(type => valueMatches(type, cancerType));
+                const entries = getTrialCancerEntries(t);
+                return entries.some(entry => valueMatches(entry.type, cancerType));
             });
         }
         
         // 治療線篩選：會先正規化空白/換行/斜線，所以「一\n線」「二、三線」也能正確命中
-        if (selectedLine !== '全部') {
+        if (selectedLine !== '全部' && cancerType === '全部') {
             result = result.filter(t => {
-                const lineCandidates = [];
-                if (Array.isArray(t.cancerTypes)) {
-                    t.cancerTypes.forEach(ct => {
-                        if (Array.isArray(ct.lines)) ct.lines.forEach(line => lineCandidates.push(line));
-                    });
-                }
-                if (t.line) lineCandidates.push(t.line);
-                return lineCandidates.some(line => lineMatchesSelection(line, selectedLine));
+                const entries = getTrialCancerEntries(t);
+                return entries.some(entry => lineMatchesSelection(entry.line, selectedLine));
+            });
+        }
+
+        // 癌種 + 線別同時篩選時，必須命中同一組分類，避免「胃癌一線 + 大腸癌二線」被誤判成胃癌二線。
+        if (cancerType !== '全部' && selectedLine !== '全部') {
+            result = result.filter(t => {
+                const entries = getTrialCancerEntries(t);
+                return entries.some(entry =>
+                    valueMatches(entry.type, cancerType) &&
+                    lineMatchesSelection(entry.line, selectedLine)
+                );
             });
         }
         
