@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.0.5 Firebase版</title>
+    <title>臨床試驗管理系統 v4.0.9 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -78,28 +78,91 @@ const LINE_NUMERAL = { '1': '一', '2': '二', '3': '三', '4': '四', '5': '五
 const LINE_NUMERAL_REGEX = '[一二三四五六七八九123456789１２３４５６７８９]';
 const toChineseLineNumber = (value) => LINE_NUMERAL[String(value || '').trim()] || String(value || '').trim();
 
+const CANCER_SORT_ORDER = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','攝護腺癌','CRPC','C R P C','預備中'];
+const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
+const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
+const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
+
+const getCancerRank = (type) => {
+    const normalized = normalizeCancerTypeLabel(type || '');
+    const idx = CANCER_SORT_ORDER.findIndex(v => valueMatches(v, normalized));
+    return idx >= 0 ? idx : 999;
+};
+
+const getLineRank = (line) => {
+    const n = normalizeFilterValue(line);
+    if (!n) return 999;
+    if (n.includes('adjuv') || n.includes('輔助') || n.includes('術後')) return 900;
+    if (n.includes('translational')) return 950;
+    const numbers = extractTreatmentLineNumbers(line);
+    if (numbers.length) {
+        const minIdx = Math.min(...numbers.map(v => LINE_ORDER.indexOf(v)).filter(v => v >= 0));
+        const abovePenalty = /以上|\+|多線|後線/i.test(String(line || '')) ? 0.4 : 0;
+        return (minIdx >= 0 ? minIdx : 99) + abovePenalty;
+    }
+    const idx = LINE_SORT_ORDER.findIndex(v => normalizeFilterValue(v) === n || n.includes(normalizeFilterValue(v)));
+    return idx >= 0 ? idx : 999;
+};
+
+const sortLineValues = (lines) => {
+    const deduped = [];
+    (Array.isArray(lines) ? lines : []).forEach(line => {
+        const normalized = normalizeCellText(line);
+        if (normalized && !deduped.some(x => valueMatches(x, normalized))) deduped.push(normalized);
+    });
+    const withoutCoveredBase = deduped.filter(line => {
+        if (/以上|\+/i.test(String(line || ''))) return true;
+        const nums = extractTreatmentLineNumbers(line);
+        if (!nums.length) return true;
+        return !deduped.some(other => other !== line && /以上|\+/i.test(String(other || '')) && extractTreatmentLineNumbers(other).some(n => nums.includes(n)));
+    });
+    return withoutCoveredBase.sort((a, b) => getLineRank(a) - getLineRank(b) || normalizeFilterValue(a).localeCompare(normalizeFilterValue(b)));
+};
+
+const sortCancerTypeItems = (items) => {
+    return (Array.isArray(items) ? items : []).sort((a, b) => {
+        const ar = getCancerRank(a && a.type);
+        const br = getCancerRank(b && b.type);
+        if (ar !== br) return ar - br;
+        const al = a && Array.isArray(a.lines) && a.lines.length ? getLineRank(a.lines[0]) : 999;
+        const bl = b && Array.isArray(b.lines) && b.lines.length ? getLineRank(b.lines[0]) : 999;
+        if (al !== bl) return al - bl;
+        return normalizeFilterValue(a && a.type).localeCompare(normalizeFilterValue(b && b.type));
+    });
+};
+
+const normalizeLineOCRText = (value) => String(value || '')
+    .replace(/．/g, '.')
+    .replace(/正\s*(?=[一二三四五六七八九123456789１２３４５６７８９])/g, '')
+    // Google 表單 PDF 轉 Excel 偶爾會把「一線」切成「一腺」；只修數字旁的腺，不動「胰管腺癌」。
+    .replace(new RegExp('(' + LINE_NUMERAL_REGEX + ')\\s*腺', 'g'), (_, n) => `${toChineseLineNumber(n)}線`);
+
+const isValidTreatmentLineText = (value) => {
+    const normalized = normalizeFilterValue(value);
+    if (!normalized || normalized === '線' || normalized === '腺') return false;
+    if (normalized.includes('adjuv') || normalized.includes('輔助') || normalized.includes('術後') || normalized.includes('translational')) return true;
+    return extractTreatmentLineNumbers(value).length > 0 || /多線|後線|laterline|multi/i.test(String(value || ''));
+};
+
 const extractTreatmentLineNumbers = (line) => {
-    const raw = String(line || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    const raw = normalizeLineOCRText(line);
     const lower = raw.toLowerCase();
     const numbers = [];
     const add = (v) => {
-        const n = toChineseLineNumber(v);
-        if (n && !numbers.includes(n)) numbers.push(n);
+        const n = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(v || '').toLowerCase()] || v);
+        if (n && LINE_ORDER.includes(n) && !numbers.includes(n)) numbers.push(n);
     };
-    lower.replace(/([1-9１２３４５６７８９])\s*l\+?/g, (_, n) => { add(n); return ''; });
+    lower.replace(/\b([1-9１２３４５６７８９])\s*l\b\s*(?:\+|以上)?/ig, (_, n) => { add(n); return ''; });
     raw.replace(new RegExp('第\\s*(' + LINE_NUMERAL_REGEX + ')\\s*線', 'g'), (_, n) => { add(n); return ''; });
     raw.replace(new RegExp('(' + LINE_NUMERAL_REGEX + ')\\s*線', 'g'), (_, n) => { add(n); return ''; });
 
-    const compact = raw.replace(/[\s　]/g, '').replace(/第/g, '').replace(/腺/g, '線');
-    const simplePattern = new RegExp('^(' + LINE_NUMERAL_REGEX + ')([、，,\/／\\.\\-–—~～至和及+]*' + LINE_NUMERAL_REGEX + ')*線?(以上|後|\\+)?$');
+    const compact = normalizeLineOCRText(raw).replace(/[\s　]/g, '').replace(/第/g, '');
+    const simplePattern = new RegExp('^(' + LINE_NUMERAL_REGEX + ')([、，,\/／\\.\\-–—~～至和及或+]*' + LINE_NUMERAL_REGEX + ')*線?(以上|後|\\+)?$');
     if (simplePattern.test(compact)) {
         (compact.match(new RegExp(LINE_NUMERAL_REGEX, 'g')) || []).forEach(add);
     }
     return numbers;
 };
-
-const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
-const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
 
 const addUniqueLineValue = (list, line) => {
     const normalized = normalizeTreatmentLine(line);
@@ -114,19 +177,18 @@ const nextChineseLineNumber = (n) => {
 };
 
 const extractLooseLineNumbers = (value) => {
-    const text = String(value || '').replace(/腺/g, '線').replace(/正/g, '');
+    const text = normalizeLineOCRText(value);
     const nums = [];
     const add = (v) => {
         const n = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(v || '').toLowerCase()] || v);
         if (n && LINE_ORDER.includes(n) && !nums.includes(n)) nums.push(n);
     };
     extractTreatmentLineNumbers(text).forEach(add);
-    text.replace(new RegExp('(' + LINE_NUMERAL_REGEX + '(?:\\s*[、，,\\/／\\.．\\-–—~～至和及或]\\s*' + LINE_NUMERAL_REGEX + ')+)\\s*(?:線|l)', 'ig'), (_, seq) => { (seq.match(new RegExp(LINE_NUMERAL_REGEX, 'g')) || []).forEach(add); return ''; });
     text.replace(/\b([1-9１２３４５６７８９])\s+lines?\b/ig, (_, n) => { add(n); return ''; });
     text.replace(/\b(one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig, (_, n) => { add(n); return ''; });
     text.replace(/\b([1-9１２３４５６７８９])\s*(?:or|and|to|through|-)\s*([1-9１２３４５６７８９])\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
     text.replace(/\b(one|two|three|four|five|six|seven|eight|nine)\s*(?:or|and|to|through|-)\s*(one|two|three|four|five|six|seven|eight|nine)\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
-    return nums.sort((a, b) => LINE_ORDER.indexOf(a) - LINE_ORDER.indexOf(b));
+    return nums;
 };
 
 const shiftPriorTherapyExpressionToCurrentLines = (expr) => {
@@ -134,7 +196,7 @@ const shiftPriorTherapyExpressionToCurrentLines = (expr) => {
     const suffix = /以上|\+/.test(src) ? '以上' : '';
     const lines = [];
     extractLooseLineNumbers(src).forEach(n => addUniqueLineValue(lines, `${nextChineseLineNumber(n)}線${suffix}`));
-    return lines;
+    return sortLineValues(lines);
 };
 
 const isPriorTherapyLineContext = (src, start, end) => {
@@ -150,11 +212,11 @@ const isPriorTherapyLineContext = (src, start, end) => {
 };
 
 const extractCurrentLinesFromPriorTherapyContext = (context) => {
-    const src = String(context || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    const src = normalizeLineOCRText(context);
     const results = [];
     const priorPatterns = [
         /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
-        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig,
+        /\b[1-9１２３４５６７８９]\s*l\s*(?:以上|\+)?\b/ig,
         /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
     ];
     priorPatterns.forEach(pattern => {
@@ -166,31 +228,33 @@ const extractCurrentLinesFromPriorTherapyContext = (context) => {
             if (match[0] === '') pattern.lastIndex++;
         }
     });
-    return results;
+    return sortLineValues(results);
 };
 
 const normalizeTreatmentLine = (line) => {
-    let text = normalizeCellText(line).replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    let text = normalizeCellText(line);
     if (!text) return '';
-    text = text.replace(/[１-９]/g, d => toChineseLineNumber(d));
-    text = text.replace(/\b([1-9])\s*l(\+)?\b/ig, (_, n, plus) => `${toChineseLineNumber(n)}線${plus ? '以上' : ''}`);
+    text = normalizeLineOCRText(text).replace(/[１-９]/g, d => toChineseLineNumber(d));
+    if (normalizeFilterValue(text) === '線' || normalizeFilterValue(text) === '腺') return '';
+    text = text.replace(/\b([1-9])\s*l\b\s*(\+)?/ig, (_, n, plus) => `${toChineseLineNumber(n)}線${plus ? '以上' : ''}`);
     text = text.replace(/第\s*([1-9一二三四五六七八九])\s*線/g, (_, n) => `${toChineseLineNumber(n)}線`);
 
     const priorShifted = extractCurrentLinesFromPriorTherapyContext(text);
     if (priorShifted.length) return priorShifted.join('、');
 
     const numbers = extractTreatmentLineNumbers(text);
-    const compact = text.replace(/[\s　]/g, '').replace(/第/g, '');
-    const simplePattern = new RegExp('^(' + LINE_NUMERAL_REGEX + ')([、，,\/／\\.\\-–—~～至和及+]*' + LINE_NUMERAL_REGEX + ')*線?(以上|後|\\+)?$');
+    const compact = normalizeLineOCRText(text).replace(/[\s　]/g, '').replace(/第/g, '');
+    const simplePattern = new RegExp('^(' + LINE_NUMERAL_REGEX + ')([、，,\/／\\.\\-–—~～至和及或+]*' + LINE_NUMERAL_REGEX + ')*線?(以上|後|\\+)?$');
     if (numbers.length && simplePattern.test(compact)) {
         if (/後/.test(compact)) {
             const shifted = [];
             numbers.forEach(n => addUniqueLineValue(shifted, `${nextChineseLineNumber(n)}線`));
-            return shifted.join('、');
+            return sortLineValues(shifted).join('、');
         }
         const suffix = /以上|\+/.test(compact) ? '以上' : '';
-        return numbers.map(n => `${n}線${suffix}`).join('、');
+        return sortLineValues(numbers.map(n => `${n}線${suffix}`)).join('、');
     }
+    if (!isValidTreatmentLineText(text)) return '';
     return text;
 };
 
@@ -410,13 +474,13 @@ const normalizeCancerTypeLabel = (value) => {
 
 
 const CANCER_TYPE_RULES = [
-    // Order matters: adenocarcinoma of esophagus / GEJ is grouped with 胃癌 before generic 食道癌 checks.
-    { type: '胃癌', regex: /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|gastroesophageal\s+junction|gastro-esophageal\s+junction|\bgej\b|胃食道接合|胃癌|胃腺癌|gastric|stomach)/ig },
-    { type: '食道癌', regex: /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus|esophageal\s+cancer|食道癌)/ig },
+    // Order matters: adenocarcinoma of esophagus / GEJ is grouped with 胃癌 before ESCC checks.
+    { type: '胃癌', regex: /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|gastroesophageal\s+junction|gastro-esophageal\s+junction|\bgej\b|胃食道接合|胃食道交接|胃食道交界|胃食道癌|胃食道腺癌|胃癌|胃腺癌|gastric|stomach)/ig },
+    { type: '食道癌', regex: /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus|食道癌)/ig },
     { type: '胰臟癌', regex: /(胰臟癌|胰管腺癌|pancreatic|pdac|pancrea\s*ca)/ig },
     { type: '肝癌', regex: /(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/ig },
-    { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma|cholangiocarcinoma)/ig },
-    { type: '大腸癌', regex: /(大腸癌|結直腸癌|結腸直腸|colorectal|colon|\bcrc\b)/ig },
+    { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma)/ig },
+    { type: '大腸癌', regex: /(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/ig },
     { type: '攝護腺癌', regex: /(攝護腺癌|前列腺癌|prostate|\bcrpc\b)/ig }
 ];
 
@@ -429,6 +493,11 @@ const collectCancerMentions = (text) => {
         const regex = cloneCancerRuleRegex(rule.regex);
         let match;
         while ((match = regex.exec(src)) !== null) {
+            // 「胃食道癌/胃食道腺癌」依團隊規則歸胃癌，不可再被 generic 食道癌重複抓到。
+            if (rule.type === '食道癌' && match[0] === '食道癌' && match.index > 0 && src[match.index - 1] === '胃') {
+                if (match[0] === '') regex.lastIndex++;
+                continue;
+            }
             mentions.push({
                 type: rule.type,
                 index: match.index,
@@ -457,7 +526,7 @@ const expandNormalizedLines = (value) => {
 };
 
 const extractTreatmentLinesFromContext = (context) => {
-    const src = String(context || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    const src = normalizeLineOCRText(context);
     const results = [];
     const addLine = (v) => {
         expandNormalizedLines(v).forEach(line => {
@@ -466,7 +535,7 @@ const extractTreatmentLinesFromContext = (context) => {
     };
     const patterns = [
         /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
-        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig,
+        /\b[1-9１２３４５６７８９]\s*l\s*(?:以上|\+)?\b/ig,
         /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
     ];
     patterns.forEach(pattern => {
@@ -499,6 +568,7 @@ const mergeCancerTypes = (items) => {
         lines.forEach(line => {
             if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
         });
+        prev.lines = sortLineValues(prev.lines);
         if (!prev.type && type) prev.type = type;
         map.set(key, prev);
     });
@@ -510,9 +580,20 @@ const inferCancerLinePairsFromText = (value) => {
     if (!text) return [];
     const mentions = collectCancerMentions(text);
     const pairs = [];
+    const nextBoundaryAfter = (from, hardMax) => {
+        const candidates = [hardMax];
+        ['。','；',';','\n'].forEach(ch => {
+            const pos = text.indexOf(ch, from);
+            if (pos >= 0) candidates.push(pos);
+        });
+        const cohort = text.slice(from, hardMax).search(/\bCohort\s+[A-Z]\b/i);
+        if (cohort >= 0) candidates.push(from + cohort);
+        return Math.min(...candidates);
+    };
     mentions.forEach((mention, idx) => {
         const nextIndex = idx + 1 < mentions.length ? mentions[idx + 1].index : Math.min(text.length, mention.index + 120);
-        const afterContext = text.slice(mention.index, Math.min(nextIndex, mention.index + 120));
+        const afterEnd = nextBoundaryAfter(mention.end, Math.min(nextIndex, mention.index + 90));
+        const afterContext = text.slice(mention.index, afterEnd);
         let lines = extractTreatmentLinesFromContext(afterContext);
         if (!lines.length) {
             const prevBoundary = Math.max(
@@ -522,8 +603,11 @@ const inferCancerLinePairsFromText = (value) => {
                 text.lastIndexOf('\n', mention.index),
                 mention.index - 45
             );
-            const beforeContext = text.slice(Math.max(0, prevBoundary + 1), Math.min(text.length, mention.end + 45));
-            lines = extractTreatmentLinesFromContext(beforeContext);
+            // Fallback only looks BEFORE the cancer term (e.g. "2L Gastric").
+            // If another cancer mention exists in that beforeContext, the line belongs to that previous cancer and must not be stolen.
+            const beforeContext = text.slice(Math.max(0, prevBoundary + 1), mention.end);
+            const beforeMentions = collectCancerMentions(beforeContext);
+            lines = beforeMentions.length > 1 ? [] : extractTreatmentLinesFromContext(beforeContext);
         }
         lines.forEach(line => pairs.push({ type: mention.type, lines: [line] }));
     });
@@ -547,7 +631,8 @@ const normalizeImportedTrialFields = (item, options = {}) => {
     if (out.line) out.line = normalizeTreatmentLine(out.line);
     if (Array.isArray(out.cancerTypes)) out.cancerTypes = normalizeCancerTypes(out.cancerTypes);
 
-    const rowText = [out.studyTitle, out.inclusion, out.exclusion, out.comments, out.sponsor, out.code, out.nurse, out.monthSigned, out.monthEnrolled, out.enrolled].filter(Boolean).join(' ');
+    // 只從臨床內容欄位推論癌別/線數；不要把 nurse / phone / Line ID / 收案數字納入，避免 0927751328 line ID 被誤判成 8L。
+    const rowText = [out.studyTitle, out.inclusion, out.exclusion, out.comments, out.sponsor, out.code].filter(Boolean).join(' ');
     const inferred = inferCancerTypeFromText(rowText);
     const inferredPairs = inferCancerLinePairsFromText(rowText);
     const explicitCancerOnRow = Boolean(options.explicitCancerOnRow);
@@ -557,9 +642,19 @@ const normalizeImportedTrialFields = (item, options = {}) => {
         out.cancerType = inferred;
     }
 
-    const explicitPair = (out.cancerType || out.line) ? [{ type: out.cancerType || '', lines: [out.line || ''].filter(Boolean) }] : [];
+    const reliableInferredPairs = inferredPairs.filter(ct => ct && ct.type && Array.isArray(ct.lines) && ct.lines.length);
+    const contextLinesForExplicitCancer = (!reliableInferredPairs.length && out.cancerType)
+        ? extractTreatmentLinesFromContext(rowText).map(line => normalizeTreatmentLine(line)).filter(Boolean)
+        : [];
+    const explicitLineValues = contextLinesForExplicitCancer.length
+        ? contextLinesForExplicitCancer
+        : (isValidTreatmentLineText(out.line) ? [out.line] : []);
+    // 若內文已經有「癌別＋線數」成對資訊，以內文配對為主，不把左側表格的合併/沿用線數灌到每個癌別。
+    const explicitPair = (!reliableInferredPairs.length && (out.cancerType || explicitLineValues.length))
+        ? [{ type: out.cancerType || '', lines: explicitLineValues }]
+        : [];
     const existingPairs = Array.isArray(out.cancerTypes) ? out.cancerTypes : [];
-    const mergedPairs = mergeCancerTypes([...inferredPairs, ...existingPairs, ...explicitPair]);
+    const mergedPairs = mergeCancerTypes([...reliableInferredPairs, ...existingPairs, ...explicitPair]);
     if (mergedPairs.length) {
         out.cancerTypes = mergedPairs;
         out.cancerType = mergedPairs[0].type || out.cancerType || '';
@@ -631,6 +726,7 @@ const consolidateParsedTrials = (rows) => {
             lines.forEach(line => {
                 if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
             });
+            prev.lines = sortLineValues(prev.lines);
             if (!prev.type && type) prev.type = type;
             ctMap.set(k, prev);
         };
@@ -677,7 +773,7 @@ const parseRowsWithHeaderMapping = (rows) => {
         if (lineCell) {
             const normalized = normalizeCancerLine(currentCancerType, lineCell);
             if (normalized.cancerType) currentCancerType = normalized.cancerType;
-            if (normalized.line) currentLine = normalized.line;
+            if (normalized.line && isValidTreatmentLineText(normalized.line)) currentLine = normalized.line;
         }
 
         const codeIndex = mappedFields.findIndex(v => v === 'code');
@@ -887,7 +983,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.9 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -2207,7 +2303,21 @@ function App() {
             });
         }
         
-        return result;
+        const trialSortKey = (trial) => {
+            const pairs = Array.isArray(trial.cancerTypes) && trial.cancerTypes.length ? trial.cancerTypes : [{type: trial.cancerType || '', lines: [trial.line || ''].filter(Boolean)}];
+            const matching = cancerType !== '全部' ? pairs.find(ct => valueMatches(ct.type, cancerType)) : null;
+            const primary = matching || pairs[0] || {type: '', lines: []};
+            return {
+                cancerRank: getCancerRank(primary.type),
+                lineRank: Array.isArray(primary.lines) && primary.lines.length ? Math.min(...primary.lines.map(getLineRank)) : getLineRank(trial.line),
+                code: normalizeCode(trial.code)
+            };
+        };
+        return [...result].sort((a, b) => {
+            const ak = trialSortKey(a);
+            const bk = trialSortKey(b);
+            return ak.cancerRank - bk.cancerRank || ak.lineRank - bk.lineRank || ak.code.localeCompare(bk.code);
+        });
     }, [trials, search, cancerType, selectedLine, showArchived]);
     
     const cancerTypes = useMemo(() => {
@@ -2224,7 +2334,7 @@ function App() {
             }
             if (trial.cancerType) addType(trial.cancerType);
         });
-        return ['全部', ...Array.from(map.values()).sort()];
+        return ['全部', ...Array.from(map.values()).sort((a, b) => getCancerRank(a) - getCancerRank(b) || normalizeFilterValue(a).localeCompare(normalizeFilterValue(b)))];
     }, [trials]);
     
     const treatmentLines = useMemo(() => {
@@ -2270,7 +2380,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.9 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
