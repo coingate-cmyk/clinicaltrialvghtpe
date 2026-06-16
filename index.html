@@ -3,35 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>臨床試驗管理系統 v4.10.1 Realtime Database版</title>
-    <script src="./vendor/tailwindcss-3.4.17.js"></script>
-    <script src="./vendor/crypto-js-4.1.1.min.js"></script>
-    <script src="./vendor/firebase-app-10.12.2-compat.js"></script>
-    <script src="./vendor/firebase-database-10.12.2-compat.js"></script>
-    <script src="./vendor/xlsx-0.18.5.full.min.js"></script>
+    <title>臨床試驗管理系統 v4.0.5 Firebase版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50">
-    <div id="boot-error" class="min-h-screen flex items-center justify-center text-xl text-slate-700">系統載入中...</div>
     <div id="app"></div>
-    <script src="./vendor/react-18.production.min.js"></script>
-    <script src="./vendor/react-dom-18.production.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script>
-const missingDependencies = [
-    ['React', window.React],
-    ['ReactDOM', window.ReactDOM],
-    ['CryptoJS', window.CryptoJS],
-    ['Firebase', window.firebase],
-    ['XLSX', window.XLSX]
-].filter((item) => !item[1]).map((item) => item[0]);
-if (missingDependencies.length) {
-    document.getElementById('boot-error').textContent =
-        `系統元件載入失敗：${missingDependencies.join('、')}。請重新整理或聯絡管理者。`;
-    throw new Error(`Missing dependencies: ${missingDependencies.join(', ')}`);
-}
-
 const {useState, useEffect, useMemo, useRef} = React;
 const e = React.createElement;
 
@@ -40,7 +23,8 @@ const CONFIG = {
     ADMIN_USERNAME: 'admin',
     ADMIN_PASSWORD: 'admin123',
     ENCRYPTION_KEY: 'clinical-trials-secret-key-2026',
-    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4.10.1'
+    FIREBASE_CONFIG_KEY: 'clinical-trials-firebase-config-v4',
+    FIREBASE_ENABLED_KEY: 'clinical-trials-firebase-enabled-v4'
 };
 
 const DEFAULT_FIREBASE_CONFIG = {
@@ -53,36 +37,18 @@ const DEFAULT_FIREBASE_CONFIG = {
     appId: '1:220821651319:web:19dbfbaea0ea999472eb72'
 };
 
-const resolveFirebaseConfig = (config) => {
-    const candidate = Object.fromEntries(
-        Object.entries(config || {}).map(([key, value]) => [
-            key,
-            typeof value === 'string' ? value.trim() : value
-        ])
-    );
-    const isComplete = candidate.apiKey && candidate.databaseURL &&
-        candidate.projectId && candidate.appId;
-    return isComplete
-        ? { ...DEFAULT_FIREBASE_CONFIG, ...candidate }
-        : { ...DEFAULT_FIREBASE_CONFIG };
-};
-
-// 本機資料只作為離線快取；Firebase Realtime Database 是唯一的多人同步來源。
+// Firebase Firestore 自動同步設定（已內建，不需每台電腦手動輸入）
 const saveAllData = async (trialsData, subjectsData) => {
-    try {
-        const encryptedTrials = encryptData(trialsData || []);
-        const encryptedSubjects = encryptData(subjectsData || []);
-        if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
-        if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
-        localStorage.setItem('clinical-trials-meta', JSON.stringify({
-            updatedAt: new Date().toISOString(),
-            trialsCount: (trialsData || []).length,
-            subjectsCount: (subjectsData || []).length,
-            source: 'firebase-realtime-database-cache'
-        }));
-    } catch (error) {
-        console.warn('Local cache write failed:', error);
-    }
+    const encryptedTrials = encryptData(trialsData || []);
+    const encryptedSubjects = encryptData(subjectsData || []);
+    if (encryptedTrials) localStorage.setItem('clinical-trials-encrypted', encryptedTrials);
+    if (encryptedSubjects) localStorage.setItem('clinical-trials-subjects', encryptedSubjects);
+    localStorage.setItem('clinical-trials-meta', JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        trialsCount: (trialsData || []).length,
+        subjectsCount: (subjectsData || []).length,
+        source: 'local-only'
+    }));
     return true;
 };
 
@@ -105,112 +71,55 @@ const decryptData = (encrypted) => {
 
 const normalizeCode = (v) => String(v || '').trim().toUpperCase();
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
-const normalizeMultilineText = (v) => String(v ?? '').replace(/\r\n/g, '\n').trim();
-const normalizeTreatmentLine = (value) => {
-    let line = normalizeText(value);
-    if (!line) return '';
-    const compactLine = line.replace(/\s+/g, '');
-    if (/adjuv|輔助|術後|觀察性/i.test(compactLine)) return 'Adjuvant';
-    if (line === '一' || line === '線') return '一線';
-    const numerals = { '1': '一', '2': '二', '3': '三', '4': '四' };
-    line = line
-        .replace(/第\s*([一二三四1-4])/g, '$1')
-        .replace(/[1-4]/g, digit => numerals[digit])
-        .replace(/([一二三四])\s*l\b/gi, '$1線')
-        .replace(/([一二三四])\s*線/g, '$1線');
-    return line
-        .replace(/一腺/g, '一線')
-        .replace(/\s*([、,，/／-])\s*/g, '$1')
-        .trim();
-};
 const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）]+/g, '').trim();
 const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
 const lineMatchesSelection = (line, selected) => {
     if (!selected || selected === '全部') return true;
     const n = normalizeFilterValue(line);
     if (!n) return false;
-    if (selected === '一線') return n.includes('第一線') || n.includes('一線') || n.includes('1l') || n.includes('firstline') || n.includes('一腺');
-    if (selected === '二線') return n.includes('第二線') || n.includes('二線') || n.includes('2l') || n.includes('一線後') || n.includes('二三線');
-    if (selected === '三線') return n.includes('第三線') || n.includes('三線') || n.includes('3l') || n.includes('二線後') || n.includes('二三線');
-    if (selected === '四線') return n.includes('第四線') || n.includes('四線') || n.includes('4l');
+    if (selected === '第一線') return n.includes('第一線') || n.includes('一線') || n.includes('1l') || n.includes('firstline') || n.includes('一腺');
+    if (selected === '第二線') return n.includes('第二線') || n.includes('二線') || n.includes('2l') || n.includes('一線後') || n.includes('二三線');
+    if (selected === '第三線') return n.includes('第三線') || n.includes('三線') || n.includes('3l') || n.includes('二線後') || n.includes('二三線');
     if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
     if (selected === '多線') return n.includes('多線') || n.includes('multi') || n.includes('後線') || n.includes('laterline');
     return normalizeFilterValue(selected) === n || n.includes(normalizeFilterValue(selected));
-};
-
-const KNOWN_CANCER_TYPES = ['肝癌', '胃癌', '胰臟癌', '食道癌', '膽道癌', '膽管癌', '大腸癌', 'CRPC', '預備中'];
-
-const splitCancerLineText = (value) => {
-    const text = normalizeCellText(value);
-    const compact = text.replace(/\s+/g, '');
-    for (const cancer of KNOWN_CANCER_TYPES) {
-        if (compact === cancer || compact.startsWith(cancer)) {
-            return {
-                cancerType: cancer === '膽管癌' ? '膽道癌' : cancer,
-                line: normalizeTreatmentLine(compact.slice(cancer.length))
-            };
-        }
-    }
-    return { cancerType: '', line: normalizeTreatmentLine(text) };
-};
-
-const inferCancerFromStudyTitle = (title) => {
-    const compact = normalizeCellText(title).replace(/\s+/g, '');
-    if (!compact) return '';
-    for (const cancer of KNOWN_CANCER_TYPES) {
-        if (compact.startsWith(cancer)) return cancer === '膽管癌' ? '膽道癌' : cancer;
-    }
-    return '';
 };
 
 const getStoredFirebaseConfig = () => {
     try {
         const raw = localStorage.getItem(CONFIG.FIREBASE_CONFIG_KEY);
         const parsed = raw ? JSON.parse(raw) : null;
-        return resolveFirebaseConfig(parsed);
+        return parsed && parsed.apiKey && parsed.projectId && parsed.appId ? parsed : DEFAULT_FIREBASE_CONFIG;
     } catch (error) {
-        return resolveFirebaseConfig();
+        return DEFAULT_FIREBASE_CONFIG;
     }
 };
 
 const setStoredFirebaseConfig = (cfg) => {
-    const merged = resolveFirebaseConfig(cfg);
+    const merged = { ...DEFAULT_FIREBASE_CONFIG, ...(cfg || {}) };
     localStorage.setItem(CONFIG.FIREBASE_CONFIG_KEY, JSON.stringify(merged));
-    return merged;
+    localStorage.setItem(CONFIG.FIREBASE_ENABLED_KEY, 'true');
 };
 
+const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY) !== 'false';
+
 let firebaseAppInstance = null;
-let realtimeDatabaseInstance = null;
+let firestoreInstance = null;
 
 const initializeFirebaseApp = (firebaseConfig) => {
-    const resolvedConfig = resolveFirebaseConfig(firebaseConfig);
-    if (!resolvedConfig.apiKey || !resolvedConfig.databaseURL || !resolvedConfig.projectId || !resolvedConfig.appId) {
+    if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
         throw new Error('Firebase 設定不完整');
     }
     if (!firebaseAppInstance) {
         firebaseAppInstance = firebase.apps && firebase.apps.length
             ? firebase.app()
-            : firebase.initializeApp(resolvedConfig);
+            : firebase.initializeApp(firebaseConfig);
     }
-    if (!realtimeDatabaseInstance) {
-        realtimeDatabaseInstance = firebase.database();
+    if (!firestoreInstance) {
+        firestoreInstance = firebase.firestore();
     }
-    return realtimeDatabaseInstance;
+    return firestoreInstance;
 };
-
-const reinitializeFirebaseApp = async (firebaseConfig) => {
-    if (firebaseAppInstance) {
-        await firebaseAppInstance.delete();
-        firebaseAppInstance = null;
-        realtimeDatabaseInstance = null;
-    }
-    return initializeFirebaseApp(firebaseConfig);
-};
-
-const firebaseTrialKey = (code) =>
-    encodeURIComponent(normalizeCode(code)).replace(/\./g, '%2E');
-
-const toFirebaseValue = (value) => JSON.parse(JSON.stringify(value));
 
 const cleanTrialForSave = (trial) => {
     const cleaned = { ...(trial || {}) };
@@ -226,30 +135,15 @@ const cleanTrialForSave = (trial) => {
     cleaned.status = normalizeText(cleaned.status);
     cleaned.inclusion = cleaned.inclusion || '';
     cleaned.exclusion = cleaned.exclusion || '';
-    cleaned.targetNum = normalizeMultilineText(cleaned.targetNum);
-    cleaned.enrolled = normalizeMultilineText(cleaned.enrolled);
-    cleaned.monthSigned = normalizeMultilineText(cleaned.monthSigned);
-    cleaned.monthEnrolled = normalizeMultilineText(cleaned.monthEnrolled);
-    cleaned.line = normalizeTreatmentLine(cleaned.line);
-    if (Array.isArray(cleaned.cancerTypes)) {
-        cleaned.cancerTypes = cleaned.cancerTypes.map((ct) => ({
-            ...ct,
-            type: normalizeCellText(ct.type || ''),
-            lines: Array.isArray(ct.lines)
-                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
-                : []
-        })).filter(ct => ct.type || ct.lines.length);
-        if (cleaned.cancerTypes.length) {
-            cleaned.cancerType = cleaned.cancerTypes[0].type || cleaned.cancerType || '';
-            cleaned.line = cleaned.cancerTypes[0].lines[0] || cleaned.line || '';
-        }
-    }
-    cleaned.cancerType = normalizeCellText(cleaned.cancerType);
+    cleaned.targetNum = Number.isFinite(Number(cleaned.targetNum)) ? Number(cleaned.targetNum) : 0;
+    cleaned.enrolled = Number.isFinite(Number(cleaned.enrolled)) ? Number(cleaned.enrolled) : 0;
+    cleaned.monthSigned = Number.isFinite(Number(cleaned.monthSigned)) ? Number(cleaned.monthSigned) : 0;
+    cleaned.monthEnrolled = Number.isFinite(Number(cleaned.monthEnrolled)) ? Number(cleaned.monthEnrolled) : 0;
     cleaned.updatedAt = new Date().toISOString();
     return cleaned;
 };
 
-const normalizeFirebaseTrial = (raw) => {
+const normalizeFirestoreTrial = (raw) => {
     const trial = { ...(raw || {}) };
     trial.code = normalizeCode(trial.code);
     trial.studyTitle = normalizeText(trial.studyTitle);
@@ -261,67 +155,32 @@ const normalizeFirebaseTrial = (raw) => {
     trial.phase = trial.phase || '';
     trial.status = trial.status || '';
     trial.id = trial.id || trial.code || Date.now();
-    trial.targetNum = normalizeMultilineText(trial.targetNum);
-    trial.enrolled = normalizeMultilineText(trial.enrolled);
-    trial.monthSigned = normalizeMultilineText(trial.monthSigned);
-    trial.monthEnrolled = normalizeMultilineText(trial.monthEnrolled);
-    trial.line = normalizeTreatmentLine(trial.line);
-    if (Array.isArray(trial.cancerTypes)) {
-        trial.cancerTypes = trial.cancerTypes.map((ct) => ({
-            ...ct,
-            type: normalizeCellText(ct.type || ''),
-            lines: Array.isArray(ct.lines)
-                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
-                : []
-        })).filter(ct => ct.type || ct.lines.length);
-    }
+    trial.targetNum = Number.isFinite(Number(trial.targetNum)) ? Number(trial.targetNum) : 0;
+    trial.enrolled = Number.isFinite(Number(trial.enrolled)) ? Number(trial.enrolled) : 0;
+    trial.monthSigned = Number.isFinite(Number(trial.monthSigned)) ? Number(trial.monthSigned) : 0;
+    trial.monthEnrolled = Number.isFinite(Number(trial.monthEnrolled)) ? Number(trial.monthEnrolled) : 0;
     if (!Array.isArray(trial.cancerTypes)) trial.cancerTypes = Array.isArray(trial.cancerTypes) ? trial.cancerTypes : [];
-    if (!trial.cancerType && trial.cancerTypes[0]) trial.cancerType = trial.cancerTypes[0].type || '';
-    if (!trial.line && trial.cancerTypes[0] && trial.cancerTypes[0].lines[0]) trial.line = trial.cancerTypes[0].lines[0];
     return trial;
 };
 
-const subscribeRealtimeData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
+const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
     try {
         const db = initializeFirebaseApp(firebaseConfig);
-        const trialsRef = db.ref('trials');
-        const subjectsRef = db.ref('subjects');
-        const handleTrials = (snapshot) => {
-            const data = snapshot.val() || {};
-            const list = Object.values(data)
-                .map((trial) => normalizeFirebaseTrial(trial))
-                .filter((trial) => trial.code);
-            onTrials(list);
-            onStatus && onStatus(`Firebase Realtime Database 已同步（${list.length} 個試驗）`);
-        };
-        const handleSubjects = async (snapshot) => {
-            try {
-                const data = snapshot.val();
-                if (Array.isArray(data)) {
-                    onSubjects(data);
-                    return;
-                }
-                if (typeof data === 'string') {
-                    const decryptedSubjects = decryptData(data);
-                    onSubjects(Array.isArray(decryptedSubjects) ? decryptedSubjects : []);
-                    return;
-                }
-                // 舊版曾把受試者陣列加密後放在 clinicalTrialApp/subjects。
-                // 新版只讀取它作相容 fallback，不會再寫回舊路徑。
-                const legacySnapshot = await db.ref('clinicalTrialApp/subjects').once('value');
-                const legacySubjects = legacySnapshot.exists() ? decryptData(legacySnapshot.val()) : null;
-                onSubjects(Array.isArray(legacySubjects) ? legacySubjects : []);
-            } catch (error) {
-                onError && onError(error);
-            }
-        };
-        const handleError = (error) => onError && onError(error);
-        trialsRef.on('value', handleTrials, handleError);
-        subjectsRef.on('value', handleSubjects, handleError);
+        const unsubTrials = db.collection('trials').onSnapshot((snapshot) => {
+            const list = snapshot.docs.map((doc) => normalizeFirestoreTrial({ ...doc.data(), code: doc.id }));
+            const merged = list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS;
+            onTrials(merged);
+            onStatus && onStatus(`Firebase 同步中（${merged.length} 個試驗）`);
+        }, onError);
+
+        const unsubSubjects = db.collection('meta').doc('subjects').onSnapshot((doc) => {
+            const data = doc.exists ? doc.data() : {};
+            onSubjects(Array.isArray(data.items) ? data.items : []);
+        }, onError);
 
         return () => {
-            trialsRef.off('value', handleTrials);
-            subjectsRef.off('value', handleSubjects);
+            try { unsubTrials && unsubTrials(); } catch (e) {}
+            try { unsubSubjects && unsubSubjects(); } catch (e) {}
         };
     } catch (error) {
         onError && onError(error);
@@ -329,72 +188,64 @@ const subscribeRealtimeData = ({ firebaseConfig, onTrials, onSubjects, onStatus,
     }
 };
 
-const saveTrialToRealtimeDatabase = async (firebaseConfig, trialData) => {
+const saveTrialToFirestore = async (firebaseConfig, trialData) => {
     const db = initializeFirebaseApp(firebaseConfig);
     const cleaned = cleanTrialForSave(trialData);
     if (!cleaned) throw new Error('trial code 不可空白');
-    await db.ref(`trials/${firebaseTrialKey(cleaned.code)}`).set(toFirebaseValue(cleaned));
+    await db.collection('trials').doc(cleaned.code).set(cleaned, { merge: true });
     return cleaned;
 };
 
-const saveTrialsToRealtimeDatabase = async (firebaseConfig, trialsData) => {
+const deleteTrialFromFirestore = async (firebaseConfig, code) => {
     const db = initializeFirebaseApp(firebaseConfig);
-    const updates = {};
-    (trialsData || []).forEach((trial) => {
-        const cleaned = cleanTrialForSave(trial);
-        if (cleaned && cleaned.code) {
-            updates[firebaseTrialKey(cleaned.code)] = toFirebaseValue(cleaned);
-        }
-    });
-    if (Object.keys(updates).length) {
-        await db.ref('trials').update(updates);
+    await db.collection('trials').doc(normalizeCode(code)).delete();
+};
+
+const clearTrialsFromFirestore = async (firebaseConfig) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    let total = 0;
+    while (true) {
+        const snapshot = await db.collection('trials').limit(400).get();
+        if (snapshot.empty) break;
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+        await batch.commit();
+        total += snapshot.size;
+        if (snapshot.size < 400) break;
     }
-};
-
-const deleteTrialFromRealtimeDatabase = async (firebaseConfig, code) => {
-    const db = initializeFirebaseApp(firebaseConfig);
-    await db.ref(`trials/${firebaseTrialKey(code)}`).remove();
-};
-
-const clearTrialsFromRealtimeDatabase = async (firebaseConfig) => {
-    const db = initializeFirebaseApp(firebaseConfig);
-    const ref = db.ref('trials');
-    const snapshot = await ref.once('value');
-    const total = snapshot.numChildren();
-    await ref.remove();
     return total;
 };
 
-const saveSubjectsToRealtimeDatabase = async (firebaseConfig, data) => {
+const saveSubjectsToFirestore = async (firebaseConfig, data) => {
     const db = initializeFirebaseApp(firebaseConfig);
-    const encrypted = encryptData(Array.isArray(data) ? data : []);
-    if (!encrypted) throw new Error('受試者資料加密失敗');
-    await db.ref('subjects').set(encrypted);
+    await db.collection('meta').doc('subjects').set({
+        items: Array.isArray(data) ? data : [],
+        updatedAt: new Date().toISOString()
+    }, { merge: true });
 };
 
-const seedInitialTrialsToRealtimeDatabase = async (firebaseConfig, trialsData) => {
+const seedInitialTrialsToFirestore = async (firebaseConfig, trialsData) => {
     const db = initializeFirebaseApp(firebaseConfig);
-    const initialMap = {};
+    const existing = await db.collection('trials').limit(1).get();
+    if (!existing.empty) return false;
+    const batch = db.batch();
     (trialsData || []).forEach((trial) => {
         const cleaned = cleanTrialForSave(trial);
         if (cleaned && cleaned.code) {
-            initialMap[firebaseTrialKey(cleaned.code)] = toFirebaseValue(cleaned);
+            batch.set(db.collection('trials').doc(cleaned.code), cleaned, { merge: true });
         }
     });
-    const ref = db.ref('trials');
-    const existing = await ref.once('value');
-    if (existing.exists()) return false;
-    await ref.transaction((current) => current || initialMap);
+    await batch.commit();
     return true;
 };
 
 
 const FIELD_ALIASES = {
-    cancerType: ['cancertype','cancer type','cancer','tumor type','癌別','癌症別','疾病別','疾病','適應症','fff'],
-    line: ['line','treatment line','therapy line','線別','治療線別','治療線'],
-    code: ['code','trial code','study code','protocol','protocol no','protocol number','protocol id','試驗代碼','試驗編號','計畫代碼','計畫編號','案號','代號'],
-    studyTitle: ['studytitle','study title','title','trial title','protocol title','study name','試驗名稱','試驗標題','計畫名稱','研究名稱'],
-    inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','納入條件','inclusion','inclusion criteria','eligibility','主要條件'],
+    cancerType: ['cancertype','cancer type','癌別','疾病別','適應症','fff'],
+    line: ['line','treatment line','線別','治療線別'],
+    code: ['code','trial code','study code','protocol','protocol no','protocol number','試驗代碼','計畫代碼','案號','代號'],
+    studyTitle: ['studytitle','study title','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
+    inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','inclusion','eligibility','主要條件'],
     phase: ['phase','期別'],
     sponsor: ['sponsor','贊助商','廠商'],
     targetNum: ['targetnum','target','target number','target no','sample size','目標收案','目標個案數','目標數','target人數'],
@@ -402,7 +253,7 @@ const FIELD_ALIASES = {
     monthSigned: ['monthsigned','signed this month','本月簽署','本月簽同意書','本月簽署數','當月簽署人數'],
     monthEnrolled: ['monthenrolled','enrolled this month','本月收案','本月入組','當月入案人數'],
     pi: ['pi','principal investigator','主持人'],
-    nurse: ['nurse','crc','study nurse','study nurse/ phone','studynurse/phone','research nurse','研究護理師','研究護士','個管師'],
+    nurse: ['nurse','crc','study nurse','study nurse/ phone','studynurse/phone','研究護理師','個管師'],
     phone: ['phone','tel','電話','分機','聯絡電話'],
     status: ['status','狀態','收案狀態'],
     comments: ['comments','comment','note','notes','remark','備註','說明','comments (相關sae)','comments相關sae'],
@@ -411,86 +262,20 @@ const FIELD_ALIASES = {
 
 const STATUS_KEYWORDS = ['暫停收案','名額已滿','停止收案','試驗結束','試驗終了','還未SIV','未SIV','預備中','close-out','closed','paused','suspended'];
 
-const normalizeHeader = (value) => String(value || '')
-    .normalize('NFKC')
-    .toLowerCase()
-    .replace(/[：:、，,.。;；'"`~!！?？\s_\-（）()\/\\]+/g, '')
-    .trim();
+const normalizeHeader = (value) => String(value || '').toLowerCase().replace(/[\s_\-（）()\/]+/g, '').trim();
 const normalizeCellText = (value) => String(value ?? '').replace(/\r\n/g, '\n').trim();
 
-const editDistance = (left, right) => {
-    const a = String(left || '');
-    const b = String(right || '');
-    if (a === b) return 0;
-    if (!a.length) return b.length;
-    if (!b.length) return a.length;
-    const previous = Array.from({length: b.length + 1}, (_, index) => index);
-    for (let i = 1; i <= a.length; i++) {
-        let diagonal = previous[0];
-        previous[0] = i;
-        for (let j = 1; j <= b.length; j++) {
-            const above = previous[j];
-            previous[j] = Math.min(
-                previous[j] + 1,
-                previous[j - 1] + 1,
-                diagonal + (a[i - 1] === b[j - 1] ? 0 : 1)
-            );
-            diagonal = above;
-        }
-    }
-    return previous[b.length];
-};
-
-const headerAliasScore = (header, alias) => {
-    const value = normalizeHeader(header);
-    const target = normalizeHeader(alias);
-    if (!value || !target) return 0;
-    if (value === target) return 1;
-
-    const shorter = Math.min(value.length, target.length);
-    const longer = Math.max(value.length, target.length);
-    if (shorter >= 3 && (value.includes(target) || target.includes(value))) {
-        return 0.9 * (shorter / longer) + 0.08;
-    }
-
-    const distance = editDistance(value, target);
-    if (value.length === target.length && distance === 2) {
-        for (let index = 0; index < value.length - 1; index++) {
-            if (
-                value[index] === target[index + 1] &&
-                value[index + 1] === target[index] &&
-                value.slice(0, index) === target.slice(0, index) &&
-                value.slice(index + 2) === target.slice(index + 2)
-            ) return 0.86;
-        }
-    }
-    if (longer <= 2) return 0;
-    if (longer <= 5) return distance === 1 ? 0.82 : 0;
-    const similarity = 1 - distance / longer;
-    return similarity >= 0.72 ? similarity : 0;
-};
-
-const inferFieldDetails = (header) => {
-    let best = { field: null, score: 0, alias: '' };
-    for (const [field, aliases] of Object.entries(FIELD_ALIASES)) {
-        for (const alias of aliases) {
-            if (field === 'cancerType' && normalizeHeader(header) !== normalizeHeader(alias)) continue;
-            const score = headerAliasScore(header, alias);
-            if (score > best.score) best = { field, score, alias };
-        }
-    }
-    return best.score >= 0.72 ? best : { field: null, score: best.score, alias: best.alias };
-};
-
 const inferFieldFromHeader = (header) => {
-    return inferFieldDetails(header).field;
+    const normalized = normalizeHeader(header);
+    for (const [field, aliases] of Object.entries(FIELD_ALIASES)) {
+        if (aliases.some(alias => normalizeHeader(alias) === normalized)) return field;
+    }
+    return null;
 };
 
 const isHeaderRow = (row) => {
     const mapped = (row || []).map(inferFieldFromHeader);
-    const recognized = new Set(mapped.filter(Boolean));
-    return recognized.has('code') &&
-        (recognized.has('studyTitle') || recognized.size >= 3);
+    return mapped.includes('code') && mapped.includes('studyTitle');
 };
 
 const isMetaCancerCell = (value) => {
@@ -505,100 +290,51 @@ const detectStatusFromRow = (row) => {
 };
 
 const normalizeCancerLine = (cancerType, line) => {
-    const cancerPart = splitCancerLineText(cancerType);
-    const linePart = splitCancerLineText(line);
-    let c = cancerPart.cancerType || normalizeCellText(cancerType) || linePart.cancerType;
-    let l = linePart.line || cancerPart.line || normalizeTreatmentLine(line);
-    if (c === '膽管癌') c = '膽道癌';
+    let c = normalizeCellText(cancerType);
+    let l = normalizeCellText(line);
+    if (!c && l.startsWith('肝癌')) {
+        c = '肝癌';
+        l = l.replace(/^肝癌/, '').trim();
+    }
     return { cancerType: c, line: l };
 };
-
-const getTrialCancerEntries = (trial) => {
-    const entries = [];
-    const addEntry = (type, line) => {
-        const normalizedType = normalizeCellText(type || '');
-        const normalizedLine = normalizeTreatmentLine(line || '');
-        if (!normalizedType && !normalizedLine) return;
-        if (entries.some(entry =>
-            valueMatches(entry.type, normalizedType) &&
-            lineMatchesSelection(entry.line || '', normalizedLine || '')
-        )) return;
-        entries.push({ type: normalizedType, line: normalizedLine });
-    };
-
-    if (Array.isArray(trial && trial.cancerTypes)) {
-        trial.cancerTypes.forEach((ct) => {
-            const type = normalizeCellText(ct && ct.type);
-            const lines = Array.isArray(ct && ct.lines)
-                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
-                : [];
-            if (lines.length) {
-                lines.forEach(line => addEntry(type, line));
-            } else {
-                addEntry(type, '');
-            }
-        });
-    }
-
-    if (trial && (trial.cancerType || trial.line)) {
-        addEntry(trial.cancerType || '', trial.line || '');
-    }
-
-    return entries;
-};
-
-const buildCancerTypesFromEntries = (entries) => {
-    const map = new Map();
-    (entries || []).forEach((entry) => {
-        const type = normalizeCellText(entry && entry.type);
-        const line = normalizeTreatmentLine(entry && entry.line);
-        if (!type && !line) return;
-        const key = normalizeFilterValue(type || '未分類');
-        const prev = map.get(key) || { type: type || '', lines: [] };
-        if (line && !prev.lines.some(existing => lineMatchesSelection(existing, line))) {
-            prev.lines.push(line);
-        }
-        if (!prev.type && type) prev.type = type;
-        map.set(key, prev);
-    });
-    return Array.from(map.values()).filter(ct => ct.type || ct.lines.length);
-};
-
-const mergeCancerTypes = (...trials) => buildCancerTypesFromEntries(
-    trials.flatMap(trial => getTrialCancerEntries(trial || {}))
-);
 
 
 const consolidateParsedTrials = (rows) => {
     const map = new Map();
     let duplicateCount = 0;
     (rows || []).forEach((row) => {
-        const preparedRow = {
-            ...(row || {}),
-            line: normalizeTreatmentLine(row && row.line),
-            cancerTypes: Array.isArray(row && row.cancerTypes)
-                ? row.cancerTypes.map((ct) => ({
-                    ...ct,
-                    lines: Array.isArray(ct.lines)
-                        ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
-                        : []
-                }))
-                : row && row.cancerTypes
-        };
-        const key = normalizeCode(preparedRow.code);
+        const key = normalizeCode(row && row.code);
         if (!key) return;
         const current = map.get(key);
         if (!current) {
-            map.set(key, { ...preparedRow, code: key });
+            map.set(key, { ...row, code: key });
             return;
         }
         duplicateCount++;
         const merged = { ...current };
-        Object.entries(preparedRow).forEach(([field, value]) => {
+        Object.entries(row || {}).forEach(([field, value]) => {
             if (field === 'cancerTypes') return;
             if (value !== undefined && value !== null && String(value).trim() !== '') merged[field] = value;
         });
-        merged.cancerTypes = mergeCancerTypes(current, preparedRow);
+        const ctMap = new Map();
+        const addCt = (ct) => {
+            if (!ct) return;
+            const type = normalizeCellText(ct.type || '');
+            const lines = Array.isArray(ct.lines) ? ct.lines.map(normalizeCellText).filter(Boolean) : [];
+            if (!type && !lines.length) return;
+            const k = normalizeFilterValue(type || '未分類');
+            const prev = ctMap.get(k) || { type: type || '', lines: [] };
+            lines.forEach(line => {
+                if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
+            });
+            if (!prev.type && type) prev.type = type;
+            ctMap.set(k, prev);
+        };
+        (Array.isArray(current.cancerTypes) ? current.cancerTypes : []).forEach(addCt);
+        (Array.isArray(row.cancerTypes) ? row.cancerTypes : []).forEach(addCt);
+        if (row.cancerType || row.line) addCt({ type: row.cancerType || '', lines: [row.line || ''].filter(Boolean) });
+        merged.cancerTypes = Array.from(ctMap.values());
         if (!merged.cancerType && merged.cancerTypes[0]) merged.cancerType = merged.cancerTypes[0].type;
         if (!merged.line && merged.cancerTypes[0] && merged.cancerTypes[0].lines[0]) merged.line = merged.cancerTypes[0].lines[0];
         merged.code = key;
@@ -625,39 +361,15 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (isHeaderRow(row)) {
             mappedFields = row.map(inferFieldFromHeader);
-            const cancerIndex = mappedFields.findIndex(v => v === 'cancerType');
-            const studyTitleIndex = mappedFields.findIndex(v => v === 'studyTitle');
-            const codeIndex = mappedFields.findIndex(v => v === 'code');
-            if (
-                cancerIndex === 0 &&
-                !mappedFields[1] &&
-                studyTitleIndex === 2 &&
-                codeIndex === 3
-            ) {
-                mappedFields[1] = 'line';
-            }
             continue;
         }
 
         if (!mappedFields) continue;
 
-        const cancerIndex = mappedFields.findIndex(v => v === 'cancerType');
-        const lineIndex = mappedFields.findIndex(v => v === 'line');
-        const cancerCell = cancerIndex >= 0 ? (row[cancerIndex] || '') : '';
-        const lineCell = lineIndex >= 0 ? (row[lineIndex] || '') : '';
+        const cancerCell = row[0] || '';
+        const lineCell = row[1] || '';
 
-        const titleIndex = mappedFields.findIndex(v => v === 'studyTitle');
-        const titleCell = titleIndex >= 0 ? (row[titleIndex] || '') : '';
-        const titleCancerType = inferCancerFromStudyTitle(titleCell);
-        const cancerLine = normalizeCancerLine(cancerCell, lineCell);
-
-        if (cancerCell && !isMetaCancerCell(cancerCell)) {
-            currentCancerType = cancerLine.cancerType || normalizeCellText(cancerCell);
-        } else if (titleCancerType) {
-            currentCancerType = titleCancerType;
-        } else if (cancerLine.cancerType) {
-            currentCancerType = cancerLine.cancerType;
-        }
+        if (cancerCell && !isMetaCancerCell(cancerCell)) currentCancerType = cancerCell;
 
         if (lineCell) {
             const normalized = normalizeCancerLine(currentCancerType, lineCell);
@@ -680,9 +392,6 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (!item.cancerType && currentCancerType) item.cancerType = currentCancerType;
         if (!item.line && currentLine) item.line = currentLine;
-        const normalizedCancerLine = normalizeCancerLine(item.cancerType || currentCancerType, item.line || currentLine);
-        item.cancerType = normalizedCancerLine.cancerType || item.cancerType || currentCancerType || '';
-        item.line = normalizedCancerLine.line || item.line || currentLine || '';
         if (!item.status) item.status = detectStatusFromRow(row) || '進行中';
         if (!item.inclusion && row[4]) item.inclusion = row[4];
         item.code = code;
@@ -724,8 +433,7 @@ const parseDelimitedLine = (line, delimiter) => {
 };
 
 
-const upsertTrialsByCode = (existingTrials, incomingTrials, options = {}) => {
-    const preserveExistingCancerTypes = !!options.preserveExistingCancerTypes;
+const upsertTrialsByCode = (existingTrials, incomingTrials) => {
     const map = new Map();
 
     (existingTrials || []).forEach((trial) => {
@@ -738,8 +446,6 @@ const upsertTrialsByCode = (existingTrials, incomingTrials, options = {}) => {
         if (!key) return;
 
         const prev = map.get(key) || {};
-        const hasExistingCancerTypes = Array.isArray(prev.cancerTypes) && prev.cancerTypes.length > 0;
-        const shouldPreserveCancerTypes = preserveExistingCancerTypes && hasExistingCancerTypes;
         const merged = {
             ...prev,
             ...incoming,
@@ -754,28 +460,15 @@ const upsertTrialsByCode = (existingTrials, incomingTrials, options = {}) => {
             isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
             archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
             archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
-            targetNum: normalizeMultilineText(incoming.targetNum ?? prev.targetNum),
-            enrolled: normalizeMultilineText(incoming.enrolled ?? prev.enrolled),
-            monthSigned: normalizeMultilineText(incoming.monthSigned ?? prev.monthSigned),
-            monthEnrolled: normalizeMultilineText(incoming.monthEnrolled ?? prev.monthEnrolled),
+            targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
+            enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
+            monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
+            monthEnrolled: Number.isFinite(Number(incoming.monthEnrolled)) ? Number(incoming.monthEnrolled) : (prev.monthEnrolled || 0),
         };
 
-        if (shouldPreserveCancerTypes) {
-            merged.cancerType = prev.cancerType;
-            merged.line = prev.line;
-            merged.cancerTypes = mergeCancerTypes(prev, incoming);
-        }
-
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
-            merged.cancerTypes = mergeCancerTypes(prev, incoming);
+            merged.cancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
         }
-        merged.line = normalizeTreatmentLine(merged.line);
-        merged.cancerTypes = merged.cancerTypes.map((ct) => ({
-            ...ct,
-            lines: Array.isArray(ct.lines)
-                ? ct.lines.map(normalizeTreatmentLine).filter(Boolean)
-                : []
-        }));
 
         map.set(key, merged);
     });
@@ -804,210 +497,6 @@ const parseExcelFile = async (file) => {
     return { rows, text, parsed };
 };
 
-const decodePdfUtf16BE = (bytes) => {
-    const chars = [];
-    for (let i = 0; i + 1 < bytes.length; i += 2) {
-        chars.push(String.fromCharCode((bytes[i] << 8) | bytes[i + 1]));
-    }
-    return chars.join('');
-};
-
-const decodePdfTextBytes = (bytes) => {
-    if (bytes.length >= 2 && bytes[0] === 0xFE && bytes[1] === 0xFF) {
-        return decodePdfUtf16BE(bytes.slice(2));
-    }
-    try {
-        return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
-    } catch (error) {
-        return String.fromCharCode(...bytes);
-    }
-};
-
-const decodePdfLiteralString = (raw) => {
-    const bytes = [];
-    for (let i = 0; i < raw.length; i += 1) {
-        const ch = raw[i];
-        if (ch !== '\\') {
-            bytes.push(ch.charCodeAt(0) & 0xFF);
-            continue;
-        }
-        i += 1;
-        const next = raw[i];
-        if (!next) break;
-        const escaped = { n: 10, r: 13, t: 9, b: 8, f: 12, '(': 40, ')': 41, '\\': 92 };
-        if (Object.prototype.hasOwnProperty.call(escaped, next)) {
-            bytes.push(escaped[next]);
-        } else if (/[0-7]/.test(next)) {
-            let octal = next;
-            for (let j = 0; j < 2 && /[0-7]/.test(raw[i + 1]); j += 1) {
-                octal += raw[++i];
-            }
-            bytes.push(parseInt(octal, 8) & 0xFF);
-        } else {
-            bytes.push(next.charCodeAt(0) & 0xFF);
-        }
-    }
-    return decodePdfTextBytes(bytes);
-};
-
-const extractPdfLiteralStrings = (text) => {
-    const result = [];
-    let inString = false;
-    let depth = 0;
-    let escaped = false;
-    let buffer = '';
-    for (let i = 0; i < text.length; i += 1) {
-        const ch = text[i];
-        if (!inString) {
-            if (ch === '(') {
-                inString = true;
-                depth = 1;
-                escaped = false;
-                buffer = '';
-            }
-            continue;
-        }
-        if (escaped) {
-            buffer += '\\' + ch;
-            escaped = false;
-            continue;
-        }
-        if (ch === '\\') {
-            escaped = true;
-            continue;
-        }
-        if (ch === '(') {
-            depth += 1;
-            buffer += ch;
-            continue;
-        }
-        if (ch === ')') {
-            depth -= 1;
-            if (depth === 0) {
-                result.push(decodePdfLiteralString(buffer));
-                inString = false;
-                buffer = '';
-            } else {
-                buffer += ch;
-            }
-            continue;
-        }
-        buffer += ch;
-    }
-    return result;
-};
-
-const extractPdfHexStrings = (text) => {
-    const result = [];
-    const matches = text.matchAll(/<([0-9A-Fa-f\s]{4,})>/g);
-    for (const match of matches) {
-        const hex = match[1].replace(/\s+/g, '');
-        if (!hex || hex.length % 2 !== 0) continue;
-        const bytes = [];
-        for (let i = 0; i < hex.length; i += 2) {
-            bytes.push(parseInt(hex.slice(i, i + 2), 16));
-        }
-        result.push(decodePdfTextBytes(bytes));
-    }
-    return result;
-};
-
-const normalizePdfExtractedText = (text) => String(text || '')
-    .replace(/\r\n/g, '\n')
-    .replace(/[ \t]{2,}/g, '\t')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-
-const looksLikePdfMojibake = (text) => {
-    const sample = String(text || '').replace(/\s+/g, '').slice(0, 3000);
-    if (sample.length < 20) return true;
-    const readable = (sample.match(/[A-Za-z0-9\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/g) || []).length;
-    const replacement = (sample.match(/[\uFFFD?]/g) || []).length;
-    const privateUse = (sample.match(/[\uE000-\uF8FF]/g) || []).length;
-    const control = (sample.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
-    return (readable / sample.length) < 0.55 ||
-        (replacement / sample.length) > 0.08 ||
-        (privateUse / sample.length) > 0.12 ||
-        (control / sample.length) > 0.02;
-};
-
-const looksLikeImportBinaryGarbage = (text) => {
-    const source = String(text || '');
-    const compact = source.replace(/\s+/g, '').slice(0, 5000);
-    if (compact.length < 80) return false;
-    const readable = (compact.match(/[A-Za-z0-9\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/g) || []).length;
-    const replacement = (compact.match(/[\uFFFD]/g) || []).length;
-    const privateUse = (compact.match(/[\uE000-\uF8FF]/g) || []).length;
-    const control = (compact.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
-    const hasBinaryHeader = /^\s*(Google Sheets|PK\x03\x04|%PDF-)/i.test(source);
-    return (replacement / compact.length) > 0.05 ||
-        (privateUse / compact.length) > 0.08 ||
-        (control / compact.length) > 0.015 ||
-        (hasBinaryHeader && (readable / compact.length) < 0.7);
-};
-
-const assertReadableImportText = (text) => {
-    if (looksLikeImportBinaryGarbage(text)) {
-        throw new Error('\u532f\u5165\u5167\u5bb9\u50cf\u662f\u6a94\u6848\u4e8c\u9032\u4f4d\u8cc7\u6599\u6216\u4e82\u78bc\uff0c\u4e0d\u662f\u53ef\u8fa8\u8b58\u7684\u8868\u683c\u6587\u5b57\u3002\u8acb\u7528\u6a94\u6848\u4e0a\u50b3 Excel / CSV\uff0c\u6216\u5f9e Google Sheets \u8907\u88fd\u5132\u5b58\u683c\u5340\u57df\u5f8c\u8cbc\u4e0a\uff0c\u4e0d\u8981\u8cbc\u6a94\u6848\u672c\u9ad4\u5167\u5bb9\u3002');
-    }
-};
-
-const extractPdfTextWithPdfJs = async (data) => {
-    const pdfjsLib = await import('./vendor/pdf.min.mjs');
-    pdfjsLib.GlobalWorkerOptions.workerSrc = './vendor/pdf.worker.min.mjs';
-    const pdf = await pdfjsLib.getDocument({ data: data.slice(0) }).promise;
-    const pageTexts = [];
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
-        const page = await pdf.getPage(pageNumber);
-        const content = await page.getTextContent();
-        const rows = [];
-        content.items.forEach((item) => {
-            const text = String(item && item.str ? item.str : '').trim();
-            if (!text) return;
-            const transform = item.transform || [];
-            const x = Number(transform[4]) || 0;
-            const y = Number(transform[5]) || 0;
-            let row = rows.find((candidate) => Math.abs(candidate.y - y) <= 3);
-            if (!row) {
-                row = { y, cells: [] };
-                rows.push(row);
-            }
-            row.cells.push({ x, text });
-        });
-        const pageText = rows
-            .sort((a, b) => b.y - a.y)
-            .map((row) => row.cells
-                .sort((a, b) => a.x - b.x)
-                .map((cell) => cell.text)
-                .join('\t'))
-            .join('\n');
-        pageTexts.push(pageText);
-    }
-    return normalizePdfExtractedText(pageTexts.join('\n'));
-};
-
-const parsePdfFile = async (file) => {
-    const data = await file.arrayBuffer();
-    let text = '';
-    try {
-        text = await extractPdfTextWithPdfJs(data);
-    } catch (error) {
-        console.warn('PDF.js extraction failed, falling back to simple extraction', error);
-        const pdfText = new TextDecoder('latin1').decode(new Uint8Array(data));
-        const pieces = [
-            ...extractPdfLiteralStrings(pdfText),
-            ...extractPdfHexStrings(pdfText)
-        ].filter((value) => /[\u4e00-\u9fffA-Za-z0-9]/.test(value));
-        text = normalizePdfExtractedText(pieces.join('\n'));
-    }
-    if (!text || text.length < 20 || looksLikePdfMojibake(text)) {
-        throw new Error('PDF 文字抽取後看起來仍是亂碼。這通常是 PDF 使用自訂字型編碼，即使可以選字也不一定能由瀏覽器正確還原。請改用 Excel / CSV，或從 PDF 複製表格文字後貼到匯入框。');
-    }
-    const parsed = parseStudyStatusCsv(text);
-    return { text, parsed };
-};
-
-
 const INITIAL_TRIALS = [{"id": 1, "cancerType": "肝癌", "line": "二\n、三線", "code": "DB1311-201", "studyTitle": "一項第II期、多中心、開放性試驗，在患有晚期 /轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305", "inclusion": "Part I:                                                         1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A                   3.HBsAg(+)可以收,HBV DNA< 500 IU/mL", "phase": "I", "targetNum": "3", "enrolled": "3", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "楊慕華", "nurse": "Abby 82935/82999", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "肝癌", "lines": ["二\n、三線"]}]}, {"id": 2, "cancerType": "胃癌", "line": "A\nd j u v", "code": "TTY", "studyTitle": "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗", "inclusion": "胃癌術後使用健保S-1 病患", "phase": "4", "sponsor": "TTY", "targetNum": "150", "enrolled": "16", "monthSigned": "1", "monthEnrolled": "1", "pi": "洪逸平", "nurse": "宋秀薇\n2935 / 2999", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["A\nd j u v"]}]}, {"id": 3, "cancerType": "胃癌", "line": "一線", "code": "D702AC00001", "studyTitle": "一項隨機分配、第  III 期試驗，評估 Rilvegostomig 併用 Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於 Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果 (ARTEMIDE-Gastric01)", "inclusion": "1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告)\n2. 體重 >= 35 KG\n3. Measurable lesion by RECIST 1.1\n4.ECOG  0-1\n5. 可收B肝.治療後的C肝 病毒量驗不到\n6.僅收一線病人\n7.CCr>=60, CPS > 1", "phase": "III", "sponsor": "AZ", "targetNum": "5", "enrolled": "pre-screen  1\n/screen 0", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 4, "cancerType": "胃癌", "line": "一線", "code": "DS8201-724", "studyTitle": "評估 Trastuzumab Deruxtecan (Enhertu®) 併用化療（加或不加Pembrolizumab）相較於化療併用  Trastuzumab（加或不加 Pembrolizumab）作為不可切除、局部晚期或轉移性   HER2-陽性胃癌或胃食道接合處  (GEJ) 癌受試者第一線治療的一項多中心、隨機分配、開放標記、第  III 期試驗 (DESTINY-Gastric05)", "inclusion": "1.  必須可以吞Xeloda\n2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive)\n3. LVEF >=50 % , CCr >=60\n4. HBsAg(+) ,HBV DNA<2000\n5. HCV(+), 但HCV RNA必須(-)\n6. At least one measurable lesion\n7. Slide片*16 ( 4-5u),10個工作天發報告", "phase": "III", "sponsor": "第一三共", "targetNum": "7", "enrolled": "4(screen failure)/0", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "宋秀薇 / 賴姵妤\n82935 / 82999\n0936385216", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 5, "cancerType": "胃癌", "line": "一線", "code": "M24-977", "studyTitle": "一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估ABBV-400 合併 Fluorouracil、 Leucovorin 和 Budigalimab 作為第一線治療的安全性、療效和最佳劑量 (AndroMETa-GEA-977)", "inclusion": "1.HER2(-)\n2.C肝不收\n3.Slide*15 (4-5u) ,C1D1前需寄出\n4.可收B肝,病毒量需小於500 IU/mL\n5.需有Target Lesion (Recist 1.1)\n6.ILD or Pneumonitis 病史不能收 7.全肺切除者不能收\n8.C1D1前不能使用抗生素", "phase": "II", "sponsor": "ABBVIE", "targetNum": "10", "enrolled": "10", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 6, "cancerType": "胃癌", "line": "一線", "code": "D967LC0001", "studyTitle": "多中心、一項第 1b/2 期開放性、劑量遞增和劑量延伸\n試驗，評估Trastuzumab Deruxtecan (T-Dxd) 單一療法與併用療法對於帶有 HER2 表現胃癌成人受試者的安全性、耐受性、藥物動力學、免疫原性和抗腫瘤活性\n(DESTINY-Gastric03)", "inclusion": "Part 5 名額已滿,暫無slot\n1. 僅收一線病人\n2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative )\n--> Part 5 用藥: Volrustomig+T-Dxd + capecitabine\n4. HBsAg(+) ,HBVDNA<100 IU/mL\n5. HCV(+), 但HCV RNA必須(-)\n6. CCr >=60mL/min\n7. Cycle1 ~ Cycle8 (共24週) 需每週返診抽血 (Liver function)", "phase": "1b/2", "sponsor": "AZ", "targetNum": "3", "enrolled": "0", "monthSigned": "1", "monthEnrolled": "0   名額已滿,暫無slot", "pi": "陳明晃", "nurse": "周淑慧\n82935 / 82999\n0900265971", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 7, "cancerType": "胃癌", "line": "一線", "code": "D9803C00001", "studyTitle": "一項第 III 期、多中心、隨機分配對照試驗，研究   Sonesitatug vedotin 合併 Fluoropyrimidine 加上或不加上  Rilvegostomig用於第一線  Claudin18.2 陽性、HER2 陰性、晚期/轉移性胃、胃食道交界處或食道腺癌  (CLARITY-Gastric 02)", "inclusion": "1. Histologically confirmed\n2. HER2-negative,\n3. archival tissue <3 months送國外驗Claudin18.2切片*13(10天出報告)\n4. 可收B肝 HBV DNA<100.治療後的C肝 病毒量驗不到\n5. 不需measurable lesion", "phase": "III", "sponsor": "AZ", "targetNum": "15", "enrolled": "0", "monthSigned": "2 (Prescreen)", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "吳佳勳\n0918696523", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 8, "cancerType": "胃癌", "line": "一線", "code": "8951-CL-0305", "studyTitle": "Zolbetuximab 合併 Pembrolizumab 和化療（ CAPOX 或 mFOLFOX6），用於罹患局部晚期無法切除或轉移性胃或胃食道交界腺癌，腫瘤為  HER2 陰性、Claudin (CLDN) 18.2 陽性且計畫性凋亡配體-1 (PD-L1) 陽性的參與者之第一線治療的一項第   3期、雙盲、隨機分配試驗", "inclusion": "1.  Histologically confirmed gastric or GEJ adenocarcinoma\n2. HER2-negative,(可以院內驗)\n3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗)\n4. HBsAg(-) ; HCV(-) ; CCr >=30\n5. Slide片*9 ( 4-5u),10個工作天發報告\n6. At least one measurable lesion", "phase": "III", "sponsor": "Astellas", "targetNum": "2", "enrolled": "0 / 2 (Prescreen)", "monthSigned": "1 (Prescreen)", "monthEnrolled": "0", "pi": "洪逸平", "nurse": "賴姵妤 / 宋秀薇\n82935 / 82999\n0919801912", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 9, "cancerType": "胃癌", "line": "一線", "code": "T1223", "studyTitle": "使用Ramucirumab (Cyramza)、nal-IRI (Onivyde) 和Trifluridine\n/Tipiracil (Lonsurf) 作為二線治療，用於轉移性胃癌的第 Ib期和第II\n期臨床試驗（ COOL臨床試驗）.", "inclusion": "1. 不限her 2 ( - or +)，但如為her 2 (+) 一線治療必須用過\nHerceptin\n2. Measurable lesion by RECIST 1.1\n3.沒有排除 B C肝", "phase": "Ib/II", "sponsor": "IIT", "targetNum": "25", "enrolled": "14", "monthSigned": "2", "monthEnrolled": "2", "pi": "陳明晃", "nurse": "林韋秀\n0963501682", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 10, "cancerType": "胃癌", "line": "二線", "code": "CHS-114-02", "studyTitle": "一項第 1b 期、多中心、開放性試驗，評估  CHS-114 合併 Toripalimab 加上或不加其他治療用於晚期或轉移性實體腫瘤參與者的安全性和療效\nCohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma) HER2-negative and MSS/pMMR\nCohort B Specific Inclusion Criteria (2L ESCC) Cohort C Specific Inclusion Criteria (1L ESCC)\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)", "inclusion": "\"1.cycle 2需要再次切片\n2.Slide*15 (4-5u) ,C1D1前需寄出\n3.Cohort C Slide (只能用藥前 3 個月)\n4.需有Target Lesion (Recist 1.1)\n5.ILD or Pneumonitis 病史不能收\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)\"\n(1)       Confirmed All RAS and MMR status\n(2)       Prior therapies include fluoropyrimidine, oxaliplatin, irinotecan-based chemotherapy, anti-VEGF biological therapy , an anti-EGFR therapy.If RAS wildtype unless right-sided, trifluridine/tipiracil or regorafenib,\nand a BRAF inhibitor in BRAF V600E mutant.\n(3) Provide baseline tumor tissue sample is required for enrollment\"", "phase": "Ib", "sponsor": "美捷", "targetNum": "6 （需與 sponsor要名額）", "enrolled": "Cohort B (2L ESCC)\n/ 1", "monthSigned": "Cohort C Specific Inclusion Criteria (1L ESCC)  - 1\n人", "monthEnrolled": "1", "pi": "陳明晃", "nurse": "Cohort A 林韋秀0963501682\n/王秋眉 0927751328\nCohort B、C 孔亭方7270#268/\nCohort D\n陳秀玲\n0988660381", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["二線"]}]}, {"id": 11, "cancerType": "胃癌", "line": "一線後", "code": "D9800C00001", "studyTitle": "一項第二期、開放性、多中心試驗，評估  AZD0901 作為單一療法和併用抗癌藥物使用於表現  Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌\n(1)胰臟癌,一線治療  ---(名額已滿 ..暫停收案 )\n(2)胃癌,正二.三線治療  ---找秋眉 (名額已滿 ..暫停收案 )\n(3)膽管癌,正二.三線治療  (名額已滿..暫停收案) ---找佳勳\n2. HER2 (-)\n3. 胃癌需PD後再次切片,C3要再切片一次\n4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外\n5. One Measurable lesion by RECIST 1.1\n6. 可收B肝 HBV DNA<2000  需使用抗病毒用藥,排除C肝及HIV (+)\n7.ECOG  0-1\n8.體重 >= 35 KG＿", "phase": "Ib/II", "sponsor": "AZ", "targetNum": "10", "enrolled": "3胃癌 (screen)\n/3 胰臟癌 (screen) /3 (膽道癌)", "monthSigned": "1胰臟癌 (prescreen)/ 0胃癌 (prescreen)/\n0膽管癌 (screen)", "monthEnrolled": "名額已滿", "pi": "陳明晃", "nurse": "胰臟癌---王昭蘋 0919377185\n胃癌       王秋眉\n0927751328\nline ID: enjoy357208\n膽管癌    吳佳勳\n0918696523", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線後"]}]}, {"id": 12, "cancerType": "胃癌", "line": "三線", "code": "BBI-4182-101", "studyTitle": "BDC-4182 作為單一藥物於晚期胃癌及胃食道癌患者之第   1/2\n期、首次使用於人體之劑量遞增與擴展試驗", "inclusion": "1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。\n2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。\n3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。\n4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。\n5.  腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。", "phase": "I/II", "sponsor": "Bolt", "targetNum": "2", "enrolled": "0", "monthSigned": "目前沒名額/可以預排", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n林韋秀\n0963501682", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["三線"]}]}, {"id": 13, "cancerType": "胰臟癌", "line": "一腺", "code": "C3651021", "studyTitle": "一項第 2b/3 期、隨機分配、雙盲試驗 ,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者 ,探討 PONSEGROMAB\n(PF-06946860) 相較於安慰劑的療效、安全性和耐受性", "inclusion": "收案條件：\n1. 資料顯示有轉移性胰管腺癌\n2. 尚未接受過治療(一線治療)\n3. Measurable lesion by RECIST 1.1\n4. Fearon 定義的惡病質: BMI < 20 kg/m2 且篩選前六個月內自願性體重減輕 > 2% 或者 篩選前過去六個月內非自願體重減輕\n> 5%\n5. ECOG : 0-1\n6. 不需要送腫瘤切片\n7. LVEF > 50%", "phase": "2b/3", "sponsor": "輝瑞", "targetNum": "15", "enrolled": "5", "monthSigned": "2", "monthEnrolled": "1", "pi": "李重賓", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一腺"]}]}, {"id": 14, "cancerType": "胰臟癌", "line": "一腺", "code": "CA2400030", "studyTitle": "一項隨機分配、第 2/3期試驗，針對未接受過治療、且具有同源性 MTAP缺失的轉移性胰管腺癌受試者，以 BMS-986504併用Nab- paclitaxel及Gemcitabine，相較於安慰劑併用 Nab-paclitaxel及 Gemcitabine的療效", "inclusion": "● 經組織學或細胞學方法確診患有轉移性 PDAC。\n● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。\n● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。\n● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。\n● 若臨床上需要且根據試驗主持人判斷，受試者可於轉移性情況下接受最多1個週期的nab-p/gem，且其疾病不能已惡化或因無法耐受之毒性而中止治療。\n排除b,c肝", "phase": "2/3期", "sponsor": "必治妥", "targetNum": "10", "enrolled": "8", "monthSigned": "0", "monthEnrolled": "0", "pi": "姜乃榕", "nurse": "王昭蘋\n0919377185", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一腺"]}]}, {"id": 15, "cancerType": "胰臟癌", "line": "一線", "code": "MK-3475-06E", "studyTitle": "一項針對罹患局部晚期不可切除／轉移性食道癌  ( ESCC) 的第一線治療受試者，使用研究\n性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療的第 1／2 期開放\n標示、傘式平台設計試驗  KEYMAKER-U06：06E 子試驗", "inclusion": "\"Inclusion Criteria\n1-  您必須經過組織學或細胞學確診為第  1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。\n2- ccr > =50 ml/min\n排除條件\n1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加\n2. 在使用試驗治療前  4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。\n3. QTcF value >470 msec / LVEF  < 50", "phase": "Phase 1/2", "sponsor": "MSD", "targetNum": "3-5 (  需\n要和\nSPONS\nOR 要名額  )", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403  /\n陳秀玲   /      王\n秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一線"]}]}, {"id": 16, "cancerType": "胰臟癌", "line": "一線", "code": "MK-3475-06C", "studyTitle": "一項針對罹患局部晚期無法切除 /轉移性胃食道腺癌 (胃腺癌、胃食道交接處腺癌與食道腺癌 ) 的第一線治療受試者，使用 MK-2870搭配Pembrolizumab (MK-3475) 和化療的第1/2期開放標示、傘式平台設計試驗： 06C子試驗\n12/10 SIV", "inclusion": "Inclusion Criteria\n1. 經組織學和/或細胞學確診為先前未經治療的局部晚期   不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。\n2. 患有非HER2/neu陽性的胃食道腺癌。\n3.ccr > =50 ml/min Exclusion Criteria\n1-在第一劑研究介入前  3 個月內體重減輕 >20%。\n2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。\n3-Received prior treatment with a TROP2-targeted ADC / with a topoisomerase 1 inhibitor-based ADC and/or a topoisomerase 1 inhibitorbased chemotherapy.\n4- Has received prior therapy with an anti-PD-1, anti-PD-L1, or anti-PD-L2 agent or with an agent directed to another stimulatory or coinhibitory TCR (eg, CTLA-4, OX40, CD137).", "phase": "I/II", "sponsor": "MSD", "targetNum": "6", "monthSigned": "1", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403/陳秀\n玲", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一線"]}]}, {"id": 17, "cancerType": "胰臟癌", "line": "二線", "code": "MK-3475-06B", "studyTitle": "一項針對罹患晚期食道癌且先前曾暴露於  PD-1／PD-L1治療的受試者，使用研究性藥劑搭配 Pembrolizumab（MK-3475）的第 1／2期開放標示、傘式平台設計試驗（ KEYMAKER-U06）：06B子試驗。", "inclusion": "Inclusion\n*.Measurable disease\n*Radiographic or clinical disease progression on one prior line of  standard therapy that includes a platinum agent and previous exposure to  an anti–PD-1/PD-L1 based IO therapy (either as a combination or monotherapy).\n*progressed during or after receiving at least one dose of platinum-based chemotherapy\n*at least 2 doses of PD-1/PD-L1 inhibitors given in a 1L setting and disease progression.\n*Anti–PD-1/PD-L1 given in definitive chemoradiation or neoadjuvant/adjuvantbased therapy will count as 1 line of therapy if disease progression occurs during treatment or within 6 months of cessation of treatment.\n*Dose reduction and/or switching of one or more 1L chemotherapy agents due to toxicity/intolerability as deemed clinically appropriate by the investigator will not constitute a new line of therapy.\nExclusion", "phase": "I/II", "sponsor": "MSD", "targetNum": "6- 10", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "陳秀玲 line ID 0988660381 吳\n佳勳", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["二線"]}]}, {"id": 18, "cancerType": "胰臟癌", "line": "二線", "code": "DS7300-202", "studyTitle": "一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性 食道鱗狀細胞癌  (ESCC) 受試者之第三期、多中心、隨機分配、開放標記試驗  (IDeate-Esophageal01)\n英文：A Phase 3, Multicenter, Randomized, Open-Label Study of\nIfinatamab Deruxtecan (I-DXd) in Subjects with Pretreated Advanced or Metastatic Esophageal Squamous Cell Carcinoma (ESCC) (IDeate-Esophageal01)", "inclusion": "Inclusion\n1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC.\n2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ) .\nExclusion Criteria\n1.受試者患有 <50 bpm 的心搏過緩，除非受試者裝有心律調節器\n2. Has received prior treatment with orlotamab, enoblituzumab, or other B7-H3 targeted agents, including I-DXd.\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.", "phase": "PHASE 3", "sponsor": "DAIICHI SANKYO", "targetNum": "4", "enrolled": "(screen failure 4 / 人\n)", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403/陳\n秀玲/王秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["二線"]}]}, {"id": 19, "cancerType": "食道癌", "line": "二線", "code": "MK-3475-06D", "studyTitle": "一項第1⁄2期開放標示、傘式平台設計試驗，評估 MK-2870合併 Paclitaxel作為二線治療罹患晚期 /轉移性胃食道腺癌 的受試者的安全與療效性： 06D子試驗", "inclusion": "Inclusion\n1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma.\n2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.\nExclusion Criteria\n1. Has squamous cell or undifferentiated esophageal gastric cancer.\n2. Received prior treatment with a TROP2-targeted ADC\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.\n4. Received prior treatment with a topoisomerase 1 inhibitor- based ADC and/or a topoisomerase 1 inhibitor-based chemotherapy.", "phase": "I/II", "sponsor": "MSD", "targetNum": "(  需要和 SPONS\nOR 要名額  )", "enrolled": "1", "nurse": "孔亭方\n0981764403/\n王秋眉\n0927751328\nline ID: enjoy35208", "contractNo": "C2411000", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "食道癌", "lines": ["二線"]}]}, {"id": 20, "cancerType": "食道癌", "line": "第\n2\n線\n／第 3\n線", "code": "MK-3475-06F", "studyTitle": "2026-04-001BU (C2603300 / 4Z33) 一項針對罹患不可切除局部晚期或轉移性食道癌的第 2線／第3線治療受試者，使用研究性藥物的第2期開放標示、傘式平台設計試驗 KEYMAKER-U06：06F子試驗 I-DXd Monotherapy 12 mg/kg*", "inclusion": "納入條件\n. 對於不可切除局部晚期或轉移性 ESCC，在先前接受1或2線全身性治療後疾病惡化。  Prior treatment must include platinum and anti-PD 1/PD-L1 inhibitor. Prior exposure to anti-CTLA-4 inhibitor is allowed\n已接受B型肝炎病毒（ HBV）抗病 毒療法至少4週且在分配前檢測不到HBV病毒量，則符合資格\n排除條件\n1. 腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道  )，發生瘻管的風險增加。\n2.具臨床意義的角膜疾病。\n3.（LVEF）<50%\n4.在試驗治療開始前 2週內曾接受放射治療\n5.. 不論是否需要使用類固醇治療的（非感染性）肺炎／間質性肺病之病史\n6.活動性感染。", "phase": "Phase 2", "sponsor": "MSD", "targetNum": "3-5", "nurse": "孔亭方line ID: 0981764403/陳\n秀玲/王秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "食道癌", "lines": ["第\n2\n線\n／第 3\n線"]}]}, {"id": 21, "cancerType": "膽道癌", "line": "一線", "code": "D702NC00001", "studyTitle": "一項第 III 期、隨機分配、開放性、全球多中心試驗，評估 Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療 (ARTEMIDE-Biliary02)", "inclusion": "1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。\n2. 需提供12個月內的切片檢體， random前需有PDL-1 報告\n(Central review) 。\n3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打GCSF。\n4. 暫不收B、C肝。", "phase": "III", "sponsor": "AZ", "targetNum": "15", "enrolled": "3(screen failure)/1", "monthSigned": "1", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "林韋秀\n0963501682\n王秋眉\n0927751328", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 22, "cancerType": "膽道癌", "line": "一線", "code": "DESTINY-Biliary Tract", "studyTitle": "DESTINY-Biliary Tract Cancer-01：一項第三期試驗，評估 Trastuzumab Deruxtecan (T-DXd) 和 Rilvegostomig 相較於標準照護 Gemcitabine、Cisplatin 和 Durvalumab 作為第一線治療局部晚期或轉移性HER2表現型的膽道癌", "inclusion": "開放收案組別\nSafety Run In: Rilvegostomig 750mg +\nT-DXd 5.4mg/kg, Q3W\n收案條件：\n1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌\n2.尚未接受過治療 (一線治療)\n3.Adjuvant結束超過6個月後復發，不在此限\n4.HER 2 表現型IHC2+或3+\n5.B肝患者可收，但與 C肝交叉感染者不可收案。\n6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1", "phase": "3", "sponsor": "AZ", "targetNum": "6", "enrolled": "5(有用藥)/ 3(screen failure)", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208王昭蘋 0919377185", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 23, "cancerType": "膽道癌", "line": "一線", "code": "TT420C2308", "studyTitle": "一項第三期、隨機分配、對照、全球多中心試驗，針 對纖維母細胞生長因子受體 (FGFR)變異、化療和 FGFR抑制劑難治型/復發型膽管癌受試者，評估口服 Tinengotinib相較於醫師選定療法的療效與安全性 (FIRST-308)", "inclusion": "1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥\n2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要\n≥1.5cm\n3. Gemcitabine+Cisplatin washout period > 21days\n4. HBsAg(+), HBV DNA<500 IU/mL\n5. Anti-HCV(+), HCV RNA(-)", "phase": "3", "sponsor": "藥捷安康", "targetNum": "6", "enrolled": "4", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "周淑慧\n82935/82999\n0900265971", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 24, "cancerType": "膽道癌", "line": "一線", "code": "TAI-301", "studyTitle": "T-1301膠囊用於晚期實體腫瘤患者之臨床一期安全性、耐受性與藥物動力學研究", "inclusion": "1 HBV(-),HCV(+)RNA(-)\n2.血壓不能超過SBP160/DBP100\n3.二線或二線以上之病人。 4.Measurable lesion by RECIST 1.1\n5.調整劑量 :  100 mg/day, 優先招募GIST、melanoma with c-KIT mutation\n6. CCr: >=50ml/min", "phase": "1", "sponsor": "泰瑋", "targetNum": "15", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "7270#268\n宋秀薇\n2935 /王秋眉\n0927751328", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 25, "cancerType": "膽道癌", "line": "一線", "code": "MK-1022", "studyTitle": "一項第1／2期試驗，評估Patritumab Deruxtecan對於胃腸道癌症的安全性和療效", "inclusion": "1.收膽管癌正二.線及大腸癌二線 . 肝癌\n(1)大腸癌---找秀玲 --額滿,停止收案\n(2)膽管癌---找秋眉 --額滿,停止收案\n(3)肝癌---找昭蘋     需詢問SLOT\n(4)胃癌正二線  HER 2 (-)--找秀玲\n2.前線PD後需要重新切片 ,在送出20片\n3.CT必須得到廠商確認 (預計5天)才能C1D1\n4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量\n5.心超LVEF > 50%", "phase": "1/2", "sponsor": "MSD", "targetNum": "6", "enrolled": "1   /   screen\nfailure 2", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "停止收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 26, "cancerType": "膽道癌", "line": "一線", "code": "PEP08-101", "studyTitle": "一項第 1a/1b 期，評估 PEP08 單一用藥和合併用藥治療於  MTAP\n缺失之晚期或轉移性實體腫瘤的臨床安全性、耐受性、藥物動力學、藥效學和初步抗腫瘤療效試驗", "inclusion": "1.在腫瘤組織中檢測到 MTAP 對偶同型合子基因缺失的證據，包括：透過次世代定序技術或螢光原位雜交確認的純合性 MTAP 缺失；或者經 NGS 或 FISH 技術確認的對偶同型合子基因 CDNK2A 或 CDKN2B 缺失，並伴隨透過免疫組織化學確認的 MTAP 缺失。                                                                            2.經組織學確認有晚期或轉移性實體腫瘤，且不適合接受手術和/或輻射之治癒性治療、標準治療失敗、無法耐受或無法取得標準治療，且先前已接受至少一線治療的患者。                      3.能夠吞嚥口服試驗藥物、保持治療並願意記錄每日服用試驗藥物。\n4.根據實體腫瘤療效評估準則第 1.1 版至少有 1 個可測量病灶。\n5.8.B 型肝炎表面抗原  血清學檢測陽性 (HBsAg [+])，同時 B 型肝炎病毒去氧核糖核酸 小於1000 IU/mL，或 C 型肝炎病毒抗體血清學檢測陽性（抗 HCV Ab [-]），同時 C 型肝炎病毒 核糖核酸 (RNA) 呈陽性 (+)。HBsAg (+) 的患者需要進行 HBV DNA 檢測。抗 HCV Ab (+) 的患者需要檢測 HCV RNA 為陰性才符合資格。", "phase": "I", "sponsor": "智擎生技製藥股份有限公司", "targetNum": "9", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "1", "pi": "姜乃榕", "nurse": "王昭蘋\n7270#262", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 27, "cancerType": "膽道癌", "line": "一線", "code": "PEP07-102", "studyTitle": "一項在晚期或轉移性實體腫瘤病患使用  PEP07 (檢查點激酶 1抑制劑 )的第一期試驗", "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。                                                                                2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治 療、或任何試驗治療，或在30天內接受過免疫治療。\n3 收案前後都要再切片 .\n4.需詢問SLOT", "phase": "I", "sponsor": "智擎生技製藥股份有限公司", "targetNum": "20", "enrolled": "2", "monthSigned": "1", "monthEnrolled": "0", "pi": "姜乃榕", "nurse": "王昭蘋\n7270#262", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 28, "cancerType": "膽道癌", "line": "一線", "code": "D967VC00001", "studyTitle": "一項第二期、多中心、開放性試驗，評估以 Trastuzumab Deruxtecan (T-DXd, DS-8201a)治療選定 HER2 表現腫瘤之療效與安全性 (DESTINY-PanTumor02)", "inclusion": "1.有一顆可測量的腫瘤\n2.HER2(2+)\n3.prescreen  Slides 4-5mu 12片 screen 在 Slides 4-5mu 15片\n4.HBsAg(-), HCV RNA(-)\n5. 可收組別 a:HER2,IHC3+ any tumor type(額滿) b:HER2,IHC2+/ISH- positive  any tumor type\n(額滿)\nc:HER2,IHC2+ or 1+ endometrial cancer (額滿) d:HER2,IHC2+ or 1+ ovarian cancer (額滿) e:HER2,IHC2+ or 1+ cervical cancer (額滿)\n6.同意書改版Anti-HBc(+)  可以收", "phase": "2", "sponsor": "AZ", "targetNum": "7", "enrolled": "5\nprescreen/ 1\nscreen", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "洪逸平", "nurse": "王秋眉\n0927751328", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 29, "cancerType": "膽道癌", "line": "一線", "code": "MK-9999-02A", "studyTitle": "一項第1／2期試驗，針對胃腸道癌症評估 MK-2870單一療法或與其他抗癌藥物合併使用的安全性與療效", "inclusion": "1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 (1)胰臟癌---找昭蘋---名額已滿,停止收案\n(2)膽管癌   (二線 )---找亭方,秋眉  需先問SLOT\n(3)大腸癌---找秀玲---名額已滿,停止收案\n2.需要20片切片\n3.CT必須得到廠商確認才能用藥\n4.試驗藥物只能從周邊血管施打\n5.HIV只要有病史不收\n6.心超LVEF > 50%", "phase": "II", "sponsor": "MSD", "targetNum": "4", "enrolled": "pancrea ca:1\nCHOLANGIOCARCI NOMA:1", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "孔亭方\n0981764403/\n王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 30, "cancerType": "膽道癌", "line": "一線", "code": "MK5909-005", "studyTitle": "一項第2期、非隨機分配、開放性、多中心試驗，評估  Raludotatug Deruxtecan用於胃腸道癌症受試者的安全和療效性", "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線、胃癌  3L以上\n(1)胰臟癌---找昭蘋(已額滿)\n(2)膽管癌(已額滿 )、胃癌---(已額滿)\n(3)大腸癌---找秀玲(已額滿)\n2.需要21片切片\n3.CT必須得到廠商確認才能用藥\n4.HIV只要有病史不收\n5.心超LVEF > 50%", "phase": "II", "sponsor": "MSD", "targetNum": "4-6", "enrolled": "pancrea ca:4\nstomach ca: 1\nCHOLANGIOCARCI NOMA:1", "monthSigned": "名額已滿", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 31, "cancerType": "膽道癌", "line": "一線", "code": "TYR430-101", "studyTitle": "一項多中心  ` 開放標記  ` 首次於人體執行之試驗  , 旨在研究 TYRA-430 用於治療晚期肝癌或具有活化  FGF/GFGR 途徑變異的其他實體腫瘤  (SUFR-431)", "inclusion": "\"Inclusion Criteria\n1. 局部晚期無法切除/轉移性肝細胞癌  (HCC) 或經組織學證實晚期實體腫瘤帶有  FGF/FGFR 基因突變 。\n2. 受試者之前可接受任何次數的先前治療 , 收多線後 。\n3.ccr > =60 ml/min\nExclusion Criteria\n1-篩選前四週曾接受重大手術。\n2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。)\n3-活動性 ` 症狀性或未經治療的腦部轉移。", "phase": "Phase I", "sponsor": "Tyra Biosciences", "targetNum": "15", "enrolled": "停止收案，沒有SLOT", "monthSigned": "0", "monthEnrolled": "0", "pi": "李重賓醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "停止收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 32, "cancerType": "膽道癌", "line": "一線", "code": "BGM-2121-001", "studyTitle": "BGM-2121 用於晚期實體腫瘤患者的第 1 期首次人體試驗", "inclusion": "1. 肝炎患者不能收\n2. 透過組織病理學或診斷性醫學造影確診患有晚期實體腫瘤\n3. 受試者具有下列條件之一 :曾接受過癌症標準療法且治療失敗、沒有可用的標準療法選項、不符合或不耐受標\n準療法。\n4. 根據實體腫瘤的療效評價標準 (RECIST)第 1.1 版,在基準期時評估至少有一個可測量大小的瘤體病灶\n5. 美國東岸癌症臨床研究合作組織 (ECOG)測量表的體能分\n數≤ 2", "phase": "Phase I", "sponsor": "智合", "targetNum": "15", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "0", "pi": "李重賓醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 33, "cancerType": "大腸癌", "line": "一線", "code": "C6461003", "studyTitle": "一項介入性、第 3 期、雙盲、隨機分配的試驗，旨在針對未曾接受治療的轉移性大腸直腸癌參與者比較 PF-08634404 併用化療對比 Bevacizumab 併用化療的療效與\n安全性。", "inclusion": "1. 經組織學或細胞學確認的結腸直腸腺癌。\n2. 第 IV 期轉移性疾病的證據。\n3. 依據當地檢測的已知 RAS 突變狀態（包括  KRAS 和NRAS 外顯子 2、3 和 4 密碼子\n12、13、59、61、117 和 146）。儘管嘗試檢測仍為  RAS 狀態未知的參與者，可有資格\n參與。\n4. V600E: Negative ;  MSS\n4. 先前未曾因轉移性疾病接受全身性療法。\n5.1 年內 Tumor Slide: 20片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎", "phase": "3", "sponsor": "輝瑞", "targetNum": "10", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 34, "cancerType": "大腸癌", "line": "一線", "code": "MK-1082-012", "studyTitle": "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估  MK-1084、 Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用 Bevacizumab，做為 KRAS G12C 突變局部晚期不可切除或轉移性大腸直腸癌受試者之第一線治療的安全性和療效（ KANDLELIT-012）", "inclusion": "Part 1 (Safety Lead-In) 收案條件簡述:\n•            Stage III or IV, KRAS G12C mutation (+) CRC\n•           Part 1: Treatment Naïve 或用過一線治療  (一線或二線皆可, 不可用到oxaliplatin) 已收滿  Target\n•           Part 2: Treatment Naïve ( 預計 2026 開放名額  )", "phase": "Phase III", "sponsor": "MSD", "targetNum": "Part 1: 2\nPart 2: 2\n(預計 2026.04\n開始收案)", "enrolled": "Part 1: 2", "monthSigned": "2", "monthEnrolled": "2", "pi": "鄧豪偉", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 35, "cancerType": "大腸癌", "line": "一線", "code": "M24-533", "studyTitle": "一項第 2 期、開放性、隨機分配、主試驗計畫書試驗，評估  Telisotuzumab Adizutecan 併用多種治療組合在轉移性大腸直腸癌受試者中的安全性和療效 (AndroMETa-CRC-533)", "inclusion": "1.Left side:KRAS/NRAS wildtype ,BRAFV600E wildtype\n2.tumor is not dMMR+/MSI-H.\n3.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1.\n4.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1.\n5.HCV negative.\n6.untreatment brain or menining metastasis is exclusion", "phase": "2", "sponsor": "Abbive", "targetNum": "3", "enrolled": "1", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲\n0988660381\n孔亭方", "comments": "5月份會開stage2", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 36, "cancerType": "大腸癌", "line": "一線", "code": "20210081", "studyTitle": "一項多中心、隨機分配、開放標記、有效藥物對照的第   3 期試驗， Sotorasib、Panitumumab 及 FOLFIRI 與 FOLFIRI 併用或無併用 Bevacizumab-awwb，用於未曾接受過治療且帶有  KRAS p.G12C突變的轉移性大腸直腸癌受試者之比較  (CodeBreaK 301)", "inclusion": "KRAS G12C: +\n1. KRAS G12C: Positive and MSS\n2.  FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III 治療後六個月(轉移) PD 預計化療.\n3. Eastern Cooperative Oncolgy Group (ECOG) Performance Status of 1.\n4. FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III\n治療後六個月(轉移) PD 預計化療.\n5. 5 年內 Tumor Slide: 15片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎", "phase": "3", "sponsor": "Amgen Inc", "targetNum": "2", "enrolled": "1", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 37, "cancerType": "大腸癌", "line": "一線", "code": "SGNTUC-029", "studyTitle": "一項評估  Tucatinib併用Trastuzumab 和 mFOLFOX6 對照 mFOLFOX6併用或不併用Cetuximab 或 Bevacizumab 作為患有HER2+轉移性結直腸癌受試者的一線治療療法的開放性、隨機分配、第3 期試驗", "inclusion": "Inclusion\n1 Send tissue slide 25 and Central confirmed HER2 3+ or ISH + and confirmed RAS status.\n2.LVEF > 50%.\n3.Previously treated brain metastases which are asystamatic Exclusion\n1.Have previously been treated with anti-HER2 therapy\n2.Have a history of GI perforation within 12 months of enrollment.", "phase": "III", "sponsor": "Seagen", "targetNum": "6", "enrolled": "3", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 38, "cancerType": "大腸癌", "line": "一線", "code": "WO42758", "inclusion": "Inclusion Criteria\n1.G12C mutation Biomarker eligibility as determined by prior results of a validated NGS or PCR-based assay, or by mass spectrometry\n2.No prior systemic treatment in the metastatic setting, except for up to two cycles (up to 4 weeks) of oxaliplatin-containing chemotherapy, with or without bevacizumab, in patients who need to wait for biomarker testing results\n3. received fluoropyrimidine-based chemotherapy with or without oxaliplatin in the adjuvant setting may still be eligible if it has been >6 months since the last dose of oxaliplatin was administered\nExclusion Criteria\n1.Prior treatment with a KRAS G12C inhibitor", "phase": "I/Ib", "sponsor": "Roche", "targetNum": "10", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "studyTitle": "", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 39, "cancerType": "大腸癌", "line": "一線", "code": "61186372COR3002", "studyTitle": "一項隨機分配、開放性、第  3 期試驗，旨在比較  Amivantamab + FOLFIRI 與 Cetuximab/Bevacizumab + FOLFIRI 在先前曾接受過化學治療的  KRAS/NRAS 和 BRAF 野生型之復發性、無法手術切除或轉移性大腸直腸癌參與者中的療效", "inclusion": "Inclusion\n1.    have received 1 line of systemic therapy for mCRC\n2.    KRAS, NRAS, and BRAF WT tumor\n3.     Measurable lesion\n4.    dMMR /MSI-H 須接受免疫治療\nExclusion :\n1.     prior exposure to irinotecan, any agents that target EGFR or MET\n2.    any component of FOLFIRI\n3.    dMMR/MSI-H status who has not received immunotherapy treatments.\n4.     HER2-positive/amplified tumor\n5.    rior exposure to irinotecan, any agents that target EGFR or MET (including but not limited to protein products, monoclonal antibodies, tyrosine kinase inhibitors, or antisense oligonucleotide therapy)\n6.        Diabetes mellitus\n7.        Ongoing or active infection\n8.        HBV or HCV infection\n9.        symptomatic or untreated brain metastasis", "phase": "III", "sponsor": "J & J", "targetNum": "5", "enrolled": "4", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "contractNo": "C2412500", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 40, "cancerType": "C R P C", "line": "一線", "code": "DB-1311-O-1001", "studyTitle": "一項第 1/2a 期、多中心、開放性、首次於人體進行之試驗，評估 DB-1311 在晚期/轉移性實體腫瘤受試者中的安全性、耐受性、藥物動力學及初步抗腫瘤活性", "inclusion": "Pathologically documented metastatic adenocarcinoma of the prostate cancer. Progressive metastatic CRPC as defined:\n1) castrate levels of serum testosterone < 50 ng/dL AND\n2) progressive disease as defined by PCWG3 criteria.\nTaxane-naive (prior treatment with taxane based chemotherapy for CSPC and did not progress within 1 year after the last dose is allowed) subjects who have progressed on or after NHT.\nHaving received one prior NHT other than Enzalutamide (for Cohort 16) / abiraterone (for Cohort 17).", "phase": "1/2a 期", "sponsor": "Taiwan Tigermed Consultin\ng臺灣泰格國際醫藥股份有限公司", "targetNum": "20", "enrolled": "9", "monthSigned": "0", "monthEnrolled": "0", "pi": "楊慕華", "nurse": "邱佩玲/孔亭方", "contractNo": "C2409400", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "C R P C", "lines": ["一線"]}]}, {"id": 41, "cancerType": "預備中", "line": "Translational study", "code": "GW-020202", "studyTitle": "一項二期、劑量隨機、開放性臨床試驗評估 PTS100用於治療不適合手術切除或局部區域治療的原發性肝癌（ HCC）患者的安全性與療效\n- PTS100, intra-liver tumor injection", "inclusion": "Major protocol amedmnet in processing.", "phase": "II", "sponsor": "共信", "targetNum": "3", "enrolled": "0", "monthSigned": "0", "monthEnrolled": "0", "pi": "黃怡翔", "nurse": "李杰如\n0939859265  /\n吳佳勳\n7270轉268", "comments": "還未SIV", "status": "還未SIV", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "預備中", "lines": ["Translational study"]}]}];
 
 function AccessPasswordModal(props) {
@@ -1026,8 +515,8 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-        e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.10.1 Realtime Database版'),
-        e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firebase Realtime Database 即時同步版')
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
+                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
                 e('input', {
@@ -1129,11 +618,11 @@ function TrialCard(props) {
             e('div', {className: 'grid grid-cols-2 gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '研究護士: '),
-                    e('span', {className: 'whitespace-pre-wrap break-words'}, trial.nurse || '')
+                    e('span', null, trial.nurse || '')
                 ),
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '聯絡方式: '),
-                    e('span', {className: 'whitespace-pre-wrap break-words'}, trial.phone || '')
+                    e('span', null, trial.phone || '')
                 )
             ),
             e('div', {className: 'grid grid-cols-2 gap-4'},
@@ -1439,17 +928,11 @@ function TrialFormModal(props) {
     });
     
     const [cancerLines, setCancerLines] = useState(() => {
-        if (props.trial && Array.isArray(props.trial.cancerTypes) && props.trial.cancerTypes.length) {
+        if (props.trial && props.trial.cancerTypes) {
             return props.trial.cancerTypes.map(ct => ({
                 type: ct.type,
                 lines: ct.lines ? ct.lines.join(', ') : ''
             }));
-        }
-        if (props.trial && (props.trial.cancerType || props.trial.line)) {
-            return [{
-                type: props.trial.cancerType || '',
-                lines: props.trial.line || ''
-            }];
         }
         return [{type: '', lines: ''}];
     });
@@ -1466,7 +949,7 @@ function TrialFormModal(props) {
             .filter(cl => cl.type && cl.lines)
             .map(cl => ({
                 type: cl.type,
-                lines: cl.lines.split(/[,，]/).map(normalizeTreatmentLine).filter(Boolean)
+                lines: cl.lines.split(',').map(l => l.trim()).filter(Boolean)
             }));
         
         if (cancerTypes.length === 0) {
@@ -1478,8 +961,8 @@ function TrialFormModal(props) {
             ...form,
             cancerTypes: cancerTypes,
             id: isEdit ? form.id : Date.now(),
-            targetNum: String(form.targetNum ?? '').trim(),
-            enrolled: String(form.enrolled ?? '').trim(),
+            targetNum: parseInt(form.targetNum) || 0,
+            enrolled: parseInt(form.enrolled) || 0,
             isArchived: !!form.isArchived,
             archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
             archiveReason: form.isArchived ? (form.archiveReason || '') : ''
@@ -1631,20 +1114,19 @@ function TrialFormModal(props) {
                     e('div', null,
                         e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目標收案數'),
                         e('input', {
-                            type: 'text',
+                            type: 'number',
                             value: form.targetNum,
                             onChange: (ev) => update('targetNum', ev.target.value),
-                            placeholder: '例：10、3-5、需向 sponsor 詢問',
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                         })
                     ),
                     e('div', null,
                         e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目前已收案'),
                         e('input', {
-                            type: 'text',
+                            type: 'number',
+                            min: '0',
                             value: form.enrolled,
                             onChange: (ev) => update('enrolled', ev.target.value),
-                            placeholder: '例：screen 1 / enrolled 0',
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                         })
                     ),
@@ -1747,18 +1229,9 @@ function ImportStatusModal(props) {
     const [parsedRows, setParsedRows] = useState([]);
     const [importInfo, setImportInfo] = useState(null);
     const [busy, setBusy] = useState(false);
-    const [importing, setImporting] = useState(false);
-    const [importProgress, setImportProgress] = useState(0);
-    const [importMessage, setImportMessage] = useState('');
     const [replaceCloud, setReplaceCloud] = useState(false);
 
     const handlePreview = () => {
-        try {
-            assertReadableImportText(csvText);
-        } catch (error) {
-            alert(error.message || error);
-            return;
-        }
         const parsed = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
         const info = analyzeParsedTrials(parsed);
         setParsedRows(info.rows);
@@ -1782,48 +1255,26 @@ function ImportStatusModal(props) {
                 setParsedRows(info.rows);
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
-                alert('Excel\u8b80\u53d6\u6210\u529f\uff1a\u6709\u6548 ' + info.validCount + ' \u7b46\uff0c\u5408\u4f75\u91cd\u8907 ' + info.duplicateCount + ' \u7b46\uff0c\u5c07\u532f\u5165 ' + info.uniqueCount + ' \u7b46');
-            } else if (file.name.match(/\.pdf$/i)) {
-                const result = await parsePdfFile(file);
-                assertReadableImportText(result.text);
-                setCsvText(result.text);
-                const parsed = result.parsed && result.parsed.length ? result.parsed : parseStudyStatusCsv(result.text);
-                const info = analyzeParsedTrials(parsed);
-                setParsedRows(info.rows);
-                setImportInfo(info);
-                setPreviewCount(info.uniqueCount);
-                if (info.uniqueCount) {
-                    alert('PDF 文字辨識成功：有效 ' + info.validCount + ' 筆，合併重複 ' + info.duplicateCount + ' 筆，將匯入 ' + info.uniqueCount + ' 筆');
-                } else {
-                    alert('PDF 已抽出文字並放入匯入框，但尚未辨識出完整 trial。請檢查文字內容；若是亂碼，請改用 Excel / CSV 或貼上從 PDF 複製的表格文字。');
-                }
+                alert(`Excel讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆`);
             } else {
                 const text = await file.text();
-                assertReadableImportText(text);
                 setCsvText(text);
                 const parsed = parseStudyStatusCsv(text);
                 const info = analyzeParsedTrials(parsed);
                 setParsedRows(info.rows);
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
-                alert('CSV\u8b80\u53d6\u6210\u529f\uff1a\u6709\u6548 ' + info.validCount + ' \u7b46\uff0c\u5408\u4f75\u91cd\u8907 ' + info.duplicateCount + ' \u7b46\uff0c\u5c07\u532f\u5165 ' + info.uniqueCount + ' \u7b46');
+                alert(`CSV讀取成功：有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆`);
             }
         } catch (e) {
             console.error(e);
-            alert('\u6a94\u6848\u8b80\u53d6\u5931\u6557\uff1a' + (e.message || e));
+            alert('檔案讀取失敗');
         } finally {
             setBusy(false);
         }
     };
 
     const handleImport = async () => {
-        if (importing) return;
-        try {
-            assertReadableImportText(csvText);
-        } catch (error) {
-            alert(error.message || error);
-            return;
-        }
         const raw = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
         const info = analyzeParsedTrials(raw);
         const parsed = info.rows;
@@ -1833,29 +1284,7 @@ function ImportStatusModal(props) {
             alert('沒有讀到任何有效資料，請確認 CSV / Excel 內容與欄位名稱。');
             return;
         }
-        setImporting(true);
-        setImportProgress(10);
-        setImportMessage(`已確認 ${info.uniqueCount} 筆資料，準備上傳...`);
-        try {
-            const completed = await props.onImport(parsed, {
-                replaceCloud,
-                onProgress: (progress, message) => {
-                    setImportProgress(progress);
-                    setImportMessage(message);
-                }
-            });
-            if (completed === false) {
-                setImportProgress(0);
-                setImportMessage('');
-                setImporting(false);
-            }
-        } catch (error) {
-            console.error('Import failed:', error);
-            setImportProgress(0);
-            setImportMessage('');
-            setImporting(false);
-            alert(`匯入失敗：${error.message || error}`);
-        }
+        await props.onImport(parsed, { replaceCloud });
     };
 
     return e('div', {className: 'fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-24 pb-8 px-4 overflow-y-auto'},
@@ -1864,36 +1293,22 @@ function ImportStatusModal(props) {
                 e('h3', {className: 'text-2xl font-bold text-slate-800'}, '匯入 Study Status'),
                 e('button', {
                     onClick: props.onClose,
-                    disabled: importing,
                     className: 'text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none'
                 }, '×')
             ),
             e('div', {className: 'mb-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800'},
-                '可直接上傳 Excel / CSV，或嘗試上傳可選字的 PDF。欄位順序可亂、標題可用常見別名；系統會自動辨識並用 code 當唯一鍵 upsert。PDF 若使用自訂字型編碼，即使可選字也可能抽成亂碼；系統會擋下亂碼結果，請改用 Excel / CSV 或貼上從 PDF 複製的表格文字。若雲端已有舊的重複殘留，可勾選「以本檔重建雲端主資料」清空後重匯。'
+                '可直接上傳 Excel / CSV，或貼上 Excel 複製內容。欄位順序可亂、標題可用常見別名；系統會自動辨識並用 code 當唯一鍵 upsert；若雲端已有舊的重複殘留，可勾選「以本檔重建雲端主資料」清空後重匯。'
             ),
             e('div', {className: 'mb-4 p-4 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50'},
                 e('div', {className: 'font-semibold mb-2 text-slate-800'}, '上傳檔案'),
                 e('input', {
                     type: 'file',
-                    accept: '.xlsx,.xls,.csv,.pdf,text/csv,application/pdf',
+                    accept: '.xlsx,.xls,.csv,text/csv',
                     onChange: handleFile,
                     className: 'block w-full text-sm'
                 }),
                 fileName && e('div', {className: 'text-xs text-slate-500 mt-2'}, `已選擇：${fileName}`),
                 busy && e('div', {className: 'text-xs text-blue-600 mt-2'}, '讀取中...')
-            ),
-            importing && e('div', {className: 'mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl'},
-                e('div', {className: 'flex justify-between text-sm font-semibold text-blue-800 mb-2'},
-                    e('span', null, importMessage || '正在處理匯入...'),
-                    e('span', null, `${importProgress}%`)
-                ),
-                e('div', {className: 'w-full h-3 bg-blue-100 rounded-full overflow-hidden'},
-                    e('div', {
-                        className: 'h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-300',
-                        style: {width: `${importProgress}%`}
-                    })
-                ),
-                e('div', {className: 'text-xs text-blue-700 mt-2'}, '請保持此視窗開啟；完成後會自動關閉並顯示結果。')
             ),
             e('div', {className: 'mb-3 p-3 bg-slate-50 rounded-lg text-xs text-slate-700 whitespace-pre-wrap'},
                 '核心欄位至少需能辨識 code。其餘欄位可自由丟：studyTitle / sponsor / phase / targetNum / enrolled / pi / nurse / phone / status / comments 等。'
@@ -1919,22 +1334,16 @@ function ImportStatusModal(props) {
                     e('input', {
                         type: 'checkbox',
                         checked: replaceCloud,
-                        disabled: importing,
                         onChange: (ev) => setReplaceCloud(ev.target.checked),
                         className: 'w-4 h-4'
                     }),
-                    e('span', null, '以本檔重建雲端主資料（先清空 Realtime Database trials，再匯入本檔）')
+                    e('span', null, '以本檔重建雲端主資料（先清空 Firestore trials，再匯入本檔）')
                 ),
                 e('button', {
                     type: 'button',
                     onClick: handleImport,
-                    disabled: importing || busy,
-                    className: `ml-auto px-5 py-2 text-white rounded-lg font-semibold transition-all ${
-                        importing || busy
-                            ? 'bg-slate-400 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700'
-                    }`
-                }, importing ? `匯入處理中 ${importProgress}%` : '匯入並自動合併更新')
+                    className: 'ml-auto px-5 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg hover:from-emerald-600 hover:to-green-700 font-semibold'
+                }, '匯入並自動合併更新')
             )
         )
     );
@@ -1963,7 +1372,6 @@ function FirebaseConfigModal(props) {
             e('div', {className: 'grid grid-cols-1 md:grid-cols-2 gap-4'},
                 field('apiKey', 'apiKey'),
                 field('authDomain', 'authDomain', 'xxx.firebaseapp.com'),
-                field('databaseURL', 'databaseURL', 'https://xxx-default-rtdb.firebaseio.com'),
                 field('projectId', 'projectId'),
                 field('storageBucket', 'storageBucket', 'xxx.appspot.com'),
                 field('messagingSenderId', 'messagingSenderId'),
@@ -1975,6 +1383,10 @@ function FirebaseConfigModal(props) {
                     onClick: () => props.onSave(form),
                     className: 'flex-1 px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold'
                 }, '儲存並啟用'),
+                e('button', {
+                    onClick: props.onDisable,
+                    className: 'px-5 py-3 bg-slate-200 text-slate-700 rounded-xl hover:bg-slate-300 font-semibold'
+                }, '停用雲端同步'),
                 e('button', {
                     onClick: props.onClose,
                     className: 'px-5 py-3 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 font-semibold'
@@ -2000,7 +1412,8 @@ function App() {
     const [showImportModal, setShowImportModal] = useState(false);
     const [syncStatus, setSyncStatus] = useState('');
     const [showArchived, setShowArchived] = useState(false);
-    const [firebaseConfig, setFirebaseConfig] = useState(() => getStoredFirebaseConfig());
+    const [firebaseConfig, setFirebaseConfig] = useState(DEFAULT_FIREBASE_CONFIG);
+    const [firebaseEnabled, setFirebaseEnabled] = useState(true);
     const [showFirebaseModal, setShowFirebaseModal] = useState(false);
     const unsubscribeRef = useRef(null);
     
@@ -2027,19 +1440,13 @@ function App() {
     }, []);
 
     useEffect(() => {
-        const resolvedConfig = resolveFirebaseConfig(firebaseConfig);
-        setStoredFirebaseConfig(resolvedConfig);
-        if (JSON.stringify(resolvedConfig) !== JSON.stringify(firebaseConfig)) {
-            setFirebaseConfig(resolvedConfig);
-            return;
-        }
         if (unsubscribeRef.current) {
             try { unsubscribeRef.current(); } catch (e) {}
             unsubscribeRef.current = null;
         }
-        if (!firebaseConfig) return;
-        setSyncStatus('Firebase Realtime Database 連線中...');
-        unsubscribeRef.current = subscribeRealtimeData({
+        if (!firebaseEnabled || !firebaseConfig) return;
+        setSyncStatus('Firebase 連線中...');
+        unsubscribeRef.current = subscribeFirestoreData({
             firebaseConfig,
             onTrials: async (remoteTrials) => {
                 setTrials(remoteTrials);
@@ -2055,7 +1462,7 @@ function App() {
                 setSyncStatus(`Firebase 同步失敗：${error.message || error}`);
             }
         });
-        seedInitialTrialsToRealtimeDatabase(firebaseConfig, INITIAL_TRIALS)
+        seedInitialTrialsToFirestore(firebaseConfig, INITIAL_TRIALS)
             .then((seeded) => {
                 if (seeded) setSyncStatus(`已初始化雲端主資料（${INITIAL_TRIALS.length} 個試驗）`);
             })
@@ -2066,45 +1473,35 @@ function App() {
                 unsubscribeRef.current = null;
             }
         };
-    }, [firebaseConfig]);
+    }, [firebaseEnabled, firebaseConfig]);
     
     const saveTrials = async (data) => {
         setTrials(data);
         await saveAllData(data, subjects);
-        setSyncStatus(`已更新本機快取，等待 Firebase 同步（${data.length} 個試驗）`);
+        setSyncStatus(firebaseEnabled ? `已更新本機快取，等待 Firebase 同步（${data.length} 個試驗）` : `已儲存到本機資料（${data.length} 個試驗）`);
     };
 
     const handleSaveTrial = async (trialData) => {
-        const activeFirebaseConfig = resolveFirebaseConfig(firebaseConfig);
-        setStoredFirebaseConfig(activeFirebaseConfig);
-        setFirebaseConfig(activeFirebaseConfig);
         const prepared = cleanTrialForSave({
             ...trialData,
             updatedBy: isAdmin ? CONFIG.ADMIN_USERNAME : 'user'
         });
         const existing = trials.find(t => normalizeCode(t.code) === normalizeCode(prepared.code));
-        try {
-            await saveTrialToRealtimeDatabase(activeFirebaseConfig, prepared);
-            const updatedTrials = upsertTrialsByCode(trials, [prepared]);
-            setTrials(updatedTrials);
-            await saveAllData(updatedTrials, subjects);
+        let updatedTrials = upsertTrialsByCode(trials, [prepared]);
+        setTrials(updatedTrials);
+        await saveAllData(updatedTrials, subjects);
+        if (firebaseEnabled && firebaseConfig) {
+            await saveTrialToFirestore(firebaseConfig, prepared);
             setSyncStatus(`已同步到 Firebase：${prepared.code}`);
-            setShowAddModal(false);
-            setShowEditModal(null);
-            alert(existing ? '試驗已更新！' : '試驗已新增！');
-        } catch (error) {
-            console.error('Save trial failed:', error);
-            alert(`儲存失敗，資料未寫入 Firebase：${error.message || error}`);
+        } else {
+            setSyncStatus(`已儲存到本機資料：${prepared.code}`);
         }
+        setShowAddModal(false);
+        setShowEditModal(null);
+        alert(existing ? '試驗已更新！' : '試驗已新增！');
     };
 
     const handleImportStudyStatus = async (incomingRows, options = {}) => {
-        const reportProgress = typeof options.onProgress === 'function'
-            ? options.onProgress
-            : () => {};
-        reportProgress(20, '正在整理與統一治療線別...');
-        const activeFirebaseConfig = resolveFirebaseConfig(firebaseConfig);
-        setStoredFirebaseConfig(activeFirebaseConfig);
         const importAnalysis = analyzeParsedTrials(incomingRows);
         const uniqueRows = importAnalysis.rows;
         const replaceCloud = !!options.replaceCloud;
@@ -2112,67 +1509,48 @@ function App() {
         let cleared = 0;
 
         if (replaceCloud) {
-            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Realtime Database trials，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return false;
-            if (activeFirebaseConfig) {
-                reportProgress(35, '正在清空舊的雲端試驗資料...');
-                setSyncStatus('正在清空 Realtime Database trials...');
-                cleared = await clearTrialsFromRealtimeDatabase(activeFirebaseConfig);
+            if (!window.confirm('確定要以這個檔案重建雲端主資料？\n\n這會先清空 Firestore trials collection，再匯入目前檔案。建議只在舊資料有重複或髒資料時使用。')) return;
+            if (firebaseEnabled && firebaseConfig) {
+                setSyncStatus('正在清空 Firestore trials...');
+                cleared = await clearTrialsFromFirestore(firebaseConfig);
             }
             baseTrials = [];
         }
 
-        const merged = upsertTrialsByCode(baseTrials, uniqueRows, {
-            preserveExistingCancerTypes: !replaceCloud
-        });
+        const merged = upsertTrialsByCode(baseTrials, uniqueRows);
+        setTrials(merged);
+        await saveAllData(merged, subjects);
         let added = 0, updated = 0, skipped = 0;
         const existingMap = new Map((baseTrials || []).map(t => [normalizeCode(t.code), t]));
         for (const row of uniqueRows) {
             const key = normalizeCode(row.code);
             if (!key) { skipped++; continue; }
             if (existingMap.has(key)) updated++; else added++;
+            if (firebaseEnabled && firebaseConfig) {
+                await saveTrialToFirestore(firebaseConfig, { ...existingMap.get(key), ...row });
+            }
         }
-        reportProgress(55, `正在寫入 Firebase（${uniqueRows.length} 筆）...`);
-        await saveTrialsToRealtimeDatabase(
-            activeFirebaseConfig,
-            uniqueRows.map((row) => {
-                const existing = existingMap.get(normalizeCode(row.code));
-                if (!existing || replaceCloud) return row;
-                if (!Array.isArray(existing.cancerTypes) || !existing.cancerTypes.length) {
-                    return { ...existing, ...row };
-                }
-                return {
-                    ...existing,
-                    ...row,
-                    cancerType: existing.cancerType,
-                    line: existing.line,
-                    cancerTypes: existing.cancerTypes
-                };
-            })
-        );
-        reportProgress(85, '雲端寫入完成，正在更新畫面與本機快取...');
-        setTrials(merged);
-        await saveAllData(merged, subjects);
         const prefix = replaceCloud ? ('已清空 ' + cleared + ' 筆後重建；') : '';
         const msg = prefix + '已匯入：新增 ' + added + ' / 更新 ' + updated + ' / 跳過 ' + skipped + '；重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆';
-        setSyncStatus('Firebase ' + msg);
-        reportProgress(100, '匯入完成');
-        await new Promise(resolve => setTimeout(resolve, 300));
+        setSyncStatus(firebaseEnabled ? ('Firebase ' + msg) : ('本機 ' + msg));
         setShowImportModal(false);
         alert('已完成匯入：' + (replaceCloud ? ('已清空 ' + cleared + ' 筆；') : '') + '新增 ' + added + ' 筆、更新 ' + updated + ' 筆、跳過 ' + skipped + ' 筆。重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆。');
-        return true;
     };
 
 
     const handleClearCloudTrials = async () => {
-        if (!firebaseConfig) return;
-        const ok = window.confirm('確定要清空 Realtime Database 的 trials？\n\n這會刪除雲端全部試驗資料；建議清空後立刻用最新版 Excel「匯入資料」重建。');
+        if (!firebaseEnabled || !firebaseConfig) {
+            alert('Firebase 尚未啟用，無法清空雲端資料。');
+            return;
+        }
+        const ok = window.confirm('確定要清空 Firestore 的 trials collection？\n\n這會刪除雲端全部試驗資料；建議清空後立刻用最新版 Excel「匯入資料」重建。');
         if (!ok) return;
         try {
-            setSyncStatus('正在清空 Realtime Database trials...');
-            const cleared = await clearTrialsFromRealtimeDatabase(firebaseConfig);
+            setSyncStatus('正在清空 Firestore trials...');
+            const cleared = await clearTrialsFromFirestore(firebaseConfig);
             setTrials([]);
             await saveAllData([], subjects);
-            setSyncStatus('已清空 Realtime Database trials：' + cleared + ' 筆。請接著匯入最新版 Excel 重建主資料。');
+            setSyncStatus('已清空 Firestore trials：' + cleared + ' 筆。請接著匯入最新版 Excel 重建主資料。');
             alert('已清空 ' + cleared + ' 筆雲端試驗資料。請接著匯入最新版 Excel。');
         } catch (error) {
             console.error(error);
@@ -2208,11 +1586,15 @@ function App() {
             }
             const mergedTrials = upsertTrialsByCode(trials, data.trials);
             const mergedSubjects = Array.isArray(data.subjects) ? data.subjects : subjects;
-            await saveTrialsToRealtimeDatabase(firebaseConfig, data.trials);
-            await saveSubjectsToRealtimeDatabase(firebaseConfig, mergedSubjects);
             setTrials(mergedTrials);
             setSubjects(mergedSubjects);
             await saveAllData(mergedTrials, mergedSubjects);
+            if (firebaseEnabled && firebaseConfig) {
+                for (const trial of data.trials) {
+                    await saveTrialToFirestore(firebaseConfig, trial);
+                }
+                await saveSubjectsToFirestore(firebaseConfig, mergedSubjects);
+            }
             setSyncStatus(`已匯入 JSON 並自動合併（${data.trials.length} 個試驗）`);
             alert('匯入 JSON 完成');
         } catch (error) {
@@ -2223,45 +1605,36 @@ function App() {
         }
     };
 
-    const downloadExcel = () => {
+    const downloadCSV = () => {
+        const headers = ['試驗代碼', '試驗標題', '癌症類型與治療線', '期別', 'PI', '護理師', '電話', '狀態', '收案進度'];
         const rows = filtered.map(trial => {
             const cancerInfo = trial.cancerTypes ? trial.cancerTypes.map(ct => 
                 `${ct.type}: ${ct.lines ? ct.lines.join(', ') : ''}`
             ).join('; ') : '';
-
-            return {
-                '試驗代碼': trial.code || '',
-                '試驗標題': trial.studyTitle || '',
-                '癌症類型與治療線': cancerInfo,
-                '期別': trial.phase || '',
-                '贊助商': trial.sponsor || '',
-                'PI': trial.pi || '',
-                '研究護士': trial.nurse || '',
-                '聯絡方式': trial.phone || '',
-                '狀態': trial.status || '',
-                '目前已收案': trial.enrolled || 0,
-                '目標收案': trial.targetNum || 0,
-                '本月簽署': trial.monthSigned || 0,
-                '本月收案': trial.monthEnrolled || 0,
-                '收案條件': trial.inclusion || '',
-                '排除條件': trial.exclusion || '',
-                '備註': trial.comments || '',
-                '是否封存': trial.isArchived ? '是' : '否',
-                '封存日期': trial.archiveDate || '',
-                '封存原因': trial.archiveReason || ''
-            };
+            
+            return [
+                trial.code || '',
+                trial.studyTitle || '',
+                cancerInfo,
+                trial.phase || '',
+                trial.pi || '',
+                trial.nurse || '',
+                trial.phone || '',
+                trial.status || '',
+                `${trial.enrolled || 0}/${trial.targetNum || 0}`
+            ];
         });
-
-        const sheet = XLSX.utils.json_to_sheet(rows);
-        sheet['!cols'] = [
-            {wch: 18}, {wch: 55}, {wch: 28}, {wch: 10}, {wch: 18},
-            {wch: 14}, {wch: 24}, {wch: 20}, {wch: 12}, {wch: 12},
-            {wch: 12}, {wch: 12}, {wch: 12}, {wch: 55}, {wch: 55},
-            {wch: 40}, {wch: 10}, {wch: 14}, {wch: 30}
-        ];
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, sheet, '臨床試驗');
-        XLSX.writeFile(workbook, `臨床試驗列表_${new Date().toISOString().split('T')[0]}.xlsx`);
+        
+        const csvContent = [headers, ...rows]
+            .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+        
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `臨床試驗列表_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
     };
     
     const generatePDF = () => {
@@ -2342,14 +1715,13 @@ function App() {
     };
     
     const saveSubjects = async (data) => {
-        try {
-            await saveSubjectsToRealtimeDatabase(firebaseConfig, data);
-            setSubjects(data);
-            await saveAllData(trials, data);
+        setSubjects(data);
+        await saveAllData(trials, data);
+        if (firebaseEnabled && firebaseConfig) {
+            await saveSubjectsToFirestore(firebaseConfig, data);
             setSyncStatus('受試者資料已同步到 Firebase');
-        } catch (error) {
-            console.error('Save subjects failed:', error);
-            alert(`受試者資料儲存失敗：${error.message || error}`);
+        } else {
+            setSyncStatus('受試者資料已儲存到本機資料');
         }
     };
     
@@ -2379,15 +1751,13 @@ function App() {
         if (confirm('確定要刪除此試驗？')) {
             const target = trials.find(t => t.id === id);
             const updated = trials.filter(t => t.id !== id);
-            try {
-                if (!target || !target.code) throw new Error('找不到試驗代碼');
-                await deleteTrialFromRealtimeDatabase(firebaseConfig, target.code);
-                setTrials(updated);
-                await saveAllData(updated, subjects);
+            setTrials(updated);
+            await saveAllData(updated, subjects);
+            if (firebaseEnabled && firebaseConfig && target && target.code) {
+                await deleteTrialFromFirestore(firebaseConfig, target.code);
                 setSyncStatus(`已自 Firebase 刪除：${target.code}`);
-            } catch (error) {
-                console.error('Delete trial failed:', error);
-                alert(`刪除失敗，Firebase 資料未變更：${error.message || error}`);
+            } else {
+                await saveTrials(updated);
             }
         }
     };
@@ -2432,29 +1802,26 @@ function App() {
         }
         
         // 癌症類型篩選
-        if (cancerType !== '全部' && selectedLine === '全部') {
+        if (cancerType !== '全部') {
             result = result.filter(t => {
-                const entries = getTrialCancerEntries(t);
-                return entries.some(entry => valueMatches(entry.type, cancerType));
+                const candidates = [];
+                if (Array.isArray(t.cancerTypes)) t.cancerTypes.forEach(ct => candidates.push(ct.type));
+                if (t.cancerType) candidates.push(t.cancerType);
+                return candidates.some(type => valueMatches(type, cancerType));
             });
         }
         
         // 治療線篩選：會先正規化空白/換行/斜線，所以「一\n線」「二、三線」也能正確命中
-        if (selectedLine !== '全部' && cancerType === '全部') {
+        if (selectedLine !== '全部') {
             result = result.filter(t => {
-                const entries = getTrialCancerEntries(t);
-                return entries.some(entry => lineMatchesSelection(entry.line, selectedLine));
-            });
-        }
-
-        // 癌種 + 線別同時篩選時，必須命中同一組分類，避免「胃癌一線 + 大腸癌二線」被誤判成胃癌二線。
-        if (cancerType !== '全部' && selectedLine !== '全部') {
-            result = result.filter(t => {
-                const entries = getTrialCancerEntries(t);
-                return entries.some(entry =>
-                    valueMatches(entry.type, cancerType) &&
-                    lineMatchesSelection(entry.line, selectedLine)
-                );
+                const lineCandidates = [];
+                if (Array.isArray(t.cancerTypes)) {
+                    t.cancerTypes.forEach(ct => {
+                        if (Array.isArray(ct.lines)) ct.lines.forEach(line => lineCandidates.push(line));
+                    });
+                }
+                if (t.line) lineCandidates.push(t.line);
+                return lineCandidates.some(line => lineMatchesSelection(line, selectedLine));
             });
         }
         
@@ -2479,31 +1846,34 @@ function App() {
     }, [trials]);
     
     const treatmentLines = useMemo(() => {
-        return ['全部', '一線', '二線', '三線', '四線', 'Adjuvant', '多線'];
+        return ['全部', '第一線', '第二線', '第三線', 'Adjuvant', '多線'];
     }, [trials]);
     
     const handleSaveFirebaseConfig = async (cfg) => {
         try {
-            const resolvedConfig = resolveFirebaseConfig(cfg);
-            if (!resolvedConfig.apiKey || !resolvedConfig.databaseURL || !resolvedConfig.projectId || !resolvedConfig.appId) {
-                alert('請至少填 apiKey / databaseURL / projectId / appId');
+            if (!cfg.apiKey || !cfg.projectId || !cfg.appId) {
+                alert('請至少填 apiKey / projectId / appId');
                 return;
             }
-            if (unsubscribeRef.current) {
-                try { unsubscribeRef.current(); } catch (e) {}
-                unsubscribeRef.current = null;
-            }
-            await reinitializeFirebaseApp(resolvedConfig);
-            setStoredFirebaseConfig(resolvedConfig);
-            setFirebaseConfig(resolvedConfig);
+            initializeFirebaseApp(cfg);
+            setStoredFirebaseConfig(cfg);
+            setFirebaseConfig(cfg);
+            setFirebaseEnabled(true);
             setShowFirebaseModal(false);
-            setSyncStatus('Firebase Realtime Database 正在同步...');
+            setSyncStatus('Firebase 已啟用，正在同步...');
         } catch (error) {
             console.error(error);
             alert(`Firebase 設定失敗：${error.message || error}`);
         }
     };
 
+    const handleDisableFirebase = () => {
+        localStorage.removeItem(CONFIG.FIREBASE_ENABLED_KEY);
+        setFirebaseEnabled(false);
+        setShowFirebaseModal(false);
+        setSyncStatus('已切回本機模式');
+    };
+    
     if (!isAuth) {
         return e(AccessPasswordModal, {onAuth: handleAuth});
     }
@@ -2518,7 +1888,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.10.1 Realtime Database版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.0.5 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -2568,9 +1938,9 @@ function App() {
                 isAdmin && e('button', {
                     onClick: () => setShowFirebaseModal(true),
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-xl hover:from-sky-600 hover:to-cyan-600 transition-all shadow-lg font-semibold'
-                }, 'Firebase 同步設定'),
+                }, firebaseEnabled ? '雲端同步（已啟用）' : '雲端同步'),
                 e('button', {
-                    onClick: downloadExcel,
+                    onClick: downloadCSV,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg font-semibold'
                 },
                     e('svg', {className: 'w-5 h-5', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24'},
@@ -2666,12 +2036,12 @@ function App() {
             showFirebaseModal && e(FirebaseConfigModal, {
                 initialConfig: firebaseConfig || {},
                 onClose: () => setShowFirebaseModal(false),
-                onSave: handleSaveFirebaseConfig
+                onSave: handleSaveFirebaseConfig,
+                onDisable: handleDisableFirebase
             })
     );
 }
 
-document.getElementById('boot-error').style.display = 'none';
 ReactDOM.render(e(App), document.getElementById('app'));
     </script>
 </body>
