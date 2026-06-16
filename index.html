@@ -831,16 +831,72 @@ const normalizePdfExtractedText = (text) => String(text || '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
+const looksLikePdfMojibake = (text) => {
+    const sample = String(text || '').replace(/\s+/g, '').slice(0, 3000);
+    if (sample.length < 20) return true;
+    const readable = (sample.match(/[A-Za-z0-9\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/g) || []).length;
+    const replacement = (sample.match(/[\uFFFD?]/g) || []).length;
+    const privateUse = (sample.match(/[\uE000-\uF8FF]/g) || []).length;
+    const control = (sample.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
+    return (readable / sample.length) < 0.55 ||
+        (replacement / sample.length) > 0.08 ||
+        (privateUse / sample.length) > 0.12 ||
+        (control / sample.length) > 0.02;
+};
+
+const looksLikeImportBinaryGarbage = (text) => {
+    const source = String(text || '');
+    const compact = source.replace(/\s+/g, '').slice(0, 5000);
+    if (compact.length < 80) return false;
+    const readable = (compact.match(/[A-Za-z0-9\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/g) || []).length;
+    const replacement = (compact.match(/[\uFFFD]/g) || []).length;
+    const privateUse = (compact.match(/[\uE000-\uF8FF]/g) || []).length;
+    const control = (compact.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
+    const hasBinaryHeader = /^\s*(Google Sheets|PK\x03\x04|%PDF-)/i.test(source);
+    return (replacement / compact.length) > 0.05 ||
+        (privateUse / compact.length) > 0.08 ||
+        (control / compact.length) > 0.015 ||
+        (hasBinaryHeader && (readable / compact.length) < 0.7);
+};
+
+const assertReadableImportText = (text) => {
+    if (looksLikeImportBinaryGarbage(text)) {
+        throw new Error('\u532f\u5165\u5167\u5bb9\u50cf\u662f\u6a94\u6848\u4e8c\u9032\u4f4d\u8cc7\u6599\u6216\u4e82\u78bc\uff0c\u4e0d\u662f\u53ef\u8fa8\u8b58\u7684\u8868\u683c\u6587\u5b57\u3002\u8acb\u7528\u6a94\u6848\u4e0a\u50b3 Excel / CSV\uff0c\u6216\u5f9e Google Sheets \u8907\u88fd\u5132\u5b58\u683c\u5340\u57df\u5f8c\u8cbc\u4e0a\uff0c\u4e0d\u8981\u8cbc\u6a94\u6848\u672c\u9ad4\u5167\u5bb9\u3002');
+    }
+};
+
+const extractPdfTextWithPdfJs = async (data) => {
+    const pdfjsLib = await import('./vendor/pdf.min.mjs');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = './vendor/pdf.worker.min.mjs';
+    const pdf = await pdfjsLib.getDocument({ data: data.slice(0) }).promise;
+    const pageTexts = [];
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const content = await page.getTextContent();
+        const pageText = content.items
+            .map((item) => item && item.str ? item.str : '')
+            .join('\t');
+        pageTexts.push(pageText);
+    }
+    return normalizePdfExtractedText(pageTexts.join('\n'));
+};
+
 const parsePdfFile = async (file) => {
     const data = await file.arrayBuffer();
-    const pdfText = new TextDecoder('latin1').decode(new Uint8Array(data));
-    const pieces = [
-        ...extractPdfLiteralStrings(pdfText),
-        ...extractPdfHexStrings(pdfText)
-    ].filter((value) => /[\u4e00-\u9fffA-Za-z0-9]/.test(value));
-    const text = normalizePdfExtractedText(pieces.join('\n'));
-    if (!text || text.length < 20) {
-        throw new Error('\u9019\u4efd PDF \u53ef\u80fd\u662f\u6383\u63cf\u5716\u7247\u6216\u6587\u5b57\u88ab\u52a0\u5bc6\uff0c\u7121\u6cd5\u76f4\u63a5\u8fa8\u8b58\u3002\u8acb\u5148\u8f49\u6210 Excel / CSV\uff0c\u6216\u8cbc\u4e0a\u53ef\u8907\u88fd\u7684\u6587\u5b57\u3002');
+    let text = '';
+    try {
+        text = await extractPdfTextWithPdfJs(data);
+    } catch (error) {
+        console.warn('PDF.js extraction failed, falling back to simple extraction', error);
+        const pdfText = new TextDecoder('latin1').decode(new Uint8Array(data));
+        const pieces = [
+            ...extractPdfLiteralStrings(pdfText),
+            ...extractPdfHexStrings(pdfText)
+        ].filter((value) => /[\u4e00-\u9fffA-Za-z0-9]/.test(value));
+        text = normalizePdfExtractedText(pieces.join('\n'));
+    }
+    if (!text || text.length < 20 || looksLikePdfMojibake(text)) {
+        throw new Error('PDF 文字抽取後看起來仍是亂碼。這通常是 PDF 使用自訂字型編碼，即使可以選字也不一定能由瀏覽器正確還原。請改用 Excel / CSV，或從 PDF 複製表格文字後貼到匯入框。');
     }
     const parsed = parseStudyStatusCsv(text);
     return { text, parsed };
@@ -1592,6 +1648,12 @@ function ImportStatusModal(props) {
     const [replaceCloud, setReplaceCloud] = useState(false);
 
     const handlePreview = () => {
+        try {
+            assertReadableImportText(csvText);
+        } catch (error) {
+            alert(error.message || error);
+            return;
+        }
         const parsed = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
         const info = analyzeParsedTrials(parsed);
         setParsedRows(info.rows);
@@ -1618,6 +1680,7 @@ function ImportStatusModal(props) {
                 alert('Excel\u8b80\u53d6\u6210\u529f\uff1a\u6709\u6548 ' + info.validCount + ' \u7b46\uff0c\u5408\u4f75\u91cd\u8907 ' + info.duplicateCount + ' \u7b46\uff0c\u5c07\u532f\u5165 ' + info.uniqueCount + ' \u7b46');
             } else if (file.name.match(/\.pdf$/i)) {
                 const result = await parsePdfFile(file);
+                assertReadableImportText(result.text);
                 setCsvText(result.text);
                 const parsed = result.parsed && result.parsed.length ? result.parsed : parseStudyStatusCsv(result.text);
                 const info = analyzeParsedTrials(parsed);
@@ -1625,12 +1688,13 @@ function ImportStatusModal(props) {
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
                 if (info.uniqueCount) {
-                    alert('PDF\u6587\u5b57\u8b80\u53d6\u6210\u529f\uff1a\u6709\u6548 ' + info.validCount + ' \u7b46\uff0c\u5408\u4f75\u91cd\u8907 ' + info.duplicateCount + ' \u7b46\uff0c\u5c07\u532f\u5165 ' + info.uniqueCount + ' \u7b46');
+                    alert('PDF 文字辨識成功：有效 ' + info.validCount + ' 筆，合併重複 ' + info.duplicateCount + ' 筆，將匯入 ' + info.uniqueCount + ' 筆');
                 } else {
-                    alert('PDF\u6587\u5b57\u5df2\u8b80\u53d6\u4e26\u653e\u5165\u532f\u5165\u6846\uff0c\u4f46\u5c1a\u672a\u8fa8\u8b58\u51fa\u5b8c\u6574 trial\u3002\u82e5\u9019\u662f\u6383\u63cf\u5716\u7247 PDF\uff0c\u8acb\u5148\u8f49\u6210 Excel / CSV \u6216\u8cbc\u4e0a\u53ef\u8907\u88fd\u6587\u5b57\u3002');
+                    alert('PDF 已抽出文字並放入匯入框，但尚未辨識出完整 trial。請檢查文字內容；若是亂碼，請改用 Excel / CSV 或貼上從 PDF 複製的表格文字。');
                 }
             } else {
                 const text = await file.text();
+                assertReadableImportText(text);
                 setCsvText(text);
                 const parsed = parseStudyStatusCsv(text);
                 const info = analyzeParsedTrials(parsed);
@@ -1649,6 +1713,12 @@ function ImportStatusModal(props) {
 
     const handleImport = async () => {
         if (importing) return;
+        try {
+            assertReadableImportText(csvText);
+        } catch (error) {
+            alert(error.message || error);
+            return;
+        }
         const raw = parsedRows.length ? parsedRows : parseStudyStatusCsv(csvText);
         const info = analyzeParsedTrials(raw);
         const parsed = info.rows;
@@ -1694,7 +1764,7 @@ function ImportStatusModal(props) {
                 }, '×')
             ),
             e('div', {className: 'mb-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800'},
-                '\u53ef\u76f4\u63a5\u4e0a\u50b3 Excel / CSV / \u6587\u5b57\u578b PDF\uff0c\u6216\u8cbc\u4e0a Excel \u8907\u88fd\u5167\u5bb9\u3002\u6b04\u4f4d\u9806\u5e8f\u53ef\u4e82\u3001\u6a19\u984c\u53ef\u7528\u5e38\u898b\u5225\u540d\uff1b\u7cfb\u7d71\u6703\u81ea\u52d5\u8fa8\u8b58\u4e26\u7528 code \u7576\u552f\u4e00\u9375 upsert\u3002PDF \u76ee\u524d\u652f\u63f4\u53ef\u8907\u88fd\u6587\u5b57\u7684\u6a94\u6848\uff0c\u6383\u63cf\u5716\u7247 PDF \u9700\u5148\u505a OCR \u6216\u8f49\u6210 Excel / CSV\u3002\u82e5\u96f2\u7aef\u5df2\u6709\u820a\u7684\u91cd\u8907\u6b98\u7559\uff0c\u53ef\u52fe\u9078\u300c\u4ee5\u672c\u6a94\u91cd\u5efa\u96f2\u7aef\u4e3b\u8cc7\u6599\u300d\u6e05\u7a7a\u5f8c\u91cd\u532f\u3002'
+                '可直接上傳 Excel / CSV，或嘗試上傳可選字的 PDF。欄位順序可亂、標題可用常見別名；系統會自動辨識並用 code 當唯一鍵 upsert。PDF 若使用自訂字型編碼，即使可選字也可能抽成亂碼；系統會擋下亂碼結果，請改用 Excel / CSV 或貼上從 PDF 複製的表格文字。若雲端已有舊的重複殘留，可勾選「以本檔重建雲端主資料」清空後重匯。'
             ),
             e('div', {className: 'mb-4 p-4 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50'},
                 e('div', {className: 'font-semibold mb-2 text-slate-800'}, '上傳檔案'),
