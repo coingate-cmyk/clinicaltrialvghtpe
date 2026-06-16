@@ -138,6 +138,31 @@ const lineMatchesSelection = (line, selected) => {
     return normalizeFilterValue(selected) === n || n.includes(normalizeFilterValue(selected));
 };
 
+const KNOWN_CANCER_TYPES = ['肝癌', '胃癌', '胰臟癌', '食道癌', '膽道癌', '膽管癌', '大腸癌', 'CRPC', '預備中'];
+
+const splitCancerLineText = (value) => {
+    const text = normalizeCellText(value);
+    const compact = text.replace(/\s+/g, '');
+    for (const cancer of KNOWN_CANCER_TYPES) {
+        if (compact === cancer || compact.startsWith(cancer)) {
+            return {
+                cancerType: cancer === '膽管癌' ? '膽道癌' : cancer,
+                line: normalizeTreatmentLine(compact.slice(cancer.length))
+            };
+        }
+    }
+    return { cancerType: '', line: normalizeTreatmentLine(text) };
+};
+
+const inferCancerFromStudyTitle = (title) => {
+    const compact = normalizeCellText(title).replace(/\s+/g, '');
+    if (!compact) return '';
+    for (const cancer of KNOWN_CANCER_TYPES) {
+        if (compact.startsWith(cancer)) return cancer === '膽管癌' ? '膽道癌' : cancer;
+    }
+    return '';
+};
+
 const getStoredFirebaseConfig = () => {
     try {
         const raw = localStorage.getItem(CONFIG.FIREBASE_CONFIG_KEY);
@@ -480,12 +505,11 @@ const detectStatusFromRow = (row) => {
 };
 
 const normalizeCancerLine = (cancerType, line) => {
-    let c = normalizeCellText(cancerType);
-    let l = normalizeTreatmentLine(line);
-    if (!c && l.startsWith('肝癌')) {
-        c = '肝癌';
-        l = l.replace(/^肝癌/, '').trim();
-    }
+    const cancerPart = splitCancerLineText(cancerType);
+    const linePart = splitCancerLineText(line);
+    let c = cancerPart.cancerType || normalizeCellText(cancerType) || linePart.cancerType;
+    let l = linePart.line || cancerPart.line || normalizeTreatmentLine(line);
+    if (c === '膽管癌') c = '膽道癌';
     return { cancerType: c, line: l };
 };
 
@@ -601,6 +625,17 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (isHeaderRow(row)) {
             mappedFields = row.map(inferFieldFromHeader);
+            const cancerIndex = mappedFields.findIndex(v => v === 'cancerType');
+            const studyTitleIndex = mappedFields.findIndex(v => v === 'studyTitle');
+            const codeIndex = mappedFields.findIndex(v => v === 'code');
+            if (
+                cancerIndex === 0 &&
+                !mappedFields[1] &&
+                studyTitleIndex === 2 &&
+                codeIndex === 3
+            ) {
+                mappedFields[1] = 'line';
+            }
             continue;
         }
 
@@ -611,7 +646,18 @@ const parseRowsWithHeaderMapping = (rows) => {
         const cancerCell = cancerIndex >= 0 ? (row[cancerIndex] || '') : '';
         const lineCell = lineIndex >= 0 ? (row[lineIndex] || '') : '';
 
-        if (cancerCell && !isMetaCancerCell(cancerCell)) currentCancerType = cancerCell;
+        const titleIndex = mappedFields.findIndex(v => v === 'studyTitle');
+        const titleCell = titleIndex >= 0 ? (row[titleIndex] || '') : '';
+        const titleCancerType = inferCancerFromStudyTitle(titleCell);
+        const cancerLine = normalizeCancerLine(cancerCell, lineCell);
+
+        if (cancerCell && !isMetaCancerCell(cancerCell)) {
+            currentCancerType = cancerLine.cancerType || normalizeCellText(cancerCell);
+        } else if (titleCancerType) {
+            currentCancerType = titleCancerType;
+        } else if (cancerLine.cancerType) {
+            currentCancerType = cancerLine.cancerType;
+        }
 
         if (lineCell) {
             const normalized = normalizeCancerLine(currentCancerType, lineCell);
@@ -634,6 +680,9 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (!item.cancerType && currentCancerType) item.cancerType = currentCancerType;
         if (!item.line && currentLine) item.line = currentLine;
+        const normalizedCancerLine = normalizeCancerLine(item.cancerType || currentCancerType, item.line || currentLine);
+        item.cancerType = normalizedCancerLine.cancerType || item.cancerType || currentCancerType || '';
+        item.line = normalizedCancerLine.line || item.line || currentLine || '';
         if (!item.status) item.status = detectStatusFromRow(row) || '進行中';
         if (!item.inclusion && row[4]) item.inclusion = row[4];
         item.code = code;
