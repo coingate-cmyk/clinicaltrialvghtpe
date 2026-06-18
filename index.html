@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.0 Firebase版</title>
+    <title>臨床試驗管理系統 v4.1.2 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -131,6 +131,12 @@ const normalizeLineOCRText = (value) => String(value || '')
     // Google 表單 PDF 轉 Excel 偶爾會把「一線」切成「一腺」；只修數字旁的腺，不動「胰管腺癌」。
     .replace(new RegExp('(' + LINE_NUMERAL_REGEX + ')\\s*腺', 'g'), (_, n) => `${toChineseLineNumber(n)}線`);
 
+const cleanLineParsingText = (value) => String(value || '')
+    // PD-L1 / anti-PD-L1 裡的 1L 不是治療線數，必須先遮蔽，避免誤判為一線。
+    .replace(/PD\s*[-–—]?\s*1\s*\/\s*PD\s*[-–—]?\s*L\s*1/ig, 'PD1_PDL_ONE')
+    .replace(/PD\s*[-–—]?\s*L\s*1/ig, 'PDL_ONE')
+    .replace(/anti\s*[-–—]?\s*PD\s*[-–—]?\s*L\s*1/ig, 'anti_PDL_ONE');
+
 const isValidTreatmentLineText = (value) => {
     const normalized = normalizeFilterValue(value);
     if (!normalized || normalized === '線' || normalized === '腺') return false;
@@ -139,14 +145,14 @@ const isValidTreatmentLineText = (value) => {
 };
 
 const extractTreatmentLineNumbers = (line) => {
-    const raw = normalizeLineOCRText(line);
+    const raw = normalizeLineOCRText(cleanLineParsingText(line));
     const lower = raw.toLowerCase();
     const numbers = [];
     const add = (v) => {
         const n = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(v || '').toLowerCase()] || v);
         if (n && LINE_ORDER.includes(n) && !numbers.includes(n)) numbers.push(n);
     };
-    lower.replace(/\b([1-9１２３４５６７８９])\s*l\s*(?:\+|以上)?\b/ig, (_, n) => { add(n); return ''; });
+    lower.replace(/(^|[^a-z0-9-])([1-9１２３４５６７８９])\s*l\s*(?:\+|以上)?\b/ig, (_, prefix, n) => { add(n); return ''; });
     raw.replace(new RegExp('第\\s*(' + LINE_NUMERAL_REGEX + ')\\s*線', 'g'), (_, n) => { add(n); return ''; });
     raw.replace(new RegExp('(' + LINE_NUMERAL_REGEX + ')\\s*線', 'g'), (_, n) => { add(n); return ''; });
 
@@ -171,7 +177,7 @@ const nextChineseLineNumber = (n) => {
 };
 
 const extractLooseLineNumbers = (value) => {
-    const text = normalizeLineOCRText(value);
+    const text = normalizeLineOCRText(cleanLineParsingText(value));
     const nums = [];
     const add = (v) => {
         const n = toChineseLineNumber(ENGLISH_LINE_NUMERAL[String(v || '').toLowerCase()] || v);
@@ -180,6 +186,8 @@ const extractLooseLineNumbers = (value) => {
     extractTreatmentLineNumbers(text).forEach(add);
     text.replace(/\b([1-9１２３４５６７８９])\s+lines?\b/ig, (_, n) => { add(n); return ''; });
     text.replace(/\b(one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig, (_, n) => { add(n); return ''; });
+    text.replace(/\b([1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+prior\s+lines?\b/ig, (_, n) => { add(n); return ''; });
+    text.replace(/\bprior\s+([1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig, (_, n) => { add(n); return ''; });
     text.replace(/\b([1-9１２３４５６７８９])\s*(?:or|and|to|through|-)\s*([1-9１２３４５６７８９])\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
     text.replace(/\b(one|two|three|four|five|six|seven|eight|nine)\s*(?:or|and|to|through|-)\s*(one|two|three|four|five|six|seven|eight|nine)\s+lines?\b/ig, (_, a, b) => { add(a); add(b); return ''; });
     return nums;
@@ -202,16 +210,22 @@ const isPriorTherapyLineContext = (src, start, end) => {
         return false;
     }
     if (/後\s*$/.test(matched)) return true;
+    if (/\b(?:one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|[1-9１２３４５６７８９])\s+prior\s+lines?\b/i.test(local)) return true;
+    if (/\bprior\s+(?:one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|[1-9１２３４５６７８９])\s+lines?\b/i.test(local)) return true;
+    if (/(?:\b[1-9１２３４５６７８９]\s*l|一\s*線|one|first)\s+setting.{0,60}(?:disease\s+progression|progressed)/i.test(local)) return true;
+    if (/(?:disease\s+progression|progressed).{0,60}(?:\b[1-9１２３４５６７８９]\s*l|一\s*線|one|first)\s+setting/i.test(local)) return true;
     return /(已接受|已經接受|曾接受|曾經接受|先前接受|接受過|用過|已用過|曾用過|既往.{0,12}治療|標準療法.{0,12}失敗|治療失敗|一線失敗|二線失敗|三線失敗|復發.{0,12}後|惡化.{0,12}後|progressed\s+(?:on|after)|progression\s+(?:on|after)|after\s+(?:receiving|received|failure|progression)|following\s+(?:prior|previous)|prior\s+(?:line|lines|therapy|therapies|treatment|treatments|systemic)|previous(?:ly)?\s+(?:treated|received)|received\s+(?:at\s+least|prior|previous|one|two|three|four|five|\d+)|have\s+received|has\s+received|failed\s+(?:after|prior|previous)?|relapsed\s+(?:after|following))/i.test(local);
 };
 
 const extractCurrentLinesFromPriorTherapyContext = (context) => {
-    const src = normalizeLineOCRText(context);
+    const src = normalizeLineOCRText(cleanLineParsingText(context));
     const results = [];
     const priorPatterns = [
         /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
         /\b[1-9１２３４５６７８９]\s*l\s*(?:以上|\+)?\b/ig,
-        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig,
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+prior\s+lines?\b/ig,
+        /\bprior\s+(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig
     ];
     priorPatterns.forEach(pattern => {
         let match;
@@ -228,7 +242,7 @@ const extractCurrentLinesFromPriorTherapyContext = (context) => {
 const normalizeTreatmentLine = (line) => {
     let text = normalizeCellText(line);
     if (!text) return '';
-    text = normalizeLineOCRText(text).replace(/[１-９]/g, d => toChineseLineNumber(d));
+    text = normalizeLineOCRText(cleanLineParsingText(text)).replace(/[１-９]/g, d => toChineseLineNumber(d));
     if (normalizeFilterValue(text) === '線' || normalizeFilterValue(text) === '腺') return '';
     text = text.replace(/\b([1-9])\s*l\s*(\+)?\b/ig, (_, n, plus) => `${toChineseLineNumber(n)}線${plus ? '以上' : ''}`);
     text = text.replace(/第\s*([1-9一二三四五六七八九])\s*線/g, (_, n) => `${toChineseLineNumber(n)}線`);
@@ -479,6 +493,7 @@ const FIELD_ALIASES = {
     code: ['code','trial code','study code','protocol','protocol no','protocol number','試驗代碼','計畫代碼','案號','代號'],
     studyTitle: ['studytitle','study title','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
     inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','inclusion','eligibility','主要條件'],
+    exclusion: ['排除條件','主要排除條件','exclusion','exclusioncriteria','exclusion criteria','排除標準'],
     phase: ['phase','期別'],
     sponsor: ['sponsor','贊助商','廠商'],
     targetNum: ['targetnum','target','target number','target no','sample size','目標收案','目標個案數','目標數','target人數'],
@@ -514,7 +529,7 @@ const normalizeCancerTypeLabel = (value) => {
 const CANCER_TYPE_RULES = [
     // Order matters: adenocarcinoma of esophagus / GEJ is grouped with 胃癌 before ESCC checks.
     { type: '胃癌', regex: /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|gastroesophageal\s+junction|gastro-esophageal\s+junction|\bgej\b|胃食道接合|胃食道交接|胃食道交界|胃食道癌|胃食道腺癌|胃癌|胃腺癌|gastric|stomach)/ig },
-    { type: '食道癌', regex: /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/ig },
+    { type: '食道癌', regex: /(\bescc\b|(?<!胃)食道癌|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+cancer|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/ig },
     { type: '胰臟癌', regex: /(胰臟癌|胰管腺癌|pancreatic|pdac|pancrea\s*ca)/ig },
     { type: '肝癌', regex: /(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/ig },
     { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma)/ig },
@@ -559,7 +574,7 @@ const expandNormalizedLines = (value) => {
 };
 
 const extractTreatmentLinesFromContext = (context) => {
-    const src = String(context || '').replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
+    const src = cleanLineParsingText(String(context || '')).replace(/腺/g, '線').replace(/正/g, '').replace(/．/g, '.');
     const results = [];
     const addLine = (v) => {
         expandNormalizedLines(v).forEach(line => {
@@ -568,8 +583,10 @@ const extractTreatmentLinesFromContext = (context) => {
     };
     const patterns = [
         /(?:第\s*)?[一二三四五六七八九123456789１２３４５６７８９](?:\s*[、，,\/／\.．\-–—~～至和及或]\s*[一二三四五六七八九123456789１２３４５６７８９])*\s*(?:線|l)\s*(?:以上|後|\+)?/ig,
-        /[一二三四五六七八九123456789１２３４５６７８９]\s*l\s*(?:以上|\+)?/ig,
-        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig
+        /(^|[^A-Za-z0-9-])([一二三四五六七八九123456789１２３４５６７８９])\s*l\s*(?:以上|\+)?/ig,
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)(?:\s*(?:or|and|to|through|-)\s*(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine))*\s+lines?\b/ig,
+        /\b(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+prior\s+lines?\b/ig,
+        /\bprior\s+(?:[1-9１２３４５６７８９]|one|two|three|four|five|six|seven|eight|nine|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+lines?\b/ig
     ];
     patterns.forEach(pattern => {
         let match;
@@ -628,6 +645,23 @@ const mergeCancerTypes = (items) => {
     }));
 };
 
+
+const isContactAssignmentOnlyCancerLineContext = (text, mention, context) => {
+    const ctx = String(context || '').slice(0, 90);
+    if (!ctx) return false;
+    // 例如「膽管癌(一線) 找姵妤」多半是護理師/窗口分工，不是正式收案線數；
+    // 若前面沒有「收、治療、cohort、eligible、已接受/失敗」等資格語氣，就不要把括號內線數當成開放線數。
+    if (!/(找|請洽|聯絡|contact|窗口)/i.test(ctx)) return false;
+    const beforeContact = ctx.split(/找|請洽|聯絡|contact|窗口/i)[0] || ctx;
+    const hasEligibilityCue = /(收|可收|僅收|納入|入組|開放|cohort|eligible|eligibility|criteria|inclusion|治療|作為|用於|失敗|已接受|曾接受|接受過|prior|received|failed|line\s*of\s*therapy)/i.test(beforeContact);
+    if (hasEligibilityCue) return false;
+    const hasLineNearCancer = new RegExp('(?:' + LINE_NUMERAL_REGEX + '|[1-9１２３４５６７８９])\\s*(?:線|l)|[（(]\\s*(?:' + LINE_NUMERAL_REGEX + '|[1-9１２３４５６７８９])\\s*(?:線|l)?\\s*[)）]', 'i').test(beforeContact);
+    const hasCancerTerm = CANCER_TYPE_RULES.some(rule => new RegExp(rule.regex.source, rule.regex.flags.replace('g', '')).test(beforeContact));
+    const compactBefore = normalizeFilterValue(beforeContact);
+    const onlyAssignment = hasCancerTerm && compactBefore.length <= 30;
+    return onlyAssignment || (hasLineNearCancer && compactBefore.length <= 24);
+};
+
 const inferCancerLinePairsFromText = (value) => {
     const text = String(value || '').replace(/\s+/g, ' ');
     if (!text) return [];
@@ -637,7 +671,11 @@ const inferCancerLinePairsFromText = (value) => {
         const nextIndex = idx + 1 < mentions.length ? mentions[idx + 1].index : Math.min(text.length, mention.index + 120);
         const afterContext = text.slice(mention.index, Math.min(nextIndex, mention.index + 120));
         let lines = extractTreatmentLinesFromContext(afterContext);
-        if (!lines.length) {
+        const contactAssignmentOnly = isContactAssignmentOnlyCancerLineContext(text, mention, afterContext);
+        if (lines.length && contactAssignmentOnly) {
+            lines = [];
+        }
+        if (!lines.length && !contactAssignmentOnly) {
             const prevBoundary = Math.max(
                 text.lastIndexOf('。', mention.index),
                 text.lastIndexOf('；', mention.index),
@@ -666,10 +704,26 @@ const inferCancerTypeFromText = (value) => {
 
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
+const splitEligibilitySections = (inclusionText, exclusionText = '') => {
+    const inclusion = normalizeCellText(inclusionText);
+    const existingExclusion = normalizeCellText(exclusionText);
+    if (!inclusion) return { inclusion: '', exclusion: existingExclusion };
+    const markerRegex = /(排除條件|主要排除條件|Exclusion\s+Criteria|Exclusion\s*:?)/i;
+    const match = markerRegex.exec(inclusion);
+    if (!match) return { inclusion, exclusion: existingExclusion };
+    const before = inclusion.slice(0, match.index).trim();
+    const after = inclusion.slice(match.index + match[0].length).trim().replace(/^[:：\s]+/, '').trim();
+    const mergedExclusion = [existingExclusion, after].filter(Boolean).join('\n').trim();
+    return { inclusion: before || inclusion, exclusion: mergedExclusion };
+};
+
 const normalizeImportedTrialFields = (item, options = {}) => {
     const out = { ...(item || {}) };
     if (out.cancerType) out.cancerType = normalizeCancerTypeLabel(out.cancerType);
     if (out.line) out.line = normalizeTreatmentLine(out.line);
+    const splitEligibility = splitEligibilitySections(out.inclusion, out.exclusion);
+    out.inclusion = splitEligibility.inclusion;
+    out.exclusion = splitEligibility.exclusion;
     if (Array.isArray(out.cancerTypes)) out.cancerTypes = normalizeCancerTypes(out.cancerTypes);
 
     // 只從臨床內容欄位推論癌別/線數；不要把 nurse / phone / Line ID / 收案數字納入，避免 0927751328 line ID 被誤判成 8L。
@@ -799,6 +853,8 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (isHeaderRow(row)) {
             mappedFields = row.map(inferFieldFromHeader);
+            currentCancerType = '';
+            currentLine = '';
             continue;
         }
 
@@ -887,6 +943,8 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
             code: key,
             studyTitle: normalizeText(incoming.studyTitle || prev.studyTitle),
+            inclusion: normalizeCellText(incoming.inclusion || prev.inclusion),
+            exclusion: normalizeCellText(incoming.exclusion || prev.exclusion),
             sponsor: normalizeText(incoming.sponsor || prev.sponsor),
             pi: normalizeText(incoming.pi || prev.pi),
             nurse: normalizeText(incoming.nurse || prev.nurse),
@@ -1029,7 +1087,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.0 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.2 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -2471,7 +2529,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.0 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.2 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
