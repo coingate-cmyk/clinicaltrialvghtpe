@@ -1,3 +1,13 @@
+# v4.1.6 — Study Status PDF 座標表格解析修正
+
+- 針對 2026/7/13 的 10 頁 Google Sheet PDF 改用獨立的座標式 table parser。
+- 以 Study title / 代號 / 收案條件等固定欄位與每列 protocol code 為錨點，不再要求整筆資料落在同一條文字行。
+- 支援跨頁列：例如 WO42758 的標題位於第 8 頁底端、代號與其餘內容位於第 9 頁。
+- 測試檔 `Study status - Study status 2026.7.13.pdf` 應辨識 41 筆，不再只抓到 8 筆。
+- 單一試驗的超寬 PDF（如 ABBVIE M24-533）仍走單筆保守 fallback，附件頁不會拆成多筆。
+- Inclusion / Exclusion 改為多段狀態機，可處理同一 trial 內重複出現的多組納入與排除條件。
+- Excel / CSV parser 未修改。
+
 # v4.1.4 - 仍能收案篩選顯示與判斷加強
 
 - 將「只顯示仍能收案」改為更醒目的綠色篩選 checkbox，避免上傳後看起來沒有變化。
