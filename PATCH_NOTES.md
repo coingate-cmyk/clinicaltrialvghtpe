@@ -1,3 +1,11 @@
+# v4.1.7
+
+- 修正癌別篩選下拉選單被 PDF 表格內容污染的問題。
+- 只允許標準癌別顯示於癌別篩選：肝癌、胃癌、胰臟癌、食道癌、膽道癌、大腸癌、CRPC。
+- 既有 Firebase / localStorage 中的錯誤癌別會在載入時自動清理，並盡量依 study title / inclusion 重新推論正確癌別與線數。
+- 修正 `C R P C` 顯示為 `CRPC`。
+- 修正 `A d j u v` / `Adjuvant` 與 `一腺` 這類 PDF/OCR 樣式線數正規化。
+
 # v4.1.6 — Study Status PDF 座標表格解析修正
 
 - 針對 2026/7/13 的 10 頁 Google Sheet PDF 改用獨立的座標式 table parser。

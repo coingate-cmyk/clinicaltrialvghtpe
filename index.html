@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.6 Firebase版</title>
+    <title>臨床試驗管理系統 v4.1.7 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -105,7 +105,8 @@ const LINE_NUMERAL = { '1': '一', '2': '二', '3': '三', '4': '四', '5': '五
 const LINE_NUMERAL_REGEX = '[一二三四五六七八九123456789１２３４５６７８９]';
 const toChineseLineNumber = (value) => LINE_NUMERAL[String(value || '').trim()] || String(value || '').trim();
 
-const CANCER_SORT_ORDER = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','攝護腺癌','CRPC','C R P C','預備中'];
+const CANONICAL_CANCER_TYPES = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','CRPC'];
+const CANCER_SORT_ORDER = CANONICAL_CANCER_TYPES;
 const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
 const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
 const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
@@ -131,10 +132,20 @@ const getLineRank = (line) => {
     return idx >= 0 ? idx : 999;
 };
 
+const normalizeLineValueForList = (line) => {
+    let normalized = normalizeCellText(line);
+    if (!normalized) return '';
+    normalized = normalizeLineOCRText(cleanLineParsingText(normalized)).replace(/[１-９]/g, d => toChineseLineNumber(d));
+    if (/a\s*d\s*j\s*u\s*v|adjuvant|輔助|術後/i.test(normalized)) return 'Adjuvant';
+    if (/translational/i.test(normalized)) return 'Translational study';
+    if (normalizeFilterValue(normalized) === '線' || normalizeFilterValue(normalized) === '腺') return '';
+    return normalized;
+};
+
 const sortLineValues = (lines) => {
     const deduped = [];
     (Array.isArray(lines) ? lines : []).forEach(line => {
-        const normalized = normalizeCellText(line);
+        const normalized = normalizeLineValueForList(line);
         if (normalized && !deduped.some(x => valueMatches(x, normalized))) deduped.push(normalized);
     });
     return deduped.sort((a, b) => getLineRank(a) - getLineRank(b) || normalizeFilterValue(a).localeCompare(normalizeFilterValue(b)));
@@ -270,6 +281,8 @@ const normalizeTreatmentLine = (line) => {
     let text = normalizeCellText(line);
     if (!text) return '';
     text = normalizeLineOCRText(cleanLineParsingText(text)).replace(/[１-９]/g, d => toChineseLineNumber(d));
+    if (/a\s*d\s*j\s*u\s*v|adjuvant|輔助|術後/i.test(text)) return 'Adjuvant';
+    if (/translational/i.test(text)) return 'Translational study';
     if (normalizeFilterValue(text) === '線' || normalizeFilterValue(text) === '腺') return '';
     text = text.replace(/\b([1-9])\s*l\s*(\+)?\b/ig, (_, n, plus) => `${toChineseLineNumber(n)}線${plus ? '以上' : ''}`);
     text = text.replace(/第\s*([1-9一二三四五六七八九])\s*線/g, (_, n) => `${toChineseLineNumber(n)}線`);
@@ -474,7 +487,7 @@ const cleanTrialForSave = (trial) => {
     cleaned.monthSigned = Number.isFinite(Number(cleaned.monthSigned)) ? Number(cleaned.monthSigned) : 0;
     cleaned.monthEnrolled = Number.isFinite(Number(cleaned.monthEnrolled)) ? Number(cleaned.monthEnrolled) : 0;
     cleaned.updatedAt = new Date().toISOString();
-    return cleaned;
+    return sanitizeTrialForRuntime(cleaned);
 };
 
 const normalizeFirestoreTrial = (raw) => {
@@ -496,7 +509,7 @@ const normalizeFirestoreTrial = (raw) => {
     trial.enrolled = Number.isFinite(Number(trial.enrolled)) ? Number(trial.enrolled) : 0;
     trial.monthSigned = Number.isFinite(Number(trial.monthSigned)) ? Number(trial.monthSigned) : 0;
     trial.monthEnrolled = Number.isFinite(Number(trial.monthEnrolled)) ? Number(trial.monthEnrolled) : 0;
-    return trial;
+    return sanitizeTrialForRuntime(trial);
 };
 
 const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
@@ -504,7 +517,7 @@ const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus
         const db = initializeFirebaseApp(firebaseConfig);
         const unsubTrials = db.collection('trials').onSnapshot((snapshot) => {
             const list = snapshot.docs.map((doc) => normalizeFirestoreTrial({ ...doc.data(), code: doc.id }));
-            const merged = list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS;
+            const merged = sanitizeTrialListForRuntime(list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS);
             onTrials(merged);
             onStatus && onStatus(`Firebase 同步中（${merged.length} 個試驗）`);
         }, onError);
@@ -605,14 +618,26 @@ const normalizeCellText = (value) => String(value ?? '').replace(/\r\n/g, '\n').
 const normalizeCancerTypeLabel = (value) => {
     const text = normalizeCellText(value).replace(/胰臟癌症/g, '胰臟癌');
     if (!text) return '';
+    const compact = normalizeFilterValue(text);
 
     // Clinical category rules used by the GI oncology team:
     // - ESCC / esophageal squamous cell carcinoma => 食道癌
     // - EAC / esophageal adenocarcinoma / 食道腺癌 / GEJ adenocarcinoma => 胃癌類
-    if (/(\beac\b|食道腺癌|食道.*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|gastroesophageal\s+junction|gastro-esophageal\s+junction|\bgej\b|胃食道接合)/i.test(text)) return '胃癌';
-    if (/(\bescc\b|食道鱗|食道.*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/i.test(text)) return '食道癌';
-    return text;
+    if (/(\beac\b|食道腺癌|食道.*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|gastroesophageal\s+junction|gastro-esophageal\s+junction|\bgej\b|胃食道接合|胃食道交接|胃食道交界|胃食道癌|胃食道腺癌|胃癌|胃腺癌|gastric|stomach)/i.test(text)) return '胃癌';
+    if (/(\bescc\b|食道鱗|食道.*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus|(?<!胃)食道癌)/i.test(text)) return '食道癌';
+    if (/(胰臟癌|胰管腺癌|pancreatic|pdac|pancrea\s*ca)/i.test(text)) return '胰臟癌';
+    if (/(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/i.test(text)) return '肝癌';
+    if (/(膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma)/i.test(text)) return '膽道癌';
+    if (/(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/i.test(text)) return '大腸癌';
+    if (/(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/i.test(text)) return 'CRPC';
+
+    // Do not let PDF table fragments, criteria bullets, or status text become cancer filter options.
+    // Unknown/free-text cancer labels are deliberately dropped; supported categories should be added above.
+    if (CANONICAL_CANCER_TYPES.some(v => normalizeFilterValue(v) === compact)) return CANONICAL_CANCER_TYPES.find(v => normalizeFilterValue(v) === compact);
+    return '';
 };
+
+const isCanonicalCancerTypeLabel = (value) => CANONICAL_CANCER_TYPES.some(v => valueMatches(v, normalizeCancerTypeLabel(value)));
 
 
 const CANCER_TYPE_RULES = [
@@ -623,7 +648,7 @@ const CANCER_TYPE_RULES = [
     { type: '肝癌', regex: /(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/ig },
     { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma)/ig },
     { type: '大腸癌', regex: /(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/ig },
-    { type: '攝護腺癌', regex: /(攝護腺癌|前列腺癌|prostate|\bcrpc\b)/ig }
+    { type: 'CRPC', regex: /(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/ig }
 ];
 
 const cloneCancerRuleRegex = (regex) => new RegExp(regex.source, regex.flags.includes('g') ? regex.flags : regex.flags + 'g');
@@ -701,8 +726,9 @@ const mergeCancerTypes = (items) => {
         rawLines.forEach(line => expandNormalizedLines(line).forEach(v => {
             if (v && !lines.some(x => valueMatches(x, v))) lines.push(v);
         }));
-        if (!type && !lines.length) return;
-        const key = normalizeFilterValue(type || '未分類');
+        if (!type) return;
+        if (!lines.length) return;
+        const key = normalizeFilterValue(type);
         const prev = map.get(key) || { type, lines: [], closedLines: [] };
         lines.forEach(line => {
             if (line && !prev.lines.some(x => valueMatches(x, line))) prev.lines.push(line);
@@ -792,6 +818,37 @@ const inferCancerTypeFromText = (value) => {
 };
 
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
+
+const sanitizeTrialForRuntime = (trial) => {
+    const t = { ...(trial || {}) };
+    t.code = normalizeCode(t.code);
+    t.cancerType = normalizeCancerTypeLabel(t.cancerType);
+    t.line = normalizeTreatmentLine(t.line);
+    t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
+    const rowText = [t.studyTitle, t.inclusion, t.exclusion, t.comments, t.sponsor, t.code].filter(Boolean).join(' ');
+    if ((!Array.isArray(t.cancerTypes) || !t.cancerTypes.length) && t.cancerType && t.line) {
+        t.cancerTypes = normalizeCancerTypes([{ type: t.cancerType, lines: [t.line], closedLines: t.closedLines || [] }]);
+    }
+    if (!Array.isArray(t.cancerTypes) || !t.cancerTypes.length) {
+        const inferredPairs = inferCancerLinePairsFromText(rowText);
+        if (inferredPairs.length) t.cancerTypes = inferredPairs;
+    }
+    if (!Array.isArray(t.cancerTypes) || !t.cancerTypes.length) {
+        const inferredType = inferCancerTypeFromText(rowText);
+        const inferredLines = extractTreatmentLinesFromContext(rowText);
+        if (inferredType && inferredLines.length) t.cancerTypes = normalizeCancerTypes([{ type: inferredType, lines: inferredLines }]);
+    }
+    if (Array.isArray(t.cancerTypes) && t.cancerTypes.length) {
+        t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
+        t.cancerType = t.cancerTypes[0].type;
+        t.line = (t.cancerTypes[0].lines || [])[0] || t.line || '';
+    }
+    return t;
+};
+
+const sanitizeTrialListForRuntime = (list) => (Array.isArray(list) ? list : [])
+    .map(sanitizeTrialForRuntime)
+    .filter(t => t && t.code);
 
 const splitEligibilitySections = (inclusionText, exclusionText = '') => {
     const inclusion = normalizeCellText(inclusionText);
@@ -1749,7 +1806,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.6 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.7 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -2717,7 +2774,7 @@ function App() {
             const localTrials = stored ? decryptData(stored) : null;
             const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
 
-            setTrials(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS);
+            setTrials(sanitizeTrialListForRuntime(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS));
             setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
             setLoading(false);
             setSyncStatus(Array.isArray(localTrials) && localTrials.length > 0
@@ -2725,7 +2782,7 @@ function App() {
                 : `本機初始資料（${INITIAL_TRIALS.length} 個試驗），正在連線雲端...`);
         } catch (error) {
             console.error('Local load error:', error);
-            setTrials(INITIAL_TRIALS);
+            setTrials(sanitizeTrialListForRuntime(INITIAL_TRIALS));
             setSubjects([]);
             setLoading(false);
             setSyncStatus('本機資料模式');
@@ -2742,8 +2799,9 @@ function App() {
         unsubscribeRef.current = subscribeFirestoreData({
             firebaseConfig,
             onTrials: async (remoteTrials) => {
-                setTrials(remoteTrials);
-                await saveAllData(remoteTrials, subjects);
+                const cleanRemote = sanitizeTrialListForRuntime(remoteTrials);
+                setTrials(cleanRemote);
+                await saveAllData(cleanRemote, subjects);
             },
             onSubjects: async (remoteSubjects) => {
                 setSubjects(remoteSubjects);
@@ -2769,8 +2827,9 @@ function App() {
     }, [firebaseEnabled, firebaseConfig]);
     
     const saveTrials = async (data) => {
-        setTrials(data);
-        await saveAllData(data, subjects);
+        const cleanData = sanitizeTrialListForRuntime(data);
+        setTrials(cleanData);
+        await saveAllData(cleanData, subjects);
         setSyncStatus(firebaseEnabled ? `已更新本機快取，等待 Firebase 同步（${data.length} 個試驗）` : `已儲存到本機資料（${data.length} 個試驗）`);
     };
 
@@ -2796,7 +2855,7 @@ function App() {
 
     const handleImportStudyStatus = async (incomingRows, options = {}) => {
         const importAnalysis = analyzeParsedTrials(incomingRows);
-        const uniqueRows = importAnalysis.rows;
+        const uniqueRows = sanitizeTrialListForRuntime(importAnalysis.rows);
         const replaceCloud = !!options.replaceCloud;
         let baseTrials = trials || [];
         let cleared = 0;
@@ -3141,8 +3200,8 @@ function App() {
         const map = new Map();
         trials.forEach(trial => {
             const addType = (type) => {
-                const label = normalizeText(type);
-                if (!label) return;
+                const label = normalizeCancerTypeLabel(type);
+                if (!label || !isCanonicalCancerTypeLabel(label)) return;
                 const key = normalizeFilterValue(label);
                 if (!map.has(key)) map.set(key, label);
             };
@@ -3197,7 +3256,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.6 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.7 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
