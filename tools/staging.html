@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJCC 7/8 GI staging 查詢 v0.5 batch 1</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJCC 7/8 GI staging 查詢 v0.6 public test</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
 <main class="max-w-6xl mx-auto p-6">
 <div class="flex justify-between gap-3 flex-wrap"><a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a><a href="../index.html" class="text-blue-700 hover:underline">回臨床試驗系統</a></div>
 <h1 class="text-3xl font-bold mt-6 mb-2">AJCC 7/8 GI staging 查詢</h1>
-<p class="text-slate-600 mb-2">v0.5 batch 1：在 smoke test 基礎上加入 colon / rectum 測試規則。完整院內 rule pack 之後再分批補齊與驗證。</p>
-<p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. 正式使用前請用院內 AJCC 授權系統逐項交叉驗證。</p>
+<p class="text-slate-600 mb-2">v0.6 public test：內建少量 smoke-test 規則；新增 CSV rule pack 匯入，可先讓大家公測操作流程。</p>
+<p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. 正式使用前請用院內 AJCC 授權系統逐項交叉驗證。請勿把授權內容公開散布。</p>
 <div class="grid lg:grid-cols-2 gap-6">
 <section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">查詢</h2><div class="grid grid-cols-2 gap-3">
 <label class="col-span-2 text-sm font-medium">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
@@ -22,81 +21,40 @@
 </div><button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 stage</button></section>
 <section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">結果</h2><div id="result"></div></section>
 </div>
-<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前規則：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、Colon、Rectum、M1 metastatic quick rule。下一批加入 BTC / gallbladder / ampulla。</section>
+<section class="mt-6 bg-white border rounded-xl p-4 text-sm">
+<h2 class="text-lg font-bold mb-2">Rule pack 匯入</h2>
+<p class="text-slate-600 mb-2">CSV 欄位：site,edition,t,n,m,stage,note。匯入後只存在本機瀏覽器 localStorage，不會上傳。</p>
+<textarea id="csvbox" class="w-full h-32 border rounded p-2 font-mono text-xs" placeholder="site,edition,t,n,m,stage,note\nColon,AJCC8,T3,N0,M0,IIA,verified by institutional source"></textarea>
+<div class="mt-2 flex gap-2 flex-wrap"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold">匯入 rule pack</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold">清除匯入規則</button></div>
+<div id="ruleInfo" class="mt-2 text-slate-600"></div>
+</section>
+<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前內建 smoke-test：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、Colon、Rectum、M1 quick rule。BTC / gallbladder / ampulla 建議先用院內授權資料以 CSV 匯入測試。</section>
 </main>
 <script>
 const sites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
-const Ts=['Any','Tis','T1','T1a','T1b','T2','T3','T4','T4a','T4b','TX'];
+const Ts=['Any','Tis','T1','T1a','T1b','T2','T2a','T2b','T3','T4','T4a','T4b','TX'];
 const Ns=['Any','N0','N1','N2','N3','NX'];
 const Ms=['M0','M1','Any'];
 function fill(id,arr){document.getElementById(id).innerHTML=arr.map(x=>`<option>${x}</option>`).join('')}
 fill('site',sites);fill('t',Ts);fill('n',Ns);fill('m',Ms);
-const rules=[
+let demo=[
 {site:'Any',edition:'Any',t:'Any',n:'Any',m:'M1',stage:'IV / metastatic',note:'M1 quick rule'},
-{site:'HCC / Liver',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'I'},
-{site:'HCC / Liver',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'II'},
-{site:'HCC / Liver',edition:'AJCC7',t:'T3',n:'N0',m:'M0',stage:'IIIA'},
-{site:'HCC / Liver',edition:'AJCC7',t:'T4',n:'N0',m:'M0',stage:'IIIC'},
-{site:'HCC / Liver',edition:'AJCC7',t:'Any',n:'N1',m:'M0',stage:'IVA'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T1a',n:'N0',m:'M0',stage:'IA'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T1b',n:'N0',m:'M0',stage:'IB'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIIA'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T4',n:'N0',m:'M0',stage:'IIIB'},
-{site:'HCC / Liver',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'IVA'},
-{site:'Stomach',edition:'AJCC7',t:'Tis',n:'N0',m:'M0',stage:'0'},
-{site:'Stomach',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA'},
-{site:'Stomach',edition:'AJCC7',t:'T1',n:'N1',m:'M0',stage:'IB'},
-{site:'Stomach',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'IB'},
-{site:'Stomach',edition:'AJCC8',t:'Tis',n:'N0',m:'M0',stage:'0'},
-{site:'Stomach',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
-{site:'Stomach',edition:'AJCC8',t:'T1',n:'N1',m:'M0',stage:'IB'},
-{site:'Stomach',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB'},
-{site:'Exocrine pancreas',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA'},
-{site:'Exocrine pancreas',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'IB'},
-{site:'Exocrine pancreas',edition:'AJCC7',t:'T3',n:'N0',m:'M0',stage:'IIA'},
-{site:'Exocrine pancreas',edition:'AJCC7',t:'T1-T3',n:'N1',m:'M0',stage:'IIB'},
-{site:'Exocrine pancreas',edition:'AJCC7',t:'T4',n:'Any',m:'M0',stage:'III'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIA'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T1-T3',n:'N1',m:'M0',stage:'IIB'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T1-T3',n:'N2',m:'M0',stage:'III'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T4',n:'Any',m:'M0',stage:'III'},
-{site:'NET - pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
-{site:'NET - pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
-{site:'NET - pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'II'},
-{site:'NET - pancreas',edition:'AJCC8',t:'T4',n:'N0',m:'M0',stage:'III'},
-{site:'NET - pancreas',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'III'},
-{site:'Colon',edition:'Any',t:'Tis',n:'N0',m:'M0',stage:'0'},
-{site:'Colon',edition:'Any',t:'T1-T2',n:'N0',m:'M0',stage:'I'},
-{site:'Colon',edition:'Any',t:'T3',n:'N0',m:'M0',stage:'IIA'},
-{site:'Colon',edition:'Any',t:'T4a',n:'N0',m:'M0',stage:'IIB'},
-{site:'Colon',edition:'Any',t:'T4b',n:'N0',m:'M0',stage:'IIC'},
-{site:'Colon',edition:'Any',t:'T1-T2',n:'N1',m:'M0',stage:'IIIA'},
-{site:'Colon',edition:'Any',t:'T3-T4a',n:'N1',m:'M0',stage:'IIIB'},
-{site:'Colon',edition:'Any',t:'T1-T2',n:'N2',m:'M0',stage:'IIIB'},
-{site:'Colon',edition:'Any',t:'T4b',n:'N1',m:'M0',stage:'IIIC'},
-{site:'Colon',edition:'Any',t:'T3-T4b',n:'N2',m:'M0',stage:'IIIC'},
-{site:'Rectum',edition:'Any',t:'Tis',n:'N0',m:'M0',stage:'0'},
-{site:'Rectum',edition:'Any',t:'T1-T2',n:'N0',m:'M0',stage:'I'},
-{site:'Rectum',edition:'Any',t:'T3',n:'N0',m:'M0',stage:'IIA'},
-{site:'Rectum',edition:'Any',t:'T4a',n:'N0',m:'M0',stage:'IIB'},
-{site:'Rectum',edition:'Any',t:'T4b',n:'N0',m:'M0',stage:'IIC'},
-{site:'Rectum',edition:'Any',t:'T1-T2',n:'N1',m:'M0',stage:'IIIA'},
-{site:'Rectum',edition:'Any',t:'T3-T4a',n:'N1',m:'M0',stage:'IIIB'},
-{site:'Rectum',edition:'Any',t:'T1-T2',n:'N2',m:'M0',stage:'IIIB'},
-{site:'Rectum',edition:'Any',t:'T4b',n:'N1',m:'M0',stage:'IIIC'},
-{site:'Rectum',edition:'Any',t:'T3-T4b',n:'N2',m:'M0',stage:'IIIC'}
-];
+{site:'HCC / Liver',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II',note:'smoke test'},
+{site:'Stomach',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA',note:'smoke test'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB',note:'smoke test'},
+{site:'NET - pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'II',note:'smoke test'},
+{site:'Colon',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIA',note:'smoke test'},
+{site:'Rectum',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I',note:'smoke test'}];
+function saved(){try{return JSON.parse(localStorage.getItem('ajcc_rules_user')||'[]')}catch(e){return []}}
+function rules(){return saved().concat(demo)}
 function base(v){return String(v||'').replace(/[abc]$/i,'')}
-function inList(v,list){return list.split('-').length===2?rangeContains(list,v):list.split(',').includes(v)}
-function rangeContains(pattern,value){const v=base(value); if(pattern==='T1-T2')return ['T1','T2'].includes(v); if(pattern==='T1-T3')return ['T1','T2','T3'].includes(v); if(pattern==='T3-T4a')return ['T3','T4a'].includes(value); if(pattern==='T3-T4b')return ['T3','T4a','T4b'].includes(value); return false}
-function rangeMatch(pattern,value){if(pattern==='Any'||value==='Any')return true;if(pattern===value)return true;if(base(value)===pattern)return true;if(pattern.includes('-'))return rangeContains(pattern,value);return false}
-function match(r,q){return (r.site==='Any'||r.site===q.site)&&(r.edition==='Any'||r.edition===q.edition)&&rangeMatch(r.t,q.t)&&rangeMatch(r.n,q.n)&&rangeMatch(r.m,q.m)}
-function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};const found=rules.find(r=>match(r,q));result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div>${found.note?'<div class="mt-2 text-sm text-amber-800">'+found.note+'</div>':''}</div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到內建測試規則</b><div class="mt-2 text-sm text-slate-600">該癌種或 TNM 組合尚未分批加入。</div></div>`}
-lookup();
+function ok(a,b){return a==='Any'||b==='Any'||a===b||base(b)===a}
+function match(r,q){return ok(r.site,q.site)&&ok(r.edition,q.edition)&&ok(r.t,q.t)&&ok(r.n,q.n)&&ok(r.m,q.m)}
+function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};const found=rules().find(r=>match(r,q));result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div><div class="mt-2 text-sm text-amber-800">${found.note||''}</div></div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到規則</b><div class="mt-2 text-sm text-slate-600">請匯入院內 rule pack 或改查內建 smoke-test 組合。</div></div>`}
+function importCSV(){const rows=csvbox.value.trim().split(/\n+/).slice(1);const arr=rows.map(line=>{const c=line.split(',').map(x=>x.trim());return{site:c[0],edition:c[1],t:c[2],n:c[3],m:c[4],stage:c[5],note:c.slice(6).join(',')}}).filter(x=>x.site&&x.stage);localStorage.setItem('ajcc_rules_user',JSON.stringify(arr));updateInfo();lookup()}
+function clearRules(){localStorage.removeItem('ajcc_rules_user');updateInfo();lookup()}
+function updateInfo(){ruleInfo.textContent='目前本機匯入規則：'+saved().length+' 筆；內建 smoke-test：'+demo.length+' 筆。'}
+updateInfo();lookup();
 </script>
 </body>
 </html>
