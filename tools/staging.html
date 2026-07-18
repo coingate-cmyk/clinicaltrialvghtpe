@@ -3,9 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJCC 7/8 GI staging 查詢 v0.4</title>
+<title>AJCC 7/8 GI staging 查詢 v0.4 smoke test</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
 <main class="max-w-6xl mx-auto p-6">
-<a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a>
+<div class="flex justify-between gap-3 flex-wrap"><a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a><a href="../index.html" class="text-blue-700 hover:underline">回臨床試驗系統</a></div>
+<h1 class="text-3xl font-bold mt-6 mb-2">AJCC 7/8 GI staging 查詢</h1>
+<p class="text-slate-600 mb-2">v0.4 smoke test：先放入少量 AJCC7/8 測試規則，確認 rule engine 可以跑。完整院內 rule pack 之後再分批加入。</p>
+<p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. 正式使用前請用院內 AJCC 授權系統逐項交叉驗證。</p>
+<div class="grid lg:grid-cols-2 gap-6">
+<section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">查詢</h2><div class="grid grid-cols-2 gap-3">
+<label class="col-span-2 text-sm font-medium">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
+<label class="text-sm font-medium">Edition<select id="edition" class="mt-1 w-full border rounded p-2"><option>AJCC7</option><option>AJCC8</option></select></label>
+<label class="text-sm font-medium">T<select id="t" class="mt-1 w-full border rounded p-2"></select></label>
+<label class="text-sm font-medium">N<select id="n" class="mt-1 w-full border rounded p-2"></select></label>
+<label class="text-sm font-medium">M<select id="m" class="mt-1 w-full border rounded p-2"></select></label>
+</div><button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 stage</button></section>
+<section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">結果</h2><div id="result"></div></section>
+</div>
+<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前 smoke test 規則：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、M1 metastatic quick rule。若可正常跑，再分批加入 esophagus、BTC、CRC、其他 NET。</section>
+</main>
+<script>
+const sites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
+const Ts=['Any','Tis','T1','T1a','T1b','T2','T3','T4','T4a','T4b','TX'];
+const Ns=['Any','N0','N1','N2','N3','NX'];
+const Ms=['M0','M1','Any'];
+function fill(id,arr){document.getElementById(id).innerHTML=arr.map(x=>`<option>${x}</option>`).join('')}
+fill('site',sites);fill('t',Ts);fill('n',Ns);fill('m',Ms);
+const rules=[
+{site:'Any',edition:'Any',t:'Any',n:'Any',m:'M1',stage:'IV / metastatic',note:'M1 quick rule'},
+{site:'HCC / Liver',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'I'},
+{site:'HCC / Liver',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'II'},
+{site:'HCC / Liver',edition:'AJCC7',t:'T3',n:'N0',m:'M0',stage:'IIIA'},
+{site:'HCC / Liver',edition:'AJCC7',t:'T4',n:'N0',m:'M0',stage:'IIIC'},
+{site:'HCC / Liver',edition:'AJCC7',t:'Any',n:'N1',m:'M0',stage:'IVA'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T1a',n:'N0',m:'M0',stage:'IA'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T1b',n:'N0',m:'M0',stage:'IB'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIIA'},
+{site:'HCC / Liver',edition:'AJCC8',t:'T4',n:'N0',m:'M0',stage:'IIIB'},
+{site:'HCC / Liver',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'IVA'},
+{site:'Stomach',edition:'AJCC7',t:'Tis',n:'N0',m:'M0',stage:'0'},
+{site:'Stomach',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA'},
+{site:'Stomach',edition:'AJCC7',t:'T1',n:'N1',m:'M0',stage:'IB'},
+{site:'Stomach',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'IB'},
+{site:'Stomach',edition:'AJCC8',t:'Tis',n:'N0',m:'M0',stage:'0'},
+{site:'Stomach',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
+{site:'Stomach',edition:'AJCC8',t:'T1',n:'N1',m:'M0',stage:'IB'},
+{site:'Stomach',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB'},
+{site:'Exocrine pancreas',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA'},
+{site:'Exocrine pancreas',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'IB'},
+{site:'Exocrine pancreas',edition:'AJCC7',t:'T3',n:'N0',m:'M0',stage:'IIA'},
+{site:'Exocrine pancreas',edition:'AJCC7',t:'T1-T3',n:'N1',m:'M0',stage:'IIB'},
+{site:'Exocrine pancreas',edition:'AJCC7',t:'T4',n:'Any',m:'M0',stage:'III'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIA'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T1-T3',n:'N1',m:'M0',stage:'IIB'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T4',n:'Any',m:'M0',stage:'III'},
+{site:'NET - pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
+{site:'NET - pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
+{site:'NET - pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'II'},
+{site:'NET - pancreas',edition:'AJCC8',t:'T4',n:'N0',m:'M0',stage:'III'},
+{site:'NET - pancreas',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'III'}
+];
+function base(v){return String(v||'').replace(/[abc]$/i,'')}
+function rangeMatch(pattern,value){if(pattern==='Any'||value==='Any')return true;if(pattern===value)return true;if(base(value)===pattern)return true;if(pattern==='T1-T3')return ['T1','T2','T3'].includes(base(value));return false}
+function match(r,q){return (r.site==='Any'||r.site===q.site)&&(r.edition==='Any'||r.edition===q.edition)&&rangeMatch(r.t,q.t)&&rangeMatch(r.n,q.n)&&rangeMatch(r.m,q.m)}
+function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};const found=rules.find(r=>match(r,q));result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div>${found.note?'<div class="mt-2 text-sm text-amber-800">'+found.note+'</div>':''}</div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到內建 smoke-test 規則</b><div class="mt-2 text-sm text-slate-600">目前還只是少量測試規則。</div></div>`}
+lookup();
+</script>
+</body>
+</html>
