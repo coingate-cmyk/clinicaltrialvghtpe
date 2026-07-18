@@ -1,70 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJCC 7/8 GI staging 查詢</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJCC 7/8 GI staging 查詢 v0.4</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 min-h-screen">
-  <main class="max-w-6xl mx-auto p-6">
-    <a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a>
-    <h1 class="text-3xl font-bold mt-6 mb-2">AJCC 7/8 GI staging 查詢</h1>
-    <p class="text-slate-600 mb-6">測試版：目前是 rule-engine 與示範規則。正式 AJCC / 院內 guideline rule pack 之後可逐步替換。</p>
-    <div class="grid lg:grid-cols-2 gap-6">
-      <section class="bg-white rounded-xl border shadow p-5">
-        <h2 class="text-xl font-bold mb-4">查詢</h2>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="col-span-2">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
-          <label>Edition<select id="edition" class="mt-1 w-full border rounded p-2"><option>AJCC7</option><option>AJCC8</option></select></label>
-          <label>Stage basis<select id="basis" class="mt-1 w-full border rounded p-2"><option value="any">Any</option><option>clinical</option><option>pathologic</option></select></label>
-          <label>T<select id="t" class="mt-1 w-full border rounded p-2"></select></label>
-          <label>N<select id="n" class="mt-1 w-full border rounded p-2"></select></label>
-          <label>M<select id="m" class="mt-1 w-full border rounded p-2"><option>M0</option><option>M1</option><option>Any</option></select></label>
-          <label>Grade / extra<select id="grade" class="mt-1 w-full border rounded p-2"><option value="any">Any</option><option>G1</option><option>G2</option><option>G3</option><option>G4</option></select></label>
-        </div>
-        <button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 stage</button>
-      </section>
-      <section class="bg-white rounded-xl border shadow p-5">
-        <h2 class="text-xl font-bold mb-4">結果</h2>
-        <div id="result" class="text-slate-800"></div>
-      </section>
-    </div>
-    <section class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
-      這是測試版，不是正式 AJCC staging software。正式上線前需用院內授權 AJCC 7/8 或計畫書系統輸出表格驗證。
-    </section>
-  </main>
-<script>
-const sites=[
- 'Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'
-];
-const Ts=['Any','Tis','T1','T1a','T1b','T2','T3','T4','T4a','T4b','TX'];
-const Ns=['Any','N0','N1','N2','N2a','N2b','N3','N3a','N3b','NX'];
-const demoRules=[
- {site:'HCC / Liver',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'HCC / Liver',edition:'AJCC7',t:'T2',n:'N0',m:'M0',stage:'II'},
- {site:'HCC / Liver',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'HCC / Liver',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
- {site:'Stomach',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA'},
- {site:'Stomach',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
- {site:'Colon',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'Colon',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'Rectum',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'Exocrine pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA'},
- {site:'Intrahepatic bile duct',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'NET - pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
- {site:'Any',edition:'Any',t:'Any',n:'Any',m:'M1',stage:'IV / metastatic'}
-];
-function fill(id,arr){document.getElementById(id).innerHTML=arr.map(x=>`<option>${x}</option>`).join('')}
-fill('site',sites); fill('t',Ts); fill('n',Ns);
-function match(rule, q){return ['site','edition','t','n','m'].every(k=>rule[k]==='Any'||q[k]==='Any'||rule[k]===q[k])}
-function lookup(){
- const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};
- const found=demoRules.find(r=>match(r,q));
- const html=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-2xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">Matched demo rule: ${found.site}, ${found.edition}, ${found.t}/${found.n}/${found.m}</div></div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到示範規則</b><div class="mt-2 text-sm text-slate-600">這代表正式 rule pack 還沒填，不代表無法分期。</div></div>`;
- document.getElementById('result').innerHTML=html;
-}
-lookup();
-</script>
-</body>
-</html>
+<body class="bg-slate-50 min-h-screen text-slate-900">
+<main class="max-w-6xl mx-auto p-6">
+<a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a>
