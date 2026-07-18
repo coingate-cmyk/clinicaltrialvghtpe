@@ -2,19 +2,19 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJCC 7/8 GI staging 查詢 v0.7 CSV upload</title>
+<title>腫瘤分期速查器 v0.8</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
 <main class="max-w-6xl mx-auto p-6">
 <div class="flex justify-between gap-3 flex-wrap"><a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a><a href="../index.html" class="text-blue-700 hover:underline">回臨床試驗系統</a></div>
-<h1 class="text-3xl font-bold mt-6 mb-2">AJCC 7/8 GI staging 查詢</h1>
-<p class="text-slate-600 mb-2">v0.7 CSV upload：公開頁面只放查詢引擎與少量 smoke-test；AJCC rule pack 可用 CSV 在本機匯入。</p>
-<p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. 正式使用前請用院內 AJCC 授權系統逐項交叉驗證。CSV 匯入只存在本機瀏覽器 localStorage，不會上傳、不進 Firebase。</p>
+<h1 class="text-3xl font-bold mt-6 mb-2">腫瘤分期速查器</h1>
+<p class="text-slate-600 mb-2">v0.8：介面改為 6.0 / 7.0 版本；支援本機 CSV 匯入與少量內建 smoke-test。正式規則請以院內授權資料驗證。</p>
+<p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. CSV 匯入只存在本機瀏覽器 localStorage，不會上傳、不進 Firebase。</p>
 <div class="grid lg:grid-cols-2 gap-6">
 <section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">查詢</h2><div class="grid grid-cols-2 gap-3">
 <label class="col-span-2 text-sm font-medium">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
-<label class="text-sm font-medium">Edition<select id="edition" class="mt-1 w-full border rounded p-2"><option>AJCC7</option><option>AJCC8</option></select></label>
+<label class="text-sm font-medium">Version<select id="edition" class="mt-1 w-full border rounded p-2"><option value="AJCC6">6.0</option><option value="AJCC7" selected>7.0</option></select></label>
 <label class="text-sm font-medium">T<select id="t" class="mt-1 w-full border rounded p-2"></select></label>
 <label class="text-sm font-medium">N<select id="n" class="mt-1 w-full border rounded p-2"></select></label>
 <label class="text-sm font-medium">M<select id="m" class="mt-1 w-full border rounded p-2"></select></label>
@@ -23,13 +23,13 @@
 </div>
 <section class="mt-6 bg-white border rounded-xl p-4 text-sm">
 <h2 class="text-lg font-bold mb-2">Rule pack 匯入</h2>
-<p class="text-slate-600 mb-2">CSV 欄位：site,edition,t,n,m,stage,note。可直接選 CSV 檔，或把 CSV 貼到下方文字框再匯入。</p>
+<p class="text-slate-600 mb-2">CSV 欄位仍用 site,edition,t,n,m,stage,note。edition 可填 AJCC6/AJCC7，畫面顯示為 6.0/7.0。</p>
 <input id="csvfile" type="file" accept=".csv,text/csv" class="block w-full border rounded p-2 bg-slate-50 mb-2" onchange="loadCSVFile(event)">
 <textarea id="csvbox" class="w-full h-32 border rounded p-2 font-mono text-xs" placeholder="site,edition,t,n,m,stage,note\nColon,AJCC7,T3,N0,M0,IIA,verified by institutional source"></textarea>
 <div class="mt-2 flex gap-2 flex-wrap"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold">匯入 rule pack</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold">清除匯入規則</button><button onclick="downloadTemplate()" class="bg-slate-200 px-3 py-2 rounded font-bold">下載 CSV 範本</button></div>
 <div id="ruleInfo" class="mt-2 text-slate-600"></div>
 </section>
-<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前內建 smoke-test：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、Colon、Rectum、M1 quick rule。正式 AJCC7/8 rule pack 請用 CSV 匯入。</section>
+<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前內建 smoke-test：</b>少量 7.0 測試規則。完整 6.0 / 7.0 rule pack 可由本機 CSV 匯入。</section>
 </main>
 <script>
 const sites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
@@ -40,25 +40,22 @@ function fill(id,arr){document.getElementById(id).innerHTML=arr.map(x=>`<option>
 fill('site',sites);fill('t',Ts);fill('n',Ns);fill('m',Ms);
 let demo=[
 {site:'Any',edition:'Any',t:'Any',n:'Any',m:'M1',stage:'IV / metastatic',note:'M1 quick rule'},
-{site:'HCC / Liver',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II',note:'smoke test'},
-{site:'Stomach',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'IA',note:'smoke test'},
-{site:'Exocrine pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB',note:'smoke test'},
-{site:'NET - pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'II',note:'smoke test'},
-{site:'Colon',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIA',note:'smoke test'},
-{site:'Rectum',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I',note:'smoke test'}];
+{site:'Stomach',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'IA',note:'7.0 smoke test'},
+{site:'Colon',edition:'AJCC7',t:'T3',n:'N0',m:'M0',stage:'IIA',note:'7.0 smoke test'},
+{site:'Rectum',edition:'AJCC7',t:'T1',n:'N0',m:'M0',stage:'I',note:'7.0 smoke test'}];
 function saved(){try{return JSON.parse(localStorage.getItem('ajcc_rules_user')||'[]')}catch(e){return []}}
 function rules(){return saved().concat(demo)}
 function base(v){return String(v||'').replace(/[abc]$/i,'')}
 function ok(a,b){return a==='Any'||b==='Any'||a===b||base(b)===a}
 function match(r,q){return ok(r.site,q.site)&&ok(r.edition,q.edition)&&ok(r.t,q.t)&&ok(r.n,q.n)&&ok(r.m,q.m)}
-function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};window.lastQ=q;const found=rules().find(r=>match(r,q));window.lastFound=found;result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div><div class="mt-2 text-sm text-amber-800">${found.note||''}</div></div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到規則</b><div class="mt-2 text-sm text-slate-600">請匯入院內 rule pack 或改查內建 smoke-test 組合。</div></div>`}
+function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};window.lastQ=q;const found=rules().find(r=>match(r,q));window.lastFound=found;const shownVer=q.edition==='AJCC6'?'6.0':q.edition==='AJCC7'?'7.0':q.edition;result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} version ${shownVer} ${found.t}/${found.n}/${found.m}</div><div class="mt-2 text-sm text-amber-800">${found.note||''}</div></div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到規則</b><div class="mt-2 text-sm text-slate-600">請匯入院內 rule pack 或改查內建 smoke-test 組合。</div></div>`}
 function parseCSV(text){const rows=text.replace(/^\uFEFF/,'').trim().split(/\n+/);return rows.slice(1).map(line=>{const c=line.split(',').map(x=>x.trim());return{site:c[0],edition:c[1],t:c[2],n:c[3],m:c[4],stage:c[5],note:c.slice(6).join(',')}}).filter(x=>x.site&&x.stage)}
 function importCSV(){const arr=parseCSV(csvbox.value);localStorage.setItem('ajcc_rules_user',JSON.stringify(arr));updateInfo();lookup()}
 function loadCSVFile(ev){const f=ev.target.files&&ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{csvbox.value=r.result;importCSV()};r.readAsText(f,'utf-8')}
 function clearRules(){localStorage.removeItem('ajcc_rules_user');updateInfo();lookup()}
 function updateInfo(){ruleInfo.textContent='目前本機匯入規則：'+saved().length+' 筆；內建 smoke-test：'+demo.length+' 筆。'}
-function downloadTemplate(){const csv='site,edition,t,n,m,stage,note\nColon,AJCC7,T3,N0,M0,IIA,verified by institutional source\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='ajcc_rule_pack_template.csv';a.click()}
-function copyResult(){const q=window.lastQ||{};const f=window.lastFound;const txt=`AJCC public test report\nQuery: ${q.site||''} ${q.edition||''} ${q.t||''}/${q.n||''}/${q.m||''}\nResult: ${f?f.stage:'not found'}\nNote: ${f?(f.note||''):''}`;navigator.clipboard&&navigator.clipboard.writeText(txt)}
+function downloadTemplate(){const csv='site,edition,t,n,m,stage,note\nColon,AJCC7,T3,N0,M0,IIA,verified by institutional source\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='staging_rule_pack_template.csv';a.click()}
+function copyResult(){const q=window.lastQ||{};const f=window.lastFound;const v=q.edition==='AJCC6'?'6.0':q.edition==='AJCC7'?'7.0':q.edition;const txt=`Staging quick-check report\nQuery: ${q.site||''} version ${v||''} ${q.t||''}/${q.n||''}/${q.m||''}\nResult: ${f?f.stage:'not found'}\nNote: ${f?(f.note||''):''}`;navigator.clipboard&&navigator.clipboard.writeText(txt)}
 updateInfo();lookup();
 </script>
 </body>
