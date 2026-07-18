@@ -1,0 +1,183 @@
+site,edition,t,n,m,stage,note
+Stomach,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T1,N1,M0,IB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T2,N1,M0,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T1,N2,M0,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T2,N2,M0,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T1,N3,M0,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4a,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T3,N2,M0,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T2,N3,M0,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4b,N0,M0,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4b,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4a,N2,M0,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T3,N3,M0,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4b,N3,M0,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,T4a,N3,M0,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,T4,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,Any,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,Any,N2,M0,IIIB,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4b,N0,M0,IIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T1,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T1,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T2,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T2,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T1,N2a,M0,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T3,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4a,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T2,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T3,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T1,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T2,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4a,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T3,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4a,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4b,N1,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4b,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,T4b,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,Any,Any,M1a,IVA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,Any,Any,M1b,IVB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4b,N0,M0,IIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T1,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T1,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T2,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T2,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T1,N2a,M0,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T3,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4a,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T2,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T3,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T1,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T2,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4a,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T3,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4a,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4b,N1,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4b,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,T4b,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,Any,Any,M1a,IVA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,Any,Any,M1b,IVB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,T3a,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,T3b,N0,M0,IIIB,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,T4,N0,M0,IIIC,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,Any,N1,M0,IVA,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,T3,N0,M0,III,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,Any,N1,M0,IVA,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T3,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T1,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T2,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,T4,N1,M0,IVA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,Any,N2,M0,IVB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T2a,N0,M0,II,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T2b,N0,M0,II,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T3,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T1,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T2,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T2a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T2b,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,T4,N1,M0,IVA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,Any,N2,M0,IVB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
