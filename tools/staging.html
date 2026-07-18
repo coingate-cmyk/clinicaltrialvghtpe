@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJCC 7/8 GI staging 查詢 v0.4 smoke test</title>
+<title>AJCC 7/8 GI staging 查詢 v0.5 batch 1</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
 <main class="max-w-6xl mx-auto p-6">
 <div class="flex justify-between gap-3 flex-wrap"><a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a><a href="../index.html" class="text-blue-700 hover:underline">回臨床試驗系統</a></div>
 <h1 class="text-3xl font-bold mt-6 mb-2">AJCC 7/8 GI staging 查詢</h1>
-<p class="text-slate-600 mb-2">v0.4 smoke test：先放入少量 AJCC7/8 測試規則，確認 rule engine 可以跑。完整院內 rule pack 之後再分批加入。</p>
+<p class="text-slate-600 mb-2">v0.5 batch 1：在 smoke test 基礎上加入 colon / rectum 測試規則。完整院內 rule pack 之後再分批補齊與驗證。</p>
 <p class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">Internal research quick-check only. 正式使用前請用院內 AJCC 授權系統逐項交叉驗證。</p>
 <div class="grid lg:grid-cols-2 gap-6">
 <section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">查詢</h2><div class="grid grid-cols-2 gap-3">
@@ -22,7 +22,7 @@
 </div><button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 stage</button></section>
 <section class="bg-white rounded-xl border shadow p-5"><h2 class="text-xl font-bold mb-4">結果</h2><div id="result"></div></section>
 </div>
-<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前 smoke test 規則：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、M1 metastatic quick rule。若可正常跑，再分批加入 esophagus、BTC、CRC、其他 NET。</section>
+<section class="mt-6 bg-white border rounded-xl p-4 text-sm"><b>目前規則：</b>HCC、Stomach、Exocrine pancreas、NET pancreas、Colon、Rectum、M1 metastatic quick rule。下一批加入 BTC / gallbladder / ampulla。</section>
 </main>
 <script>
 const sites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
@@ -62,17 +62,40 @@ const rules=[
 {site:'Exocrine pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'IB'},
 {site:'Exocrine pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'IIA'},
 {site:'Exocrine pancreas',edition:'AJCC8',t:'T1-T3',n:'N1',m:'M0',stage:'IIB'},
+{site:'Exocrine pancreas',edition:'AJCC8',t:'T1-T3',n:'N2',m:'M0',stage:'III'},
 {site:'Exocrine pancreas',edition:'AJCC8',t:'T4',n:'Any',m:'M0',stage:'III'},
 {site:'NET - pancreas',edition:'AJCC8',t:'T1',n:'N0',m:'M0',stage:'I'},
 {site:'NET - pancreas',edition:'AJCC8',t:'T2',n:'N0',m:'M0',stage:'II'},
 {site:'NET - pancreas',edition:'AJCC8',t:'T3',n:'N0',m:'M0',stage:'II'},
 {site:'NET - pancreas',edition:'AJCC8',t:'T4',n:'N0',m:'M0',stage:'III'},
-{site:'NET - pancreas',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'III'}
+{site:'NET - pancreas',edition:'AJCC8',t:'Any',n:'N1',m:'M0',stage:'III'},
+{site:'Colon',edition:'Any',t:'Tis',n:'N0',m:'M0',stage:'0'},
+{site:'Colon',edition:'Any',t:'T1-T2',n:'N0',m:'M0',stage:'I'},
+{site:'Colon',edition:'Any',t:'T3',n:'N0',m:'M0',stage:'IIA'},
+{site:'Colon',edition:'Any',t:'T4a',n:'N0',m:'M0',stage:'IIB'},
+{site:'Colon',edition:'Any',t:'T4b',n:'N0',m:'M0',stage:'IIC'},
+{site:'Colon',edition:'Any',t:'T1-T2',n:'N1',m:'M0',stage:'IIIA'},
+{site:'Colon',edition:'Any',t:'T3-T4a',n:'N1',m:'M0',stage:'IIIB'},
+{site:'Colon',edition:'Any',t:'T1-T2',n:'N2',m:'M0',stage:'IIIB'},
+{site:'Colon',edition:'Any',t:'T4b',n:'N1',m:'M0',stage:'IIIC'},
+{site:'Colon',edition:'Any',t:'T3-T4b',n:'N2',m:'M0',stage:'IIIC'},
+{site:'Rectum',edition:'Any',t:'Tis',n:'N0',m:'M0',stage:'0'},
+{site:'Rectum',edition:'Any',t:'T1-T2',n:'N0',m:'M0',stage:'I'},
+{site:'Rectum',edition:'Any',t:'T3',n:'N0',m:'M0',stage:'IIA'},
+{site:'Rectum',edition:'Any',t:'T4a',n:'N0',m:'M0',stage:'IIB'},
+{site:'Rectum',edition:'Any',t:'T4b',n:'N0',m:'M0',stage:'IIC'},
+{site:'Rectum',edition:'Any',t:'T1-T2',n:'N1',m:'M0',stage:'IIIA'},
+{site:'Rectum',edition:'Any',t:'T3-T4a',n:'N1',m:'M0',stage:'IIIB'},
+{site:'Rectum',edition:'Any',t:'T1-T2',n:'N2',m:'M0',stage:'IIIB'},
+{site:'Rectum',edition:'Any',t:'T4b',n:'N1',m:'M0',stage:'IIIC'},
+{site:'Rectum',edition:'Any',t:'T3-T4b',n:'N2',m:'M0',stage:'IIIC'}
 ];
 function base(v){return String(v||'').replace(/[abc]$/i,'')}
-function rangeMatch(pattern,value){if(pattern==='Any'||value==='Any')return true;if(pattern===value)return true;if(base(value)===pattern)return true;if(pattern==='T1-T3')return ['T1','T2','T3'].includes(base(value));return false}
+function inList(v,list){return list.split('-').length===2?rangeContains(list,v):list.split(',').includes(v)}
+function rangeContains(pattern,value){const v=base(value); if(pattern==='T1-T2')return ['T1','T2'].includes(v); if(pattern==='T1-T3')return ['T1','T2','T3'].includes(v); if(pattern==='T3-T4a')return ['T3','T4a'].includes(value); if(pattern==='T3-T4b')return ['T3','T4a','T4b'].includes(value); return false}
+function rangeMatch(pattern,value){if(pattern==='Any'||value==='Any')return true;if(pattern===value)return true;if(base(value)===pattern)return true;if(pattern.includes('-'))return rangeContains(pattern,value);return false}
 function match(r,q){return (r.site==='Any'||r.site===q.site)&&(r.edition==='Any'||r.edition===q.edition)&&rangeMatch(r.t,q.t)&&rangeMatch(r.n,q.n)&&rangeMatch(r.m,q.m)}
-function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};const found=rules.find(r=>match(r,q));result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div>${found.note?'<div class="mt-2 text-sm text-amber-800">'+found.note+'</div>':''}</div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到內建 smoke-test 規則</b><div class="mt-2 text-sm text-slate-600">目前還只是少量測試規則。</div></div>`}
+function lookup(){const q={site:site.value,edition:edition.value,t:t.value,n:n.value,m:m.value};const found=rules.find(r=>match(r,q));result.innerHTML=found?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${found.stage}</div><div class="mt-2 text-sm text-emerald-900">${found.site} ${found.edition} ${found.t}/${found.n}/${found.m}</div>${found.note?'<div class="mt-2 text-sm text-amber-800">'+found.note+'</div>':''}</div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到內建測試規則</b><div class="mt-2 text-sm text-slate-600">該癌種或 TNM 組合尚未分批加入。</div></div>`}
 lookup();
 </script>
 </body>
