@@ -1,3 +1,10 @@
+
+## v4.1.8 - PI / Study Nurse 欄位清理修正
+- 修正 PDF 匯入時 PI 欄位誤含 `PI` 標籤，造成畫面顯示 `PI: PI鄧豪偉`。
+- 修正 PI 欄位誤抓到 `3`、`III`、Phase 或 Sponsor 的情況。
+- 修正 PI 與 Study Nurse/SC 名字混在一起時，PI 欄優先保留真正 PI，Study Nurse 欄移除誤混入的 PI。
+- 載入舊 Firebase/localStorage 資料時也會做同樣清理。
+
 # v4.1.7
 
 - 修正癌別篩選下拉選單被 PDF 表格內容污染的問題。

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.7 Firebase版</title>
+    <title>臨床試驗管理系統 v4.1.8 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -471,8 +471,8 @@ const cleanTrialForSave = (trial) => {
     cleaned.code = normalizeCode(cleaned.code);
     cleaned.studyTitle = normalizeText(cleaned.studyTitle);
     cleaned.sponsor = normalizeText(cleaned.sponsor);
-    cleaned.pi = normalizeText(cleaned.pi);
-    cleaned.nurse = normalizeText(cleaned.nurse);
+    cleaned.pi = sanitizePiField(cleaned.pi, [cleaned.pi, cleaned.nurse, cleaned.studyTitle, cleaned.inclusion].filter(Boolean).join('\n'));
+    cleaned.nurse = sanitizeNurseField(cleaned.nurse);
     cleaned.phone = normalizeText(cleaned.phone);
     cleaned.comments = normalizeText(cleaned.comments);
     cleaned.phase = normalizeText(cleaned.phase);
@@ -495,8 +495,8 @@ const normalizeFirestoreTrial = (raw) => {
     trial.code = normalizeCode(trial.code);
     trial.studyTitle = normalizeText(trial.studyTitle);
     trial.sponsor = normalizeText(trial.sponsor);
-    trial.pi = normalizeText(trial.pi);
-    trial.nurse = normalizeText(trial.nurse);
+    trial.pi = sanitizePiField(trial.pi, [trial.pi, trial.nurse, trial.studyTitle, trial.inclusion].filter(Boolean).join('\n'));
+    trial.nurse = sanitizeNurseField(trial.nurse);
     trial.phone = normalizeText(trial.phone);
     trial.comments = normalizeText(trial.comments);
     trial.phase = trial.phase || '';
@@ -819,8 +819,111 @@ const inferCancerTypeFromText = (value) => {
 
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
-const sanitizeTrialForRuntime = (trial) => {
+
+const KNOWN_PI_NAMES = ['洪逸平', '陳明晃', '楊慕華', '李重賓', '姜乃榕', '鄧豪偉', '黃怡翔', '蕭育和', '張牧新'];
+const KNOWN_STUDY_NURSE_NAMES = ['Abby', '宋秀薇', '王秋眉', '賴姵妤', '周淑慧', '吳佳勳', '林韋秀', '王昭蘋', '陳秀玲', '孔亭方', '張台依', '邱佩玲', '李杰如', '李杰如醫師'];
+
+const uniqueKnownNamesFromText = (value, names) => {
+    const src = normalizeText(value);
+    const found = [];
+    (names || []).forEach((name) => {
+        if (!name) return;
+        const escaped = String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = /[A-Za-z]/.test(name) ? new RegExp(escaped, 'i') : new RegExp(escaped);
+        if (regex.test(src) && !found.includes(name)) found.push(name);
+    });
+    return found;
+};
+
+const stripKnownNames = (value, names) => {
+    let src = String(value || '');
+    (names || []).forEach((name) => {
+        if (!name) return;
+        const escaped = String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        src = src.replace(new RegExp(escaped, /[A-Za-z]/.test(name) ? 'gi' : 'g'), ' ');
+    });
+    return src;
+};
+
+const normalizePdfPersonText = (value) => normalizeText(value)
+    .replace(/\bPrincipal\s+Investigator\b/gi, ' ')
+    .replace(/^\s*PI\s*[:：]?\s*/i, '')
+    .replace(/(?:^|\s)PI\s*[:：]?\s*/gi, ' ')
+    .replace(/Study\s*Nurse\s*\/?\s*phone/gi, ' ')
+    .replace(/研究護士|護理師|個管師/g, ' ')
+    .replace(/醫師/g, '')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const isDefinitelyNotPiValue = (value) => {
+    const src = normalizePdfPersonText(value);
+    if (!src) return true;
+    if (/^(?:I|II|III|IV|V|VI|VII|VIII|IX|X|Phase\s*[\w/.-]*|[0-9０-９]+(?:[\-–/][0-9０-９]+)?|\d+(?:\.\d+)?)$/i.test(src)) return true;
+    if (/^(?:AZ|MSD|PFIZER|Astellas|Bolt|IIT|Abbvie|第一三共|輝瑞|必治妥)$/i.test(src)) return true;
+    if (/\d{4,}|line\s*ID|#|轉|82935|82999/i.test(src)) return true;
+    if (/^(?:Target|Sponsor|Phase|已收案|當月簽|當月入|comments?|Study)$/i.test(src)) return true;
+    return false;
+};
+
+const sanitizePiField = (value, rowContext = '') => {
+    const local = normalizePdfPersonText(value);
+    const localKnown = uniqueKnownNamesFromText(local, KNOWN_PI_NAMES);
+    if (localKnown.length) return localKnown.join(' / ');
+
+    let candidate = stripKnownNames(local, KNOWN_STUDY_NURSE_NAMES)
+        .replace(/\d{2,}[-#\d\s/]*|line\s*ID\s*[:：]?\s*\S*/gi, ' ')
+        .replace(/[:：/／,，、|]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (isDefinitelyNotPiValue(candidate)) {
+        const contextKnown = uniqueKnownNamesFromText(rowContext, KNOWN_PI_NAMES);
+        return contextKnown.length ? contextKnown.join(' / ') : '';
+    }
+
+    const contextKnown = uniqueKnownNamesFromText(rowContext, KNOWN_PI_NAMES);
+    if (contextKnown.length && (candidate.length > 6 || /\d|line\s*ID/i.test(candidate))) return contextKnown.join(' / ');
+
+    const cjkNames = candidate.match(/[\u4e00-\u9fff]{2,4}/g) || [];
+    const filtered = cjkNames.filter(name => !KNOWN_STUDY_NURSE_NAMES.includes(name) && !/^(?:醫師|研究|護理|名額|暫停|停止|收案|進行)$/.test(name));
+    if (filtered.length) return Array.from(new Set(filtered)).join(' / ');
+    return candidate;
+};
+
+const sanitizeNurseField = (value) => {
+    let src = normalizeText(value)
+        .replace(/Study\s*Nurse\s*\/?\s*phone/gi, ' ')
+        .replace(/^\s*(?:護理師|研究護士|個管師)\s*[:：]?\s*/g, '')
+        .replace(/^\s*PI\s*[:：]?\s*/i, ' ');
+    src = stripKnownNames(src, KNOWN_PI_NAMES);
+    src = src
+        .replace(/\b(?:Phase|Sponsor|Target|comments?|合約編號|學會發表者)\b/gi, ' ')
+        .replace(/^(?:I|II|III|IV|V|VI|VII|VIII|IX|X|\d+)\s*$/i, '')
+        .replace(/[ \t]+/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+    return src;
+};
+
+const sanitizePersonFields = (trial, rowContext = '') => {
     const t = { ...(trial || {}) };
+    const context = [rowContext, t.pi, t.nurse, t.studyTitle, t.inclusion, t.comments].filter(Boolean).join('\n');
+    t.pi = sanitizePiField(t.pi, context);
+    t.nurse = sanitizeNurseField(t.nurse);
+    if (t.nurse && t.pi) {
+        const escapedPi = t.pi.split(/\s*\/\s*/).filter(Boolean).map(name => String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        escapedPi.forEach((name) => {
+            t.nurse = t.nurse.replace(new RegExp(name, 'g'), ' ');
+        });
+        t.nurse = normalizeText(t.nurse);
+    }
+    return t;
+};
+
+const sanitizeTrialForRuntime = (trial) => {
+    let t = { ...(trial || {}) };
+    t = sanitizePersonFields(t);
     t.code = normalizeCode(t.code);
     t.cancerType = normalizeCancerTypeLabel(t.cancerType);
     t.line = normalizeTreatmentLine(t.line);
@@ -898,7 +1001,8 @@ const splitEligibilitySections = (inclusionText, exclusionText = '') => {
 };
 
 const normalizeImportedTrialFields = (item, options = {}) => {
-    const out = { ...(item || {}) };
+    let out = { ...(item || {}) };
+    out = sanitizePersonFields(out, [out.pi, out.nurse, out.studyTitle, out.inclusion, out.comments].filter(Boolean).join('\n'));
     if (out.cancerType) out.cancerType = normalizeCancerTypeLabel(out.cancerType);
     if (out.line) out.line = normalizeTreatmentLine(out.line);
     const splitEligibility = splitEligibilitySections(out.inclusion, out.exclusion);
@@ -1128,8 +1232,8 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             inclusion: normalizeCellText(incoming.inclusion || prev.inclusion),
             exclusion: normalizeCellText(incoming.exclusion || prev.exclusion),
             sponsor: normalizeText(incoming.sponsor || prev.sponsor),
-            pi: normalizeText(incoming.pi || prev.pi),
-            nurse: normalizeText(incoming.nurse || prev.nurse),
+            pi: sanitizePiField(incoming.pi || prev.pi, [incoming.pi, prev.pi, incoming.nurse, prev.nurse, incoming.studyTitle, incoming.inclusion].filter(Boolean).join('\n')),
+            nurse: sanitizeNurseField(incoming.nurse || prev.nurse),
             phone: normalizeText(incoming.phone || prev.phone),
             comments: normalizeText(incoming.comments || prev.comments),
             isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
@@ -1607,6 +1711,7 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
             if (cancerLine.cancerType) currentCancerType = cancerLine.cancerType;
             if (cancerLine.line) currentLine = cancerLine.line;
 
+            const rawRowText = Object.values(raw).filter(Boolean).join('\n');
             const fragment = {
                 cancerType: cancerLine.cancerType,
                 line: cancerLine.line,
@@ -1619,8 +1724,8 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                 enrolled: raw.enrolled,
                 monthSigned: raw.monthSigned,
                 monthEnrolled: raw.monthEnrolled,
-                pi: raw.pi,
-                nurse: raw.nurse,
+                pi: sanitizePiField(raw.pi, rawRowText),
+                nurse: sanitizeNurseField(raw.nurse),
                 comments: raw.comments,
                 contractNo: raw.contractNo,
                 status: detectStatusFromRow(Object.values(raw)) || '進行中'
@@ -1718,8 +1823,8 @@ const parseWideSingleTrialPdfPage = (pageData) => {
         enrolled: metadata.enrolled || '',
         monthSigned: metadata.monthSigned || '',
         monthEnrolled: metadata.monthEnrolled || '',
-        pi: metadata.pi || '',
-        nurse: metadata.nurse || '',
+        pi: sanitizePiField(metadata.pi || '', Object.values(metadata).join('\n')),
+        nurse: sanitizeNurseField(metadata.nurse || ''),
         comments: metadata.comments || '',
         status: detectStatusFromRow([rowText]) || '進行中'
     }, { explicitCancerOnRow: false });
@@ -1806,7 +1911,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.7 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.8 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -3256,7 +3361,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.7 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.8 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
