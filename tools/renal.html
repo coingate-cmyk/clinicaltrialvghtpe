@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>腎功能 / BSA 計算機</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <main class="max-w-5xl mx-auto p-6">
+    <a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a>
+    <h1 class="text-3xl font-bold mt-6 mb-2">腎功能 / BSA 計算機</h1>
+    <p class="text-slate-600 mb-6">Internal trial screening helper. Final eligibility should follow the protocol.</p>
+    <div class="grid md:grid-cols-2 gap-6">
+      <section class="bg-white rounded-xl border shadow p-5">
+        <h2 class="text-xl font-bold mb-4">輸入</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="block">性別<select id="sex" class="mt-1 w-full border rounded p-2"><option value="male">Male</option><option value="female">Female</option></select></label>
+          <label class="block">年齡<input id="age" type="number" value="60" class="mt-1 w-full border rounded p-2"></label>
+          <label class="block">身高 cm<input id="height" type="number" value="170" class="mt-1 w-full border rounded p-2"></label>
+          <label class="block">體重 kg<input id="weight" type="number" value="70" class="mt-1 w-full border rounded p-2"></label>
+          <label class="block">Scr mg/dL<input id="scr" type="number" step="0.01" value="1.0" class="mt-1 w-full border rounded p-2"></label>
+          <label class="block">CG weight<select id="cgWeight" class="mt-1 w-full border rounded p-2"><option value="actual">Actual BW</option><option value="ibw">IBW</option><option value="adjusted">Adjusted BW</option></select></label>
+          <label class="block col-span-2">Trial cutoff mL/min<input id="cutoff" type="number" value="50" class="mt-1 w-full border rounded p-2"></label>
+        </div>
+        <button onclick="calc()" class="mt-5 bg-blue-700 text-white rounded-lg px-4 py-2 font-bold">計算</button>
+      </section>
+      <section class="bg-white rounded-xl border shadow p-5">
+        <h2 class="text-xl font-bold mb-4">結果</h2>
+        <div id="results" class="space-y-2 text-slate-800"></div>
+      </section>
+    </div>
+    <section class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+      注意：Cockcroft-Gault 常用於藥物試驗 eligibility；CKD-EPI/MDRD 為 indexed eGFR，接近 cutoff 或用於給藥時可參考 de-indexed eGFR。
+    </section>
+  </main>
+<script>
+function n(id){return Number(document.getElementById(id).value)}
+function v(id){return document.getElementById(id).value}
+function round(x,d=1){return isFinite(x)?Number(x).toFixed(d):'--'}
+function ibw(sex,hcm){const inch=hcm/2.54; const over=Math.max(0, inch-60); return (sex==='female'?45.5:50)+2.3*over}
+function bsa(h,w){return Math.sqrt(h*w/3600)}
+function ckdEpi2021(sex,age,scr){const female=sex==='female'; const k=female?0.7:0.9; const a=female?-0.241:-0.302; return 142*Math.pow(Math.min(scr/k,1),a)*Math.pow(Math.max(scr/k,1),-1.200)*Math.pow(0.9938,age)*(female?1.012:1)}
+function mdrd(sex,age,scr){return 175*Math.pow(scr,-1.154)*Math.pow(age,-0.203)*(sex==='female'?0.742:1)}
+function calc(){
+  const sex=v('sex'), age=n('age'), h=n('height'), w=n('weight'), scr=n('scr'), cutoff=n('cutoff');
+  const BSA=bsa(h,w), IBW=ibw(sex,h), Adj=IBW+0.4*(w-IBW);
+  const wtChoice=v('cgWeight'); const cgW=wtChoice==='ibw'?IBW:(wtChoice==='adjusted'?Adj:w);
+  const cg=((140-age)*cgW)/(72*scr)*(sex==='female'?0.85:1);
+  const epi=ckdEpi2021(sex,age,scr), epiDe=epi*BSA/1.73;
+  const md=mdrd(sex,age,scr), mdDe=md*BSA/1.73;
+  const pass=cg>=cutoff;
+  document.getElementById('results').innerHTML=`
+    <div class="p-3 rounded bg-slate-100"><b>BSA Mosteller</b>: ${round(BSA,2)} m²</div>
+    <div class="p-3 rounded bg-slate-100"><b>IBW / Adjusted BW</b>: ${round(IBW)} / ${round(Adj)} kg</div>
+    <div class="p-3 rounded bg-blue-50"><b>Cockcroft-Gault CrCl</b>: ${round(cg)} mL/min <span class="ml-2 px-2 py-1 rounded ${pass?'bg-emerald-100 text-emerald-800':'bg-red-100 text-red-800'}">${pass?'Pass':'Below cutoff'}</span></div>
+    <div class="p-3 rounded bg-slate-100"><b>CKD-EPI 2021</b>: ${round(epi)} mL/min/1.73m²; de-indexed ${round(epiDe)} mL/min</div>
+    <div class="p-3 rounded bg-slate-100"><b>MDRD</b>: ${round(md)} mL/min/1.73m²; de-indexed ${round(mdDe)} mL/min</div>`;
+}
+calc();
+</script>
+</body>
+</html>
