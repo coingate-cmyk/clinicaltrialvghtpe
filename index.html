@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.9 Firebase版</title>
+    <title>臨床試驗管理系統 v4.2.1 工具入口版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -1942,7 +1942,7 @@ const INITIAL_TRIALS = [{"id": 1, "cancerType": "肝癌", "line": "二\n、三�
 function AccessPasswordModal(props) {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-    
+
     const handleSubmit = (ev) => {
         ev.preventDefault();
         if (props.onAuth(password)) {
@@ -1951,27 +1951,56 @@ function AccessPasswordModal(props) {
             setError(true);
         }
     };
-    
+
+    const toolButtonClass = 'block w-full text-left px-4 py-3 rounded-xl border transition bg-slate-50 hover:bg-blue-50 hover:border-blue-300';
+
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
-        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
-            e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
-                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
+        e('div', {className: 'w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch'},
+            e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
+                e('div', {className: 'mb-6'},
+                    e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-3'}, '免登入'),
+                    e('h2', {className: 'text-2xl font-bold mb-2'}, '臨床工具'),
+                    e('p', {className: 'text-sm text-gray-600'}, '研究護士與醫師快速查詢使用；獨立頁面，不影響臨床試驗資料庫。')
+                ),
+                e('div', {className: 'space-y-3'},
+                    e('a', {href: './tools/renal.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腎功能 / BSA 計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff')
+                    ),
+                    e('a', {href: './tools/staging.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'AJCC 7/8 staging 查詢'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'GI oncology cancer sites；目前為測試 rule pack，可逐步換成院內版')
+                    ),
+                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '工具首頁'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '所有 standalone clinical tools')
+                    )
+                ),
+                e('div', {className: 'mt-6 text-xs text-gray-500 leading-relaxed'},
+                    '提示：如果工具頁開不到，請確認 GitHub repo 根目錄下有 tools/renal.html 與 tools/staging.html。'
+                )
             ),
-            e('form', {onSubmit: handleSubmit},
-                e('input', {
-                    type: 'password',
-                    value: password,
-                    onChange: (ev) => setPassword(ev.target.value),
-                    placeholder: '請輸入密碼',
-                    className: 'w-full px-4 py-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500',
-                    autoFocus: true
-                }),
-                error && e('div', {className: 'text-red-600 text-sm mb-4'}, '密碼錯誤'),
-                e('button', {
-                    type: 'submit',
-                    className: 'w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold'
-                }, '進入系統')
+            e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
+                e('div', null,
+                    e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
+                    e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
+                ),
+                e('form', {onSubmit: handleSubmit},
+                    e('input', {
+                        type: 'password',
+                        value: password,
+                        onChange: (ev) => setPassword(ev.target.value),
+                        placeholder: '請輸入密碼',
+                        className: 'w-full px-4 py-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500',
+                        autoFocus: true
+                    }),
+                    error && e('div', {className: 'text-red-600 text-sm mb-4'}, '密碼錯誤'),
+                    e('button', {
+                        type: 'submit',
+                        className: 'w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold'
+                    }, '進入系統')
+                )
             )
         )
     );
@@ -3573,71 +3602,5 @@ function App() {
 
 ReactDOM.render(e(App), document.getElementById('app'));
     </script>
-
-<!-- Clinical tools launcher: added v4.2.0-tools-launcher -->
-<style>
-  #clinical-tools-launcher {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    z-index: 99999;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
-  #clinical-tools-launcher details {
-    background: #ffffff;
-    border: 1px solid #d0d7de;
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
-    overflow: hidden;
-    min-width: 220px;
-  }
-  #clinical-tools-launcher summary {
-    cursor: pointer;
-    list-style: none;
-    padding: 12px 14px;
-    font-weight: 700;
-    color: #ffffff;
-    background: #2563eb;
-  }
-  #clinical-tools-launcher summary::-webkit-details-marker {
-    display: none;
-  }
-  #clinical-tools-launcher .tool-links {
-    display: grid;
-    gap: 8px;
-    padding: 12px;
-    background: #ffffff;
-  }
-  #clinical-tools-launcher a {
-    display: block;
-    padding: 10px 12px;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #111827;
-    background: #f3f4f6;
-    font-size: 14px;
-  }
-  #clinical-tools-launcher a:hover {
-    background: #e5e7eb;
-  }
-  #clinical-tools-launcher .note {
-    font-size: 12px;
-    color: #6b7280;
-    padding: 0 12px 12px 12px;
-  }
-</style>
-
-<div id="clinical-tools-launcher">
-  <details>
-    <summary>臨床工具</summary>
-    <div class="tool-links">
-      <a href="./tools/renal.html" target="_blank" rel="noopener">腎功能 / BSA 計算機</a>
-      <a href="./tools/staging.html" target="_blank" rel="noopener">AJCC 7/8 staging 查詢</a>
-      <a href="./tools/index.html" target="_blank" rel="noopener">工具首頁</a>
-    </div>
-    <div class="note">Standalone tools，不影響主系統資料。</div>
-  </details>
-</div>
-
 </body>
 </html>
