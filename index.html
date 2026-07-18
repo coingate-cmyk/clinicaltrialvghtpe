@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.8 Firebase版</title>
+    <title>臨床試驗管理系統 v4.1.9 Firebase版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -80,9 +80,30 @@ const normalizeProtocolCodeText = (value) => String(value || '')
     .trim()
     .toUpperCase();
 
+
+const isKnownFalseStudyCode = (value) => {
+    const compact = normalizeProtocolCodeText(value).replace(/[\s\r\n]+/g, '');
+    if (!compact) return false;
+    // Line ID / LINE official accounts are not protocol codes.  The classic false positive is
+    // "line ID: enjoy357208", which can otherwise look like ENJOY357208 to the PDF code scanner.
+    if (/^(?:ENJOY|LINEID|LINDID|LINE)\d{3,}$/i.test(compact)) return true;
+    if (/^(?:ID|TEL|PHONE|MOBILE)\d{4,}$/i.test(compact)) return true;
+    if (/^0\d{7,10}$/.test(compact)) return true;
+    return false;
+};
+
+const isSpecialLegacyStudyCode = (value) => {
+    const compact = normalizeProtocolCodeText(value).replace(/[\s\r\n]+/g, '');
+    if (!compact || isKnownFalseStudyCode(compact)) return false;
+    if (compact === 'TTY') return true;
+    if (/^DESTINY-BILIARY-?TRACT$/i.test(compact)) return true;
+    return false;
+};
+
 const isLikelyStudyCode = (value) => {
     const compact = normalizeProtocolCodeText(value).replace(/[\s\r\n]+/g, '');
     if (!compact || compact.length < 2 || compact.length > 42) return false;
+    if (isKnownFalseStudyCode(compact)) return false;
     if (/[\u4e00-\u9fff]/.test(compact)) return false;
     if (/^(?:I|II|III|IV|V|PHASE|PHASEI|PHASEII|PHASEIII|PHASEIV)$/i.test(compact)) return false;
     if (/^(?:PD-?1|PD-?L1|HER-?2|MSI-?H|DMMR|KRAS|NRAS|BRAF|BRAFV|HBV|HCV|HIV|DNA|RNA|EGFR|MET|SOC|FOLFOX|CAPOX|CPS)/i.test(compact)) return false;
@@ -949,9 +970,32 @@ const sanitizeTrialForRuntime = (trial) => {
     return t;
 };
 
+
+const looksLikeCriteriaFragmentTitle = (value) => {
+    const src = normalizeText(value);
+    if (!src) return false;
+    if (/^(?:[0-9０-９]+[\.．、\)]|[•●*\-–—])/.test(src)) return true;
+    if (/adjuvant.{0,30}(?:復發|不在此限|months?|個月)/i.test(src)) return true;
+    if (/^(?:Inclusion|Exclusion|收案條件|納入條件|排除條件)/i.test(src)) return true;
+    return false;
+};
+
+const isPlausibleRuntimeTrialRecord = (trial) => {
+    if (!trial) return false;
+    const code = normalizeStudyCodeForImport(trial.code || '');
+    if (!code || isKnownFalseStudyCode(code)) return false;
+    // Reject records where a LINE account or phone/contact value became the code/title.
+    const title = normalizeText(trial.studyTitle || '');
+    if (isKnownFalseStudyCode(title)) return false;
+    if (!(isLikelyStudyCode(code) || isSpecialLegacyStudyCode(code))) return false;
+    // If the title is clearly just a criteria bullet and there is no real clinical context, drop it.
+    if (looksLikeCriteriaFragmentTitle(title) && !normalizeText(trial.inclusion || trial.exclusion || '').match(/癌|cancer|tumou?r|solid\s+tumou?r|metastatic/i)) return false;
+    return true;
+};
+
 const sanitizeTrialListForRuntime = (list) => (Array.isArray(list) ? list : [])
     .map(sanitizeTrialForRuntime)
-    .filter(t => t && t.code);
+    .filter(t => isPlausibleRuntimeTrialRecord(t));
 
 const splitEligibilitySections = (inclusionText, exclusionText = '') => {
     const inclusion = normalizeCellText(inclusionText);
@@ -1080,7 +1124,7 @@ const consolidateParsedTrials = (rows) => {
     let duplicateCount = 0;
     (rows || []).forEach((row) => {
         const key = normalizeCode(row && row.code);
-        if (!key) return;
+        if (!key || isKnownFalseStudyCode(key) || !(isLikelyStudyCode(key) || isSpecialLegacyStudyCode(key) || isLikelyPdfCodeCell(key))) return;
         const current = map.get(key);
         if (!current) {
             map.set(key, { ...row, code: key });
@@ -1911,7 +1955,7 @@ function AccessPasswordModal(props) {
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
         e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
             e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.8 Firebase版'),
+                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
                 e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
             ),
             e('form', {onSubmit: handleSubmit},
@@ -3361,7 +3405,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.8 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'

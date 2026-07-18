@@ -1,3 +1,10 @@
+# v4.1.9 - LINE ID false trial cleanup
+
+- 修正 PDF 匯入時把 `line ID: enjoy357208` 誤當成試驗代號 `ENJOY357208` 的問題。
+- 載入既有 Firebase/localStorage 資料時，自動濾掉由 line ID / 電話 / 聯絡方式誤產生的假 trial。
+- 避免 `3.Adjuvant 結束超過 6 個月後復發，不在此限` 這類收案條件句子被當成癌別或試驗名稱顯示。
+- 保留 v4.1.8 的 PI / Study Nurse 欄位清理邏輯。
+
 
 ## v4.1.8 - PI / Study Nurse 欄位清理修正
 - 修正 PDF 匯入時 PI 欄位誤含 `PI` 標籤，造成畫面顯示 `PI: PI鄧豪偉`。
