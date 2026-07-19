@@ -1,1 +1,0 @@
-Login panel update note.
