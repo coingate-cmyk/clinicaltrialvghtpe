@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CTCAE 副作用速查器</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<main class="max-w-6xl mx-auto p-6">
+  <div class="flex justify-between"><a class="text-blue-700" href="./index.html">← 回工具首頁</a><a class="text-blue-700" href="../index.html">回臨床試驗系統</a></div>
+  <h1 class="text-3xl font-bold mt-6">CTCAE 副作用速查器</h1>
+  <p class="text-slate-600 mt-2">先放常用 oncology AE seed terms；可查 G1-G5 嚴重程度。未來可擴充成完整 CTCAE v5/v6。</p>
+  <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">Internal quick-check only. Protocol 指定版本優先；正式通報請以 protocol / NCI CTCAE 原文為準。</p>
+  <div class="grid lg:grid-cols-3 gap-6 mt-6">
+    <section class="bg-white rounded-xl border shadow p-5 lg:col-span-1">
+      <h2 class="text-xl font-bold mb-4">查詢</h2>
+      <label class="text-sm font-medium">Version<select id="version" class="mt-1 w-full border rounded p-2"><option>CTCAE v5.0</option><option disabled>CTCAE v6.0 - reserved</option></select></label>
+      <label class="text-sm font-medium block mt-3">Search<input id="search" class="mt-1 w-full border rounded p-2" placeholder="例如 neutropenia, ANC, diarrhea, ALT"></label>
+      <label class="text-sm font-medium block mt-3">AE term<select id="term" class="mt-1 w-full border rounded p-2"></select></label>
+      <button onclick="renderTerm()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 grade</button>
+      <div id="info" class="mt-3 text-sm text-slate-500">載入中...</div>
+    </section>
+    <section class="bg-white rounded-xl border shadow p-5 lg:col-span-2">
+      <h2 class="text-xl font-bold mb-4">結果</h2>
+      <div id="result"></div>
+      <button onclick="copyResult()" class="mt-3 bg-slate-200 px-3 py-2 rounded font-bold">複製</button>
+    </section>
+  </div>
+</main>
+<script>
+let terms=[];
+function parseCSV(text){const rows=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(ch==='"'){if(q&&nx==='"'){cur+='"';i++}else q=!q}else if(ch===','&&!q){row.push(cur);cur=''}else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&nx==='\n')i++;row.push(cur);if(row.some(x=>x.trim()))rows.push(row);row=[];cur=''}else cur+=ch}if(cur||row.length){row.push(cur);rows.push(row)}const h=rows.shift().map(x=>x.trim());return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||'').trim()])))}
+function norm(s){return String(s||'').toLowerCase().replace(/[\s_\-\/]+/g,' ')}
+function fillTermList(list){term.innerHTML=list.map((x,i)=>`<option value="${terms.indexOf(x)}">${x.term}</option>`).join('');if(list.length)term.value=terms.indexOf(list[0]);}
+function filterTerms(){const q=norm(search.value);let list=terms;if(q)list=terms.filter(x=>norm([x.term,x.aliases,x.soc].join(' ')).includes(q));fillTermList(list);info.textContent=`載入 ${terms.length} 筆；目前符合 ${list.length} 筆。`;renderTerm();}
+function gradeCard(label,text){const empty=!text||text==='-';return `<div class="rounded-lg border ${empty?'bg-slate-50 text-slate-400':'bg-white'} p-3"><div class="font-bold text-slate-800">${label}</div><div class="mt-1 text-sm whitespace-pre-wrap">${text||'-'}</div></div>`}
+function renderTerm(){const x=terms[Number(term.value)];if(!x){result.innerHTML='<div class="p-4 bg-slate-100 rounded">沒有找到 term</div>';return}window.current=x;result.innerHTML=`<div class="mb-4"><div class="text-2xl font-bold text-emerald-800">${x.term}</div><div class="text-sm text-slate-600 mt-1">${x.version} · ${x.soc}</div><div class="text-sm text-slate-500 mt-1">Alias: ${x.aliases||'-'}</div></div><div class="grid md:grid-cols-2 gap-3">${gradeCard('Grade 1',x.g1)}${gradeCard('Grade 2',x.g2)}${gradeCard('Grade 3',x.g3)}${gradeCard('Grade 4',x.g4)}${gradeCard('Grade 5',x.g5)}</div><div class="mt-4 p-3 bg-slate-50 rounded border text-sm"><b>Definition:</b> ${x.definition||'-'}<br><b>Note:</b> ${x.note||'-'}</div>`}
+function copyResult(){const x=window.current;if(!x)return;const txt=`${x.term} (${x.version})\nG1: ${x.g1}\nG2: ${x.g2}\nG3: ${x.g3}\nG4: ${x.g4}\nG5: ${x.g5}\nDefinition: ${x.definition}`;navigator.clipboard&&navigator.clipboard.writeText(txt)}
+search.addEventListener('input',filterTerms);term.addEventListener('change',renderTerm);
+async function boot(){try{const r=await fetch('ctcae_terms_v5_seed.csv',{cache:'no-store'});terms=parseCSV(await r.text())}catch(e){terms=[]}filterTerms();}
+boot();
+</script>
+</body>
+</html>
