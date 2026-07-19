@@ -1,0 +1,75 @@
+name: Patch login tools panel
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[bot-patch]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index login panel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = """                e('div', {className: 'space-y-3'},
+                    e('a', {href: './tools/renal.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腎功能 / BSA 計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff')
+                    ),
+                    e('a', {href: './tools/staging.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'AJCC 7/8 staging 查詢'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'GI oncology cancer sites；目前為測試 rule pack，可逐步換成院內版')
+                    ),
+                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '工具首頁'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '所有 standalone clinical tools')
+                    )
+                ),
+                e('div', {className: 'mt-6 text-xs text-gray-500 leading-relaxed'},
+                    '提示：如果工具頁開不到，請確認 GitHub repo 根目錄下有 tools/renal.html 與 tools/staging.html。'
+                )"""
+          new = """                e('div', {className: 'space-y-3'},
+                    e('a', {href: './tools/renal.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腎功能 / BSA 計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff')
+                    ),
+                    e('a', {href: './tools/quick-staging.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腫瘤分期速查器'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '6.0 / 7.0 / 8.0；T/N/M cascade dropdown，自動載入規則')
+                    ),
+                    e('a', {href: './tools/ctcae.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'CTCAE 副作用速查器'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'cytotoxic、ICI、ADC、targeted therapy 常見 AE grading quick reference')
+                    ),
+                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '工具首頁'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '所有 standalone clinical tools')
+                    )
+                ),
+                e('div', {className: 'mt-6 text-xs text-gray-500 leading-relaxed'},
+                    '提示：如果工具頁開不到，請確認 GitHub repo 根目錄下有 tools/renal.html、tools/quick-staging.html 與 tools/ctcae.html。'
+                )"""
+          if old not in s:
+              print('No matching old login panel block; no change made')
+              raise SystemExit(0)
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          if git diff --quiet index.html; then
+            echo "No index.html change"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Patch login tools panel [bot-patch]"
+          git push
