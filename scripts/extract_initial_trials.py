@@ -74,6 +74,9 @@ def extract(source: str) -> tuple[str, str, int, str]:
         raise ValueError("Expected ReactDOM script tag was not found exactly once")
 
     updated = source.replace(REACT_DOM_TAG, REACT_DOM_TAG + DATA_TAG, 1)
+    inserted_length = len(DATA_TAG)
+    declaration_start += inserted_length
+    declaration_end += inserted_length
     updated = updated[:declaration_start] + updated[declaration_end:]
 
     if PREFIX in updated:
