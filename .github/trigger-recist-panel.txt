@@ -1,0 +1,2 @@
+trigger: 2026-07-20T02:55:00Z
+purpose: add RECIST link to root login tools panel after hardened workflow
