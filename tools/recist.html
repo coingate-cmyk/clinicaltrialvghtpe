@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RECIST 1.1 / TLS Calculator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+<main class="max-w-7xl mx-auto p-4 md:p-6">
+  <div class="flex justify-between gap-3 flex-wrap"><a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a><a href="../index.html" class="text-blue-700 hover:underline">回臨床試驗系統</a></div>
+  <h1 class="text-3xl font-bold mt-6">RECIST 1.1 / TLS Calculator</h1>
+  <p class="text-slate-600 mt-2">Target lesion sum、% change from baseline、% change from nadir/minimum、preliminary RECIST response。Standalone tool；不使用 Firebase、不同步。</p>
+  <div class="mt-3 p-3 rounded-lg border border-amber-200 bg-amber-50 text-sm text-amber-900">Preliminary calculation only. Final assessment should follow protocol, imaging review, PI decision, and RECIST/iRECIST rules when applicable.</div>
+
+  <section class="mt-5 bg-white rounded-xl border shadow p-4">
+    <div class="grid md:grid-cols-4 gap-3">
+      <label class="text-sm font-medium">Subject / Screening ID<input id="subjectId" class="mt-1 w-full border rounded p-2" placeholder="optional"></label>
+      <label class="text-sm font-medium">Protocol<input id="protocol" class="mt-1 w-full border rounded p-2" placeholder="optional"></label>
+      <label class="text-sm font-medium">Unit<select id="unit" class="mt-1 w-full border rounded p-2" onchange="recalc()"><option value="mm">mm</option><option value="cm">cm</option></select></label>
+      <label class="text-sm font-medium">Patient list<select id="caseSelect" class="mt-1 w-full border rounded p-2" onchange="loadCaseBySelect()"></select></label>
+    </div>
+    <div class="mt-3 flex flex-wrap gap-2">
+      <button onclick="newCase()" class="px-3 py-2 rounded bg-slate-200 font-semibold">New case</button>
+      <button onclick="saveCase()" class="px-3 py-2 rounded bg-blue-700 text-white font-semibold">Save local</button>
+      <button onclick="deleteCase()" class="px-3 py-2 rounded bg-red-100 text-red-700 font-semibold">Delete local</button>
+      <button onclick="addVisit()" class="px-3 py-2 rounded bg-emerald-700 text-white font-semibold">+ Add visit</button>
+      <button onclick="loadDemo()" class="px-3 py-2 rounded bg-slate-100 font-semibold">Demo</button>
+      <span id="saveStatus" class="text-sm text-slate-500 self-center"></span>
+    </div>
+  </section>
+
+  <section class="mt-5 bg-white rounded-xl border shadow p-4 overflow-x-auto">
+    <div class="flex items-center justify-between mb-3 gap-3 flex-wrap"><h2 class="text-xl font-bold">Assessments</h2><div class="text-sm text-slate-500">Enter up to 5 target lesions per visit. Blank lesion cells are ignored.</div></div>
+    <table class="min-w-[1250px] w-full text-sm border-collapse">
+      <thead class="bg-slate-100"><tr>
+        <th class="border p-2">Visit</th><th class="border p-2">Date</th><th class="border p-2">L1</th><th class="border p-2">L2</th><th class="border p-2">L3</th><th class="border p-2">L4</th><th class="border p-2">L5</th><th class="border p-2">TLS</th><th class="border p-2">ΔBaseline</th><th class="border p-2">ΔNadir</th><th class="border p-2">New lesion</th><th class="border p-2">NT unequivocal PD</th><th class="border p-2">Prelim</th><th class="border p-2">Final</th><th class="border p-2">Note</th><th class="border p-2">Del</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+
+  <section class="mt-5 grid lg:grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl border shadow p-4">
+      <h2 class="text-xl font-bold mb-3">Current summary</h2>
+      <div id="summary" class="text-sm space-y-2"></div>
+      <button onclick="copySummary()" class="mt-3 px-3 py-2 rounded bg-slate-200 font-semibold">Copy summary</button>
+    </div>
+    <div class="bg-white rounded-xl border shadow p-4">
+      <h2 class="text-xl font-bold mb-3">Export / Import</h2>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="exportCSV()" class="px-3 py-2 rounded bg-green-700 text-white font-semibold">Download CSV</button>
+        <button onclick="exportJSON()" class="px-3 py-2 rounded bg-indigo-700 text-white font-semibold">Download JSON</button>
+        <button onclick="window.print()" class="px-3 py-2 rounded bg-slate-700 text-white font-semibold">Print / Save PDF</button>
+        <label class="px-3 py-2 rounded bg-slate-200 font-semibold cursor-pointer">Import JSON<input type="file" accept=".json,application/json" class="hidden" onchange="importJSON(event)"></label>
+      </div>
+      <p class="text-sm text-slate-600 mt-3">建議：CSV 給 Excel/試驗表格；JSON 保留完整可再載入的 case；Print 可另存 PDF 報告。資料只存在本機瀏覽器 localStorage，不進 Firebase。</p>
+    </div>
+  </section>
+</main>
+
+<script>
+const STORE_KEY='recist_tls_cases_v1';
+let visits=[];
+function today(){return new Date().toISOString().slice(0,10)}
+function uid(){return 'case_'+Date.now()+'_'+Math.floor(Math.random()*10000)}
+function val(id){return document.getElementById(id).value.trim()}
+function setVal(id,v){document.getElementById(id).value=v||''}
+function unitFactor(){return unit.value==='cm'?10:1}
+function fmt(x,d=1){return Number.isFinite(x)?x.toFixed(d):''}
+function pct(x){return Number.isFinite(x)?(x>=0?'+':'')+x.toFixed(1)+'%':''}
+function readCases(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'[]')}catch(e){return[]}}
+function writeCases(cases){localStorage.setItem(STORE_KEY,JSON.stringify(cases||[]))}
+function refreshCaseSelect(){const cases=readCases();caseSelect.innerHTML='<option value="">-- saved cases --</option>'+cases.map(c=>`<option value="${c.id}">${escapeHtml(c.subjectId||'(no ID)')} ${escapeHtml(c.protocol||'')}</option>`).join('')}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function newVisit(label){return{visit:label||'',date:today(),lesions:['','','','',''],newLesion:false,ntPD:false,final:'',note:''}}
+function addVisit(){visits.push(newVisit(visits.length?'':'Baseline'));render()}
+function removeVisit(i){visits.splice(i,1);render()}
+function tls(v){const f=unitFactor();return (v.lesions||[]).map(x=>parseFloat(x)).filter(x=>Number.isFinite(x)).reduce((a,b)=>a+b*f,0)}
+function calcs(){let baseline=null,nadir=null;return visits.map((v,i)=>{const sum=tls(v);if(i===0) baseline=sum;if(nadir===null||sum<nadir)nadir=sum;const db=baseline>0?(sum-baseline)/baseline*100:null;const dn=nadir>0?(sum-nadir)/nadir*100:null;let prelim='SD';let reason='';if(i===0){prelim='Baseline'}else if(v.newLesion||v.ntPD){prelim='PD';reason=v.newLesion?'new lesion':'non-target unequivocal PD'}else if(sum===0){prelim='CR candidate';reason='all entered target lesions disappeared; confirm lymph-node/non-target rules'}else if(nadir>0 && sum>=nadir*1.2 && (sum-nadir)>=5){prelim='PD';reason='≥20% increase from nadir and ≥5 mm absolute increase'}else if(baseline>0 && sum<=baseline*0.7){prelim='PR';reason='≥30% decrease from baseline'}else{prelim='SD'}return{sum,baseline,nadir,db,dn,prelim,reason}})}
+function render(){if(!visits.length) visits=[newVisit('Baseline')];const c=calcs();tbody.innerHTML=visits.map((v,i)=>`<tr class="align-top"><td class="border p-1"><input class="w-28 border rounded p-1" value="${escapeHtml(v.visit)}" onchange="visits[${i}].visit=this.value;render()"></td><td class="border p-1"><input type="date" class="w-36 border rounded p-1" value="${escapeHtml(v.date)}" onchange="visits[${i}].date=this.value;render()"></td>${[0,1,2,3,4].map(j=>`<td class="border p-1"><input type="number" step="0.1" class="w-20 border rounded p-1" value="${escapeHtml(v.lesions[j]||'')}" onchange="visits[${i}].lesions[${j}]=this.value;render()"></td>`).join('')}<td class="border p-2 font-semibold text-right">${fmt(c[i].sum)}</td><td class="border p-2 text-right">${pct(c[i].db)}</td><td class="border p-2 text-right">${pct(c[i].dn)}</td><td class="border p-2 text-center"><input type="checkbox" ${v.newLesion?'checked':''} onchange="visits[${i}].newLesion=this.checked;render()"></td><td class="border p-2 text-center"><input type="checkbox" ${v.ntPD?'checked':''} onchange="visits[${i}].ntPD=this.checked;render()"></td><td class="border p-2"><span class="font-bold ${badgeColor(c[i].prelim)}">${c[i].prelim}</span><div class="text-xs text-slate-500">${escapeHtml(c[i].reason||'')}</div></td><td class="border p-1"><select class="border rounded p-1" onchange="visits[${i}].final=this.value;render()"><option value="">--</option>${['CR','PR','SD','PD','NE'].map(x=>`<option ${v.final===x?'selected':''}>${x}</option>`).join('')}</select></td><td class="border p-1"><input class="w-48 border rounded p-1" value="${escapeHtml(v.note||'')}" onchange="visits[${i}].note=this.value;render()"></td><td class="border p-1 text-center"><button onclick="removeVisit(${i})" class="px-2 py-1 bg-red-50 text-red-700 rounded">×</button></td></tr>`).join('');updateSummary(c)}
+function badgeColor(x){return x==='PD'?'text-red-700':x==='PR'?'text-emerald-700':x==='CR candidate'?'text-purple-700':x==='Baseline'?'text-slate-700':'text-blue-700'}
+function updateSummary(c){const last=visits.length?visits.length-1:0;const best=c.reduce((acc,x,i)=>i>0&&Number.isFinite(x.db)&&x.db<acc.db?{db:x.db,i}:acc,{db:Infinity,i:null});summary.innerHTML=`<div><b>Subject:</b> ${escapeHtml(val('subjectId')||'(blank)')} &nbsp; <b>Protocol:</b> ${escapeHtml(val('protocol')||'(blank)')}</div><div><b>Baseline TLS:</b> ${fmt(c[0]?.sum)} mm</div><div><b>Current TLS:</b> ${fmt(c[last]?.sum)} mm; <b>ΔBaseline:</b> ${pct(c[last]?.db)}; <b>ΔNadir:</b> ${pct(c[last]?.dn)}</div><div><b>Current preliminary:</b> <span class="font-bold ${badgeColor(c[last]?.prelim)}">${c[last]?.prelim||''}</span></div><div><b>Best shrinkage:</b> ${best.i===null?'':pct(best.db)+' at '+escapeHtml(visits[best.i].visit||('visit '+(best.i+1)))}</div><div class="text-xs text-slate-500">PD rule uses ≥20% increase from nadir/minimum plus ≥5 mm absolute increase, or new lesion / unequivocal non-target progression. PR uses ≥30% decrease from baseline.</div>`}
+function recalc(){render()}
+function collectCase(){return{id:caseSelect.value||uid(),subjectId:val('subjectId'),protocol:val('protocol'),unit:unit.value,visits:visits,updatedAt:new Date().toISOString()}}
+function saveCase(){const item=collectCase();let cases=readCases().filter(c=>c.id!==item.id);cases.push(item);writeCases(cases);refreshCaseSelect();caseSelect.value=item.id;saveStatus.textContent='Saved locally '+new Date().toLocaleTimeString()}
+function loadCase(c){setVal('subjectId',c.subjectId);setVal('protocol',c.protocol);unit.value=c.unit||'mm';visits=Array.isArray(c.visits)?c.visits:[];render()}
+function loadCaseBySelect(){const c=readCases().find(x=>x.id===caseSelect.value);if(c)loadCase(c)}
+function deleteCase(){if(!caseSelect.value)return;writeCases(readCases().filter(c=>c.id!==caseSelect.value));refreshCaseSelect();newCase()}
+function newCase(){setVal('subjectId','');setVal('protocol','');unit.value='mm';caseSelect.value='';visits=[newVisit('Baseline')];render();saveStatus.textContent=''}
+function loadDemo(){setVal('subjectId','DEMO-001');setVal('protocol','RECIST demo');unit.value='mm';visits=[{visit:'Baseline',date:'2026-01-01',lesions:['30','22','15','','10'],newLesion:false,ntPD:false,final:'',note:''},{visit:'Week 8',date:'2026-03-01',lesions:['20','15','10','','8'],newLesion:false,ntPD:false,final:'',note:''},{visit:'Week 16',date:'2026-05-01',lesions:['23','17','12','','9'],newLesion:false,ntPD:false,final:'',note:''},{visit:'Week 24',date:'2026-07-01',lesions:['28','22','14','','10'],newLesion:false,ntPD:false,final:'',note:''}];render()}
+function rowsForExport(){const c=calcs();return visits.map((v,i)=>({subjectId:val('subjectId'),protocol:val('protocol'),visit:v.visit,date:v.date,l1:v.lesions[0]||'',l2:v.lesions[1]||'',l3:v.lesions[2]||'',l4:v.lesions[3]||'',l5:v.lesions[4]||'',tls_mm:fmt(c[i].sum),change_from_baseline_pct:pct(c[i].db),change_from_nadir_pct:pct(c[i].dn),new_lesion:v.newLesion?'Y':'N',non_target_pd:v.ntPD?'Y':'N',preliminary:c[i].prelim,final:v.final||'',note:v.note||''}))}
+function download(name,text,type){const blob=new Blob([text],{type:type||'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function exportCSV(){const rows=rowsForExport();const keys=Object.keys(rows[0]||{});const csv='\uFEFF'+[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replace(/"/g,'""')+'"').join(','))].join('\n');download('recist_tls_'+(val('subjectId')||'case')+'.csv',csv,'text/csv;charset=utf-8')}
+function exportJSON(){download('recist_tls_'+(val('subjectId')||'case')+'.json',JSON.stringify(collectCase(),null,2),'application/json;charset=utf-8')}
+function importJSON(ev){const f=ev.target.files&&ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{loadCase(JSON.parse(r.result));saveStatus.textContent='JSON imported, not saved yet'}catch(e){alert('JSON import failed')}};r.readAsText(f,'utf-8');ev.target.value=''}
+function summaryText(){const c=calcs();const last=visits.length-1;return `RECIST 1.1 / TLS summary\nSubject: ${val('subjectId')}\nProtocol: ${val('protocol')}\nBaseline TLS: ${fmt(c[0]?.sum)} mm\nCurrent TLS: ${fmt(c[last]?.sum)} mm\nChange from baseline: ${pct(c[last]?.db)}\nChange from nadir: ${pct(c[last]?.dn)}\nPreliminary: ${c[last]?.prelim||''}\nFinal: ${visits[last]?.final||''}\nNote: preliminary calculation only; confirm by protocol / imaging review.`}
+function copySummary(){navigator.clipboard&&navigator.clipboard.writeText(summaryText());saveStatus.textContent='Summary copied'}
+subjectId.oninput=()=>render();protocol.oninput=()=>render();refreshCaseSelect();newCase();
+</script>
+</body>
+</html>
