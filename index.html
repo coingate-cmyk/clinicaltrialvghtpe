@@ -1975,13 +1975,17 @@ function AccessPasswordModal(props) {
                         e('div', {className: 'font-semibold text-gray-900'}, 'CTCAE 副作用速查器'),
                         e('div', {className: 'text-xs text-gray-500 mt-1'}, '常用 oncology AE；免疫治療、ADC、targeted therapy 相關副作用 quick check')
                     ),
+                    e('a', {href: './tools/recist.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'RECIST 1.1 / TLS Calculator'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Target lesion sum、relative to baseline/nadir；本機儲存、JSON 可匯出再匯入')
+                    ),
                     e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
                         e('div', {className: 'font-semibold text-gray-900'}, '工具首頁'),
                         e('div', {className: 'text-xs text-gray-500 mt-1'}, '所有 standalone clinical tools')
                     )
                 ),
                 e('div', {className: 'mt-6 text-xs text-gray-500 leading-relaxed'},
-                    '提示：工具頁皆為 standalone clinical tools；目前包含 renal/BSA、腫瘤分期與 CTCAE 副作用速查。'
+                    '提示：工具頁皆為 standalone clinical tools；目前包含 renal/BSA、腫瘤分期、CTCAE 副作用速查與 RECIST/TLS 計算。'
                 )
             ),
             e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
