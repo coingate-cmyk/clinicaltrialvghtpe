@@ -1,0 +1,1 @@
+/* Structured clinical trial search engine. Content added in the next commit. */
