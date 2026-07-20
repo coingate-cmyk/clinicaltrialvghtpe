@@ -13,19 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - name: Patch root login tools panel
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          if "./tools/recist.html" not in s:
-              marker = "                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},"
-              block = """                    e('a', {href: './tools/recist.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+          marker = "                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},"
+          block = """                    e('a', {href: './tools/recist.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
                         e('div', {className: 'font-semibold text-gray-900'}, 'RECIST 1.1 / TLS Calculator'),
                         e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Target lesion sum、relative to baseline/nadir；本機儲存、JSON 可匯出再匯入')
                     ),
 """
+          if "./tools/recist.html" not in s:
               if marker not in s:
                   raise SystemExit('tools index marker not found')
               s = s.replace(marker, block + marker, 1)
@@ -34,13 +36,16 @@ jobs:
           p.write_text(s, encoding='utf-8')
           PY
       - name: Commit patch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git add index.html
           if git diff --cached --quiet; then
             echo "No changes"
           else
             git commit -m "Add RECIST link to root login tools panel"
+            git push origin HEAD:${GITHUB_REF_NAME}
           fi
-          git push
