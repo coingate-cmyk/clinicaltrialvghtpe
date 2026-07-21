@@ -1,0 +1,30 @@
+AJCC 8 audit matrix v0.2 — stage-table focused
+This version distinguishes true stage-table requirements from generic time-of-classification text on the forms.
+
+Total disease-site/form variants audited: 99
+- TNM-only may be sufficient; verify table rows.: 25
+- TNM lookup possible only with exact subcategories.: 36
+- Smart-form needed before validated release.: 31
+- No stage-group calculation; show note.: 7
+
+High-risk stage-table features:
+- stage table uses T subcategories: 45
+- requires histology: 19
+- stage table uses M subcategories: 11
+- requires B symptoms / Ann Arbor factors: 9
+- requires grade/G: 8
+- stage table uses N subcategories: 8
+- separate stage tables by classification: 7
+- no prognostic stage grouping: 7
+- requires tumor location/site: 2
+- requires mitotic rate: 2
+- requires age: 2
+- requires ER/PR/HER2: 1
+- requires Oncotype/multigene: 1
+- requires PSA: 1
+- requires Gleason/Grade Group: 1
+- requires heritable trait/H: 1
+- requires LDH: 1
+
+GI/current-tool subset rows: 24
+Next release plan: model site metadata first, then validate actual stage-rule rows by cancer site.

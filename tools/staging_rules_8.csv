@@ -1,26 +1,41 @@
 site,edition,classification,t,n,m,stage,note
-Stomach,AJCC8,any,Tis,N0,M0,0,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T1,N0,M0,IA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T1,N1,M0,IB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T2,N0,M0,IB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T1,N2,M0,IIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T2,N1,M0,IIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T1,N3,M0,IIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T2,N2,M0,IIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T3,N1,M0,IIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4a,N0,M0,IIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T2,N3,M0,IIIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T3,N2,M0,IIIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4a,N1,M0,IIIA,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T3,N3,M0,IIIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4a,N2,M0,IIIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4b,N0,M0,IIIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4b,N1,M0,IIIB,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4a,N3,M0,IIIC,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4b,N2,M0,IIIC,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,T4b,N3,M0,IIIC,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
-Stomach,AJCC8,any,Any,Any,M1,IV,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
+Stomach,AJCC8,pathological,Tis,N0,M0,0,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1,N0,M0,IA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1a,N0,M0,IA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1b,N0,M0,IA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1,N1,M0,IB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1a,N1,M0,IB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1b,N1,M0,IB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T2,N0,M0,IB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1,N2,M0,IIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1a,N2,M0,IIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1b,N2,M0,IIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T2,N1,M0,IIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T3,N0,M0,IIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1,N3a,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1a,N3a,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1b,N3a,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T2,N2,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T3,N1,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4a,N0,M0,IIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T2,N3a,M0,IIIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T3,N2,M0,IIIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4a,N1,M0,IIIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4a,N2,M0,IIIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4b,N0,M0,IIIA,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1,N3b,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1a,N3b,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T1b,N3b,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T2,N3b,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T3,N3a,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4a,N3a,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4b,N1,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4b,N2,M0,IIIB,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T3,N3b,M0,IIIC,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4a,N3b,M0,IIIC,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4b,N3a,M0,IIIC,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,T4b,N3b,M0,IIIC,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
+Stomach,AJCC8,pathological,Any,Any,M1,IV,AJCC8 stomach pTNM audited: T1a/T1b accepted as T1 aliases; N3a/N3b split; clinical/yp groups still require separate audit
 Small intestine,AJCC8,any,Tis,N0,M0,0,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
 Small intestine,AJCC8,any,T1,N0,M0,I,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
 Small intestine,AJCC8,any,T2,N0,M0,I,AJCC8 first-pass local rule pack; classification-aware row; verify cTNM/pTNM and disease-site specific rules before clinical use
