@@ -1,0 +1,26 @@
+AJCC8 TNM-first audit v0.3
+Policy: use TNM as the default lookup model for most cancer sites; handle exceptions with extra-input warnings or smart forms.
+
+Full form/site variants scanned: 99
+Full strategy counts:
+- tnm_exact_subcategories: 36
+- tnm_plus_extra_inputs: 28
+- tnm_basic: 25
+- exception_note_only: 7
+- tnm_plus_classification_split: 3
+
+Current tool site strategy counts:
+- tnm_basic: 10
+- tnm_exact_subcategories: 6
+- tnm_plus_extra_inputs: 5
+- exception_note_only: 2
+- tnm_plus_classification_split: 1
+
+Current tool priority exceptions:
+- Esophagus / EGJ - squamous: tnm_plus_extra_inputs / TNM-first but not TNM-only: AJCC8 requires histology=squamous, grade, tumor location for relevant tables, and separate clinical/pathological/yp stage groupings. Use exact T1a/T1b when applicable.
+- Esophagus / EGJ - adenocarcinoma: tnm_plus_extra_inputs / TNM-first but not TNM-only: AJCC8 requires adenocarcinoma histology, grade for relevant tables, and separate clinical/pathological/yp stage groupings. EGJ epicenter rules apply.
+- Stomach: tnm_plus_classification_split / TNM-first with separate clinical/pathological/yp stage groups. Do not use pTNM table as cTNM. Preserve T1a/T1b and N3a/N3b in input.
+- Appendix - carcinoma: tnm_plus_extra_inputs / TNM-first but not TNM-only for stage IV: grade is required for M1b grouping; preserve Tis(LAMN), T4a/b, N1a/b/c, M1a/b/c.
+- GIST: tnm_plus_extra_inputs / Exception/smart form: stage grouping depends on anatomic site and mitotic rate in addition to T/N/M.
+
+Implementation note: do not block TNM calculation for subcategory-only risk. Instead expose exact subcategory dropdowns. Block/warn only when non-TNM fields are required or when no prognostic stage group exists.

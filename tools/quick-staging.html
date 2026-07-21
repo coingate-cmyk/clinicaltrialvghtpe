@@ -15,7 +15,7 @@
 
   <div class="mt-6">
     <h1 class="text-3xl font-bold">腫瘤分期速查器</h1>
-    <p class="text-slate-600 mt-2">同一組 T/N/M 可依 clinical / pathological basis 並列顯示 AJCC 7.0 與 8.0 結果；規則由 CSV 載入，不使用 Firebase、不同步。</p>
+    <p class="text-slate-600 mt-2">TNM-first 速查；同一組 T/N/M 可同時比較 AJCC 7/8 與 clinical/pathological。多數癌種以 TNM 為核心，例外癌種會提示需要 grade、histology、location、mitotic rate 或 biomarker 等額外欄位。</p>
     <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">
       Internal quick-check only. AJCC 8.0 規則包為 first-pass local rule pack；clinical / pathological stage grouping 在部分癌種可能不同，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
     </p>
@@ -49,7 +49,7 @@
 
   <section class="mt-6 bg-white border rounded-xl p-4 text-sm">
     <b>規則狀態：</b><span id="info">載入中...</span>
-    <div class="mt-2 text-slate-600">自動讀取同資料夾 <code>staging_rules_7.csv</code> 與 <code>staging_rules_8.csv</code>。也可手動匯入補充 CSV。新版 CSV 欄位：<code>site,edition,classification,t,n,m,stage,note</code>；舊版 <code>site,edition,t,n,m,stage,note</code> 仍可讀取，會自動視為 classification = any。</div>
+    <div class="mt-2 text-slate-600">自動讀取同資料夾 <code>staging_rules_7.csv</code> 與 <code>staging_rules_8.csv</code>。另附 <code>staging_site_requirements_8.csv</code> 作為 TNM-first 例外清單。可手動匯入補充 CSV。新版規則欄位：<code>site,edition,classification,t,n,m,stage,note</code>。</div>
     <input type="file" accept=".csv,text/csv" class="block w-full border rounded p-2 bg-slate-50 mt-3" onchange="loadFile(event)" multiple>
     <textarea id="csvbox" class="w-full h-24 border rounded p-2 font-mono text-xs mt-2" placeholder="site,edition,classification,t,n,m,stage,note"></textarea>
     <div class="mt-2 flex flex-wrap gap-2"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold hover:bg-blue-800">匯入補充規則</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">清除手動匯入</button><button onclick="downloadMergedCSV()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">下載目前規則快照</button></div>
@@ -59,11 +59,27 @@
 <script>
 const baseSites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
 const SITE_NOTES={
- 'Esophagus / EGJ - squamous':'AJCC 8 食道癌分期需整合 histology、grade、tumor location，且 clinical/pathological/post-neoadjuvant stage grouping 不同；T/N/M-only quick check 可能不足。',
- 'Esophagus / EGJ - adenocarcinoma':'AJCC 8 食道/EGJ adenocarcinoma 需區分 clinical/pathological/post-neoadjuvant stage grouping；T/N/M-only quick check 可能不足。',
- 'GIST':'GIST AJCC stage grouping 需要 tumor site、size、mitotic rate，單純 T/N/M 不足；本工具先保留提示與補充 CSV 匯入。',
- 'NET - pancreas':'Pancreatic NET 8.0 規則 first-pass；請確認 tumor size/T category 與 nodal category。',
- 'Ampulla of Vater':'Ampulla 8.0 T category 細分較多；請確認 T1a/T1b/T3a/T3b 等細項。'
+ "Esophagus / EGJ - squamous":"TNM-first but not TNM-only: AJCC8 requires histology=squamous, grade, tumor location for relevant tables, and separate clinical/pathological/yp stage groupings. Use exact T1a/T1b when applicable.",
+ "Esophagus / EGJ - adenocarcinoma":"TNM-first but not TNM-only: AJCC8 requires adenocarcinoma histology, grade for relevant tables, and separate clinical/pathological/yp stage groupings. EGJ epicenter rules apply.",
+ "Stomach":"TNM-first with separate clinical/pathological/yp stage groups. Do not use pTNM table as cTNM. Preserve T1a/T1b and N3a/N3b in input.",
+ "Small intestine":"TNM-first adenocarcinoma table. Other small-intestine histologies may not use this stage group.",
+ "Colon":"TNM-first. Must preserve exact T4a/T4b, N1a/N1b/N1c, N2a/N2b, and M1a/M1b/M1c when available.",
+ "Rectum":"TNM-first. Must preserve exact T4a/T4b, N1a/N1b/N1c, N2a/N2b, and M1a/M1b/M1c when available.",
+ "Appendix - carcinoma":"TNM-first but not TNM-only for stage IV: grade is required for M1b grouping; preserve Tis(LAMN), T4a/b, N1a/b/c, M1a/b/c.",
+ "GIST":"Exception/smart form: stage grouping depends on anatomic site and mitotic rate in addition to T/N/M.",
+ "HCC / Liver":"TNM-first with exact T subcategories; preserve T1a/T1b when applicable.",
+ "Intrahepatic bile duct":"TNM-first with exact T subcategories; preserve T1a/T1b when applicable.",
+ "Perihilar bile duct":"TNM-first with exact T categories; verify T2a/T2b/T4 details.",
+ "Distal bile duct":"TNM-first table; verify complete T/N/M rows.",
+ "Gallbladder":"TNM-first with exact T categories; preserve T2a/T2b when applicable.",
+ "Ampulla of Vater":"TNM-first with exact T subcategories; preserve T1a/T1b and T3a/T3b.",
+ "Exocrine pancreas":"TNM-first table; verify exact T and N subcategories before release.",
+ "NET - stomach":"TNM-first for well-differentiated NET. High-grade NEC or mixed adenoneuroendocrine carcinoma should be redirected to stomach carcinoma staging, not NET staging.",
+ "NET - duodenum / ampulla":"TNM-first for well-differentiated NET. High-grade NEC should be redirected to relevant carcinoma staging, not NET staging.",
+ "NET - jejunum / ileum":"TNM-first for well-differentiated NET. High-grade NEC should be redirected to relevant carcinoma staging, not NET staging.",
+ "NET - appendix":"TNM-first for well-differentiated NET. Goblet cell and high-grade NEC should be staged as appendiceal carcinoma when applicable.",
+ "NET - colon / rectum":"TNM-first for well-differentiated NET. High-grade NEC should be redirected to colorectal carcinoma staging, not NET staging.",
+ "NET - pancreas":"TNM-first for pancreatic NET; verify tumor-size T categories and nodal rules before release."
 };
 const CLASS_NOTES={
  clinical:'Clinical / cTNM：治療前、trial screening、初始治療決策預設使用；所有病人都應有 clinical stage。',
