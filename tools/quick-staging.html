@@ -7,69 +7,102 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900">
-<main class="max-w-6xl mx-auto p-6">
-  <div class="flex justify-between"><a class="text-blue-700" href="./index.html">← 回工具首頁</a><a class="text-blue-700" href="../index.html">回臨床試驗系統</a></div>
-  <h1 class="text-3xl font-bold mt-6">腫瘤分期速查器</h1>
-  <p class="text-slate-600 mt-2">7.0 規則自動載入；T/N/M 下拉選單會依癌種與版本自動縮小，避免選到不存在的組合。不使用 Firebase、不同步。</p>
-  <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">Internal quick-check only. 請以院內正式資料交叉確認。</p>
-  <div class="grid lg:grid-cols-2 gap-6 mt-6">
-    <section class="bg-white rounded-xl border shadow p-5">
+<main class="max-w-7xl mx-auto p-4 md:p-6">
+  <div class="flex flex-wrap justify-between gap-3 text-sm">
+    <a class="text-blue-700 hover:underline" href="./index.html">← 回工具首頁</a>
+    <a class="text-blue-700 hover:underline" href="../index.html">回臨床試驗系統</a>
+  </div>
+
+  <div class="mt-6">
+    <h1 class="text-3xl font-bold">腫瘤分期速查器</h1>
+    <p class="text-slate-600 mt-2">同一組 T/N/M 可並列顯示 AJCC 7.0 與 8.0 結果；規則由 CSV 載入，不使用 Firebase、不同步。</p>
+    <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">
+      Internal quick-check only. AJCC 8.0 規則包為 first-pass local rule pack，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
+    </p>
+  </div>
+
+  <div class="grid xl:grid-cols-5 gap-6 mt-6">
+    <section class="xl:col-span-2 bg-white rounded-xl border shadow p-5">
       <h2 class="text-xl font-bold mb-4">查詢</h2>
+
       <div class="grid grid-cols-2 gap-3">
         <label class="col-span-2 text-sm font-medium">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
-        <label class="text-sm font-medium">Version<select id="ver" class="mt-1 w-full border rounded p-2"><option value="AJCC6">6.0</option><option value="AJCC7" selected>7.0</option><option value="AJCC8">8.0</option></select></label>
+        <label class="text-sm font-medium">Display<select id="mode" class="mt-1 w-full border rounded p-2"><option value="COMPARE" selected>7.0 + 8.0 並列</option><option value="AJCC7">只看 7.0</option><option value="AJCC8">只看 8.0</option><option value="AJCC6">只看 6.0</option></select></label>
         <label class="text-sm font-medium">T<select id="t" class="mt-1 w-full border rounded p-2"></select></label>
         <label class="text-sm font-medium">N<select id="n" class="mt-1 w-full border rounded p-2"></select></label>
         <label class="text-sm font-medium">M<select id="m" class="mt-1 w-full border rounded p-2"></select></label>
+        <label class="col-span-2 text-sm font-medium">Optional clinical context<input id="context" class="mt-1 w-full border rounded p-2" placeholder="例如：esophagus histology/grade/location、GIST mitotic rate、clinical/pathological stage..."></label>
       </div>
-      <button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 stage</button>
+
+      <button onclick="lookup()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold hover:bg-emerald-800">查詢 stage</button>
       <div id="hint" class="mt-3 text-sm text-slate-500"></div>
+      <div id="siteNote" class="mt-3 text-sm"></div>
     </section>
-    <section class="bg-white rounded-xl border shadow p-5">
-      <h2 class="text-xl font-bold mb-4">結果</h2>
-      <div id="result"></div>
-      <button onclick="copyResult()" class="mt-3 bg-slate-200 px-3 py-2 rounded font-bold">複製測試回報</button>
+
+    <section class="xl:col-span-3 bg-white rounded-xl border shadow p-5">
+      <div class="flex justify-between items-center gap-3"><h2 class="text-xl font-bold">結果</h2><button onclick="copyResult()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300 text-sm">複製測試回報</button></div>
+      <div id="result" class="mt-4"></div>
     </section>
   </div>
+
   <section class="mt-6 bg-white border rounded-xl p-4 text-sm">
     <b>規則狀態：</b><span id="info">載入中...</span>
-    <div class="mt-2 text-slate-600">自動讀取同資料夾 staging_rules_7.csv。也可手動匯入補充 CSV。</div>
-    <input type="file" accept=".csv,text/csv" class="block w-full border rounded p-2 bg-slate-50 mt-3" onchange="loadFile(event)">
+    <div class="mt-2 text-slate-600">自動讀取同資料夾 <code>staging_rules_7.csv</code> 與 <code>staging_rules_8.csv</code>。也可手動匯入補充 CSV。CSV 欄位：<code>site,edition,t,n,m,stage,note</code></div>
+    <input type="file" accept=".csv,text/csv" class="block w-full border rounded p-2 bg-slate-50 mt-3" onchange="loadFile(event)" multiple>
     <textarea id="csvbox" class="w-full h-24 border rounded p-2 font-mono text-xs mt-2" placeholder="site,edition,t,n,m,stage,note"></textarea>
-    <div class="mt-2 flex gap-2"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold">匯入補充規則</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold">清除手動匯入</button></div>
+    <div class="mt-2 flex flex-wrap gap-2"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold hover:bg-blue-800">匯入補充規則</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">清除手動匯入</button><button onclick="downloadMergedCSV()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">下載目前規則快照</button></div>
   </section>
 </main>
+
 <script>
 const baseSites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
-const ORD={t:['Any','Tis','T0','T1','T1a','T1b','T2','T2a','T2b','T3','T3a','T3b','T4','T4a','T4b','TX'],n:['Any','N0','N1','N1a','N1b','N1c','N2','N2a','N2b','N3','N3a','N3b','NX'],m:['M0','M1','M1a','M1b','Any']};
-let staticRules=[];
+const SITE_NOTES={
+ 'Esophagus / EGJ - squamous':'AJCC 8 食道癌分期需整合 histology、grade、tumor location，且 clinical/pathological/post-neoadjuvant stage grouping 不同；T/N/M-only quick check 可能不足。',
+ 'Esophagus / EGJ - adenocarcinoma':'AJCC 8 食道/EGJ adenocarcinoma 需區分 clinical/pathological/post-neoadjuvant stage grouping；T/N/M-only quick check 可能不足。',
+ 'GIST':'GIST AJCC stage grouping 需要 tumor site、size、mitotic rate，單純 T/N/M 不足；本工具先保留提示與補充 CSV 匯入。',
+ 'NET - pancreas':'Pancreatic NET 8.0 規則 first-pass；請確認 tumor size/T category 與 nodal category。',
+ 'Ampulla of Vater':'Ampulla 8.0 T category 細分較多；請確認 T1a/T1b/T3a/T3b 等細項。'
+};
+const ORD={t:['Any','Tis','T0','T1','T1a','T1b','T1c','T2','T2a','T2b','T3','T3a','T3b','T4','T4a','T4b','TX'],n:['Any','N0','N1','N1a','N1b','N1c','N2','N2a','N2b','N3','N3a','N3b','NX'],m:['M0','M1','M1a','M1b','M1c','Any']};
+let staticRules=[];let loadStatus=[];
 function saved(){try{return JSON.parse(localStorage.getItem('staging_rules_user')||'[]')}catch(e){return[]}}
-function allRules(){return saved().concat(staticRules)}
-function uniq(a){return [...new Set(a.filter(Boolean))]}
+function normalizeRule(r){return{site:String(r.site||'').trim(),edition:String(r.edition||'').trim().toUpperCase(),t:String(r.t||'Any').trim(),n:String(r.n||'Any').trim(),m:String(r.m||'Any').trim(),stage:String(r.stage||'').trim(),note:String(r.note||'').trim()}}
+function allRules(){return staticRules.concat(saved()).map(normalizeRule).filter(r=>r.site&&r.edition&&r.stage)}
+function uniq(a){return[...new Set((a||[]).filter(Boolean))]}
 function orderVals(vals,kind){const ord=ORD[kind]||[];return uniq(vals).sort((a,b)=>{let ia=ord.indexOf(a),ib=ord.indexOf(b);ia=ia<0?999:ia;ib=ib<0?999:ib;return ia-ib||String(a).localeCompare(String(b))})}
-function setOptions(el,vals,kind){let old=el.value;let arr=orderVals(vals,kind);if(!arr.length)arr=ORD[kind]||[];el.innerHTML=arr.map(x=>`<option value="${x}">${x}</option>`).join('');el.value=arr.includes(old)?old:arr[0]}
-function same(ruleVal,userVal){return ruleVal==='Any'||userVal==='Any'||ruleVal===userVal}
-function base(v){return String(v||'').replace(/[abc]$/i,'')}
-function ok(a,b){return a==='Any'||b==='Any'||a===b||base(b)===a}
-function match(r,q){return ok(r.site,q.site)&&ok(r.edition,q.edition)&&ok(r.t,q.t)&&ok(r.n,q.n)&&ok(r.m,q.m)}
-function vl(v){return v==='AJCC6'?'6.0':v==='AJCC7'?'7.0':v==='AJCC8'?'8.0':v}
-function parseCSV(s){if(!s||!s.trim())return[];return s.replace(/^\uFEFF/,'').trim().split(/\n+/).slice(1).map(line=>{const c=line.split(',').map(x=>x.trim());return{site:c[0],edition:c[1],t:c[2],n:c[3],m:c[4],stage:c[5],note:c.slice(6).join(',')}}).filter(x=>x.site&&x.stage)}
-function setInfo(){info.textContent='自動載入 '+staticRules.length+' 筆；手動匯入 '+saved().length+' 筆。'}
-function refreshSites(){const vals=uniq(baseSites.concat(allRules().map(r=>r.site)));const old=site.value;site.innerHTML=vals.map(x=>`<option value="${x}">${x}</option>`).join('');site.value=vals.includes(old)?old:(vals.includes('Colon')?'Colon':vals[0])}
-function rulesForBase(){return allRules().filter(r=>same(r.site,site.value)&&same(r.edition,ver.value))}
-function refreshCascade(changed){const rs=rulesForBase();if(!rs.length){setOptions(t,ORD.t,'t');setOptions(n,ORD.n,'n');setOptions(m,ORD.m,'m');hint.textContent='此癌種/版本尚無規則；可匯入補充規則。';return}
- if(changed==='site'||changed==='ver'){setOptions(t,rs.map(r=>r.t),'t')}
- const rt=rs.filter(r=>ok(r.t,t.value));setOptions(n,rt.map(r=>r.n),'n');
- const rn=rt.filter(r=>ok(r.n,n.value));setOptions(m,rn.map(r=>r.m),'m');
- const count=rs.length;hint.textContent='已依目前癌種/版本縮小選單；此癌種版本可用規則 '+count+' 筆。';}
-function lookup(){const q={site:site.value,edition:ver.value,t:t.value,n:n.value,m:m.value};window.lastQ=q;const f=allRules().find(r=>match(r,q));window.lastFound=f;result.innerHTML=f?`<div class="p-4 rounded bg-emerald-50 border border-emerald-200"><div class="text-3xl font-bold text-emerald-800">${f.stage}</div><div class="mt-2 text-sm text-emerald-900">${f.site} version ${vl(q.edition)} ${f.t}/${f.n}/${f.m}</div><div class="mt-2 text-sm text-amber-800">${f.note||''}</div></div>`:`<div class="p-4 rounded bg-slate-100 border"><b>未找到規則</b><div class="mt-2 text-sm text-slate-600">請確認癌種、版本與 T/N/M；若選單已自動縮小但仍查不到，可能需匯入補充規則。</div></div>`}
+function setOptions(el,vals,kind){const old=el.value;let arr=orderVals(vals,kind);if(!arr.length)arr=ORD[kind]||[];el.innerHTML=arr.map(x=>`<option value="${escapeHTML(x)}">${escapeHTML(x)}</option>`).join('');el.value=arr.includes(old)?old:arr[0]}
+function selectedEditions(){if(mode.value==='COMPARE')return['AJCC7','AJCC8'];return[mode.value]}
+function versionLabel(v){return v==='AJCC6'?'6.0':v==='AJCC7'?'7.0':v==='AJCC8'?'8.0':v}
+function parseCSVLine(line){const out=[];let cur='',quote=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++}else quote=!quote}else if(ch===','&&!quote){out.push(cur);cur=''}else{cur+=ch}}out.push(cur);return out.map(x=>x.trim())}
+function parseCSV(s){if(!s||!s.trim())return[];const lines=s.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim()&&!x.trim().startsWith('#'));if(!lines.length)return[];const header=parseCSVLine(lines[0]).map(x=>x.toLowerCase().trim());const hasHeader=header.includes('site')&&header.includes('edition');const start=hasHeader?1:0;const idx=(name,fallback)=>{const i=header.indexOf(name);return i>=0?i:fallback};return lines.slice(start).map(line=>{const c=parseCSVLine(line);return normalizeRule({site:c[idx('site',0)],edition:c[idx('edition',1)],t:c[idx('t',2)]||'Any',n:c[idx('n',3)]||'Any',m:c[idx('m',4)]||'Any',stage:c[idx('stage',5)],note:c.slice(idx('note',6)).join(',')})}).filter(x=>x.site&&x.edition&&x.stage)}
+function stageRank(stage){const order=['0','IA','IB','IC','I','IIA','IIB','IIC','II','IIIA','IIIB','IIIC','III','IVA','IVB','IVC','IV'];const i=order.indexOf(String(stage||'').toUpperCase());return i<0?999:i}
+function categoryPrefix(v){return String(v||'').replace(/[abc]$/i,'')}
+function categoryFamily(v){const m=String(v||'').match(/^([TNM])(\d)/i);return m?(m[1].toUpperCase()+m[2]):String(v||'')}
+function expandRangeToken(token){const raw=String(token||'').trim();const m=raw.match(/^([TNM])(\d)\s*-\s*(\d)$/i);if(!m)return[raw];const kind=m[1].toUpperCase();const a=Number(m[2]),b=Number(m[3]);const out=[];for(let i=a;i<=b;i++)out.push(kind+i);return out}
+function splitRuleToken(raw){const s=String(raw||'Any').trim();if(!s||s==='Any')return['Any'];return s.split(/[\/;|]+|(?:\s+or\s+)|(?:\s*,\s*)/i).flatMap(expandRangeToken).map(x=>x.trim()).filter(Boolean)}
+function tokenOK(ruleToken,userVal){if(ruleToken==='Any'||userVal==='Any')return true;if(ruleToken===userVal)return true;if(ruleToken===categoryPrefix(userVal))return true;if(categoryPrefix(ruleToken)===userVal)return true;if(categoryFamily(ruleToken)===categoryFamily(userVal)&&!/[abc]$/i.test(ruleToken))return true;return false}
+function ok(ruleVal,userVal){return splitRuleToken(ruleVal).some(tok=>tokenOK(tok,userVal))}
+function exactness(ruleVal,userVal){if(ruleVal===userVal)return 3;if(splitRuleToken(ruleVal).some(tok=>tok===userVal))return 2.5;if(ruleVal==='Any')return 0;if(ok(ruleVal,userVal))return 1;return-99}
+function specificityScore(rule,q){return exactness(rule.site,q.site)+exactness(rule.edition,q.edition)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)}
+function match(rule,q){return ok(rule.site,q.site)&&ok(rule.edition,q.edition)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)}
+function bestMatch(q){return allRules().filter(r=>match(r,q)).sort((a,b)=>specificityScore(b,q)-specificityScore(a,q)||stageRank(b.stage)-stageRank(a.stage))[0]||null}
+function setInfo(){const counts={};staticRules.forEach(r=>counts[r.edition]=(counts[r.edition]||0)+1);info.textContent=`自動載入 ${staticRules.length} 筆（${Object.entries(counts).map(([k,v])=>versionLabel(k)+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
+function refreshSites(){const vals=uniq(baseSites.concat(allRules().map(r=>r.site)));const old=site.value;site.innerHTML=vals.map(x=>`<option value="${escapeHTML(x)}">${escapeHTML(x)}</option>`).join('');site.value=vals.includes(old)?old:(vals.includes('Stomach')?'Stomach':vals[0])}
+function rulesForCurrentSiteAndEditions(){const eds=selectedEditions();return allRules().filter(r=>ok(r.site,site.value)&&eds.some(ed=>ok(r.edition,ed)))}
+function refreshCascade(changed){const rs=rulesForCurrentSiteAndEditions();if(!rs.length){setOptions(t,ORD.t,'t');setOptions(n,ORD.n,'n');setOptions(m,ORD.m,'m');hint.textContent='此癌種目前沒有可用規則；可匯入補充 CSV。'}else{if(changed==='site'||changed==='mode')setOptions(t,rs.map(r=>r.t),'t');const rt=rs.filter(r=>ok(r.t,t.value));setOptions(n,rt.map(r=>r.n),'n');const rn=rt.filter(r=>ok(r.n,n.value));setOptions(m,rn.map(r=>r.m),'m');hint.textContent=`已依目前癌種與顯示模式縮小選單；可用規則 ${rs.length} 筆。`}const note=SITE_NOTES[site.value];siteNote.innerHTML=note?`<div class="rounded border border-sky-200 bg-sky-50 text-sky-900 p-3">${escapeHTML(note)}</div>`:''}
+function resultCard(edition,found,q){const label=versionLabel(edition);if(!found){const note=SITE_NOTES[q.site]||'可能尚未建置此癌種/版本，或此癌種需要額外 prognostic factors。';return`<div class="rounded-xl border bg-slate-50 p-4"><div class="text-sm font-semibold text-slate-500">AJCC ${label}</div><div class="text-2xl font-bold text-slate-500 mt-1">未找到規則</div><div class="mt-2 text-sm text-slate-600">${escapeHTML(note)}</div></div>`}return`<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><div class="text-sm font-semibold text-emerald-700">AJCC ${label}</div><div class="text-3xl font-bold text-emerald-800 mt-1">Stage ${escapeHTML(found.stage)}</div><div class="mt-2 text-sm text-emerald-900">${escapeHTML(found.site)} ${escapeHTML(found.t)}/${escapeHTML(found.n)}/${escapeHTML(found.m)}</div>${found.note?`<div class="mt-2 text-xs text-amber-800">${escapeHTML(found.note)}</div>`:''}</div>`}
+function lookup(){const eds=selectedEditions();const qBase={site:site.value,t:t.value,n:n.value,m:m.value,context:context.value};const results=eds.map(ed=>{const q={...qBase,edition:ed};return{edition:ed,found:bestMatch(q),q}});window.lastResults=results;let diff='';if(eds.length===2){const a=results[0].found,b=results[1].found;if(a&&b){diff=String(a.stage)===String(b.stage)?`<div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-900 p-3 text-sm"><b>7/8 結果相同：</b>Stage ${escapeHTML(a.stage)}</div>`:`<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 p-3 text-sm"><b>7/8 分期不同：</b>AJCC 7 = Stage ${escapeHTML(a.stage)}；AJCC 8 = Stage ${escapeHTML(b.stage)}</div>`}else if(a||b){diff=`<div class="mb-4 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 p-3 text-sm"><b>部分版本尚無規則：</b>請確認此癌種是否需要額外條件或補充 CSV。</div>`}}result.innerHTML=diff+`<div class="grid md:grid-cols-${eds.length===2?'2':'1'} gap-4">`+results.map(r=>resultCard(r.edition,r.found,r.q)).join('')+`</div>`}
 function changed(which){refreshCascade(which);lookup()}
-site.onchange=()=>changed('site');ver.onchange=()=>changed('ver');t.onchange=()=>changed('t');n.onchange=()=>changed('n');m.onchange=()=>lookup();
-function importCSV(){localStorage.setItem('staging_rules_user',JSON.stringify(parseCSV(csvbox.value)));refreshSites();setInfo();refreshCascade('site');lookup()}
-function loadFile(e){const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{csvbox.value=r.result;importCSV()};r.readAsText(f,'utf-8')}
+site.onchange=()=>changed('site');mode.onchange=()=>changed('mode');t.onchange=()=>changed('t');n.onchange=()=>changed('n');m.onchange=()=>lookup();context.oninput=()=>lookup();
+function importCSV(){const incoming=parseCSV(csvbox.value);localStorage.setItem('staging_rules_user',JSON.stringify(incoming));refreshSites();setInfo();refreshCascade('site');lookup()}
+function loadFile(e){const files=Array.from(e.target.files||[]);if(!files.length)return;Promise.all(files.map(f=>f.text())).then(texts=>{csvbox.value=texts.join('\n');importCSV()})}
 function clearRules(){localStorage.removeItem('staging_rules_user');refreshSites();setInfo();refreshCascade('site');lookup()}
-function copyResult(){const q=window.lastQ||{},f=window.lastFound;const txt=`Staging quick-check report\nQuery: ${q.site||''} version ${vl(q.edition)||''} ${q.t||''}/${q.n||''}/${q.m||''}\nResult: ${f?f.stage:'not found'}\nNote: ${f?(f.note||''):''}`;navigator.clipboard&&navigator.clipboard.writeText(txt)}
-async function boot(){refreshSites();refreshCascade('site');lookup();try{const r=await fetch('staging_rules_7.csv',{cache:'no-store'});if(r.ok)staticRules=parseCSV(await r.text())}catch(e){}refreshSites();setInfo();refreshCascade('site');lookup()}
+function csvEscape(v){const s=String(v??'');return/[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function downloadMergedCSV(){const rows=allRules();const text=['site,edition,t,n,m,stage,note'].concat(rows.map(r=>[r.site,r.edition,r.t,r.n,r.m,r.stage,r.note].map(csvEscape).join(','))).join('\n');const blob=new Blob([text],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='staging_rules_snapshot.csv';a.click();URL.revokeObjectURL(a.href)}
+function copyResult(){const rows=(window.lastResults||[]).map(r=>{const q=r.q||{};const f=r.found;return`AJCC ${versionLabel(r.edition)}: ${f?'Stage '+f.stage:'not found'} (${q.site||''} ${q.t||''}/${q.n||''}/${q.m||''})${f&&f.note?' | '+f.note:''}`});const txt=`Staging quick-check report\n${rows.join('\n')}\nContext: ${context.value||''}\nInternal quick-check only; verify with formal AJCC/UICC source.`;if(navigator.clipboard)navigator.clipboard.writeText(txt)}
+function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+async function loadRulesFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
+async function boot(){refreshSites();refreshCascade('site');lookup();const packs=await Promise.all([loadRulesFromFile('staging_rules_7.csv'),loadRulesFromFile('staging_rules_8.csv')]);staticRules=packs.flat().map(normalizeRule);refreshSites();setInfo();refreshCascade('site');lookup()}
 setInfo();boot();
 </script>
 </body></html>

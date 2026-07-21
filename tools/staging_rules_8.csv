@@ -1,0 +1,228 @@
+site,edition,t,n,m,stage,note
+Stomach,AJCC8,Tis,N0,M0,0,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T1,N0,M0,IA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T1,N1,M0,IB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T2,N0,M0,IB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T1,N2,M0,IIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T2,N1,M0,IIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T1,N3,M0,IIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T2,N2,M0,IIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T3,N1,M0,IIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4a,N0,M0,IIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T2,N3,M0,IIIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T3,N2,M0,IIIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4a,N1,M0,IIIA,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T3,N3,M0,IIIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4a,N2,M0,IIIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4b,N0,M0,IIIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4b,N1,M0,IIIB,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4a,N3,M0,IIIC,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4b,N2,M0,IIIC,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,T4b,N3,M0,IIIC,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Stomach,AJCC8,Any,Any,M1,IV,AJCC8 first-pass pTNM-style local rule pack; verify clinical vs pathological stage
+Small intestine,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,T2,N0,M0,I,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,T4,N0,M0,IIB,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,Any,N1,M0,IIIA,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,Any,N2,M0,IIIB,AJCC8 first-pass local rule pack; verify before clinical use
+Small intestine,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; verify before clinical use
+Colon,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T2,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4a,N0,M0,IIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4b,N0,M0,IIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T1,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T1,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T2,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T2,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T1,N2a,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T3,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T3,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4a,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4a,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T2,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T3,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T1,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T2,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4a,N2a,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T3,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4a,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4b,N1,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,T4b,N2,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,Any,Any,M1a,IVA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,Any,Any,M1b,IVB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,Any,Any,M1c,IVC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Colon,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T2,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4a,N0,M0,IIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4b,N0,M0,IIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T1,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T1,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T2,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T2,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T1,N2a,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T3,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T3,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4a,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4a,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T2,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T3,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T1,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T2,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4a,N2a,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T3,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4a,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4b,N1,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,T4b,N2,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,Any,Any,M1a,IVA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,Any,Any,M1b,IVB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,Any,Any,M1c,IVC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Rectum,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T2,N0,M0,I,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4a,N0,M0,IIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4b,N0,M0,IIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T1,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T1,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T2,N1,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T2,N1c,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T1,N2a,M0,IIIA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T3,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T3,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4a,N1,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4a,N1c,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T2,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T3,N2a,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T1,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T2,N2b,M0,IIIB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4a,N2a,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T3,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4a,N2b,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4b,N1,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,T4b,N2,M0,IIIC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,Any,Any,M1a,IVA,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,Any,Any,M1b,IVB,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,Any,Any,M1c,IVC,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+Appendix - carcinoma,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; includes M1c; verify before clinical use
+HCC / Liver,AJCC8,T1a,N0,M0,IA,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,T1b,N0,M0,IB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,T2,N0,M0,II,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,T3,N0,M0,IIIA,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,T4,N0,M0,IIIB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,Any,N1,M0,IVA,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+HCC / Liver,AJCC8,Any,Any,M1,IVB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T1a,N0,M0,IA,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T1b,N0,M0,IB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T2,N0,M0,II,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T3,N0,M0,IIIA,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,T4,N0,M0,IIIB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,Any,N1,M0,IIIB,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Intrahepatic bile duct,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; T1a/T1b split; verify before clinical use
+Gallbladder,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T2a,N0,M0,IIA,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T2b,N0,M0,IIB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T2,N0,M0,II,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T3,N0,M0,IIIA,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T1,N1,M0,IIIB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T2,N1,M0,IIIB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T3,N1,M0,IIIB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T4,N0,M0,IVA,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,T4,N1,M0,IVA,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,Any,N2,M0,IVB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Gallbladder,AJCC8,Any,Any,M1,IVB,AJCC8 first-pass local rule pack; T2a/T2b split; verify before clinical use
+Perihilar bile duct,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T2a,N0,M0,II,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T2b,N0,M0,II,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T2,N0,M0,II,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T3,N0,M0,IIIA,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,T4,N0,M0,IIIB,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,Any,N1,M0,IIIC,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,Any,N2,M0,IVA,AJCC8 first-pass local rule pack; verify before clinical use
+Perihilar bile duct,AJCC8,Any,Any,M1,IVB,AJCC8 first-pass local rule pack; verify before clinical use
+Distal bile duct,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T1,N0,M0,IA,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T2,N0,M0,IB,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T1-3,N1,M0,IIB,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T4,N0,M0,IIIA,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,T4,N1,M0,IIIA,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,Any,N2,M0,IIIB,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Distal bile duct,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; N1/N2 node-count staging; verify before clinical use
+Ampulla of Vater,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T1a,N0,M0,IA,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T1b,N0,M0,IB,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T2,N0,M0,IB,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T1,N0,M0,I,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T3a,N0,M0,IIA,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T3b,N0,M0,IIB,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T3,N0,M0,II,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T1-3,N1,M0,IIIA,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,T4,Any,M0,IIIB,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,Any,N2,M0,IIIB,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Ampulla of Vater,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; confirm T1a/T1b/T3a/T3b definitions
+Exocrine pancreas,AJCC8,Tis,N0,M0,0,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T1,N0,M0,IA,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T2,N0,M0,IB,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T3,N0,M0,IIA,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T1-3,N1,M0,IIB,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T1-3,N2,M0,III,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,T4,Any,M0,III,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+Exocrine pancreas,AJCC8,Any,Any,M1,IV,AJCC8 first-pass local rule pack; N2 added; verify before clinical use
+NET - stomach,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - stomach,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - duodenum / ampulla,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - jejunum / ileum,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - appendix,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - colon / rectum,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,Tis,N0,M0,0,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,T1,N0,M0,I,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,T2,N0,M0,IIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,T3,N0,M0,IIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,T4,N0,M0,IIIA,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,Any,N1,M0,IIIB,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+NET - pancreas,AJCC8,Any,Any,M1,IV,AJCC8 NET first-pass local rule pack; verify site-specific NET rules before clinical use
+Esophagus / EGJ - squamous,AJCC8,Any,Any,M1,IVB,AJCC8 esophagus M1 category; full 8.0 staging requires histology/grade/location and clinical/pathologic context
+Esophagus / EGJ - adenocarcinoma,AJCC8,Any,Any,M1,IVB,AJCC8 esophagus M1 category; full 8.0 staging requires histology/grade/location and clinical/pathologic context
