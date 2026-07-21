@@ -1,0 +1,56 @@
+site,classification,t,n,m,grade,location,expected,got,pass,matched_rule
+Esophagus / EGJ - squamous,clinical,T1,N0,M0,Any,Any,I,I,True,T1/N0|N1/M0 G=Any L=Any
+Esophagus / EGJ - squamous,clinical,T3,N1,M0,Any,Any,III,III,True,T3/N1/M0 G=Any L=Any
+Esophagus / EGJ - squamous,pathological,T2,N0,M0,G1,Any,IB,IB,True,T2/N0/M0 G=G1 L=Any
+Esophagus / EGJ - squamous,pathological,T2,N0,M0,G2,Any,IIA,IIA,True,T2/N0/M0 G=G2|G3|GX L=Any
+Esophagus / EGJ - squamous,pathological,T3,N0,M0,G3,Upper,IIB,IIB,True,T3/N0/M0 G=G2|G3|GX L=Upper|Middle|Location X
+Esophagus / EGJ - adenocarcinoma,pathological,T2,N0,M0,G2,Any,IC,IC,True,T2/N0/M0 G=G1|G2 L=Any
+Esophagus / EGJ - adenocarcinoma,pathological,T2,N0,M0,GX,Any,IIA,IIA,True,T2/N0/M0 G=G3|GX L=Any
+Stomach,pathological,T1a,N3a,M0,Any,Any,IIB,IIB,True,T1a/N3a/M0 G=Any L=Any
+Stomach,pathological,T1b,N3b,M0,Any,Any,IIIB,IIIB,True,T1b/N3b/M0 G=Any L=Any
+Stomach,clinical,T4b,NX,M0,Any,Any,IV,IV,True,T4b/Any|NX/M0 G=Any L=Any
+Small intestine,any,T4,N0,M0,Any,Any,IIB,IIB,True,T4/N0/M0 G=Any L=Any
+Small intestine,any,T2,N2,M0,Any,Any,IIIB,IIIB,True,Any/N2/M0 G=Any L=Any
+Colon,any,T1,N2a,M0,Any,Any,IIIA,IIIA,True,T1/N2a/M0 G=Any L=Any
+Colon,any,T4b,N2b,M0,Any,Any,IIIC,IIIC,True,T4b/N1|N1a|N1b|N1c|N2|N2a|N2b/M0 G=Any L=Any
+Colon,any,T3,N1c,M0,Any,Any,IIIB,IIIB,True,T3|T4a/N1|N1a|N1b|N1c/M0 G=Any L=Any
+Colon,any,T2,N0,M1c,Any,Any,IVC,IVC,True,Any/Any/M1c G=Any L=Any
+Rectum,any,T1,N2a,M0,Any,Any,IIIA,IIIA,True,T1/N2a/M0 G=Any L=Any
+Rectum,any,T4b,N2b,M0,Any,Any,IIIC,IIIC,True,T4b/N1|N1a|N1b|N1c|N2|N2a|N2b/M0 G=Any L=Any
+Rectum,any,T3,N1c,M0,Any,Any,IIIB,IIIB,True,T3|T4a/N1|N1a|N1b|N1c/M0 G=Any L=Any
+Rectum,any,T2,N0,M1c,Any,Any,IVC,IVC,True,Any/Any/M1c G=Any L=Any
+Appendix - carcinoma,any,Tis(LAMN),N0,M0,Any,Any,0,0,True,Tis|Tis(LAMN)/N0/M0 G=Any L=Any
+Appendix - carcinoma,any,T2,N0,M1b,G1,Any,IVA,IVA,True,Any/Any/M1b G=G1 L=Any
+Appendix - carcinoma,any,T2,N0,M1b,G3,Any,IVB,IVB,True,Any/Any/M1b G=G2|G3|GX L=Any
+HCC / Liver,any,T1a,N0,M0,Any,Any,IA,IA,True,T1a/N0/M0 G=Any L=Any
+HCC / Liver,any,T4,N0,M0,Any,Any,IIIB,IIIB,True,T4/N0/M0 G=Any L=Any
+Intrahepatic bile duct,any,T1b,N0,M0,Any,Any,IB,IB,True,T1b/N0/M0 G=Any L=Any
+Intrahepatic bile duct,any,T4,N0,M0,Any,Any,IIIB,IIIB,True,T4/N0/M0 G=Any L=Any
+Gallbladder,any,T2a,N0,M0,Any,Any,IIA,IIA,True,T2a/N0/M0 G=Any L=Any
+Gallbladder,any,T2b,N0,M0,Any,Any,IIB,IIB,True,T2b/N0/M0 G=Any L=Any
+Perihilar bile duct,any,T4,N0,M0,Any,Any,IIIB,IIIB,True,T4/N0/M0 G=Any L=Any
+Perihilar bile duct,any,T2b,N0,M0,Any,Any,II,II,True,T2|T2a|T2b/N0/M0 G=Any L=Any
+Distal bile duct,any,T1,N1,M0,Any,Any,IIB,IIB,True,T1|T2|T3/N1/M0 G=Any L=Any
+Distal bile duct,any,T1,N2,M0,Any,Any,IIIA,IIIA,True,T1|T2|T3/N2/M0 G=Any L=Any
+Ampulla of Vater,any,T1a,N0,M0,Any,Any,IA,IA,True,T1a/N0/M0 G=Any L=Any
+Ampulla of Vater,any,T3b,N0,M0,Any,Any,IIB,IIB,True,T3b/N0/M0 G=Any L=Any
+Exocrine pancreas,any,T1c,N0,M0,Any,Any,IA,IA,True,T1|T1a|T1b|T1c/N0/M0 G=Any L=Any
+Exocrine pancreas,any,T2,N2,M0,Any,Any,III,III,True,T1|T1a|T1b|T1c|T2|T3/N2/M0 G=Any L=Any
+NET - stomach,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - stomach,any,T4,N1,M0,Any,Any,III,III,True,T1|T2|T3|T4/N1/M0 G=Any L=Any
+NET - stomach,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any
+NET - duodenum / ampulla,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - duodenum / ampulla,any,T4,N1,M0,Any,Any,III,III,True,Any/N1/M0 G=Any L=Any
+NET - duodenum / ampulla,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any
+NET - jejunum / ileum,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - jejunum / ileum,any,T4,N1,M0,Any,Any,III,III,True,Any/N1|N2/M0 G=Any L=Any
+NET - jejunum / ileum,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any
+NET - appendix,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - appendix,any,T4,N1,M0,Any,Any,III,III,True,Any/N1/M0 G=Any L=Any
+NET - appendix,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any
+NET - colon / rectum,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - colon / rectum,any,T4,N1,M0,Any,Any,IIIB,IIIB,True,Any/N1/M0 G=Any L=Any
+NET - colon / rectum,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any
+NET - pancreas,any,T1,N0,M0,Any,Any,I,I,True,T1/N0/M0 G=Any L=Any
+NET - pancreas,any,T4,N1,M0,Any,Any,III,III,True,Any/N1/M0 G=Any L=Any
+NET - pancreas,any,T2,N0,M1,Any,Any,IV,IV,True,Any/Any/M1 G=Any L=Any

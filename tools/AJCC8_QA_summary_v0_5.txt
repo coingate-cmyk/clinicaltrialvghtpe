@@ -1,0 +1,8 @@
+AJCC8 quick-staging QA v0.5
+Scope: current quick-staging built-in sites (21 sites).
+Rule rows: 242. Sentinel tests: 55; failed: 0.
+Status counts: {'CHECKED_SPECIAL': 2, 'PARTIAL_SPECIAL': 1, 'CHECKED_TNM_FIRST': 17, 'EXCEPTION_NOT_TNM_ONLY': 1}
+
+All sentinel tests passed.
+
+Known limitations: GIST not TNM-only; Stomach full clinical/yp tables not released; esophagus ypTNM not released; rule pack is internal quick-check only.

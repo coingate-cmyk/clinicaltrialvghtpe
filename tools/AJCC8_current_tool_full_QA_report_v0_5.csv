@@ -1,0 +1,22 @@
+site,status,rule_rows,sentinel_tests,sentinel_passed,limitation
+Esophagus / EGJ - squamous,CHECKED_SPECIAL,28,5,5,Clinical and pathological checked; ypTNM not released; SCC pTNM uses grade/location.
+Esophagus / EGJ - adenocarcinoma,CHECKED_SPECIAL,28,2,2,Clinical and pathological checked; ypTNM not released; SCC pTNM uses grade/location.
+Stomach,PARTIAL_SPECIAL,39,3,3,Pathological pTNM complete for common table; clinical has only T4b/M1 sentinel; ypTNM not released.
+Small intestine,CHECKED_TNM_FIRST,7,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Colon,CHECKED_TNM_FIRST,17,4,4,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Rectum,CHECKED_TNM_FIRST,17,4,4,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Appendix - carcinoma,CHECKED_TNM_FIRST,13,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+GIST,EXCEPTION_NOT_TNM_ONLY,0,0,0,Requires anatomic site and mitotic rate; no TNM-only stage rows released in this tool.
+HCC / Liver,CHECKED_TNM_FIRST,8,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Intrahepatic bile duct,CHECKED_TNM_FIRST,9,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Perihilar bile duct,CHECKED_TNM_FIRST,8,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Distal bile duct,CHECKED_TNM_FIRST,8,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Gallbladder,CHECKED_TNM_FIRST,10,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Ampulla of Vater,CHECKED_TNM_FIRST,11,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+Exocrine pancreas,CHECKED_TNM_FIRST,8,2,2,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - stomach,CHECKED_TNM_FIRST,5,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - duodenum / ampulla,CHECKED_TNM_FIRST,5,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - jejunum / ileum,CHECKED_TNM_FIRST,5,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - appendix,CHECKED_TNM_FIRST,5,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - colon / rectum,CHECKED_TNM_FIRST,6,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.
+NET - pancreas,CHECKED_TNM_FIRST,5,3,3,TNM-first stage grouping released; histology redirects remain in notes where relevant.

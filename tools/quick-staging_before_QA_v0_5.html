@@ -105,36 +105,31 @@ function selectedClassifications(){return mode.value==='MATRIX'?['clinical','pat
 function versionLabel(v){return v==='AJCC6'?'6.0':v==='AJCC7'?'7.0':v==='AJCC8'?'8.0':v}
 function parseCSVLine(line){const out=[];let cur='',quote=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++}else quote=!quote}else if(ch===','&&!quote){out.push(cur);cur=''}else{cur+=ch}}out.push(cur);return out.map(x=>x.trim())}
 function parseCSV(s){
-  if(!s || !s.trim()) return [];
-  const lines = s.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim() && !x.trim().startsWith('#'));
-  if(!lines.length) return [];
-  const rawHeader = parseCSVLine(lines[0]);
-  const header = rawHeader.map(x=>x.toLowerCase().trim());
-  const hasHeader = header.includes('site') && header.includes('edition');
-  const start = hasHeader ? 1 : 0;
-  const idx = (name, fallback) => { const i = header.indexOf(name); return i >= 0 ? i : fallback; };
-  const hasClass = hasHeader && header.includes('classification');
-  return lines.slice(start).map(line=>{
-    const c = parseCSVLine(line);
-    let obj;
-    if(hasHeader){
-      obj = {
-        site: c[idx('site',0)],
-        edition: c[idx('edition',1)],
-        classification: hasClass ? c[idx('classification',2)] : 'any',
-        t: c[idx('t',hasClass?3:2)] || 'Any',
-        n: c[idx('n',hasClass?4:3)] || 'Any',
-        m: c[idx('m',hasClass?5:4)] || 'Any',
-        grade: c[idx('grade',-1)] || 'Any',
-        location: c[idx('location',-1)] || 'Any',
-        stage: c[idx('stage',hasClass?6:5)],
-        note: c.slice(idx('note',hasClass?7:6)).join(',')
-      };
-    }else{
-      obj = {site:c[0],edition:c[1],classification:'any',t:c[2]||'Any',n:c[3]||'Any',m:c[4]||'Any',grade:'Any',location:'Any',stage:c[5],note:c.slice(6).join(',')};
-    }
-    return normalizeRule(obj);
-  }).filter(x=>x.site && x.edition && x.stage);
+ if(!s||!s.trim())return[];
+ const lines=s.replace(/^﻿/,'').split(/?
+/).filter(x=>x.trim()&&!x.trim().startsWith('#'));
+ if(!lines.length)return[];
+ const rawHeader=parseCSVLine(lines[0]);
+ const header=rawHeader.map(x=>x.toLowerCase().trim());
+ const hasHeader=header.includes('site')&&header.includes('edition');
+ const start=hasHeader?1:0;
+ const idx=(name,fallback)=>{const i=header.indexOf(name);return i>=0?i:fallback};
+ const hasClass=hasHeader&&header.includes('classification');
+ return lines.slice(start).map(line=>{
+   const c=parseCSVLine(line); let obj;
+   if(hasHeader){
+     obj={
+       site:c[idx('site',0)], edition:c[idx('edition',1)],
+       classification:hasClass?c[idx('classification',2)]:'any',
+       t:c[idx('t',hasClass?3:2)]||'Any', n:c[idx('n',hasClass?4:3)]||'Any', m:c[idx('m',hasClass?5:4)]||'Any',
+       grade:c[idx('grade',-1)]||'Any', location:c[idx('location',-1)]||'Any',
+       stage:c[idx('stage',hasClass?6:5)], note:c.slice(idx('note',hasClass?7:6)).join(',')
+     }
+   }else{
+     obj={site:c[0],edition:c[1],classification:'any',t:c[2]||'Any',n:c[3]||'Any',m:c[4]||'Any',grade:'Any',location:'Any',stage:c[5],note:c.slice(6).join(',')}
+   }
+   return normalizeRule(obj)
+ }).filter(x=>x.site&&x.edition&&x.stage)
 }
 function stageRank(stage){const order=['0','IA','IB','IC','I','IIA','IIB','IIC','II','IIIA','IIIB','IIIC','III','IVA','IVB','IVC','IV'];const i=order.indexOf(String(stage||'').toUpperCase());return i<0?999:i}
 function categoryPrefix(v){return String(v||'').replace(/[abc]$/i,'')}
@@ -143,16 +138,15 @@ function expandRangeToken(token){const raw=String(token||'').trim();const m=raw.
 function splitRuleToken(raw){const s=String(raw||'Any').trim();if(!s||s==='Any')return['Any'];return s.split(/[\/;|]+|(?:\s+or\s+)|(?:\s*,\s*)/i).flatMap(expandRangeToken).map(x=>x.trim()).filter(Boolean)}
 function tokenOK(ruleToken,userVal){if(ruleToken==='Any'||userVal==='Any')return true;if(ruleToken===userVal)return true;if(ruleToken===categoryPrefix(userVal))return true;if(categoryPrefix(ruleToken)===userVal)return true;if(categoryFamily(ruleToken)===categoryFamily(userVal)&&!/[abc]$/i.test(ruleToken))return true;return false}
 function ok(ruleVal,userVal){return splitRuleToken(ruleVal).some(tok=>tokenOK(tok,userVal))}
-function siteOK(ruleSite,userSite){return String(ruleSite||'').trim()===String(userSite||'').trim()||String(ruleSite||'').trim()==='Any'||String(userSite||'').trim()==='Any'}
 function classOK(ruleClass,userClass){const r=normalizeClassification(ruleClass),u=normalizeClassification(userClass);return r==='any'||u==='any'||r===u}
 function exactness(ruleVal,userVal){if(ruleVal===userVal)return 3;if(splitRuleToken(ruleVal).some(tok=>tok===userVal))return 2.5;if(ruleVal==='Any')return 0;if(ok(ruleVal,userVal))return 1;return-99}
 function classExactness(ruleClass,userClass){const r=normalizeClassification(ruleClass),u=normalizeClassification(userClass);if(r===u)return 3;if(r==='any')return 0;return-99}
-function specificityScore(rule,q){return (siteOK(rule.site,q.site)?3:-99)+exactness(rule.edition,q.edition)+classExactness(rule.classification,q.classification)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)+exactness(rule.grade||'Any',q.grade||'Any')+exactness(rule.location||'Any',q.location||'Any')}
-function match(rule,q){return siteOK(rule.site,q.site)&&ok(rule.edition,q.edition)&&classOK(rule.classification,q.classification)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)&&ok(rule.grade||'Any',q.grade||'Any')&&ok(rule.location||'Any',q.location||'Any')}
+function specificityScore(rule,q){return exactness(rule.site,q.site)+exactness(rule.edition,q.edition)+classExactness(rule.classification,q.classification)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)+exactness(rule.grade||'Any',q.grade||'Any')+exactness(rule.location||'Any',q.location||'Any')}
+function match(rule,q){return ok(rule.site,q.site)&&ok(rule.edition,q.edition)&&classOK(rule.classification,q.classification)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)&&ok(rule.grade||'Any',q.grade||'Any')&&ok(rule.location||'Any',q.location||'Any')}
 function bestMatch(q){return allRules().filter(r=>match(r,q)).sort((a,b)=>specificityScore(b,q)-specificityScore(a,q)||stageRank(b.stage)-stageRank(a.stage))[0]||null}
 function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 ${staticRules.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
 function refreshSites(){const vals=uniq(baseSites.concat(allRules().map(r=>r.site)));const old=site.value;site.innerHTML=vals.map(x=>`<option value="${escapeHTML(x)}">${escapeHTML(x)}</option>`).join('');site.value=vals.includes(old)?old:(vals.includes('Stomach')?'Stomach':vals[0])}
-function rulesForCurrentSiteAndEditions(){const eds=selectedEditions();const cls=selectedClassifications();return allRules().filter(r=>siteOK(r.site,site.value)&&cls.some(c=>classOK(r.classification,c))&&eds.some(ed=>ok(r.edition,ed)))}
+function rulesForCurrentSiteAndEditions(){const eds=selectedEditions();const cls=selectedClassifications();return allRules().filter(r=>ok(r.site,site.value)&&cls.some(c=>classOK(r.classification,c))&&eds.some(ed=>ok(r.edition,ed)))}
 function usesField(rs,field){return rs.some(r=>String(r[field]||'Any')!=='Any')}
 function refreshCascade(changed){
  const rs=rulesForCurrentSiteAndEditions();
