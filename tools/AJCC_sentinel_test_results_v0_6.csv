@@ -1,0 +1,23 @@
+site,edition,classification,t,n,m,grade,location,expected_stage,found_stage,pass,note
+Esophagus / EGJ - squamous,AJCC7,clinical,T1,N0,M0,Any,Any,IA/IB,IA/IB,True,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T3,N1,M0,Any,Any,IIIA,IIIA,True,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T4b,N0,M0,Any,Any,IIIC,IIIC,True,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T2,N0,M0,Any,Any,IB/IIA,IB/IIA,True,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T3,N1,M0,Any,Any,IIIA,IIIA,True,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - squamous,AJCC8,clinical,T1,N0,M0,Any,Any,I,I,True,AJCC8 ESCC clinical cTNM quick table; TNM-only in this tool. yp/prognostic details are not forced into quick mode.
+Esophagus / EGJ - squamous,AJCC8,clinical,T3,N1,M0,Any,Any,III,III,True,AJCC8 ESCC clinical cTNM quick table; TNM-only in this tool. yp/prognostic details are not forced into quick mode.
+Esophagus / EGJ - squamous,AJCC8,clinical,T4b,N0,M0,Any,Any,IVA,IVA,True,AJCC8 ESCC clinical cTNM quick table; TNM-only in this tool. yp/prognostic details are not forced into quick mode.
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T2,N0,M0,Any,Any,IIB,IIB,True,AJCC8 EAC/GEJ clinical cTNM quick table; TNM-only in this tool. EGJ epicenter rules apply.
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T3,N1,M0,Any,Any,III,III,True,AJCC8 EAC/GEJ clinical cTNM quick table; TNM-only in this tool. EGJ epicenter rules apply.
+Stomach,AJCC7,clinical,T1a,N3a,M0,Any,Any,IIB,IIB,True,7.0 local rule pack; verify before clinical use
+Stomach,AJCC8,pathological,T1a,N3b,M0,Any,Any,IIIB,IIIB,True,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
+Appendix - carcinoma,AJCC7,clinical,T4b,N0,M0,Any,Any,IIC,IIC,True,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC8,clinical,T4b,N0,M0,Any,Any,IIC,IIC,True,Appendix carcinoma audited.
+Appendix - carcinoma,AJCC8,clinical,T1,N0,M1b,G1,Any,IVA,IVA,True,Appendix carcinoma audited: M1b with G1 is IVA.
+Appendix - carcinoma,AJCC8,clinical,T1,N0,M1b,G3,Any,IVB,IVB,True,Appendix carcinoma audited: M1b with G2/G3/GX is IVB.
+NET - appendix,AJCC7,clinical,T3,N0,M0,Any,Any,II,II,True,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - pancreas,AJCC7,clinical,T3,N1,M0,Any,Any,IIB,IIB,True,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+Exocrine pancreas,AJCC8,clinical,T3,N2,M0,Any,Any,III,III,True,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.
+Ampulla of Vater,AJCC8,clinical,T3b,N0,M0,Any,Any,IIB,IIB,True,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.
+Colon,AJCC8,clinical,T4b,N2b,M0,Any,Any,IIIC,IIIC,True,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.
+HCC / Liver,AJCC8,clinical,T1a,N0,M0,Any,Any,IA,IA,True,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.

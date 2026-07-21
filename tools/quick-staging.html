@@ -15,9 +15,9 @@
 
   <div class="mt-6">
     <h1 class="text-3xl font-bold">腫瘤分期速查器</h1>
-    <p class="text-slate-600 mt-2">TNM-first 速查；同一組 T/N/M 可同時比較 AJCC 7/8 與 clinical/pathological。多數癌種以 TNM 為核心，例外癌種會提示需要 grade、histology、location、mitotic rate 或 biomarker 等額外欄位。</p>
+    <p class="text-slate-600 mt-2">TNM-first 速查；同一組 T/N/M 可同時比較 AJCC 7/8 與 clinical/pathological。預設不把 prognostic extra factors 混入 quick mode；若完整表格因 grade/location 等因素產生分歧，會以分期範圍與註記呈現。</p>
     <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">
-      Internal quick-check only. AJCC 8.0 規則包 v0.5 已完成目前工具內 GI / hepatobiliary / pancreas / NET 站點的 sentinel QA；特殊癌種（如 GIST、胃癌 full cTNM/ypTNM）會明確標示為 limitation，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
+      Internal quick-check only. v0.6 已重新掃描 AJCC7/AJCC8 手冊與目前工具內 21 個 cancer site；ESCC/GEJ quick mode 改回 TNM-first，不強制 grade/location。分期範圍代表完整 prognostic table 尚有額外分流，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
     </p>
   </div>
 
@@ -28,7 +28,7 @@
       <div class="grid grid-cols-2 gap-3">
         <label class="col-span-2 text-sm font-medium">Cancer site<select id="site" class="mt-1 w-full border rounded p-2"></select></label>
         <label class="text-sm font-medium">Stage basis<select id="classification" class="mt-1 w-full border rounded p-2"><option value="clinical" selected>Clinical / cTNM</option><option value="pathological">Pathological / pTNM</option><option value="yp">Post-neoadjuvant / ypTNM</option><option value="recurrence">Recurrence / rTNM</option></select></label>
-        <label class="text-sm font-medium">Display<select id="mode" class="mt-1 w-full border rounded p-2"><option value="COMPARE" selected>7.0 + 8.0 並列</option><option value="MATRIX">7/8 × Clinical/Pathological 四格</option><option value="AJCC7">只看 7.0</option><option value="AJCC8">只看 8.0</option><option value="AJCC6">只看 6.0</option></select></label>
+        <label class="text-sm font-medium">Display<select id="mode" class="mt-1 w-full border rounded p-2"><option value="COMPARE" selected>7.0 + 8.0 並列</option><option value="MATRIX">7/8 × Clinical/Pathological 四格（進階）</option><option value="AJCC7">只看 7.0</option><option value="AJCC8">只看 8.0</option><option value="AJCC6">只看 6.0</option></select></label>
         <label class="text-sm font-medium">T<select id="t" class="mt-1 w-full border rounded p-2"></select></label>
         <label class="text-sm font-medium">N<select id="n" class="mt-1 w-full border rounded p-2"></select></label>
         <label class="text-sm font-medium">M<select id="m" class="mt-1 w-full border rounded p-2"></select></label>
@@ -61,8 +61,8 @@
 <script>
 const baseSites=['Esophagus / EGJ - squamous','Esophagus / EGJ - adenocarcinoma','Stomach','Small intestine','Colon','Rectum','Appendix - carcinoma','GIST','HCC / Liver','Intrahepatic bile duct','Perihilar bile duct','Distal bile duct','Gallbladder','Ampulla of Vater','Exocrine pancreas','NET - stomach','NET - duodenum / ampulla','NET - jejunum / ileum','NET - appendix','NET - colon / rectum','NET - pancreas'];
 const SITE_NOTES={
- "Esophagus / EGJ - squamous":"TNM-first: cTNM for ESCC is T/N/M-based; pTNM ESCC requires Grade and Tumor location for some early/intermediate groups. Use exact T1a/T1b when available. ypTNM remains separate.",
- "Esophagus / EGJ - adenocarcinoma":"TNM-first but not TNM-only: AJCC8 requires adenocarcinoma histology, grade for relevant tables, and separate clinical/pathological/yp stage groupings. EGJ epicenter rules apply.",
+ "Esophagus / EGJ - squamous":"TNM-first quick mode: clinical ESCC/GEJ staging uses T/N/M; tool does not force grade/location. If the full prognostic table has extra-factor splits, results are shown as a stage range.",
+ "Esophagus / EGJ - adenocarcinoma":"TNM-first quick mode: clinical EAC/GEJ staging uses T/N/M; tool does not force grade/location. EGJ epicenter rules still apply; extra-factor splits are shown as ranges.",
  "Stomach":"TNM-first with separate clinical/pathological/yp stage groups. Do not use pTNM table as cTNM. Preserve T1a/T1b and N3a/N3b in input.",
  "Small intestine":"TNM-first adenocarcinoma table. Other small-intestine histologies may not use this stage group.",
  "Colon":"TNM-first. Must preserve exact T4a/T4b, N1a/N1b/N1c, N2a/N2b, and M1a/M1b/M1c when available.",

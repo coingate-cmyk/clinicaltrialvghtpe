@@ -1,0 +1,27 @@
+AJCC quick-staging v0.6 final QA summary
+
+Scope
+- Manuals scanned programmatically from first page to last page: AJCC7 PDF and AJCC8 PDF.
+- Tool scope: the 21 cancer sites currently listed in quick-staging.html.
+- This is TNM-first quick-check, not a licensed full AJCC replacement.
+
+Manual file integrity
+- AJCC7: 672 pages, 2025611 extracted text chars, 271 stage/prognostic-heading pages, 127 TNM-definition pages.
+- AJCC8: 324 pages, 1265448 extracted text chars, 94 stage/prognostic-heading pages, 69 TNM-definition pages.
+
+Rule rows
+- AJCC7 rows: 280
+- AJCC8 rows: 234
+- Sentinel tests: 22, failures: 0
+
+Major corrections
+1. AJCC7 esophagus/EGJ rules were missing from staging_rules_7.csv; added TNM-first quick rows for ESCC and EAC/GEJ. Because AJCC7 full esophageal prognostic grouping contains extra-factor splits in selected early rows, quick mode returns stage ranges instead of forcing extra fields.
+2. ESCC/EAC/GEJ quick mode no longer asks grade or tumor location. AJCC8 clinical rows are TNM-based; pathological quick rows return ranges where full prognostic splits exist.
+3. Added AJCC7 Appendix carcinoma, NET appendix, and pancreatic NET rows that were absent from the original AJCC7 local rule pack.
+4. Converted AJCC7 CSV to the unified schema with classification/grade/location columns so the same parser can load both editions.
+5. Updated site notes and requirements to clarify TNM-first vs exceptions.
+
+Known limitations
+- GIST remains an exception because formal stage grouping needs anatomic site and mitotic rate; no TNM-only rows are released.
+- Stomach AJCC8 clinical/ypTNM remains not fully released in quick mode; pTNM is present.
+- Full-manual automatic table extraction is used as an audit scaffold; disease-site rows in the released CSV should still be treated as internal quick-check and verified against formal AJCC/UICC references before clinical use.

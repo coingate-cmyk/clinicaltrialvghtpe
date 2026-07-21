@@ -1,0 +1,3 @@
+edition,file,pages,text_chars_extracted,stage_group_heading_pages,tnm_definition_pages,summary_heading_pages,note
+AJCC7,ajcc_7thed_cancer_staging_manual.pdf,672,2025611,271,127,58,Programmatic from first page to last page. Complex tables/images still require disease-site QA before formal clinical use.
+AJCC8,"AJCC Cancer Staging Manual, 8th.pdf",324,1265448,94,69,58,Programmatic from first page to last page. Complex tables/images still require disease-site QA before formal clinical use.

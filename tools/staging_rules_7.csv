@@ -1,183 +1,281 @@
-site,edition,t,n,m,stage,note
-Stomach,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T1,N1,M0,IB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T2,N1,M0,IIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T1,N2,M0,IIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T2,N2,M0,IIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T1,N3,M0,IIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4a,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T3,N2,M0,IIIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T2,N3,M0,IIIA,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4b,N0,M0,IIIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4b,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4a,N2,M0,IIIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T3,N3,M0,IIIB,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4b,N3,M0,IIIC,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,T4a,N3,M0,IIIC,7.0 local rule pack; verify before clinical use
-Stomach,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,T4,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,Any,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,Any,N2,M0,IIIB,7.0 local rule pack; verify before clinical use
-Small intestine,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4b,N0,M0,IIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T1,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T1,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T2,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T2,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T1,N2a,M0,IIIA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T3,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4a,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T2,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T3,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T1,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T2,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4a,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T3,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4a,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4b,N1,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4b,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,T4b,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,Any,Any,M1a,IVA,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,Any,Any,M1b,IVB,7.0 local rule pack; verify before clinical use
-Colon,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T2,N0,M0,I,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4a,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4b,N0,M0,IIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T1,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T1,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T2,N1,M0,IIIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T2,N1c,M0,IIIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T1,N2a,M0,IIIA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T3,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4a,N1c,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T2,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T3,N2a,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T1,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T2,N2b,M0,IIIB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4a,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T3,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4a,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4b,N1,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4b,N2,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4b,N2a,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,T4b,N2b,M0,IIIC,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,Any,Any,M1a,IVA,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,Any,Any,M1b,IVB,7.0 local rule pack; verify before clinical use
-Rectum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-NET - stomach,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-NET - duodenum / ampulla,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-NET - jejunum / ileum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,T2,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,T3,N0,M0,IIB,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,T4,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,Any,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-NET - colon / rectum,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,T3a,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,T3b,N0,M0,IIIB,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,T4,N0,M0,IIIC,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,Any,N1,M0,IVA,7.0 local rule pack; verify before clinical use
-HCC / Liver,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,T3,N0,M0,III,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,Any,N1,M0,IVA,7.0 local rule pack; verify before clinical use
-Intrahepatic bile duct,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T2,N0,M0,II,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T3,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T1,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T2,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,T4,N1,M0,IVA,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,Any,N2,M0,IVB,7.0 local rule pack; verify before clinical use
-Gallbladder,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T1,N0,M0,I,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T2a,N0,M0,II,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T2b,N0,M0,II,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T3,N0,M0,IIIA,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T1,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T2,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T2a,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T2b,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T3,N1,M0,IIIB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T4,N0,M0,IVA,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,T4,N1,M0,IVA,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,Any,N2,M0,IVB,7.0 local rule pack; verify before clinical use
-Perihilar bile duct,AJCC7,Any,Any,M1,IVB,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
-Distal bile duct,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
-Ampulla of Vater,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,Tis,N0,M0,0,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T1,N0,M0,IA,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T2,N0,M0,IB,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T3,N0,M0,IIA,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T1,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T2,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T3,N1,M0,IIB,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,T4,Any,M0,III,7.0 local rule pack; verify before clinical use
-Exocrine pancreas,AJCC7,Any,Any,M1,IV,7.0 local rule pack; verify before clinical use
+site,edition,classification,t,n,m,grade,location,stage,note
+Esophagus / EGJ - squamous,AJCC7,clinical,Any,Any,M1,Any,Any,IV,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,Any,N3,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T1,N0,M0,Any,Any,IA/IB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T1|T2,N1,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T1|T2,N2,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T2|T3,N0,M0,Any,Any,IB/IIA/IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T3,N1,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T3,N2,M0,Any,Any,IIIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T4a,N0,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T4a,N1|N2,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,T4b,Any,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,clinical,Tis,N0,M0,Any,Any,0,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,Any,Any,M1,Any,Any,IV,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,Any,N3,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T1,N0,M0,Any,Any,IA/IB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T1|T2,N1,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T1|T2,N2,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T2|T3,N0,M0,Any,Any,IB/IIA/IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T3,N1,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T3,N2,M0,Any,Any,IIIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T4a,N0,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T4a,N1|N2,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,T4b,Any,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - squamous,AJCC7,pathological,Tis,N0,M0,Any,Any,0,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal prognostic grouping table lists grade/location for some rows, so ranges mean grade/location-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,Any,Any,M1,Any,Any,IV,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,Any,N3,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T1,N0,M0,Any,Any,IA/IB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T1|T2,N1,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T1|T2,N2,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T2,N0,M0,Any,Any,IB/IIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T3,N0,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T3,N1,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T3,N2,M0,Any,Any,IIIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T4a,N0,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T4a,N1|N2,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T4b,Any,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,Tis,N0,M0,Any,Any,0,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,Any,Any,M1,Any,Any,IV,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,Any,N3,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T1,N0,M0,Any,Any,IA/IB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T1|T2,N1,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T1|T2,N2,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T2,N0,M0,Any,Any,IB/IIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T3,N0,M0,Any,Any,IIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T3,N1,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T3,N2,M0,Any,Any,IIIB,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T4a,N0,M0,Any,Any,IIIA,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T4a,N1|N2,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T4b,Any,M0,Any,Any,IIIC,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,Tis,N0,M0,Any,Any,0,"AJCC7 manual coverage patch v0.6. Quick TNM-first/anatomic result; AJCC7 full esophageal adenocarcinoma prognostic grouping table lists grade for selected rows, so ranges mean grade-dependent."
+Stomach,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T1,N0,M0,Any,Any,IA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T1,N1,M0,Any,Any,IB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T1,N2,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T1,N3,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T2,N0,M0,Any,Any,IB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T2,N1,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T2,N2,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T2,N3,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T3,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T3,N2,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T3,N3,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4a,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4a,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4a,N2,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4a,N3,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4b,N0,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4b,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4b,N2,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,T4b,N3,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Stomach,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,Any,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,Any,N2,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,T2,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,T4,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Small intestine,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,Any,Any,M1a,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,Any,Any,M1b,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T1,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T1,N1c,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T1,N2a,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T1,N2b,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T2,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T2,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T2,N1c,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T2,N2a,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T2,N2b,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T3,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T3,N1c,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T3,N2a,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T3,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4a,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4a,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4a,N1c,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4a,N2a,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4a,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4b,N0,M0,Any,Any,IIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4b,N1,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4b,N2,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4b,N2a,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,T4b,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Colon,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,Any,Any,M1a,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,Any,Any,M1b,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T1,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T1,N1c,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T1,N2a,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T1,N2b,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T2,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T2,N1,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T2,N1c,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T2,N2a,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T2,N2b,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T3,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T3,N1c,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T3,N2a,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T3,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4a,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4a,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4a,N1c,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4a,N2a,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4a,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4b,N0,M0,Any,Any,IIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4b,N1,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4b,N2,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4b,N2a,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,T4b,N2b,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Rectum,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Appendix - carcinoma,AJCC7,clinical,Any,Any,M1b,Any,Any,IVC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,Any,N0,M1a,G1,Any,IVA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,Any,N0,M1a,G2|G3|GX,Any,IVB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,Any,N1|N2,M1a,Any,Any,IVB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,Any,N2,M0,Any,Any,IIIC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T1|T2,N0,M0,Any,Any,I,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T1|T2,N1,M0,Any,Any,IIIA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T3,N0,M0,Any,Any,IIA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T3|T4,N1,M0,Any,Any,IIIB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T4a,N0,M0,Any,Any,IIB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,T4b,N0,M0,Any,Any,IIC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,clinical,Tis,N0,M0,Any,Any,0,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Any,Any,M1b,Any,Any,IVC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Any,N0,M1a,G1,Any,IVA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Any,N0,M1a,G2|G3|GX,Any,IVB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Any,N1|N2,M1a,Any,Any,IVB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Any,N2,M0,Any,Any,IIIC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T1|T2,N0,M0,Any,Any,I,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T1|T2,N1,M0,Any,Any,IIIA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T3,N0,M0,Any,Any,IIA,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T3|T4,N1,M0,Any,Any,IIIB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T4a,N0,M0,Any,Any,IIB,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,T4b,N0,M0,Any,Any,IIC,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+Appendix - carcinoma,AJCC7,pathological,Tis,N0,M0,Any,Any,0,AJCC7 manual coverage patch v0.6. Appendix carcinoma; grade affects M1a stage grouping.
+HCC / Liver,AJCC7,any,Any,Any,M1,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,Any,N1,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,T2,N0,M0,Any,Any,II,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,T3a,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,T3b,N0,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+HCC / Liver,AJCC7,any,T4,N0,M0,Any,Any,IIIC,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,Any,Any,M1,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,Any,N1,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,T2,N0,M0,Any,Any,II,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,T3,N0,M0,Any,Any,III,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,T4,N0,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Intrahepatic bile duct,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,Any,Any,M1,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,Any,N2,M0,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T1,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T2,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T2a,N0,M0,Any,Any,II,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T2a,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T2b,N0,M0,Any,Any,II,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T2b,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T3,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T3,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T4,N0,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,T4,N1,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Perihilar bile duct,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T1,N0,M0,Any,Any,IA,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T1,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T2,N0,M0,Any,Any,IB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T2,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T3,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,T4,Any,M0,Any,Any,III,7.0 local rule pack; verify before clinical use
+Distal bile duct,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,Any,Any,M1,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,Any,N2,M0,Any,Any,IVB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T1,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T2,N0,M0,Any,Any,II,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T2,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T3,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T3,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T4,N0,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,T4,N1,M0,Any,Any,IVA,7.0 local rule pack; verify before clinical use
+Gallbladder,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T1,N0,M0,Any,Any,IA,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T1,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T2,N0,M0,Any,Any,IB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T2,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T3,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,T4,Any,M0,Any,Any,III,7.0 local rule pack; verify before clinical use
+Ampulla of Vater,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T1,N0,M0,Any,Any,IA,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T1,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T2,N0,M0,Any,Any,IB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T2,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T3,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T3,N1,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,T4,Any,M0,Any,Any,III,7.0 local rule pack; verify before clinical use
+Exocrine pancreas,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,Any,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,T2,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,T3,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,T4,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+NET - stomach,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,Any,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,T2,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,T3,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,T4,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+NET - duodenum / ampulla,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,Any,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,T2,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,T3,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,T4,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+NET - jejunum / ileum,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+NET - appendix,AJCC7,clinical,Any,Any,M1,Any,Any,IV,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,clinical,Any,N1,M0,Any,Any,III,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,clinical,T1,N0,M0,Any,Any,I,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,clinical,T2|T3,N0,M0,Any,Any,II,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,clinical,T4,N0,M0,Any,Any,III,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,pathological,Any,Any,M1,Any,Any,IV,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,pathological,Any,N1,M0,Any,Any,III,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,pathological,T1,N0,M0,Any,Any,I,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,pathological,T2|T3,N0,M0,Any,Any,II,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - appendix,AJCC7,pathological,T4,N0,M0,Any,Any,III,AJCC7 appendiceal carcinoid/NET patch v0.6 from appendix staging form; for well-differentiated NET/carcinoid only.
+NET - colon / rectum,AJCC7,any,Any,Any,M1,Any,Any,IV,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,Any,N1,M0,Any,Any,IIIB,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,T1,N0,M0,Any,Any,I,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,T2,N0,M0,Any,Any,IIA,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,T3,N0,M0,Any,Any,IIB,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,T4,N0,M0,Any,Any,IIIA,7.0 local rule pack; verify before clinical use
+NET - colon / rectum,AJCC7,any,Tis,N0,M0,Any,Any,0,7.0 local rule pack; verify before clinical use
+NET - pancreas,AJCC7,clinical,Any,Any,M1,Any,Any,IV,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,T1,N0,M0,Any,Any,IA,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,T1|T2|T3,N1,M0,Any,Any,IIB,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,T2,N0,M0,Any,Any,IB,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,T3,N0,M0,Any,Any,IIA,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,T4,Any,M0,Any,Any,III,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,clinical,Tis,N0,M0,Any,Any,0,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,Any,Any,M1,Any,Any,IV,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,T1,N0,M0,Any,Any,IA,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,T1|T2|T3,N1,M0,Any,Any,IIB,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,T2,N0,M0,Any,Any,IB,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,T3,N0,M0,Any,Any,IIA,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,T4,Any,M0,Any,Any,III,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
+NET - pancreas,AJCC7,pathological,Tis,N0,M0,Any,Any,0,AJCC7 exocrine/endocrine pancreas patch v0.6. 7th edition used the exocrine/endocrine pancreas TNM stage table; check histology-specific context.
