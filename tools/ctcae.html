@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CTCAE v5/v6 副作用速查器</title>
+<title>CTCAE v5/v6 副作用速查器 v1.1 fuzzy search</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   .grade-label{width:5.4rem;min-width:5.4rem}
@@ -14,7 +14,7 @@
 <main class="max-w-7xl mx-auto p-4 md:p-6">
   <div class="flex flex-wrap gap-3 justify-between text-sm"><a class="text-blue-700 hover:underline" href="./index.html">← 回工具首頁</a><a class="text-blue-700 hover:underline" href="../index.html">回臨床試驗系統</a></div>
   <h1 class="text-3xl font-bold mt-6">CTCAE v5/v6 副作用速查器</h1>
-  <p class="text-slate-600 mt-2">完整匯入 CTCAE v5.0 與 CTCAE v6.0 AE terms，提供 Grade 1-5、Definition、Navigational Note 並列對照。下拉選單只放 AE term；長 grading 內容只在結果區顯示。</p>
+  <p class="text-slate-600 mt-2">完整匯入 CTCAE v5.0 與 CTCAE v6.0 AE terms，提供 Grade 1-5、Definition、Navigational Note 並列對照。支援模糊搜尋、常用縮寫、部分中文臨床用語與少量 typo tolerance；下拉選單只放 AE term，長 grading 內容只在結果區顯示。</p>
   <div class="grid md:grid-cols-3 gap-3 mt-4 text-sm">
     <div class="rounded-lg border border-amber-200 bg-amber-50 text-amber-950 p-3 md:col-span-2"><b>臨床提醒：</b>此頁是院內 quick-check。正式 AE reporting 請以該 protocol 指定的 CTCAE 版本與 NCI 原文為準。分號 <b>;</b> 代表 <b>or</b>；dash <b>-</b> 代表該 grade 不適用或未提供。</div>
     <div id="loadStatus" class="rounded-lg border bg-white p-3 text-slate-600">載入中...</div>
@@ -24,7 +24,11 @@
     <section class="bg-white rounded-xl border shadow-sm p-5 lg:col-span-1">
       <h2 class="text-xl font-bold mb-4">查詢</h2>
       <label class="text-sm font-medium block">Search / AE term
-        <input id="search" class="mt-1 w-full border rounded-lg p-2" placeholder="例如 Diarrhea, ALT, Pneumonitis, QTc, platelet">
+        <input id="search" class="mt-1 w-full border rounded-lg p-2" placeholder="例如 Diarrhea, ALT, SGPT, ILD, QTc, 血小板, 腹瀉">
+      </label>
+      <label class="mt-2 flex items-start gap-2 text-sm text-slate-700">
+        <input id="fuzzyToggle" type="checkbox" checked class="mt-1">
+        <span><b>啟用模糊搜尋</b><br><span class="text-xs text-slate-500">可查縮寫 / alias / 中文提示 / 少量拼字錯誤，例如 SGPT→ALT、ILD→pneumonitis、血小板→platelet / thrombocytopenia。</span></span>
       </label>
       <label class="text-sm font-medium block mt-3">SOC
         <select id="socFilter" class="mt-1 w-full border rounded-lg p-2"><option value="ALL">All SOCs</option></select>
@@ -70,6 +74,7 @@ const result=document.getElementById('result');
 const termTitle=document.getElementById('termTitle');
 const flagBox=document.getElementById('flagBox');
 const copyBtn=document.getElementById('copyBtn');
+const fuzzyToggle=document.getElementById('fuzzyToggle');
 function parseCSV(text){
   const rows=[];let row=[],cur='',q=false;
   for(let i=0;i<text.length;i++){
@@ -90,7 +95,191 @@ async function fetchCSV(file){
   return parseCSV(await r.text());
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function norm(s){return String(s||'').toLowerCase().replace(/[\s_\-\/()]+/g,' ');}
+function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,' ').replace(/\s+/g,' ').trim();}
+function normLoose(s){return norm(s).replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');}
+function tokenize(s){return norm(s).split(' ').filter(t=>t.length>=2 || /[\u4e00-\u9fff]/.test(t));}
+function phraseMatch(text, phrase, tokens){
+  const q=norm(phrase); if(!q) return false;
+  const qTokens=tokenize(q);
+  if(qTokens.length<=1) return (tokens||tokenize(text)).includes(q);
+  return norm(text).includes(q);
+}
+const aliasPairs = [
+  ['alt', ['alanine aminotransferase increased','alanine aminotransferase','sgpt','gpt','丙氨酸轉氨酶']],
+  ['sgpt', ['alanine aminotransferase increased','alt','gpt']],
+  ['gpt', ['alanine aminotransferase increased','alt','sgpt']],
+  ['ast', ['aspartate aminotransferase increased','aspartate aminotransferase','sgot','got','天門冬胺酸轉氨酶']],
+  ['sgot', ['aspartate aminotransferase increased','ast','got']],
+  ['got', ['aspartate aminotransferase increased','ast','sgot']],
+  ['肝指數', ['alanine aminotransferase increased','aspartate aminotransferase increased','blood bilirubin increased']],
+  ['bilirubin', ['blood bilirubin increased','hyperbilirubinemia','jaundice','黃疸','膽紅素']],
+  ['黃疸', ['blood bilirubin increased','bilirubin','hyperbilirubinemia','jaundice']],
+  ['膽紅素', ['blood bilirubin increased','bilirubin']],
+  ['platelet', ['platelet count decreased','thrombocytopenia','血小板','plt']],
+  ['plt', ['platelet count decreased','thrombocytopenia','platelet']],
+  ['血小板', ['platelet count decreased','thrombocytopenia','platelet','plt']],
+  ['thrombocytopenia', ['platelet count decreased','platelet']],
+  ['neutropenia', ['neutrophil count decreased','febrile neutropenia','anc','中性球低下','嗜中性球']],
+  ['anc', ['neutrophil count decreased','febrile neutropenia','neutropenia']],
+  ['中性球', ['neutrophil count decreased','febrile neutropenia','neutropenia','anc']],
+  ['嗜中性球', ['neutrophil count decreased','febrile neutropenia','neutropenia','anc']],
+  ['white blood cell', ['white blood cell decreased','leukopenia','wbc','白血球']],
+  ['wbc', ['white blood cell decreased','leukopenia','white blood cell','白血球']],
+  ['白血球', ['white blood cell decreased','leukopenia','wbc']],
+  ['hemoglobin', ['anemia','hgb','hb','貧血','血紅素']],
+  ['hgb', ['anemia','hemoglobin','hb']],
+  ['hb', ['anemia','hemoglobin','hgb']],
+  ['貧血', ['anemia','hemoglobin','hgb']],
+  ['creatinine', ['creatinine increased','肌酸酐']],
+  ['腎功能', ['creatinine increased','acute kidney injury','renal','kidney']],
+  ['肌酸酐', ['creatinine increased','creatinine']],
+  ['renal', ['creatinine increased','acute kidney injury','kidney','腎功能']],
+  ['diarrhea', ['diarrhoea','loose stool','colitis','腹瀉','拉肚子']],
+  ['diarrhoea', ['diarrhea','loose stool','colitis']],
+  ['腹瀉', ['diarrhea','colitis','loose stool']],
+  ['拉肚子', ['diarrhea','loose stool']],
+  ['mucositis', ['mucositis oral','stomatitis','mouth sore','oral mucositis','口腔黏膜炎','口腔炎','嘴破']],
+  ['口腔黏膜炎', ['mucositis oral','mucositis','stomatitis']],
+  ['口腔炎', ['mucositis oral','stomatitis','mucositis']],
+  ['嘴破', ['mucositis oral','stomatitis','mucositis']],
+  ['vomit', ['vomiting','emesis','嘔吐']],
+  ['嘔吐', ['vomiting','emesis']],
+  ['nausea', ['噁心','nauseated']],
+  ['噁心', ['nausea']],
+  ['pneumonitis', ['interstitial lung disease','ild','lung inflammation','間質性肺炎']],
+  ['ild', ['pneumonitis','interstitial lung disease','間質性肺炎']],
+  ['間質性肺炎', ['pneumonitis','interstitial lung disease','ild']],
+  ['肺炎', ['pneumonitis','pneumonia']],
+  ['qt', ['qtc','electrocardiogram qt corrected interval prolonged','qt prolongation']],
+  ['qtc', ['electrocardiogram qt corrected interval prolonged','qt prolongation','qt']],
+  ['qt prolongation', ['electrocardiogram qt corrected interval prolonged','qtc']],
+  ['lvef', ['ejection fraction decreased','left ventricular systolic dysfunction','left ventricular dysfunction']],
+  ['ef', ['ejection fraction decreased','left ventricular systolic dysfunction']],
+  ['心臟衰竭', ['heart failure','ejection fraction decreased','left ventricular systolic dysfunction']],
+  ['myocarditis', ['心肌炎']],
+  ['心肌炎', ['myocarditis']],
+  ['infusion reaction', ['infusion related reaction','hypersensitivity','allergic reaction','輸注反應','輸液反應']],
+  ['輸注反應', ['infusion related reaction','infusion reaction','hypersensitivity']],
+  ['輸液反應', ['infusion related reaction','infusion reaction']],
+  ['rash', ['rash maculo-papular','skin rash','dermatitis','皮疹','紅疹']],
+  ['皮疹', ['rash maculo-papular','rash','dermatitis']],
+  ['紅疹', ['rash maculo-papular','rash']],
+  ['ppe', ['palmar plantar erythrodysesthesia syndrome','hand foot syndrome','hand-foot syndrome','手足症候群']],
+  ['hand foot', ['palmar plantar erythrodysesthesia syndrome','hand-foot syndrome','ppe']],
+  ['手足症候群', ['palmar plantar erythrodysesthesia syndrome','hand-foot syndrome','ppe']],
+  ['neuropathy', ['peripheral sensory neuropathy','peripheral motor neuropathy','paresthesia','神經病變','手麻']],
+  ['神經病變', ['peripheral sensory neuropathy','peripheral motor neuropathy','neuropathy']],
+  ['手麻', ['peripheral sensory neuropathy','paresthesia','neuropathy']],
+  ['fatigue', ['asthenia','tired','疲倦','倦怠']],
+  ['疲倦', ['fatigue','asthenia']],
+  ['倦怠', ['fatigue','asthenia']],
+  ['sepsis', ['septic shock','infection','敗血症']],
+  ['敗血症', ['sepsis','septic shock']],
+  ['hypothyroid', ['hypothyroidism','甲狀腺低下']],
+  ['甲狀腺低下', ['hypothyroidism','hypothyroid']],
+  ['hyperthyroid', ['hyperthyroidism','甲狀腺亢進']],
+  ['甲狀腺亢進', ['hyperthyroidism','hyperthyroid']],
+  ['hypertension', ['blood pressure increased','high blood pressure','bp','高血壓']],
+  ['bp', ['blood pressure increased','hypertension']],
+  ['高血壓', ['hypertension','blood pressure increased']],
+  ['hypersensitivity', ['allergic reaction','infusion related reaction','過敏']],
+  ['過敏', ['hypersensitivity','allergic reaction']],
+  ['fever', ['pyrexia','發燒','febrile']],
+  ['發燒', ['pyrexia','fever','febrile neutropenia']]
+];
+const aliasMap = new Map();
+aliasPairs.forEach(([k,vals])=>aliasMap.set(norm(k), vals.map(norm)));
+function expandQuery(raw){
+  const base = norm(raw);
+  if(!base) return [];
+  const out = new Set([base]);
+  for(const [k,vals] of aliasMap.entries()){
+    if(base.includes(k) || normLoose(base).includes(normLoose(k))) vals.forEach(v=>out.add(v));
+  }
+  const words = tokenize(base);
+  words.forEach(w=>{ if(aliasMap.has(w)) aliasMap.get(w).forEach(v=>out.add(v)); });
+  return Array.from(out).filter(Boolean);
+}
+function bigrams(s){
+  const x=normLoose(s); const out=[];
+  if(x.length<2) return x?[x]:[];
+  for(let i=0;i<x.length-1;i++) out.push(x.slice(i,i+2));
+  return out;
+}
+function dice(a,b){
+  const A=bigrams(a), B=bigrams(b); if(!A.length||!B.length)return 0;
+  const counts=new Map(); B.forEach(x=>counts.set(x,(counts.get(x)||0)+1));
+  let hit=0; A.forEach(x=>{const c=counts.get(x)||0; if(c){hit++; counts.set(x,c-1);}});
+  return (2*hit)/(A.length+B.length);
+}
+function levenshtein(a,b){
+  a=normLoose(a); b=normLoose(b);
+  const al=a.length, bl=b.length; if(!al) return bl; if(!bl) return al;
+  if(Math.abs(al-bl)>Math.max(3, Math.ceil(Math.max(al,bl)*0.45))) return Math.max(al,bl);
+  let prev=Array.from({length:bl+1},(_,i)=>i), cur=new Array(bl+1);
+  for(let i=1;i<=al;i++){
+    cur[0]=i;
+    for(let j=1;j<=bl;j++) cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    [prev,cur]=[cur,prev];
+  }
+  return prev[bl];
+}
+function tokenTypoScore(qTokens, indexTokens){
+  if(!qTokens.length) return 0;
+  let total=0;
+  qTokens.forEach(qt=>{
+    let best=0;
+    indexTokens.forEach(it=>{
+      const ql=normLoose(qt), il=normLoose(it);
+      if(it===qt) best=Math.max(best,1);
+      else if(ql.length<=3 || il.length<=3) { /* short abbreviations require exact token match */ }
+      else if(it.includes(qt)||qt.includes(it)) best=Math.max(best,0.88);
+      else {
+        const mx=Math.max(ql.length, il.length);
+        if(mx>=4){
+          const d=levenshtein(qt,it);
+          const allowed = mx<=5 ? 1 : (mx<=9 ? 2 : 3);
+          if(d<=allowed) best=Math.max(best, 0.78 - d*0.08);
+        }
+      }
+    });
+    total += best;
+  });
+  return total/qTokens.length;
+}
+function scorePair(p, raw){
+  const queries = expandQuery(raw);
+  const useFuzzy = fuzzyToggle ? fuzzyToggle.checked : true;
+  let best={score:0, reason:''};
+  const rawNorm = norm(raw);
+  for(const q of queries){
+    const qLoose = normLoose(q);
+    if(!q) continue;
+    const isAliasQuery = q !== rawNorm;
+    const isShort = qLoose.length<=3;
+    const qTokenCount = tokenize(q).length;
+    const termTokensNow = tokenize(p._termNorm);
+    const termTokenHit = termTokensNow.includes(q);
+    const indexTokenHit = p._fuzzyTokens.includes(q);
+    const termPhraseHit = phraseMatch(p._termNorm, q, termTokensNow);
+    const fuzzyPhraseHit = phraseMatch(p._searchShort+' '+p._aliasText, q, p._fuzzyTokens);
+    const searchPhraseHit = phraseMatch(p._search, q, p._indexTokens);
+    if((isShort ? termTokenHit : termPhraseHit) || (!isShort && qTokenCount>1 && q.includes(p._termNorm))) best={score:Math.max(best.score,1.00), reason:q===rawNorm?'term':'alias'};
+    else if(isShort ? indexTokenHit : (isAliasQuery ? fuzzyPhraseHit : searchPhraseHit)) best={score:Math.max(best.score,0.94), reason:q===rawNorm?'content':'alias'};
+    else if(qLoose && !isShort && !isAliasQuery && qTokenCount>1 && (p._termLoose.includes(qLoose)||p._searchLoose.includes(qLoose))) best={score:Math.max(best.score,0.90), reason:'loose'};
+    if(useFuzzy && !isAliasQuery){
+      const qTokens=tokenize(q);
+      const termTok=tokenTypoScore(qTokens, tokenize(p._termNorm));
+      if(termTok>0) best={score:Math.max(best.score,0.70 + termTok*0.20), reason:termTok>=0.999?'term':'term typo'};
+      const tok=tokenTypoScore(qTokens, p._fuzzyTokens);
+      if(tok>=0.999) best={score:Math.max(best.score,0.86), reason:'tokens'};
+      else if(tok>0) best={score:Math.max(best.score,0.50 + tok*0.30), reason:'typo'};
+      const termDice = Math.max(dice(q, p._termNorm), dice(q, p._searchShort));
+      if(termDice>=0.62) best={score:Math.max(best.score,0.42 + termDice*0.42), reason:'fuzzy'};
+    }
+  }
+  return best;
+}
 function flagClass(flag){
   if(flag==='Same')return 'bg-emerald-50 border-emerald-200 text-emerald-900';
   if(flag==='Changed')return 'bg-amber-50 border-amber-200 text-amber-950';
@@ -122,7 +311,9 @@ function detailRow(label, a, b){
 function pairLabel(p){
   const term = p.term;
   const suffix = p.change_flag;
-  return `${term} — ${suffix}`;
+  const q = search.value.trim();
+  const score = q ? ` · ${Math.round((p._matchScore||0)*100)}%${p._matchReason?` ${p._matchReason}`:''}` : '';
+  return `${term} — ${suffix}${score}`;
 }
 function buildPairs(){
   pairs = maps.map((m,idx)=>{
@@ -132,7 +323,17 @@ function buildPairs(){
     const text = [term, m.v5_term, m.v6_term, m.v5_soc, m.v6_soc, m.change_flag, m.changed_fields, m.possible_counterpart_term, m.mapping_note,
                   r5&&[r5.g1,r5.g2,r5.g3,r5.g4,r5.g5,r5.definition,r5.note].join(' '),
                   r6&&[r6.g1,r6.g2,r6.g3,r6.g4,r6.g5,r6.definition,r6.note].join(' ')].filter(Boolean).join(' ');
-    return {...m, _idx:idx, term, r5, r6, _search:norm(text)};
+    const termText=[term,m.v5_term,m.v6_term].filter(Boolean).join(' ');
+    const aliasHits=[];
+    const aliasBase = norm(termText);
+    const termTokens = new Set(tokenize(aliasBase));
+    aliasPairs.forEach(([k,vals])=>{
+      const candidates=[k,...vals].map(norm).filter(x=>normLoose(x).length>2);
+      if(candidates.some(c=>normLoose(c).length<=3 ? termTokens.has(c) : phraseMatch(aliasBase, c, Array.from(termTokens)))) aliasHits.push(k);
+    });
+    const searchText = norm(text + ' ' + aliasHits.join(' '));
+    const shortText = norm([termText,m.v5_soc,m.v6_soc,m.change_flag].filter(Boolean).join(' '));
+    return {...m, _idx:idx, term, r5, r6, _search:searchText, _termNorm:norm(termText), _termLoose:normLoose(termText), _searchLoose:normLoose(searchText), _searchShort:shortText, _indexTokens:tokenize(searchText), _fuzzyTokens:tokenize(shortText+' '+aliasHits.join(' ')), _aliasText:norm(aliasHits.join(' ')), _matchScore:1, _matchReason:''};
   }).sort((a,b)=>a.term.localeCompare(b.term)||a.change_flag.localeCompare(b.change_flag));
   pairs.forEach((p,i)=>p._display=i);
 }
@@ -141,18 +342,26 @@ function fillFilters(){
   socFilter.innerHTML='<option value="ALL">All SOCs</option>'+socs.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
 }
 function filteredPairs(){
-  const q=norm(search.value); const soc=socFilter.value; const flag=flagFilter.value;
-  return pairs.filter(p=>{
+  const qRaw=search.value.trim(); const soc=socFilter.value; const flag=flagFilter.value;
+  const threshold = (fuzzyToggle && fuzzyToggle.checked) ? 0.76 : 0.90;
+  const out = pairs.filter(p=>{
     if(flag!=='ALL' && p.change_flag!==flag) return false;
     if(soc!=='ALL' && p.v5_soc!==soc && p.v6_soc!==soc) return false;
-    if(q && !p._search.includes(q)) return false;
+    if(qRaw){
+      const s=scorePair(p,qRaw);
+      p._matchScore=s.score; p._matchReason=s.reason;
+      if(s.score < threshold) return false;
+    } else { p._matchScore=1; p._matchReason=''; }
     return true;
   });
+  if(qRaw) out.sort((a,b)=>(b._matchScore-a._matchScore)||a.term.localeCompare(b.term)||a.change_flag.localeCompare(b.change_flag));
+  return out;
 }
 function refreshList(){
   const list=filteredPairs();
   termList.innerHTML=list.map(p=>`<option value="${p._idx}">${esc(pairLabel(p))}</option>`).join('');
-  listInfo.textContent=`符合 ${list.length} 個 AE pair / term。`;
+  const q=search.value.trim();
+  listInfo.textContent=`符合 ${list.length} 個 AE pair / term。${q ? (fuzzyToggle.checked ? ' 已依模糊相關度排序。' : ' 模糊搜尋關閉。') : ''}`;
   if(list.length){ termList.value=list[0]._idx; renderPair(Number(termList.value)); }
   else { termTitle.textContent='沒有符合條件的 AE term'; flagBox.innerHTML=''; result.innerHTML='<div class="rounded-lg bg-slate-100 p-4">請放寬搜尋條件。</div>'; }
 }
@@ -214,6 +423,7 @@ async function boot(){
 search.addEventListener('input', refreshList);
 socFilter.addEventListener('change', refreshList);
 flagFilter.addEventListener('change', refreshList);
+fuzzyToggle.addEventListener('change', refreshList);
 termList.addEventListener('change', ()=>renderPair(Number(termList.value)));
 copyBtn.addEventListener('click', copyResult);
 boot();

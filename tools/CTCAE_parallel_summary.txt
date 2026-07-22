@@ -1,3 +1,5 @@
+CTCAE v1.1 parallel full fuzzy-search package
+
 CTCAE v1.0 parallel full extraction package
 
 Scope
@@ -45,3 +47,19 @@ UI behavior
 Limitations
 - This is an automated extraction and QA package for quick checking. Formal reporting should follow the protocol-specified CTCAE version and the official NCI source document.
 - Same-name terms are mapped directly. Possible renamed/related terms are flagged only as possible counterparts in ctcae_v5_v6_map.csv, not silently merged.
+
+
+Update v1.1:
+- ctcae.html adds fuzzy search and clinical alias expansion.
+- Search supports common abbreviations/aliases such as ALT/SGPT/GPT, AST/SGOT/GOT, ILD/pneumonitis, QT/QTc, platelet/PLT/thrombocytopenia, ANC/neutropenia, LVEF/EF, PPE/hand-foot syndrome.
+- Search supports selected Traditional Chinese clinical hints such as 腹瀉, 血小板, 中性球, 白血球, 貧血, 黃疸, 腎功能, 肌酸酐, 間質性肺炎, 口腔黏膜炎, 皮疹, 手足症候群, 神經病變, 甲狀腺低下, 甲狀腺亢進.
+- Results are ranked by relevance when a search query is entered.
+- Long CTCAE grade text remains only in the result area; term dropdown still only lists AE terms plus flag and match score.
+- CSV extraction data are unchanged from v1.0; v1.1 only updates the search UI/logic.
+
+
+Fuzzy search QA v1.1:
+- Added ctcae_fuzzy_search_QA.csv.
+- Tested exact terms, common oncology abbreviations, Traditional Chinese hints, and representative typos.
+- Important behavior: alias-expanded queries are constrained to AE terms / term aliases, not long grade text, to avoid broad false-positive matches.
+- Threshold for fuzzy search is intentionally conservative to prevent terms like ALT from pulling many unrelated liver tests.

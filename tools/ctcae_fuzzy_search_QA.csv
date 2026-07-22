@@ -1,0 +1,15 @@
+query,expected_key_result,top_results,pass,note
+SGPT,Alanine aminotransferase increased,Alanine aminotransferase increased,TRUE,Clinical abbreviation alias
+GPT,Alanine aminotransferase increased,Alanine aminotransferase increased,TRUE,Clinical abbreviation alias
+ALT,Alanine aminotransferase increased,Alanine aminotransferase increased,TRUE,Clinical abbreviation alias
+ILD,Pneumonitis,Pneumonitis,TRUE,Interstitial lung disease alias
+pneumonits,Pneumonitis,"Pneumonitis; Pneumonia",TRUE,Typo tolerance
+Pneumonitis,Pneumonitis,Pneumonitis,TRUE,Exact term
+Diarrhea,Diarrhea,Diarrhea,TRUE,Exact term
+diarhea,Diarrhea,Diarrhea,TRUE,Typo tolerance
+血小板,"Platelet count decreased; Thrombocytopenia","Platelet count decreased; Thrombocytopenia",TRUE,Traditional Chinese clinical hint
+腹瀉,"Diarrhea; Colitis","Colitis; Diarrhea",TRUE,Traditional Chinese clinical hint
+肌酸酐,"Creatinine increased; Creatinine clearance decreased","Creatinine clearance decreased; Creatinine increased",TRUE,Traditional Chinese clinical hint
+QTc,Electrocardiogram QT corrected interval prolonged,Electrocardiogram QT corrected interval prolonged,TRUE,Clinical abbreviation alias
+手足症候群,Palmar-plantar erythrodysesthesia syndrome,Palmar-plantar erythrodysesthesia syndrome,TRUE,Traditional Chinese clinical hint
+甲狀腺低下,Hypothyroidism,Hypothyroidism,TRUE,Traditional Chinese clinical hint
