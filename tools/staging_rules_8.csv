@@ -47,8 +47,17 @@ Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T4a,N0|N1,M0,Any,Any,IIIB,AJ
 Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T4a,N2,M0,Any,Any,IVA,AJCC8 EAC/GEJ pTNM quick/anatomic summary; rows showing ranges mean the full prognostic table separates by additional factors. Quick mode does not ask grade/location.
 Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T4b,N0|N1|N2,M0,Any,Any,IVA,AJCC8 EAC/GEJ pTNM quick/anatomic summary; rows showing ranges mean the full prognostic table separates by additional factors. Quick mode does not ask grade/location.
 Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,Tis,N0,M0,Any,Any,0,AJCC8 EAC/GEJ pTNM quick/anatomic summary; rows showing ranges mean the full prognostic table separates by additional factors. Quick mode does not ask grade/location.
-Stomach,AJCC8,clinical,Any,Any,M1,Any,Any,IV,Stomach cTNM sentinel only: M1 is Stage IV; full cTNM/ypTNM not released.
-Stomach,AJCC8,clinical,T4b,Any|NX,M0,Any,Any,IV,Stomach cTNM sentinel only: AJCC8 notes cT4bNXM0 has very poor prognosis and is clinical Stage IV; full cTNM/ypTNM not released.
+Stomach,AJCC8,clinical,Any,Any,M1,Any,Any,IVB,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T1,N0,M0,Any,Any,I,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T1,N1|N2|N3,M0,Any,Any,IIA,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T2,N0,M0,Any,Any,I,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T2,N1|N2|N3,M0,Any,Any,IIA,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T3,N0,M0,Any,Any,IIB,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T3,N1|N2|N3,M0,Any,Any,III,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T4a,N0,M0,Any,Any,IIB,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T4a,N1|N2|N3,M0,Any,Any,III,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,T4b,Any,M0,Any,Any,IVA,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,clinical,Tis,N0,M0,Any,Any,0,Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.
 Stomach,AJCC8,pathological,Any,Any,M1,Any,Any,IV,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
 Stomach,AJCC8,pathological,T1,N0,M0,Any,Any,IA,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
 Stomach,AJCC8,pathological,T1,N1,M0,Any,Any,IB,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
@@ -86,6 +95,27 @@ Stomach,AJCC8,pathological,T4b,N2,M0,Any,Any,IIIB,Stomach AJCC8 pTNM audited: pr
 Stomach,AJCC8,pathological,T4b,N3a,M0,Any,Any,IIIC,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
 Stomach,AJCC8,pathological,T4b,N3b,M0,Any,Any,IIIC,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
 Stomach,AJCC8,pathological,Tis,N0,M0,Any,Any,0,Stomach AJCC8 pTNM audited: preserves T1a/T1b and N3a/N3b. Clinical/yp have distinct tables; only cT4b/M1 sentinel rules included.
+Stomach,AJCC8,yp,Any,Any,M1,Any,Any,IV,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T1,N0,M0,Any,Any,I,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T1,N1,M0,Any,Any,I,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T1,N2,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T1,N3,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T2,N0,M0,Any,Any,I,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T2,N1,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T2,N2,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T2,N3,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T3,N0,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T3,N1,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T3,N2,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T3,N3,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4a,N0,M0,Any,Any,II,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4a,N1,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4a,N2,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4a,N3,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4b,N0,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4b,N1,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4b,N2,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
+Stomach,AJCC8,yp,T4b,N3,M0,Any,Any,III,Stomach AJCC8 ypTNM post-neoadjuvant stage grouping audited v0.8.1 from AJCC8 stomach ypTNM table; N3a/N3b are accepted through N3 parent rule.
 Small intestine,AJCC8,any,Any,Any,M1,Any,Any,IV,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.
 Small intestine,AJCC8,any,Any,N1,M0,Any,Any,IIIA,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.
 Small intestine,AJCC8,any,Any,N2,M0,Any,Any,IIIB,AJCC8 QA v0.5: TNM-first audited for current quick-staging site; verify in formal clinical documentation.

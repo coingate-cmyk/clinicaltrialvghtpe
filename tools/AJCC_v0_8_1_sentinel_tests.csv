@@ -1,0 +1,31 @@
+site,edition,classification,t,n,m,expected_stage,actual_stage,pass,matched_rule
+Stomach,AJCC8,clinical,Tis,N0,M0,0,0,True,Stomach AJCC8 clinical Tis/N0/M0 -> 0
+Stomach,AJCC8,clinical,T1,N0,M0,I,I,True,Stomach AJCC8 clinical T1/N0/M0 -> I
+Stomach,AJCC8,clinical,T1a,N0,M0,I,I,True,Stomach AJCC8 clinical T1/N0/M0 -> I
+Stomach,AJCC8,clinical,T2,N0,M0,I,I,True,Stomach AJCC8 clinical T2/N0/M0 -> I
+Stomach,AJCC8,clinical,T1b,N3b,M0,IIA,IIA,True,Stomach AJCC8 clinical T1/N1|N2|N3/M0 -> IIA
+Stomach,AJCC8,clinical,T2,N2,M0,IIA,IIA,True,Stomach AJCC8 clinical T2/N1|N2|N3/M0 -> IIA
+Stomach,AJCC8,clinical,T3,N0,M0,IIB,IIB,True,Stomach AJCC8 clinical T3/N0/M0 -> IIB
+Stomach,AJCC8,clinical,T4a,N0,M0,IIB,IIB,True,Stomach AJCC8 clinical T4a/N0/M0 -> IIB
+Stomach,AJCC8,clinical,T3,N3a,M0,III,III,True,Stomach AJCC8 clinical T3/N1|N2|N3/M0 -> III
+Stomach,AJCC8,clinical,T4a,N3b,M0,III,III,True,Stomach AJCC8 clinical T4a/N1|N2|N3/M0 -> III
+Stomach,AJCC8,clinical,T4b,NX,M0,IVA,IVA,True,Stomach AJCC8 clinical T4b/Any/M0 -> IVA
+Stomach,AJCC8,clinical,T4b,N2,M0,IVA,IVA,True,Stomach AJCC8 clinical T4b/Any/M0 -> IVA
+Stomach,AJCC8,clinical,T1,N0,M1,IVB,IVB,True,Stomach AJCC8 clinical Any/Any/M1 -> IVB
+Stomach,AJCC8,pathological,T1a,N3a,M0,IIB,IIB,True,Stomach AJCC8 pathological T1a/N3a/M0 -> IIB
+Stomach,AJCC8,pathological,T1b,N3b,M0,IIIB,IIIB,True,Stomach AJCC8 pathological T1b/N3b/M0 -> IIIB
+Stomach,AJCC8,pathological,T3,N2,M0,IIIA,IIIA,True,Stomach AJCC8 pathological T3/N2/M0 -> IIIA
+Stomach,AJCC8,pathological,T3,N3b,M0,IIIC,IIIC,True,Stomach AJCC8 pathological T3/N3b/M0 -> IIIC
+Stomach,AJCC8,yp,T1,N1,M0,I,I,True,Stomach AJCC8 yp T1/N1/M0 -> I
+Stomach,AJCC8,yp,T3,N1,M0,II,II,True,Stomach AJCC8 yp T3/N1/M0 -> II
+Stomach,AJCC8,yp,T4b,N3b,M0,III,III,True,Stomach AJCC8 yp T4b/N3/M0 -> III
+Stomach,AJCC8,yp,T2,N0,M1,IV,IV,True,Stomach AJCC8 yp Any/Any/M1 -> IV
+Esophagus / EGJ - squamous,AJCC8,clinical,T3,N1,M0,III,III,True,Esophagus / EGJ - squamous AJCC8 clinical T3/N1/M0 -> III
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T4a,N2,M0,IVA,IVA,True,Esophagus / EGJ - adenocarcinoma AJCC8 clinical T1|T2|T3|T4a/N2/M0 -> IVA
+Colon,AJCC8,clinical,T4b,N2b,M0,IIIC,IIIC,True,Colon AJCC8 any T4b/N1|N1a|N1b|N1c|N2|N2a|N2b/M0 -> IIIC
+Rectum,AJCC8,clinical,T3,N1c,M0,IIIB,IIIB,True,Rectum AJCC8 any T3|T4a/N1|N1a|N1b|N1c/M0 -> IIIB
+Exocrine pancreas,AJCC8,clinical,T1c,N2,M0,III,III,True,Exocrine pancreas AJCC8 any T1|T1a|T1b|T1c|T2|T3/N2/M0 -> III
+Ampulla of Vater,AJCC8,clinical,T3b,N0,M0,IIB,IIB,True,Ampulla of Vater AJCC8 any T3b/N0/M0 -> IIB
+HCC / Liver,AJCC8,clinical,T3,N0,M0,IIIA,IIIA,True,HCC / Liver AJCC8 any T3/N0/M0 -> IIIA
+Appendix - carcinoma,AJCC8,clinical,T1,N0,M1a,IVA,IVA,True,Appendix - carcinoma AJCC8 any Any/Any/M1a -> IVA
+NET - stomach,AJCC8,clinical,T4,N1,M0,III,III,True,NET - stomach AJCC8 any T1|T2|T3|T4/N1/M0 -> III

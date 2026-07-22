@@ -153,7 +153,7 @@ function categoryPrefix(v){return String(v||'').replace(/[abc]$/i,'')}
 function categoryFamily(v){const m=String(v||'').match(/^([TNM])(\d)/i);return m?(m[1].toUpperCase()+m[2]):String(v||'')}
 function expandRangeToken(token){const raw=String(token||'').trim();const m=raw.match(/^([TNM])(\d)\s*-\s*(\d)$/i);if(!m)return[raw];const kind=m[1].toUpperCase();const a=Number(m[2]),b=Number(m[3]);const out=[];for(let i=a;i<=b;i++)out.push(kind+i);return out}
 function splitRuleToken(raw){const s=String(raw||'Any').trim();if(!s||s==='Any')return['Any'];return s.split(/[\/;|]+|(?:\s+or\s+)|(?:\s*,\s*)/i).flatMap(expandRangeToken).map(x=>x.trim()).filter(Boolean)}
-function tokenOK(ruleToken,userVal){if(ruleToken==='Any'||userVal==='Any')return true;if(ruleToken===userVal)return true;if(ruleToken===categoryPrefix(userVal))return true;if(categoryPrefix(ruleToken)===userVal)return true;if(categoryFamily(ruleToken)===categoryFamily(userVal)&&!/[abc]$/i.test(ruleToken))return true;return false}
+function tokenOK(ruleToken,userVal){if(ruleToken==='Any'||userVal==='Any')return true;if(ruleToken===userVal)return true;if(ruleToken===categoryPrefix(userVal))return true;if(categoryPrefix(ruleToken)===userVal)return true;return false}
 function ok(ruleVal,userVal){return splitRuleToken(ruleVal).some(tok=>tokenOK(tok,userVal))}
 function siteOK(ruleSite,userSite){return String(ruleSite||'').trim()===String(userSite||'').trim()||String(ruleSite||'').trim()==='Any'||String(userSite||'').trim()==='Any'}
 function classOK(ruleClass,userClass){const r=normalizeClassification(ruleClass),u=normalizeClassification(userClass);return r==='any'||u==='any'||r===u}
@@ -162,7 +162,7 @@ function classExactness(ruleClass,userClass){const r=normalizeClassification(rul
 function specificityScore(rule,q){return (siteOK(rule.site,q.site)?3:-99)+exactness(rule.edition,q.edition)+classExactness(rule.classification,q.classification)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)+exactness(rule.grade||'Any',q.grade||'Any')+exactness(rule.location||'Any',q.location||'Any')}
 function match(rule,q){return siteOK(rule.site,q.site)&&ok(rule.edition,q.edition)&&classOK(rule.classification,q.classification)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)&&ok(rule.grade||'Any',q.grade||'Any')&&ok(rule.location||'Any',q.location||'Any')}
 function bestMatch(q){return allRules().filter(r=>match(r,q)).sort((a,b)=>specificityScore(b,q)-specificityScore(a,q)||stageRank(b.stage)-stageRank(a.stage))[0]||null}
-function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 staging rules ${staticRules.length} 筆、TNM definitions ${staticDefinitions.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
+function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 staging rules ${staticRules.length} 筆、TNM definitions · v0.8.1 gastric clinical + exact matcher ${staticDefinitions.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
 function refreshSites(){const vals=uniq(baseSites.concat(allRules().map(r=>r.site)));const old=site.value;site.innerHTML=vals.map(x=>`<option value="${escapeHTML(x)}">${escapeHTML(x)}</option>`).join('');site.value=vals.includes(old)?old:(vals.includes('Stomach')?'Stomach':vals[0])}
 function rulesForCurrentSiteAndEditions(){const eds=selectedEditions();const cls=selectedClassifications();return allRules().filter(r=>siteOK(r.site,site.value)&&cls.some(c=>classOK(r.classification,c))&&eds.some(ed=>ok(r.edition,ed)))}
 function usesField(rs,field){return rs.some(r=>String(r[field]||'Any')!=='Any')}
@@ -210,7 +210,7 @@ function renderCategoryDefinitions(q){
     const note=def.detail_note?`<div class="ml-5 text-xs text-slate-500">${escapeHTML(def.detail_note)}</div>`:'';
     return`<div class="py-1"><b>${escapeHTML(cat)}</b>：${escapeHTML(def.short_definition)}${parent}${status}${note}</div>`;
   }).join('');
-  return`<div class="mt-3 rounded-lg border border-slate-200 bg-white/80 p-3"><div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Selected TNM definitions for double check</div><div class="mt-1 text-sm text-slate-800">${body}</div></div>`;
+  return`<div class="mt-3 rounded-lg border border-slate-200 bg-white/80 p-3"><div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Selected TNM definitions · v0.8.1 gastric clinical + exact matcher for double check</div><div class="mt-1 text-sm text-slate-800">${body}</div></div>`;
 }
 function categoryDefinitionsText(q){
   const items=categoryDefinitionItems(q);

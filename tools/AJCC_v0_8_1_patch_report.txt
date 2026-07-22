@@ -1,0 +1,27 @@
+AJCC quick staging v0.8.1 gastric clinical + exact matcher fix
+
+Fixed two issues:
+1) AJCC8 Stomach clinical cTNM had only sentinel rows in v0.7; full cTNM rows are now added.
+2) The matcher was too permissive: same-letter categories could match each other (e.g., M0 vs M1, AJCC7 vs AJCC8). The JS token matcher now allows only:
+   - exact match
+   - rule parent to selected subcategory (e.g., N3 matches N3a/N3b)
+   - selected parent to rule subcategory when appropriate
+   It no longer matches by broad letter family.
+
+Stomach AJCC8 rows after patch:
+- clinical rows: 11
+- pathological rows: 37
+- yp rows: 21
+
+QA:
+- sentinel tests: 30
+- failed sentinel tests: 0
+- definition coverage rows checked: 554
+- missing definitions: 0
+
+Deploy:
+tools/quick-staging.html
+tools/staging_rules_7.csv
+tools/staging_rules_8.csv
+tools/staging_site_requirements.csv
+tools/staging_category_definitions.csv

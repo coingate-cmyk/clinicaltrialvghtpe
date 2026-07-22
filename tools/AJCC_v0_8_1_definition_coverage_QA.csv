@@ -1,0 +1,555 @@
+site,edition,classification,category_type,category,definition_found_exact,definition_found_parent,status
+Esophagus / EGJ - squamous,AJCC7,clinical,M,M1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,N,N3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,M,M0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,T1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,N,N0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,T2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,N,N1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,N,N2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,T3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,T4a,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,T4b,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,clinical,T,Tis,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,M,M1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,N,N3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,M,M0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,T1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,N,N0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,T2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,N,N1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,N,N2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,T3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,T4a,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,T4b,True,False,PASS
+Esophagus / EGJ - squamous,AJCC7,pathological,T,Tis,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,M,M1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,N,N3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,M,M0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,T1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,N,N0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,T2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,N,N1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,N,N2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,T3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,T4a,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,T4b,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,clinical,T,Tis,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,M,M1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,N,N3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,M,M0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,T1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,N,N0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,T2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,N,N1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,N,N2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,T3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,T4a,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,T4b,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC7,pathological,T,Tis,True,False,PASS
+Stomach,AJCC7,any,M,M1,True,False,PASS
+Stomach,AJCC7,any,T,T1,True,False,PASS
+Stomach,AJCC7,any,N,N0,True,False,PASS
+Stomach,AJCC7,any,M,M0,True,False,PASS
+Stomach,AJCC7,any,N,N1,True,False,PASS
+Stomach,AJCC7,any,N,N2,True,False,PASS
+Stomach,AJCC7,any,N,N3,True,False,PASS
+Stomach,AJCC7,any,T,T2,True,False,PASS
+Stomach,AJCC7,any,T,T3,True,False,PASS
+Stomach,AJCC7,any,T,T4a,True,False,PASS
+Stomach,AJCC7,any,T,T4b,True,False,PASS
+Stomach,AJCC7,any,T,Tis,True,False,PASS
+Small intestine,AJCC7,any,M,M1,True,False,PASS
+Small intestine,AJCC7,any,N,N1,True,False,PASS
+Small intestine,AJCC7,any,M,M0,True,False,PASS
+Small intestine,AJCC7,any,N,N2,True,False,PASS
+Small intestine,AJCC7,any,T,T1,True,False,PASS
+Small intestine,AJCC7,any,N,N0,True,False,PASS
+Small intestine,AJCC7,any,T,T2,True,False,PASS
+Small intestine,AJCC7,any,T,T3,True,False,PASS
+Small intestine,AJCC7,any,T,T4,True,False,PASS
+Small intestine,AJCC7,any,T,Tis,True,False,PASS
+Colon,AJCC7,any,M,M1,True,False,PASS
+Colon,AJCC7,any,M,M1a,True,False,PASS
+Colon,AJCC7,any,M,M1b,True,False,PASS
+Colon,AJCC7,any,T,T1,True,False,PASS
+Colon,AJCC7,any,N,N0,True,False,PASS
+Colon,AJCC7,any,M,M0,True,False,PASS
+Colon,AJCC7,any,N,N1,True,False,PASS
+Colon,AJCC7,any,N,N1c,True,False,PASS
+Colon,AJCC7,any,N,N2a,True,False,PASS
+Colon,AJCC7,any,N,N2b,True,False,PASS
+Colon,AJCC7,any,T,T2,True,False,PASS
+Colon,AJCC7,any,T,T3,True,False,PASS
+Colon,AJCC7,any,T,T4a,True,False,PASS
+Colon,AJCC7,any,T,T4b,True,False,PASS
+Colon,AJCC7,any,N,N2,True,False,PASS
+Colon,AJCC7,any,T,Tis,True,False,PASS
+Rectum,AJCC7,any,M,M1,True,False,PASS
+Rectum,AJCC7,any,M,M1a,True,False,PASS
+Rectum,AJCC7,any,M,M1b,True,False,PASS
+Rectum,AJCC7,any,T,T1,True,False,PASS
+Rectum,AJCC7,any,N,N0,True,False,PASS
+Rectum,AJCC7,any,M,M0,True,False,PASS
+Rectum,AJCC7,any,N,N1,True,False,PASS
+Rectum,AJCC7,any,N,N1c,True,False,PASS
+Rectum,AJCC7,any,N,N2a,True,False,PASS
+Rectum,AJCC7,any,N,N2b,True,False,PASS
+Rectum,AJCC7,any,T,T2,True,False,PASS
+Rectum,AJCC7,any,T,T3,True,False,PASS
+Rectum,AJCC7,any,T,T4a,True,False,PASS
+Rectum,AJCC7,any,T,T4b,True,False,PASS
+Rectum,AJCC7,any,N,N2,True,False,PASS
+Rectum,AJCC7,any,T,Tis,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,M,M1b,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,N,N0,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,M,M1a,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,N,N1,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,N,N2,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,M,M0,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T1,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T2,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T3,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T4,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T4a,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,T4b,True,False,PASS
+Appendix - carcinoma,AJCC7,clinical,T,Tis,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,M,M1b,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,N,N0,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,M,M1a,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,N,N1,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,N,N2,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,M,M0,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T1,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T2,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T3,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T4,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T4a,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,T4b,True,False,PASS
+Appendix - carcinoma,AJCC7,pathological,T,Tis,True,False,PASS
+HCC / Liver,AJCC7,any,M,M1,True,False,PASS
+HCC / Liver,AJCC7,any,N,N1,True,False,PASS
+HCC / Liver,AJCC7,any,M,M0,True,False,PASS
+HCC / Liver,AJCC7,any,T,T1,True,False,PASS
+HCC / Liver,AJCC7,any,N,N0,True,False,PASS
+HCC / Liver,AJCC7,any,T,T2,True,False,PASS
+HCC / Liver,AJCC7,any,T,T3a,True,False,PASS
+HCC / Liver,AJCC7,any,T,T3b,True,False,PASS
+HCC / Liver,AJCC7,any,T,T4,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,M,M1,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,N,N1,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,M,M0,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,T,T1,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,N,N0,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,T,T2,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,T,T3,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,T,T4,True,False,PASS
+Intrahepatic bile duct,AJCC7,any,T,Tis,True,False,PASS
+Perihilar bile duct,AJCC7,any,M,M1,True,False,PASS
+Perihilar bile duct,AJCC7,any,N,N2,True,False,PASS
+Perihilar bile duct,AJCC7,any,M,M0,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T1,True,False,PASS
+Perihilar bile duct,AJCC7,any,N,N0,True,False,PASS
+Perihilar bile duct,AJCC7,any,N,N1,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T2,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T2a,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T2b,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T3,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,T4,True,False,PASS
+Perihilar bile duct,AJCC7,any,T,Tis,True,False,PASS
+Distal bile duct,AJCC7,any,M,M1,True,False,PASS
+Distal bile duct,AJCC7,any,T,T1,True,False,PASS
+Distal bile duct,AJCC7,any,N,N0,True,False,PASS
+Distal bile duct,AJCC7,any,M,M0,True,False,PASS
+Distal bile duct,AJCC7,any,N,N1,True,False,PASS
+Distal bile duct,AJCC7,any,T,T2,True,False,PASS
+Distal bile duct,AJCC7,any,T,T3,True,False,PASS
+Distal bile duct,AJCC7,any,T,T4,True,False,PASS
+Distal bile duct,AJCC7,any,T,Tis,True,False,PASS
+Gallbladder,AJCC7,any,M,M1,True,False,PASS
+Gallbladder,AJCC7,any,N,N2,True,False,PASS
+Gallbladder,AJCC7,any,M,M0,True,False,PASS
+Gallbladder,AJCC7,any,T,T1,True,False,PASS
+Gallbladder,AJCC7,any,N,N0,True,False,PASS
+Gallbladder,AJCC7,any,N,N1,True,False,PASS
+Gallbladder,AJCC7,any,T,T2,True,False,PASS
+Gallbladder,AJCC7,any,T,T3,True,False,PASS
+Gallbladder,AJCC7,any,T,T4,True,False,PASS
+Gallbladder,AJCC7,any,T,Tis,True,False,PASS
+Ampulla of Vater,AJCC7,any,M,M1,True,False,PASS
+Ampulla of Vater,AJCC7,any,T,T1,True,False,PASS
+Ampulla of Vater,AJCC7,any,N,N0,True,False,PASS
+Ampulla of Vater,AJCC7,any,M,M0,True,False,PASS
+Ampulla of Vater,AJCC7,any,N,N1,True,False,PASS
+Ampulla of Vater,AJCC7,any,T,T2,True,False,PASS
+Ampulla of Vater,AJCC7,any,T,T3,True,False,PASS
+Ampulla of Vater,AJCC7,any,T,T4,True,False,PASS
+Ampulla of Vater,AJCC7,any,T,Tis,True,False,PASS
+Exocrine pancreas,AJCC7,any,M,M1,True,False,PASS
+Exocrine pancreas,AJCC7,any,T,T1,True,False,PASS
+Exocrine pancreas,AJCC7,any,N,N0,True,False,PASS
+Exocrine pancreas,AJCC7,any,M,M0,True,False,PASS
+Exocrine pancreas,AJCC7,any,N,N1,True,False,PASS
+Exocrine pancreas,AJCC7,any,T,T2,True,False,PASS
+Exocrine pancreas,AJCC7,any,T,T3,True,False,PASS
+Exocrine pancreas,AJCC7,any,T,T4,True,False,PASS
+Exocrine pancreas,AJCC7,any,T,Tis,True,False,PASS
+NET - stomach,AJCC7,any,M,M1,True,False,PASS
+NET - stomach,AJCC7,any,N,N1,True,False,PASS
+NET - stomach,AJCC7,any,M,M0,True,False,PASS
+NET - stomach,AJCC7,any,T,T1,True,False,PASS
+NET - stomach,AJCC7,any,N,N0,True,False,PASS
+NET - stomach,AJCC7,any,T,T2,True,False,PASS
+NET - stomach,AJCC7,any,T,T3,True,False,PASS
+NET - stomach,AJCC7,any,T,T4,True,False,PASS
+NET - stomach,AJCC7,any,T,Tis,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,M,M1,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,N,N1,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,M,M0,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,T,T1,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,N,N0,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,T,T2,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,T,T3,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,T,T4,True,False,PASS
+NET - duodenum / ampulla,AJCC7,any,T,Tis,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,M,M1,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,N,N1,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,M,M0,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,T,T1,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,N,N0,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,T,T2,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,T,T3,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,T,T4,True,False,PASS
+NET - jejunum / ileum,AJCC7,any,T,Tis,True,False,PASS
+NET - appendix,AJCC7,clinical,M,M1,True,False,PASS
+NET - appendix,AJCC7,clinical,N,N1,True,False,PASS
+NET - appendix,AJCC7,clinical,M,M0,True,False,PASS
+NET - appendix,AJCC7,clinical,T,T1,True,False,PASS
+NET - appendix,AJCC7,clinical,N,N0,True,False,PASS
+NET - appendix,AJCC7,clinical,T,T2,True,False,PASS
+NET - appendix,AJCC7,clinical,T,T3,True,False,PASS
+NET - appendix,AJCC7,clinical,T,T4,True,False,PASS
+NET - appendix,AJCC7,pathological,M,M1,True,False,PASS
+NET - appendix,AJCC7,pathological,N,N1,True,False,PASS
+NET - appendix,AJCC7,pathological,M,M0,True,False,PASS
+NET - appendix,AJCC7,pathological,T,T1,True,False,PASS
+NET - appendix,AJCC7,pathological,N,N0,True,False,PASS
+NET - appendix,AJCC7,pathological,T,T2,True,False,PASS
+NET - appendix,AJCC7,pathological,T,T3,True,False,PASS
+NET - appendix,AJCC7,pathological,T,T4,True,False,PASS
+NET - colon / rectum,AJCC7,any,M,M1,True,False,PASS
+NET - colon / rectum,AJCC7,any,N,N1,True,False,PASS
+NET - colon / rectum,AJCC7,any,M,M0,True,False,PASS
+NET - colon / rectum,AJCC7,any,T,T1,True,False,PASS
+NET - colon / rectum,AJCC7,any,N,N0,True,False,PASS
+NET - colon / rectum,AJCC7,any,T,T2,True,False,PASS
+NET - colon / rectum,AJCC7,any,T,T3,True,False,PASS
+NET - colon / rectum,AJCC7,any,T,T4,True,False,PASS
+NET - colon / rectum,AJCC7,any,T,Tis,True,False,PASS
+NET - pancreas,AJCC7,clinical,M,M1,True,False,PASS
+NET - pancreas,AJCC7,clinical,T,T1,True,False,PASS
+NET - pancreas,AJCC7,clinical,N,N0,True,False,PASS
+NET - pancreas,AJCC7,clinical,M,M0,True,False,PASS
+NET - pancreas,AJCC7,clinical,T,T2,True,False,PASS
+NET - pancreas,AJCC7,clinical,T,T3,True,False,PASS
+NET - pancreas,AJCC7,clinical,N,N1,True,False,PASS
+NET - pancreas,AJCC7,clinical,T,T4,True,False,PASS
+NET - pancreas,AJCC7,clinical,T,Tis,True,False,PASS
+NET - pancreas,AJCC7,pathological,M,M1,True,False,PASS
+NET - pancreas,AJCC7,pathological,T,T1,True,False,PASS
+NET - pancreas,AJCC7,pathological,N,N0,True,False,PASS
+NET - pancreas,AJCC7,pathological,M,M0,True,False,PASS
+NET - pancreas,AJCC7,pathological,T,T2,True,False,PASS
+NET - pancreas,AJCC7,pathological,T,T3,True,False,PASS
+NET - pancreas,AJCC7,pathological,N,N1,True,False,PASS
+NET - pancreas,AJCC7,pathological,T,T4,True,False,PASS
+NET - pancreas,AJCC7,pathological,T,Tis,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,M,M1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,N,N3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,M,M0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,N,N0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,N,N1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,N,N2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T4,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T4a,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,T4b,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,clinical,T,Tis,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,M,M1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,N,N3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,M,M0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,N,N1,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,N,N2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T1a,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,N,N0,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T1b,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T2,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T3,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T4a,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,T4b,True,False,PASS
+Esophagus / EGJ - squamous,AJCC8,pathological,T,Tis,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,M,M1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,N,N3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,M,M0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,T1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,N,N0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,N,N1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,T2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,T3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,T4a,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,N,N2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,T4b,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,clinical,T,Tis,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,M,M1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,N,N3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,M,M0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,T1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,N,N0,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,N,N1,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,N,N2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,T2,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,T3,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,T4a,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,T4b,True,False,PASS
+Esophagus / EGJ - adenocarcinoma,AJCC8,pathological,T,Tis,True,False,PASS
+Stomach,AJCC8,clinical,M,M1,True,False,PASS
+Stomach,AJCC8,clinical,T,T1,True,False,PASS
+Stomach,AJCC8,clinical,N,N0,True,False,PASS
+Stomach,AJCC8,clinical,M,M0,True,False,PASS
+Stomach,AJCC8,clinical,N,N1,True,False,PASS
+Stomach,AJCC8,clinical,N,N2,True,False,PASS
+Stomach,AJCC8,clinical,N,N3,True,False,PASS
+Stomach,AJCC8,clinical,T,T2,True,False,PASS
+Stomach,AJCC8,clinical,T,T3,True,False,PASS
+Stomach,AJCC8,clinical,T,T4a,True,False,PASS
+Stomach,AJCC8,clinical,T,T4b,True,False,PASS
+Stomach,AJCC8,clinical,T,Tis,True,False,PASS
+Stomach,AJCC8,pathological,M,M1,True,False,PASS
+Stomach,AJCC8,pathological,T,T1,True,False,PASS
+Stomach,AJCC8,pathological,N,N0,True,False,PASS
+Stomach,AJCC8,pathological,M,M0,True,False,PASS
+Stomach,AJCC8,pathological,N,N1,True,False,PASS
+Stomach,AJCC8,pathological,N,N2,True,False,PASS
+Stomach,AJCC8,pathological,N,N3a,True,False,PASS
+Stomach,AJCC8,pathological,N,N3b,True,False,PASS
+Stomach,AJCC8,pathological,T,T1a,True,False,PASS
+Stomach,AJCC8,pathological,T,T1b,True,False,PASS
+Stomach,AJCC8,pathological,T,T2,True,False,PASS
+Stomach,AJCC8,pathological,T,T3,True,False,PASS
+Stomach,AJCC8,pathological,T,T4a,True,False,PASS
+Stomach,AJCC8,pathological,T,T4b,True,False,PASS
+Stomach,AJCC8,pathological,T,Tis,True,False,PASS
+Stomach,AJCC8,yp,M,M1,True,False,PASS
+Stomach,AJCC8,yp,T,T1,True,False,PASS
+Stomach,AJCC8,yp,N,N0,True,False,PASS
+Stomach,AJCC8,yp,M,M0,True,False,PASS
+Stomach,AJCC8,yp,N,N1,True,False,PASS
+Stomach,AJCC8,yp,N,N2,True,False,PASS
+Stomach,AJCC8,yp,N,N3,True,False,PASS
+Stomach,AJCC8,yp,T,T2,True,False,PASS
+Stomach,AJCC8,yp,T,T3,True,False,PASS
+Stomach,AJCC8,yp,T,T4a,True,False,PASS
+Stomach,AJCC8,yp,T,T4b,True,False,PASS
+Small intestine,AJCC8,any,M,M1,True,False,PASS
+Small intestine,AJCC8,any,N,N1,True,False,PASS
+Small intestine,AJCC8,any,M,M0,True,False,PASS
+Small intestine,AJCC8,any,N,N2,True,False,PASS
+Small intestine,AJCC8,any,T,T1,True,False,PASS
+Small intestine,AJCC8,any,T,T2,True,False,PASS
+Small intestine,AJCC8,any,N,N0,True,False,PASS
+Small intestine,AJCC8,any,T,T3,True,False,PASS
+Small intestine,AJCC8,any,T,T4,True,False,PASS
+Small intestine,AJCC8,any,T,Tis,True,False,PASS
+Colon,AJCC8,any,M,M1,True,False,PASS
+Colon,AJCC8,any,M,M1a,True,False,PASS
+Colon,AJCC8,any,M,M1b,True,False,PASS
+Colon,AJCC8,any,M,M1c,True,False,PASS
+Colon,AJCC8,any,T,T1,True,False,PASS
+Colon,AJCC8,any,N,N2a,True,False,PASS
+Colon,AJCC8,any,M,M0,True,False,PASS
+Colon,AJCC8,any,T,T2,True,False,PASS
+Colon,AJCC8,any,N,N0,True,False,PASS
+Colon,AJCC8,any,N,N1,True,False,PASS
+Colon,AJCC8,any,N,N1a,True,False,PASS
+Colon,AJCC8,any,N,N1b,True,False,PASS
+Colon,AJCC8,any,N,N1c,True,False,PASS
+Colon,AJCC8,any,N,N2b,True,False,PASS
+Colon,AJCC8,any,T,T3,True,False,PASS
+Colon,AJCC8,any,T,T4a,True,False,PASS
+Colon,AJCC8,any,T,T4b,True,False,PASS
+Colon,AJCC8,any,N,N2,True,False,PASS
+Colon,AJCC8,any,T,Tis,True,False,PASS
+Rectum,AJCC8,any,M,M1,True,False,PASS
+Rectum,AJCC8,any,M,M1a,True,False,PASS
+Rectum,AJCC8,any,M,M1b,True,False,PASS
+Rectum,AJCC8,any,M,M1c,True,False,PASS
+Rectum,AJCC8,any,T,T1,True,False,PASS
+Rectum,AJCC8,any,N,N2a,True,False,PASS
+Rectum,AJCC8,any,M,M0,True,False,PASS
+Rectum,AJCC8,any,T,T2,True,False,PASS
+Rectum,AJCC8,any,N,N0,True,False,PASS
+Rectum,AJCC8,any,N,N1,True,False,PASS
+Rectum,AJCC8,any,N,N1a,True,False,PASS
+Rectum,AJCC8,any,N,N1b,True,False,PASS
+Rectum,AJCC8,any,N,N1c,True,False,PASS
+Rectum,AJCC8,any,N,N2b,True,False,PASS
+Rectum,AJCC8,any,T,T3,True,False,PASS
+Rectum,AJCC8,any,T,T4a,True,False,PASS
+Rectum,AJCC8,any,T,T4b,True,False,PASS
+Rectum,AJCC8,any,N,N2,True,False,PASS
+Rectum,AJCC8,any,T,Tis,True,False,PASS
+Appendix - carcinoma,AJCC8,any,M,M1,True,False,PASS
+Appendix - carcinoma,AJCC8,any,M,M1a,True,False,PASS
+Appendix - carcinoma,AJCC8,any,M,M1b,True,False,PASS
+Appendix - carcinoma,AJCC8,any,M,M1c,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N2,True,False,PASS
+Appendix - carcinoma,AJCC8,any,M,M0,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T1,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T2,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N0,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N1,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N1a,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N1b,True,False,PASS
+Appendix - carcinoma,AJCC8,any,N,N1c,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T3,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T4,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T4a,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,T4b,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,Tis,True,False,PASS
+Appendix - carcinoma,AJCC8,any,T,Tis(LAMN),True,False,PASS
+HCC / Liver,AJCC8,any,M,M1,True,False,PASS
+HCC / Liver,AJCC8,any,N,N1,True,False,PASS
+HCC / Liver,AJCC8,any,M,M0,True,False,PASS
+HCC / Liver,AJCC8,any,T,T1,True,False,PASS
+HCC / Liver,AJCC8,any,N,N0,True,False,PASS
+HCC / Liver,AJCC8,any,T,T1a,True,False,PASS
+HCC / Liver,AJCC8,any,T,T1b,True,False,PASS
+HCC / Liver,AJCC8,any,T,T2,True,False,PASS
+HCC / Liver,AJCC8,any,T,T3,True,False,PASS
+HCC / Liver,AJCC8,any,T,T4,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,M,M1,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,N,N1,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,M,M0,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T1,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,N,N0,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T1a,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T1b,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T2,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T3,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,T4,True,False,PASS
+Intrahepatic bile duct,AJCC8,any,T,Tis,True,False,PASS
+Perihilar bile duct,AJCC8,any,M,M1,True,False,PASS
+Perihilar bile duct,AJCC8,any,N,N1,True,False,PASS
+Perihilar bile duct,AJCC8,any,M,M0,True,False,PASS
+Perihilar bile duct,AJCC8,any,N,N2,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T1,True,False,PASS
+Perihilar bile duct,AJCC8,any,N,N0,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T2,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T2a,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T2b,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T3,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,T4,True,False,PASS
+Perihilar bile duct,AJCC8,any,T,Tis,True,False,PASS
+Distal bile duct,AJCC8,any,M,M1,True,False,PASS
+Distal bile duct,AJCC8,any,T,T1,True,False,PASS
+Distal bile duct,AJCC8,any,N,N0,True,False,PASS
+Distal bile duct,AJCC8,any,M,M0,True,False,PASS
+Distal bile duct,AJCC8,any,T,T2,True,False,PASS
+Distal bile duct,AJCC8,any,T,T3,True,False,PASS
+Distal bile duct,AJCC8,any,N,N1,True,False,PASS
+Distal bile duct,AJCC8,any,N,N2,True,False,PASS
+Distal bile duct,AJCC8,any,T,T4,True,False,PASS
+Distal bile duct,AJCC8,any,T,Tis,True,False,PASS
+Gallbladder,AJCC8,any,M,M1,True,False,PASS
+Gallbladder,AJCC8,any,N,N2,True,False,PASS
+Gallbladder,AJCC8,any,M,M0,True,False,PASS
+Gallbladder,AJCC8,any,T,T1,True,False,PASS
+Gallbladder,AJCC8,any,T,T1a,True,False,PASS
+Gallbladder,AJCC8,any,T,T1b,True,False,PASS
+Gallbladder,AJCC8,any,N,N0,True,False,PASS
+Gallbladder,AJCC8,any,T,T2,True,False,PASS
+Gallbladder,AJCC8,any,T,T2a,True,False,PASS
+Gallbladder,AJCC8,any,T,T2b,True,False,PASS
+Gallbladder,AJCC8,any,T,T3,True,False,PASS
+Gallbladder,AJCC8,any,N,N1,True,False,PASS
+Gallbladder,AJCC8,any,T,T4,True,False,PASS
+Gallbladder,AJCC8,any,T,Tis,True,False,PASS
+Ampulla of Vater,AJCC8,any,M,M1,True,False,PASS
+Ampulla of Vater,AJCC8,any,N,N2,True,False,PASS
+Ampulla of Vater,AJCC8,any,M,M0,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T1,True,False,PASS
+Ampulla of Vater,AJCC8,any,N,N0,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T1a,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T1b,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T2,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T3a,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T3b,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T3,True,False,PASS
+Ampulla of Vater,AJCC8,any,N,N1,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,T4,True,False,PASS
+Ampulla of Vater,AJCC8,any,T,Tis,True,False,PASS
+Exocrine pancreas,AJCC8,any,M,M1,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T1,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T1a,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T1b,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T1c,True,False,PASS
+Exocrine pancreas,AJCC8,any,N,N0,True,False,PASS
+Exocrine pancreas,AJCC8,any,M,M0,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T2,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T3,True,False,PASS
+Exocrine pancreas,AJCC8,any,N,N1,True,False,PASS
+Exocrine pancreas,AJCC8,any,N,N2,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,T4,True,False,PASS
+Exocrine pancreas,AJCC8,any,T,Tis,True,False,PASS
+NET - stomach,AJCC8,any,M,M1,True,False,PASS
+NET - stomach,AJCC8,any,T,T1,True,False,PASS
+NET - stomach,AJCC8,any,N,N0,True,False,PASS
+NET - stomach,AJCC8,any,M,M0,True,False,PASS
+NET - stomach,AJCC8,any,T,T2,True,False,PASS
+NET - stomach,AJCC8,any,T,T3,True,False,PASS
+NET - stomach,AJCC8,any,T,T4,True,False,PASS
+NET - stomach,AJCC8,any,N,N1,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,M,M1,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,N,N1,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,M,M0,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,T,T1,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,N,N0,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,T,T2,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,T,T3,True,False,PASS
+NET - duodenum / ampulla,AJCC8,any,T,T4,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,M,M1,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,N,N1,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,N,N2,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,M,M0,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,T,T1,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,N,N0,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,T,T2,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,T,T3,True,False,PASS
+NET - jejunum / ileum,AJCC8,any,T,T4,True,False,PASS
+NET - appendix,AJCC8,any,M,M1,True,False,PASS
+NET - appendix,AJCC8,any,N,N1,True,False,PASS
+NET - appendix,AJCC8,any,M,M0,True,False,PASS
+NET - appendix,AJCC8,any,T,T1,True,False,PASS
+NET - appendix,AJCC8,any,N,N0,True,False,PASS
+NET - appendix,AJCC8,any,T,T2,True,False,PASS
+NET - appendix,AJCC8,any,T,T3,True,False,PASS
+NET - appendix,AJCC8,any,T,T4,True,False,PASS
+NET - colon / rectum,AJCC8,any,M,M1,True,False,PASS
+NET - colon / rectum,AJCC8,any,N,N1,True,False,PASS
+NET - colon / rectum,AJCC8,any,M,M0,True,False,PASS
+NET - colon / rectum,AJCC8,any,T,T1,True,False,PASS
+NET - colon / rectum,AJCC8,any,N,N0,True,False,PASS
+NET - colon / rectum,AJCC8,any,T,T2,True,False,PASS
+NET - colon / rectum,AJCC8,any,T,T3,True,False,PASS
+NET - colon / rectum,AJCC8,any,T,T4,True,False,PASS
+NET - pancreas,AJCC8,any,M,M1,True,False,PASS
+NET - pancreas,AJCC8,any,N,N1,True,False,PASS
+NET - pancreas,AJCC8,any,M,M0,True,False,PASS
+NET - pancreas,AJCC8,any,T,T1,True,False,PASS
+NET - pancreas,AJCC8,any,N,N0,True,False,PASS
+NET - pancreas,AJCC8,any,T,T2,True,False,PASS
+NET - pancreas,AJCC8,any,T,T3,True,False,PASS
+NET - pancreas,AJCC8,any,T,T4,True,False,PASS
