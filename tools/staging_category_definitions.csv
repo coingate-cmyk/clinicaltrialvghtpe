@@ -1,0 +1,636 @@
+﻿site,edition,classification,category_type,category,short_definition,detail_note,verification_status
+Ampulla of Vater,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,T1,Tumor limited to ampulla of Vater or sphincter of Oddi（限於 Vater 壺腹或 Oddi 括約肌）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,T2,Tumor invades duodenal wall（侵犯十二指腸壁）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,T3,Tumor invades pancreas（侵犯胰臟）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,T4,Tumor invades peripancreatic soft tissues or other adjacent organs/structures（侵犯胰周軟組織或其他鄰近器官/構造）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Ampulla of Vater,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T1,Tumor limited to ampulla/sphincter of Oddi or with perisphincteric/duodenal submucosal invasion（限於壺腹/Oddi 括約肌或侵犯括約肌周邊/十二指腸黏膜下層；依 T1a/T1b 細分）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T1a,Tumor limited to ampulla of Vater or sphincter of Oddi（限於 Vater 壺腹或 Oddi 括約肌）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T1b,Tumor invades beyond sphincter of Oddi and/or into duodenal submucosa（侵犯 Oddi 括約肌外及/或十二指腸黏膜下層）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T2,Tumor invades muscularis propria of the duodenum（侵犯十二指腸固有肌層）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T3,Tumor directly invades pancreas or peripancreatic/periduodenal tissue without major arterial involvement（直接侵犯胰臟或胰周/十二指腸周邊組織，未侵犯主要動脈；依 T3a/T3b 細分）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T3a,Tumor directly invades pancreas up to 0.5 cm（直接侵犯胰臟 ≤0.5 cm）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T3b,Tumor extends >0.5 cm into pancreas or into peripancreatic/periduodenal tissue or duodenal serosa without celiac/SMA involvement（侵犯胰臟 >0.5 cm 或侵犯胰周/十二指腸周邊組織/十二指腸漿膜，未侵犯腹腔幹/SMA）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,T4,"Tumor involves celiac axis, superior mesenteric artery, and/or common hepatic artery（侵犯腹腔幹、上腸繫膜動脈及/或總肝動脈）",,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Ampulla of Vater,AJCC8,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,M,M1a,"Intraperitoneal metastasis beyond the right lower quadrant, including pseudomyxoma peritonei（右下腹以外腹腔內轉移，含腹膜偽黏液瘤）",,checked_v0_7
+Appendix - carcinoma,AJCC7,any,M,M1b,Non-peritoneal metastasis（非腹膜遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T3,Tumor invades through muscularis propria into subserosa or mesoappendix（穿越肌層至漿膜下或闌尾繫膜）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T4,Tumor invades visceral peritoneum or directly invades/adheres to adjacent organs/structures（侵犯臟層腹膜或直接侵犯/沾黏鄰近器官/構造）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T4a,"Tumor invades through visceral peritoneum, including acellular mucin/mucinous epithelium on serosa or mesoappendix（侵犯穿透臟層腹膜，含無細胞黏液/黏液性上皮於漿膜或闌尾繫膜）",,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,T4b,Tumor directly invades or adheres to adjacent organs or structures（直接侵犯或沾黏鄰近器官/構造）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Appendix - carcinoma,AJCC7,any,T,Tis(LAMN),Low-grade appendiceal mucinous neoplasm confined by muscularis propria（低度惡性黏液性腫瘤，限於肌層內；依 AJCC8 表）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,M,M1a,Intraperitoneal acellular mucin without identifiable tumor cells（腹腔內無細胞黏液，未見腫瘤細胞）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,M,M1b,"Intraperitoneal metastasis only, including mucinous deposits containing tumor cells（僅腹腔內轉移，含有腫瘤細胞之黏液沉積）",,checked_v0_7
+Appendix - carcinoma,AJCC8,any,M,M1c,Metastasis to sites other than peritoneum（非腹膜部位遠端轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N1,One to three positive nodes or tumor deposits with all nodes negative（1–3 顆陽性淋巴結，或無陽性淋巴結但有 tumor deposits）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N1a,One positive regional lymph node（1 顆陽性區域淋巴結）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N1b,Two or three positive regional lymph nodes（2–3 顆陽性區域淋巴結）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N1c,Tumor deposits with all identifiable lymph nodes negative（無陽性淋巴結但有 tumor deposits）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,N2,Four or more positive regional lymph nodes（≥4 顆陽性區域淋巴結）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T3,Tumor invades through muscularis propria into subserosa or mesoappendix（穿越肌層至漿膜下或闌尾繫膜）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T4,Tumor invades visceral peritoneum or directly invades/adheres to adjacent organs/structures（侵犯臟層腹膜或直接侵犯/沾黏鄰近器官/構造）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T4a,"Tumor invades through visceral peritoneum, including acellular mucin/mucinous epithelium on serosa or mesoappendix（侵犯穿透臟層腹膜，含無細胞黏液/黏液性上皮於漿膜或闌尾繫膜）",,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,T4b,Tumor directly invades or adheres to adjacent organs or structures（直接侵犯或沾黏鄰近器官/構造）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Appendix - carcinoma,AJCC8,any,T,Tis(LAMN),Low-grade appendiceal mucinous neoplasm confined by muscularis propria（低度惡性黏液性腫瘤，限於肌層內；依 AJCC8 表）,,checked_v0_7
+Colon,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Colon,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Colon,AJCC7,any,M,M1a,Metastasis confined to one distant organ or site（單一遠端器官/部位轉移）,,checked_v0_7
+Colon,AJCC7,any,M,M1b,Metastases in more than one distant organ/site or the peritoneum（多個遠端器官/部位或腹膜轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N1,Metastasis in 1–3 regional lymph nodes or applicable N1 subcategory（1–3 顆區域淋巴結轉移，或符合 N1 子類別）,,checked_v0_7
+Colon,AJCC7,any,N,N1a,Metastasis in 1 regional lymph node（1 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N1b,Metastasis in 2–3 regional lymph nodes（2–3 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N1c,Tumor deposit(s) without positive regional lymph nodes（無陽性區域淋巴結但有 tumor deposits）,,checked_v0_7
+Colon,AJCC7,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N2a,Metastasis in 4–6 regional lymph nodes（4–6 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,N2b,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Colon,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Colon,AJCC7,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Colon,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Colon,AJCC7,any,T,T3,Tumor invades through muscularis propria into pericolorectal tissues（穿越固有肌層至結腸/直腸周圍組織）,,checked_v0_7
+Colon,AJCC7,any,T,T4a,Tumor penetrates to the surface of the visceral peritoneum（穿透至臟層腹膜表面）,,checked_v0_7
+Colon,AJCC7,any,T,T4b,Tumor directly invades or adheres to other organs or structures（直接侵犯或沾黏其他器官/構造）,,checked_v0_7
+Colon,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Colon,AJCC7,any,T,Tis,Carcinoma in situ: intraepithelial or invasion of lamina propria（原位癌；上皮內或侵犯固有層）,,checked_v0_7
+Colon,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Colon,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Colon,AJCC8,any,M,M1a,Metastasis to one distant organ/site without peritoneal metastasis（單一遠端器官/部位且無腹膜轉移）,,checked_v0_7
+Colon,AJCC8,any,M,M1b,Metastases to two or more distant organs/sites without peritoneal metastasis（兩個以上遠端器官/部位且無腹膜轉移）,,checked_v0_7
+Colon,AJCC8,any,M,M1c,"Metastasis to the peritoneal surface, with or without other organ/site metastases（有腹膜表面轉移，可合併其他遠端轉移）",,checked_v0_7
+Colon,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes or applicable N1 subcategory（1–3 顆區域淋巴結轉移，或符合 N1 子類別）,,checked_v0_7
+Colon,AJCC8,any,N,N1a,Metastasis in 1 regional lymph node（1 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,N1b,Metastasis in 2–3 regional lymph nodes（2–3 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,N1c,Tumor deposit(s) without positive regional lymph nodes（無陽性區域淋巴結但有 tumor deposits）,,checked_v0_7
+Colon,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,N2a,Metastasis in 4–6 regional lymph nodes（4–6 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,N2b,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Colon,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Colon,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Colon,AJCC8,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Colon,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Colon,AJCC8,any,T,T3,Tumor invades through muscularis propria into pericolorectal tissues（穿越固有肌層至結腸/直腸周圍組織）,,checked_v0_7
+Colon,AJCC8,any,T,T4a,Tumor penetrates to the surface of the visceral peritoneum（穿透至臟層腹膜表面）,,checked_v0_7
+Colon,AJCC8,any,T,T4b,Tumor directly invades or adheres to other organs or structures（直接侵犯或沾黏其他器官/構造）,,checked_v0_7
+Colon,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Colon,AJCC8,any,T,Tis,Carcinoma in situ: intraepithelial or invasion of lamina propria（原位癌；上皮內或侵犯固有層）,,checked_v0_7
+Distal bile duct,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Distal bile duct,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Distal bile duct,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Distal bile duct,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Distal bile duct,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,T1,Tumor confined to bile duct（限於膽管）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,T2,Tumor invades beyond bile duct wall（侵犯膽管壁外）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,T3,"Tumor invades gallbladder, pancreas, duodenum, or other adjacent organs without celiac/SMA involvement（侵犯膽囊、胰臟、十二指腸或其他鄰近器官，未侵犯腹腔幹/SMA）",,checked_v0_7
+Distal bile duct,AJCC7,any,T,T4,Tumor involves celiac axis or superior mesenteric artery（侵犯腹腔幹或上腸繫膜動脈）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Distal bile duct,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Distal bile duct,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Distal bile duct,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Distal bile duct,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Distal bile duct,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Distal bile duct,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Distal bile duct,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,T1,Tumor invades bile duct wall with depth <5 mm（侵犯膽管壁，深度 <5 mm）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,T2,Tumor invades bile duct wall with depth 5–12 mm（侵犯膽管壁，深度 5–12 mm）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,T3,Tumor invades bile duct wall with depth >12 mm（侵犯膽管壁，深度 >12 mm）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,T4,"Tumor involves celiac axis, superior mesenteric artery, and/or common hepatic artery（侵犯腹腔幹、上腸繫膜動脈及/或總肝動脈）",,checked_v0_7
+Distal bile duct,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Distal bile duct,AJCC8,any,T,Tis,Carcinoma in situ / high-grade dysplasia（原位癌／高度異生）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T3,Tumor invades adventitia（侵犯外膜）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T4,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T4a,"Resectable invasion of pleura, pericardium, azygos vein, diaphragm, or peritoneum（可切除之鄰近構造侵犯；依版本/章節用語）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,T4b,"Unresectable invasion such as aorta, vertebral body, trachea, or major airway（不可切除侵犯，如主動脈、椎體、氣管/主要氣道等）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC7,any,T,Tis,High-grade dysplasia / carcinoma in situ category for esophageal/EGJ staging（食道／EGJ 高度異生／原位病變）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T3,Tumor invades adventitia（侵犯外膜）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T4,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T4a,"Resectable invasion of pleura, pericardium, azygos vein, diaphragm, or peritoneum（可切除之鄰近構造侵犯；依版本/章節用語）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,T4b,"Unresectable invasion such as aorta, vertebral body, trachea, or major airway（不可切除侵犯，如主動脈、椎體、氣管/主要氣道等）",,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Esophagus / EGJ - adenocarcinoma,AJCC8,any,T,Tis,High-grade dysplasia / carcinoma in situ category for esophageal/EGJ staging（食道／EGJ 高度異生／原位病變）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T3,Tumor invades adventitia（侵犯外膜）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T4,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T4a,"Resectable invasion of pleura, pericardium, azygos vein, diaphragm, or peritoneum（可切除之鄰近構造侵犯；依版本/章節用語）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,T4b,"Unresectable invasion such as aorta, vertebral body, trachea, or major airway（不可切除侵犯，如主動脈、椎體、氣管/主要氣道等）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC7,any,T,Tis,High-grade dysplasia / carcinoma in situ category for esophageal/EGJ staging（食道／EGJ 高度異生／原位病變）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T3,Tumor invades adventitia（侵犯外膜）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T4,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T4a,"Resectable invasion of pleura, pericardium, azygos vein, diaphragm, or peritoneum（可切除之鄰近構造侵犯；依版本/章節用語）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,T4b,"Unresectable invasion such as aorta, vertebral body, trachea, or major airway（不可切除侵犯，如主動脈、椎體、氣管/主要氣道等）",,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Esophagus / EGJ - squamous,AJCC8,any,T,Tis,High-grade dysplasia / carcinoma in situ category for esophageal/EGJ staging（食道／EGJ 高度異生／原位病變）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,T1,"Tumor limited to pancreas, ≤2 cm（限於胰臟且 ≤2 cm）",,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,T2,"Tumor limited to pancreas, >2 cm（限於胰臟且 >2 cm）",,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,T3,Tumor extends beyond pancreas without involvement of celiac axis or SMA（超出胰臟但未侵犯腹腔幹或上腸繫膜動脈）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,T4,Tumor involves celiac axis or superior mesenteric artery（侵犯腹腔幹或上腸繫膜動脈）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Exocrine pancreas,AJCC7,any,T,Tis,"Carcinoma in situ, including PanIN-III（原位癌，含 PanIN-III）",,checked_v0_7
+Exocrine pancreas,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T1,Tumor ≤2 cm in greatest dimension（最大徑 ≤2 cm；依 T1a/T1b/T1c 細分）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T1a,Tumor ≤0.5 cm（最大徑 ≤0.5 cm）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T1b,Tumor >0.5 cm and <1 cm（最大徑 >0.5 且 <1 cm）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T1c,Tumor 1–2 cm（最大徑 1–2 cm）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T2,Tumor >2 cm and ≤4 cm（最大徑 >2 且 ≤4 cm）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T3,Tumor >4 cm（最大徑 >4 cm）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,T4,"Tumor involves celiac axis, superior mesenteric artery, and/or common hepatic artery（侵犯腹腔幹、上腸繫膜動脈及/或總肝動脈）",,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Exocrine pancreas,AJCC8,any,T,Tis,Carcinoma in situ / high-grade precursor lesion（原位癌／高度異生前驅病灶）,,checked_v0_7
+GIST,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+GIST,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+GIST,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+GIST,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移；GIST 少見，仍需依正式表格與 mitotic rate/site 判讀）,,checked_v0_7
+GIST,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+GIST,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+GIST,AJCC7,any,T,T1,Tumor ≤2 cm（腫瘤 ≤2 cm）,,checked_v0_7
+GIST,AJCC7,any,T,T2,Tumor >2 cm but ≤5 cm（>2 至 ≤5 cm）,,checked_v0_7
+GIST,AJCC7,any,T,T3,Tumor >5 cm but ≤10 cm（>5 至 ≤10 cm）,,checked_v0_7
+GIST,AJCC7,any,T,T4,Tumor >10 cm（>10 cm）,,checked_v0_7
+GIST,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+GIST,AJCC7,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+GIST,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+GIST,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+GIST,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+GIST,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移；GIST 少見，仍需依正式表格與 mitotic rate/site 判讀）,,checked_v0_7
+GIST,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+GIST,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+GIST,AJCC8,any,T,T1,Tumor ≤2 cm（腫瘤 ≤2 cm）,,checked_v0_7
+GIST,AJCC8,any,T,T2,Tumor >2 cm but ≤5 cm（>2 至 ≤5 cm）,,checked_v0_7
+GIST,AJCC8,any,T,T3,Tumor >5 cm but ≤10 cm（>5 至 ≤10 cm）,,checked_v0_7
+GIST,AJCC8,any,T,T4,Tumor >10 cm（>10 cm）,,checked_v0_7
+GIST,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+GIST,AJCC8,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+Gallbladder,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Gallbladder,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Gallbladder,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Gallbladder,AJCC7,any,N,N1,"Regional nodes along cystic duct, common bile duct, hepatic artery, and/or portal vein（膽囊管、總膽管、肝動脈及/或門靜脈旁區域淋巴結）",,checked_v0_7
+Gallbladder,AJCC7,any,N,N2,"Periaortic, pericaval, SMA, and/or celiac lymph node metastasis（主動脈旁、腔靜脈旁、SMA及/或腹腔淋巴結轉移）",,checked_v0_7
+Gallbladder,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T1,Tumor invades lamina propria or muscle layer（侵犯固有層或肌層）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T1a,Tumor invades lamina propria（侵犯固有層）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T1b,Tumor invades muscle layer（侵犯肌層）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T2,Tumor invades perimuscular connective tissue without extension beyond serosa or into liver（侵犯肌周結締組織，未穿過漿膜且未侵犯肝）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T3,Tumor perforates serosa and/or directly invades liver and/or one adjacent organ/structure（穿破漿膜及/或直接侵犯肝或一個鄰近器官/構造）,,checked_v0_7
+Gallbladder,AJCC7,any,T,T4,Tumor invades main portal vein/hepatic artery or invades two or more extrahepatic organs/structures（侵犯主門靜脈/肝動脈或兩個以上肝外器官/構造）,,checked_v0_7
+Gallbladder,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Gallbladder,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Gallbladder,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Gallbladder,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Gallbladder,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Gallbladder,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Gallbladder,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Gallbladder,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T1,Tumor invades lamina propria or muscle layer（侵犯固有層或肌層；依 T1a/T1b 細分）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T1a,Tumor invades lamina propria（侵犯固有層）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T1b,Tumor invades muscle layer（侵犯肌層）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T2,Tumor invades perimuscular connective tissue without extension beyond serosa or into liver（侵犯肌周結締組織，未穿過漿膜且未侵犯肝；依 T2a/T2b 細分）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T2a,"Tumor invades perimuscular connective tissue on peritoneal side, without serosal involvement（腹膜側肌周結締組織侵犯，未侵犯漿膜）",,checked_v0_7
+Gallbladder,AJCC8,any,T,T2b,"Tumor invades perimuscular connective tissue on hepatic side, without liver involvement（肝側肌周結締組織侵犯，未侵犯肝）",,checked_v0_7
+Gallbladder,AJCC8,any,T,T3,Tumor perforates serosa and/or directly invades liver and/or one adjacent organ/structure（穿破漿膜及/或直接侵犯肝或一個鄰近器官/構造）,,checked_v0_7
+Gallbladder,AJCC8,any,T,T4,Tumor invades main portal vein/hepatic artery or invades two or more extrahepatic organs/structures（侵犯主門靜脈/肝動脈或兩個以上肝外器官/構造）,,checked_v0_7
+Gallbladder,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Gallbladder,AJCC8,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+HCC / Liver,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+HCC / Liver,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+HCC / Liver,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+HCC / Liver,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+HCC / Liver,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T1,Solitary tumor without vascular invasion（單一腫瘤，無血管侵犯）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T2,Solitary tumor with vascular invasion or multiple tumors none >5 cm（單一腫瘤合併血管侵犯，或多發腫瘤且皆 ≤5 cm）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T3a,Multiple tumors with at least one >5 cm（多發腫瘤且至少一顆 >5 cm）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T3b,Tumor involving major branch of portal or hepatic vein（侵犯門靜脈或肝靜脈主要分支）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,T4,Tumor directly invades adjacent organs other than gallbladder or perforates visceral peritoneum（直接侵犯膽囊以外鄰近器官或穿破臟層腹膜）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+HCC / Liver,AJCC7,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+HCC / Liver,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+HCC / Liver,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+HCC / Liver,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+HCC / Liver,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+HCC / Liver,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T1,Solitary tumor ≤2 cm or >2 cm without vascular invasion（單一腫瘤；依 T1a/T1b 細分）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T1a,Solitary tumor ≤2 cm（單一腫瘤 ≤2 cm）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T1b,Solitary tumor >2 cm without vascular invasion（單一腫瘤 >2 cm，無血管侵犯）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T2,"Solitary tumor >2 cm with vascular invasion, or multiple tumors none >5 cm（單一腫瘤 >2 cm 且有血管侵犯，或多發腫瘤且皆 ≤5 cm）",,checked_v0_7
+HCC / Liver,AJCC8,any,T,T3,Multiple tumors with at least one >5 cm（多發腫瘤且至少一顆 >5 cm）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,T4,"Tumor involving major portal/hepatic vein branch, adjacent organs other than gallbladder, or perforating visceral peritoneum（侵犯主要門/肝靜脈分支、膽囊以外鄰近器官或穿破臟層腹膜）",,checked_v0_7
+HCC / Liver,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+HCC / Liver,AJCC8,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,T1,Solitary tumor without vascular invasion（單一腫瘤，無血管侵犯）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,T2,Solitary tumor with vascular invasion or multiple tumors with/without vascular invasion（單一腫瘤合併血管侵犯，或多發腫瘤）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,T3,Tumor perforates visceral peritoneum or directly invades local extrahepatic structures（穿破臟層腹膜或直接侵犯局部肝外構造）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,T4,Tumor with periductal invasion（沿膽管周圍侵犯；AJCC7）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Intrahepatic bile duct,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T1,Solitary tumor without vascular invasion（單一腫瘤，無血管侵犯；依 T1a/T1b 細分）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T1a,Solitary tumor ≤5 cm without vascular invasion（單一腫瘤 ≤5 cm，無血管侵犯）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T1b,Solitary tumor >5 cm without vascular invasion（單一腫瘤 >5 cm，無血管侵犯）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T2,"Solitary tumor with intrahepatic vascular invasion or multiple tumors, with/without vascular invasion（單一腫瘤合併肝內血管侵犯，或多發腫瘤）",,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T3,Tumor perforates visceral peritoneum（穿破臟層腹膜）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,T4,Tumor directly invades local extrahepatic structures（直接侵犯局部肝外構造）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Intrahepatic bile duct,AJCC8,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+NET - appendix,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - appendix,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - appendix,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - appendix,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - appendix,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - appendix,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - appendix,AJCC7,any,T,T1,Tumor ≤2 cm（腫瘤 ≤2 cm）,,checked_v0_7
+NET - appendix,AJCC7,any,T,T2,"Tumor >2 cm but ≤4 cm, or extension to cecum by site-specific criteria（>2 至 ≤4 cm，或依部位定義延伸至盲腸）",,checked_v0_7
+NET - appendix,AJCC7,any,T,T3,Tumor >4 cm or extension into ileum/mesoappendix by site-specific criteria（>4 cm 或依部位定義侵犯迴腸/闌尾繫膜）,,checked_v0_7
+NET - appendix,AJCC7,any,T,T4,Tumor perforates peritoneum or directly invades adjacent organs/structures（穿破腹膜或直接侵犯鄰近器官/構造）,,checked_v0_7
+NET - appendix,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - appendix,AJCC7,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+NET - appendix,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - appendix,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - appendix,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - appendix,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - appendix,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - appendix,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - appendix,AJCC8,any,T,T1,Tumor ≤2 cm（腫瘤 ≤2 cm）,,checked_v0_7
+NET - appendix,AJCC8,any,T,T2,"Tumor >2 cm but ≤4 cm, or extension to cecum by site-specific criteria（>2 至 ≤4 cm，或依部位定義延伸至盲腸）",,checked_v0_7
+NET - appendix,AJCC8,any,T,T3,Tumor >4 cm or extension into ileum/mesoappendix by site-specific criteria（>4 cm 或依部位定義侵犯迴腸/闌尾繫膜）,,checked_v0_7
+NET - appendix,AJCC8,any,T,T4,Tumor perforates peritoneum or directly invades adjacent organs/structures（穿破腹膜或直接侵犯鄰近器官/構造）,,checked_v0_7
+NET - appendix,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - appendix,AJCC8,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+NET - colon / rectum,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,T1,Tumor invades lamina propria or submucosa and is small by site-specific criteria（侵犯固有層或黏膜下層且符合小型定義）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,T2,Tumor invades muscularis propria or is larger by site-specific criteria（侵犯固有肌層或尺寸較大）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,T3,Tumor invades through muscularis propria into subserosa/pericolorectal tissue（穿越肌層至漿膜下或結腸/直腸周圍組織）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,T4,Tumor invades visceral peritoneum or other organs/structures（侵犯臟層腹膜或其他器官/構造）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - colon / rectum,AJCC7,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,T1,Tumor invades lamina propria or submucosa and is small by site-specific criteria（侵犯固有層或黏膜下層且符合小型定義）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,T2,Tumor invades muscularis propria or is larger by site-specific criteria（侵犯固有肌層或尺寸較大）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,T3,Tumor invades through muscularis propria into subserosa/pericolorectal tissue（穿越肌層至漿膜下或結腸/直腸周圍組織）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,T4,Tumor invades visceral peritoneum or other organs/structures（侵犯臟層腹膜或其他器官/構造）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - colon / rectum,AJCC8,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,T1,"Tumor limited to mucosa/submucosa and ≤1 cm, or limited to ampulla/sphincter by site-specific criteria（限於黏膜/黏膜下層且小型，或限於壺腹/括約肌）",,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,T2,Tumor invades muscularis propria or >1 cm（侵犯固有肌層或 >1 cm）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,T3,Tumor invades pancreas or peripancreatic/periduodenal tissues（侵犯胰臟或胰周/十二指腸周邊組織）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,T4,Tumor invades visceral peritoneum or adjacent organs/structures（侵犯臟層腹膜或鄰近器官/構造）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - duodenum / ampulla,AJCC7,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,T1,"Tumor limited to mucosa/submucosa and ≤1 cm, or limited to ampulla/sphincter by site-specific criteria（限於黏膜/黏膜下層且小型，或限於壺腹/括約肌）",,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,T2,Tumor invades muscularis propria or >1 cm（侵犯固有肌層或 >1 cm）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,T3,Tumor invades pancreas or peripancreatic/periduodenal tissues（侵犯胰臟或胰周/十二指腸周邊組織）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,T4,Tumor invades visceral peritoneum or adjacent organs/structures（侵犯臟層腹膜或鄰近器官/構造）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - duodenum / ampulla,AJCC8,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,N,N1,"Regional lymph node metastasis, or applicable mesenteric nodal mass definition by edition（區域淋巴結轉移；依版本可含腸繫膜淋巴結團塊定義）",,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,N,N2,Large mesenteric mass and/or extensive nodal deposits by AJCC8 NET criteria（AJCC8 NET 定義之大型腸繫膜團塊及/或廣泛節點沉積）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,T1,Tumor invades lamina propria or submucosa and is ≤1 cm（侵犯固有層或黏膜下層且 ≤1 cm）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,T2,Tumor invades muscularis propria or >1 cm（侵犯固有肌層或 >1 cm）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,T3,Tumor invades subserosa without serosal penetration（侵犯漿膜下層，未穿透漿膜）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,T4,Tumor invades visceral peritoneum/serosa or adjacent organs/structures（侵犯臟層腹膜/漿膜或鄰近構造）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - jejunum / ileum,AJCC7,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,N,N1,"Regional lymph node metastasis, or applicable mesenteric nodal mass definition by edition（區域淋巴結轉移；依版本可含腸繫膜淋巴結團塊定義）",,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,N,N2,Large mesenteric mass and/or extensive nodal deposits by AJCC8 NET criteria（AJCC8 NET 定義之大型腸繫膜團塊及/或廣泛節點沉積）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,T1,Tumor invades lamina propria or submucosa and is ≤1 cm（侵犯固有層或黏膜下層且 ≤1 cm）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,T2,Tumor invades muscularis propria or >1 cm（侵犯固有肌層或 >1 cm）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,T3,Tumor invades subserosa without serosal penetration（侵犯漿膜下層，未穿透漿膜）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,T4,Tumor invades visceral peritoneum/serosa or adjacent organs/structures（侵犯臟層腹膜/漿膜或鄰近構造）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - jejunum / ileum,AJCC8,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - pancreas,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - pancreas,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - pancreas,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - pancreas,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - pancreas,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - pancreas,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - pancreas,AJCC7,any,T,T1,"Tumor limited to pancreas, ≤2 cm（限於胰臟且 ≤2 cm）",,checked_v0_7
+NET - pancreas,AJCC7,any,T,T2,"Tumor limited to pancreas, >2 cm（限於胰臟且 >2 cm）",,checked_v0_7
+NET - pancreas,AJCC7,any,T,T3,Tumor extends beyond pancreas without celiac axis/SMA involvement（超出胰臟但未侵犯腹腔幹/SMA）,,checked_v0_7
+NET - pancreas,AJCC7,any,T,T4,Tumor involves celiac axis or superior mesenteric artery（侵犯腹腔幹或上腸繫膜動脈）,,checked_v0_7
+NET - pancreas,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - pancreas,AJCC7,any,T,Tis,Carcinoma in situ category when applicable（原位病變，若適用）,,checked_v0_7
+NET - pancreas,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - pancreas,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - pancreas,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - pancreas,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - pancreas,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - pancreas,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - pancreas,AJCC8,any,T,T1,"Tumor limited to pancreas, <2 cm（限於胰臟且 <2 cm）",,checked_v0_7
+NET - pancreas,AJCC8,any,T,T2,Tumor 2–4 cm or invading duodenum/bile duct by site-specific criteria（2–4 cm 或依部位定義侵犯十二指腸/膽管）,,checked_v0_7
+NET - pancreas,AJCC8,any,T,T3,Tumor >4 cm or invading duodenum or common bile duct（>4 cm 或侵犯十二指腸/總膽管）,,checked_v0_7
+NET - pancreas,AJCC8,any,T,T4,"Tumor involves celiac axis, superior mesenteric artery, and/or common hepatic artery（侵犯腹腔幹、上腸繫膜動脈及/或總肝動脈）",,checked_v0_7
+NET - pancreas,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - pancreas,AJCC8,any,T,Tis,"Carcinoma in situ / high-grade dysplasia, according to site-specific wording（原位癌／高度異生，依癌種定義）",,checked_v0_7
+NET - stomach,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - stomach,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - stomach,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - stomach,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - stomach,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - stomach,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - stomach,AJCC7,any,T,T1,Tumor invades lamina propria or submucosa and is small/limited by site-specific criteria（侵犯固有層或黏膜下層且符合該部位小型/侷限定義）,,checked_v0_7
+NET - stomach,AJCC7,any,T,T2,Tumor invades muscularis propria or is larger by site-specific criteria（侵犯固有肌層或尺寸較大）,,checked_v0_7
+NET - stomach,AJCC7,any,T,T3,Tumor invades subserosa（侵犯漿膜下層）,,checked_v0_7
+NET - stomach,AJCC7,any,T,T4,Tumor invades visceral peritoneum/serosa or adjacent structures（侵犯臟層腹膜/漿膜或鄰近構造）,,checked_v0_7
+NET - stomach,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - stomach,AJCC7,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+NET - stomach,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+NET - stomach,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+NET - stomach,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+NET - stomach,AJCC8,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+NET - stomach,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+NET - stomach,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+NET - stomach,AJCC8,any,T,T1,Tumor invades lamina propria or submucosa and is small/limited by site-specific criteria（侵犯固有層或黏膜下層且符合該部位小型/侷限定義）,,checked_v0_7
+NET - stomach,AJCC8,any,T,T2,Tumor invades muscularis propria or is larger by site-specific criteria（侵犯固有肌層或尺寸較大）,,checked_v0_7
+NET - stomach,AJCC8,any,T,T3,Tumor invades subserosa（侵犯漿膜下層）,,checked_v0_7
+NET - stomach,AJCC8,any,T,T4,Tumor invades visceral peritoneum/serosa or adjacent structures（侵犯臟層腹膜/漿膜或鄰近構造）,,checked_v0_7
+NET - stomach,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+NET - stomach,AJCC8,any,T,Tis,In situ / dysplasia category when available（原位/異生分類，若適用）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,N,N1,Regional lymph node metastasis（區域淋巴結轉移）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,N,N2,Distant nodal metastasis such as periaortic/pericaval/celiac/SMA nodes in AJCC7 grouping（AJCC7 中遠端淋巴結轉移，如主動脈旁/腔靜脈旁/腹腔/上腸繫膜動脈淋巴結）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T1,Tumor confined to bile duct with extension up to muscle layer or fibrous tissue（限於膽管，侵犯至肌層或纖維組織）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T2,Tumor invades beyond bile duct wall or adjacent hepatic parenchyma（侵犯膽管壁外或鄰近肝實質；依 T2a/T2b 細分）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T2a,Tumor invades beyond bile duct wall to surrounding adipose tissue（侵犯膽管壁外至周圍脂肪組織）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T2b,Tumor invades adjacent hepatic parenchyma（侵犯鄰近肝實質）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T3,Tumor invades unilateral branches of portal vein or hepatic artery（侵犯單側門靜脈或肝動脈分支）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,T4,"Tumor invades main portal vein or its branches bilaterally, common hepatic artery, bilateral second-order ducts, or unilateral second-order ducts with contralateral vascular involvement（侵犯主門靜脈/雙側分支、總肝動脈、雙側二級膽管或單側二級膽管合併對側血管侵犯）",,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Perihilar bile duct,AJCC7,any,T,Tis,Carcinoma in situ / high-grade dysplasia（原位癌／高度異生）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T1,Tumor confined to bile duct with extension up to muscle layer or fibrous tissue（限於膽管，侵犯至肌層或纖維組織）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T2,Tumor invades beyond bile duct wall or adjacent hepatic parenchyma（侵犯膽管壁外或鄰近肝實質；依 T2a/T2b 細分）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T2a,Tumor invades beyond bile duct wall to surrounding adipose tissue（侵犯膽管壁外至周圍脂肪組織）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T2b,Tumor invades adjacent hepatic parenchyma（侵犯鄰近肝實質）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T3,Tumor invades unilateral branches of portal vein or hepatic artery（侵犯單側門靜脈或肝動脈分支）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,T4,"Tumor invades main portal vein or its branches bilaterally, common hepatic artery, bilateral second-order ducts, or unilateral second-order ducts with contralateral vascular involvement（侵犯主門靜脈/雙側分支、總肝動脈、雙側二級膽管或單側二級膽管合併對側血管侵犯）",,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Perihilar bile duct,AJCC8,any,T,Tis,Carcinoma in situ / high-grade dysplasia（原位癌／高度異生）,,checked_v0_7
+Rectum,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Rectum,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Rectum,AJCC7,any,M,M1a,Metastasis confined to one distant organ or site（單一遠端器官/部位轉移）,,checked_v0_7
+Rectum,AJCC7,any,M,M1b,Metastases in more than one distant organ/site or the peritoneum（多個遠端器官/部位或腹膜轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N1,Metastasis in 1–3 regional lymph nodes or applicable N1 subcategory（1–3 顆區域淋巴結轉移，或符合 N1 子類別）,,checked_v0_7
+Rectum,AJCC7,any,N,N1a,Metastasis in 1 regional lymph node（1 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N1b,Metastasis in 2–3 regional lymph nodes（2–3 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N1c,Tumor deposit(s) without positive regional lymph nodes（無陽性區域淋巴結但有 tumor deposits）,,checked_v0_7
+Rectum,AJCC7,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N2a,Metastasis in 4–6 regional lymph nodes（4–6 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,N2b,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Rectum,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Rectum,AJCC7,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Rectum,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Rectum,AJCC7,any,T,T3,Tumor invades through muscularis propria into pericolorectal tissues（穿越固有肌層至結腸/直腸周圍組織）,,checked_v0_7
+Rectum,AJCC7,any,T,T4a,Tumor penetrates to the surface of the visceral peritoneum（穿透至臟層腹膜表面）,,checked_v0_7
+Rectum,AJCC7,any,T,T4b,Tumor directly invades or adheres to other organs or structures（直接侵犯或沾黏其他器官/構造）,,checked_v0_7
+Rectum,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Rectum,AJCC7,any,T,Tis,Carcinoma in situ: intraepithelial or invasion of lamina propria（原位癌；上皮內或侵犯固有層）,,checked_v0_7
+Rectum,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Rectum,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Rectum,AJCC8,any,M,M1a,Metastasis to one distant organ/site without peritoneal metastasis（單一遠端器官/部位且無腹膜轉移）,,checked_v0_7
+Rectum,AJCC8,any,M,M1b,Metastases to two or more distant organs/sites without peritoneal metastasis（兩個以上遠端器官/部位且無腹膜轉移）,,checked_v0_7
+Rectum,AJCC8,any,M,M1c,"Metastasis to the peritoneal surface, with or without other organ/site metastases（有腹膜表面轉移，可合併其他遠端轉移）",,checked_v0_7
+Rectum,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes or applicable N1 subcategory（1–3 顆區域淋巴結轉移，或符合 N1 子類別）,,checked_v0_7
+Rectum,AJCC8,any,N,N1a,Metastasis in 1 regional lymph node（1 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,N1b,Metastasis in 2–3 regional lymph nodes（2–3 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,N1c,Tumor deposit(s) without positive regional lymph nodes（無陽性區域淋巴結但有 tumor deposits）,,checked_v0_7
+Rectum,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,N2a,Metastasis in 4–6 regional lymph nodes（4–6 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,N2b,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Rectum,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Rectum,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Rectum,AJCC8,any,T,T1,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Rectum,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Rectum,AJCC8,any,T,T3,Tumor invades through muscularis propria into pericolorectal tissues（穿越固有肌層至結腸/直腸周圍組織）,,checked_v0_7
+Rectum,AJCC8,any,T,T4a,Tumor penetrates to the surface of the visceral peritoneum（穿透至臟層腹膜表面）,,checked_v0_7
+Rectum,AJCC8,any,T,T4b,Tumor directly invades or adheres to other organs or structures（直接侵犯或沾黏其他器官/構造）,,checked_v0_7
+Rectum,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Rectum,AJCC8,any,T,Tis,Carcinoma in situ: intraepithelial or invasion of lamina propria（原位癌；上皮內或侵犯固有層）,,checked_v0_7
+Small intestine,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Small intestine,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Small intestine,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC7,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC7,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Small intestine,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Small intestine,AJCC7,any,T,T1,Tumor invades lamina propria or submucosa（侵犯固有層或黏膜下層）,,checked_v0_7
+Small intestine,AJCC7,any,T,T1a,Tumor invades lamina propria（侵犯固有層）,,checked_v0_7
+Small intestine,AJCC7,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Small intestine,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Small intestine,AJCC7,any,T,T3,Tumor invades through muscularis propria into subserosa or nonperitonealized perimuscular tissue without serosal penetration（穿越肌層至漿膜下/非腹膜化周圍組織，未穿透漿膜）,,checked_v0_7
+Small intestine,AJCC7,any,T,T4,Tumor perforates visceral peritoneum or directly invades other organs/structures（穿透臟層腹膜或直接侵犯其他器官/構造）,,checked_v0_7
+Small intestine,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Small intestine,AJCC7,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Small intestine,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Small intestine,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Small intestine,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC8,any,N,N1,Metastasis in 1–3 regional lymph nodes（1–3 顆區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC8,any,N,N2,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）,,checked_v0_7
+Small intestine,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Small intestine,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Small intestine,AJCC8,any,T,T1,Tumor invades lamina propria or submucosa（侵犯固有層或黏膜下層）,,checked_v0_7
+Small intestine,AJCC8,any,T,T1a,Tumor invades lamina propria（侵犯固有層）,,checked_v0_7
+Small intestine,AJCC8,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Small intestine,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Small intestine,AJCC8,any,T,T3,Tumor invades through muscularis propria into subserosa or nonperitonealized perimuscular tissue without serosal penetration（穿越肌層至漿膜下/非腹膜化周圍組織，未穿透漿膜）,,checked_v0_7
+Small intestine,AJCC8,any,T,T4,Tumor perforates visceral peritoneum or directly invades other organs/structures（穿透臟層腹膜或直接侵犯其他器官/構造）,,checked_v0_7
+Small intestine,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Small intestine,AJCC8,any,T,Tis,Carcinoma in situ（原位癌）,,checked_v0_7
+Stomach,AJCC7,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Stomach,AJCC7,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N3a,Metastasis in 7–15 regional lymph nodes（7–15 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,N3b,Metastasis in 16 or more regional lymph nodes（≥16 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC7,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Stomach,AJCC7,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Stomach,AJCC7,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Stomach,AJCC7,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Stomach,AJCC7,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Stomach,AJCC7,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Stomach,AJCC7,any,T,T3,Tumor penetrates subserosal connective tissue without invasion of visceral peritoneum or adjacent structures（侵犯漿膜下結締組織，未侵犯臟層腹膜或鄰近構造）,,checked_v0_7
+Stomach,AJCC7,any,T,T4,Tumor invades serosa/visceral peritoneum or adjacent structures（侵犯漿膜/臟層腹膜或鄰近構造）,,checked_v0_7
+Stomach,AJCC7,any,T,T4a,Tumor invades serosa / visceral peritoneum（侵犯漿膜／臟層腹膜）,,checked_v0_7
+Stomach,AJCC7,any,T,T4b,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Stomach,AJCC7,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Stomach,AJCC7,any,T,Tis,Carcinoma in situ: intraepithelial tumor without invasion of lamina propria（原位癌；未侵犯固有層）,,checked_v0_7
+Stomach,AJCC8,any,M,M0,No distant metastasis（無遠端轉移）,,checked_v0_7
+Stomach,AJCC8,any,M,M1,Distant metastasis（有遠端轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N0,No regional lymph node metastasis（無區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N1,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N2,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N3,Metastasis in 7 or more regional lymph nodes（≥7 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N3a,Metastasis in 7–15 regional lymph nodes（7–15 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,N3b,Metastasis in 16 or more regional lymph nodes（≥16 顆區域淋巴結轉移）,,checked_v0_7
+Stomach,AJCC8,any,N,NX,Regional lymph nodes cannot be assessed（區域淋巴結無法評估）,,checked_v0_7
+Stomach,AJCC8,any,T,T0,No evidence of primary tumor（無原發腫瘤證據）,,checked_v0_7
+Stomach,AJCC8,any,T,T1,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）",,checked_v0_7
+Stomach,AJCC8,any,T,T1a,Tumor invades lamina propria or muscularis mucosae（侵犯固有層或黏膜肌層）,,checked_v0_7
+Stomach,AJCC8,any,T,T1b,Tumor invades submucosa（侵犯黏膜下層）,,checked_v0_7
+Stomach,AJCC8,any,T,T2,Tumor invades muscularis propria（侵犯固有肌層）,,checked_v0_7
+Stomach,AJCC8,any,T,T3,Tumor penetrates subserosal connective tissue without invasion of visceral peritoneum or adjacent structures（侵犯漿膜下結締組織，未侵犯臟層腹膜或鄰近構造）,,checked_v0_7
+Stomach,AJCC8,any,T,T4,Tumor invades serosa/visceral peritoneum or adjacent structures（侵犯漿膜/臟層腹膜或鄰近構造）,,checked_v0_7
+Stomach,AJCC8,any,T,T4a,Tumor invades serosa / visceral peritoneum（侵犯漿膜／臟層腹膜）,,checked_v0_7
+Stomach,AJCC8,any,T,T4b,Tumor invades adjacent structures（侵犯鄰近構造）,,checked_v0_7
+Stomach,AJCC8,any,T,TX,Primary tumor cannot be assessed（原發腫瘤無法評估）,,checked_v0_7
+Stomach,AJCC8,any,T,Tis,Carcinoma in situ: intraepithelial tumor without invasion of lamina propria（原位癌；未侵犯固有層）,,checked_v0_7

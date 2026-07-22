@@ -17,7 +17,7 @@
     <h1 class="text-3xl font-bold">腫瘤分期速查器</h1>
     <p class="text-slate-600 mt-2">TNM-first 速查；同一組 T/N/M 可同時比較 AJCC 7/8 與 clinical/pathological。預設不把 prognostic extra factors 混入 quick mode；若完整表格因 grade/location 等因素產生分歧，會以分期範圍與註記呈現。</p>
     <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">
-      Internal quick-check only. v0.7 已加入 AJCC 7/8 selected T/N/M definition check；ESCC/GEJ quick mode 保持 TNM-first，不強制 grade/location。分期範圍代表完整 prognostic table 尚有額外分流，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
+      Internal quick-check only. v0.6 已重新掃描 AJCC7/AJCC8 手冊與目前工具內 21 個 cancer site；ESCC/GEJ quick mode 改回 TNM-first，不強制 grade/location。分期範圍代表完整 prognostic table 尚有額外分流，請以院內正式資料與原始 AJCC/UICC 資料交叉確認。
     </p>
   </div>
 
@@ -51,7 +51,7 @@
 
   <section class="mt-6 bg-white border rounded-xl p-4 text-sm">
     <b>規則狀態：</b><span id="info">載入中...</span>
-    <div class="mt-2 text-slate-600">自動讀取同資料夾 <code>staging_rules_7.csv</code> 與 <code>staging_rules_8.csv</code>。另附 <code>staging_site_requirements.csv</code> 作為 TNM-first 例外清單，並讀取 <code>staging_category_definitions.csv</code> 在結果區顯示所選 T/N/M 定義。可手動匯入補充 staging rule CSV。新版規則欄位：<code>site,edition,classification,t,n,m,grade,location,stage,note</code>。</div>
+    <div class="mt-2 text-slate-600">自動讀取同資料夾 <code>staging_rules_7.csv</code> 與 <code>staging_rules_8.csv</code>。另附 <code>staging_site_requirements_8.csv</code> 作為 TNM-first 例外清單。可手動匯入補充 CSV。新版規則欄位：<code>site,edition,classification,t,n,m,grade,location,stage,note</code>（v0.5 已修正 grade/location CSV 解析）。舊版 <code>site,edition,classification,t,n,m,stage,note</code> 仍可讀取。</div>
     <input type="file" accept=".csv,text/csv" class="block w-full border rounded p-2 bg-slate-50 mt-3" onchange="loadFile(event)" multiple>
     <textarea id="csvbox" class="w-full h-24 border rounded p-2 font-mono text-xs mt-2" placeholder="site,edition,classification,t,n,m,grade,location,stage,note"></textarea>
     <div class="mt-2 flex flex-wrap gap-2"><button onclick="importCSV()" class="bg-blue-700 text-white px-3 py-2 rounded font-bold hover:bg-blue-800">匯入補充規則</button><button onclick="clearRules()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">清除手動匯入</button><button onclick="downloadMergedCSV()" class="bg-slate-200 px-3 py-2 rounded font-bold hover:bg-slate-300">下載目前規則快照</button></div>
@@ -90,7 +90,7 @@ const CLASS_NOTES={
  recurrence:'Recurrence / rTNM：復發或再治療時使用；需根據復發當下的臨床/病理資訊，第一版僅保留架構與補充 CSV。'
 };
 const ORD={t:['Any','Tis','Tis(LAMN)','T0','T1','T1a','T1b','T1c','T2','T2a','T2b','T3','T3a','T3b','T4','T4a','T4b','TX'],n:['Any','NX','N0','N1','N1a','N1b','N1c','N2','N2a','N2b','N3','N3a','N3b'],m:['M0','M1','M1a','M1b','M1c','Any'],grade:['Any','N/A','G1','G2','G3','GX'],location:['Any','Upper','Middle','Lower','Location X']};
-let staticRules=[];let staticDefinitions=[];let loadStatus=[];
+let staticRules=[];let loadStatus=[];
 function saved(){try{return JSON.parse(localStorage.getItem('staging_rules_user')||'[]')}catch(e){return[]}}
 function normalizeClassification(v){const x=String(v||'any').trim().toLowerCase().replace(/[\s_\-]+/g,'');if(!x||x==='any'||x==='all'||x==='both')return'any';if(['c','ctnm','clinical'].includes(x))return'clinical';if(['p','ptnm','pathologic','pathological'].includes(x))return'pathological';if(['yp','yptnm','postneoadjuvant','posttherapy','posttreatment'].includes(x))return'yp';if(['r','rtnm','recurrence','recurrent','retreatment'].includes(x))return'recurrence';return x}
 function classLabel(v){const x=normalizeClassification(v);return x==='any'?'any':x==='clinical'?'Clinical / cTNM':x==='pathological'?'Pathological / pTNM':x==='yp'?'Post-neoadjuvant / ypTNM':x==='recurrence'?'Recurrence / rTNM':x}
@@ -136,18 +136,6 @@ function parseCSV(s){
     return normalizeRule(obj);
   }).filter(x=>x.site && x.edition && x.stage);
 }
-function normalizeDefinition(r){return{site:String(r.site||'').trim(),edition:String(r.edition||'').trim().toUpperCase(),classification:normalizeClassification(r.classification),category_type:String(r.category_type||r.type||'').trim().toUpperCase(),category:String(r.category||'').trim(),short_definition:String(r.short_definition||r.definition||'').trim(),detail_note:String(r.detail_note||r.note||'').trim(),verification_status:String(r.verification_status||r.status||'').trim()}}
-function parseDefinitionCSV(s){
-  if(!s || !s.trim()) return [];
-  const lines=s.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim()&&!x.trim().startsWith('#'));
-  if(!lines.length) return [];
-  const header=parseCSVLine(lines[0]).map(x=>x.toLowerCase().trim());
-  const idx=(name,fallback)=>{const i=header.indexOf(name);return i>=0?i:fallback};
-  const hasHeader=header.includes('site')&&header.includes('edition')&&(header.includes('category')||header.includes('short_definition'));
-  return lines.slice(hasHeader?1:0).map(line=>{const c=parseCSVLine(line);return normalizeDefinition({site:c[idx('site',0)],edition:c[idx('edition',1)],classification:c[idx('classification',2)]||'any',category_type:c[idx('category_type',3)]||c[idx('type',3)],category:c[idx('category',4)],short_definition:c[idx('short_definition',5)]||c[idx('definition',5)],detail_note:c[idx('detail_note',6)]||c[idx('note',6)],verification_status:c[idx('verification_status',7)]||c[idx('status',7)]})}).filter(d=>d.site&&d.edition&&d.category_type&&d.category&&d.short_definition);
-}
-function allDefinitions(){return (staticDefinitions||[]).map(normalizeDefinition).filter(d=>d.site&&d.edition&&d.category_type&&d.category&&d.short_definition)}
-
 function stageRank(stage){const order=['0','IA','IB','IC','I','IIA','IIB','IIC','II','IIIA','IIIB','IIIC','III','IVA','IVB','IVC','IV'];const i=order.indexOf(String(stage||'').toUpperCase());return i<0?999:i}
 function categoryPrefix(v){return String(v||'').replace(/[abc]$/i,'')}
 function categoryFamily(v){const m=String(v||'').match(/^([TNM])(\d)/i);return m?(m[1].toUpperCase()+m[2]):String(v||'')}
@@ -162,7 +150,7 @@ function classExactness(ruleClass,userClass){const r=normalizeClassification(rul
 function specificityScore(rule,q){return (siteOK(rule.site,q.site)?3:-99)+exactness(rule.edition,q.edition)+classExactness(rule.classification,q.classification)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)+exactness(rule.grade||'Any',q.grade||'Any')+exactness(rule.location||'Any',q.location||'Any')}
 function match(rule,q){return siteOK(rule.site,q.site)&&ok(rule.edition,q.edition)&&classOK(rule.classification,q.classification)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)&&ok(rule.grade||'Any',q.grade||'Any')&&ok(rule.location||'Any',q.location||'Any')}
 function bestMatch(q){return allRules().filter(r=>match(r,q)).sort((a,b)=>specificityScore(b,q)-specificityScore(a,q)||stageRank(b.stage)-stageRank(a.stage))[0]||null}
-function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 staging rules ${staticRules.length} 筆、TNM definitions ${staticDefinitions.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
+function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 ${staticRules.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
 function refreshSites(){const vals=uniq(baseSites.concat(allRules().map(r=>r.site)));const old=site.value;site.innerHTML=vals.map(x=>`<option value="${escapeHTML(x)}">${escapeHTML(x)}</option>`).join('');site.value=vals.includes(old)?old:(vals.includes('Stomach')?'Stomach':vals[0])}
 function rulesForCurrentSiteAndEditions(){const eds=selectedEditions();const cls=selectedClassifications();return allRules().filter(r=>siteOK(r.site,site.value)&&cls.some(c=>classOK(r.classification,c))&&eds.some(ed=>ok(r.edition,ed)))}
 function usesField(rs,field){return rs.some(r=>String(r[field]||'Any')!=='Any')}
@@ -184,48 +172,7 @@ function refreshCascade(changed){
  const note=SITE_NOTES[site.value];siteNote.innerHTML=note?`<div class="rounded border border-sky-200 bg-sky-50 text-sky-900 p-3">${escapeHTML(note)}</div>`:'';
  const cnote=mode.value==='MATRIX'?'Matrix mode：同一組 T/N/M 同時顯示 AJCC 7/8 與 clinical/pathological 四格；若某列 rule basis 顯示 any，代表目前此癌種尚未分出 c/p 專屬規則。':(CLASS_NOTES[classification.value]||'');classificationNote.innerHTML=cnote?`<div class="rounded border border-indigo-200 bg-indigo-50 text-indigo-900 p-3">${escapeHTML(cnote)}</div>`:''
 }
-function lookupCategoryDefinition(q,type,category){
-  const raw=String(category||'').trim();
-  if(!raw||raw==='Any')return null;
-  const cats=[raw];
-  const parent=categoryPrefix(raw);
-  if(parent&&parent!==raw)cats.push(parent);
-  const defs=allDefinitions().filter(d=>siteOK(d.site,q.site)&&ok(d.edition,q.edition)&&d.category_type===type&&classOK(d.classification||'any',q.classification||'any'));
-  for(const cat of cats){
-    const exact=defs.find(d=>d.category===cat&&normalizeClassification(d.classification)===normalizeClassification(q.classification));
-    if(exact)return{...exact,matched_category:cat,match_level:cat===raw?'exact':'parent'};
-    const any=defs.find(d=>d.category===cat&&normalizeClassification(d.classification)==='any');
-    if(any)return{...any,matched_category:cat,match_level:cat===raw?'exact':'parent'};
-  }
-  return null;
-}
-function categoryDefinitionItems(q){return [['T',q.t],['N',q.n],['M',q.m]].filter(x=>x[1]&&x[1]!=='Any').map(([type,cat])=>{const d=lookupCategoryDefinition(q,type,cat);return{type,cat,def:d}})}
-function renderCategoryDefinitions(q){
-  const items=categoryDefinitionItems(q);
-  if(!items.length)return'';
-  const body=items.map(({cat,def})=>{
-    if(!def)return`<div class="py-1"><b>${escapeHTML(cat)}</b>：<span class="text-rose-700">definition not verified in v0.7 definitions file</span></div>`;
-    const status=def.verification_status&&def.verification_status!=='checked_v0_7'?` <span class="text-amber-700">(${escapeHTML(def.verification_status)})</span>`:'';
-    const parent=def.match_level==='parent'?` <span class="text-slate-500">using ${escapeHTML(def.matched_category)} parent definition</span>`:'';
-    const note=def.detail_note?`<div class="ml-5 text-xs text-slate-500">${escapeHTML(def.detail_note)}</div>`:'';
-    return`<div class="py-1"><b>${escapeHTML(cat)}</b>：${escapeHTML(def.short_definition)}${parent}${status}${note}</div>`;
-  }).join('');
-  return`<div class="mt-3 rounded-lg border border-slate-200 bg-white/80 p-3"><div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Selected TNM definitions for double check</div><div class="mt-1 text-sm text-slate-800">${body}</div></div>`;
-}
-function categoryDefinitionsText(q){
-  const items=categoryDefinitionItems(q);
-  if(!items.length)return'';
-  return items.map(({cat,def})=>`${cat}: ${def?def.short_definition:'definition not verified'}`).join(' | ');
-}
-function resultCard(edition,found,q){
-  const label=versionLabel(edition);
-  const defs=renderCategoryDefinitions(q);
-  if(!found){
-    const note=SITE_NOTES[q.site]||'可能尚未建置此癌種 / 版本 / stage basis，或此癌種需要額外 prognostic factors。';
-    return`<div class="rounded-xl border bg-slate-50 p-4"><div class="text-sm font-semibold text-slate-500">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-2xl font-bold text-slate-500 mt-1">未找到規則</div><div class="mt-2 text-sm text-slate-600">${escapeHTML(note)}</div>${defs}</div>`;
-  }
-  return`<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><div class="text-sm font-semibold text-emerald-700">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-3xl font-bold text-emerald-800 mt-1">Stage ${escapeHTML(found.stage)}</div><div class="mt-2 text-sm text-emerald-900">${escapeHTML(found.site)} ${escapeHTML(found.t)}/${escapeHTML(found.n)}/${escapeHTML(found.m)}${found.grade&&found.grade!=='Any'?' · G '+escapeHTML(found.grade):''}${found.location&&found.location!=='Any'?' · L '+escapeHTML(found.location):''}</div><div class="mt-1 text-xs text-slate-600">rule basis: ${escapeHTML(classLabel(found.classification))}</div>${defs}${found.note?`<div class="mt-2 text-xs text-amber-800">${escapeHTML(found.note)}</div>`:''}</div>`;
-}
+function resultCard(edition,found,q){const label=versionLabel(edition);if(!found){const note=SITE_NOTES[q.site]||'可能尚未建置此癌種 / 版本 / stage basis，或此癌種需要額外 prognostic factors。';return`<div class="rounded-xl border bg-slate-50 p-4"><div class="text-sm font-semibold text-slate-500">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-2xl font-bold text-slate-500 mt-1">未找到規則</div><div class="mt-2 text-sm text-slate-600">${escapeHTML(note)}</div></div>`}return`<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><div class="text-sm font-semibold text-emerald-700">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-3xl font-bold text-emerald-800 mt-1">Stage ${escapeHTML(found.stage)}</div><div class="mt-2 text-sm text-emerald-900">${escapeHTML(found.site)} ${escapeHTML(found.t)}/${escapeHTML(found.n)}/${escapeHTML(found.m)}${found.grade&&found.grade!=='Any'?' · G '+escapeHTML(found.grade):''}${found.location&&found.location!=='Any'?' · L '+escapeHTML(found.location):''}</div><div class="mt-1 text-xs text-slate-600">rule basis: ${escapeHTML(classLabel(found.classification))}</div>${found.note?`<div class="mt-2 text-xs text-amber-800">${escapeHTML(found.note)}</div>`:''}</div>`}
 function lookup(){const eds=selectedEditions();if(mode.value==='MATRIX'){const classes=['clinical','pathological'];const results=[];eds.forEach(ed=>classes.forEach(cls=>{const q={site:site.value,classification:cls,t:t.value,n:n.value,m:m.value,grade:grade.value||'Any',location:location.value||'Any',context:context.value,edition:ed};results.push({edition:ed,found:bestMatch(q),q})}));window.lastResults=results;let summary='';const a7c=results.find(r=>r.edition==='AJCC7'&&r.q.classification==='clinical')?.found;const a7p=results.find(r=>r.edition==='AJCC7'&&r.q.classification==='pathological')?.found;const a8c=results.find(r=>r.edition==='AJCC8'&&r.q.classification==='clinical')?.found;const a8p=results.find(r=>r.edition==='AJCC8'&&r.q.classification==='pathological')?.found;if(a8c&&a8p&&String(a8c.stage)!==String(a8p.stage))summary+=`<div class="mb-3 rounded-lg border border-violet-200 bg-violet-50 text-violet-900 p-3 text-sm"><b>AJCC 8 clinical/pathological 不同：</b>cStage ${escapeHTML(a8c.stage)}；pStage ${escapeHTML(a8p.stage)}</div>`;if(a7c&&a8c&&String(a7c.stage)!==String(a8c.stage))summary+=`<div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 p-3 text-sm"><b>Clinical 7/8 不同：</b>AJCC 7 = Stage ${escapeHTML(a7c.stage)}；AJCC 8 = Stage ${escapeHTML(a8c.stage)}</div>`;if(a7p&&a8p&&String(a7p.stage)!==String(a8p.stage))summary+=`<div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 p-3 text-sm"><b>Pathological 7/8 不同：</b>AJCC 7 = Stage ${escapeHTML(a7p.stage)}；AJCC 8 = Stage ${escapeHTML(a8p.stage)}</div>`;if(!summary)summary=`<div class="mb-4 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 p-3 text-sm"><b>四格比較：</b>若 rule basis 顯示 any，代表目前此癌種尚未分出 c/p 專屬規則；後續可用補充 CSV 覆蓋。</div>`;result.innerHTML=summary+`<div class="grid md:grid-cols-2 gap-4">`+results.map(r=>resultCard(r.edition,r.found,r.q)).join('')+`</div>`;return}
  const eds2=eds;const qBase={site:site.value,classification:classification.value,t:t.value,n:n.value,m:m.value,grade:grade.value||'Any',location:location.value||'Any',context:context.value};const results=eds2.map(ed=>{const q={...qBase,edition:ed};return{edition:ed,found:bestMatch(q),q}});window.lastResults=results;let diff='';if(eds2.length===2){const a=results[0].found,b=results[1].found;if(a&&b){diff=String(a.stage)===String(b.stage)?`<div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-900 p-3 text-sm"><b>7/8 結果相同：</b>Stage ${escapeHTML(a.stage)}（${escapeHTML(classLabel(qBase.classification))}）</div>`:`<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 p-3 text-sm"><b>7/8 分期不同：</b>AJCC 7 = Stage ${escapeHTML(a.stage)}；AJCC 8 = Stage ${escapeHTML(b.stage)}（${escapeHTML(classLabel(qBase.classification))}）</div>`}else if(a||b){diff=`<div class="mb-4 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 p-3 text-sm"><b>部分版本尚無規則：</b>請確認此癌種 / stage basis 是否需要額外條件或補充 CSV。</div>`}}result.innerHTML=diff+`<div class="grid md:grid-cols-${eds2.length===2?'2':'1'} gap-4">`+results.map(r=>resultCard(r.edition,r.found,r.q)).join('')+`</div>`}
 function changed(which){refreshCascade(which);lookup()}
@@ -235,11 +182,10 @@ function loadFile(e){const files=Array.from(e.target.files||[]);if(!files.length
 function clearRules(){localStorage.removeItem('staging_rules_user');refreshSites();setInfo();refreshCascade('site');lookup()}
 function csvEscape(v){const s=String(v??'');return/[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
 function downloadMergedCSV(){const rows=allRules();const text=['site,edition,classification,t,n,m,grade,location,stage,note'].concat(rows.map(r=>[r.site,r.edition,r.classification,r.t,r.n,r.m,r.grade||'Any',r.location||'Any',r.stage,r.note].map(csvEscape).join(','))).join('\n');const blob=new Blob([text],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='staging_rules_snapshot.csv';a.click();URL.revokeObjectURL(a.href)}
-function copyResult(){const rows=(window.lastResults||[]).map(r=>{const q=r.q||{};const f=r.found;const defs=categoryDefinitionsText(q);return`AJCC ${versionLabel(r.edition)} ${classLabel(q.classification)}: ${f?'Stage '+f.stage:'not found'} (${q.site||''} ${q.t||''}/${q.n||''}/${q.m||''}${q.grade&&q.grade!=='Any'?' G='+q.grade:''}${q.location&&q.location!=='Any'?' L='+q.location:''})${defs?' | definitions: '+defs:''}${f&&f.note?' | '+f.note:''}`});const txt=`Staging quick-check report\n${rows.join('\n')}\nContext: ${context.value||''}\nInternal quick-check only; verify with formal AJCC/UICC source.`;if(navigator.clipboard)navigator.clipboard.writeText(txt)}
+function copyResult(){const rows=(window.lastResults||[]).map(r=>{const q=r.q||{};const f=r.found;return`AJCC ${versionLabel(r.edition)} ${classLabel(q.classification)}: ${f?'Stage '+f.stage:'not found'} (${q.site||''} ${q.t||''}/${q.n||''}/${q.m||''}${q.grade&&q.grade!=='Any'?' G='+q.grade:''}${q.location&&q.location!=='Any'?' L='+q.location:''})${f&&f.note?' | '+f.note:''}`});const txt=`Staging quick-check report\n${rows.join('\n')}\nContext: ${context.value||''}\nInternal quick-check only; verify with formal AJCC/UICC source.`;if(navigator.clipboard)navigator.clipboard.writeText(txt)}
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 async function loadRulesFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
-async function loadDefinitionsFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseDefinitionCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
-async function boot(){refreshSites();refreshCascade('site');lookup();const packs=await Promise.all([loadRulesFromFile('staging_rules_7.csv'),loadRulesFromFile('staging_rules_8.csv'),loadDefinitionsFromFile('staging_category_definitions.csv')]);staticRules=packs.slice(0,2).flat().map(normalizeRule);staticDefinitions=(packs[2]||[]).map(normalizeDefinition);refreshSites();setInfo();refreshCascade('site');lookup()}
+async function boot(){refreshSites();refreshCascade('site');lookup();const packs=await Promise.all([loadRulesFromFile('staging_rules_7.csv'),loadRulesFromFile('staging_rules_8.csv')]);staticRules=packs.flat().map(normalizeRule);refreshSites();setInfo();refreshCascade('site');lookup()}
 setInfo();boot();
 </script>
 </body></html>

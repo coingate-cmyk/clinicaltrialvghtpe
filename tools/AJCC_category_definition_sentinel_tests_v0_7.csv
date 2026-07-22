@@ -1,0 +1,20 @@
+﻿site,edition,category_type,category,status,verification_status,definition
+Stomach,AJCC7,T,T3,PASS,checked_v0_7,Tumor penetrates subserosal connective tissue without invasion of visceral peritoneum or adjacent structures（侵犯漿膜下結締組織，未侵犯臟層腹膜或鄰近構造）
+Stomach,AJCC8,N,N3b,PASS,checked_v0_7,Metastasis in 16 or more regional lymph nodes（≥16 顆區域淋巴結轉移）
+Esophagus / EGJ - squamous,AJCC7,T,T3,PASS,checked_v0_7,Tumor invades adventitia（侵犯外膜）
+Esophagus / EGJ - squamous,AJCC8,N,N2,PASS,checked_v0_7,Metastasis in 3–6 regional lymph nodes（3–6 顆區域淋巴結轉移）
+Colon,AJCC8,M,M1c,PASS,checked_v0_7,"Metastasis to the peritoneal surface, with or without other organ/site metastases（有腹膜表面轉移，可合併其他遠端轉移）"
+Rectum,AJCC7,N,N1c,PASS,checked_v0_7,Tumor deposit(s) without positive regional lymph nodes（無陽性區域淋巴結但有 tumor deposits）
+Appendix - carcinoma,AJCC8,M,M1a,PASS,checked_v0_7,Intraperitoneal acellular mucin without identifiable tumor cells（腹腔內無細胞黏液，未見腫瘤細胞）
+Appendix - carcinoma,AJCC7,M,M1b,PASS,checked_v0_7,Non-peritoneal metastasis（非腹膜遠端轉移）
+Exocrine pancreas,AJCC7,T,T3,PASS,checked_v0_7,Tumor extends beyond pancreas without involvement of celiac axis or SMA（超出胰臟但未侵犯腹腔幹或上腸繫膜動脈）
+Exocrine pancreas,AJCC8,T,T1c,PASS,checked_v0_7,Tumor 1–2 cm（最大徑 1–2 cm）
+Ampulla of Vater,AJCC8,T,T3b,PASS,checked_v0_7,Tumor extends >0.5 cm into pancreas or into peripancreatic/periduodenal tissue or duodenal serosa without celiac/SMA involvement（侵犯胰臟 >0.5 cm 或侵犯胰周/十二指腸周邊組織/十二指腸漿膜，未侵犯腹腔幹/SMA）
+Gallbladder,AJCC8,T,T2b,PASS,checked_v0_7,"Tumor invades perimuscular connective tissue on hepatic side, without liver involvement（肝側肌周結締組織侵犯，未侵犯肝）"
+HCC / Liver,AJCC7,T,T3b,PASS,checked_v0_7,Tumor involving major branch of portal or hepatic vein（侵犯門靜脈或肝靜脈主要分支）
+HCC / Liver,AJCC8,T,T1a,PASS,checked_v0_7,Solitary tumor ≤2 cm（單一腫瘤 ≤2 cm）
+Perihilar bile duct,AJCC8,N,N2,PASS,checked_v0_7,Metastasis in 4 or more regional lymph nodes（≥4 顆區域淋巴結轉移）
+Distal bile duct,AJCC8,T,T2,PASS,checked_v0_7,Tumor invades bile duct wall with depth 5–12 mm（侵犯膽管壁，深度 5–12 mm）
+NET - pancreas,AJCC8,T,T3,PASS,checked_v0_7,Tumor >4 cm or invading duodenum or common bile duct（>4 cm 或侵犯十二指腸/總膽管）
+NET - appendix,AJCC8,T,T1,PASS,checked_v0_7,Tumor ≤2 cm（腫瘤 ≤2 cm）
+GIST,AJCC8,T,T4,PASS,checked_v0_7,Tumor >10 cm（>10 cm）
