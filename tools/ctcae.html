@@ -3,43 +3,219 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CTCAE 副作用速查器</title>
+<title>CTCAE v5/v6 副作用速查器</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .grade-label{width:5.4rem;min-width:5.4rem}
+  .mono{font-variant-numeric:tabular-nums}
+</style>
 </head>
 <body class="bg-slate-50 text-slate-900">
-<main class="max-w-6xl mx-auto p-6">
-  <div class="flex justify-between"><a class="text-blue-700" href="./index.html">← 回工具首頁</a><a class="text-blue-700" href="../index.html">回臨床試驗系統</a></div>
-  <h1 class="text-3xl font-bold mt-6">CTCAE 副作用速查器</h1>
-  <p class="text-slate-600 mt-2">常用 oncology AE seed terms；涵蓋 cytotoxic、immunotherapy、ADC、targeted therapy 常見血液、肝腎、內分泌、皮膚、肺、心血管、神經、感染、代謝、積水與眼毒性事件。未來可擴充成完整 CTCAE v5/v6。</p>
-  <p class="text-sm bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 mt-3">Internal quick-check only. Protocol 指定版本優先；正式通報請以 protocol / NCI CTCAE 原文為準。</p>
-  <div class="grid lg:grid-cols-3 gap-6 mt-6">
-    <section class="bg-white rounded-xl border shadow p-5 lg:col-span-1">
+<main class="max-w-7xl mx-auto p-4 md:p-6">
+  <div class="flex flex-wrap gap-3 justify-between text-sm"><a class="text-blue-700 hover:underline" href="./index.html">← 回工具首頁</a><a class="text-blue-700 hover:underline" href="../index.html">回臨床試驗系統</a></div>
+  <h1 class="text-3xl font-bold mt-6">CTCAE v5/v6 副作用速查器</h1>
+  <p class="text-slate-600 mt-2">完整匯入 CTCAE v5.0 與 CTCAE v6.0 AE terms，提供 Grade 1-5、Definition、Navigational Note 並列對照。下拉選單只放 AE term；長 grading 內容只在結果區顯示。</p>
+  <div class="grid md:grid-cols-3 gap-3 mt-4 text-sm">
+    <div class="rounded-lg border border-amber-200 bg-amber-50 text-amber-950 p-3 md:col-span-2"><b>臨床提醒：</b>此頁是院內 quick-check。正式 AE reporting 請以該 protocol 指定的 CTCAE 版本與 NCI 原文為準。分號 <b>;</b> 代表 <b>or</b>；dash <b>-</b> 代表該 grade 不適用或未提供。</div>
+    <div id="loadStatus" class="rounded-lg border bg-white p-3 text-slate-600">載入中...</div>
+  </div>
+
+  <div class="grid lg:grid-cols-4 gap-6 mt-6">
+    <section class="bg-white rounded-xl border shadow-sm p-5 lg:col-span-1">
       <h2 class="text-xl font-bold mb-4">查詢</h2>
-      <label class="text-sm font-medium">Version<select id="version" class="mt-1 w-full border rounded p-2"><option>CTCAE v5.0</option><option disabled>CTCAE v6.0 - reserved</option></select></label>
-      <label class="text-sm font-medium block mt-3">Search<input id="search" class="mt-1 w-full border rounded p-2" placeholder="例如 pneumonitis, thyroiditis, ADC, QTc, AMS, ascites, sepsis"></label>
-      <label class="text-sm font-medium block mt-3">AE term<select id="term" class="mt-1 w-full border rounded p-2"></select></label>
-      <button onclick="renderTerm()" class="mt-5 bg-emerald-700 text-white rounded-lg px-4 py-2 font-bold">查詢 grade</button>
-      <div id="info" class="mt-3 text-sm text-slate-500">載入中...</div>
+      <label class="text-sm font-medium block">Search / AE term
+        <input id="search" class="mt-1 w-full border rounded-lg p-2" placeholder="例如 Diarrhea, ALT, Pneumonitis, QTc, platelet">
+      </label>
+      <label class="text-sm font-medium block mt-3">SOC
+        <select id="socFilter" class="mt-1 w-full border rounded-lg p-2"><option value="ALL">All SOCs</option></select>
+      </label>
+      <label class="text-sm font-medium block mt-3">Change flag
+        <select id="flagFilter" class="mt-1 w-full border rounded-lg p-2">
+          <option value="ALL">All flags</option>
+          <option value="Same">Same</option>
+          <option value="Changed">Changed</option>
+          <option value="v5 only">v5 only</option>
+          <option value="v6 only">v6 only</option>
+        </select>
+      </label>
+      <label class="text-sm font-medium block mt-3">AE term list
+        <select id="termList" size="16" class="mt-1 w-full border rounded-lg p-2 text-sm"></select>
+      </label>
+      <div id="listInfo" class="mt-3 text-sm text-slate-500"></div>
     </section>
-    <section class="bg-white rounded-xl border shadow p-5 lg:col-span-2">
-      <h2 class="text-xl font-bold mb-4">結果</h2>
-      <div id="result"></div>
-      <button onclick="copyResult()" class="mt-3 bg-slate-200 px-3 py-2 rounded font-bold">複製</button>
+
+    <section class="bg-white rounded-xl border shadow-sm p-5 lg:col-span-3">
+      <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+        <div>
+          <h2 class="text-xl font-bold">結果</h2>
+          <div id="termTitle" class="text-slate-500 text-sm mt-1">請選擇 AE term</div>
+        </div>
+        <button id="copyBtn" class="bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-lg font-bold text-sm">複製結果</button>
+      </div>
+      <div id="flagBox"></div>
+      <div id="result" class="mt-4"></div>
     </section>
   </div>
 </main>
 <script>
-let terms=[];
-function parseCSV(text){const rows=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(ch==='"'){if(q&&nx==='"'){cur+='"';i++}else q=!q}else if(ch===','&&!q){row.push(cur);cur=''}else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&nx==='\n')i++;row.push(cur);if(row.some(x=>x.trim()))rows.push(row);row=[];cur=''}else cur+=ch}if(cur||row.length){row.push(cur);rows.push(row)}if(!rows.length)return[];const h=rows.shift().map(x=>x.trim());return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||'').trim()]))) }
-function norm(s){return String(s||'').toLowerCase().replace(/[\s_\-\/]+/g,' ')}
-function fillTermList(list){term.innerHTML=list.map((x,i)=>`<option value="${terms.indexOf(x)}">${x.term}</option>`).join('');if(list.length)term.value=terms.indexOf(list[0]);}
-function filterTerms(){const q=norm(search.value);let list=terms;if(q)list=terms.filter(x=>norm([x.term,x.aliases,x.soc,x.note].join(' ')).includes(q));fillTermList(list);info.textContent=`載入 ${terms.length} 筆；目前符合 ${list.length} 筆。`;renderTerm();}
-function gradeCard(label,text){const empty=!text||text==='-';return `<div class="rounded-lg border ${empty?'bg-slate-50 text-slate-400':'bg-white'} p-3"><div class="font-bold text-slate-800">${label}</div><div class="mt-1 text-sm whitespace-pre-wrap">${text||'-'}</div></div>`}
-function renderTerm(){const x=terms[Number(term.value)];if(!x){result.innerHTML='<div class="p-4 bg-slate-100 rounded">沒有找到 term</div>';return}window.current=x;result.innerHTML=`<div class="mb-4"><div class="text-2xl font-bold text-emerald-800">${x.term}</div><div class="text-sm text-slate-600 mt-1">${x.version} · ${x.soc}</div><div class="text-sm text-slate-500 mt-1">Alias: ${x.aliases||'-'}</div></div><div class="grid md:grid-cols-2 gap-3">${gradeCard('Grade 1',x.g1)}${gradeCard('Grade 2',x.g2)}${gradeCard('Grade 3',x.g3)}${gradeCard('Grade 4',x.g4)}${gradeCard('Grade 5',x.g5)}</div><div class="mt-4 p-3 bg-slate-50 rounded border text-sm"><b>Definition:</b> ${x.definition||'-'}<br><b>Note:</b> ${x.note||'-'}</div>`}
-function copyResult(){const x=window.current;if(!x)return;const txt=`${x.term} (${x.version})\nG1: ${x.g1}\nG2: ${x.g2}\nG3: ${x.g3}\nG4: ${x.g4}\nG5: ${x.g5}\nDefinition: ${x.definition}\nNote: ${x.note}`;navigator.clipboard&&navigator.clipboard.writeText(txt)}
-search.addEventListener('input',filterTerms);term.addEventListener('change',renderTerm);
-async function fetchCSV(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok)return[];return parseCSV(await r.text())}catch(e){return[]}}
-async function boot(){const files=['ctcae_terms_v5_seed.csv','ctcae_terms_v5_immune_adc_seed.csv','ctcae_terms_v5_broad_oncology_seed.csv'];let all=[];for(const f of files){all=all.concat(await fetchCSV(f))}const seen=new Set();terms=all.filter(x=>{const k=(x.term||'').toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.term.localeCompare(b.term));filterTerms();}
+let v5=[], v6=[], maps=[], pairs=[];
+let v5ByTerm=new Map(), v6ByTerm=new Map(), mapByKey=new Map();
+const search=document.getElementById('search');
+const socFilter=document.getElementById('socFilter');
+const flagFilter=document.getElementById('flagFilter');
+const termList=document.getElementById('termList');
+const listInfo=document.getElementById('listInfo');
+const loadStatus=document.getElementById('loadStatus');
+const result=document.getElementById('result');
+const termTitle=document.getElementById('termTitle');
+const flagBox=document.getElementById('flagBox');
+const copyBtn=document.getElementById('copyBtn');
+function parseCSV(text){
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], nx=text[i+1];
+    if(ch==='"'){ if(q && nx==='"'){cur+='"'; i++;} else q=!q; }
+    else if(ch===',' && !q){ row.push(cur); cur=''; }
+    else if((ch==='\n'||ch==='\r') && !q){ if(ch==='\r'&&nx==='\n')i++; row.push(cur); if(row.some(x=>String(x).trim()!==''))rows.push(row); row=[]; cur=''; }
+    else cur+=ch;
+  }
+  if(cur!=='' || row.length){row.push(cur); rows.push(row);}
+  if(!rows.length)return[];
+  const head=rows.shift().map(x=>String(x||'').replace(/^\uFEFF/,'').trim());
+  return rows.map(r=>Object.fromEntries(head.map((h,i)=>[h, String(r[i]??'').trim()])));
+}
+async function fetchCSV(file){
+  const r=await fetch(file,{cache:'no-store'});
+  if(!r.ok) throw new Error(file+' load failed: '+r.status);
+  return parseCSV(await r.text());
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function norm(s){return String(s||'').toLowerCase().replace(/[\s_\-\/()]+/g,' ');}
+function flagClass(flag){
+  if(flag==='Same')return 'bg-emerald-50 border-emerald-200 text-emerald-900';
+  if(flag==='Changed')return 'bg-amber-50 border-amber-200 text-amber-950';
+  if(flag==='v5 only')return 'bg-blue-50 border-blue-200 text-blue-950';
+  if(flag==='v6 only')return 'bg-purple-50 border-purple-200 text-purple-950';
+  return 'bg-slate-50 border-slate-200 text-slate-900';
+}
+function gradeBlock(label, a, b){
+  return `<div class="grid md:grid-cols-[5.4rem_1fr_1fr] border rounded-lg overflow-hidden text-sm">
+    <div class="grade-label bg-slate-100 p-3 font-bold mono">${esc(label)}</div>
+    <div class="p-3 border-t md:border-t-0 md:border-l whitespace-pre-wrap ${(!a||a==='-')?'text-slate-400 bg-slate-50':''}">${esc(a||'-')}</div>
+    <div class="p-3 border-t md:border-t-0 md:border-l whitespace-pre-wrap ${(!b||b==='-')?'text-slate-400 bg-slate-50':''}">${esc(b||'-')}</div>
+  </div>`;
+}
+function columnHeader(row){
+  return `<div class="grid md:grid-cols-[5.4rem_1fr_1fr] rounded-lg overflow-hidden border bg-slate-800 text-white text-sm">
+    <div class="grade-label p-3 font-bold">Field</div>
+    <div class="p-3 border-l font-bold">CTCAE v5.0${row.v5_page&&row.v5_page!=='-'?` · p.${esc(row.v5_page)}`:''}</div>
+    <div class="p-3 border-l font-bold">CTCAE v6.0${row.v6_page&&row.v6_page!=='-'?` · p.${esc(row.v6_page)}`:''}</div>
+  </div>`;
+}
+function detailRow(label, a, b){
+  return `<div class="grid md:grid-cols-[5.4rem_1fr_1fr] border rounded-lg overflow-hidden text-sm">
+    <div class="grade-label bg-slate-100 p-3 font-bold">${esc(label)}</div>
+    <div class="p-3 border-t md:border-t-0 md:border-l whitespace-pre-wrap ${(!a||a==='-')?'text-slate-400 bg-slate-50':''}">${esc(a||'-')}</div>
+    <div class="p-3 border-t md:border-t-0 md:border-l whitespace-pre-wrap ${(!b||b==='-')?'text-slate-400 bg-slate-50':''}">${esc(b||'-')}</div>
+  </div>`;
+}
+function pairLabel(p){
+  const term = p.term;
+  const suffix = p.change_flag;
+  return `${term} — ${suffix}`;
+}
+function buildPairs(){
+  pairs = maps.map((m,idx)=>{
+    const term = m.v5_term && m.v5_term!=='-' ? m.v5_term : m.v6_term;
+    const r5 = v5ByTerm.get(m.v5_term) || null;
+    const r6 = v6ByTerm.get(m.v6_term) || null;
+    const text = [term, m.v5_term, m.v6_term, m.v5_soc, m.v6_soc, m.change_flag, m.changed_fields, m.possible_counterpart_term, m.mapping_note,
+                  r5&&[r5.g1,r5.g2,r5.g3,r5.g4,r5.g5,r5.definition,r5.note].join(' '),
+                  r6&&[r6.g1,r6.g2,r6.g3,r6.g4,r6.g5,r6.definition,r6.note].join(' ')].filter(Boolean).join(' ');
+    return {...m, _idx:idx, term, r5, r6, _search:norm(text)};
+  }).sort((a,b)=>a.term.localeCompare(b.term)||a.change_flag.localeCompare(b.change_flag));
+  pairs.forEach((p,i)=>p._display=i);
+}
+function fillFilters(){
+  const socs=[...new Set([...v5.map(x=>x.soc), ...v6.map(x=>x.soc)].filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  socFilter.innerHTML='<option value="ALL">All SOCs</option>'+socs.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
+}
+function filteredPairs(){
+  const q=norm(search.value); const soc=socFilter.value; const flag=flagFilter.value;
+  return pairs.filter(p=>{
+    if(flag!=='ALL' && p.change_flag!==flag) return false;
+    if(soc!=='ALL' && p.v5_soc!==soc && p.v6_soc!==soc) return false;
+    if(q && !p._search.includes(q)) return false;
+    return true;
+  });
+}
+function refreshList(){
+  const list=filteredPairs();
+  termList.innerHTML=list.map(p=>`<option value="${p._idx}">${esc(pairLabel(p))}</option>`).join('');
+  listInfo.textContent=`符合 ${list.length} 個 AE pair / term。`;
+  if(list.length){ termList.value=list[0]._idx; renderPair(Number(termList.value)); }
+  else { termTitle.textContent='沒有符合條件的 AE term'; flagBox.innerHTML=''; result.innerHTML='<div class="rounded-lg bg-slate-100 p-4">請放寬搜尋條件。</div>'; }
+}
+function renderPair(idx){
+  const p = maps[idx] ? pairs.find(x=>x._idx===idx) : pairs.find(x=>String(x._idx)===String(idx));
+  if(!p){ result.innerHTML='<div class="rounded-lg bg-slate-100 p-4">沒有找到資料。</div>'; return; }
+  window.currentPair=p;
+  const r5=p.r5||{}; const r6=p.r6||{};
+  termTitle.innerHTML=`<span class="font-bold text-slate-900">${esc(p.term)}</span> <span class="text-slate-500">${esc(p.v5_soc&&p.v5_soc!=='-'?p.v5_soc:p.v6_soc)}</span>`;
+  flagBox.innerHTML=`<div class="rounded-lg border ${flagClass(p.change_flag)} p-3 text-sm">
+    <b>Change flag: ${esc(p.change_flag)}</b>
+    ${p.changed_fields&&p.changed_fields!=='-'?`<span class="ml-2">Changed fields: ${esc(p.changed_fields)}</span>`:''}
+    ${p.possible_counterpart_term&&p.possible_counterpart_term!=='-'?`<div class="mt-1"><b>Possible counterpart:</b> ${esc(p.possible_counterpart_term)} — ${esc(p.mapping_note||'')}</div>`:''}
+  </div>`;
+  result.innerHTML=`<div class="space-y-3">
+    ${columnHeader(p)}
+    ${detailRow('AE term', p.v5_term, p.v6_term)}
+    ${detailRow('SOC', p.v5_soc, p.v6_soc)}
+    ${gradeBlock('Grade 1', r5.g1, r6.g1)}
+    ${gradeBlock('Grade 2', r5.g2, r6.g2)}
+    ${gradeBlock('Grade 3', r5.g3, r6.g3)}
+    ${gradeBlock('Grade 4', r5.g4, r6.g4)}
+    ${gradeBlock('Grade 5', r5.g5, r6.g5)}
+    ${detailRow('Definition', r5.definition, r6.definition)}
+    ${detailRow('Note', r5.note, r6.note)}
+  </div>`;
+}
+function copyResult(){
+  const p=window.currentPair; if(!p)return;
+  const r5=p.r5||{}, r6=p.r6||{};
+  const lines=[];
+  lines.push(`${p.term} | Change flag: ${p.change_flag}`);
+  if(p.changed_fields&&p.changed_fields!=='-') lines.push(`Changed fields: ${p.changed_fields}`);
+  if(p.possible_counterpart_term&&p.possible_counterpart_term!=='-') lines.push(`Possible counterpart: ${p.possible_counterpart_term} (${p.mapping_note})`);
+  lines.push(``);
+  lines.push(`CTCAE v5.0: ${p.v5_term||'-'} | ${p.v5_soc||'-'} | p.${p.v5_page||'-'}`);
+  ['g1','g2','g3','g4','g5'].forEach((g,i)=>lines.push(`  Grade ${i+1}: ${r5[g]||'-'}`));
+  lines.push(`  Definition: ${r5.definition||'-'}`);
+  lines.push(`  Navigational Note: ${r5.note||'-'}`);
+  lines.push(``);
+  lines.push(`CTCAE v6.0: ${p.v6_term||'-'} | ${p.v6_soc||'-'} | p.${p.v6_page||'-'}`);
+  ['g1','g2','g3','g4','g5'].forEach((g,i)=>lines.push(`  Grade ${i+1}: ${r6[g]||'-'}`));
+  lines.push(`  Definition: ${r6.definition||'-'}`);
+  lines.push(`  Navigational Note: ${r6.note||'-'}`);
+  navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n'));
+}
+async function boot(){
+  try{
+    [v5, v6, maps] = await Promise.all([fetchCSV('ctcae_terms_v5.csv'), fetchCSV('ctcae_terms_v6.csv'), fetchCSV('ctcae_v5_v6_map.csv')]);
+    v5ByTerm = new Map(v5.map(x=>[x.term,x])); v6ByTerm = new Map(v6.map(x=>[x.term,x]));
+    buildPairs(); fillFilters(); refreshList();
+    const same=maps.filter(x=>x.change_flag==='Same').length, changed=maps.filter(x=>x.change_flag==='Changed').length, only5=maps.filter(x=>x.change_flag==='v5 only').length, only6=maps.filter(x=>x.change_flag==='v6 only').length;
+    loadStatus.innerHTML=`<b>Loaded:</b> v5 ${v5.length} terms / v6 ${v6.length} terms<br><span class="text-xs">Same ${same}, Changed ${changed}, v5 only ${only5}, v6 only ${only6}</span>`;
+  }catch(e){
+    console.error(e);
+    loadStatus.innerHTML='<span class="text-red-700 font-bold">CSV 載入失敗。</span><br><span class="text-xs">請確認 ctcae_terms_v5.csv、ctcae_terms_v6.csv、ctcae_v5_v6_map.csv 與 ctcae.html 在同一個 tools/ 目錄。</span>';
+  }
+}
+search.addEventListener('input', refreshList);
+socFilter.addEventListener('change', refreshList);
+flagFilter.addEventListener('change', refreshList);
+termList.addEventListener('change', ()=>renderPair(Number(termList.value)));
+copyBtn.addEventListener('click', copyResult);
 boot();
 </script>
 </body>

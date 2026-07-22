@@ -1,0 +1,58 @@
+﻿section,metric,value,expected_or_threshold,status,note
+source_v5,pdf_file,CTCAE_v5_Quick_Reference_5x7.pdf,,PASS,
+source_v5,page_count,155,155,PASS,
+source_v5,parsed_text_line_count,13901,>0,PASS,
+source_v5,definition_marker_count,837,837,PASS,Extraction count should equal Definition markers for v5 quick reference table.
+source_v6,pdf_file,CTCAEv6_Jan2026.pdf,,PASS,
+source_v6,page_count,312,312,PASS,
+source_v6,parsed_text_line_count,19303,>0,PASS,
+source_v6,definition_marker_count,850,850,PASS,Extraction count should equal Definition markers for v6 table.
+v5,term_count,837,>=800,PASS,
+v5,extractor_bad_row_count,0,0,PASS,[]
+v5,SOC_count_found,26,26,PASS,missing=[]; extra=[]
+v5,duplicate_term_count,0,0,PASS,
+v5,blank_term_count,0,0,PASS,
+v5,blank_soc_count,0,0,PASS,
+v5,blank_version_count,0,0,PASS,
+v5,blank_g1_count,0,0,PASS,
+v5,blank_g2_count,0,0,PASS,
+v5,blank_g3_count,0,0,PASS,
+v5,blank_g4_count,0,0,PASS,
+v5,blank_g5_count,0,0,PASS,
+v5,blank_definition_count,0,0,PASS,
+v5,blank_note_count,0,0,PASS,
+v5,blank_page_count,0,0,PASS,
+v5,g1_dash_count,192,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v5,g2_dash_count,92,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v5,g3_dash_count,87,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v5,g4_dash_count,286,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v5,g5_dash_count,343,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v6,term_count,850,>=800,PASS,
+v6,extractor_bad_row_count,0,0,PASS,[]
+v6,SOC_count_found,26,26,PASS,missing=[]; extra=[]
+v6,duplicate_term_count,0,0,PASS,
+v6,blank_term_count,0,0,PASS,
+v6,blank_soc_count,0,0,PASS,
+v6,blank_version_count,0,0,PASS,
+v6,blank_g1_count,0,0,PASS,
+v6,blank_g2_count,0,0,PASS,
+v6,blank_g3_count,0,0,PASS,
+v6,blank_g4_count,0,0,PASS,
+v6,blank_g5_count,0,0,PASS,
+v6,blank_definition_count,0,0,PASS,
+v6,blank_note_count,0,0,PASS,
+v6,blank_page_count,0,0,PASS,
+v6,g1_dash_count,198,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v6,g2_dash_count,97,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v6,g3_dash_count,96,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v6,g4_dash_count,287,informational,INFO,Dash is preserved and means that grade is not available/provided.
+v6,g5_dash_count,338,informational,INFO,Dash is preserved and means that grade is not available/provided.
+parallel_map,exact_overlap_count,790,informational,INFO,
+parallel_map,same_count,337,informational,INFO,
+parallel_map,changed_count,453,informational,INFO,
+parallel_map,v5_only_count,47,informational,INFO,
+parallel_map,v6_only_count,60,informational,INFO,
+parallel_map,map_rows_total,897,897,PASS,
+sentinel_tests,test_count,47,informational,INFO,
+sentinel_tests,failed_count,0,0,PASS,
+html,javascript_syntax,OK,node --check,PASS,

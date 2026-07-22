@@ -1,0 +1,47 @@
+CTCAE v1.0 parallel full extraction package
+
+Scope
+- Full CTCAE v5.0 extraction from: CTCAE_v5_Quick_Reference_5x7.pdf
+- Full CTCAE v6.0 extraction from: CTCAEv6_Jan2026.pdf
+- UI: tools/ctcae.html, parallel v5/v6 display.
+
+Source metadata
+- CTCAE v5.0: published November 27, 2017; CTCAE descriptive terminology for AE reporting with Grade 1-5 severity scale.
+- CTCAE v6.0: Common Terminology Criteria for Adverse Events v6.0, MedDRA 28.0; published July 22, 2025; NCI/NIH/HHS.
+
+Extraction counts
+- CTCAE v5.0 terms: 837
+- CTCAE v6.0 terms: 850
+- Exact same-term overlap: 790
+- Same after field comparison: 337
+- Changed after field comparison: 453
+- v5 only: 47
+- v6 only: 60
+- Map rows total: 897
+
+QA
+- v5 PDF pages: 155; Definition markers: 837; extractor bad rows: 0
+- v6 PDF pages: 312; Definition markers: 850; extractor bad rows: 0
+- SOC coverage: v5 26/26; v6 26/26
+- Sentinel tests: 47 total; 0 failed
+
+Files in tools/
+- ctcae.html
+- ctcae_terms_v5.csv
+- ctcae_terms_v6.csv
+- ctcae_v5_v6_map.csv
+- ctcae_extraction_QA.csv
+- ctcae_parallel_sentinel_tests.csv
+- CTCAE_parallel_summary.txt
+
+UI behavior
+- Search / AE term list uses short term labels only.
+- Result area shows CTCAE v5.0 and CTCAE v6.0 side by side.
+- Grade 1-5, Definition, and Navigational Note are displayed in result cards.
+- Change flag is computed as Same / Changed / v5 only / v6 only.
+- Semicolon ; is preserved and should be read as OR.
+- Dash - is preserved and means the grade is not available/provided.
+
+Limitations
+- This is an automated extraction and QA package for quick checking. Formal reporting should follow the protocol-specified CTCAE version and the official NCI source document.
+- Same-name terms are mapped directly. Possible renamed/related terms are flagged only as possible counterparts in ctcae_v5_v6_map.csv, not silently merged.
