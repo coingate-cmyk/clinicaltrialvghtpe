@@ -367,40 +367,98 @@ const isClosedTreatmentLine = (ct, line) => {
 
 const formatLineForDisplay = (ct, line) => isClosedTreatmentLine(ct, line) ? `✕ ${line}` : line;
 
-const isGloballyUnavailableTrial = (trial) => {
-    const statusText = normalizeFilterValue(trial && trial.status);
-    if (!statusText) return false;
-    return [
-        '暫停收案',
-        '名額已滿',
-        '滿額',
-        '停止收案',
-        '試驗結束',
-        '試驗終了',
-        '結束收案',
-        '收案結束',
-        '還未siv',
-        '未siv',
-        '預備中',
-        'closed',
-        'full',
-        'paused',
-        'suspended',
-        'terminated',
-        'completed',
-        'closeout'
-    ].some(keyword => statusText.includes(normalizeFilterValue(keyword)));
+const TRIAL_STATUS_OPTIONS = ['進行中', '開放收案', '需問slot', '暫停收案', '名額已滿', '停止收案', '還未SIV', '預備中', '試驗結束'];
+const OPEN_ENROLLMENT_STATUS_KEYWORDS = ['進行中', '開放收案', '收案中', '招募中', 'recruiting', 'active', 'ongoing', 'open'];
+const UNAVAILABLE_STATUS_KEYWORDS = [
+    '暫停收案',
+    '名額已滿',
+    '已收滿',
+    '滿額',
+    '收滿',
+    '停止收案',
+    '試驗結束',
+    '試驗終了',
+    '結束收案',
+    '收案結束',
+    '還未siv',
+    '未siv',
+    '預備中',
+    '沒有slot',
+    '暫無slot',
+    'no slot',
+    'closed',
+    'full',
+    'paused',
+    'suspended',
+    'terminated',
+    'completed',
+    'closeout'
+];
+const AMBIGUOUS_COUNT_RE = /[-–—~～至到以上+＋/／()（）a-zA-Z一-鿿]/;
+
+const statusIncludesAny = (statusText, keywords) => {
+    const normalized = normalizeFilterValue(statusText);
+    return !!normalized && (keywords || []).some(keyword => normalized.includes(normalizeFilterValue(keyword)));
 };
 
+const isExplicitOpenStatusText = (status) => statusIncludesAny(status, OPEN_ENROLLMENT_STATUS_KEYWORDS);
+const isUnavailableStatusText = (status) => {
+    if (isExplicitOpenStatusText(status)) return false;
+    return statusIncludesAny(status, UNAVAILABLE_STATUS_KEYWORDS);
+};
+const isExplicitOpenEnrollmentStatus = (trial) => isExplicitOpenStatusText(trial && trial.status);
+
+const isGloballyUnavailableTrial = (trial) => isUnavailableStatusText(trial && trial.status);
+
+const isCleanNumericText = (v) => /^\s*\d+(?:\.\d+)?\s*$/.test(String(v ?? ''));
+
 const isTrialNumericallyFull = (trial) => {
-    if (!trial) return false;
-    const toNum = (v) => {
-        const m = String(v ?? '').replace(/,/g, '').match(/-?\d+(?:\.\d+)?/);
-        return m ? Number(m[0]) : NaN;
-    };
-    const target = toNum(trial.targetNum ?? trial.target ?? trial.targetNumber);
-    const enrolled = toNum(trial.enrolled ?? trial.currentEnrolled ?? trial.enrolledNum);
+    if (!trial || isExplicitOpenEnrollmentStatus(trial)) return false;
+    const targetRaw = trial.targetNum ?? trial.target ?? trial.targetNumber;
+    const enrolledRaw = trial.enrolled ?? trial.currentEnrolled ?? trial.enrolledNum;
+    // 只在「目標」與「已收案」都是單純數字時才做輔助判斷。
+    // 3-5、4/6、prescreen、需問 sponsor、需問 slot 等臨床常見文字不能自動判成收滿。
+    if (!isCleanNumericText(targetRaw) || !isCleanNumericText(enrolledRaw)) return false;
+    if (AMBIGUOUS_COUNT_RE.test(String(targetRaw)) || AMBIGUOUS_COUNT_RE.test(String(enrolledRaw))) return false;
+    const target = Number(String(targetRaw).trim());
+    const enrolled = Number(String(enrolledRaw).trim());
     return Number.isFinite(target) && target > 0 && Number.isFinite(enrolled) && enrolled >= target;
+};
+
+const chooseMergedTrialStatus = (prevStatus, incomingStatus, incomingDetectedFromText) => {
+    const incoming = normalizeText(incomingStatus);
+    const previous = normalizeText(prevStatus);
+    if (!incoming) return previous || '進行中';
+    if (!previous) return incoming;
+    // 若匯入檔沒有正式 status 欄，只是從整列文字猜到「停止/結束/滿額」，不要覆蓋既有手動開放狀態。
+    // 真正要關閉時：在編輯視窗改 status，或在匯入表格中放明確 status/收案狀態欄。
+    if (incomingDetectedFromText && isExplicitOpenStatusText(previous) && isUnavailableStatusText(incoming)) return previous;
+    return incoming;
+};
+
+const getTrialStatusBadgeClass = (trial) => {
+    if (trial && trial.isArchived) return 'px-3 py-1 bg-slate-500 text-white rounded-full text-sm';
+    if (isExplicitOpenEnrollmentStatus(trial)) return 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm';
+    if (isUnavailableStatusText(trial && trial.status)) return 'px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm';
+    return 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm';
+};
+
+const getTrialStatusPrintClass = (trial) => {
+    if (isExplicitOpenEnrollmentStatus(trial)) return 'status-active';
+    if (isUnavailableStatusText(trial && trial.status)) return 'status-full';
+    return 'status-paused';
+};
+
+const extractNumbersFromText = (v) => (String(v ?? '').replace(/,/g, '').match(/\d+(?:\.\d+)?/g) || []).map(Number).filter(Number.isFinite);
+const getEnrollmentProgress = (trial) => {
+    const enrolledNumbers = extractNumbersFromText(trial && trial.enrolled);
+    const targetNumbers = extractNumbersFromText(trial && trial.targetNum);
+    const enrolled = enrolledNumbers.length ? enrolledNumbers[0] : NaN;
+    const target = targetNumbers.length ? Math.max(...targetNumbers) : NaN;
+    const percent = Number.isFinite(enrolled) && Number.isFinite(target) && target > 0
+        ? Math.min(100, Math.round((enrolled / target) * 100))
+        : 0;
+    return { enrolled, target, percent };
 };
 
 const getTrialCancerLinePairs = (trial) => {
@@ -503,10 +561,10 @@ const cleanTrialForSave = (trial) => {
     cleaned.cancerTypes = normalizeCancerTypes(cleaned.cancerTypes);
     cleaned.inclusion = cleaned.inclusion || '';
     cleaned.exclusion = cleaned.exclusion || '';
-    cleaned.targetNum = Number.isFinite(Number(cleaned.targetNum)) ? Number(cleaned.targetNum) : 0;
-    cleaned.enrolled = Number.isFinite(Number(cleaned.enrolled)) ? Number(cleaned.enrolled) : 0;
-    cleaned.monthSigned = Number.isFinite(Number(cleaned.monthSigned)) ? Number(cleaned.monthSigned) : 0;
-    cleaned.monthEnrolled = Number.isFinite(Number(cleaned.monthEnrolled)) ? Number(cleaned.monthEnrolled) : 0;
+    cleaned.targetNum = normalizeText(cleaned.targetNum);
+    cleaned.enrolled = normalizeText(cleaned.enrolled);
+    cleaned.monthSigned = normalizeText(cleaned.monthSigned);
+    cleaned.monthEnrolled = normalizeText(cleaned.monthEnrolled);
     cleaned.updatedAt = new Date().toISOString();
     return sanitizeTrialForRuntime(cleaned);
 };
@@ -526,10 +584,10 @@ const normalizeFirestoreTrial = (raw) => {
     trial.line = normalizeTreatmentLine(trial.line);
     trial.cancerTypes = normalizeCancerTypes(trial.cancerTypes);
     trial.id = trial.id || trial.code || Date.now();
-    trial.targetNum = Number.isFinite(Number(trial.targetNum)) ? Number(trial.targetNum) : 0;
-    trial.enrolled = Number.isFinite(Number(trial.enrolled)) ? Number(trial.enrolled) : 0;
-    trial.monthSigned = Number.isFinite(Number(trial.monthSigned)) ? Number(trial.monthSigned) : 0;
-    trial.monthEnrolled = Number.isFinite(Number(trial.monthEnrolled)) ? Number(trial.monthEnrolled) : 0;
+    trial.targetNum = normalizeText(trial.targetNum);
+    trial.enrolled = normalizeText(trial.enrolled);
+    trial.monthSigned = normalizeText(trial.monthSigned);
+    trial.monthEnrolled = normalizeText(trial.monthEnrolled);
     return sanitizeTrialForRuntime(trial);
 };
 
@@ -631,7 +689,7 @@ const FIELD_ALIASES = {
     contractNo: ['合約編號 學會','合約編號','合約']
 };
 
-const STATUS_KEYWORDS = ['暫停收案','名額已滿','停止收案','試驗結束','試驗終了','還未SIV','未SIV','預備中','close-out','closed','paused','suspended'];
+const STATUS_KEYWORDS = ['暫停收案','名額已滿','已收滿','停止收案','試驗結束','試驗終了','還未SIV','未SIV','預備中','暫無slot','沒有SLOT','no slot','close-out','closed','paused','suspended'];
 
 const normalizeHeader = (value) => String(value || '').toLowerCase().replace(/[\s_\-（）()\/]+/g, '').trim();
 const normalizeCellText = (value) => String(value ?? '').replace(/\r\n/g, '\n').trim();
@@ -1103,8 +1161,13 @@ const isMetaCancerCell = (value) => {
 };
 
 const detectStatusFromRow = (row) => {
-    const joined = (row || []).map(v => normalizeCellText(v)).join(' ');
-    const found = STATUS_KEYWORDS.find(keyword => joined.includes(keyword));
+    const cells = (row || []).map(v => normalizeCellText(v)).filter(Boolean);
+    // 避免長篇 study title / inclusion / exclusion 裡偶然出現「結束、停止、completed」就把整個試驗關掉。
+    const shortCells = cells.filter(cell => cell.length <= 80);
+    const exactOpen = shortCells.find(cell => isExplicitOpenStatusText(cell));
+    if (exactOpen) return '進行中';
+    const candidates = shortCells.length ? shortCells : cells;
+    const found = STATUS_KEYWORDS.find(keyword => candidates.some(cell => normalizeFilterValue(cell).includes(normalizeFilterValue(keyword))));
     return found || '';
 };
 
@@ -1216,7 +1279,11 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (!item.cancerType && currentCancerType) item.cancerType = currentCancerType;
         if (!item.line && currentLine) item.line = currentLine;
-        if (!item.status) item.status = detectStatusFromRow(row) || '進行中';
+        if (!item.status) {
+            const detectedStatus = detectStatusFromRow(row);
+            item.status = detectedStatus || '進行中';
+            item.statusDetectedFromText = Boolean(detectedStatus);
+        }
         if (!item.inclusion && row[4]) item.inclusion = row[4];
         item.code = code;
 
@@ -1293,10 +1360,13 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
                     ? normalizeCancerTypes(incomingCancerTypes)
                     : carryLineStatusesToCancerTypes(incomingCancerTypes, previousCancerTypes);
             })(),
-            targetNum: Number.isFinite(Number(incoming.targetNum)) ? Number(incoming.targetNum) : (prev.targetNum || 0),
-            enrolled: Number.isFinite(Number(incoming.enrolled)) ? Number(incoming.enrolled) : (prev.enrolled || 0),
-            monthSigned: Number.isFinite(Number(incoming.monthSigned)) ? Number(incoming.monthSigned) : (prev.monthSigned || 0),
-            monthEnrolled: Number.isFinite(Number(incoming.monthEnrolled)) ? Number(incoming.monthEnrolled) : (prev.monthEnrolled || 0),
+            status: chooseMergedTrialStatus(prev.status, incoming.status, Boolean(incoming.statusDetectedFromText)),
+            statusManuallyTouched: Boolean(incoming.statusManuallyTouched ?? prev.statusManuallyTouched ?? false),
+            statusDetectedFromText: Boolean(incoming.statusDetectedFromText ?? false),
+            targetNum: normalizeText(incoming.targetNum !== undefined && incoming.targetNum !== null && String(incoming.targetNum).trim() !== '' ? incoming.targetNum : (prev.targetNum || '')),
+            enrolled: normalizeText(incoming.enrolled !== undefined && incoming.enrolled !== null && String(incoming.enrolled).trim() !== '' ? incoming.enrolled : (prev.enrolled || '')),
+            monthSigned: normalizeText(incoming.monthSigned !== undefined && incoming.monthSigned !== null && String(incoming.monthSigned).trim() !== '' ? incoming.monthSigned : (prev.monthSigned || '')),
+            monthEnrolled: normalizeText(incoming.monthEnrolled !== undefined && incoming.monthEnrolled !== null && String(incoming.monthEnrolled).trim() !== '' ? incoming.monthEnrolled : (prev.monthEnrolled || '')),
         };
 
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
@@ -1772,7 +1842,8 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                 nurse: sanitizeNurseField(raw.nurse),
                 comments: raw.comments,
                 contractNo: raw.contractNo,
-                status: detectStatusFromRow(Object.values(raw)) || '進行中'
+                status: detectStatusFromRow(Object.values(raw)) || '進行中',
+                statusDetectedFromText: Boolean(detectStatusFromRow(Object.values(raw)))
             };
 
             if (code && isLikelyPdfCodeCell(code)) {
@@ -1870,7 +1941,8 @@ const parseWideSingleTrialPdfPage = (pageData) => {
         pi: sanitizePiField(metadata.pi || '', Object.values(metadata).join('\n')),
         nurse: sanitizeNurseField(metadata.nurse || ''),
         comments: metadata.comments || '',
-        status: detectStatusFromRow([rowText]) || '進行中'
+        status: detectStatusFromRow([rowText]) || '進行中',
+        statusDetectedFromText: Boolean(detectStatusFromRow([rowText]))
     }, { explicitCancerOnRow: false });
     return item.code ? [item] : [];
 };
@@ -1994,9 +2066,7 @@ function TrialCard(props) {
             ),
             e('div', {className: 'flex items-center gap-2'},
                 e('span', {
-                    className: trial.status === '進行中' 
-                        ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm'
-                        : 'px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'
+                    className: getTrialStatusBadgeClass(trial)
                 }, trial.status),
                 trial.isArchived && e('span', {
                     className: 'px-3 py-1 bg-slate-500 text-white rounded-full text-sm'
@@ -2084,11 +2154,11 @@ function TrialCard(props) {
                 e('div', {className: 'w-full bg-slate-200 rounded-full h-3 overflow-hidden'},
                     e('div', {
                         className: 'bg-gradient-to-r from-blue-500 to-emerald-500 h-3 rounded-full',
-                        style: { width: `${Math.min(100, Math.round(((Number(trial.enrolled)||0) / Math.max(1, Number(trial.targetNum)||0)) * 100))}%` }
+                        style: { width: `${getEnrollmentProgress(trial).percent}%` }
                     })
                 ),
                 e('div', {className: 'text-xs text-slate-600 mt-1'},
-                    `${trial.enrolled || 0} / ${trial.targetNum || 0}（${Math.min(100, Math.round(((Number(trial.enrolled)||0) / Math.max(1, Number(trial.targetNum)||0)) * 100))}%）`
+                    `${trial.enrolled || 0} / ${trial.targetNum || 0}（${getEnrollmentProgress(trial).percent}%）`
                 )
             ),
             trial.inclusion && e('div', null,
@@ -2411,9 +2481,10 @@ function TrialFormModal(props) {
             ...form,
             cancerTypes: cancerTypes,
             id: isEdit ? form.id : Date.now(),
-            targetNum: parseInt(form.targetNum) || 0,
-            enrolled: parseInt(form.enrolled) || 0,
+            targetNum: normalizeText(form.targetNum),
+            enrolled: normalizeText(form.enrolled),
             lineStatusTouched: true,
+            statusManuallyTouched: true,
             isArchived: !!form.isArchived,
             archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
             archiveReason: form.isArchived ? (form.archiveReason || '') : ''
@@ -2603,7 +2674,7 @@ function TrialFormModal(props) {
                     e('div', null,
                         e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目標收案數'),
                         e('input', {
-                            type: 'number',
+                            type: 'text',
                             value: form.targetNum,
                             onChange: (ev) => update('targetNum', ev.target.value),
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
@@ -2612,8 +2683,7 @@ function TrialFormModal(props) {
                     e('div', null,
                         e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '目前已收案'),
                         e('input', {
-                            type: 'number',
-                            min: '0',
+                            type: 'text',
                             value: form.enrolled,
                             onChange: (ev) => update('enrolled', ev.target.value),
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
@@ -2626,7 +2696,7 @@ function TrialFormModal(props) {
                             onChange: (ev) => update('status', ev.target.value),
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                         },
-                            ['進行中', '暫停收案', '名額已滿', '停止收案'].map(s =>
+                            TRIAL_STATUS_OPTIONS.map(s =>
                                 e('option', {key: s, value: s}, s)
                             )
                         )
@@ -3182,8 +3252,7 @@ function App() {
                     ${filtered.map(trial => {
                         const cancerInfo = trial.cancerTypes ? formatCancerTypesForExport(trial.cancerTypes).replace(/; /g, '<br>') : '';
                         
-                        const statusClass = trial.status === '進行中' ? 'status-active' : 
-                                          trial.status === '暫停收案' ? 'status-paused' : 'status-full';
+                        const statusClass = getTrialStatusPrintClass(trial);
                         
                         return `
                           <tr>

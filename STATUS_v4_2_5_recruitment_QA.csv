@@ -1,0 +1,9 @@
+﻿test_id,expected_category,actual,expected,pass,note
+06F_target_range_manual_ongoing,open,True,True,True,target 3-5 不再被第一個數字 3 誤判為收滿
+exact_full_no_status,closed,False,False,True,沒有明確開放狀態時，單純數字滿額仍可作為輔助判斷
+exact_full_but_manual_ongoing,open,True,True,True,手動狀態進行中優先於數字推論
+explicit_full_status,closed,False,False,True,明確狀態名額已滿關閉
+explicit_stopped_status,closed,False,False,True,明確停止收案關閉
+textual_target_not_full,open,True,True,True,文字 target 不做自動滿額判斷
+guessed_stop_does_not_override_open,進行中,進行中,進行中,True,從整列文字猜到的停止收案不覆蓋既有開放狀態
+formal_status_can_override,停止收案,停止收案,停止收案,True,正式 status 欄或手動編輯仍可關閉
