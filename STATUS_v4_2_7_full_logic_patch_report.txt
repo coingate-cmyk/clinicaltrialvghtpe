@@ -1,0 +1,30 @@
+clinicaltrialvghtpe v4.2.7 收案狀態全邏輯修正版
+Generated: 2026-07-23T04:37:50
+
+Scope:
+- index.html and 404.html only.
+- No CTCAE/AJCC/tool data changed.
+- No GitHub Actions/workflows required.
+
+Problems audited:
+1. Old cloud/local records for MK-3475-06C and MK-3475-06F can remain as 試驗終了 and override the newer packaged open seed.
+2. PDF import was still inferring a global status from any short text cell in the row; row fragments/comments such as 試驗終了, 名額已滿, no slot could close a trial without an explicit status column.
+3. English open keyword matching could read inactive as active.
+4. Auto-imported closedLines could keep a treatment line crossed out even after global status is repaired.
+
+Fixes:
+1. Status is now source-aware: manual edit and explicit status columns are trusted; PDF row text/default status is not trusted for closing.
+2. If the packaged/current seed says a trial is 進行中 and an old cloud record says 試驗終了 without manual/explicit source, the open seed is preserved. This repairs MK-3475-06C and MK-3475-06F style false closures.
+3. PDF structured import no longer sets global status from whole-row text. Without an explicit status column it defaults to 進行中.
+4. Trial form saves statusSource=manual and statusManuallyTouched=true.
+5. English status matching now uses word boundaries, so inactive is no longer matched as active.
+6. Line-level closedLines from incoming data are trusted only when lineStatusTouched=true; old auto-imported closedLines no longer force a false closure.
+
+QA:
+- STATUS_v4_2_7_full_logic_QA.csv: 19/19 pass.
+- STATUS_v4_2_7_initial_trial_status_review.csv: review of all packaged INITIAL_TRIALS.
+
+Deployment:
+- Upload/overwrite index.html and 404.html.
+- Hard refresh browser.
+- If Firestore already has false closed records, the page should display MK-3475-06C and MK-3475-06F as open unless those records were manually closed. Open each record and save once if you want to permanently write the repaired manual status to Firestore.

@@ -1,0 +1,61 @@
+﻿code,status,targetNum,enrolled,monthSigned,monthEnrolled,openEnrollmentByLogic,flags
+20210081,進行中,2,1,0,0,True,open-status
+61186372COR3002,進行中,5,4,0,0,True,open-status
+8951-CL-0305,進行中,2,0 / 2 (Prescreen),1 (Prescreen),0,True,open-status
+BBI-4182-101,進行中,2,0,目前沒名額/可以預排,0,True,open-status
+BGM-2121-001,進行中,15,1,1,0,True,open-status
+C3651021,進行中,15,5,2,1,True,open-status
+C6461003,進行中,10,1,1,0,True,open-status
+CA2400030,進行中,10,8,0,0,True,open-status
+CHS-114-02,進行中,6 （需與 sponsor要名額）,"Cohort B (2L ESCC)
+/ 1","Cohort C Specific Inclusion Criteria (1L ESCC)  - 1
+人",1,True,open-status
+D702AC00001,進行中,5,"pre-screen  1
+/screen 0",0,0,True,open-status
+D702NC00001,進行中,15,3(screen failure)/1,1,0,True,open-status
+D967LC0001,名額已滿,3,0,1,"0   名額已滿,暫無slot",False,unavailable-status
+D967VC00001,暫停收案,7,"5
+prescreen/ 1
+screen",暫停收案,0,False,unavailable-status
+D9800C00001,暫停收案,10,"3胃癌 (screen)
+/3 胰臟癌 (screen) /3 (膽道癌)","1胰臟癌 (prescreen)/ 0胃癌 (prescreen)/
+0膽管癌 (screen)",名額已滿,False,unavailable-status
+D9803C00001,進行中,15,0,2 (Prescreen),0,True,open-status
+DB-1311-O-1001,進行中,20,9,0,0,True,open-status
+DB1311-201,暫停收案,3,3,暫停收案,0,False,unavailable-status; numeric-full
+DESTINY-Biliary Tract,進行中,6,5(有用藥)/ 3(screen failure),0,0,True,open-status
+DS7300-202,進行中,4,"(screen failure 4 / 人
+)",,,True,open-status
+DS8201-724,進行中,7,4(screen failure)/0,0,0,True,open-status
+GW-020202,還未SIV,3,0,0,0,False,unavailable-status
+M24-533,進行中,3,1,0,0,True,open-status
+M24-977,暫停收案,10,10,暫停收案,0,False,unavailable-status; numeric-full
+MK-1022,停止收案,6,"1   /   screen
+failure 2",0,0,False,unavailable-status
+MK-1082-012,進行中,"Part 1: 2
+Part 2: 2
+(預計 2026.04
+開始收案)",Part 1: 2,2,2,True,open-status
+MK-3475-06B,進行中,6- 10,6,0,0,True,open-status
+MK-3475-06C,進行中,6,,1,,True,open-status
+MK-3475-06D,進行中,"(  需要和 SPONS
+OR 要名額  )",1,,,True,open-status
+MK-3475-06E,進行中,"3-5 (  需
+要和
+SPONS
+OR 要名額  )",,,,True,open-status
+MK-3475-06F,進行中,3-5,,,,True,open-status
+MK-9999-02A,名額已滿,4,"pancrea ca:1
+CHOLANGIOCARCI NOMA:1",0,0,False,unavailable-status
+MK5909-005,名額已滿,4-6,"pancrea ca:4
+stomach ca: 1
+CHOLANGIOCARCI NOMA:1",名額已滿,0,False,unavailable-status
+PEP07-102,進行中,20,2,1,0,True,open-status
+PEP08-101,進行中,9,1,1,1,True,open-status
+SGNTUC-029,進行中,6,3,0,0,True,open-status
+T1223,進行中,25,14,2,2,True,open-status
+TAI-301,進行中,15,6,0,0,True,open-status
+TT420C2308,進行中,6,4,0,0,True,open-status
+TTY,進行中,150,16,1,1,True,open-status
+TYR430-101,停止收案,15,停止收案，沒有SLOT,0,0,False,unavailable-status
+WO42758,進行中,10,6,0,0,True,open-status

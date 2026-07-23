@@ -351,6 +351,14 @@ const hasLineStatusFields = (ct) => {
         || Object.prototype.hasOwnProperty.call(ct, 'lineStatuses');
 };
 
+const hasMeaningfulLineStatusFields = (ct) => {
+    if (!ct || typeof ct !== 'object') return false;
+    if (Array.isArray(ct.closedLines) && ct.closedLines.length) return true;
+    if (Array.isArray(ct.inactiveLines) && ct.inactiveLines.length) return true;
+    if (ct.lineStatuses && typeof ct.lineStatuses === 'object' && Object.keys(ct.lineStatuses).length) return true;
+    return false;
+};
+
 const isClosedTreatmentLine = (ct, line) => {
     if (!ct || !line) return false;
     const normalizedLine = normalizeTreatmentLine(line) || normalizeCellText(line);
@@ -367,8 +375,25 @@ const isClosedTreatmentLine = (ct, line) => {
 
 const formatLineForDisplay = (ct, line) => isClosedTreatmentLine(ct, line) ? `✕ ${line}` : line;
 
-const TRIAL_STATUS_OPTIONS = ['進行中', '開放收案', '需問slot', '暫停收案', '名額已滿', '停止收案', '還未SIV', '預備中', '試驗結束'];
-const OPEN_ENROLLMENT_STATUS_KEYWORDS = ['進行中', '開放收案', '收案中', '招募中', 'recruiting', 'active', 'ongoing', 'open'];
+const TRIAL_STATUS_OPTIONS = ['進行中', '開放收案', '需問slot', '暫停收案', '名額已滿', '停止收案', '還未SIV', '預備中', '試驗結束', '試驗終了'];
+const getTrialStatusOptions = (currentStatus) => {
+    const options = [...TRIAL_STATUS_OPTIONS];
+    const current = normalizeText(currentStatus);
+    if (current && !options.some(v => valueMatches(v, current))) options.unshift(current);
+    return options;
+};
+
+// v4.2.7: status is now an explicit, source-aware field.
+// Do not close an ongoing trial merely because a PDF row/inclusion/comments contains 「終了」, 「名額已滿」 or 「no slot」.
+// Those words are still useful as comments, but they are not trusted as global trial status unless they came
+// from a real status column or from manual editing.
+const STATUS_SOURCE_MANUAL = 'manual';
+const STATUS_SOURCE_EXPLICIT_FIELD = 'explicit-field';
+const STATUS_SOURCE_DETECTED_TEXT = 'detected-text';
+const STATUS_SOURCE_DEFAULT = 'default';
+const STATUS_SOURCE_SEED = 'seed';
+
+const OPEN_ENROLLMENT_STATUS_KEYWORDS = ['進行中', '開放收案', '收案中', '招募中', 'recruiting', 'ongoing', 'open'];
 const UNAVAILABLE_STATUS_KEYWORDS = [
     '暫停收案',
     '名額已滿',
@@ -386,6 +411,7 @@ const UNAVAILABLE_STATUS_KEYWORDS = [
     '沒有slot',
     '暫無slot',
     'no slot',
+    'inactive',
     'closed',
     'full',
     'paused',
@@ -396,18 +422,46 @@ const UNAVAILABLE_STATUS_KEYWORDS = [
 ];
 const AMBIGUOUS_COUNT_RE = /[-–—~～至到以上+＋/／()（）a-zA-Z一-鿿]/;
 
-const statusIncludesAny = (statusText, keywords) => {
+const isEnglishStatusKeyword = (keyword) => /^[a-z]+(?:\s+[a-z]+)*$/i.test(String(keyword || '').trim());
+const escapeRegExp = (value) => String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const statusKeywordMatches = (statusText, keyword) => {
+    const raw = String(statusText || '').toLowerCase();
     const normalized = normalizeFilterValue(statusText);
-    return !!normalized && (keywords || []).some(keyword => normalized.includes(normalizeFilterValue(keyword)));
+    const k = String(keyword || '').trim();
+    const nk = normalizeFilterValue(k);
+    if (!normalized || !nk) return false;
+    if (isEnglishStatusKeyword(k)) {
+        // Avoid matching active inside inactive.
+        const escaped = escapeRegExp(k.toLowerCase()).replace(/\s+/g, '[\\s_-]+');
+        return new RegExp('(^|[^a-z])' + escaped + '([^a-z]|$)', 'i').test(raw);
+    }
+    return normalized.includes(nk);
 };
+const statusIncludesAny = (statusText, keywords) => !!String(statusText || '').trim()
+    && (keywords || []).some(keyword => statusKeywordMatches(statusText, keyword));
 
 const isExplicitOpenStatusText = (status) => statusIncludesAny(status, OPEN_ENROLLMENT_STATUS_KEYWORDS);
 const isUnavailableStatusText = (status) => {
+    if (!String(status || '').trim()) return false;
+    // Canonical open statuses win only when actually present, not via English substring such as inactive -> active.
     if (isExplicitOpenStatusText(status)) return false;
     return statusIncludesAny(status, UNAVAILABLE_STATUS_KEYWORDS);
 };
+const classifyStatusText = (status) => {
+    if (isExplicitOpenStatusText(status)) return 'open';
+    if (isUnavailableStatusText(status)) return 'unavailable';
+    return 'unknown';
+};
+const normalizeStatusSource = (value) => normalizeFilterValue(value || '');
+const isTrustedIncomingStatus = (trialOrSource, manuallyTouched) => {
+    const source = typeof trialOrSource === 'string'
+        ? normalizeStatusSource(trialOrSource)
+        : normalizeStatusSource(trialOrSource && trialOrSource.statusSource);
+    return Boolean(manuallyTouched)
+        || source === normalizeStatusSource(STATUS_SOURCE_MANUAL)
+        || source === normalizeStatusSource(STATUS_SOURCE_EXPLICIT_FIELD);
+};
 const isExplicitOpenEnrollmentStatus = (trial) => isExplicitOpenStatusText(trial && trial.status);
-
 const isGloballyUnavailableTrial = (trial) => isUnavailableStatusText(trial && trial.status);
 
 const isCleanNumericText = (v) => /^\s*\d+(?:\.\d+)?\s*$/.test(String(v ?? ''));
@@ -425,15 +479,44 @@ const isTrialNumericallyFull = (trial) => {
     return Number.isFinite(target) && target > 0 && Number.isFinite(enrolled) && enrolled >= target;
 };
 
-const chooseMergedTrialStatus = (prevStatus, incomingStatus, incomingDetectedFromText) => {
+const chooseMergedTrialStatus = (prevStatus, incomingStatus, options = {}) => {
     const incoming = normalizeText(incomingStatus);
     const previous = normalizeText(prevStatus);
+    const incomingDetectedFromText = Boolean(options.incomingDetectedFromText);
+    const previousManuallyTouched = Boolean(options.previousManuallyTouched);
+    const incomingManuallyTouched = Boolean(options.incomingManuallyTouched);
+    const incomingTrusted = isTrustedIncomingStatus(options.incomingStatusSource || '', incomingManuallyTouched);
+    const previousTrusted = isTrustedIncomingStatus(options.previousStatusSource || '', previousManuallyTouched);
+
     if (!incoming) return previous || '進行中';
     if (!previous) return incoming;
-    // 若匯入檔沒有正式 status 欄，只是從整列文字猜到「停止/結束/滿額」，不要覆蓋既有手動開放狀態。
-    // 真正要關閉時：在編輯視窗改 status，或在匯入表格中放明確 status/收案狀態欄。
+
+    // Manual edit and explicit status column are authoritative.
+    if (incomingTrusted) return incoming;
+    if (previousTrusted && previous !== incoming) {
+        // Do not let a later PDF text fragment/default overwrite a manual or explicit status.
+        return previous;
+    }
+
+    // Repair old false closures: if the packaged/current seed says the trial is open, and the cloud/imported
+    // value says closed without a trusted source, keep the open seed/manual view. This fixes MK-3475-06C/06F.
+    if (isExplicitOpenStatusText(previous) && isUnavailableStatusText(incoming)) return previous;
+
+    // Never let text-scanned closure override an open record.
     if (incomingDetectedFromText && isExplicitOpenStatusText(previous) && isUnavailableStatusText(incoming)) return previous;
+
+    // Default imported rows should not re-open a deliberately closed trial.
+    if (isUnavailableStatusText(previous) && isExplicitOpenStatusText(incoming) && !incomingTrusted) return previous;
+
     return incoming;
+};
+
+const chooseMergedStatusSource = (prev, incoming, chosenStatus) => {
+    const incomingStatus = normalizeText(incoming && incoming.status);
+    const prevStatus = normalizeText(prev && prev.status);
+    if (chosenStatus === incomingStatus) return incoming.statusSource || (incoming.statusManuallyTouched ? STATUS_SOURCE_MANUAL : STATUS_SOURCE_DEFAULT);
+    if (chosenStatus === prevStatus) return prev.statusSource || (prev.statusManuallyTouched ? STATUS_SOURCE_MANUAL : STATUS_SOURCE_SEED);
+    return '';
 };
 
 const getTrialStatusBadgeClass = (trial) => {
@@ -556,6 +639,7 @@ const cleanTrialForSave = (trial) => {
     cleaned.comments = normalizeText(cleaned.comments);
     cleaned.phase = normalizeText(cleaned.phase);
     cleaned.status = normalizeText(cleaned.status);
+    cleaned.statusSource = cleaned.statusManuallyTouched ? STATUS_SOURCE_MANUAL : (cleaned.statusSource || '');
     cleaned.cancerType = normalizeCancerTypeLabel(cleaned.cancerType);
     cleaned.line = normalizeTreatmentLine(cleaned.line);
     cleaned.cancerTypes = normalizeCancerTypes(cleaned.cancerTypes);
@@ -579,7 +663,10 @@ const normalizeFirestoreTrial = (raw) => {
     trial.phone = normalizeText(trial.phone);
     trial.comments = normalizeText(trial.comments);
     trial.phase = trial.phase || '';
-    trial.status = trial.status || '';
+    trial.status = normalizeText(trial.status || '');
+    trial.statusSource = normalizeText(trial.statusSource || '');
+    trial.statusDetectedFromText = Boolean(trial.statusDetectedFromText);
+    trial.statusManuallyTouched = Boolean(trial.statusManuallyTouched);
     trial.cancerType = normalizeCancerTypeLabel(trial.cancerType);
     trial.line = normalizeTreatmentLine(trial.line);
     trial.cancerTypes = normalizeCancerTypes(trial.cancerTypes);
@@ -1197,6 +1284,17 @@ const consolidateParsedTrials = (rows) => {
         const merged = { ...current };
         Object.entries(row || {}).forEach(([field, value]) => {
             if (field === 'cancerTypes') return;
+            if (field === 'status') {
+                merged.status = chooseMergedTrialStatus(merged.status, value, {
+                    incomingDetectedFromText: Boolean(row.statusDetectedFromText),
+                    previousManuallyTouched: Boolean(merged.statusManuallyTouched),
+                    incomingManuallyTouched: Boolean(row.statusManuallyTouched),
+                    incomingStatusSource: row.statusSource || '',
+                    previousStatusSource: merged.statusSource || ''
+                });
+                merged.statusSource = chooseMergedStatusSource(merged, row, merged.status);
+                return;
+            }
             if (value !== undefined && value !== null && String(value).trim() !== '') merged[field] = value;
         });
         const ctMap = new Map();
@@ -1279,10 +1377,15 @@ const parseRowsWithHeaderMapping = (rows) => {
 
         if (!item.cancerType && currentCancerType) item.cancerType = currentCancerType;
         if (!item.line && currentLine) item.line = currentLine;
-        if (!item.status) {
-            const detectedStatus = detectStatusFromRow(row);
-            item.status = detectedStatus || '進行中';
-            item.statusDetectedFromText = Boolean(detectedStatus);
+        const explicitStatusIndex = mappedFields.findIndex((field, idx) => field === 'status' && normalizeCellText(row[idx]));
+        if (explicitStatusIndex >= 0) {
+            item.status = normalizeText(row[explicitStatusIndex]);
+            item.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+            item.statusDetectedFromText = false;
+        } else if (!item.status) {
+            item.status = '進行中';
+            item.statusSource = STATUS_SOURCE_DEFAULT;
+            item.statusDetectedFromText = false;
         }
         if (!item.inclusion && row[4]) item.inclusion = row[4];
         item.code = code;
@@ -1334,6 +1437,13 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
         if (!key) return;
 
         const prev = map.get(key) || {};
+        const mergedStatus = chooseMergedTrialStatus(prev.status, incoming.status, {
+            incomingDetectedFromText: Boolean(incoming.statusDetectedFromText),
+            previousManuallyTouched: Boolean(prev.statusManuallyTouched),
+            incomingManuallyTouched: Boolean(incoming.statusManuallyTouched),
+            incomingStatusSource: incoming.statusSource || '',
+            previousStatusSource: prev.statusSource || ''
+        });
         const merged = {
             ...prev,
             ...incoming,
@@ -1356,12 +1466,15 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
                 const incomingCancerTypes = Array.isArray(incoming.cancerTypes) ? incoming.cancerTypes : [];
                 const previousCancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
                 if (!incomingCancerTypes.length) return normalizeCancerTypes(previousCancerTypes);
-                return incoming.lineStatusTouched || incomingCancerTypes.some(hasLineStatusFields)
+                // Only manually touched line status is authoritative. Old PDF/auto-imported closedLines can otherwise
+                // keep a trial crossed out even after the global status is repaired to 進行中.
+                return incoming.lineStatusTouched
                     ? normalizeCancerTypes(incomingCancerTypes)
-                    : carryLineStatusesToCancerTypes(incomingCancerTypes, previousCancerTypes);
+                    : carryLineStatusesToCancerTypes(incomingCancerTypes.map(ct => ({ ...ct, closedLines: [], inactiveLines: [], lineStatuses: {} })), previousCancerTypes);
             })(),
-            status: chooseMergedTrialStatus(prev.status, incoming.status, Boolean(incoming.statusDetectedFromText)),
-            statusManuallyTouched: Boolean(incoming.statusManuallyTouched ?? prev.statusManuallyTouched ?? false),
+            status: mergedStatus,
+            statusSource: chooseMergedStatusSource(prev, incoming, mergedStatus),
+            statusManuallyTouched: Boolean(incoming.statusManuallyTouched || prev.statusManuallyTouched || false),
             statusDetectedFromText: Boolean(incoming.statusDetectedFromText ?? false),
             targetNum: normalizeText(incoming.targetNum !== undefined && incoming.targetNum !== null && String(incoming.targetNum).trim() !== '' ? incoming.targetNum : (prev.targetNum || '')),
             enrolled: normalizeText(incoming.enrolled !== undefined && incoming.enrolled !== null && String(incoming.enrolled).trim() !== '' ? incoming.enrolled : (prev.enrolled || '')),
@@ -1842,8 +1955,9 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                 nurse: sanitizeNurseField(raw.nurse),
                 comments: raw.comments,
                 contractNo: raw.contractNo,
-                status: detectStatusFromRow(Object.values(raw)) || '進行中',
-                statusDetectedFromText: Boolean(detectStatusFromRow(Object.values(raw)))
+                status: '進行中',
+                statusSource: STATUS_SOURCE_DEFAULT,
+                statusDetectedFromText: false
             };
 
             if (code && isLikelyPdfCodeCell(code)) {
@@ -1941,8 +2055,9 @@ const parseWideSingleTrialPdfPage = (pageData) => {
         pi: sanitizePiField(metadata.pi || '', Object.values(metadata).join('\n')),
         nurse: sanitizeNurseField(metadata.nurse || ''),
         comments: metadata.comments || '',
-        status: detectStatusFromRow([rowText]) || '進行中',
-        statusDetectedFromText: Boolean(detectStatusFromRow([rowText]))
+        status: '進行中',
+        statusSource: STATUS_SOURCE_DEFAULT,
+        statusDetectedFromText: false
     }, { explicitCancerOnRow: false });
     return item.code ? [item] : [];
 };
@@ -2485,6 +2600,8 @@ function TrialFormModal(props) {
             enrolled: normalizeText(form.enrolled),
             lineStatusTouched: true,
             statusManuallyTouched: true,
+            statusSource: STATUS_SOURCE_MANUAL,
+            statusDetectedFromText: false,
             isArchived: !!form.isArchived,
             archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
             archiveReason: form.isArchived ? (form.archiveReason || '') : ''
@@ -2696,7 +2813,7 @@ function TrialFormModal(props) {
                             onChange: (ev) => update('status', ev.target.value),
                             className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                         },
-                            TRIAL_STATUS_OPTIONS.map(s =>
+                            getTrialStatusOptions(form.status).map(s =>
                                 e('option', {key: s, value: s}, s)
                             )
                         )
@@ -3093,12 +3210,15 @@ function App() {
         await saveAllData(merged, subjects);
         let added = 0, updated = 0, skipped = 0;
         const existingMap = new Map((baseTrials || []).map(t => [normalizeCode(t.code), t]));
+        const mergedMap = new Map((merged || []).map(t => [normalizeCode(t.code), t]));
         for (const row of uniqueRows) {
             const key = normalizeCode(row.code);
             if (!key) { skipped++; continue; }
             if (existingMap.has(key)) updated++; else added++;
             if (firebaseEnabled && firebaseConfig) {
-                await saveTrialToFirestore(firebaseConfig, { ...existingMap.get(key), ...row });
+                // v4.2.6: write the already-merged trial, not the raw imported row.
+                // Otherwise an imported PDF row can overwrite a protected manual status in Firestore.
+                await saveTrialToFirestore(firebaseConfig, mergedMap.get(key) || row);
             }
         }
         const prefix = replaceCloud ? ('已清空 ' + cleared + ' 筆後重建；') : '';
