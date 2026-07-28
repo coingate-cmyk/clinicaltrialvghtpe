@@ -393,6 +393,55 @@ const STATUS_SOURCE_DETECTED_TEXT = 'detected-text';
 const STATUS_SOURCE_DEFAULT = 'default';
 const STATUS_SOURCE_SEED = 'seed';
 
+const STATUS_REPAIR_VERSION = 'v4.2.8-known-status-repair';
+// User-confirmed corrections from the July 2026 study-status PDF review.
+// These are open/ongoing trials but older PDF parsing/Firestore rows may have persisted 「試驗終了」.
+// Repair is one-time and reversible: after the repaired record has statusRepairVersion/statusOverrideConfirmedAt,
+// future manual edits are respected and will not be auto-forced again.
+const KNOWN_OPEN_STATUS_REPAIRS = {
+    'MK-3475-06C': '進行中',
+    'MK-3475-06F': '進行中'
+};
+const isKnownOpenRepairCode = (code) => Object.prototype.hasOwnProperty.call(KNOWN_OPEN_STATUS_REPAIRS, normalizeCode(code));
+const hasStatusRepairMarker = (trial) => normalizeText(trial && trial.statusRepairVersion) === STATUS_REPAIR_VERSION
+    || Boolean(trial && trial.statusOverrideConfirmedAt);
+const shouldApplyKnownOpenStatusRepair = (trial, seedTrial = null) => {
+    if (!trial || !isKnownOpenRepairCode(trial.code)) return false;
+    if (hasStatusRepairMarker(trial)) return false;
+    const seedStatus = seedTrial ? normalizeText(seedTrial.status) : KNOWN_OPEN_STATUS_REPAIRS[normalizeCode(trial.code)];
+    if (!isExplicitOpenStatusText(seedStatus || KNOWN_OPEN_STATUS_REPAIRS[normalizeCode(trial.code)])) return false;
+    // Apply only when the stored value is a closed/unavailable status. Do not touch blank/unknown/open values.
+    return isUnavailableStatusText(trial.status);
+};
+const applyKnownOpenStatusRepairToTrial = (trial, seedTrial = null) => {
+    const t = { ...(trial || {}) };
+    if (!shouldApplyKnownOpenStatusRepair(t, seedTrial)) return { trial: t, repaired: false };
+    const fixedStatus = KNOWN_OPEN_STATUS_REPAIRS[normalizeCode(t.code)] || '進行中';
+    return {
+        trial: {
+            ...t,
+            status: fixedStatus,
+            statusSource: STATUS_SOURCE_MANUAL,
+            statusManuallyTouched: true,
+            statusDetectedFromText: false,
+            statusRepairVersion: STATUS_REPAIR_VERSION,
+            statusRepairReason: 'Known false closure from older PDF/status import logic; user confirmed ongoing/open.',
+            statusOverrideConfirmedAt: new Date().toISOString()
+        },
+        repaired: true
+    };
+};
+const applyKnownOpenStatusRepairsToList = (list, seedList = INITIAL_TRIALS) => {
+    const seedMap = new Map((seedList || []).map(t => [normalizeCode(t.code), t]));
+    const repairedCodes = [];
+    const trials = (Array.isArray(list) ? list : []).map(trial => {
+        const result = applyKnownOpenStatusRepairToTrial(trial, seedMap.get(normalizeCode(trial && trial.code)) || null);
+        if (result.repaired) repairedCodes.push(normalizeCode(trial.code));
+        return result.trial;
+    });
+    return { trials, repairedCodes };
+};
+
 const OPEN_ENROLLMENT_STATUS_KEYWORDS = ['進行中', '開放收案', '收案中', '招募中', 'recruiting', 'ongoing', 'open'];
 const UNAVAILABLE_STATUS_KEYWORDS = [
     '暫停收案',
@@ -1437,49 +1486,57 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
         if (!key) return;
 
         const prev = map.get(key) || {};
-        const mergedStatus = chooseMergedTrialStatus(prev.status, incoming.status, {
-            incomingDetectedFromText: Boolean(incoming.statusDetectedFromText),
+        // v4.2.8: repair known false closures before status-source trust logic.
+        // Some old Firestore rows were stamped as statusManuallyTouched even though the value came from PDF text,
+        // so v4.2.7 could keep trusting 「試驗終了」 for MK-3475-06C/06F.
+        const incomingRepair = applyKnownOpenStatusRepairToTrial({ ...incoming, code: key }, prev);
+        const incomingForMerge = incomingRepair.trial;
+        const mergedStatus = chooseMergedTrialStatus(prev.status, incomingForMerge.status, {
+            incomingDetectedFromText: Boolean(incomingForMerge.statusDetectedFromText),
             previousManuallyTouched: Boolean(prev.statusManuallyTouched),
-            incomingManuallyTouched: Boolean(incoming.statusManuallyTouched),
-            incomingStatusSource: incoming.statusSource || '',
+            incomingManuallyTouched: Boolean(incomingForMerge.statusManuallyTouched),
+            incomingStatusSource: incomingForMerge.statusSource || '',
             previousStatusSource: prev.statusSource || ''
         });
         const merged = {
             ...prev,
-            ...incoming,
+            ...incomingForMerge,
             id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
             code: key,
-            studyTitle: normalizeText(incoming.studyTitle || prev.studyTitle),
-            inclusion: normalizeCellText(incoming.inclusion || prev.inclusion),
-            exclusion: normalizeCellText(incoming.exclusion || prev.exclusion),
-            sponsor: normalizeText(incoming.sponsor || prev.sponsor),
-            pi: sanitizePiField(incoming.pi || prev.pi, [incoming.pi, prev.pi, incoming.nurse, prev.nurse, incoming.studyTitle, incoming.inclusion].filter(Boolean).join('\n')),
-            nurse: sanitizeNurseField(incoming.nurse || prev.nurse),
-            phone: normalizeText(incoming.phone || prev.phone),
-            comments: normalizeText(incoming.comments || prev.comments),
-            isArchived: Boolean(incoming.isArchived ?? prev.isArchived ?? false),
-            archiveDate: normalizeText(incoming.archiveDate || prev.archiveDate),
-            archiveReason: normalizeText(incoming.archiveReason || prev.archiveReason),
-            cancerType: normalizeCancerTypeLabel(incoming.cancerType || prev.cancerType),
-            line: normalizeTreatmentLine(incoming.line || prev.line),
+            studyTitle: normalizeText(incomingForMerge.studyTitle || prev.studyTitle),
+            inclusion: normalizeCellText(incomingForMerge.inclusion || prev.inclusion),
+            exclusion: normalizeCellText(incomingForMerge.exclusion || prev.exclusion),
+            sponsor: normalizeText(incomingForMerge.sponsor || prev.sponsor),
+            pi: sanitizePiField(incomingForMerge.pi || prev.pi, [incomingForMerge.pi, prev.pi, incomingForMerge.nurse, prev.nurse, incomingForMerge.studyTitle, incomingForMerge.inclusion].filter(Boolean).join('\n')),
+            nurse: sanitizeNurseField(incomingForMerge.nurse || prev.nurse),
+            phone: normalizeText(incomingForMerge.phone || prev.phone),
+            comments: normalizeText(incomingForMerge.comments || prev.comments),
+            isArchived: Boolean(incomingForMerge.isArchived ?? prev.isArchived ?? false),
+            archiveDate: normalizeText(incomingForMerge.archiveDate || prev.archiveDate),
+            archiveReason: normalizeText(incomingForMerge.archiveReason || prev.archiveReason),
+            cancerType: normalizeCancerTypeLabel(incomingForMerge.cancerType || prev.cancerType),
+            line: normalizeTreatmentLine(incomingForMerge.line || prev.line),
             cancerTypes: (() => {
-                const incomingCancerTypes = Array.isArray(incoming.cancerTypes) ? incoming.cancerTypes : [];
+                const incomingCancerTypes = Array.isArray(incomingForMerge.cancerTypes) ? incomingForMerge.cancerTypes : [];
                 const previousCancerTypes = Array.isArray(prev.cancerTypes) ? prev.cancerTypes : [];
                 if (!incomingCancerTypes.length) return normalizeCancerTypes(previousCancerTypes);
                 // Only manually touched line status is authoritative. Old PDF/auto-imported closedLines can otherwise
                 // keep a trial crossed out even after the global status is repaired to 進行中.
-                return incoming.lineStatusTouched
+                return incomingForMerge.lineStatusTouched
                     ? normalizeCancerTypes(incomingCancerTypes)
                     : carryLineStatusesToCancerTypes(incomingCancerTypes.map(ct => ({ ...ct, closedLines: [], inactiveLines: [], lineStatuses: {} })), previousCancerTypes);
             })(),
             status: mergedStatus,
-            statusSource: chooseMergedStatusSource(prev, incoming, mergedStatus),
-            statusManuallyTouched: Boolean(incoming.statusManuallyTouched || prev.statusManuallyTouched || false),
-            statusDetectedFromText: Boolean(incoming.statusDetectedFromText ?? false),
-            targetNum: normalizeText(incoming.targetNum !== undefined && incoming.targetNum !== null && String(incoming.targetNum).trim() !== '' ? incoming.targetNum : (prev.targetNum || '')),
-            enrolled: normalizeText(incoming.enrolled !== undefined && incoming.enrolled !== null && String(incoming.enrolled).trim() !== '' ? incoming.enrolled : (prev.enrolled || '')),
-            monthSigned: normalizeText(incoming.monthSigned !== undefined && incoming.monthSigned !== null && String(incoming.monthSigned).trim() !== '' ? incoming.monthSigned : (prev.monthSigned || '')),
-            monthEnrolled: normalizeText(incoming.monthEnrolled !== undefined && incoming.monthEnrolled !== null && String(incoming.monthEnrolled).trim() !== '' ? incoming.monthEnrolled : (prev.monthEnrolled || '')),
+            statusSource: chooseMergedStatusSource(prev, incomingForMerge, mergedStatus),
+            statusManuallyTouched: Boolean(incomingForMerge.statusManuallyTouched || prev.statusManuallyTouched || false),
+            statusDetectedFromText: Boolean(incomingForMerge.statusDetectedFromText ?? false),
+            statusRepairVersion: incomingForMerge.statusRepairVersion || prev.statusRepairVersion || '',
+            statusRepairReason: incomingForMerge.statusRepairReason || prev.statusRepairReason || '',
+            statusOverrideConfirmedAt: incomingForMerge.statusOverrideConfirmedAt || prev.statusOverrideConfirmedAt || '',
+            targetNum: normalizeText(incomingForMerge.targetNum !== undefined && incomingForMerge.targetNum !== null && String(incomingForMerge.targetNum).trim() !== '' ? incomingForMerge.targetNum : (prev.targetNum || '')),
+            enrolled: normalizeText(incomingForMerge.enrolled !== undefined && incomingForMerge.enrolled !== null && String(incomingForMerge.enrolled).trim() !== '' ? incomingForMerge.enrolled : (prev.enrolled || '')),
+            monthSigned: normalizeText(incomingForMerge.monthSigned !== undefined && incomingForMerge.monthSigned !== null && String(incomingForMerge.monthSigned).trim() !== '' ? incomingForMerge.monthSigned : (prev.monthSigned || '')),
+            monthEnrolled: normalizeText(incomingForMerge.monthEnrolled !== undefined && incomingForMerge.monthEnrolled !== null && String(incomingForMerge.monthEnrolled).trim() !== '' ? incomingForMerge.monthEnrolled : (prev.monthEnrolled || '')),
         };
 
         if (!Array.isArray(merged.cancerTypes) || merged.cancerTypes.length === 0) {
@@ -2639,6 +2696,7 @@ function TrialFormModal(props) {
             statusManuallyTouched: true,
             statusSource: STATUS_SOURCE_MANUAL,
             statusDetectedFromText: false,
+            statusOverrideConfirmedAt: new Date().toISOString(),
             isArchived: !!form.isArchived,
             archiveDate: form.isArchived ? (form.archiveDate || new Date().toISOString().slice(0,10)) : '',
             archiveReason: form.isArchived ? (form.archiveReason || '') : ''
@@ -3147,12 +3205,15 @@ function App() {
             const localTrials = stored ? decryptData(stored) : null;
             const localSubjects = storedSubjects ? decryptData(storedSubjects) : null;
 
-            setTrials(sanitizeTrialListForRuntime(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS));
+            const baseLocalTrials = sanitizeTrialListForRuntime(Array.isArray(localTrials) && localTrials.length > 0 ? localTrials : INITIAL_TRIALS);
+            const localRepair = applyKnownOpenStatusRepairsToList(baseLocalTrials);
+            setTrials(localRepair.trials);
             setSubjects(Array.isArray(localSubjects) ? localSubjects : []);
             setLoading(false);
-            setSyncStatus(Array.isArray(localTrials) && localTrials.length > 0
+            setSyncStatus((Array.isArray(localTrials) && localTrials.length > 0
                 ? `本機快取已載入（${localTrials.length} 個試驗），正在連線雲端...`
-                : `本機初始資料（${INITIAL_TRIALS.length} 個試驗），正在連線雲端...`);
+                : `本機初始資料（${INITIAL_TRIALS.length} 個試驗），正在連線雲端...`) +
+                (localRepair.repairedCodes.length ? ` 已先修復狀態：${localRepair.repairedCodes.join(', ')}` : ''));
         } catch (error) {
             console.error('Local load error:', error);
             setTrials(sanitizeTrialListForRuntime(INITIAL_TRIALS));
@@ -3172,9 +3233,18 @@ function App() {
         unsubscribeRef.current = subscribeFirestoreData({
             firebaseConfig,
             onTrials: async (remoteTrials) => {
-                const cleanRemote = sanitizeTrialListForRuntime(remoteTrials);
+                const remoteRepair = applyKnownOpenStatusRepairsToList(sanitizeTrialListForRuntime(remoteTrials));
+                const cleanRemote = remoteRepair.trials;
                 setTrials(cleanRemote);
                 await saveAllData(cleanRemote, subjects);
+                if (firebaseEnabled && firebaseConfig && remoteRepair.repairedCodes.length) {
+                    const byCode = new Map(cleanRemote.map(t => [normalizeCode(t.code), t]));
+                    for (const code of remoteRepair.repairedCodes) {
+                        const repairedTrial = byCode.get(code);
+                        if (repairedTrial) await saveTrialToFirestore(firebaseConfig, repairedTrial);
+                    }
+                    setSyncStatus(`已自動修復雲端狀態：${remoteRepair.repairedCodes.join(', ')}`);
+                }
             },
             onSubjects: async (remoteSubjects) => {
                 setSubjects(remoteSubjects);
@@ -3265,6 +3335,27 @@ function App() {
         alert('已完成匯入：' + (replaceCloud ? ('已清空 ' + cleared + ' 筆；') : '') + '新增 ' + added + ' 筆、更新 ' + updated + ' 筆、跳過 ' + skipped + ' 筆。重複 code 已合併 ' + importAnalysis.duplicateCount + ' 筆。');
     };
 
+
+    const handleRepairKnownStatusMistakes = async () => {
+        const repair = applyKnownOpenStatusRepairsToList(trials || []);
+        if (!repair.repairedCodes.length) {
+            alert('目前沒有偵測到需修復的 MK-3475-06C / MK-3475-06F 錯誤終了狀態。若畫面仍錯，請先強制重新整理後再試。');
+            return;
+        }
+        setTrials(repair.trials);
+        await saveAllData(repair.trials, subjects);
+        if (firebaseEnabled && firebaseConfig) {
+            const byCode = new Map(repair.trials.map(t => [normalizeCode(t.code), t]));
+            for (const code of repair.repairedCodes) {
+                const repairedTrial = byCode.get(code);
+                if (repairedTrial) await saveTrialToFirestore(firebaseConfig, repairedTrial);
+            }
+            setSyncStatus(`已修復並同步雲端狀態：${repair.repairedCodes.join(', ')}`);
+        } else {
+            setSyncStatus(`已修復本機狀態：${repair.repairedCodes.join(', ')}`);
+        }
+        alert('已修復狀態：' + repair.repairedCodes.join(', ') + ' → 進行中');
+    };
 
     const handleClearCloudTrials = async () => {
         if (!firebaseEnabled || !firebaseConfig) {
@@ -3663,6 +3754,11 @@ function App() {
                     onClick: handleClearCloudTrials,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-700 to-red-800 text-white rounded-xl hover:from-red-800 hover:to-red-900 transition-all shadow-lg font-semibold'
                 }, '清空雲端 trials'),
+                isAdmin && e('button', {
+                    onClick: handleRepairKnownStatusMistakes,
+                    title: '修復 MK-3475-06C / MK-3475-06F 被舊匯入誤標為試驗終了的狀態',
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-xl hover:from-emerald-700 hover:to-green-800 transition-all shadow-lg font-semibold'
+                }, '修復06C/06F狀態'),
                 isAdmin && e('button', {
                     onClick: handleExportJSON,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'

@@ -1,0 +1,10 @@
+result,test_case
+PASS,seed06F_is_open
+PASS,seed06C_is_open
+PASS,06F_bad_manual_without_marker_repaired
+PASS,06C_bad_manual_without_marker_repaired
+PASS,future_manual_close_after_override_is_respected
+PASS,non_target_code_not_repaired
+PASS,list_repairs_both_known_codes
+PASS,06F_open_enrollment_after_repair
+PASS,06F_target_3_5_not_numerically_full
