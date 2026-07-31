@@ -1,0 +1,23 @@
+﻿test,pass,detail
+public_page_exists,PASS,public-trials.html
+admin_publish_button_exists,PASS,admin publish button
+firebase_public_doc_path_exists,PASS,public/clinical-trials write path
+public_json_created,PASS,41 trials
+no_forbidden_key_nurse,PASS,forbidden key nurse
+no_forbidden_key_phone,PASS,forbidden key phone
+no_forbidden_key_subjects,PASS,forbidden key subjects
+no_forbidden_key_contractNo,PASS,forbidden key contractNo
+no_forbidden_key_comments,PASS,forbidden key comments
+no_forbidden_key_sponsor,PASS,forbidden key sponsor
+no_forbidden_key_targetNum,PASS,forbidden key targetNum
+no_forbidden_key_enrolled,PASS,forbidden key enrolled
+no_forbidden_key_monthSigned,PASS,forbidden key monthSigned
+no_forbidden_key_monthEnrolled,PASS,forbidden key monthEnrolled
+no_forbidden_key_pi,PASS,forbidden key pi
+no_mobile_pattern,PASS,No Taiwan mobile pattern
+no_email_pattern,PASS,No email pattern
+no_line_id_pattern,PASS,No LINE ID pattern
+required_public_fields,PASS,All public fields
+limited_public_physicians_only,PASS,Only allowed public physicians
+mk_3475_06c_open,PASS,MK-3475-06C
+mk_3475_06f_open,PASS,MK-3475-06F

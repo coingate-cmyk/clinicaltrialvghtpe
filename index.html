@@ -804,6 +804,127 @@ const seedInitialTrialsToFirestore = async (firebaseConfig, trialsData) => {
 };
 
 
+
+const PUBLIC_TRIALS_SCHEMA_VERSION = 'public-trials-v1.0';
+const PUBLIC_TRIALS_COLLECTION = 'public';
+const PUBLIC_TRIALS_DOC_ID = 'clinical-trials';
+const PUBLIC_TRIAL_CONTACT_PHYSICIANS = ['洪逸平醫師', '陳明晃醫師', '姜乃榕醫師'];
+const PUBLIC_APPOINTMENT_LINKS = {
+    registration: 'https://www6.vghtpe.gov.tw/reg/',
+    clinicSchedule: 'https://wd.vghtpe.gov.tw/Cancer_Cen/Fpage.action?fid=15325&muid=16879'
+};
+
+const stripPrivatePublicText = (value) => String(value || '')
+    .replace(/(?:line|lind)\s*id\s*[:：]?\s*[A-Za-z0-9_.@-]+/ig, '')
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/ig, '')
+    .replace(/\b09\d{8}\b/g, '')
+    .replace(/\b(?:02|03|04|05|06|07|08)\s*[-–—]?\s*\d{6,8}\b/g, '')
+    .replace(/\b\d{4,5}\s*\/\s*\d{4,5}\b/g, '')
+    .replace(/\b(?:ext|分機|轉)\s*[:：]?\s*\d{3,6}\b/ig, '')
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+const normalizePublicText = (value) => stripPrivatePublicText(String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n'));
+
+const getPublicPhysicians = (trial) => {
+    const haystack = normalizeFilterValue([trial && trial.pi, trial && trial.studyTitle].filter(Boolean).join(' '));
+    const found = [];
+    if (haystack.includes(normalizeFilterValue('洪逸平')) || haystack.includes('yipinghung') || haystack.includes('yiphung')) found.push('洪逸平醫師');
+    if (haystack.includes(normalizeFilterValue('陳明晃')) || haystack.includes('minghuangchen')) found.push('陳明晃醫師');
+    if (haystack.includes(normalizeFilterValue('姜乃榕')) || haystack.includes('naijungchiang') || haystack.includes('nai-jungchiang')) found.push('姜乃榕醫師');
+    return found.length ? found : [...PUBLIC_TRIAL_CONTACT_PHYSICIANS];
+};
+
+const getPublicTrialStatusLabel = (trial) => {
+    if (!trial) return '狀態未明';
+    if (trial.isArchived) return '已封存';
+    const status = normalizeText(trial.status || '');
+    if (statusIncludesAny(status, ['需問slot', '需問 slot', '需問名額'])) return '需問名額';
+    if (statusIncludesAny(status, ['暫停收案', 'paused', 'suspended'])) return '暫停收案';
+    if (statusIncludesAny(status, ['名額已滿', '已收滿', '滿額', '收滿', '沒有slot', '暫無slot', 'no slot', 'full'])) return '名額已滿';
+    if (statusIncludesAny(status, ['停止收案', '試驗結束', '試驗終了', '結束收案', '收案結束', 'closed', 'terminated', 'completed', 'closeout'])) return '停止收案';
+    if (statusIncludesAny(status, ['還未siv', '未siv'])) return '尚未開放';
+    if (statusIncludesAny(status, ['預備中'])) return '預備中';
+    if (isExplicitOpenStatusText(status) || trialHasOpenEnrollment(trial)) return '收案中';
+    if (isTrialNumericallyFull(trial)) return '名額已滿';
+    return status || '狀態未明';
+};
+
+const getPublicStatusClass = (label) => {
+    const n = normalizeFilterValue(label);
+    if (n.includes('收案中')) return 'open';
+    if (n.includes('需問')) return 'ask';
+    if (n.includes('暫停')) return 'paused';
+    if (n.includes('滿')) return 'full';
+    if (n.includes('停止') || n.includes('結束') || n.includes('終了')) return 'closed';
+    if (n.includes('尚未') || n.includes('預備')) return 'preparing';
+    return 'unknown';
+};
+
+const getPublicCancerTypes = (trial) => {
+    const cancerTypes = Array.isArray(trial && trial.cancerTypes) && trial.cancerTypes.length
+        ? trial.cancerTypes
+        : [{ type: trial && trial.cancerType || '', lines: [trial && trial.line || ''].filter(Boolean), closedLines: [] }];
+    return normalizeCancerTypes(cancerTypes).map(ct => ({
+        type: normalizePublicText(ct.type || ''),
+        lines: (Array.isArray(ct.lines) ? ct.lines : []).map(line => ({
+            line: normalizePublicText(line),
+            status: isClosedTreatmentLine(ct, line) ? '該線暫停/收滿' : '依全試驗狀態'
+        })).filter(item => item.line)
+    })).filter(ct => ct.type || (ct.lines && ct.lines.length));
+};
+
+const buildPublicTrialsDataset = (sourceTrials) => {
+    const cleanTrials = sanitizeTrialListForRuntime(Array.isArray(sourceTrials) ? sourceTrials : []);
+    const trials = cleanTrials
+        .filter(trial => trial && trial.code && !trial.isArchived)
+        .map(trial => {
+            const publicStatus = getPublicTrialStatusLabel(trial);
+            return {
+                code: normalizeCode(trial.code),
+                studyTitle: normalizePublicText(trial.studyTitle || ''),
+                phase: normalizePublicText(trial.phase || ''),
+                publicStatus,
+                statusClass: getPublicStatusClass(publicStatus),
+                publicPhysicians: getPublicPhysicians(trial),
+                cancerTypes: getPublicCancerTypes(trial),
+                inclusion: normalizePublicText(trial.inclusion || ''),
+                exclusion: normalizePublicText(trial.exclusion || ''),
+                isOpenEnrollment: publicStatus === '收案中',
+                updatedAt: normalizePublicText(trial.updatedAt || trial.updated_at || '')
+            };
+        })
+        .sort((a, b) => {
+            const ac = a.cancerTypes && a.cancerTypes[0] ? getCancerRank(a.cancerTypes[0].type) : 999;
+            const bc = b.cancerTypes && b.cancerTypes[0] ? getCancerRank(b.cancerTypes[0].type) : 999;
+            if (ac !== bc) return ac - bc;
+            return normalizeCode(a.code).localeCompare(normalizeCode(b.code));
+        });
+    return {
+        schemaVersion: PUBLIC_TRIALS_SCHEMA_VERSION,
+        generatedAt: new Date().toISOString(),
+        source: 'clinicaltrialvghtpe sanitized public dataset',
+        privacyLevel: 'sanitized-public',
+        publicPhysicianPolicy: 'Public page displays only 洪逸平醫師、陳明晃醫師、姜乃榕醫師.',
+        appointmentLinks: { ...PUBLIC_APPOINTMENT_LINKS },
+        disclaimer: '本頁僅供臨床試驗資訊查詢。實際收案狀態、納入/排除條件、名額與是否適合參加，仍以門診醫師評估、試驗團隊確認與 IRB 核准版本為準。',
+        contactPhysicians: [...PUBLIC_TRIAL_CONTACT_PHYSICIANS],
+        trialCount: trials.length,
+        trials
+    };
+};
+
+const publishPublicTrialsToFirestore = async (firebaseConfig, sourceTrials) => {
+    const db = initializeFirebaseApp(firebaseConfig);
+    const payload = buildPublicTrialsDataset(sourceTrials || []);
+    await db.collection(PUBLIC_TRIALS_COLLECTION).doc(PUBLIC_TRIALS_DOC_ID).set(payload, { merge: false });
+    return payload;
+};
+
 const FIELD_ALIASES = {
     cancerType: ['cancertype','cancer type','癌別','疾病別','適應症','fff'],
     line: ['line','treatment line','線別','治療線別'],
@@ -2235,7 +2356,7 @@ function AccessPasswordModal(props) {
             e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
                 e('div', null,
                     e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
-                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.2.5 Firebase版'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.0 Firebase版'),
                     e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
                 ),
                 e('form', {onSubmit: handleSubmit},
@@ -3393,6 +3514,46 @@ function App() {
         }
     };
 
+
+    const handlePublishPublicTrials = async () => {
+        if (!firebaseEnabled || !firebaseConfig) {
+            alert('Firebase 尚未啟用，無法發布公開查詢資料。');
+            return;
+        }
+        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含癌種、線別、收案狀態、納入/排除條件與公開洽詢醫師，不包含研究護理師、電話、LINE、受試者或內部備註。');
+        if (!ok) return;
+        try {
+            setSyncStatus('正在發布公開查詢資料...');
+            const payload = await publishPublicTrialsToFirestore(firebaseConfig, trials || []);
+            setSyncStatus(`已發布公開查詢資料：${payload.trialCount} 個試驗，更新時間 ${new Date(payload.generatedAt).toLocaleString('zh-TW')}`);
+            alert(`已發布公開查詢資料：${payload.trialCount} 個試驗。\n公開頁：public-trials.html`);
+        } catch (error) {
+            console.error(error);
+            alert('發布公開查詢資料失敗：' + (error.message || error));
+        }
+    };
+
+    const handleExportPublicTrialsJSON = () => {
+        try {
+            const data = buildPublicTrialsDataset(trials || []);
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'public_trials.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            setSyncStatus(`已產生公開版備份 public_trials.json（${data.trialCount} 個試驗）`);
+        } catch (error) {
+            console.error(error);
+            alert('匯出公開版 JSON 失敗：' + (error.message || error));
+        }
+    };
+
+    const handleOpenPublicTrialsPage = () => {
+        window.open('public-trials.html', '_blank', 'noopener,noreferrer');
+    };
+
     const handleImportJSON = async (ev) => {
         const file = ev.target.files && ev.target.files[0];
         if (!file) return;
@@ -3722,7 +3883,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.2.5 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.0 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'

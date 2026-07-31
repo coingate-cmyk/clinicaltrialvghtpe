@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺北榮總胃腸肝膽胰腫瘤臨床試驗公開查詢</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <div class="min-h-screen">
+    <header class="bg-white border-b shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-6">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div>
+            <div class="text-sm font-semibold text-blue-700">臺北榮總胃腸肝膽胰腫瘤臨床試驗</div>
+            <h1 class="text-2xl md:text-3xl font-bold mt-1">臨床試驗公開查詢</h1>
+            <p class="text-sm text-slate-600 mt-2">供病友與家屬初步查詢癌種、治療線、收案狀態與主要條件。</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 text-sm">
+            <a id="registrationLink" href="https://www6.vghtpe.gov.tw/reg/" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-center hover:bg-blue-700">臺北榮總網路掛號</a>
+            <a id="scheduleLink" href="https://wd.vghtpe.gov.tw/Cancer_Cen/Fpage.action?fid=15325&muid=16879" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-slate-700 text-white font-semibold text-center hover:bg-slate-800">腫瘤醫學部門診時段</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-6">
+      <section class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-5 text-sm text-amber-900">
+        <div class="font-semibold mb-1">重要提醒</div>
+        <div id="disclaimer">本頁僅供臨床試驗資訊查詢。實際收案狀態、納入/排除條件、名額與是否適合參加，仍以門診醫師評估、試驗團隊確認與 IRB 核准版本為準。</div>
+      </section>
+
+      <section class="bg-white rounded-2xl border shadow-sm p-4 mb-6">
+        <div class="grid md:grid-cols-4 gap-3">
+          <input id="searchInput" class="md:col-span-2 px-4 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="搜尋：癌種、試驗代碼、藥名、條件，例如 HER2、KRAS、胰臟癌" />
+          <select id="cancerFilter" class="px-4 py-2.5 rounded-xl border bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="全部">全部癌種</option></select>
+          <select id="statusFilter" class="px-4 py-2.5 rounded-xl border bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="全部">全部狀態</option>
+            <option value="收案中">收案中</option>
+            <option value="需問名額">需問名額</option>
+            <option value="暫停收案">暫停收案</option>
+            <option value="名額已滿">名額已滿</option>
+            <option value="停止收案">停止收案</option>
+            <option value="尚未開放">尚未開放</option>
+            <option value="預備中">預備中</option>
+          </select>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3 text-xs" id="summaryChips"></div>
+      </section>
+
+      <div id="meta" class="text-sm text-slate-500 mb-4"></div>
+      <div id="emptyState" class="hidden bg-white border rounded-2xl p-8 text-center text-slate-600">找不到符合條件的臨床試驗。</div>
+      <div id="cards" class="space-y-4"></div>
+    </main>
+  </div>
+
+<script>
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDQREDbVoc6QpcKitiU5JN5gWk4JHKE1Og',
+  authDomain: 'clinicaltrial-vghtpe.firebaseapp.com',
+  databaseURL: 'https://clinicaltrial-vghtpe-default-rtdb.firebaseio.com',
+  projectId: 'clinicaltrial-vghtpe',
+  storageBucket: 'clinicaltrial-vghtpe.firebasestorage.app',
+  messagingSenderId: '220821651319',
+  appId: '1:220821651319:web:19dbfbaea0ea999472eb72'
+};
+const PUBLIC_DOC = { collection: 'public', id: 'clinical-trials' };
+const state = { data: null, filtered: [], search: '', cancer: '全部', status: '全部', loadedFrom: '' };
+const norm = v => String(v || '').toLowerCase().replace(/[\s　\r\n、，,\/／\-–—_()（）.]+/g, '').trim();
+const statusClassMap = {
+  open: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  ask: 'bg-blue-100 text-blue-800 border-blue-200',
+  paused: 'bg-amber-100 text-amber-800 border-amber-200',
+  full: 'bg-orange-100 text-orange-800 border-orange-200',
+  closed: 'bg-slate-200 text-slate-700 border-slate-300',
+  preparing: 'bg-purple-100 text-purple-800 border-purple-200',
+  unknown: 'bg-gray-100 text-gray-700 border-gray-200'
+};
+const esc = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const textBlob = trial => [trial.code, trial.studyTitle, trial.phase, trial.publicStatus, (trial.publicPhysicians || []).join(' '), trial.inclusion, trial.exclusion, ...(trial.cancerTypes || []).flatMap(ct => [ct.type, ...(ct.lines || []).map(x => x.line)])].join(' ');
+function chip(text, cls='bg-slate-100 text-slate-700 border-slate-200') { return `<span class="inline-flex items-center px-2.5 py-1 rounded-full border ${cls}">${esc(text)}</span>`; }
+function setData(data, loadedFrom) {
+  state.data = data || { trials: [], trialCount: 0 };
+  state.loadedFrom = loadedFrom || '';
+  document.getElementById('disclaimer').textContent = state.data.disclaimer || document.getElementById('disclaimer').textContent;
+  const links = state.data.appointmentLinks || {};
+  if (links.registration) document.getElementById('registrationLink').href = links.registration;
+  if (links.clinicSchedule) document.getElementById('scheduleLink').href = links.clinicSchedule;
+  renderFilters();
+  state.filtered = state.data.trials || [];
+  applyFilters();
+}
+function renderFilters() {
+  const cancerSet = new Set();
+  (state.data.trials || []).forEach(t => (t.cancerTypes || []).forEach(ct => ct.type && cancerSet.add(ct.type)));
+  const cancerFilter = document.getElementById('cancerFilter');
+  const current = cancerFilter.value || '全部';
+  cancerFilter.innerHTML = '<option value="全部">全部癌種</option>';
+  [...cancerSet].sort((a,b)=>a.localeCompare(b,'zh-Hant')).forEach(c => {
+    const opt = document.createElement('option'); opt.value = c; opt.textContent = c; cancerFilter.appendChild(opt);
+  });
+  cancerFilter.value = [...cancerFilter.options].some(o => o.value === current) ? current : '全部';
+}
+function applyFilters() {
+  if (!state.data) return;
+  const s = norm(state.search);
+  state.filtered = (state.data.trials || []).filter(t => {
+    if (state.status !== '全部' && t.publicStatus !== state.status) return false;
+    if (state.cancer !== '全部' && !(t.cancerTypes || []).some(ct => ct.type === state.cancer)) return false;
+    if (s && !norm(textBlob(t)).includes(s)) return false;
+    return true;
+  });
+  render();
+}
+function renderSummary() {
+  const counts = {};
+  (state.data.trials || []).forEach(t => counts[t.publicStatus] = (counts[t.publicStatus] || 0) + 1);
+  const order = ['收案中','需問名額','暫停收案','名額已滿','停止收案','尚未開放','預備中','狀態未明'];
+  document.getElementById('summaryChips').innerHTML = order.filter(k => counts[k]).map(k => chip(`${k} ${counts[k]}`)).join('') + chip(`目前顯示 ${state.filtered.length}/${state.data.trialCount || (state.data.trials || []).length}`);
+}
+function renderCard(t) {
+  const statusCls = statusClassMap[t.statusClass] || statusClassMap.unknown;
+  const cancers = (t.cancerTypes || []).map(ct => {
+    const lines = (ct.lines || []).map(x => chip(x.line + (x.status && x.status !== '依全試驗狀態' ? `｜${x.status}` : ''), x.status === '該線暫停/收滿' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-slate-100 text-slate-700 border-slate-200')).join(' ');
+    return `<div class="mt-2"><span class="font-semibold text-slate-800">${esc(ct.type || '未分類')}</span><div class="flex flex-wrap gap-1.5 mt-1">${lines || chip('未指定治療線')}</div></div>`;
+  }).join('');
+  const inclusion = t.inclusion ? `<details class="mt-3 bg-emerald-50 border border-emerald-100 rounded-xl p-3" open><summary class="font-semibold cursor-pointer text-emerald-900">主要納入條件</summary><div class="mt-2 whitespace-pre-wrap text-sm text-slate-800">${esc(t.inclusion)}</div></details>` : '';
+  const exclusion = t.exclusion ? `<details class="mt-3 bg-rose-50 border border-rose-100 rounded-xl p-3"><summary class="font-semibold cursor-pointer text-rose-900">主要排除條件</summary><div class="mt-2 whitespace-pre-wrap text-sm text-slate-800">${esc(t.exclusion)}</div></details>` : '';
+  return `<article class="bg-white border rounded-2xl shadow-sm p-5">
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+      <div>
+        <div class="flex flex-wrap gap-2 items-center mb-2">
+          ${chip(t.publicStatus, statusCls)}
+          ${t.phase ? chip('Phase ' + t.phase) : ''}
+          ${chip(t.code)}
+        </div>
+        <h2 class="text-lg font-bold text-slate-900 leading-snug">${esc(t.studyTitle || t.code)}</h2>
+      </div>
+      <div class="text-sm bg-blue-50 border border-blue-100 text-blue-900 rounded-xl px-3 py-2 min-w-[190px]">
+        <div class="font-semibold">建議門診諮詢</div>
+        <div>${esc((t.publicPhysicians || []).join('、'))}</div>
+        <div class="flex gap-2 mt-2 text-xs">
+          <a class="underline" href="${esc((state.data.appointmentLinks || {}).registration || 'https://www6.vghtpe.gov.tw/reg/')}" target="_blank" rel="noopener">掛號</a>
+          <a class="underline" href="${esc((state.data.appointmentLinks || {}).clinicSchedule || 'https://wd.vghtpe.gov.tw/Cancer_Cen/Fpage.action?fid=15325&muid=16879')}" target="_blank" rel="noopener">門診時段</a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3 border-t pt-3">${cancers}</div>
+    ${inclusion}${exclusion}
+  </article>`;
+}
+function render() {
+  renderSummary();
+  const cards = document.getElementById('cards');
+  const empty = document.getElementById('emptyState');
+  cards.innerHTML = state.filtered.map(renderCard).join('');
+  empty.classList.toggle('hidden', state.filtered.length > 0);
+  const count = state.data.trialCount || (state.data.trials || []).length;
+  const updated = state.data.generatedAt ? new Date(state.data.generatedAt).toLocaleString('zh-TW') : '未知';
+  document.getElementById('meta').textContent = `資料來源：${state.loadedFrom}｜資料更新：${updated}｜共 ${count} 個試驗｜公開版不含內部聯絡資訊或受試者資料。`;
+}
+async function loadFallbackJSON() {
+  const res = await fetch('public_trials.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error('public_trials.json not found');
+  return await res.json();
+}
+async function loadData() {
+  document.getElementById('cards').innerHTML = '<div class="bg-white border rounded-2xl p-8 text-center text-slate-600">載入公開試驗資料中...</div>';
+  try {
+    firebase.initializeApp(DEFAULT_FIREBASE_CONFIG);
+    const db = firebase.firestore();
+    let first = true;
+    db.collection(PUBLIC_DOC.collection).doc(PUBLIC_DOC.id).onSnapshot(async doc => {
+      if (doc.exists) {
+        setData(doc.data(), 'Firebase 公開資料');
+      } else if (first) {
+        const fallback = await loadFallbackJSON();
+        setData(fallback, 'public_trials.json 備份');
+      }
+      first = false;
+    }, async err => {
+      console.warn(err);
+      const fallback = await loadFallbackJSON();
+      setData(fallback, 'public_trials.json 備份');
+    });
+  } catch (err) {
+    try {
+      const fallback = await loadFallbackJSON();
+      setData(fallback, 'public_trials.json 備份');
+    } catch (e) {
+      document.getElementById('cards').innerHTML = `<div class="bg-white border rounded-2xl p-8 text-center text-slate-700"><div class="font-bold text-lg mb-2">尚未找到公開版資料</div><div class="text-sm">請先在管理頁按「發布公開查詢」。若 Firebase 讀取受限，請按「下載公開JSON」並將 public_trials.json 上傳到 repo 根目錄。</div></div>`;
+    }
+  }
+}
+document.getElementById('searchInput').addEventListener('input', ev => { state.search = ev.target.value; applyFilters(); });
+document.getElementById('cancerFilter').addEventListener('change', ev => { state.cancer = ev.target.value; applyFilters(); });
+document.getElementById('statusFilter').addEventListener('change', ev => { state.status = ev.target.value; applyFilters(); });
+loadData();
+</script>
+</body>
+</html>
