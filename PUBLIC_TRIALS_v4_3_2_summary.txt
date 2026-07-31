@@ -1,0 +1,22 @@
+clinicaltrialvghtpe v4.3.2 public trials portal toolbar fix
+
+Purpose
+- Keep option B: public page is independent, but internal admin page can publish sanitized public data.
+- Fix v4.3.0 issue where publish functions existed but toolbar did not show public publishing buttons.
+- Remove visible 06C/06F repair button from toolbar; internal repair logic is retained for compatibility but no longer shown as a separate button.
+
+Changed files
+- index.html
+- 404.html
+- public-trials.html (carried forward)
+- public_trials.json (carried forward fallback data)
+
+Admin toolbar now includes
+- 發布公開查詢
+- 下載公開JSON
+- 公開頁預覽
+
+Notes
+- No GitHub Actions/workflows are included.
+- Upload these files manually to the repo root.
+- Public data remains sanitized and does not expose nurse/phone/LINE/subjects/internal notes.

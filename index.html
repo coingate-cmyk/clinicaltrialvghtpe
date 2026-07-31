@@ -2356,7 +2356,7 @@ function AccessPasswordModal(props) {
             e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
                 e('div', null,
                     e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
-                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.0 Firebase版'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.2 Firebase版'),
                     e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
                 ),
                 e('form', {onSubmit: handleSubmit},
@@ -3883,7 +3883,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.0 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.2 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -3892,7 +3892,7 @@ function App() {
             )
         ),
         e('div', {className: 'max-w-7xl mx-auto px-4 py-8'},
-            e('div', {className: 'flex gap-3 mb-6'},
+            e('div', {className: 'flex flex-wrap gap-3 mb-6'},
                 isAdmin && e('button', {
                     onClick: () => setShowAddModal(true),
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all shadow-lg font-semibold'
@@ -3916,11 +3916,6 @@ function App() {
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-700 to-red-800 text-white rounded-xl hover:from-red-800 hover:to-red-900 transition-all shadow-lg font-semibold'
                 }, '清空雲端 trials'),
                 isAdmin && e('button', {
-                    onClick: handleRepairKnownStatusMistakes,
-                    title: '修復 MK-3475-06C / MK-3475-06F 被舊匯入誤標為試驗終了的狀態',
-                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-xl hover:from-emerald-700 hover:to-green-800 transition-all shadow-lg font-semibold'
-                }, '修復06C/06F狀態'),
-                isAdmin && e('button', {
                     onClick: handleExportJSON,
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg font-semibold'
                 }, '匯出 JSON'),
@@ -3935,6 +3930,21 @@ function App() {
                         className: 'hidden'
                     })
                 ),
+                isAdmin && e('button', {
+                    onClick: handlePublishPublicTrials,
+                    title: '將目前內部資料轉成去識別化公開版並發布到 Firestore public/clinical-trials',
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg font-semibold'
+                }, '發布公開查詢'),
+                isAdmin && e('button', {
+                    onClick: handleExportPublicTrialsJSON,
+                    title: '下載去識別化公開版 public_trials.json；不含研究護理師、電話、LINE、受試者或內部備註',
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-lime-500 to-green-600 text-white rounded-xl hover:from-lime-600 hover:to-green-700 transition-all shadow-lg font-semibold'
+                }, '下載公開JSON'),
+                isAdmin && e('button', {
+                    onClick: handleOpenPublicTrialsPage,
+                    title: '開啟一般民眾使用的獨立公開頁 public-trials.html',
+                    className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg font-semibold'
+                }, '公開頁預覽'),
                 isAdmin && e('button', {
                     onClick: () => setShowFirebaseModal(true),
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-xl hover:from-sky-600 hover:to-cyan-600 transition-all shadow-lg font-semibold'
