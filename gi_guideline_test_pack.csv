@@ -1,4 +1,0 @@
-site,edition,stage_basis,histology,grade,location,t,n,m,extra_key,stage,note,verify_status,source_ref
-HCC,AJCC8,*,*,*,*,T?,N?,M?,*,Stage ?,Replace with licensed/validated AJCC rule,draft,institutional AJCC source
-EXOCRINE_PANCREAS,AJCC8,*,*,*,*,T?,N?,M?,*,Stage ?,Replace with licensed/validated AJCC rule,draft,institutional AJCC source
-NET_PANCREAS,AJCC8,*,NET,*,pancreas,T?,N?,M?,*,Stage ?,Replace with licensed/validated AJCC rule,draft,institutional AJCC source
