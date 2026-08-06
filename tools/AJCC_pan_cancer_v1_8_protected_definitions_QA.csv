@@ -1,0 +1,10 @@
+﻿test,pass,detail
+Stomach AJCC8 T2 curated definition present,PASS,Tumor invades muscularis propria（侵犯固有肌層）
+Stomach AJCC8 generic fallback removed for T2/N1/M0,PASS,0
+Breast AJCC8 T2 strict definition preserved,PASS,['Tumor >20 mm but ≤50 mm in greatest dimension']
+No obvious figure-caption text in short_definition,PASS,0
+quick-staging.html JavaScript syntax,PASS,
+staging_rules_7.csv exists,PASS,
+staging_rules_7.csv row count > 0,PASS,1525
+staging_rules_8.csv exists,PASS,
+staging_rules_8.csv row count > 0,PASS,1173

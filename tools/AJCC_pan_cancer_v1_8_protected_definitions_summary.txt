@@ -1,0 +1,29 @@
+AJCC pan-cancer CSV import v1.8 protected definitions patch
+
+Purpose:
+- Fix regression where pan-cancer definition extraction replaced previously audited GI definitions with generic fallback text.
+- Keep v1.7 AJCC8 gap-fill/surrogate rule approach for broad pan-cancer trial use, but mark review-required rows.
+- Make result display show user input TNM separately from the matched rule row.
+
+Key changes:
+- Merged protected known-good v0.8.2 GI TNM definitions into staging_category_definitions.csv.
+- Removed weak generated generic fallbacks for protected GI site/category keys.
+- Updated quick-staging.html definition lookup to choose the best-quality definition, not merely exact-classification generic fallback.
+- Updated result cards: show Input TNM and matched rule TNM separately.
+- Version labels updated to v1.8.
+
+Definitions:
+- total definitions: 2855
+- protected v0.8.2 definitions appended/kept: 635
+- weak fallback rows removed due to protected curated definitions: 706
+
+QA:
+- Stomach AJCC8 T2 curated definition present: PASS Tumor invades muscularis propria（侵犯固有肌層）
+- Stomach AJCC8 generic fallback removed for T2/N1/M0: PASS 0
+- Breast AJCC8 T2 strict definition preserved: PASS ['Tumor >20 mm but ≤50 mm in greatest dimension']
+- No obvious figure-caption text in short_definition: PASS 0
+- quick-staging.html JavaScript syntax: PASS 
+- staging_rules_7.csv exists: PASS 
+- staging_rules_7.csv row count > 0: PASS 1525
+- staging_rules_8.csv exists: PASS 
+- staging_rules_8.csv row count > 0: PASS 1173
