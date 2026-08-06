@@ -1,0 +1,34 @@
+﻿test,pass,details
+pan_cancer_site_registry_count_ge_90,PASS,99
+source_requirement_rows_99,PASS,99
+all_requirement_sites_mapped_or_present,PASS,missing=[]
+all_existing_rule_sites_still_present,PASS,[]
+search_pancreatic adenocarcinoma,PASS,hits=['Exocrine pancreas']
+search_PANCRATIC ADENOCARCINOMA,PASS,hits=['Exocrine pancreas']
+search_PDAC,PASS,hits=['Exocrine pancreas']
+search_胰臟癌,PASS,hits=['Exocrine pancreas']
+search_lung cancer,PASS,hits=['Lung']
+search_肺癌,PASS,hits=['Lung']
+search_breast cancer,PASS,hits=['Breast']
+search_乳癌,PASS,hits=['Breast']
+search_prostate,PASS,hits=['Prostate']
+search_攝護腺癌,PASS,hits=['Prostate']
+search_kidney cancer,PASS,hits=['Kidney']
+search_腎癌,PASS,hits=['Kidney']
+search_oral cancer,PASS,hits=['Oral Cavity']
+search_口腔癌,PASS,hits=['Oral Cavity']
+search_thyroid cancer,PASS,"hits=['Thyroid – Differentiated', 'Thyroid – Anaplastic', 'Thyroid – Medullary']"
+search_甲狀腺癌,PASS,"hits=['Thyroid – Differentiated', 'Thyroid – Anaplastic', 'Thyroid – Medullary', 'Parathyroid']"
+search_DLBCL,PASS,hits=['Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma']
+search_淋巴瘤,PASS,"hits=['Ocular Adnexal Lymphoma', 'Non-Hodgkin Lymphomas: Unspecified or Other Type', 'Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma', 'Non-Hodgkin Lymphomas: Mantle Cell Lymphoma', 'Non-Hodgkin Lymphomas: Follicular Lymphoma']"
+search_melanoma,PASS,"hits=['Mucosal Melanoma of the Head and Neck', 'Melanoma of the Skin', 'Conjunctival Melanoma', 'Uveal Melanoma – Iris Melanoma', 'Uveal Melanoma – Choroidal and Ciliary Body Melanoma']"
+search_黑色素瘤,PASS,"hits=['Mucosal Melanoma of the Head and Neck', 'Melanoma of the Skin', 'Conjunctival Melanoma', 'Uveal Melanoma – Iris Melanoma', 'Uveal Melanoma – Choroidal and Ciliary Body Melanoma']"
+search_腦瘤,PASS,hits=['Brain and Spinal Cord']
+search_ovarian cancer,PASS,"hits=['Ovary, Fallopian Tube and Primary Peritoneal Carcinoma']"
+search_卵巢癌,PASS,"hits=['Ovary, Fallopian Tube and Primary Peritoneal Carcinoma']"
+search_膀胱癌,PASS,hits=['Urinary Bladder: Urothelial Carcinomas']
+search_thymoma,PASS,hits=['Thymus']
+search_胸腺瘤,PASS,hits=['Thymus']
+staging_rules_7_rows_280,PASS,280
+staging_rules_8_rows_264,PASS,264
+quick_staging_js_syntax,PASS,

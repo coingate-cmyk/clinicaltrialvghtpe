@@ -1,0 +1,30 @@
+AJCC quick staging v0.9.0 pan-cancer site registry patch report
+
+Purpose
+- Add hospital-wide pan-cancer site registry/search to the AJCC quick staging tool.
+- Preserve v0.8.1/v0.8.2 exact/parent-subcategory/Any matcher.
+- Keep current encoded staging rules unchanged: AJCC7 rows=280, AJCC8 rows=264.
+
+Scope
+- Tool site registry: 99 selectable/searchable cancer sites or staging site variants.
+- Source AJCC8 site requirements/audit rows used: 99.
+- Search aliases include English, common abbreviations, selected common Traditional Chinese clinical names, and typo support for PANCRATIC ADENOCARCINOMA.
+
+Important limitation
+- This release puts all cancer sites into the tool entry/search layer.
+- Full stage-group calculation remains available only where staging_rules_7.csv/staging_rules_8.csv contain structured rows.
+- Non-encoded sites are shown with notes and can accept future rule CSV updates; the tool does not invent a stage when rules are not loaded.
+
+QA
+- 33/33 checks pass.
+
+Deploy to repo tools/:
+- quick-staging.html
+- staging_rules_7.csv
+- staging_rules_8.csv
+- staging_category_definitions.csv
+- staging_site_requirements.csv
+- staging_site_requirements_all_ajcc8_v0_9_0.csv
+- staging_site_registry_all_ajcc8_v0_9_0.csv
+- staging_site_aliases_v0_9_0.csv
+- AJCC_v0_9_0_pan_cancer_site_registry_QA.csv
