@@ -1,0 +1,33 @@
+AJCC pan-cancer source extraction v2.1 - committee review package
+
+Purpose
+- This package is NOT a surrogate/generic filler update.
+- It extracts actual source blocks and candidate rows from the uploaded AJCC 7th and AJCC 8th PDF files so the cancer committee can verify/correct, not fill from blank.
+
+Source files
+- AJCC7 PDF: ajcc_7thed_cancer_staging_manual(1).pdf, physical pages: 672
+- AJCC8 PDF: AJCC Cancer Staging Manual, 8th(1).pdf, physical pages: 324
+
+Extracted actual source blocks
+- total source blocks: 1060
+- formal definition candidate rows: 2186
+- simple TNM stage rule candidate rows: 765
+
+Important limitation
+- The uploaded AJCC8 PDF has printed-page jumps. Example: if a disease chapter's formal stage table pages are not present in the uploaded source, this package does not invent or backfill them from AJCC7.
+- Check tools/AJCC_source_page_presence_audit_v2_1.csv for missing printed-page spans.
+- Raw source text is in tools/staging_source_blocks_by_site_v2_1.csv.
+
+Primary review files
+1. tools/staging_source_blocks_by_site_v2_1.csv
+   - raw definition/stage table text extracted from PDF by edition/site/page.
+2. tools/staging_definitions_extracted_candidates_v2_1.csv
+   - candidate T/N/M/G definitions parsed from formal source blocks only.
+3. tools/staging_rules_extracted_candidates_v2_1.csv
+   - candidate simple TNM stage rules parsed from source blocks; complex tables remain as raw source blocks.
+4. tools/staging_extraction_review_matrix_v2_1.csv
+   - site-level extraction status.
+5. tools/AJCC_source_page_presence_audit_v2_1.csv
+   - printed-page jumps / pages not available to extractor.
+
+Working reference files copied from v1.8 are included with *_working_reference_v1_8.csv names only. They are not the review source of truth.
