@@ -1,100 +1,100 @@
-﻿site_group,site_order,tool_site,ajcc7_source_sites,ajcc8_source_sites,crosswalk_note
-Head & Neck / 頭頸部,22,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,New/changed AJCC8 site; no direct AJCC7 chapter in uploaded 7th manual TOC.
-Head & Neck / 頭頸部,23,Oral Cavity,Lip and Oral Cavity,Oral Cavity,
-Head & Neck / 頭頸部,24,Major Salivary Glands,Major Salivary Glands,Major Salivary Glands,
-Head & Neck / 頭頸部,25,Nasopharynx,"Pharynx (Including base of tongue, soft palate, and uvula)",Nasopharynx,AJCC7 uses a broader Pharynx chapter; AJCC8 splits pharyngeal sites/HPV-mediated disease.
-Head & Neck / 頭頸部,26,HPV-Mediated (p16+) Oropharyngeal Cancer,"Pharynx (Including base of tongue, soft palate, and uvula)",HPV-Mediated (p16+) Oropharyngeal Cancer,AJCC7 uses a broader Pharynx chapter; AJCC8 splits pharyngeal sites/HPV-mediated disease.
-Head & Neck / 頭頸部,27,Oropharynx (p16-),"Pharynx (Including base of tongue, soft palate, and uvula)",Oropharynx (p16-) and Hypopharynx | Oropharynx (p16-),AJCC7 uses a broader Pharynx chapter; AJCC8 splits pharyngeal sites/HPV-mediated disease.
-Head & Neck / 頭頸部,28,Hypopharynx,"Pharynx (Including base of tongue, soft palate, and uvula)",Oropharynx (p16-) and Hypopharynx | Hypopharynx,AJCC7 uses a broader Pharynx chapter; AJCC8 splits pharyngeal sites/HPV-mediated disease.
-Head & Neck / 頭頸部,29,Maxillary Sinus,Nasal Cavity and Paranasal Sinuses,Nasal Cavity and Paranasal Sinuses | Maxillary Sinus,AJCC7 uses a broader nasal cavity/paranasal sinus chapter; AJCC8 may split sites.
-Head & Neck / 頭頸部,30,Nasal Cavity and Ethmoid Sinus,Nasal Cavity and Paranasal Sinuses,Nasal Cavity and Paranasal Sinuses | Nasal Cavity and Ethmoid Sinus,AJCC7 uses a broader nasal cavity/paranasal sinus chapter; AJCC8 may split sites.
-Head & Neck / 頭頸部,31,Larynx: Supraglottis,Larynx,Larynx,Tool split by laryngeal subsite; uploaded rule rows may be from broader Larynx chapter.
-Head & Neck / 頭頸部,32,Larynx: Glottis,Larynx,Larynx,Tool split by laryngeal subsite; uploaded rule rows may be from broader Larynx chapter.
-Head & Neck / 頭頸部,33,Larynx: Subglottis,Larynx,Larynx,Tool split by laryngeal subsite; uploaded rule rows may be from broader Larynx chapter.
-Head & Neck / 頭頸部,34,Mucosal Melanoma of the Head and Neck,Mucosal Melanoma of the Head and Neck,Mucosal Melanoma of the Head and Neck,
-Head & Neck / 頭頸部,35,Cutaneous Carcinoma of the Head and Neck,Cutaneous Squamous Cell Carcinoma and Other Cutaneous Carcinomas,Cutaneous Carcinoma of the Head and Neck,
-Thoracic / 胸腔,39,Thymus,,Thymus,
-Thoracic / 胸腔,40,Lung,Lung,Lung,
-Thoracic / 胸腔,41,Malignant Pleural Mesothelioma,Pleural Mesothelioma,Malignant Pleural Mesothelioma,
-Breast / 乳房,52,Breast,Breast,Breast,
-Gastrointestinal & HPB / 消化道與肝膽胰,1,Esophagus / EGJ - squamous,Esophagus / EGJ - squamous | Esophagus and EGJ | Esophagus and Esophagogastric Junction,Esophagus / EGJ - squamous | Esophagus and Esophagogastric Junction,
-Gastrointestinal & HPB / 消化道與肝膽胰,2,Esophagus / EGJ - adenocarcinoma,Esophagus / EGJ - adenocarcinoma | Esophagus and EGJ | Esophagus and Esophagogastric Junction,Esophagus / EGJ - adenocarcinoma | Esophagus and Esophagogastric Junction,
-Gastrointestinal & HPB / 消化道與肝膽胰,3,Stomach,Stomach,Stomach,
-Gastrointestinal & HPB / 消化道與肝膽胰,4,Small intestine,Small intestine | Small Intestine,Small intestine | Small Intestine,
-Gastrointestinal & HPB / 消化道與肝膽胰,5,Colon,Colon | Colon and Rectum,Colon | Colon and Rectum,
-Gastrointestinal & HPB / 消化道與肝膽胰,6,Rectum,Rectum | Colon and Rectum,Rectum | Colon and Rectum,
-Gastrointestinal & HPB / 消化道與肝膽胰,7,Appendix - carcinoma,Appendix - carcinoma | Appendix,Appendix - carcinoma | Appendix - Carcinoma,
-Gastrointestinal & HPB / 消化道與肝膽胰,9,HCC / Liver,HCC / Liver | Liver (Excluding intrahepatic bile ducts) | Liver,HCC / Liver | Liver,
-Gastrointestinal & HPB / 消化道與肝膽胰,10,Intrahepatic bile duct,Intrahepatic bile duct | Intrahepatic Bile Ducts,Intrahepatic bile duct | Intrahepatic Bile Ducts | Intrahepatic Bile Duct,
-Gastrointestinal & HPB / 消化道與肝膽胰,11,Perihilar bile duct,Perihilar bile duct | Perihilar Bile Ducts,Perihilar bile duct | Perihilar Bile Ducts,
-Gastrointestinal & HPB / 消化道與肝膽胰,12,Distal bile duct,Distal bile duct | Distal Bile Duct,Distal bile duct | Distal Bile Ducts,
-Gastrointestinal & HPB / 消化道與肝膽胰,13,Gallbladder,Gallbladder,Gallbladder,
-Gastrointestinal & HPB / 消化道與肝膽胰,14,Ampulla of Vater,Ampulla of Vater,Ampulla of Vater,
-Gastrointestinal & HPB / 消化道與肝膽胰,15,Exocrine pancreas,Exocrine pancreas | Pancreas - exocrine/endocrine (AJCC7) | Exocrine and Endocrine Pancreas,Exocrine pancreas | Exocrine Pancreas,
-Gastrointestinal & HPB / 消化道與肝膽胰,36,Esophagus and Esophagogastric Junction: Other Histologies,Esophagus and EGJ | Esophagus and Esophagogastric Junction,Esophagus and Esophagogastric Junction,
-Gastrointestinal & HPB / 消化道與肝膽胰,37,Small Intestine: Other Histologies,Small intestine | Small Intestine,Small intestine | Small Intestine,
-Gastrointestinal & HPB / 消化道與肝膽胰,38,Anus,Anus,Anus,
-Neuroendocrine & GIST / 神經內分泌與GIST,8,GIST,GIST | Gastrointestinal Stromal Tumor,GIST | Gastrointestinal Stromal Tumor,
-Neuroendocrine & GIST / 神經內分泌與GIST,16,NET - stomach,NET - stomach | Neuroendocrine Tumors,NET - stomach | Neuroendocrine Tumors of the Stomach,
-Neuroendocrine & GIST / 神經內分泌與GIST,17,NET - duodenum / ampulla,NET - duodenum / ampulla | Neuroendocrine Tumors,NET - duodenum / ampulla | Neuroendocrine Tumors of the Duodenum and Ampulla of Vater,
-Neuroendocrine & GIST / 神經內分泌與GIST,18,NET - jejunum / ileum,NET - jejunum / ileum | Neuroendocrine Tumors,NET - jejunum / ileum | Neuroendocrine Tumors of the Jejunum and Ileum,
-Neuroendocrine & GIST / 神經內分泌與GIST,19,NET - appendix,NET - appendix | Neuroendocrine Tumors,NET - appendix | Neuroendocrine Tumors of the Appendix,
-Neuroendocrine & GIST / 神經內分泌與GIST,20,NET - colon / rectum,NET - colon / rectum | Neuroendocrine Tumors,NET - colon / rectum | Neuroendocrine Tumors of the Colon and Rectum,
-Neuroendocrine & GIST / 神經內分泌與GIST,21,NET - pancreas,NET - pancreas | Neuroendocrine Tumors | Pancreas - exocrine/endocrine (AJCC7),NET - pancreas | Neuroendocrine Tumors of the Pancreas,
-Bone & Soft Tissue / 骨與軟組織,42,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",Bone,Bone,
-Bone & Soft Tissue / 骨與軟組織,43,Bone: Spine,Bone,Bone,
-Bone & Soft Tissue / 骨與軟組織,44,Bone: Pelvis,Bone,Bone,
-Bone & Soft Tissue / 骨與軟組織,45,Soft Tissue Sarcoma of the Head and Neck,Soft Tissue Sarcoma,Soft Tissue Sarcoma of the Head and Neck,AJCC7 has one broader Soft Tissue Sarcoma chapter; AJCC8 splits by anatomic site.
-Bone & Soft Tissue / 骨與軟組織,46,Soft Tissue Sarcoma of the Trunk and Extremities,Soft Tissue Sarcoma,Soft Tissue Sarcoma of the Trunk and Extremities,AJCC7 has one broader Soft Tissue Sarcoma chapter; AJCC8 splits by anatomic site.
-Bone & Soft Tissue / 骨與軟組織,47,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,Soft Tissue Sarcoma,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,AJCC7 has one broader Soft Tissue Sarcoma chapter; AJCC8 splits by anatomic site.
-Bone & Soft Tissue / 骨與軟組織,48,Soft Tissue Sarcoma of the Retroperitoneum,Soft Tissue Sarcoma,Soft Tissue Sarcoma of the Retroperitoneum,AJCC7 has one broader Soft Tissue Sarcoma chapter; AJCC8 splits by anatomic site.
-Bone & Soft Tissue / 骨與軟組織,49,Soft Tissue Sarcoma – Unusual Histologies and Sites,Soft Tissue Sarcoma,Soft Tissue Sarcoma – Unusual Histologies and Sites,AJCC7 has one broader Soft Tissue Sarcoma chapter; AJCC8 splits by anatomic site.
-Skin / 皮膚,50,Merkel Cell Carcinoma,Merkel Cell Carcinoma,Merkel Cell Carcinoma,
-Skin / 皮膚,51,Melanoma of the Skin,Melanoma of the Skin,Melanoma of the Skin,
-Gynecologic / 婦癌,53,Vulva,Vulva,Vulva,
-Gynecologic / 婦癌,54,Vagina,Vagina,Vagina,
-Gynecologic / 婦癌,55,Cervix Uteri,Cervix Uteri,Cervix Uteri,
-Gynecologic / 婦癌,56,Corpus Uteri – Carcinoma and Carcinosarcoma,Corpus Uteri,Corpus Uteri - Carcinoma and Carcinosarcoma | Corpus Uteri – Carcinoma and Carcinosarcoma,
-Gynecologic / 婦癌,57,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,Corpus Uteri,Corpus Uteri - Sarcoma | Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,
-Gynecologic / 婦癌,58,Corpus Uteri – Adenosarcoma,Corpus Uteri,Corpus Uteri - Sarcoma | Corpus Uteri – Adenosarcoma,
-Gynecologic / 婦癌,59,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",Ovary and Primary Peritoneal Carcinoma | Fallopian Tube,"Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma | Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",
-Gynecologic / 婦癌,60,Gestational Trophoblastic Neoplasms,Gestational Trophoblastic Tumors,Gestational Trophoblastic Neoplasms,
-Genitourinary / 泌尿與男性生殖,61,Penis,Penis,Penis,
-Genitourinary / 泌尿與男性生殖,62,Prostate,Prostate,Prostate,
-Genitourinary / 泌尿與男性生殖,63,Testis,Testis,Testis,
-Genitourinary / 泌尿與男性生殖,64,Kidney,Kidney,Kidney,
-Genitourinary / 泌尿與男性生殖,65,Urinary Bladder: Urothelial Carcinomas,Urinary Bladder,Urinary Bladder,
-Genitourinary / 泌尿與男性生殖,66,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,Urinary Bladder,Urinary Bladder,
-Genitourinary / 泌尿與男性生殖,67,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,Urethra,Urethra,
-Genitourinary / 泌尿與男性生殖,68,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,Urethra,Urethra,
-Genitourinary / 泌尿與男性生殖,69,Prostatic Urethra: Urothelial Carcinomas,Urethra,Urethra,
-Genitourinary / 泌尿與男性生殖,70,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,Urethra,Urethra,
-Ophthalmic / 眼科腫瘤,71,Eyelid Carcinoma,Carcinoma of the Eyelid,Eyelid Carcinoma,
-Ophthalmic / 眼科腫瘤,72,Conjunctival Carcinoma,Carcinoma of the Conjunctiva,Conjunctival Carcinoma,
-Ophthalmic / 眼科腫瘤,73,Conjunctival Melanoma,Malignant Melanoma of the Conjunctiva,Conjunctival Melanoma,
-Ophthalmic / 眼科腫瘤,74,Uveal Melanoma – Iris Melanoma,Malignant Melanoma of the Uvea,Uveal Melanoma,
-Ophthalmic / 眼科腫瘤,75,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,Malignant Melanoma of the Uvea,Uveal Melanoma,
-Ophthalmic / 眼科腫瘤,76,Retinoblastoma,Retinoblastoma,Retinoblastoma,
-Ophthalmic / 眼科腫瘤,77,Lacrimal Gland Carcinoma,Carcinoma of the Lacrimal Gland,Lacrimal Gland Carcinoma,
-Ophthalmic / 眼科腫瘤,78,Orbital Sarcoma,Sarcoma of the Orbit,Orbital Sarcoma,
-Ophthalmic / 眼科腫瘤,79,Ocular Adnexal Lymphoma,Ocular Adnexal Lymphoma,Ocular Adnexal Lymphoma,
-CNS / 中樞神經,80,Brain and Spinal Cord,Brain and Spinal Cord,Brain and Spinal Cord,
-Endocrine / 內分泌,81,Thyroid – Differentiated,Thyroid,Thyroid - Differentiated and Anaplastic Carcinoma,
-Endocrine / 內分泌,82,Thyroid – Anaplastic,Thyroid,Thyroid - Differentiated and Anaplastic Carcinoma,
-Endocrine / 內分泌,83,Thyroid – Medullary,Thyroid,Thyroid - Medullary,
-Endocrine / 內分泌,84,Parathyroid,,Parathyroid,
-Endocrine / 內分泌,85,Adrenal Cortical Carcinoma,Adrenal,Adrenal Cortical Carcinoma,
-Endocrine / 內分泌,86,Adrenal – Neuroendocrine Tumors,Adrenal | Neuroendocrine Tumors,Adrenal - Neuroendocrine Tumors,
-Hematologic & Lymphoid / 血液淋巴,87,Non-Hodgkin Lymphomas: Unspecified or Other Type,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,88,Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,89,Non-Hodgkin Lymphomas: Mantle Cell Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,90,Non-Hodgkin Lymphomas: Follicular Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,91,Non-Hodgkin Lymphomas: Marginal Zone Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,92,Non-Hodgkin Lymphomas: Chronic Lymphocytic Leukemia and Small Lymphocytic,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,93,Non-Hodgkin Lymphomas: Peripheral T-cell Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,94,Hodgkin Lymphoma,Lymphoid Neoplasms,Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,95,Pediatric Hodgkin Lymphoma,Lymphoid Neoplasms,Pediatric Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,96,Pediatric Non-Hodgkin Lymphoma,Lymphoid Neoplasms,Pediatric Hodgkin and Non-Hodgkin Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,97,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,Lymphoid Neoplasms,Primary Cutaneous Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,98,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),Lymphoid Neoplasms,Primary Cutaneous Lymphomas,
-Hematologic & Lymphoid / 血液淋巴,99,Plasma Cell Myeloma and Plasma Cell Disorders,Lymphoid Neoplasms,Plasma Cell Myeloma and Plasma Cell Disorders,
+group_order,site_group,site_order,site,display_label
+10,Head & Neck / 頭頸部,22,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck
+10,Head & Neck / 頭頸部,23,Oral Cavity,Oral Cavity
+10,Head & Neck / 頭頸部,24,Major Salivary Glands,Major Salivary Glands
+10,Head & Neck / 頭頸部,25,Nasopharynx,Nasopharynx
+10,Head & Neck / 頭頸部,26,HPV-Mediated (p16+) Oropharyngeal Cancer,HPV-Mediated (p16+) Oropharyngeal Cancer
+10,Head & Neck / 頭頸部,27,Oropharynx (p16-),Oropharynx (p16-)
+10,Head & Neck / 頭頸部,28,Hypopharynx,Hypopharynx
+10,Head & Neck / 頭頸部,29,Maxillary Sinus,Maxillary Sinus
+10,Head & Neck / 頭頸部,30,Nasal Cavity and Ethmoid Sinus,Nasal Cavity and Ethmoid Sinus
+10,Head & Neck / 頭頸部,31,Larynx: Supraglottis,Larynx: Supraglottis
+10,Head & Neck / 頭頸部,32,Larynx: Glottis,Larynx: Glottis
+10,Head & Neck / 頭頸部,33,Larynx: Subglottis,Larynx: Subglottis
+10,Head & Neck / 頭頸部,34,Mucosal Melanoma of the Head and Neck,Mucosal Melanoma of the Head and Neck
+10,Head & Neck / 頭頸部,35,Cutaneous Carcinoma of the Head and Neck,Cutaneous Carcinoma of the Head and Neck
+20,Thoracic / 胸腔,39,Thymus,Thymus
+20,Thoracic / 胸腔,40,Lung,Lung
+20,Thoracic / 胸腔,41,Malignant Pleural Mesothelioma,Malignant Pleural Mesothelioma
+30,Breast / 乳房,52,Breast,Breast
+40,Gastrointestinal & HPB / 消化道與肝膽胰,1,Esophagus / EGJ - squamous,Esophageal / EGJ squamous cell carcinoma (ESCC) / 食道鱗狀細胞癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,2,Esophagus / EGJ - adenocarcinoma,Esophageal / EGJ adenocarcinoma (EAC) / 食道胃食道交界腺癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,3,Stomach,Gastric adenocarcinoma / Stomach / 胃癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,4,Small intestine,Small intestinal adenocarcinoma / 小腸腺癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,5,Colon,Colon adenocarcinoma / 結腸癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,6,Rectum,Rectal adenocarcinoma / 直腸癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,7,Appendix - carcinoma,Appendiceal carcinoma / appendix adenocarcinoma / 闌尾癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,9,HCC / Liver,Hepatocellular carcinoma (HCC) / Liver / 肝細胞癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,10,Intrahepatic bile duct,Intrahepatic cholangiocarcinoma / 肝內膽管癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,11,Perihilar bile duct,Perihilar cholangiocarcinoma / 肝門膽管癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,12,Distal bile duct,Distal bile duct cholangiocarcinoma / 遠端膽管癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,13,Gallbladder,Gallbladder carcinoma / 膽囊癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,14,Ampulla of Vater,Ampulla of Vater carcinoma / 壺腹癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,15,Exocrine pancreas,Pancreatic adenocarcinoma / Exocrine pancreas / 胰臟腺癌
+40,Gastrointestinal & HPB / 消化道與肝膽胰,36,Esophagus and Esophagogastric Junction: Other Histologies,Esophagus and Esophagogastric Junction: Other Histologies
+40,Gastrointestinal & HPB / 消化道與肝膽胰,37,Small Intestine: Other Histologies,Small Intestine: Other Histologies
+40,Gastrointestinal & HPB / 消化道與肝膽胰,38,Anus,Anus
+50,Neuroendocrine & GIST / 神經內分泌與GIST,8,GIST,Gastrointestinal stromal tumor (GIST) / 胃腸道基質瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,16,NET - stomach,Gastric NET / stomach neuroendocrine tumor / 胃神經內分泌瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,17,NET - duodenum / ampulla,Duodenal / ampullary NET / 十二指腸壺腹神經內分泌瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,18,NET - jejunum / ileum,Jejunal / ileal NET / 空腸迴腸神經內分泌瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,19,NET - appendix,Appendiceal NET / 闌尾神經內分泌瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,20,NET - colon / rectum,Colorectal NET / 結直腸神經內分泌瘤
+50,Neuroendocrine & GIST / 神經內分泌與GIST,21,NET - pancreas,Pancreatic NET / 胰臟神經內分泌瘤
+60,Bone & Soft Tissue / 骨與軟組織,42,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones","Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones"
+60,Bone & Soft Tissue / 骨與軟組織,43,Bone: Spine,Bone: Spine
+60,Bone & Soft Tissue / 骨與軟組織,44,Bone: Pelvis,Bone: Pelvis
+60,Bone & Soft Tissue / 骨與軟組織,45,Soft Tissue Sarcoma of the Head and Neck,Soft Tissue Sarcoma of the Head and Neck
+60,Bone & Soft Tissue / 骨與軟組織,46,Soft Tissue Sarcoma of the Trunk and Extremities,Soft Tissue Sarcoma of the Trunk and Extremities
+60,Bone & Soft Tissue / 骨與軟組織,47,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs
+60,Bone & Soft Tissue / 骨與軟組織,48,Soft Tissue Sarcoma of the Retroperitoneum,Soft Tissue Sarcoma of the Retroperitoneum
+60,Bone & Soft Tissue / 骨與軟組織,49,Soft Tissue Sarcoma – Unusual Histologies and Sites,Soft Tissue Sarcoma – Unusual Histologies and Sites
+70,Skin / 皮膚,50,Merkel Cell Carcinoma,Merkel Cell Carcinoma
+70,Skin / 皮膚,51,Melanoma of the Skin,Melanoma of the Skin
+80,Gynecologic / 婦癌,53,Vulva,Vulva
+80,Gynecologic / 婦癌,54,Vagina,Vagina
+80,Gynecologic / 婦癌,55,Cervix Uteri,Cervix Uteri
+80,Gynecologic / 婦癌,56,Corpus Uteri – Carcinoma and Carcinosarcoma,Corpus Uteri – Carcinoma and Carcinosarcoma
+80,Gynecologic / 婦癌,57,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma
+80,Gynecologic / 婦癌,58,Corpus Uteri – Adenosarcoma,Corpus Uteri – Adenosarcoma
+80,Gynecologic / 婦癌,59,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma","Ovary, Fallopian Tube and Primary Peritoneal Carcinoma"
+80,Gynecologic / 婦癌,60,Gestational Trophoblastic Neoplasms,Gestational Trophoblastic Neoplasms
+90,Genitourinary / 泌尿與男性生殖,61,Penis,Penis
+90,Genitourinary / 泌尿與男性生殖,62,Prostate,Prostate
+90,Genitourinary / 泌尿與男性生殖,63,Testis,Testis
+90,Genitourinary / 泌尿與男性生殖,64,Kidney,Kidney
+90,Genitourinary / 泌尿與男性生殖,65,Urinary Bladder: Urothelial Carcinomas,Urinary Bladder: Urothelial Carcinomas
+90,Genitourinary / 泌尿與男性生殖,66,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma
+90,Genitourinary / 泌尿與男性生殖,67,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,Male Penile Urethra and Female Urethra: Urothelial Carcinomas
+90,Genitourinary / 泌尿與男性生殖,68,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma
+90,Genitourinary / 泌尿與男性生殖,69,Prostatic Urethra: Urothelial Carcinomas,Prostatic Urethra: Urothelial Carcinomas
+90,Genitourinary / 泌尿與男性生殖,70,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma
+100,Ophthalmic / 眼科腫瘤,71,Eyelid Carcinoma,Eyelid Carcinoma
+100,Ophthalmic / 眼科腫瘤,72,Conjunctival Carcinoma,Conjunctival Carcinoma
+100,Ophthalmic / 眼科腫瘤,73,Conjunctival Melanoma,Conjunctival Melanoma
+100,Ophthalmic / 眼科腫瘤,74,Uveal Melanoma – Iris Melanoma,Uveal Melanoma – Iris Melanoma
+100,Ophthalmic / 眼科腫瘤,75,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,Uveal Melanoma – Choroidal and Ciliary Body Melanoma
+100,Ophthalmic / 眼科腫瘤,76,Retinoblastoma,Retinoblastoma
+100,Ophthalmic / 眼科腫瘤,77,Lacrimal Gland Carcinoma,Lacrimal Gland Carcinoma
+100,Ophthalmic / 眼科腫瘤,78,Orbital Sarcoma,Orbital Sarcoma
+100,Ophthalmic / 眼科腫瘤,79,Ocular Adnexal Lymphoma,Ocular Adnexal Lymphoma
+110,CNS / 中樞神經,80,Brain and Spinal Cord,Brain and Spinal Cord
+120,Endocrine / 內分泌,81,Thyroid – Differentiated,Thyroid – Differentiated
+120,Endocrine / 內分泌,82,Thyroid – Anaplastic,Thyroid – Anaplastic
+120,Endocrine / 內分泌,83,Thyroid – Medullary,Thyroid – Medullary
+120,Endocrine / 內分泌,84,Parathyroid,Parathyroid
+120,Endocrine / 內分泌,85,Adrenal Cortical Carcinoma,Adrenal Cortical Carcinoma
+120,Endocrine / 內分泌,86,Adrenal – Neuroendocrine Tumors,Adrenal – Neuroendocrine Tumors
+130,Hematologic & Lymphoid / 血液淋巴,87,Non-Hodgkin Lymphomas: Unspecified or Other Type,Non-Hodgkin Lymphomas: Unspecified or Other Type
+130,Hematologic & Lymphoid / 血液淋巴,88,Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma,Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,89,Non-Hodgkin Lymphomas: Mantle Cell Lymphoma,Non-Hodgkin Lymphomas: Mantle Cell Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,90,Non-Hodgkin Lymphomas: Follicular Lymphoma,Non-Hodgkin Lymphomas: Follicular Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,91,Non-Hodgkin Lymphomas: Marginal Zone Lymphoma,Non-Hodgkin Lymphomas: Marginal Zone Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,92,Non-Hodgkin Lymphomas: Chronic Lymphocytic Leukemia and Small Lymphocytic,Non-Hodgkin Lymphomas: Chronic Lymphocytic Leukemia and Small Lymphocytic
+130,Hematologic & Lymphoid / 血液淋巴,93,Non-Hodgkin Lymphomas: Peripheral T-cell Lymphoma,Non-Hodgkin Lymphomas: Peripheral T-cell Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,94,Hodgkin Lymphoma,Hodgkin Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,95,Pediatric Hodgkin Lymphoma,Pediatric Hodgkin Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,96,Pediatric Non-Hodgkin Lymphoma,Pediatric Non-Hodgkin Lymphoma
+130,Hematologic & Lymphoid / 血液淋巴,97,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome
+130,Hematologic & Lymphoid / 血液淋巴,98,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS)
+130,Hematologic & Lymphoid / 血液淋巴,99,Plasma Cell Myeloma and Plasma Cell Disorders,Plasma Cell Myeloma and Plasma Cell Disorders
