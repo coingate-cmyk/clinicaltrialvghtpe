@@ -1,17 +1,112 @@
-﻿edition,site,issue,note
-AJCC8,Cervix Uteri,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Conjunctival Carcinoma,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Conjunctival Melanoma,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Corpus Uteri - Carcinoma and Carcinosarcoma,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Lacrimal Gland Carcinoma,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Liver,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Malignant Pleural Mesothelioma,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Nasopharynx,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Neuroendocrine Tumors of the Pancreas,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Oropharynx (p16-) and Hypopharynx,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Soft Tissue Sarcoma of the Head and Neck,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Soft Tissue Sarcoma of the Retroperitoneum,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Staging Head and Neck Cancers,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Testis,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
-AJCC8,Vagina,no_stage_group_source_block_extracted_from_uploaded_pdf,"If this chapter should contain stage grouping, source pages may be omitted from uploaded PDF or table heading not recognized. See page presence audit and raw pages."
+﻿edition,site,definition_blocks,stage_group_blocks,definition_candidate_rows,simple_stage_rule_candidate_rows,raw_source_available,review_note
+AJCC7,Adrenal,7,3,28,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Ampulla of Vater,8,3,28,14,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Anus,8,2,35,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Appendix,11,3,54,26,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Bone,8,3,30,9,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Brain and Spinal Cord,1,0,5,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Breast,11,3,33,18,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Carcinoma of the Conjunctiva,7,3,22,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Carcinoma of the Eyelid,7,3,31,18,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Carcinoma of the Lacrimal Gland,5,3,8,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Cervix Uteri,8,3,51,20,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Colon and Rectum,8,2,43,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Corpus Uteri,17,7,69,28,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Cutaneous Squamous Cell Carcinoma and Other Cutaneous Carcinomas,7,3,22,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Distal Bile Duct,7,3,28,14,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Esophagus and Esophagogastric Junction,7,4,40,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Exocrine and Endocrine Pancreas,7,3,28,14,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Fallopian Tube,8,3,27,24,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Gallbladder,8,3,32,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Gastrointestinal Stromal Tumor,8,3,31,18,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Gestational Trophoblastic Tumors,7,3,30,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Intrahepatic Bile Ducts,8,3,28,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Kidney,7,3,28,5,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Larynx,7,2,49,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Lip and Oral Cavity,7,3,21,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Liver (Excluding intrahepatic bile ducts),7,3,25,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Lung,7,4,22,16,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Lymphoid Neoplasms,8,6,3,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Major Salivary Glands,7,3,17,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Malignant Melanoma of the Conjunctiva,7,1,23,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Malignant Melanoma of the Uvea,5,3,7,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Melanoma of the Skin,7,4,18,20,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Merkel Cell Carcinoma,8,3,34,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Mucosal Melanoma of the Head and Neck,5,2,14,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Nasal Cavity and Paranasal Sinuses,8,2,44,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Neuroendocrine Tumors,9,3,33,11,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Ocular Adnexal Lymphoma,8,4,25,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Ovary and Primary Peritoneal Carcinoma,8,3,35,24,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Penis,8,3,23,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Perihilar Bile Ducts,7,3,29,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,"Pharynx (Including base of tongue, soft palate, and uvula)",9,3,35,22,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Pleural Mesothelioma,7,3,21,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Prostate,8,4,50,4,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Renal Pelvis and Ureter,7,3,34,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Retinoblastoma,7,3,31,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Sarcoma of the Orbit,7,3,17,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Small Intestine,7,2,28,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Soft Tissue Sarcoma,7,3,29,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Stomach,7,3,27,18,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Testis,7,3,13,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Thyroid,7,4,23,19,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,UNKNOWN,8,3,11,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Urethra,8,3,27,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Urinary Bladder,8,3,32,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Vagina,8,3,30,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC7,Vulva,8,3,38,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Adrenal Cortical Carcinoma,1,2,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Ampulla of Vater,4,1,17,14,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Appendix - Carcinoma,5,1,26,11,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Breast,16,20,24,21,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,0,2,0,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Cervix Uteri,1,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Conjunctival Carcinoma,1,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Conjunctival Melanoma,5,0,15,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Corpus Uteri - Carcinoma and Carcinosarcoma,3,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Corpus Uteri - Sarcoma,7,1,0,7,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Cutaneous Carcinoma of the Head and Neck,6,1,25,12,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Esophagus and Esophagogastric Junction,0,7,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Eyelid Carcinoma,3,3,15,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Gastrointestinal Stromal Tumor,4,1,10,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,5,1,12,4,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Hodgkin and Non-Hodgkin Lymphomas,0,1,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Kidney,5,1,10,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Lacrimal Gland Carcinoma,2,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Larynx,5,1,6,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Liver,4,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Lung,2,6,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Major Salivary Glands,2,1,12,8,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Malignant Pleural Mesothelioma,3,0,10,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Melanoma of the Skin,0,1,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Nasal Cavity and Paranasal Sinuses,2,2,5,14,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Nasopharynx,4,0,14,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Neuroendocrine Tumors of the Appendix,5,2,18,1,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Neuroendocrine Tumors of the Colon and Rectum,5,1,16,11,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Neuroendocrine Tumors of the Jejunum and Ileum,5,1,15,3,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Neuroendocrine Tumors of the Pancreas,2,0,5,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Neuroendocrine Tumors of the Stomach,5,2,14,7,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Ocular Adnexal Lymphoma,7,1,23,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Oral Cavity,16,1,19,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Oropharynx (p16-) and Hypopharynx,10,0,10,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,"Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma",3,6,22,9,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Pediatric Hodgkin and Non-Hodgkin Lymphomas,0,1,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Penis,3,1,8,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Primary Cutaneous Lymphomas,7,2,30,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Prostate,4,2,8,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Renal Pelvis and Ureter,6,1,20,5,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Retinoblastoma,8,2,5,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,1,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Soft Tissue Sarcoma of the Head and Neck,1,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Soft Tissue Sarcoma of the Retroperitoneum,7,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Soft Tissue Sarcoma of the Trunk and Extremities,6,2,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Staging Head and Neck Cancers,1,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Testis,7,0,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Thyroid - Differentiated and Anaplastic Carcinoma,7,7,19,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Thyroid - Medullary,6,1,19,5,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,UNKNOWN,24,29,0,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Urethra,5,1,40,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Urinary Bladder,5,1,23,6,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Uveal Melanoma,5,1,44,10,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Vagina,5,0,15,0,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.
+AJCC8,Vulva,3,1,13,5,yes,Actual source text extracted; rows may need correction if source table is complex or spans pages.

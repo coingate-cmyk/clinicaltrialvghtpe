@@ -1,0 +1,20 @@
+﻿test,status,detail
+no polluted fallback/surrogate text in staging_rules_7.csv,PASS,clean
+no polluted fallback/surrogate text in staging_rules_8.csv,PASS,clean
+no polluted fallback/surrogate text in staging_category_definitions.csv,PASS,clean
+formal AJCC7 row count restored from v0.8.2,PASS,280 rows
+formal AJCC8 row count restored from v0.8.2,PASS,264 rows
+formal definition row count restored from v0.8.2,PASS,635 rows
+"protected definition ('Stomach', 'AJCC8', 'T', 'T1')",PASS,"Tumor invades lamina propria, muscularis mucosae, or submucosa（侵犯固有層、黏膜肌層或黏膜下層）"
+"protected definition ('Stomach', 'AJCC8', 'T', 'T2')",PASS,Tumor invades muscularis propria（侵犯固有肌層）
+"protected definition ('Stomach', 'AJCC8', 'T', 'T3')",PASS,Tumor penetrates subserosal connective tissue without invasion of visceral peritoneum or adjacent structures（侵犯漿膜下結締組織，未
+"protected definition ('Stomach', 'AJCC8', 'N', 'N1')",PASS,Metastasis in 1–2 regional lymph nodes（1–2 顆區域淋巴結轉移）
+"protected definition ('Stomach', 'AJCC8', 'M', 'M0')",PASS,No distant metastasis（無遠端轉移）
+AJCC7 Stomach T1/N1/M0 -> IB,PASS,"{'site': 'Stomach', 'edition': 'AJCC7', 'classification': 'any', 't': 'T1', 'n': 'N1', 'm': 'M0', 'grade': 'Any', 'location': 'Any', 'stage': 'IB', 'note': '7.0 local rule pack; verify before clinical use'}"
+AJCC8 Stomach T1/N1/M0 -> IIA,PASS,"{'site': 'Stomach', 'edition': 'AJCC8', 'classification': 'clinical', 't': 'T1', 'n': 'N1|N2|N3', 'm': 'M0', 'grade': 'Any', 'location': 'Any', 'stage': 'IIA', 'note': 'Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.'}"
+AJCC7 Stomach T3/N1/M0 -> IIB,PASS,"{'site': 'Stomach', 'edition': 'AJCC7', 'classification': 'any', 't': 'T3', 'n': 'N1', 'm': 'M0', 'grade': 'Any', 'location': 'Any', 'stage': 'IIB', 'note': '7.0 local rule pack; verify before clinical use'}"
+AJCC8 Stomach T3/N1/M0 -> III,PASS,"{'site': 'Stomach', 'edition': 'AJCC8', 'classification': 'clinical', 't': 'T3', 'n': 'N1|N2|N3', 'm': 'M0', 'grade': 'Any', 'location': 'Any', 'stage': 'III', 'note': 'Stomach AJCC8 cTNM clinical stage grouping audited v0.8.1 from AJCC8 stomach clinical table; N3a/N3b are accepted through N3 parent rule.'}"
+pan-cancer site registry retained,PASS,99 registry sites
+quick-staging uses new v2.2 localStorage key,PASS,legacy staging_rules_user not referenced directly
+quick-staging does not mention gap-fill as live feature,PASS,surrogate text removed
+committee review candidates are prefilled,PASS,765 rule candidates; 2186 definition candidates
