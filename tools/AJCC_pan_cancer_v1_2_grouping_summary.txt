@@ -1,0 +1,18 @@
+AJCC pan-cancer CSV import v1.2 - system-grouped cancer site list
+Change: cancer site list is now grouped by organ/system rather than mixed GI-first + manual extraction order.
+Sort policy: system group order for hospital/cancer committee workflow, then original AJCC/manual-ish order within each group. Search remains alias-based.
+
+10,Head & Neck / 頭頸部,14
+20,Thoracic / 胸腔,3
+30,Breast / 乳房,1
+40,Gastrointestinal & HPB / 消化道與肝膽胰,17
+50,Neuroendocrine & GIST / 神經內分泌與GIST,7
+60,Bone & Soft Tissue / 骨與軟組織,8
+70,Skin / 皮膚,2
+80,Gynecologic / 婦癌,8
+90,Genitourinary / 泌尿與男性生殖,10
+100,Ophthalmic / 眼科腫瘤,9
+110,CNS / 中樞神經,1
+120,Endocrine / 內分泌,6
+130,Hematologic & Lymphoid / 血液淋巴,13
+990,Other / Special / 其他特殊,0

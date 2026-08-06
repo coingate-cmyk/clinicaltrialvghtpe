@@ -1,0 +1,13 @@
+test,expected,observed,pass,notes
+site_group_order_csv_exists,yes,True,PASS,
+all_base_sites_grouped,99,99,PASS,Other group is allowed only for uncategorized future sites
+Lung group,Thoracic / 胸腔,Thoracic / 胸腔,PASS,
+Breast group,Breast / 乳房,Breast / 乳房,PASS,
+Exocrine pancreas group,Gastrointestinal & HPB / 消化道與肝膽胰,Gastrointestinal & HPB / 消化道與肝膽胰,PASS,
+Prostate group,Genitourinary / 泌尿與男性生殖,Genitourinary / 泌尿與男性生殖,PASS,
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma group",Gynecologic / 婦癌,Gynecologic / 婦癌,PASS,
+Brain and Spinal Cord group,CNS / 中樞神經,CNS / 中樞神經,PASS,
+Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma group,Hematologic & Lymphoid / 血液淋巴,Hematologic & Lymphoid / 血液淋巴,PASS,
+quick_staging_contains_optgroup,yes,True,PASS,
+quick_staging_contains_group_filter,yes,True,PASS,
+javascript_basic_syntax_check,node --check pass,node --check passed,PASS,quick-staging.html script syntax passed node --check

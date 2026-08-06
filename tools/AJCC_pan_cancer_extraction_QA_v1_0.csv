@@ -1,0 +1,21 @@
+﻿check,value,status,details
+AJCC7 source PDF pages,673,info,pdftotext layout pages
+AJCC8 source PDF pages,325,info,pdftotext layout pages
+AJCC7 TOC/site chapters,55,info,manual TOC mapping from 7th edition
+AJCC8 TOC/site chapters,77,info,PDF outline chapter mapping from 8th edition
+AJCC7 extracted tool-import rules,800,needs_review,automatic extraction from user-uploaded AJCC 7th PDF
+AJCC8 extracted tool-import rules,307,needs_review,automatic extraction from user-uploaded AJCC 8th PDF
+Total extracted tool-import rules,1107,needs_review,deduped site/edition/classification/T/N/M/grade/location/stage rows
+Rows requiring manual review,952,needs_review,extra factors/raw prognostic conditions present
+Sentinel site contains Pancreatic,0,needs_review,rule count by extracted site/source_site
+Sentinel site contains Lung,28,pass,rule count by extracted site/source_site
+Sentinel site contains Breast,58,pass,rule count by extracted site/source_site
+Sentinel site contains Prostate,27,pass,rule count by extracted site/source_site
+Sentinel site contains Stomach,36,pass,rule count by extracted site/source_site
+Sentinel site contains Colon,29,pass,rule count by extracted site/source_site
+Sentinel site contains Rectum,29,pass,rule count by extracted site/source_site
+Sentinel site contains Thyroid,26,pass,rule count by extracted site/source_site
+Sentinel site contains Urinary Bladder,40,pass,rule count by extracted site/source_site
+Sentinel site contains Kidney,23,pass,rule count by extracted site/source_site
+Sentinel site contains Melanoma,77,pass,rule count by extracted site/source_site
+Sentinel site contains Lymphoid,0,needs_review,rule count by extracted site/source_site

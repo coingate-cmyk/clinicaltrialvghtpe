@@ -1,0 +1,22 @@
+AJCC pan-cancer CSV import v1.1 (merged draft)
+
+What this package does:
+- Uses the two user-supplied AJCC manuals as extraction sources.
+- Preserves the already-working v0.9.0 GI/pan-cancer site registry rules so current known-good sites do not disappear.
+- Adds automatically extracted AJCC 7th and 8th TNM-like rows from the uploaded PDFs.
+- Provides review CSVs with source pages/raw lines for cancer committee QA.
+
+Tool import files:
+- tools/staging_rules_7.csv: 1007 rows, 57 unique sites
+- tools/staging_rules_8.csv: 565 rows, 47 unique sites
+- tools/staging_rules_all_ajcc7_8.csv: 1572 rows
+
+Critical caveat:
+This is an automatic extraction draft for testing. It is intentionally NOT certified. Cancer committee review is needed, especially for sites with non-TNM required factors such as breast biomarkers, prostate PSA/Gleason/Grade Group, thyroid age, GIST site/mitotic rate, gynecologic FIGO-style definitions, and hematologic malignancies.
+
+Why merged instead of extracted-only:
+The uploaded AJCC8 PDF appears to contain updates/corrections and not every site table in a consistently extractable format. Therefore v1.1 keeps the existing curated v0.9 rules and appends extracted rows rather than replacing working data.
+
+Deployment for testing:
+Upload the contents of the tools/ folder to repo tools/ and replace staging_rules_7.csv and staging_rules_8.csv.
+Keep review files for audit.

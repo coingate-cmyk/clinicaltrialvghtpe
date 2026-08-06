@@ -1,0 +1,19 @@
+﻿check,value,status,details
+Merged AJCC7 rows,1007,needs_review,existing v0.9 + automatic extraction from AJCC7 PDF
+Merged AJCC8 rows,565,needs_review,existing v0.9 + automatic extraction from AJCC8 PDF
+AJCC7 unique sites,57,needs_review,tool import sites
+AJCC8 unique sites,47,needs_review,tool import sites
+Sentinel search Pancreas,54,pass,
+Sentinel search pancreatic,7,pass,
+Sentinel search Exocrine pancreas,17,pass,
+Sentinel search Lung,28,pass,
+Sentinel search Breast,58,pass,
+Sentinel search Prostate,27,pass,
+Sentinel search Stomach,119,pass,
+Sentinel search Colon,89,pass,
+Sentinel search Rectum,90,pass,
+Sentinel search Thyroid,26,pass,
+Sentinel search Urinary Bladder,40,pass,
+Sentinel search Kidney,23,pass,
+Sentinel search Melanoma,78,pass,
+Sentinel search Lymphoid,0,needs_review,

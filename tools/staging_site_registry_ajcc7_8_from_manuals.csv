@@ -1,0 +1,133 @@
+﻿edition,site,source_site,start_pdf_page,end_pdf_page,extracted_rule_rows,status
+AJCC7,Lip and Oral Cavity,Lip and Oral Cavity,45,56,16,rules_extracted_needs_committee_review
+AJCC7,"Pharynx (Including base of tongue, soft palate, and uvula)","Pharynx (Including base of tongue, soft palate, and uvula)",57,72,39,rules_extracted_needs_committee_review
+AJCC7,Larynx,Larynx,73,84,16,rules_extracted_needs_committee_review
+AJCC7,Nasal Cavity and Paranasal Sinuses,Nasal Cavity and Paranasal Sinuses,85,94,16,rules_extracted_needs_committee_review
+AJCC7,Major Salivary Glands,Major Salivary Glands,95,102,15,rules_extracted_needs_committee_review
+AJCC7,Thyroid,Thyroid,103,112,18,rules_extracted_needs_committee_review
+AJCC7,Mucosal Melanoma of the Head and Neck,Mucosal Melanoma of the Head and Neck,113,118,5,rules_extracted_needs_committee_review
+AJCC7,Esophagus and EGJ,Esophagus and Esophagogastric Junction,119,132,36,rules_extracted_needs_committee_review
+AJCC7,Stomach,Stomach,133,142,22,rules_extracted_needs_committee_review
+AJCC7,Small intestine,Small Intestine,143,148,16,rules_extracted_needs_committee_review
+AJCC7,Appendix - carcinoma,Appendix,149,158,32,rules_extracted_needs_committee_review
+AJCC7,Colon and Rectum,Colon and Rectum,159,180,16,rules_extracted_needs_committee_review
+AJCC7,Anus,Anus,181,190,12,rules_extracted_needs_committee_review
+AJCC7,Gastrointestinal Stromal Tumor,Gastrointestinal Stromal Tumor,191,196,19,rules_extracted_needs_committee_review
+AJCC7,Neuroendocrine Tumors,Neuroendocrine Tumors,197,206,7,rules_extracted_needs_committee_review
+AJCC7,HCC / Liver,Liver (Excluding intrahepatic bile ducts),207,216,7,rules_extracted_needs_committee_review
+AJCC7,Intrahepatic bile duct,Intrahepatic Bile Ducts,217,226,7,rules_extracted_needs_committee_review
+AJCC7,Gallbladder,Gallbladder,227,234,13,rules_extracted_needs_committee_review
+AJCC7,Perihilar bile duct,Perihilar Bile Ducts,235,242,8,rules_extracted_needs_committee_review
+AJCC7,Distal bile duct,Distal Bile Duct,243,250,9,rules_extracted_needs_committee_review
+AJCC7,Ampulla of Vater,Ampulla of Vater,251,256,18,rules_extracted_needs_committee_review
+AJCC7,Pancreas - exocrine/endocrine (AJCC7),Exocrine and Endocrine Pancreas,257,268,18,rules_extracted_needs_committee_review
+AJCC7,Lung,Lung,269,286,28,rules_extracted_needs_committee_review
+AJCC7,Pleural Mesothelioma,Pleural Mesothelioma,287,296,20,rules_extracted_needs_committee_review
+AJCC7,Bone,Bone,297,306,9,rules_extracted_needs_committee_review
+AJCC7,Soft Tissue Sarcoma,Soft Tissue Sarcoma,307,316,21,rules_extracted_needs_committee_review
+AJCC7,Cutaneous Squamous Cell Carcinoma and Other Cutaneous Carcinomas,Cutaneous Squamous Cell Carcinoma and Other Cutaneous Carcinomas,317,330,26,rules_extracted_needs_committee_review
+AJCC7,Merkel Cell Carcinoma,Merkel Cell Carcinoma,331,340,18,rules_extracted_needs_committee_review
+AJCC7,Melanoma of the Skin,Melanoma of the Skin,341,362,27,rules_extracted_needs_committee_review
+AJCC7,Breast,Breast,363,394,24,rules_extracted_needs_committee_review
+AJCC7,Vulva,Vulva,395,402,23,rules_extracted_needs_committee_review
+AJCC7,Vagina,Vagina,403,410,8,rules_extracted_needs_committee_review
+AJCC7,Cervix Uteri,Cervix Uteri,411,418,14,rules_extracted_needs_committee_review
+AJCC7,Corpus Uteri,Corpus Uteri,419,434,12,rules_extracted_needs_committee_review
+AJCC7,Ovary and Primary Peritoneal Carcinoma,Ovary and Primary Peritoneal Carcinoma,435,444,14,rules_extracted_needs_committee_review
+AJCC7,Fallopian Tube,Fallopian Tube,445,452,17,rules_extracted_needs_committee_review
+AJCC7,Gestational Trophoblastic Tumors,Gestational Trophoblastic Tumors,453,462,0,site_registered_no_tnm_rows_extracted
+AJCC7,Penis,Penis,463,472,22,rules_extracted_needs_committee_review
+AJCC7,Prostate,Prostate,473,484,21,rules_extracted_needs_committee_review
+AJCC7,Testis,Testis,485,494,17,rules_extracted_needs_committee_review
+AJCC7,Kidney,Kidney,495,506,11,rules_extracted_needs_committee_review
+AJCC7,Renal Pelvis and Ureter,Renal Pelvis and Ureter,507,512,20,rules_extracted_needs_committee_review
+AJCC7,Urinary Bladder,Urinary Bladder,513,522,22,rules_extracted_needs_committee_review
+AJCC7,Urethra,Urethra,523,530,15,rules_extracted_needs_committee_review
+AJCC7,Adrenal,Adrenal,531,538,9,rules_extracted_needs_committee_review
+AJCC7,Carcinoma of the Eyelid,Carcinoma of the Eyelid,539,546,11,rules_extracted_needs_committee_review
+AJCC7,Carcinoma of the Conjunctiva,Carcinoma of the Conjunctiva,547,554,0,site_registered_no_tnm_rows_extracted
+AJCC7,Malignant Melanoma of the Conjunctiva,Malignant Melanoma of the Conjunctiva,555,562,0,site_registered_no_tnm_rows_extracted
+AJCC7,Malignant Melanoma of the Uvea,Malignant Melanoma of the Uvea,563,576,26,rules_extracted_needs_committee_review
+AJCC7,Retinoblastoma,Retinoblastoma,577,584,0,site_registered_no_tnm_rows_extracted
+AJCC7,Carcinoma of the Lacrimal Gland,Carcinoma of the Lacrimal Gland,585,592,0,site_registered_no_tnm_rows_extracted
+AJCC7,Sarcoma of the Orbit,Sarcoma of the Orbit,593,598,0,site_registered_no_tnm_rows_extracted
+AJCC7,Ocular Adnexal Lymphoma,Ocular Adnexal Lymphoma,599,608,0,site_registered_no_tnm_rows_extracted
+AJCC7,Brain and Spinal Cord,Brain and Spinal Cord,609,620,0,site_registered_no_tnm_rows_extracted
+AJCC7,Lymphoid Neoplasms,Lymphoid Neoplasms,621,644,0,site_registered_no_tnm_rows_extracted
+AJCC8,Staging Head and Neck Cancers,Staging Head and Neck Cancers,11,14,0,site_registered_no_tnm_rows_extracted
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,15,17,5,rules_extracted_needs_committee_review
+AJCC8,Oral Cavity,Oral Cavity,18,32,16,rules_extracted_needs_committee_review
+AJCC8,Major Salivary Glands,Major Salivary Glands,33,35,10,rules_extracted_needs_committee_review
+AJCC8,Nasopharynx,Nasopharynx,36,37,0,site_registered_no_tnm_rows_extracted
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,HPV-Mediated (p16+) Oropharyngeal Cancer,38,39,11,rules_extracted_needs_committee_review
+AJCC8,Oropharynx (p16-) and Hypopharynx,Oropharynx (p16-) and Hypopharynx,40,45,0,site_registered_no_tnm_rows_extracted
+AJCC8,Nasal Cavity and Paranasal Sinuses,Nasal Cavity and Paranasal Sinuses,46,47,1,rules_extracted_needs_committee_review
+AJCC8,Larynx,Larynx,48,49,3,rules_extracted_needs_committee_review
+AJCC8,Mucosal Melanoma of the Head and Neck,Mucosal Melanoma of the Head and Neck,50,51,0,site_registered_no_tnm_rows_extracted
+AJCC8,Cutaneous Carcinoma of the Head and Neck,Cutaneous Carcinoma of the Head and Neck,52,57,17,rules_extracted_needs_committee_review
+AJCC8,Esophagus and EGJ,Esophagus and Esophagogastric Junction,58,60,0,site_registered_no_tnm_rows_extracted
+AJCC8,Stomach,Stomach,61,61,0,site_registered_no_tnm_rows_extracted
+AJCC8,Small intestine,Small Intestine,62,62,0,site_registered_no_tnm_rows_extracted
+AJCC8,Appendix - carcinoma,Appendix - Carcinoma,63,65,9,rules_extracted_needs_committee_review
+AJCC8,Colon and Rectum,Colon and Rectum,66,66,0,site_registered_no_tnm_rows_extracted
+AJCC8,Anus,Anus,67,67,0,site_registered_no_tnm_rows_extracted
+AJCC8,HCC / Liver,Liver,68,69,0,site_registered_no_tnm_rows_extracted
+AJCC8,Intrahepatic bile duct,Intrahepatic Bile Ducts,70,71,0,site_registered_no_tnm_rows_extracted
+AJCC8,Gallbladder,Gallbladder,72,73,0,site_registered_no_tnm_rows_extracted
+AJCC8,Perihilar bile duct,Perihilar Bile Ducts,74,74,0,site_registered_no_tnm_rows_extracted
+AJCC8,Distal bile duct,Distal Bile Ducts,75,75,0,site_registered_no_tnm_rows_extracted
+AJCC8,Ampulla of Vater,Ampulla of Vater,76,77,3,rules_extracted_needs_committee_review
+AJCC8,Pancreatic adenocarcinoma / Exocrine pancreas,Exocrine Pancreas,78,78,0,site_registered_no_tnm_rows_extracted
+AJCC8,Neuroendocrine Tumors of the Stomach,Neuroendocrine Tumors of the Stomach,79,81,14,rules_extracted_needs_committee_review
+AJCC8,Neuroendocrine Tumors of the Duodenum and Ampulla of Vater,Neuroendocrine Tumors of the Duodenum and Ampulla of Vater,82,82,0,site_registered_no_tnm_rows_extracted
+AJCC8,Neuroendocrine Tumors of the Jejunum and Ileum,Neuroendocrine Tumors of the Jejunum and Ileum,83,84,17,rules_extracted_needs_committee_review
+AJCC8,Neuroendocrine Tumors of the Appendix,Neuroendocrine Tumors of the Appendix,85,88,21,rules_extracted_needs_committee_review
+AJCC8,Neuroendocrine Tumors of the Colon and Rectum,Neuroendocrine Tumors of the Colon and Rectum,89,91,13,rules_extracted_needs_committee_review
+AJCC8,Neuroendocrine Tumors of the Pancreas,Neuroendocrine Tumors of the Pancreas,92,93,0,site_registered_no_tnm_rows_extracted
+AJCC8,Thymus,Thymus,94,95,0,site_registered_no_tnm_rows_extracted
+AJCC8,Lung,Lung,96,96,0,site_registered_no_tnm_rows_extracted
+AJCC8,Malignant Pleural Mesothelioma,Malignant Pleural Mesothelioma,97,98,0,site_registered_no_tnm_rows_extracted
+AJCC8,Bone,Bone,99,99,0,site_registered_no_tnm_rows_extracted
+AJCC8,Introduction to Soft Tissue Sarcoma,Introduction to Soft Tissue Sarcoma,100,100,0,site_registered_no_tnm_rows_extracted
+AJCC8,Soft Tissue Sarcoma of the Head and Neck,Soft Tissue Sarcoma of the Head and Neck,101,102,0,site_registered_no_tnm_rows_extracted
+AJCC8,Soft Tissue Sarcoma of the Trunk and Extremities,Soft Tissue Sarcoma of the Trunk and Extremities,103,104,0,site_registered_no_tnm_rows_extracted
+AJCC8,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,105,106,0,site_registered_no_tnm_rows_extracted
+AJCC8,Gastrointestinal Stromal Tumor,Gastrointestinal Stromal Tumor,107,109,0,site_registered_no_tnm_rows_extracted
+AJCC8,Soft Tissue Sarcoma of the Retroperitoneum,Soft Tissue Sarcoma of the Retroperitoneum,110,111,0,site_registered_no_tnm_rows_extracted
+AJCC8,Soft Tissue Sarcoma - Unusual Histologies and Sites,Soft Tissue Sarcoma - Unusual Histologies and Sites,112,114,0,site_registered_no_tnm_rows_extracted
+AJCC8,Merkel Cell Carcinoma,Merkel Cell Carcinoma,115,115,0,site_registered_no_tnm_rows_extracted
+AJCC8,Melanoma of the Skin,Melanoma of the Skin,116,118,0,site_registered_no_tnm_rows_extracted
+AJCC8,Breast,Breast,119,166,34,rules_extracted_needs_committee_review
+AJCC8,Vulva,Vulva,167,170,3,rules_extracted_needs_committee_review
+AJCC8,Vagina,Vagina,171,173,0,site_registered_no_tnm_rows_extracted
+AJCC8,Cervix Uteri,Cervix Uteri,174,175,0,site_registered_no_tnm_rows_extracted
+AJCC8,Corpus Uteri - Carcinoma and Carcinosarcoma,Corpus Uteri - Carcinoma and Carcinosarcoma,176,177,0,site_registered_no_tnm_rows_extracted
+AJCC8,Corpus Uteri - Sarcoma,Corpus Uteri - Sarcoma,178,181,22,rules_extracted_needs_committee_review
+AJCC8,"Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma","Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma",182,184,4,rules_extracted_needs_committee_review
+AJCC8,Gestational Trophoblastic Neoplasms,Gestational Trophoblastic Neoplasms,185,185,0,site_registered_no_tnm_rows_extracted
+AJCC8,Penis,Penis,186,187,5,rules_extracted_needs_committee_review
+AJCC8,Prostate,Prostate,188,190,6,rules_extracted_needs_committee_review
+AJCC8,Testis,Testis,191,193,0,site_registered_no_tnm_rows_extracted
+AJCC8,Kidney,Kidney,194,196,12,rules_extracted_needs_committee_review
+AJCC8,Renal Pelvis and Ureter,Renal Pelvis and Ureter,197,199,9,rules_extracted_needs_committee_review
+AJCC8,Urinary Bladder,Urinary Bladder,200,202,18,rules_extracted_needs_committee_review
+AJCC8,Urethra,Urethra,203,205,13,rules_extracted_needs_committee_review
+AJCC8,Eyelid Carcinoma,Eyelid Carcinoma,206,208,5,rules_extracted_needs_committee_review
+AJCC8,Conjunctival Carcinoma,Conjunctival Carcinoma,209,210,0,site_registered_no_tnm_rows_extracted
+AJCC8,Conjunctival Melanoma,Conjunctival Melanoma,211,213,0,site_registered_no_tnm_rows_extracted
+AJCC8,Uveal Melanoma,Uveal Melanoma,214,216,19,rules_extracted_needs_committee_review
+AJCC8,Retinoblastoma,Retinoblastoma,217,220,6,rules_extracted_needs_committee_review
+AJCC8,Lacrimal Gland Carcinoma,Lacrimal Gland Carcinoma,221,222,0,site_registered_no_tnm_rows_extracted
+AJCC8,Orbital Sarcoma,Orbital Sarcoma,223,224,0,site_registered_no_tnm_rows_extracted
+AJCC8,Ocular Adnexal Lymphoma,Ocular Adnexal Lymphoma,225,227,0,site_registered_no_tnm_rows_extracted
+AJCC8,Brain and Spinal Cord,Brain and Spinal Cord,228,230,0,site_registered_no_tnm_rows_extracted
+AJCC8,Thyroid - Differentiated and Anaplastic Carcinoma,Thyroid - Differentiated and Anaplastic Carcinoma,231,235,7,rules_extracted_needs_committee_review
+AJCC8,Thyroid - Medullary,Thyroid - Medullary,236,239,1,rules_extracted_needs_committee_review
+AJCC8,Parathyroid,Parathyroid,240,240,0,site_registered_no_tnm_rows_extracted
+AJCC8,Adrenal Cortical Carcinoma,Adrenal Cortical Carcinoma,241,242,0,site_registered_no_tnm_rows_extracted
+AJCC8,Adrenal - Neuroendocrine Tumors,Adrenal - Neuroendocrine Tumors,243,243,0,site_registered_no_tnm_rows_extracted
+AJCC8,Hodgkin and Non-Hodgkin Lymphomas,Hodgkin and Non-Hodgkin Lymphomas,244,246,0,site_registered_no_tnm_rows_extracted
+AJCC8,Pediatric Hodgkin and Non-Hodgkin Lymphomas,Pediatric Hodgkin and Non-Hodgkin Lymphomas,247,248,0,site_registered_no_tnm_rows_extracted
+AJCC8,Primary Cutaneous Lymphomas,Primary Cutaneous Lymphomas,249,253,3,rules_extracted_needs_committee_review
+AJCC8,Plasma Cell Myeloma and Plasma Cell Disorders,Plasma Cell Myeloma and Plasma Cell Disorders,254,255,0,site_registered_no_tnm_rows_extracted
+AJCC8,Leukemia,Leukemia,256,258,0,site_registered_no_tnm_rows_extracted

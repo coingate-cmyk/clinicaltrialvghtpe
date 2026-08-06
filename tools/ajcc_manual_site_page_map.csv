@@ -1,0 +1,133 @@
+﻿edition,chapter,site,print_page,start_pdf_page,end_pdf_page
+AJCC7,,Lip and Oral Cavity,29,45,56
+AJCC7,,"Pharynx (Including base of tongue, soft palate, and uvula)",41,57,72
+AJCC7,,Larynx,57,73,84
+AJCC7,,Nasal Cavity and Paranasal Sinuses,69,85,94
+AJCC7,,Major Salivary Glands,79,95,102
+AJCC7,,Thyroid,87,103,112
+AJCC7,,Mucosal Melanoma of the Head and Neck,97,113,118
+AJCC7,,Esophagus and Esophagogastric Junction,103,119,132
+AJCC7,,Stomach,117,133,142
+AJCC7,,Small Intestine,127,143,148
+AJCC7,,Appendix,133,149,158
+AJCC7,,Colon and Rectum,143,159,180
+AJCC7,,Anus,165,181,190
+AJCC7,,Gastrointestinal Stromal Tumor,175,191,196
+AJCC7,,Neuroendocrine Tumors,181,197,206
+AJCC7,,Liver (Excluding intrahepatic bile ducts),191,207,216
+AJCC7,,Intrahepatic Bile Ducts,201,217,226
+AJCC7,,Gallbladder,211,227,234
+AJCC7,,Perihilar Bile Ducts,219,235,242
+AJCC7,,Distal Bile Duct,227,243,250
+AJCC7,,Ampulla of Vater,235,251,256
+AJCC7,,Exocrine and Endocrine Pancreas,241,257,268
+AJCC7,,Lung,253,269,286
+AJCC7,,Pleural Mesothelioma,271,287,296
+AJCC7,,Bone,281,297,306
+AJCC7,,Soft Tissue Sarcoma,291,307,316
+AJCC7,,Cutaneous Squamous Cell Carcinoma and Other Cutaneous Carcinomas,301,317,330
+AJCC7,,Merkel Cell Carcinoma,315,331,340
+AJCC7,,Melanoma of the Skin,325,341,362
+AJCC7,,Breast,347,363,394
+AJCC7,,Vulva,379,395,402
+AJCC7,,Vagina,387,403,410
+AJCC7,,Cervix Uteri,395,411,418
+AJCC7,,Corpus Uteri,403,419,434
+AJCC7,,Ovary and Primary Peritoneal Carcinoma,419,435,444
+AJCC7,,Fallopian Tube,429,445,452
+AJCC7,,Gestational Trophoblastic Tumors,437,453,462
+AJCC7,,Penis,447,463,472
+AJCC7,,Prostate,457,473,484
+AJCC7,,Testis,469,485,494
+AJCC7,,Kidney,479,495,506
+AJCC7,,Renal Pelvis and Ureter,491,507,512
+AJCC7,,Urinary Bladder,497,513,522
+AJCC7,,Urethra,507,523,530
+AJCC7,,Adrenal,515,531,538
+AJCC7,,Carcinoma of the Eyelid,523,539,546
+AJCC7,,Carcinoma of the Conjunctiva,531,547,554
+AJCC7,,Malignant Melanoma of the Conjunctiva,539,555,562
+AJCC7,,Malignant Melanoma of the Uvea,547,563,576
+AJCC7,,Retinoblastoma,561,577,584
+AJCC7,,Carcinoma of the Lacrimal Gland,569,585,592
+AJCC7,,Sarcoma of the Orbit,577,593,598
+AJCC7,,Ocular Adnexal Lymphoma,583,599,608
+AJCC7,,Brain and Spinal Cord,593,609,620
+AJCC7,,Lymphoid Neoplasms,605,621,644
+AJCC8,5,Staging Head and Neck Cancers,,11,14
+AJCC8,6,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,,15,17
+AJCC8,7,Oral Cavity,,18,32
+AJCC8,8,Major Salivary Glands,,33,35
+AJCC8,9,Nasopharynx,,36,37
+AJCC8,10,HPV-Mediated (p16+) Oropharyngeal Cancer,,38,39
+AJCC8,11,Oropharynx (p16-) and Hypopharynx,,40,45
+AJCC8,12,Nasal Cavity and Paranasal Sinuses,,46,47
+AJCC8,13,Larynx,,48,49
+AJCC8,14,Mucosal Melanoma of the Head and Neck,,50,51
+AJCC8,15,Cutaneous Carcinoma of the Head and Neck,,52,57
+AJCC8,16,Esophagus and Esophagogastric Junction,,58,60
+AJCC8,17,Stomach,,61,61
+AJCC8,18,Small Intestine,,62,62
+AJCC8,19,Appendix - Carcinoma,,63,65
+AJCC8,20,Colon and Rectum,,66,66
+AJCC8,21,Anus,,67,67
+AJCC8,22,Liver,,68,69
+AJCC8,23,Intrahepatic Bile Ducts,,70,71
+AJCC8,24,Gallbladder,,72,73
+AJCC8,25,Perihilar Bile Ducts,,74,74
+AJCC8,26,Distal Bile Ducts,,75,75
+AJCC8,27,Ampulla of Vater,,76,77
+AJCC8,28,Exocrine Pancreas,,78,78
+AJCC8,29,Neuroendocrine Tumors of the Stomach,,79,81
+AJCC8,30,Neuroendocrine Tumors of the Duodenum and Ampulla of Vater,,82,82
+AJCC8,31,Neuroendocrine Tumors of the Jejunum and Ileum,,83,84
+AJCC8,32,Neuroendocrine Tumors of the Appendix,,85,88
+AJCC8,33,Neuroendocrine Tumors of the Colon and Rectum,,89,91
+AJCC8,34,Neuroendocrine Tumors of the Pancreas,,92,93
+AJCC8,35,Thymus,,94,95
+AJCC8,36,Lung,,96,96
+AJCC8,37,Malignant Pleural Mesothelioma,,97,98
+AJCC8,38,Bone,,99,99
+AJCC8,39,Introduction to Soft Tissue Sarcoma,,100,100
+AJCC8,40,Soft Tissue Sarcoma of the Head and Neck,,101,102
+AJCC8,41,Soft Tissue Sarcoma of the Trunk and Extremities,,103,104
+AJCC8,42,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,,105,106
+AJCC8,43,Gastrointestinal Stromal Tumor,,107,109
+AJCC8,44,Soft Tissue Sarcoma of the Retroperitoneum,,110,111
+AJCC8,45,Soft Tissue Sarcoma - Unusual Histologies and Sites,,112,114
+AJCC8,46,Merkel Cell Carcinoma,,115,115
+AJCC8,47,Melanoma of the Skin,,116,118
+AJCC8,48,Breast,,119,166
+AJCC8,50,Vulva,,167,170
+AJCC8,51,Vagina,,171,173
+AJCC8,52,Cervix Uteri,,174,175
+AJCC8,53,Corpus Uteri - Carcinoma and Carcinosarcoma,,176,177
+AJCC8,54,Corpus Uteri - Sarcoma,,178,181
+AJCC8,55,"Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma",,182,184
+AJCC8,56,Gestational Trophoblastic Neoplasms,,185,185
+AJCC8,57,Penis,,186,187
+AJCC8,58,Prostate,,188,190
+AJCC8,59,Testis,,191,193
+AJCC8,60,Kidney,,194,196
+AJCC8,61,Renal Pelvis and Ureter,,197,199
+AJCC8,62,Urinary Bladder,,200,202
+AJCC8,63,Urethra,,203,205
+AJCC8,64,Eyelid Carcinoma,,206,208
+AJCC8,65,Conjunctival Carcinoma,,209,210
+AJCC8,66,Conjunctival Melanoma,,211,213
+AJCC8,67,Uveal Melanoma,,214,216
+AJCC8,68,Retinoblastoma,,217,220
+AJCC8,69,Lacrimal Gland Carcinoma,,221,222
+AJCC8,70,Orbital Sarcoma,,223,224
+AJCC8,71,Ocular Adnexal Lymphoma,,225,227
+AJCC8,72,Brain and Spinal Cord,,228,230
+AJCC8,73,Thyroid - Differentiated and Anaplastic Carcinoma,,231,235
+AJCC8,74,Thyroid - Medullary,,236,239
+AJCC8,75,Parathyroid,,240,240
+AJCC8,76,Adrenal Cortical Carcinoma,,241,242
+AJCC8,77,Adrenal - Neuroendocrine Tumors,,243,243
+AJCC8,79,Hodgkin and Non-Hodgkin Lymphomas,,244,246
+AJCC8,80,Pediatric Hodgkin and Non-Hodgkin Lymphomas,,247,248
+AJCC8,81,Primary Cutaneous Lymphomas,,249,253
+AJCC8,82,Plasma Cell Myeloma and Plasma Cell Disorders,,254,255
+AJCC8,83,Leukemia,,256,258
