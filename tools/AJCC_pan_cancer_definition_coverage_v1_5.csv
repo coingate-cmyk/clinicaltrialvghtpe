@@ -1,0 +1,1502 @@
+﻿edition,site,category_type,category,definition_match
+AJCC7,Oral Cavity,T,T1,exact
+AJCC7,Oral Cavity,T,T2,exact
+AJCC7,Oral Cavity,T,T3,exact
+AJCC7,Oral Cavity,T,T4a,exact
+AJCC7,Oral Cavity,T,T4b,exact
+AJCC7,Oral Cavity,T,Tis,exact
+AJCC7,Oral Cavity,N,N0,exact
+AJCC7,Oral Cavity,N,N1,exact
+AJCC7,Oral Cavity,N,N2,exact
+AJCC7,Oral Cavity,N,N3,exact
+AJCC7,Oral Cavity,M,M0,exact
+AJCC7,Oral Cavity,M,M1,exact
+AJCC7,Major Salivary Glands,T,T1,exact
+AJCC7,Major Salivary Glands,T,T2,exact
+AJCC7,Major Salivary Glands,T,T3,exact
+AJCC7,Major Salivary Glands,T,T4a,exact
+AJCC7,Major Salivary Glands,T,T4b,exact
+AJCC7,Major Salivary Glands,N,N0,exact
+AJCC7,Major Salivary Glands,N,N1,exact
+AJCC7,Major Salivary Glands,N,N2,exact
+AJCC7,Major Salivary Glands,N,N3,exact
+AJCC7,Major Salivary Glands,M,M0,exact
+AJCC7,Major Salivary Glands,M,M1,exact
+AJCC7,Nasopharynx,T,T1,exact
+AJCC7,Nasopharynx,T,T2,exact
+AJCC7,Nasopharynx,T,T3,exact
+AJCC7,Nasopharynx,T,T4,exact
+AJCC7,Nasopharynx,T,T4a,exact
+AJCC7,Nasopharynx,T,T4b,exact
+AJCC7,Nasopharynx,T,Tis,exact
+AJCC7,Nasopharynx,N,N0,exact
+AJCC7,Nasopharynx,N,N1,exact
+AJCC7,Nasopharynx,N,N2,exact
+AJCC7,Nasopharynx,N,N3,exact
+AJCC7,Nasopharynx,M,M0,exact
+AJCC7,Nasopharynx,M,M1,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T1,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T2,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T3,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T4,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T4a,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T4b,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,T,Tis,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N0,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N1,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N2,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N3,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,M,M0,exact
+AJCC7,HPV-Mediated (p16+) Oropharyngeal Cancer,M,M1,exact
+AJCC7,Oropharynx (p16-),T,T1,exact
+AJCC7,Oropharynx (p16-),T,T2,exact
+AJCC7,Oropharynx (p16-),T,T3,exact
+AJCC7,Oropharynx (p16-),T,T4,exact
+AJCC7,Oropharynx (p16-),T,T4a,exact
+AJCC7,Oropharynx (p16-),T,T4b,exact
+AJCC7,Oropharynx (p16-),T,Tis,exact
+AJCC7,Oropharynx (p16-),N,N0,exact
+AJCC7,Oropharynx (p16-),N,N1,exact
+AJCC7,Oropharynx (p16-),N,N2,exact
+AJCC7,Oropharynx (p16-),N,N3,exact
+AJCC7,Oropharynx (p16-),M,M0,exact
+AJCC7,Oropharynx (p16-),M,M1,exact
+AJCC7,Hypopharynx,T,T1,exact
+AJCC7,Hypopharynx,T,T2,exact
+AJCC7,Hypopharynx,T,T3,exact
+AJCC7,Hypopharynx,T,T4,exact
+AJCC7,Hypopharynx,T,T4a,exact
+AJCC7,Hypopharynx,T,T4b,exact
+AJCC7,Hypopharynx,T,Tis,exact
+AJCC7,Hypopharynx,N,N0,exact
+AJCC7,Hypopharynx,N,N1,exact
+AJCC7,Hypopharynx,N,N2,exact
+AJCC7,Hypopharynx,N,N3,exact
+AJCC7,Hypopharynx,M,M0,exact
+AJCC7,Hypopharynx,M,M1,exact
+AJCC7,Maxillary Sinus,T,T1,exact
+AJCC7,Maxillary Sinus,T,T2,exact
+AJCC7,Maxillary Sinus,T,T3,exact
+AJCC7,Maxillary Sinus,T,T4a,exact
+AJCC7,Maxillary Sinus,T,T4b,exact
+AJCC7,Maxillary Sinus,T,Tis,exact
+AJCC7,Maxillary Sinus,N,N0,exact
+AJCC7,Maxillary Sinus,N,N1,exact
+AJCC7,Maxillary Sinus,N,N2,exact
+AJCC7,Maxillary Sinus,N,N3,exact
+AJCC7,Maxillary Sinus,M,M0,exact
+AJCC7,Maxillary Sinus,M,M1,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,T1,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,T2,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,T3,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,T4a,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,T4b,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,T,Tis,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,N,N0,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,N,N1,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,N,N2,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,N,N3,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,M,M0,exact
+AJCC7,Nasal Cavity and Ethmoid Sinus,M,M1,exact
+AJCC7,Larynx: Supraglottis,T,T1,exact
+AJCC7,Larynx: Supraglottis,T,T2,exact
+AJCC7,Larynx: Supraglottis,T,T3,exact
+AJCC7,Larynx: Supraglottis,T,T4a,exact
+AJCC7,Larynx: Supraglottis,T,T4b,exact
+AJCC7,Larynx: Supraglottis,T,Tis,exact
+AJCC7,Larynx: Supraglottis,N,N0,exact
+AJCC7,Larynx: Supraglottis,N,N1,exact
+AJCC7,Larynx: Supraglottis,N,N2,exact
+AJCC7,Larynx: Supraglottis,N,N3,exact
+AJCC7,Larynx: Supraglottis,M,M0,exact
+AJCC7,Larynx: Supraglottis,M,M1,exact
+AJCC7,Larynx: Glottis,T,T1,exact
+AJCC7,Larynx: Glottis,T,T2,exact
+AJCC7,Larynx: Glottis,T,T3,exact
+AJCC7,Larynx: Glottis,T,T4a,exact
+AJCC7,Larynx: Glottis,T,T4b,exact
+AJCC7,Larynx: Glottis,T,Tis,exact
+AJCC7,Larynx: Glottis,N,N0,exact
+AJCC7,Larynx: Glottis,N,N1,exact
+AJCC7,Larynx: Glottis,N,N2,exact
+AJCC7,Larynx: Glottis,N,N3,exact
+AJCC7,Larynx: Glottis,M,M0,exact
+AJCC7,Larynx: Glottis,M,M1,exact
+AJCC7,Larynx: Subglottis,T,T1,exact
+AJCC7,Larynx: Subglottis,T,T2,exact
+AJCC7,Larynx: Subglottis,T,T3,exact
+AJCC7,Larynx: Subglottis,T,T4a,exact
+AJCC7,Larynx: Subglottis,T,T4b,exact
+AJCC7,Larynx: Subglottis,T,Tis,exact
+AJCC7,Larynx: Subglottis,N,N0,exact
+AJCC7,Larynx: Subglottis,N,N1,exact
+AJCC7,Larynx: Subglottis,N,N2,exact
+AJCC7,Larynx: Subglottis,N,N3,exact
+AJCC7,Larynx: Subglottis,M,M0,exact
+AJCC7,Larynx: Subglottis,M,M1,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,T,T3,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,T,T3-T4a,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,T,T4a,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,T,T4b,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,N,N0,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,N,N1,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,M,M0,exact
+AJCC7,Mucosal Melanoma of the Head and Neck,M,M1,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,T1,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,T2,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,T3,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,T4,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,TAny,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,T,Tis,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,N,N0,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,N,N1,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,N,N2,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,N,N3,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,N,NAny,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,M,M0,exact
+AJCC7,Cutaneous Carcinoma of the Head and Neck,M,M1,exact
+AJCC7,Lung,T,T1a,exact
+AJCC7,Lung,T,T1b,exact
+AJCC7,Lung,T,T2a,exact
+AJCC7,Lung,T,T2b,exact
+AJCC7,Lung,T,T3,exact
+AJCC7,Lung,T,T4,exact
+AJCC7,Lung,T,TX,exact
+AJCC7,Lung,T,Tis,exact
+AJCC7,Lung,N,N0,exact
+AJCC7,Lung,N,N1,exact
+AJCC7,Lung,N,N2,exact
+AJCC7,Lung,N,N3,exact
+AJCC7,Lung,M,M0,exact
+AJCC7,Lung,M,M1a,exact
+AJCC7,Lung,M,M1b,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T1,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T1a,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T1b,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T2,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T3,exact
+AJCC7,Malignant Pleural Mesothelioma,T,T4,exact
+AJCC7,Malignant Pleural Mesothelioma,N,N0,exact
+AJCC7,Malignant Pleural Mesothelioma,N,N1,exact
+AJCC7,Malignant Pleural Mesothelioma,N,N2,exact
+AJCC7,Malignant Pleural Mesothelioma,N,N3,exact
+AJCC7,Malignant Pleural Mesothelioma,M,M0,exact
+AJCC7,Malignant Pleural Mesothelioma,M,M1,exact
+AJCC7,Breast,T,T0,exact
+AJCC7,Breast,T,T1,exact
+AJCC7,Breast,T,T2,exact
+AJCC7,Breast,T,T3,exact
+AJCC7,Breast,T,T4,exact
+AJCC7,Breast,T,Tis,exact
+AJCC7,Breast,N,N0,exact
+AJCC7,Breast,N,N1,exact
+AJCC7,Breast,N,N1mi,exact
+AJCC7,Breast,N,N2,exact
+AJCC7,Breast,N,N3,exact
+AJCC7,Breast,M,M0,exact
+AJCC7,Breast,M,M1,exact
+AJCC7,Esophagus / EGJ - squamous,M,M0,exact
+AJCC7,Esophagus / EGJ - squamous,M,M01,exact
+AJCC7,Esophagus / EGJ - squamous,M,M02-3,exact
+AJCC7,Esophagus / EGJ - squamous,M,M03,exact
+AJCC7,Esophagus / EGJ - squamous,M,M0Any,parent
+AJCC7,Esophagus / EGJ - squamous,M,M1,exact
+AJCC7,Esophagus / EGJ - squamous,M,M1Any,parent
+AJCC7,Esophagus / EGJ - squamous,M,X,exact
+AJCC7,Esophagus / EGJ - squamous,N,AnyM0,exact
+AJCC7,Esophagus / EGJ - squamous,N,AnyM0Any,exact
+AJCC7,Esophagus / EGJ - squamous,N,N0,exact
+AJCC7,Esophagus / EGJ - squamous,N,N1,exact
+AJCC7,Esophagus / EGJ - squamous,N,N2,exact
+AJCC7,Esophagus / EGJ - squamous,N,N2M0,parent
+AJCC7,Esophagus / EGJ - squamous,N,N2M0Any,parent
+AJCC7,Esophagus / EGJ - squamous,N,N3,exact
+AJCC7,Esophagus / EGJ - squamous,T,T1,exact
+AJCC7,Esophagus / EGJ - squamous,T,T2,exact
+AJCC7,Esophagus / EGJ - squamous,T,T3,exact
+AJCC7,Esophagus / EGJ - squamous,T,T4a,exact
+AJCC7,Esophagus / EGJ - squamous,T,T4b,exact
+AJCC7,Esophagus / EGJ - squamous,T,Tis,exact
+AJCC7,Esophagus / EGJ - squamous,T,Tis(HGD),parent
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M0,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M01,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M02-3,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M03,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M0Any,parent
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M1,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,M1Any,parent
+AJCC7,Esophagus / EGJ - adenocarcinoma,M,X,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,AnyM0,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,AnyM0Any,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N0,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N1,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N2,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N2M0,parent
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N2M0Any,parent
+AJCC7,Esophagus / EGJ - adenocarcinoma,N,N3,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,T1,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,T2,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,T3,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,T4a,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,T4b,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,Tis,exact
+AJCC7,Esophagus / EGJ - adenocarcinoma,T,Tis(HGD),parent
+AJCC7,Stomach,M,M0,exact
+AJCC7,Stomach,M,M1,exact
+AJCC7,Stomach,T,T1,exact
+AJCC7,Stomach,T,T2,exact
+AJCC7,Stomach,T,T3,exact
+AJCC7,Stomach,T,T4a,exact
+AJCC7,Stomach,T,T4b,exact
+AJCC7,Stomach,T,Tis,exact
+AJCC7,Stomach,N,N0,exact
+AJCC7,Stomach,N,N1,exact
+AJCC7,Stomach,N,N2,exact
+AJCC7,Stomach,N,N3,exact
+AJCC7,Small intestine,M,M0,exact
+AJCC7,Small intestine,M,M1,exact
+AJCC7,Small intestine,N,N0,exact
+AJCC7,Small intestine,N,N1,exact
+AJCC7,Small intestine,N,N2,exact
+AJCC7,Small intestine,T,T1,exact
+AJCC7,Small intestine,T,T2,exact
+AJCC7,Small intestine,T,T3,exact
+AJCC7,Small intestine,T,T4,exact
+AJCC7,Small intestine,T,Tis,exact
+AJCC7,Colon,M,M0,exact
+AJCC7,Colon,M,M1,exact
+AJCC7,Colon,M,M1a,exact
+AJCC7,Colon,M,M1b,exact
+AJCC7,Colon,T,T1,exact
+AJCC7,Colon,T,T1-T2,exact
+AJCC7,Colon,T,T2,exact
+AJCC7,Colon,T,T2-T3,exact
+AJCC7,Colon,T,T3,exact
+AJCC7,Colon,T,T3-T4a,exact
+AJCC7,Colon,T,T4a,exact
+AJCC7,Colon,T,T4b,exact
+AJCC7,Colon,T,Tis,exact
+AJCC7,Colon,N,N0,exact
+AJCC7,Colon,N,N1,exact
+AJCC7,Colon,N,N1-N2,exact
+AJCC7,Colon,N,N1c,exact
+AJCC7,Colon,N,N2,exact
+AJCC7,Colon,N,N2a,exact
+AJCC7,Colon,N,N2b,exact
+AJCC7,Rectum,M,M0,exact
+AJCC7,Rectum,M,M1,exact
+AJCC7,Rectum,M,M1a,exact
+AJCC7,Rectum,M,M1b,exact
+AJCC7,Rectum,T,T1,exact
+AJCC7,Rectum,T,T1-T2,exact
+AJCC7,Rectum,T,T2,exact
+AJCC7,Rectum,T,T2-T3,exact
+AJCC7,Rectum,T,T3,exact
+AJCC7,Rectum,T,T3-T4a,exact
+AJCC7,Rectum,T,T4a,exact
+AJCC7,Rectum,T,T4b,exact
+AJCC7,Rectum,T,Tis,exact
+AJCC7,Rectum,N,N0,exact
+AJCC7,Rectum,N,N1,exact
+AJCC7,Rectum,N,N1-N2,exact
+AJCC7,Rectum,N,N1c,exact
+AJCC7,Rectum,N,N2,exact
+AJCC7,Rectum,N,N2a,exact
+AJCC7,Rectum,N,N2b,exact
+AJCC7,Appendix - carcinoma,M,M0,exact
+AJCC7,Appendix - carcinoma,M,M1,exact
+AJCC7,Appendix - carcinoma,M,M1a,exact
+AJCC7,Appendix - carcinoma,M,M1b,exact
+AJCC7,Appendix - carcinoma,N,N0,exact
+AJCC7,Appendix - carcinoma,N,N1,exact
+AJCC7,Appendix - carcinoma,N,N2,exact
+AJCC7,Appendix - carcinoma,T,T1,exact
+AJCC7,Appendix - carcinoma,T,T2,exact
+AJCC7,Appendix - carcinoma,T,T3,exact
+AJCC7,Appendix - carcinoma,T,T4,exact
+AJCC7,Appendix - carcinoma,T,T4a,exact
+AJCC7,Appendix - carcinoma,T,T4b,exact
+AJCC7,Appendix - carcinoma,T,Tis,exact
+AJCC7,HCC / Liver,M,M0,exact
+AJCC7,HCC / Liver,M,M1,exact
+AJCC7,HCC / Liver,N,N0,exact
+AJCC7,HCC / Liver,N,N1,exact
+AJCC7,HCC / Liver,T,T1,exact
+AJCC7,HCC / Liver,T,T2,exact
+AJCC7,HCC / Liver,T,T3a,exact
+AJCC7,HCC / Liver,T,T3b,exact
+AJCC7,HCC / Liver,T,T4,exact
+AJCC7,Intrahepatic bile duct,M,M0,exact
+AJCC7,Intrahepatic bile duct,M,M1,exact
+AJCC7,Intrahepatic bile duct,N,N0,exact
+AJCC7,Intrahepatic bile duct,N,N1,exact
+AJCC7,Intrahepatic bile duct,T,T1,exact
+AJCC7,Intrahepatic bile duct,T,T2,exact
+AJCC7,Intrahepatic bile duct,T,T3,exact
+AJCC7,Intrahepatic bile duct,T,T4,exact
+AJCC7,Intrahepatic bile duct,T,Tis,exact
+AJCC7,Perihilar bile duct,M,M0,exact
+AJCC7,Perihilar bile duct,M,M1,exact
+AJCC7,Perihilar bile duct,N,N0,exact
+AJCC7,Perihilar bile duct,N,N1,exact
+AJCC7,Perihilar bile duct,N,N2,exact
+AJCC7,Perihilar bile duct,T,T1,exact
+AJCC7,Perihilar bile duct,T,T2,exact
+AJCC7,Perihilar bile duct,T,T2a,exact
+AJCC7,Perihilar bile duct,T,T2b,exact
+AJCC7,Perihilar bile duct,T,T3,exact
+AJCC7,Perihilar bile duct,T,T4,exact
+AJCC7,Perihilar bile duct,T,Tis,exact
+AJCC7,Distal bile duct,M,M0,exact
+AJCC7,Distal bile duct,M,M1,exact
+AJCC7,Distal bile duct,T,T1,exact
+AJCC7,Distal bile duct,T,T2,exact
+AJCC7,Distal bile duct,T,T3,exact
+AJCC7,Distal bile duct,T,T4,exact
+AJCC7,Distal bile duct,T,Tis,exact
+AJCC7,Distal bile duct,N,N0,exact
+AJCC7,Distal bile duct,N,N1,exact
+AJCC7,Gallbladder,M,M0,exact
+AJCC7,Gallbladder,M,M1,exact
+AJCC7,Gallbladder,N,N0,exact
+AJCC7,Gallbladder,N,N1,exact
+AJCC7,Gallbladder,N,N2,exact
+AJCC7,Gallbladder,T,T1,exact
+AJCC7,Gallbladder,T,T2,exact
+AJCC7,Gallbladder,T,T3,exact
+AJCC7,Gallbladder,T,T4,exact
+AJCC7,Gallbladder,T,Tis,exact
+AJCC7,Ampulla of Vater,M,M0,exact
+AJCC7,Ampulla of Vater,M,M1,exact
+AJCC7,Ampulla of Vater,T,T1,exact
+AJCC7,Ampulla of Vater,T,T2,exact
+AJCC7,Ampulla of Vater,T,T3,exact
+AJCC7,Ampulla of Vater,T,T4,exact
+AJCC7,Ampulla of Vater,T,Tis,exact
+AJCC7,Ampulla of Vater,N,N0,exact
+AJCC7,Ampulla of Vater,N,N1,exact
+AJCC7,Exocrine pancreas,M,M0,exact
+AJCC7,Exocrine pancreas,M,M1,exact
+AJCC7,Exocrine pancreas,T,T1,exact
+AJCC7,Exocrine pancreas,T,T2,exact
+AJCC7,Exocrine pancreas,T,T3,exact
+AJCC7,Exocrine pancreas,T,T4,exact
+AJCC7,Exocrine pancreas,T,Tis,exact
+AJCC7,Exocrine pancreas,N,N0,exact
+AJCC7,Exocrine pancreas,N,N1,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,T1,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,T2,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,T3,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,T4a,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,T4b,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,T,Tis(HGD),parent
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,AnyM0,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,AnyM0Any,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N0,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N1,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N2,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N2M0,parent
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N2M0Any,parent
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,N,N3,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M0,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M01,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M02-3,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M03,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M0Any,parent
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M1,exact
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,M1Any,parent
+AJCC7,Esophagus and Esophagogastric Junction: Other Histologies,M,X,exact
+AJCC7,Small Intestine: Other Histologies,M,M0,exact
+AJCC7,Small Intestine: Other Histologies,M,M1,exact
+AJCC7,Small Intestine: Other Histologies,N,N0,exact
+AJCC7,Small Intestine: Other Histologies,N,N1,exact
+AJCC7,Small Intestine: Other Histologies,N,N2,exact
+AJCC7,Small Intestine: Other Histologies,T,T1,exact
+AJCC7,Small Intestine: Other Histologies,T,T2,exact
+AJCC7,Small Intestine: Other Histologies,T,T3,exact
+AJCC7,Small Intestine: Other Histologies,T,T4,exact
+AJCC7,Small Intestine: Other Histologies,T,Tis,exact
+AJCC7,Anus,T,T1,exact
+AJCC7,Anus,T,T2,exact
+AJCC7,Anus,T,T3,exact
+AJCC7,Anus,T,T4,exact
+AJCC7,Anus,T,Tis,exact
+AJCC7,Anus,N,N0,exact
+AJCC7,Anus,N,N1,exact
+AJCC7,Anus,N,N2,exact
+AJCC7,Anus,N,N3,exact
+AJCC7,Anus,M,M0,exact
+AJCC7,Anus,M,M1,exact
+AJCC7,GIST,T,T1,exact
+AJCC7,GIST,T,T2,exact
+AJCC7,GIST,T,T3,exact
+AJCC7,GIST,T,T4,exact
+AJCC7,GIST,N,N0,exact
+AJCC7,GIST,N,N1,exact
+AJCC7,GIST,M,M0,exact
+AJCC7,GIST,M,M1,exact
+AJCC7,NET - stomach,M,M0,exact
+AJCC7,NET - stomach,M,M1,exact
+AJCC7,NET - stomach,N,N0,exact
+AJCC7,NET - stomach,N,N1,exact
+AJCC7,NET - stomach,T,T1,exact
+AJCC7,NET - stomach,T,T2,exact
+AJCC7,NET - stomach,T,T3,exact
+AJCC7,NET - stomach,T,T4,exact
+AJCC7,NET - stomach,T,Tis,exact
+AJCC7,NET - duodenum / ampulla,M,M0,exact
+AJCC7,NET - duodenum / ampulla,M,M1,exact
+AJCC7,NET - duodenum / ampulla,N,N0,exact
+AJCC7,NET - duodenum / ampulla,N,N1,exact
+AJCC7,NET - duodenum / ampulla,T,T1,exact
+AJCC7,NET - duodenum / ampulla,T,T2,exact
+AJCC7,NET - duodenum / ampulla,T,T3,exact
+AJCC7,NET - duodenum / ampulla,T,T4,exact
+AJCC7,NET - duodenum / ampulla,T,Tis,exact
+AJCC7,NET - jejunum / ileum,M,M0,exact
+AJCC7,NET - jejunum / ileum,M,M1,exact
+AJCC7,NET - jejunum / ileum,N,N0,exact
+AJCC7,NET - jejunum / ileum,N,N1,exact
+AJCC7,NET - jejunum / ileum,T,T1,exact
+AJCC7,NET - jejunum / ileum,T,T2,exact
+AJCC7,NET - jejunum / ileum,T,T3,exact
+AJCC7,NET - jejunum / ileum,T,T4,exact
+AJCC7,NET - jejunum / ileum,T,Tis,exact
+AJCC7,NET - appendix,M,M0,exact
+AJCC7,NET - appendix,M,M1,exact
+AJCC7,NET - appendix,N,N0,exact
+AJCC7,NET - appendix,N,N1,exact
+AJCC7,NET - appendix,T,T1,exact
+AJCC7,NET - appendix,T,T2,exact
+AJCC7,NET - appendix,T,T3,exact
+AJCC7,NET - appendix,T,T4,exact
+AJCC7,NET - appendix,T,Tis,exact
+AJCC7,NET - colon / rectum,M,M0,exact
+AJCC7,NET - colon / rectum,M,M1,exact
+AJCC7,NET - colon / rectum,N,N0,exact
+AJCC7,NET - colon / rectum,N,N1,exact
+AJCC7,NET - colon / rectum,T,T1,exact
+AJCC7,NET - colon / rectum,T,T2,exact
+AJCC7,NET - colon / rectum,T,T3,exact
+AJCC7,NET - colon / rectum,T,T4,exact
+AJCC7,NET - colon / rectum,T,Tis,exact
+AJCC7,NET - pancreas,M,M0,exact
+AJCC7,NET - pancreas,M,M1,exact
+AJCC7,NET - pancreas,T,T1,exact
+AJCC7,NET - pancreas,T,T2,exact
+AJCC7,NET - pancreas,T,T3,exact
+AJCC7,NET - pancreas,T,T4,exact
+AJCC7,NET - pancreas,T,Tis,exact
+AJCC7,NET - pancreas,N,N0,exact
+AJCC7,NET - pancreas,N,N1,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",T,T1,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",T,T2,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",T,T3,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",N,N0,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",N,N1,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",M,M0,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",M,M1a,exact
+AJCC7,"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",M,M1b,exact
+AJCC7,Bone: Spine,T,T1,exact
+AJCC7,Bone: Spine,T,T2,exact
+AJCC7,Bone: Spine,T,T3,exact
+AJCC7,Bone: Spine,N,N0,exact
+AJCC7,Bone: Spine,N,N1,exact
+AJCC7,Bone: Spine,M,M0,exact
+AJCC7,Bone: Spine,M,M1a,exact
+AJCC7,Bone: Spine,M,M1b,exact
+AJCC7,Bone: Pelvis,T,T1,exact
+AJCC7,Bone: Pelvis,T,T2,exact
+AJCC7,Bone: Pelvis,T,T3,exact
+AJCC7,Bone: Pelvis,N,N0,exact
+AJCC7,Bone: Pelvis,N,N1,exact
+AJCC7,Bone: Pelvis,M,M0,exact
+AJCC7,Bone: Pelvis,M,M1a,exact
+AJCC7,Bone: Pelvis,M,M1b,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,T,T1a,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,T,T1b,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,T,T2a,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,T,T2b,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,N,N0,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,N,N1,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,M,M0,exact
+AJCC7,Soft Tissue Sarcoma of the Head and Neck,M,M1,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,T,T1a,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,T,T1b,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,T,T2a,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,T,T2b,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,N,N0,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,N,N1,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,M,M0,exact
+AJCC7,Soft Tissue Sarcoma of the Trunk and Extremities,M,M1,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,T,T1a,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,T,T1b,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,T,T2a,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,T,T2b,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,N,N0,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,N,N1,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,M,M0,exact
+AJCC7,Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,M,M1,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,T,T1a,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,T,T1b,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,T,T2a,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,T,T2b,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,N,N0,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,N,N1,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,M,M0,exact
+AJCC7,Soft Tissue Sarcoma of the Retroperitoneum,M,M1,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,T,T1a,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,T,T1b,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,T,T2a,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,T,T2b,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,N,N0,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,N,N1,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,M,M0,exact
+AJCC7,Soft Tissue Sarcoma – Unusual Histologies and Sites,M,M1,exact
+AJCC7,Merkel Cell Carcinoma,T,T1,exact
+AJCC7,Merkel Cell Carcinoma,T,T2,exact
+AJCC7,Merkel Cell Carcinoma,T,T3,exact
+AJCC7,Merkel Cell Carcinoma,T,T4,exact
+AJCC7,Merkel Cell Carcinoma,T,Tis,exact
+AJCC7,Merkel Cell Carcinoma,N,N0,exact
+AJCC7,Merkel Cell Carcinoma,N,N1,exact
+AJCC7,Merkel Cell Carcinoma,N,N1a,exact
+AJCC7,Merkel Cell Carcinoma,N,N1b,exact
+AJCC7,Merkel Cell Carcinoma,N,N2,exact
+AJCC7,Merkel Cell Carcinoma,M,M0,exact
+AJCC7,Merkel Cell Carcinoma,M,M1,exact
+AJCC7,Melanoma of the Skin,T,T1,exact
+AJCC7,Melanoma of the Skin,T,T1a,parent
+AJCC7,Melanoma of the Skin,T,T1b,parent
+AJCC7,Melanoma of the Skin,T,T2,exact
+AJCC7,Melanoma of the Skin,T,T2a,parent
+AJCC7,Melanoma of the Skin,T,T2b,parent
+AJCC7,Melanoma of the Skin,T,T3,exact
+AJCC7,Melanoma of the Skin,T,T3a,parent
+AJCC7,Melanoma of the Skin,T,T3b,parent
+AJCC7,Melanoma of the Skin,T,T4a,parent
+AJCC7,Melanoma of the Skin,T,T4b,exact
+AJCC7,Melanoma of the Skin,T,Tis,exact
+AJCC7,Melanoma of the Skin,N,N0,exact
+AJCC7,Melanoma of the Skin,N,N1a,parent
+AJCC7,Melanoma of the Skin,N,N1b,parent
+AJCC7,Melanoma of the Skin,N,N2a,parent
+AJCC7,Melanoma of the Skin,N,N2b,parent
+AJCC7,Melanoma of the Skin,N,N2c,parent
+AJCC7,Melanoma of the Skin,N,N3,exact
+AJCC7,Melanoma of the Skin,M,M0,exact
+AJCC7,Melanoma of the Skin,M,M1,exact
+AJCC7,Vulva,T,T1,exact
+AJCC7,Vulva,T,T1a,exact
+AJCC7,Vulva,T,T1b,exact
+AJCC7,Vulva,T,T2,exact
+AJCC7,Vulva,T,T3,exact
+AJCC7,Vulva,T,Tis,exact
+AJCC7,Vulva,N,N0,exact
+AJCC7,Vulva,N,N1a,exact
+AJCC7,Vulva,N,N1b,exact
+AJCC7,Vulva,N,N2a,exact
+AJCC7,Vulva,N,N2b,exact
+AJCC7,Vulva,N,N2c,exact
+AJCC7,Vulva,N,N3,exact
+AJCC7,Vulva,M,M0,exact
+AJCC7,Vulva,M,M1,exact
+AJCC7,Vulva,M,MO,exact
+AJCC7,Vagina,T,T1,exact
+AJCC7,Vagina,T,T1-T3,exact
+AJCC7,Vagina,T,T2,exact
+AJCC7,Vagina,T,T3,exact
+AJCC7,Vagina,T,T4,exact
+AJCC7,Vagina,T,Tis,exact
+AJCC7,Vagina,N,N0,exact
+AJCC7,Vagina,N,N1,exact
+AJCC7,Vagina,M,M0,exact
+AJCC7,Vagina,M,M1,exact
+AJCC7,Cervix Uteri,T,T1,exact
+AJCC7,Cervix Uteri,T,T1a,exact
+AJCC7,Cervix Uteri,T,T1b,exact
+AJCC7,Cervix Uteri,T,T2,exact
+AJCC7,Cervix Uteri,T,T2a,exact
+AJCC7,Cervix Uteri,T,T2b,exact
+AJCC7,Cervix Uteri,T,T3,exact
+AJCC7,Cervix Uteri,T,T3a,exact
+AJCC7,Cervix Uteri,T,T3b,exact
+AJCC7,Cervix Uteri,T,T4,exact
+AJCC7,Cervix Uteri,T,Tis,exact
+AJCC7,Cervix Uteri,N,N0,exact
+AJCC7,Cervix Uteri,N,N1,exact
+AJCC7,Cervix Uteri,M,M0,exact
+AJCC7,Cervix Uteri,M,M1,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T1,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T1a,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T1b,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T1c,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T2,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T3,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T3a,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T3b,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,T4,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,T,Tis,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,N,N0,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,N,N1,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,M,M0,exact
+AJCC7,Corpus Uteri – Carcinoma and Carcinosarcoma,M,M1,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1a,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1b,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1c,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T2,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3a,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3b,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T4,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,Tis,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,N,N0,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,N,N1,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,M,M0,exact
+AJCC7,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,M,M1,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T1,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T1a,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T1b,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T1c,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T2,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T3,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T3a,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T3b,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,T4,exact
+AJCC7,Corpus Uteri – Adenosarcoma,T,Tis,exact
+AJCC7,Corpus Uteri – Adenosarcoma,N,N0,exact
+AJCC7,Corpus Uteri – Adenosarcoma,N,N1,exact
+AJCC7,Corpus Uteri – Adenosarcoma,M,M0,exact
+AJCC7,Corpus Uteri – Adenosarcoma,M,M1,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T1,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T1a,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T1b,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T1c,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T2,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T2a,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T2b,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T2c,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T3,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T3a,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T3b,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T3c,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,Tis,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",N,N0,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",N,N1,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",M,M0,exact
+AJCC7,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",M,M1,exact
+AJCC7,Penis,T,T1,exact
+AJCC7,Penis,T,T1a,exact
+AJCC7,Penis,T,T1b,exact
+AJCC7,Penis,T,T2,exact
+AJCC7,Penis,T,T3,exact
+AJCC7,Penis,T,T4,exact
+AJCC7,Penis,T,TA,exact
+AJCC7,Penis,T,Tis,exact
+AJCC7,Penis,N,N0,exact
+AJCC7,Penis,N,N1,exact
+AJCC7,Penis,N,N2,exact
+AJCC7,Penis,N,N3,exact
+AJCC7,Penis,M,M0,exact
+AJCC7,Penis,M,M1,exact
+AJCC7,Prostate,T,T1,exact
+AJCC7,Prostate,T,T1a,exact
+AJCC7,Prostate,T,T1b,exact
+AJCC7,Prostate,T,T1c,exact
+AJCC7,Prostate,T,T2,exact
+AJCC7,Prostate,T,T2a,exact
+AJCC7,Prostate,T,T2b,exact
+AJCC7,Prostate,T,T2c,exact
+AJCC7,Prostate,T,T3a,exact
+AJCC7,Prostate,T,T3b,exact
+AJCC7,Prostate,T,T4,exact
+AJCC7,Prostate,N,AnyM1,exact
+AJCC7,Prostate,N,N0,exact
+AJCC7,Prostate,N,N1,exact
+AJCC7,Prostate,M,AnyPSA,exact
+AJCC7,Prostate,M,M0,exact
+AJCC7,Prostate,M,M1,exact
+AJCC7,Testis,T,AnypT,exact
+AJCC7,Testis,T,T1,exact
+AJCC7,Testis,T,T2,exact
+AJCC7,Testis,T,T3,exact
+AJCC7,Testis,T,T4,exact
+AJCC7,Testis,T,TX,exact
+AJCC7,Testis,T,Tis,exact
+AJCC7,Testis,N,N0,exact
+AJCC7,Testis,N,N1,exact
+AJCC7,Testis,N,N2,exact
+AJCC7,Testis,N,N3,exact
+AJCC7,Testis,M,M0,exact
+AJCC7,Testis,M,M1,exact
+AJCC7,Testis,M,M1a,exact
+AJCC7,Testis,M,M1b,exact
+AJCC7,Kidney,T,T1,exact
+AJCC7,Kidney,T,T2,exact
+AJCC7,Kidney,T,T3,exact
+AJCC7,Kidney,T,T4,exact
+AJCC7,Kidney,N,N0,exact
+AJCC7,Kidney,N,N1,exact
+AJCC7,Kidney,M,M0,exact
+AJCC7,Kidney,M,M1,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T1,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T2a,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T2b,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T3a,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T3b,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T4a,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,T4b,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,TA,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,T,Tis,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,N,N0,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,N,N1,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,N,N2,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,N,N3,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,M,M0,exact
+AJCC7,Urinary Bladder: Urothelial Carcinomas,M,M1,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T2a,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T2b,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T3a,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T3b,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T4a,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T4b,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N2,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N3,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC7,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,M,M1,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T1,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T2,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T3,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T4,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,TA,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,Tis,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,Tispd,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,Tispu,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,N,N0,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,N,N1,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,N,N2,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,M,M0,exact
+AJCC7,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,M,M1,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T2,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T3,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T4,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tispd,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tispu,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N2,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC7,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M1,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,T1,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,T2,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,T3,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,T4,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,TA,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,Tis,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,Tispd,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,T,Tispu,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,N,N0,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,N,N1,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,N,N2,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,M,M0,exact
+AJCC7,Prostatic Urethra: Urothelial Carcinomas,M,M1,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T2,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T3,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T4,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tispd,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tispu,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N2,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC7,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M1,exact
+AJCC7,Eyelid Carcinoma,T,T1,exact
+AJCC7,Eyelid Carcinoma,T,T2a,exact
+AJCC7,Eyelid Carcinoma,T,T2b,exact
+AJCC7,Eyelid Carcinoma,T,T3a,exact
+AJCC7,Eyelid Carcinoma,T,T3b,exact
+AJCC7,Eyelid Carcinoma,T,T4,exact
+AJCC7,Eyelid Carcinoma,T,Tis,exact
+AJCC7,Eyelid Carcinoma,N,N0,exact
+AJCC7,Eyelid Carcinoma,N,N1,exact
+AJCC7,Eyelid Carcinoma,M,M0,exact
+AJCC7,Eyelid Carcinoma,M,M1,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T1a,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T1b-d,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T2a,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T2b,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T2c-d,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T3a,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T3b,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T3c,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T3d,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T4a,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T4b,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T4c,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,T,T4d-e,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,N,N0,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,N,N1,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,M,M0,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,M,M1a,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,M,M1b,exact
+AJCC7,Uveal Melanoma – Iris Melanoma,M,M1c,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T1a,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T1b-d,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2a,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2b,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2c-d,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3a,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3b,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3c,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3d,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4a,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4b,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4c,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4d-e,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,N,N0,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,N,N1,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M0,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1a,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1b,exact
+AJCC7,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1c,exact
+AJCC7,Thyroid – Differentiated,M,M0,exact
+AJCC7,Thyroid – Differentiated,M,M1,exact
+AJCC7,Thyroid – Differentiated,T,T1,exact
+AJCC7,Thyroid – Differentiated,T,T2,exact
+AJCC7,Thyroid – Differentiated,T,T3,exact
+AJCC7,Thyroid – Differentiated,T,T4a,exact
+AJCC7,Thyroid – Differentiated,T,T4b,exact
+AJCC7,Thyroid – Differentiated,N,N0,exact
+AJCC7,Thyroid – Differentiated,N,N1a,exact
+AJCC7,Thyroid – Differentiated,N,N1b,exact
+AJCC7,Thyroid – Anaplastic,M,M0,exact
+AJCC7,Thyroid – Anaplastic,M,M1,exact
+AJCC7,Thyroid – Anaplastic,T,T1,exact
+AJCC7,Thyroid – Anaplastic,T,T2,exact
+AJCC7,Thyroid – Anaplastic,T,T3,exact
+AJCC7,Thyroid – Anaplastic,T,T4a,exact
+AJCC7,Thyroid – Anaplastic,T,T4b,exact
+AJCC7,Thyroid – Anaplastic,N,N0,exact
+AJCC7,Thyroid – Anaplastic,N,N1a,exact
+AJCC7,Thyroid – Anaplastic,N,N1b,exact
+AJCC7,Thyroid – Medullary,M,M0,exact
+AJCC7,Thyroid – Medullary,M,M1,exact
+AJCC7,Thyroid – Medullary,T,T1,exact
+AJCC7,Thyroid – Medullary,T,T2,exact
+AJCC7,Thyroid – Medullary,T,T3,exact
+AJCC7,Thyroid – Medullary,T,T4a,exact
+AJCC7,Thyroid – Medullary,T,T4b,exact
+AJCC7,Thyroid – Medullary,N,N0,exact
+AJCC7,Thyroid – Medullary,N,N1a,exact
+AJCC7,Thyroid – Medullary,N,N1b,exact
+AJCC7,Adrenal Cortical Carcinoma,T,T1,exact
+AJCC7,Adrenal Cortical Carcinoma,T,T2,exact
+AJCC7,Adrenal Cortical Carcinoma,T,T3,exact
+AJCC7,Adrenal Cortical Carcinoma,T,T4,exact
+AJCC7,Adrenal Cortical Carcinoma,N,N0,exact
+AJCC7,Adrenal Cortical Carcinoma,N,N1,exact
+AJCC7,Adrenal Cortical Carcinoma,M,M0,exact
+AJCC7,Adrenal Cortical Carcinoma,M,M1,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,T,T1,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,T,T2,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,T,T3,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,T,T4,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,T,Tis,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,N,N0,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,N,N1,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,M,M0,exact
+AJCC7,Adrenal – Neuroendocrine Tumors,M,M1,exact
+AJCC7,Renal Pelvis and Ureter,T,T1,exact
+AJCC7,Renal Pelvis and Ureter,T,T2,exact
+AJCC7,Renal Pelvis and Ureter,T,T3,exact
+AJCC7,Renal Pelvis and Ureter,T,T4,exact
+AJCC7,Renal Pelvis and Ureter,T,TA,exact
+AJCC7,Renal Pelvis and Ureter,T,Tis,exact
+AJCC7,Renal Pelvis and Ureter,N,N0,exact
+AJCC7,Renal Pelvis and Ureter,N,N1,exact
+AJCC7,Renal Pelvis and Ureter,N,N2,exact
+AJCC7,Renal Pelvis and Ureter,N,N3,exact
+AJCC7,Renal Pelvis and Ureter,M,M0,exact
+AJCC7,Renal Pelvis and Ureter,M,M1,exact
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,T,T0,exact
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,N,N1,exact
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,N,N2,exact
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,N,N3,exact
+AJCC8,Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,M,M0,exact
+AJCC8,Oral Cavity,T,2,exact
+AJCC8,Oral Cavity,T,3,exact
+AJCC8,Oral Cavity,T,4A,exact
+AJCC8,Oral Cavity,T,T1,exact
+AJCC8,Oral Cavity,T,T2,exact
+AJCC8,Oral Cavity,T,T3,exact
+AJCC8,Oral Cavity,T,T4a,exact
+AJCC8,Oral Cavity,T,T4b,exact
+AJCC8,Oral Cavity,T,Tis,exact
+AJCC8,Oral Cavity,N,1,exact
+AJCC8,Oral Cavity,N,N0,exact
+AJCC8,Oral Cavity,N,N1,exact
+AJCC8,Oral Cavity,N,N2,exact
+AJCC8,Oral Cavity,N,N3,exact
+AJCC8,Oral Cavity,M,M0,exact
+AJCC8,Oral Cavity,M,M1,exact
+AJCC8,Major Salivary Glands,T,T0,exact
+AJCC8,Major Salivary Glands,T,T1,exact
+AJCC8,Major Salivary Glands,T,T2,exact
+AJCC8,Major Salivary Glands,T,T3,exact
+AJCC8,Major Salivary Glands,T,T4a,exact
+AJCC8,Major Salivary Glands,T,T4b,exact
+AJCC8,Major Salivary Glands,N,N0,exact
+AJCC8,Major Salivary Glands,N,N1,exact
+AJCC8,Major Salivary Glands,N,N2,exact
+AJCC8,Major Salivary Glands,M,M0,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T0,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T1,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T2,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T3,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,T,T4,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N0,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N1,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N2,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N2or,parent
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,N,N3,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,M,M0,exact
+AJCC8,HPV-Mediated (p16+) Oropharyngeal Cancer,M,M1,exact
+AJCC8,Maxillary Sinus,T,T1,exact
+AJCC8,Maxillary Sinus,N,N0,exact
+AJCC8,Maxillary Sinus,M,M0,exact
+AJCC8,Nasal Cavity and Ethmoid Sinus,T,T1,exact
+AJCC8,Nasal Cavity and Ethmoid Sinus,N,N0,exact
+AJCC8,Nasal Cavity and Ethmoid Sinus,M,M0,exact
+AJCC8,Larynx: Supraglottis,T,T1,exact
+AJCC8,Larynx: Supraglottis,T,T2,exact
+AJCC8,Larynx: Supraglottis,T,T3,exact
+AJCC8,Larynx: Supraglottis,T,T4a,exact
+AJCC8,Larynx: Supraglottis,T,Tis,exact
+AJCC8,Larynx: Supraglottis,N,N0,exact
+AJCC8,Larynx: Supraglottis,N,N2,exact
+AJCC8,Larynx: Supraglottis,M,M0,exact
+AJCC8,Larynx: Glottis,T,T1,exact
+AJCC8,Larynx: Glottis,T,T2,exact
+AJCC8,Larynx: Glottis,T,T3,exact
+AJCC8,Larynx: Glottis,T,T4a,exact
+AJCC8,Larynx: Glottis,T,Tis,exact
+AJCC8,Larynx: Glottis,N,N0,exact
+AJCC8,Larynx: Glottis,N,N2,exact
+AJCC8,Larynx: Glottis,M,M0,exact
+AJCC8,Larynx: Subglottis,T,T1,exact
+AJCC8,Larynx: Subglottis,T,T2,exact
+AJCC8,Larynx: Subglottis,T,T3,exact
+AJCC8,Larynx: Subglottis,T,T4a,exact
+AJCC8,Larynx: Subglottis,T,Tis,exact
+AJCC8,Larynx: Subglottis,N,N0,exact
+AJCC8,Larynx: Subglottis,N,N2,exact
+AJCC8,Larynx: Subglottis,M,M0,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,T,T1,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,T,T2,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,T,T3,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,T,T4,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,T,Tis,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,N,N0,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,N,N1,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,N,N2,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,N,N3,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,M,M0,exact
+AJCC8,Cutaneous Carcinoma of the Head and Neck,M,M1,exact
+AJCC8,Breast,T,AnyAnyN,exact
+AJCC8,Breast,T,AnyAnyNM1,exact
+AJCC8,Breast,T,T0,exact
+AJCC8,Breast,T,T1,exact
+AJCC8,Breast,T,T2,exact
+AJCC8,Breast,T,T3,exact
+AJCC8,Breast,T,T4,exact
+AJCC8,Breast,T,Tis,exact
+AJCC8,Breast,T,TisN0M0,exact
+AJCC8,Breast,N,N0,exact
+AJCC8,Breast,N,N1,exact
+AJCC8,Breast,N,N1mi,exact
+AJCC8,Breast,N,N2,exact
+AJCC8,Breast,M,M0,exact
+AJCC8,Breast,M,M1,exact
+AJCC8,Esophagus / EGJ - squamous,M,M0,exact
+AJCC8,Esophagus / EGJ - squamous,M,M1,exact
+AJCC8,Esophagus / EGJ - squamous,N,N0,exact
+AJCC8,Esophagus / EGJ - squamous,N,N1,exact
+AJCC8,Esophagus / EGJ - squamous,N,N2,exact
+AJCC8,Esophagus / EGJ - squamous,N,N3,exact
+AJCC8,Esophagus / EGJ - squamous,T,T1,exact
+AJCC8,Esophagus / EGJ - squamous,T,T1a,exact
+AJCC8,Esophagus / EGJ - squamous,T,T1b,exact
+AJCC8,Esophagus / EGJ - squamous,T,T2,exact
+AJCC8,Esophagus / EGJ - squamous,T,T3,exact
+AJCC8,Esophagus / EGJ - squamous,T,T4,exact
+AJCC8,Esophagus / EGJ - squamous,T,T4a,exact
+AJCC8,Esophagus / EGJ - squamous,T,T4b,exact
+AJCC8,Esophagus / EGJ - squamous,T,Tis,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,M,M0,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,M,M1,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,N,N0,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,N,N1,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,N,N2,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,N,N3,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,T1,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,T2,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,T3,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,T4a,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,T4b,exact
+AJCC8,Esophagus / EGJ - adenocarcinoma,T,Tis,exact
+AJCC8,Stomach,M,M0,exact
+AJCC8,Stomach,M,M1,exact
+AJCC8,Stomach,T,T1,exact
+AJCC8,Stomach,T,T1a,exact
+AJCC8,Stomach,T,T1b,exact
+AJCC8,Stomach,T,T2,exact
+AJCC8,Stomach,T,T3,exact
+AJCC8,Stomach,T,T4a,exact
+AJCC8,Stomach,T,T4b,exact
+AJCC8,Stomach,T,Tis,exact
+AJCC8,Stomach,N,N0,exact
+AJCC8,Stomach,N,N1,exact
+AJCC8,Stomach,N,N2,exact
+AJCC8,Stomach,N,N3,exact
+AJCC8,Stomach,N,N3a,exact
+AJCC8,Stomach,N,N3b,exact
+AJCC8,Small intestine,M,M0,exact
+AJCC8,Small intestine,M,M1,exact
+AJCC8,Small intestine,N,N0,exact
+AJCC8,Small intestine,N,N1,exact
+AJCC8,Small intestine,N,N2,exact
+AJCC8,Small intestine,T,T1,exact
+AJCC8,Small intestine,T,T2,exact
+AJCC8,Small intestine,T,T3,exact
+AJCC8,Small intestine,T,T4,exact
+AJCC8,Small intestine,T,Tis,exact
+AJCC8,Colon,M,M0,exact
+AJCC8,Colon,M,M1,exact
+AJCC8,Colon,M,M1a,exact
+AJCC8,Colon,M,M1b,exact
+AJCC8,Colon,M,M1c,exact
+AJCC8,Colon,T,T1,exact
+AJCC8,Colon,T,T2,exact
+AJCC8,Colon,T,T3,exact
+AJCC8,Colon,T,T4a,exact
+AJCC8,Colon,T,T4b,exact
+AJCC8,Colon,T,Tis,exact
+AJCC8,Colon,N,N0,exact
+AJCC8,Colon,N,N1,exact
+AJCC8,Colon,N,N1a,exact
+AJCC8,Colon,N,N1b,exact
+AJCC8,Colon,N,N1c,exact
+AJCC8,Colon,N,N2,exact
+AJCC8,Colon,N,N2a,exact
+AJCC8,Colon,N,N2b,exact
+AJCC8,Rectum,M,M0,exact
+AJCC8,Rectum,M,M1,exact
+AJCC8,Rectum,M,M1a,exact
+AJCC8,Rectum,M,M1b,exact
+AJCC8,Rectum,M,M1c,exact
+AJCC8,Rectum,T,T1,exact
+AJCC8,Rectum,T,T2,exact
+AJCC8,Rectum,T,T3,exact
+AJCC8,Rectum,T,T4a,exact
+AJCC8,Rectum,T,T4b,exact
+AJCC8,Rectum,T,Tis,exact
+AJCC8,Rectum,N,N0,exact
+AJCC8,Rectum,N,N1,exact
+AJCC8,Rectum,N,N1a,exact
+AJCC8,Rectum,N,N1b,exact
+AJCC8,Rectum,N,N1c,exact
+AJCC8,Rectum,N,N2,exact
+AJCC8,Rectum,N,N2a,exact
+AJCC8,Rectum,N,N2b,exact
+AJCC8,Appendix - carcinoma,M,M0,exact
+AJCC8,Appendix - carcinoma,M,M1,exact
+AJCC8,Appendix - carcinoma,M,M1a,exact
+AJCC8,Appendix - carcinoma,M,M1b,exact
+AJCC8,Appendix - carcinoma,M,M1c,exact
+AJCC8,Appendix - carcinoma,N,N0,exact
+AJCC8,Appendix - carcinoma,N,N1,exact
+AJCC8,Appendix - carcinoma,N,N1a,exact
+AJCC8,Appendix - carcinoma,N,N1b,exact
+AJCC8,Appendix - carcinoma,N,N1c,exact
+AJCC8,Appendix - carcinoma,N,N2,exact
+AJCC8,Appendix - carcinoma,T,T1,exact
+AJCC8,Appendix - carcinoma,T,T2,exact
+AJCC8,Appendix - carcinoma,T,T3,exact
+AJCC8,Appendix - carcinoma,T,T4,exact
+AJCC8,Appendix - carcinoma,T,T4a,exact
+AJCC8,Appendix - carcinoma,T,T4b,exact
+AJCC8,Appendix - carcinoma,T,Tis,exact
+AJCC8,Appendix - carcinoma,T,Tis(LAMN),exact
+AJCC8,HCC / Liver,M,M0,exact
+AJCC8,HCC / Liver,M,M1,exact
+AJCC8,HCC / Liver,N,N0,exact
+AJCC8,HCC / Liver,N,N1,exact
+AJCC8,HCC / Liver,T,T1,exact
+AJCC8,HCC / Liver,T,T1a,exact
+AJCC8,HCC / Liver,T,T1b,exact
+AJCC8,HCC / Liver,T,T2,exact
+AJCC8,HCC / Liver,T,T3,exact
+AJCC8,HCC / Liver,T,T4,exact
+AJCC8,Intrahepatic bile duct,M,M0,exact
+AJCC8,Intrahepatic bile duct,M,M1,exact
+AJCC8,Intrahepatic bile duct,N,N0,exact
+AJCC8,Intrahepatic bile duct,N,N1,exact
+AJCC8,Intrahepatic bile duct,T,T1,exact
+AJCC8,Intrahepatic bile duct,T,T1a,exact
+AJCC8,Intrahepatic bile duct,T,T1b,exact
+AJCC8,Intrahepatic bile duct,T,T2,exact
+AJCC8,Intrahepatic bile duct,T,T3,exact
+AJCC8,Intrahepatic bile duct,T,T4,exact
+AJCC8,Intrahepatic bile duct,T,Tis,exact
+AJCC8,Perihilar bile duct,M,M0,exact
+AJCC8,Perihilar bile duct,M,M1,exact
+AJCC8,Perihilar bile duct,N,N0,exact
+AJCC8,Perihilar bile duct,N,N1,exact
+AJCC8,Perihilar bile duct,N,N2,exact
+AJCC8,Perihilar bile duct,T,T1,exact
+AJCC8,Perihilar bile duct,T,T2,exact
+AJCC8,Perihilar bile duct,T,T2a,exact
+AJCC8,Perihilar bile duct,T,T2b,exact
+AJCC8,Perihilar bile duct,T,T3,exact
+AJCC8,Perihilar bile duct,T,T4,exact
+AJCC8,Perihilar bile duct,T,Tis,exact
+AJCC8,Distal bile duct,M,M0,exact
+AJCC8,Distal bile duct,M,M1,exact
+AJCC8,Distal bile duct,T,T1,exact
+AJCC8,Distal bile duct,T,T2,exact
+AJCC8,Distal bile duct,T,T3,exact
+AJCC8,Distal bile duct,T,T4,exact
+AJCC8,Distal bile duct,T,Tis,exact
+AJCC8,Distal bile duct,N,N0,exact
+AJCC8,Distal bile duct,N,N1,exact
+AJCC8,Distal bile duct,N,N2,exact
+AJCC8,Gallbladder,M,M0,exact
+AJCC8,Gallbladder,M,M1,exact
+AJCC8,Gallbladder,N,N0,exact
+AJCC8,Gallbladder,N,N1,exact
+AJCC8,Gallbladder,N,N2,exact
+AJCC8,Gallbladder,T,T1,exact
+AJCC8,Gallbladder,T,T1a,exact
+AJCC8,Gallbladder,T,T1b,exact
+AJCC8,Gallbladder,T,T2,exact
+AJCC8,Gallbladder,T,T2a,exact
+AJCC8,Gallbladder,T,T2b,exact
+AJCC8,Gallbladder,T,T3,exact
+AJCC8,Gallbladder,T,T4,exact
+AJCC8,Gallbladder,T,Tis,exact
+AJCC8,Ampulla of Vater,M,M0,exact
+AJCC8,Ampulla of Vater,M,M1,exact
+AJCC8,Ampulla of Vater,N,N0,exact
+AJCC8,Ampulla of Vater,N,N1,exact
+AJCC8,Ampulla of Vater,N,N2,exact
+AJCC8,Ampulla of Vater,T,T1,exact
+AJCC8,Ampulla of Vater,T,T1a,exact
+AJCC8,Ampulla of Vater,T,T1b,exact
+AJCC8,Ampulla of Vater,T,T2,exact
+AJCC8,Ampulla of Vater,T,T3,exact
+AJCC8,Ampulla of Vater,T,T3a,exact
+AJCC8,Ampulla of Vater,T,T3b,exact
+AJCC8,Ampulla of Vater,T,T4,exact
+AJCC8,Ampulla of Vater,T,Tis,exact
+AJCC8,Exocrine pancreas,M,M0,exact
+AJCC8,Exocrine pancreas,M,M1,exact
+AJCC8,Exocrine pancreas,T,T1,exact
+AJCC8,Exocrine pancreas,T,T1a,exact
+AJCC8,Exocrine pancreas,T,T1b,exact
+AJCC8,Exocrine pancreas,T,T1c,exact
+AJCC8,Exocrine pancreas,T,T2,exact
+AJCC8,Exocrine pancreas,T,T3,exact
+AJCC8,Exocrine pancreas,T,T4,exact
+AJCC8,Exocrine pancreas,T,Tis,exact
+AJCC8,Exocrine pancreas,N,N0,exact
+AJCC8,Exocrine pancreas,N,N1,exact
+AJCC8,Exocrine pancreas,N,N2,exact
+AJCC8,Small Intestine: Other Histologies,M,M0,exact
+AJCC8,Small Intestine: Other Histologies,M,M1,exact
+AJCC8,Small Intestine: Other Histologies,N,N0,exact
+AJCC8,Small Intestine: Other Histologies,N,N1,exact
+AJCC8,Small Intestine: Other Histologies,N,N2,exact
+AJCC8,Small Intestine: Other Histologies,T,T1,exact
+AJCC8,Small Intestine: Other Histologies,T,T2,exact
+AJCC8,Small Intestine: Other Histologies,T,T3,exact
+AJCC8,Small Intestine: Other Histologies,T,T4,exact
+AJCC8,Small Intestine: Other Histologies,T,Tis,exact
+AJCC8,NET - stomach,M,M0,exact
+AJCC8,NET - stomach,M,M1,exact
+AJCC8,NET - stomach,T,T0,exact
+AJCC8,NET - stomach,T,T1,exact
+AJCC8,NET - stomach,T,T2,exact
+AJCC8,NET - stomach,T,T3,exact
+AJCC8,NET - stomach,T,T4,exact
+AJCC8,NET - stomach,T,TX,exact
+AJCC8,NET - stomach,N,N0,exact
+AJCC8,NET - stomach,N,N1,exact
+AJCC8,NET - stomach,N,NX,exact
+AJCC8,NET - duodenum / ampulla,M,M0,exact
+AJCC8,NET - duodenum / ampulla,M,M1,exact
+AJCC8,NET - duodenum / ampulla,N,N0,exact
+AJCC8,NET - duodenum / ampulla,N,N1,exact
+AJCC8,NET - duodenum / ampulla,T,T1,exact
+AJCC8,NET - duodenum / ampulla,T,T2,exact
+AJCC8,NET - duodenum / ampulla,T,T3,exact
+AJCC8,NET - duodenum / ampulla,T,T4,exact
+AJCC8,NET - jejunum / ileum,M,M0,exact
+AJCC8,NET - jejunum / ileum,M,M1,exact
+AJCC8,NET - jejunum / ileum,N,N0,exact
+AJCC8,NET - jejunum / ileum,N,N1,exact
+AJCC8,NET - jejunum / ileum,N,N2,exact
+AJCC8,NET - jejunum / ileum,N,NX,exact
+AJCC8,NET - jejunum / ileum,T,T0,exact
+AJCC8,NET - jejunum / ileum,T,T1,exact
+AJCC8,NET - jejunum / ileum,T,T2,exact
+AJCC8,NET - jejunum / ileum,T,T3,exact
+AJCC8,NET - jejunum / ileum,T,T4,exact
+AJCC8,NET - jejunum / ileum,T,TX,exact
+AJCC8,NET - appendix,M,M0,exact
+AJCC8,NET - appendix,M,M1,exact
+AJCC8,NET - appendix,N,N0,exact
+AJCC8,NET - appendix,N,N1,exact
+AJCC8,NET - appendix,N,NX,exact
+AJCC8,NET - appendix,T,T0,exact
+AJCC8,NET - appendix,T,T1,exact
+AJCC8,NET - appendix,T,T2,exact
+AJCC8,NET - appendix,T,T3,exact
+AJCC8,NET - appendix,T,T4,exact
+AJCC8,NET - appendix,T,TX,exact
+AJCC8,NET - colon / rectum,M,M0,exact
+AJCC8,NET - colon / rectum,M,M1,exact
+AJCC8,NET - colon / rectum,N,N0,exact
+AJCC8,NET - colon / rectum,N,N1,exact
+AJCC8,NET - colon / rectum,T,T0,exact
+AJCC8,NET - colon / rectum,T,T1,exact
+AJCC8,NET - colon / rectum,T,T2,exact
+AJCC8,NET - colon / rectum,T,T3,exact
+AJCC8,NET - colon / rectum,T,T4,exact
+AJCC8,NET - colon / rectum,T,TX,exact
+AJCC8,NET - pancreas,M,M0,exact
+AJCC8,NET - pancreas,M,M1,exact
+AJCC8,NET - pancreas,N,N0,exact
+AJCC8,NET - pancreas,N,N1,exact
+AJCC8,NET - pancreas,T,T1,exact
+AJCC8,NET - pancreas,T,T2,exact
+AJCC8,NET - pancreas,T,T3,exact
+AJCC8,NET - pancreas,T,T4,exact
+AJCC8,Vulva,T,T1-T2,exact
+AJCC8,Vulva,N,N1,exact
+AJCC8,Vulva,N,N2a,exact
+AJCC8,Vulva,N,N2b,exact
+AJCC8,Vulva,M,M0,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1a,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1b,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T1c,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T2,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3a,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T3b,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,T,T4,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,N,N0,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,N,N1,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,M,M0,exact
+AJCC8,Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,M,M1,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T1,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T1a,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T1b,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T1c,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T2,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T3,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T3a,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T3b,exact
+AJCC8,Corpus Uteri – Adenosarcoma,T,T4,exact
+AJCC8,Corpus Uteri – Adenosarcoma,N,N0,exact
+AJCC8,Corpus Uteri – Adenosarcoma,N,N1,exact
+AJCC8,Corpus Uteri – Adenosarcoma,M,M0,exact
+AJCC8,Corpus Uteri – Adenosarcoma,M,M1,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T1,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",T,T2,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",N,N0,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",N,N1,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",M,M0,exact
+AJCC8,"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",M,M1b,exact
+AJCC8,Penis,T,T3,exact
+AJCC8,Penis,T,TA,exact
+AJCC8,Penis,T,Tis,exact
+AJCC8,Penis,N,N0,exact
+AJCC8,Penis,M,M0,exact
+AJCC8,Prostate,T,T1,exact
+AJCC8,Prostate,T,T2,exact
+AJCC8,Prostate,T,T2b,parent
+AJCC8,Prostate,T,T2c,parent
+AJCC8,Prostate,N,N0,exact
+AJCC8,Prostate,M,M0,exact
+AJCC8,Kidney,T,T1,exact
+AJCC8,Kidney,T,T2,exact
+AJCC8,Kidney,T,T3,exact
+AJCC8,Kidney,T,T4,exact
+AJCC8,Kidney,N,N0,exact
+AJCC8,Kidney,N,N1,exact
+AJCC8,Kidney,N,NX,exact
+AJCC8,Kidney,M,M0,exact
+AJCC8,Kidney,M,M1,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T1,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T1-T4a,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T2a,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T2b,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T3a,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T3b,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T4a,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,T4b,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,TA,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,T,Tis,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,N,N0,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,N,N1,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,N,N2,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,N,N3,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,M,M0,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,M,M1a,exact
+AJCC8,Urinary Bladder: Urothelial Carcinomas,M,M1b,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T1-T4a,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T2a,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T2b,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T3a,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T3b,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T4a,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,T4b,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N2,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,N,N3,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,M,M1a,exact
+AJCC8,Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,M,M1b,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T1,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,T2,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,TA,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,T,Tis,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,N,N0,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,N,N1,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,M,M0,exact
+AJCC8,Male Penile Urethra and Female Urethra: Urothelial Carcinomas,M,M1,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T2,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC8,Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M1,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,T,T1,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,T,T2,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,T,TA,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,T,Tis,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,N,N0,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,N,N1,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,M,M0,exact
+AJCC8,Prostatic Urethra: Urothelial Carcinomas,M,M1,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T1,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,T2,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,TA,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,T,Tis,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N0,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,N,N1,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M0,exact
+AJCC8,Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,M,M1,exact
+AJCC8,Eyelid Carcinoma,T,T1,exact
+AJCC8,Eyelid Carcinoma,T,T2a,exact
+AJCC8,Eyelid Carcinoma,T,Tis,exact
+AJCC8,Eyelid Carcinoma,N,N0,exact
+AJCC8,Eyelid Carcinoma,M,M0,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T1a,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T1b-d,parent
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T2a,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T2b,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T2c-d,parent
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T3a,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T3b,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T3c,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T3d,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T4a,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T4b,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T4c,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,T,T4d-e,parent
+AJCC8,Uveal Melanoma – Iris Melanoma,N,N0,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,N,N1,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,M,M0,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,M,M1a,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,M,M1b,exact
+AJCC8,Uveal Melanoma – Iris Melanoma,M,M1c,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T1a,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T1b-d,parent
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2a,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2b,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T2c-d,parent
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3a,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3b,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3c,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T3d,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4a,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4b,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4c,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,T,T4d-e,parent
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,N,N0,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,N,N1,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M0,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1a,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1b,exact
+AJCC8,Uveal Melanoma – Choroidal and Ciliary Body Melanoma,M,M1c,exact
+AJCC8,Retinoblastoma,T,T4a,exact
+AJCC8,Retinoblastoma,T,T4b,exact
+AJCC8,Retinoblastoma,N,N0,exact
+AJCC8,Retinoblastoma,N,N1,exact
+AJCC8,Retinoblastoma,M,M0,exact
+AJCC8,Retinoblastoma,M,M1,exact
+AJCC8,Retinoblastoma,M,M1AnyH,parent
+AJCC8,Thyroid – Differentiated,T,T1-T3a,exact
+AJCC8,Thyroid – Differentiated,T,T3b,exact
+AJCC8,Thyroid – Differentiated,T,T4,exact
+AJCC8,Thyroid – Differentiated,N,N0,exact
+AJCC8,Thyroid – Differentiated,N,N1,exact
+AJCC8,Thyroid – Differentiated,N,NX,exact
+AJCC8,Thyroid – Differentiated,M,M0,exact
+AJCC8,Thyroid – Differentiated,M,M1,exact
+AJCC8,Thyroid – Anaplastic,T,T1-T3a,exact
+AJCC8,Thyroid – Anaplastic,T,T3b,exact
+AJCC8,Thyroid – Anaplastic,T,T4,exact
+AJCC8,Thyroid – Anaplastic,N,N0,exact
+AJCC8,Thyroid – Anaplastic,N,N1,exact
+AJCC8,Thyroid – Anaplastic,N,NX,exact
+AJCC8,Thyroid – Anaplastic,M,M0,exact
+AJCC8,Thyroid – Anaplastic,M,M1,exact
+AJCC8,Thyroid – Medullary,T,Tothethyroid,exact
+AJCC8,Thyroid – Medullary,N,AnyT,exact
+AJCC8,Thyroid – Medullary,M,AnyN,exact
+AJCC8,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,T,T1,exact
+AJCC8,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,T,T2,exact
+AJCC8,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,N,N0,exact
+AJCC8,Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,M,M0,exact
+AJCC8,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),T,T1,exact
+AJCC8,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),T,T2,exact
+AJCC8,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),N,N0,exact
+AJCC8,Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),M,M0,exact
+AJCC8,Renal Pelvis and Ureter,M,M0,exact
+AJCC8,Renal Pelvis and Ureter,M,M1,exact
+AJCC8,Renal Pelvis and Ureter,T,T1,exact
+AJCC8,Renal Pelvis and Ureter,T,T2,exact
+AJCC8,Renal Pelvis and Ureter,T,TA,exact
+AJCC8,Renal Pelvis and Ureter,T,Tis,exact
+AJCC8,Renal Pelvis and Ureter,N,N0,exact

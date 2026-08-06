@@ -1,0 +1,10 @@
+﻿check,status,detail
+definitions_rows_total,PASS,3602
+ajcc8_manual_extraction_improved,PASS,572
+ajcc8_explicit_sites_extracted,PASS,45
+rule_category_no_missing_after_generic,PASS,"{'exact': 1464, 'parent': 37}"
+gap_audit_present,PASS,present
+has_pancreas_definitions,PASS,28
+has_stomach_definitions,PASS,40
+has_lung_definitions,PASS,42
+has_breast_definitions,PASS,59

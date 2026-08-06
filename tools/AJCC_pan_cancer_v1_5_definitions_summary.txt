@@ -1,0 +1,27 @@
+AJCC pan-cancer CSV import v1.5 - retried AJCC8 definitions extraction
+
+What changed from v1.4:
+- Re-read uploaded AJCC8 PDF directly with PyMuPDF.
+- Used printed-page chapter mapping instead of previous PDF-page range assumption.
+- Added explicit AJCC8 definition rows where the uploaded AJCC8 file contains TNM definition tables.
+- Preserved visible fallback/generic labels for categories not explicitly present in uploaded AJCC8 pages.
+
+Counts:
+- Final staging_category_definitions.csv rows: 3602
+- AJCC7 final rows: 1938
+- AJCC8 final rows: 1664
+- Explicit AJCC8 manual-extracted rows before mapping/fallback/generic: 572
+- Explicit AJCC8 source sites with extracted definitions: 45
+- Generic fallback rows added after rule coverage scan: 170
+- Rule-category definition coverage after fallback: {'exact': 1464, 'parent': 37}
+
+Important source note:
+The uploaded AJCC8 file is readable and contains many full AJCC8 pages, but it is labeled throughout as AJCC 8th Edition Updates and Corrections. It contains explicit TNM definitions for many, but not all, AJCC8 source chapters. For source chapters where no explicit TNM definition table was present/extracted, the tool keeps definitions visible by using flagged AJCC7-to-AJCC8 or generic review-required fallback rows. These rows are not certified and should be checked by the cancer committee.
+
+Cancer committee review files:
+- staging_category_definitions_review_v1_5.csv
+- staging_site_definition_coverage_v1_5.csv
+- AJCC_pan_cancer_definition_coverage_v1_5.csv
+- AJCC8_explicit_definition_gap_audit_v1_5.csv
+- ajcc8_print_page_assignment_v1_5.csv
+- AJCC_pan_cancer_definitions_QA_v1_5.csv

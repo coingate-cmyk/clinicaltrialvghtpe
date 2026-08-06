@@ -1,0 +1,199 @@
+﻿tool_site,edition,definition_rows,explicit_manual_rows,fallback_rows,generic_rows,coverage_status
+Esophagus / EGJ - squamous,AJCC7,24,0,6,6,has_definitions
+Esophagus / EGJ - squamous,AJCC8,18,0,0,0,has_definitions
+Esophagus / EGJ - adenocarcinoma,AJCC7,24,0,6,6,has_definitions
+Esophagus / EGJ - adenocarcinoma,AJCC8,18,0,0,0,has_definitions
+Stomach,AJCC7,20,0,0,0,has_definitions
+Stomach,AJCC8,20,0,0,0,has_definitions
+Small intestine,AJCC7,15,0,0,0,has_definitions
+Small intestine,AJCC8,15,0,0,0,has_definitions
+Colon,AJCC7,25,0,4,4,has_definitions
+Colon,AJCC8,22,0,0,0,has_definitions
+Rectum,AJCC7,25,0,4,4,has_definitions
+Rectum,AJCC8,22,0,0,0,has_definitions
+Appendix - carcinoma,AJCC7,20,2,0,0,has_definitions
+Appendix - carcinoma,AJCC8,22,0,0,0,has_definitions
+GIST,AJCC7,12,0,0,0,has_definitions
+GIST,AJCC8,12,0,0,0,has_definitions
+HCC / Liver,AJCC7,13,0,0,0,has_definitions
+HCC / Liver,AJCC8,15,1,0,0,has_definitions
+Intrahepatic bile duct,AJCC7,14,2,0,0,has_definitions
+Intrahepatic bile duct,AJCC8,14,0,0,0,has_definitions
+Perihilar bile duct,AJCC7,15,0,0,0,has_definitions
+Perihilar bile duct,AJCC8,15,0,0,0,has_definitions
+Distal bile duct,AJCC7,12,0,0,0,has_definitions
+Distal bile duct,AJCC8,13,0,0,0,has_definitions
+Gallbladder,AJCC7,15,0,0,0,has_definitions
+Gallbladder,AJCC8,17,0,0,0,has_definitions
+Ampulla of Vater,AJCC7,12,0,0,0,has_definitions
+Ampulla of Vater,AJCC8,17,0,0,0,has_definitions
+Exocrine pancreas,AJCC7,12,0,0,0,has_definitions
+Exocrine pancreas,AJCC8,16,0,0,0,has_definitions
+NET - stomach,AJCC7,14,2,0,0,has_definitions
+NET - stomach,AJCC8,15,3,0,0,has_definitions
+NET - duodenum / ampulla,AJCC7,14,2,0,0,has_definitions
+NET - duodenum / ampulla,AJCC8,12,0,0,0,has_definitions
+NET - jejunum / ileum,AJCC7,15,2,0,0,has_definitions
+NET - jejunum / ileum,AJCC8,16,3,0,0,has_definitions
+NET - appendix,AJCC7,14,2,0,0,has_definitions
+NET - appendix,AJCC8,15,3,0,0,has_definitions
+NET - colon / rectum,AJCC7,14,2,0,0,has_definitions
+NET - colon / rectum,AJCC8,18,6,0,0,has_definitions
+NET - pancreas,AJCC7,14,2,0,0,has_definitions
+NET - pancreas,AJCC8,12,0,0,0,has_definitions
+Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,AJCC7,0,0,0,0,no_tnm_definitions_extracted
+Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,AJCC8,12,10,2,2,has_definitions
+Oral Cavity,AJCC7,18,18,0,0,has_definitions
+Oral Cavity,AJCC8,24,20,4,4,has_definitions
+Major Salivary Glands,AJCC7,17,17,0,0,has_definitions
+Major Salivary Glands,AJCC8,18,12,6,6,has_definitions
+Nasopharynx,AJCC7,21,21,0,0,has_definitions
+Nasopharynx,AJCC8,14,14,0,0,has_definitions
+HPV-Mediated (p16+) Oropharyngeal Cancer,AJCC7,21,21,0,0,has_definitions
+HPV-Mediated (p16+) Oropharyngeal Cancer,AJCC8,12,12,0,0,has_definitions
+Oropharynx (p16-),AJCC7,21,21,0,0,has_definitions
+Oropharynx (p16-),AJCC8,18,18,0,0,has_definitions
+Hypopharynx,AJCC7,21,21,0,0,has_definitions
+Hypopharynx,AJCC8,18,18,0,0,has_definitions
+Maxillary Sinus,AJCC7,18,18,0,0,has_definitions
+Maxillary Sinus,AJCC8,13,12,1,1,has_definitions
+Nasal Cavity and Ethmoid Sinus,AJCC7,18,18,0,0,has_definitions
+Nasal Cavity and Ethmoid Sinus,AJCC8,13,12,1,1,has_definitions
+Larynx: Supraglottis,AJCC7,20,19,1,1,has_definitions
+Larynx: Supraglottis,AJCC8,17,12,5,5,has_definitions
+Larynx: Glottis,AJCC7,20,19,1,1,has_definitions
+Larynx: Glottis,AJCC8,17,12,5,5,has_definitions
+Larynx: Subglottis,AJCC7,20,19,1,1,has_definitions
+Larynx: Subglottis,AJCC8,17,12,5,5,has_definitions
+Mucosal Melanoma of the Head and Neck,AJCC7,8,4,4,4,has_definitions
+Mucosal Melanoma of the Head and Neck,AJCC8,4,0,4,0,has_definitions
+Cutaneous Carcinoma of the Head and Neck,AJCC7,19,17,2,2,has_definitions
+Cutaneous Carcinoma of the Head and Neck,AJCC8,20,20,0,0,has_definitions
+Esophagus and Esophagogastric Junction: Other Histologies,AJCC7,24,18,6,6,has_definitions
+Esophagus and Esophagogastric Junction: Other Histologies,AJCC8,18,0,18,0,has_definitions
+Small Intestine: Other Histologies,AJCC7,15,0,0,0,has_definitions
+Small Intestine: Other Histologies,AJCC8,15,0,0,0,has_definitions
+Anus,AJCC7,14,14,0,0,has_definitions
+Anus,AJCC8,14,0,14,0,has_definitions
+Thymus,AJCC7,0,0,0,0,no_tnm_definitions_extracted
+Thymus,AJCC8,0,0,0,0,no_tnm_definitions_extracted
+Lung,AJCC7,21,21,0,0,has_definitions
+Lung,AJCC8,21,0,21,0,has_definitions
+Malignant Pleural Mesothelioma,AJCC7,15,15,0,0,has_definitions
+Malignant Pleural Mesothelioma,AJCC8,10,10,0,0,has_definitions
+"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",AJCC7,12,12,0,0,has_definitions
+"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",AJCC8,12,0,12,0,has_definitions
+Bone: Spine,AJCC7,12,12,0,0,has_definitions
+Bone: Spine,AJCC8,12,0,12,0,has_definitions
+Bone: Pelvis,AJCC7,12,12,0,0,has_definitions
+Bone: Pelvis,AJCC8,12,0,12,0,has_definitions
+Soft Tissue Sarcoma of the Head and Neck,AJCC7,13,13,0,0,has_definitions
+Soft Tissue Sarcoma of the Head and Neck,AJCC8,13,0,13,0,has_definitions
+Soft Tissue Sarcoma of the Trunk and Extremities,AJCC7,13,13,0,0,has_definitions
+Soft Tissue Sarcoma of the Trunk and Extremities,AJCC8,4,4,0,0,has_definitions
+Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,AJCC7,13,13,0,0,has_definitions
+Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,AJCC8,13,0,13,0,has_definitions
+Soft Tissue Sarcoma of the Retroperitoneum,AJCC7,13,13,0,0,has_definitions
+Soft Tissue Sarcoma of the Retroperitoneum,AJCC8,4,4,0,0,has_definitions
+Soft Tissue Sarcoma – Unusual Histologies and Sites,AJCC7,13,13,0,0,has_definitions
+Soft Tissue Sarcoma – Unusual Histologies and Sites,AJCC8,13,0,13,0,has_definitions
+Merkel Cell Carcinoma,AJCC7,18,18,0,0,has_definitions
+Merkel Cell Carcinoma,AJCC8,18,0,18,0,has_definitions
+Melanoma of the Skin,AJCC7,16,16,0,0,has_definitions
+Melanoma of the Skin,AJCC8,3,3,0,0,has_definitions
+Breast,AJCC7,34,34,0,0,has_definitions
+Breast,AJCC8,25,18,7,7,has_definitions
+Vulva,AJCC7,21,17,4,4,has_definitions
+Vulva,AJCC8,5,1,4,4,has_definitions
+Vagina,AJCC7,13,12,1,1,has_definitions
+Vagina,AJCC8,16,16,0,0,has_definitions
+Cervix Uteri,AJCC7,18,18,0,0,has_definitions
+Cervix Uteri,AJCC8,18,0,18,0,has_definitions
+Corpus Uteri – Carcinoma and Carcinosarcoma,AJCC7,20,20,0,0,has_definitions
+Corpus Uteri – Carcinoma and Carcinosarcoma,AJCC8,20,0,20,0,has_definitions
+Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,AJCC7,20,20,0,0,has_definitions
+Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,AJCC8,19,19,0,0,has_definitions
+Corpus Uteri – Adenosarcoma,AJCC7,20,20,0,0,has_definitions
+Corpus Uteri – Adenosarcoma,AJCC8,19,19,0,0,has_definitions
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",AJCC7,20,20,0,0,has_definitions
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",AJCC8,23,23,0,0,has_definitions
+Gestational Trophoblastic Neoplasms,AJCC7,8,8,0,0,has_definitions
+Gestational Trophoblastic Neoplasms,AJCC8,8,0,8,0,has_definitions
+Penis,AJCC7,17,15,2,2,has_definitions
+Penis,AJCC8,15,13,2,2,has_definitions
+Prostate,AJCC7,24,22,2,2,has_definitions
+Prostate,AJCC8,14,13,1,1,has_definitions
+Testis,AJCC7,17,16,1,1,has_definitions
+Testis,AJCC8,16,0,16,0,has_definitions
+Kidney,AJCC7,18,18,0,0,has_definitions
+Kidney,AJCC8,9,5,4,4,has_definitions
+Urinary Bladder: Urothelial Carcinomas,AJCC7,21,20,1,1,has_definitions
+Urinary Bladder: Urothelial Carcinomas,AJCC8,24,22,2,2,has_definitions
+Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,21,20,1,1,has_definitions
+Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,24,22,2,2,has_definitions
+Male Penile Urethra and Female Urethra: Urothelial Carcinomas,AJCC7,16,13,3,3,has_definitions
+Male Penile Urethra and Female Urethra: Urothelial Carcinomas,AJCC8,10,6,4,4,has_definitions
+Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,16,13,3,3,has_definitions
+Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,10,6,4,4,has_definitions
+Prostatic Urethra: Urothelial Carcinomas,AJCC7,16,13,3,3,has_definitions
+Prostatic Urethra: Urothelial Carcinomas,AJCC8,10,6,4,4,has_definitions
+Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,16,13,3,3,has_definitions
+Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,10,6,4,4,has_definitions
+Eyelid Carcinoma,AJCC7,14,14,0,0,has_definitions
+Eyelid Carcinoma,AJCC8,20,17,3,3,has_definitions
+Conjunctival Carcinoma,AJCC7,16,16,0,0,has_definitions
+Conjunctival Carcinoma,AJCC8,1,1,0,0,has_definitions
+Conjunctival Melanoma,AJCC7,19,19,0,0,has_definitions
+Conjunctival Melanoma,AJCC8,19,19,0,0,has_definitions
+Uveal Melanoma – Iris Melanoma,AJCC7,20,5,15,15,has_definitions
+Uveal Melanoma – Iris Melanoma,AJCC8,32,32,0,0,has_definitions
+Uveal Melanoma – Choroidal and Ciliary Body Melanoma,AJCC7,20,5,15,15,has_definitions
+Uveal Melanoma – Choroidal and Ciliary Body Melanoma,AJCC8,32,32,0,0,has_definitions
+Retinoblastoma,AJCC7,27,27,0,0,has_definitions
+Retinoblastoma,AJCC8,8,4,4,4,has_definitions
+Lacrimal Gland Carcinoma,AJCC7,3,3,0,0,has_definitions
+Lacrimal Gland Carcinoma,AJCC8,1,1,0,0,has_definitions
+Orbital Sarcoma,AJCC7,11,11,0,0,has_definitions
+Orbital Sarcoma,AJCC8,11,0,11,0,has_definitions
+Ocular Adnexal Lymphoma,AJCC7,26,26,0,0,has_definitions
+Ocular Adnexal Lymphoma,AJCC8,18,18,0,0,has_definitions
+Brain and Spinal Cord,AJCC7,0,0,0,0,no_tnm_definitions_extracted
+Brain and Spinal Cord,AJCC8,0,0,0,0,no_tnm_definitions_extracted
+Thyroid – Differentiated,AJCC7,16,16,0,0,has_definitions
+Thyroid – Differentiated,AJCC8,20,19,1,1,has_definitions
+Thyroid – Anaplastic,AJCC7,16,16,0,0,has_definitions
+Thyroid – Anaplastic,AJCC8,20,19,1,1,has_definitions
+Thyroid – Medullary,AJCC7,16,16,0,0,has_definitions
+Thyroid – Medullary,AJCC8,22,19,3,3,has_definitions
+Parathyroid,AJCC7,0,0,0,0,no_tnm_definitions_extracted
+Parathyroid,AJCC8,0,0,0,0,no_tnm_definitions_extracted
+Adrenal Cortical Carcinoma,AJCC7,11,11,0,0,has_definitions
+Adrenal Cortical Carcinoma,AJCC8,11,0,11,0,has_definitions
+Adrenal – Neuroendocrine Tumors,AJCC7,14,14,0,0,has_definitions
+Adrenal – Neuroendocrine Tumors,AJCC8,14,0,14,0,has_definitions
+Non-Hodgkin Lymphomas: Unspecified or Other Type,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Unspecified or Other Type,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Diffuse Large B Cell Lymphoma,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Mantle Cell Lymphoma,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Mantle Cell Lymphoma,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Follicular Lymphoma,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Follicular Lymphoma,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Marginal Zone Lymphoma,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Marginal Zone Lymphoma,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Chronic Lymphocytic Leukemia and Small Lymphocytic,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Chronic Lymphocytic Leukemia and Small Lymphocytic,AJCC8,3,0,3,0,has_definitions
+Non-Hodgkin Lymphomas: Peripheral T-cell Lymphoma,AJCC7,3,3,0,0,has_definitions
+Non-Hodgkin Lymphomas: Peripheral T-cell Lymphoma,AJCC8,3,0,3,0,has_definitions
+Hodgkin Lymphoma,AJCC7,3,3,0,0,has_definitions
+Hodgkin Lymphoma,AJCC8,3,0,3,0,has_definitions
+Pediatric Hodgkin Lymphoma,AJCC7,3,3,0,0,has_definitions
+Pediatric Hodgkin Lymphoma,AJCC8,3,0,3,0,has_definitions
+Pediatric Non-Hodgkin Lymphoma,AJCC7,3,3,0,0,has_definitions
+Pediatric Non-Hodgkin Lymphoma,AJCC8,3,0,3,0,has_definitions
+Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,AJCC7,3,3,0,0,has_definitions
+Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,AJCC8,22,22,0,0,has_definitions
+Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),AJCC7,3,3,0,0,has_definitions
+Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),AJCC8,22,22,0,0,has_definitions
+Plasma Cell Myeloma and Plasma Cell Disorders,AJCC7,3,3,0,0,has_definitions
+Plasma Cell Myeloma and Plasma Cell Disorders,AJCC8,3,0,3,0,has_definitions
