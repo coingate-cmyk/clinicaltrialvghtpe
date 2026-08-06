@@ -1,0 +1,39 @@
+AJCC pan-cancer CSV import v1.6 - strict table-only definitions patch
+
+Purpose
+- Fix definition extraction errors where figure captions or explanatory text were accidentally used as T/N/M definitions.
+- Example corrected: Breast AJCC8 T2 now reads: Tumor >20 mm but ≤50 mm in greatest dimension.
+
+Inputs
+- AJCC Cancer Staging Manual 7th Edition PDF
+- AJCC Cancer Staging Manual 8th Edition PDF uploaded by user
+- Previous v1.5 pan-cancer staging package
+
+Key changes
+- Re-extracted TNM definitions only from sections headed "DEFINITIONS OF AJCC TNM" / "Definition of Primary Tumor (T)" / "Definition of Regional Lymph Nodes (N)" / "Definition of Distant Metastasis (M)".
+- Rejected candidate definitions containing figure-caption patterns such as "Fig.", "illustrated", or AJCC footer/header text.
+- Preserved fallback definitions only when strict table extraction did not locate a category; every fallback row is marked generic_fallback_v1_6_review_required.
+
+Counts
+- strict table extracted rows: 650
+- final definition rows including flagged fallbacks: 2587
+- final suspicious caption-like rows: 0
+
+Important files
+- tools/staging_category_definitions.csv
+- tools/staging_category_definitions_review_v1_6.csv
+- tools/staging_category_definitions_strict_extracted_v1_6.csv
+- tools/AJCC_definition_suspect_text_audit_v1_6.csv
+- tools/staging_site_definition_coverage_v1_6.csv
+- tools/AJCC_pan_cancer_definitions_QA_v1_6.csv
+
+QA
+                                                 test status                                        detail
+                     Breast AJCC8 T2 exact definition   PASS Tumor >20 mm but ≤50 mm in greatest dimension
+                    Breast AJCC8 T4c exact definition   PASS                  Both T4a and T4b are present
+No Fig./illustrated caption text in final definitions   PASS                                suspect rows=0
+                          Final definitions non-empty   PASS                                     rows=2587
+ Rule categories have definitions or flagged fallback   PASS                                     missing=0
+
+Caution
+This remains a committee-review import draft. Stage-grouping rows and definitions should be validated by the cancer committee, especially rows marked generic_fallback_v1_6_review_required.

@@ -1,0 +1,6 @@
+test,status,detail
+Breast AJCC8 T2 exact definition,PASS,Tumor >20 mm but ≤50 mm in greatest dimension
+Breast AJCC8 T4c exact definition,PASS,Both T4a and T4b are present
+No Fig./illustrated caption text in final definitions,PASS,suspect rows=0
+Final definitions non-empty,PASS,rows=2587
+Rule categories have definitions or flagged fallback,PASS,missing=0

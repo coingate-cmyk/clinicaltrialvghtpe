@@ -1,0 +1,156 @@
+site,edition,definition_rows,strict_table_rows,fallback_review_rows
+Adrenal Cortical Carcinoma,AJCC7,8,0,8
+Adrenal – Neuroendocrine Tumors,AJCC7,9,0,9
+Ampulla of Vater,AJCC7,18,0,18
+Ampulla of Vater,AJCC8,17,17,0
+Anus,AJCC7,11,0,11
+Appendix - Carcinoma,AJCC8,22,22,0
+Appendix - carcinoma,AJCC7,51,0,51
+Appendix - carcinoma,AJCC8,19,0,19
+"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",AJCC7,8,0,8
+Bone: Pelvis,AJCC7,8,0,8
+Bone: Spine,AJCC7,8,0,8
+Breast,AJCC7,22,0,22
+Breast,AJCC8,52,45,7
+Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,AJCC8,5,0,5
+Cervix Uteri,AJCC7,15,0,15
+Colon,AJCC7,20,0,20
+Colon,AJCC8,19,0,19
+Conjunctival Melanoma,AJCC8,18,18,0
+Corpus Uteri - Sarcoma,AJCC8,22,22,0
+Corpus Uteri – Adenosarcoma,AJCC7,14,0,14
+Corpus Uteri – Adenosarcoma,AJCC8,17,0,17
+Corpus Uteri – Carcinoma and Carcinosarcoma,AJCC7,14,0,14
+Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,AJCC7,14,0,14
+Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,AJCC8,17,0,17
+Cutaneous Carcinoma of the Head and Neck,AJCC7,26,0,26
+Cutaneous Carcinoma of the Head and Neck,AJCC8,27,23,4
+Distal bile duct,AJCC7,9,0,9
+Distal bile duct,AJCC8,10,0,10
+Esophagus / EGJ - adenocarcinoma,AJCC7,46,0,46
+Esophagus / EGJ - adenocarcinoma,AJCC8,24,0,24
+Esophagus / EGJ - squamous,AJCC7,46,0,46
+Esophagus / EGJ - squamous,AJCC8,27,0,27
+Esophagus and Esophagogastric Junction: Other Histologies,AJCC7,22,0,22
+Exocrine pancreas,AJCC7,18,0,18
+Exocrine pancreas,AJCC8,13,0,13
+Eyelid Carcinoma,AJCC7,14,0,14
+Eyelid Carcinoma,AJCC8,13,10,3
+GIST,AJCC7,14,0,14
+Gallbladder,AJCC7,19,0,19
+Gallbladder,AJCC8,14,0,14
+Gastrointestinal Stromal Tumor,AJCC8,10,10,0
+HCC / Liver,AJCC7,9,0,9
+HCC / Liver,AJCC8,10,0,10
+HPV-Mediated (p16+) Oropharyngeal Cancer,AJCC7,24,0,24
+HPV-Mediated (p16+) Oropharyngeal Cancer,AJCC8,21,16,5
+Hypopharynx,AJCC7,24,0,24
+Intrahepatic bile duct,AJCC7,9,0,9
+Intrahepatic bile duct,AJCC8,11,0,11
+Kidney,AJCC7,15,0,15
+Kidney,AJCC8,9,5,4
+Larynx,AJCC8,12,12,0
+Larynx: Glottis,AJCC7,12,0,12
+Larynx: Glottis,AJCC8,8,0,8
+Larynx: Subglottis,AJCC7,12,0,12
+Larynx: Subglottis,AJCC8,8,0,8
+Larynx: Supraglottis,AJCC7,12,0,12
+Larynx: Supraglottis,AJCC8,8,0,8
+Lung,AJCC7,15,0,15
+Major Salivary Glands,AJCC7,11,0,11
+Major Salivary Glands,AJCC8,24,15,9
+Male Penile Urethra and Female Urethra: Urothelial Carcinomas,AJCC7,14,0,14
+Male Penile Urethra and Female Urethra: Urothelial Carcinomas,AJCC8,8,0,8
+Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,14,0,14
+Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,8,0,8
+Malignant Pleural Mesothelioma,AJCC7,24,0,24
+Malignant Pleural Mesothelioma,AJCC8,10,10,0
+Maxillary Sinus,AJCC7,12,0,12
+Maxillary Sinus,AJCC8,3,0,3
+Melanoma of the Skin,AJCC7,21,0,21
+Merkel Cell Carcinoma,AJCC7,24,0,24
+Mucosal Melanoma of the Head and Neck,AJCC7,8,0,8
+NET - appendix,AJCC7,25,0,25
+NET - appendix,AJCC8,19,0,19
+NET - colon / rectum,AJCC7,9,0,9
+NET - colon / rectum,AJCC8,10,0,10
+NET - duodenum / ampulla,AJCC7,9,0,9
+NET - duodenum / ampulla,AJCC8,8,0,8
+NET - jejunum / ileum,AJCC7,9,0,9
+NET - jejunum / ileum,AJCC8,12,0,12
+NET - pancreas,AJCC7,36,0,36
+NET - pancreas,AJCC8,8,0,8
+NET - stomach,AJCC7,9,0,9
+NET - stomach,AJCC8,11,0,11
+Nasal Cavity and Ethmoid Sinus,AJCC7,12,0,12
+Nasal Cavity and Ethmoid Sinus,AJCC8,3,0,3
+Nasal Cavity and Paranasal Sinuses,AJCC8,2,2,0
+Nasopharynx,AJCC7,24,0,24
+Nasopharynx,AJCC8,14,14,0
+Neuroendocrine Tumors of the Appendix,AJCC8,14,14,0
+Neuroendocrine Tumors of the Colon and Rectum,AJCC8,16,16,0
+Neuroendocrine Tumors of the Jejunum and Ileum,AJCC8,15,15,0
+Neuroendocrine Tumors of the Pancreas,AJCC8,5,5,0
+Neuroendocrine Tumors of the Stomach,AJCC8,14,14,0
+Ocular Adnexal Lymphoma,AJCC8,18,18,0
+Oral Cavity,AJCC7,12,0,12
+Oral Cavity,AJCC8,31,23,8
+Oropharynx (p16-),AJCC7,24,0,24
+Oropharynx (p16-) and Hypopharynx,AJCC8,23,23,0
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",AJCC7,20,0,20
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",AJCC8,6,0,6
+"Ovary, Fallopian Tube, and Primary Peritoneal Carcinoma",AJCC8,23,23,0
+Penis,AJCC7,29,0,29
+Penis,AJCC8,17,12,5
+Perihilar bile duct,AJCC7,12,0,12
+Perihilar bile duct,AJCC8,12,0,12
+Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,AJCC8,4,0,4
+Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),AJCC8,4,0,4
+Primary Cutaneous Lymphomas,AJCC8,27,27,0
+Prostate,AJCC7,25,0,25
+Prostate,AJCC8,16,13,3
+Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,14,0,14
+Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,8,0,8
+Prostatic Urethra: Urothelial Carcinomas,AJCC7,14,0,14
+Prostatic Urethra: Urothelial Carcinomas,AJCC8,8,0,8
+Rectum,AJCC7,20,0,20
+Rectum,AJCC8,19,0,19
+Renal Pelvis and Ureter,AJCC7,24,0,24
+Renal Pelvis and Ureter,AJCC8,14,13,1
+Retinoblastoma,AJCC8,42,41,1
+Small Intestine: Other Histologies,AJCC7,20,0,20
+Small Intestine: Other Histologies,AJCC8,10,0,10
+Small intestine,AJCC7,20,0,20
+Small intestine,AJCC8,10,0,10
+Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,AJCC7,16,0,16
+Soft Tissue Sarcoma of the Head and Neck,AJCC7,16,0,16
+Soft Tissue Sarcoma of the Retroperitoneum,AJCC7,16,0,16
+Soft Tissue Sarcoma of the Trunk and Extremities,AJCC7,16,0,16
+Soft Tissue Sarcoma – Unusual Histologies and Sites,AJCC7,16,0,16
+Stomach,AJCC7,12,0,12
+Stomach,AJCC8,38,0,38
+Testis,AJCC7,14,0,14
+Testis,AJCC8,18,18,0
+Thyroid - Differentiated and Anaplastic Carcinoma,AJCC8,19,19,0
+Thyroid - Medullary,AJCC8,19,19,0
+Thyroid – Anaplastic,AJCC7,10,0,10
+Thyroid – Anaplastic,AJCC8,8,0,8
+Thyroid – Differentiated,AJCC7,10,0,10
+Thyroid – Differentiated,AJCC8,8,0,8
+Thyroid – Medullary,AJCC7,10,0,10
+Thyroid – Medullary,AJCC8,1,0,1
+Urethra,AJCC8,13,13,0
+Urinary Bladder,AJCC8,22,22,0
+Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,AJCC7,30,0,30
+Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,AJCC8,17,0,17
+Urinary Bladder: Urothelial Carcinomas,AJCC7,30,0,30
+Urinary Bladder: Urothelial Carcinomas,AJCC8,17,0,17
+Uveal Melanoma,AJCC8,31,31,0
+Uveal Melanoma – Choroidal and Ciliary Body Melanoma,AJCC7,38,0,38
+Uveal Melanoma – Choroidal and Ciliary Body Melanoma,AJCC8,21,0,21
+Uveal Melanoma – Iris Melanoma,AJCC7,38,0,38
+Uveal Melanoma – Iris Melanoma,AJCC8,21,0,21
+Vagina,AJCC7,10,0,10
+Vagina,AJCC8,16,16,0
+Vulva,AJCC7,31,0,31
+Vulva,AJCC8,15,13,2
