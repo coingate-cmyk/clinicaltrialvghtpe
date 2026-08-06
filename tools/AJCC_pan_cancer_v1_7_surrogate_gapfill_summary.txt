@@ -1,0 +1,21 @@
+AJCC pan-cancer CSV import v1.7 — AJCC8 surrogate gap-fill + strict definitions
+
+Purpose
+- Fix multiple cancer sites showing blank AJCC8 results when the uploaded AJCC8 PDF did not expose complete extractable stage-grouping rows for that site.
+- Keep v1.6 strict table-only TNM definitions to avoid figure captions being used as definitions.
+- Add clearly marked AJCC8 surrogate rows copied from AJCC7 where no AJCC8 rows were extractable, pending cancer committee validation.
+
+Rule counts
+- AJCC7 rules: 1525 rows, 76 sites
+- AJCC8 rules after v1.7: 1173 rows, 80 sites
+- AJCC8 surrogate rows added: 490 rows across 27 sites/gaps
+
+Important review files
+- AJCC8_surrogate_rule_audit_v1_7.csv
+- staging_rules_8_surrogate_review_v1_7.csv
+- staging_site_coverage_matrix_v1_7.csv
+- staging_category_definitions_review_v1_7.csv
+- AJCC_pan_cancer_v1_7_surrogate_QA.csv
+
+Caution
+Surrogate AJCC8 rows are not certified AJCC8 extraction. They are gap-fill rows copied from AJCC7 and marked in the note field so the cancer committee can review/correct them.

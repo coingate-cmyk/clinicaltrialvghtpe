@@ -1,0 +1,7 @@
+test,passed,detail
+AJCC8 surrogate rows created,True,490 surrogate rows created
+Merkel AJCC8 now has rows,True,18 rows
+Merkel AJCC8 M1 Stage IV row present,True,"[{'classification': 'any', 't': 'Any', 'n': 'Any', 'm': 'M1', 'stage': 'IV'}, {'classification': 'yp', 't': 'Any', 'n': 'Any', 'm': 'M1', 'stage': 'IV'}]"
+All AJCC7 sites have AJCC8 rows or surrogate,True,missing_after=0
+No obvious figure-caption/staging-form text in definitions,True,suspect_definition_rows=0
+quick-staging JavaScript syntax,True,OK

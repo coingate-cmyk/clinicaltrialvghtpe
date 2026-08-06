@@ -1,0 +1,28 @@
+site,reason,ajcc7_rows_copied,ajcc8_existing_rows,classes_copied
+Adrenal Cortical Carcinoma,no AJCC8 rows for site,9,0,all AJCC7 classes
+Adrenal – Neuroendocrine Tumors,no AJCC8 rows for site,14,0,all AJCC7 classes
+Anus,no AJCC8 rows for site,12,0,all AJCC7 classes
+"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",no AJCC8 rows for site,9,0,all AJCC7 classes
+Bone: Pelvis,no AJCC8 rows for site,9,0,all AJCC7 classes
+Bone: Spine,no AJCC8 rows for site,9,0,all AJCC7 classes
+Cervix Uteri,no AJCC8 rows for site,14,0,all AJCC7 classes
+Corpus Uteri – Carcinoma and Carcinosarcoma,no AJCC8 rows for site,12,0,all AJCC7 classes
+Esophagus / EGJ - adenocarcinoma,AJCC8 class-specific gap,1,24,yp
+Esophagus / EGJ - squamous,AJCC8 class-specific gap,1,24,yp
+Esophagus and Esophagogastric Junction: Other Histologies,no AJCC8 rows for site,36,0,all AJCC7 classes
+GIST,no AJCC8 rows for site,19,0,all AJCC7 classes
+Hypopharynx,no AJCC8 rows for site,39,0,all AJCC7 classes
+Lung,no AJCC8 rows for site,28,0,all AJCC7 classes
+Malignant Pleural Mesothelioma,no AJCC8 rows for site,20,0,all AJCC7 classes
+Melanoma of the Skin,no AJCC8 rows for site,27,0,all AJCC7 classes
+Merkel Cell Carcinoma,no AJCC8 rows for site,18,0,all AJCC7 classes
+Mucosal Melanoma of the Head and Neck,no AJCC8 rows for site,5,0,all AJCC7 classes
+Nasopharynx,no AJCC8 rows for site,39,0,all AJCC7 classes
+Oropharynx (p16-),no AJCC8 rows for site,39,0,all AJCC7 classes
+Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,no AJCC8 rows for site,21,0,all AJCC7 classes
+Soft Tissue Sarcoma of the Head and Neck,no AJCC8 rows for site,21,0,all AJCC7 classes
+Soft Tissue Sarcoma of the Retroperitoneum,no AJCC8 rows for site,21,0,all AJCC7 classes
+Soft Tissue Sarcoma of the Trunk and Extremities,no AJCC8 rows for site,21,0,all AJCC7 classes
+Soft Tissue Sarcoma – Unusual Histologies and Sites,no AJCC8 rows for site,21,0,all AJCC7 classes
+Testis,no AJCC8 rows for site,17,0,all AJCC7 classes
+Vagina,no AJCC8 rows for site,8,0,all AJCC7 classes

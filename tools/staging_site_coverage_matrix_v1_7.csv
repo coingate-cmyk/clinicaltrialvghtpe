@@ -1,0 +1,81 @@
+tool_site,ajcc7_rule_rows,ajcc8_rule_rows_after_v1_7,ajcc8_surrogate_rows,coverage_status_v1_7
+Adrenal Cortical Carcinoma,9,9,9,both_extracted_or_surrogate
+Adrenal – Neuroendocrine Tumors,14,14,14,both_extracted_or_surrogate
+Ampulla of Vater,18,12,0,both_extracted_or_surrogate
+Anus,12,12,12,both_extracted_or_surrogate
+Appendix - carcinoma,56,18,0,both_extracted_or_surrogate
+"Bone: Appendicular Skeleton, Trunk, Skull and Facial Bones",9,9,9,both_extracted_or_surrogate
+Bone: Pelvis,9,9,9,both_extracted_or_surrogate
+Bone: Spine,9,9,9,both_extracted_or_surrogate
+Breast,24,34,0,both_extracted_or_surrogate
+Cervical Lymph Nodes and Unknown Primary Tumors of the Head and Neck,0,5,0,AJCC8_only
+Cervix Uteri,14,14,14,both_extracted_or_surrogate
+Colon,35,17,0,both_extracted_or_surrogate
+Corpus Uteri – Adenosarcoma,12,22,0,both_extracted_or_surrogate
+Corpus Uteri – Carcinoma and Carcinosarcoma,12,12,12,both_extracted_or_surrogate
+Corpus Uteri – Leiomyosarcoma and Endometrial Stromal Sarcoma,12,22,0,both_extracted_or_surrogate
+Cutaneous Carcinoma of the Head and Neck,26,17,0,both_extracted_or_surrogate
+Distal bile duct,9,8,0,both_extracted_or_surrogate
+Esophagus / EGJ - adenocarcinoma,62,25,1,both_extracted_or_surrogate
+Esophagus / EGJ - squamous,60,25,1,both_extracted_or_surrogate
+Esophagus and Esophagogastric Junction: Other Histologies,36,36,36,both_extracted_or_surrogate
+Exocrine pancreas,18,8,0,both_extracted_or_surrogate
+Eyelid Carcinoma,11,5,0,both_extracted_or_surrogate
+GIST,19,19,19,both_extracted_or_surrogate
+Gallbladder,18,10,0,both_extracted_or_surrogate
+HCC / Liver,7,8,0,both_extracted_or_surrogate
+HPV-Mediated (p16+) Oropharyngeal Cancer,39,11,0,both_extracted_or_surrogate
+Hypopharynx,39,39,39,both_extracted_or_surrogate
+Intrahepatic bile duct,7,9,0,both_extracted_or_surrogate
+Kidney,11,12,0,both_extracted_or_surrogate
+Larynx: Glottis,16,3,0,both_extracted_or_surrogate
+Larynx: Subglottis,16,3,0,both_extracted_or_surrogate
+Larynx: Supraglottis,16,3,0,both_extracted_or_surrogate
+Lung,28,28,28,both_extracted_or_surrogate
+Major Salivary Glands,15,10,0,both_extracted_or_surrogate
+Male Penile Urethra and Female Urethra: Urothelial Carcinomas,15,13,0,both_extracted_or_surrogate
+Male Penile and Female Urethra: Squamous Cell Carcinoma and Adenocarcinoma,15,13,0,both_extracted_or_surrogate
+Malignant Pleural Mesothelioma,20,20,20,both_extracted_or_surrogate
+Maxillary Sinus,16,1,0,both_extracted_or_surrogate
+Melanoma of the Skin,27,27,27,both_extracted_or_surrogate
+Merkel Cell Carcinoma,18,18,18,both_extracted_or_surrogate
+Mucosal Melanoma of the Head and Neck,5,5,5,both_extracted_or_surrogate
+NET - appendix,17,26,0,both_extracted_or_surrogate
+NET - colon / rectum,7,17,0,both_extracted_or_surrogate
+NET - duodenum / ampulla,7,5,0,both_extracted_or_surrogate
+NET - jejunum / ileum,7,21,0,both_extracted_or_surrogate
+NET - pancreas,37,5,0,both_extracted_or_surrogate
+NET - stomach,7,18,0,both_extracted_or_surrogate
+Nasal Cavity and Ethmoid Sinus,16,1,0,both_extracted_or_surrogate
+Nasopharynx,39,39,39,both_extracted_or_surrogate
+Oral Cavity,16,16,0,both_extracted_or_surrogate
+Oropharynx (p16-),39,39,39,both_extracted_or_surrogate
+"Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",17,4,0,both_extracted_or_surrogate
+Penis,22,5,0,both_extracted_or_surrogate
+Perihilar bile duct,17,8,0,both_extracted_or_surrogate
+Primary Cutaneous Lymphoma: Mycosis Fungoides and Sézary Syndrome,0,3,0,AJCC8_only
+Primary Cutaneous Lymphoma: Primary Cutaneous B-Cell/T-Cell (non-MF/SS),0,3,0,AJCC8_only
+Prostate,21,6,0,both_extracted_or_surrogate
+Prostatic Urethra: Squamous Cell Carcinoma and Adenocarcinoma,15,13,0,both_extracted_or_surrogate
+Prostatic Urethra: Urothelial Carcinomas,15,13,0,both_extracted_or_surrogate
+Rectum,35,17,0,both_extracted_or_surrogate
+Renal Pelvis and Ureter,20,9,0,both_extracted_or_surrogate
+Retinoblastoma,0,6,0,AJCC8_only
+Small Intestine: Other Histologies,16,7,0,both_extracted_or_surrogate
+Small intestine,16,7,0,both_extracted_or_surrogate
+Soft Tissue Sarcoma of the Abdomen and Thoracic Visceral Organs,21,21,21,both_extracted_or_surrogate
+Soft Tissue Sarcoma of the Head and Neck,21,21,21,both_extracted_or_surrogate
+Soft Tissue Sarcoma of the Retroperitoneum,21,21,21,both_extracted_or_surrogate
+Soft Tissue Sarcoma of the Trunk and Extremities,21,21,21,both_extracted_or_surrogate
+Soft Tissue Sarcoma – Unusual Histologies and Sites,21,21,21,both_extracted_or_surrogate
+Stomach,22,69,0,both_extracted_or_surrogate
+Testis,17,17,17,both_extracted_or_surrogate
+Thyroid – Anaplastic,18,7,0,both_extracted_or_surrogate
+Thyroid – Differentiated,18,7,0,both_extracted_or_surrogate
+Thyroid – Medullary,18,1,0,both_extracted_or_surrogate
+Urinary Bladder: Squamous Cell Carcinoma and Adenocarcinoma,22,18,0,both_extracted_or_surrogate
+Urinary Bladder: Urothelial Carcinomas,22,18,0,both_extracted_or_surrogate
+Uveal Melanoma – Choroidal and Ciliary Body Melanoma,26,19,0,both_extracted_or_surrogate
+Uveal Melanoma – Iris Melanoma,26,19,0,both_extracted_or_surrogate
+Vagina,8,8,8,both_extracted_or_surrogate
+Vulva,23,3,0,both_extracted_or_surrogate
