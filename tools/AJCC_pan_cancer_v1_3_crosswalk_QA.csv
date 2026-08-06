@@ -1,0 +1,24 @@
+﻿check,value,status,details
+tool sites in group list,99,pass,
+crosswalk rows,99,pass,
+AJCC7 import rows after crosswalk,1525,needs_review,
+AJCC8 import rows after crosswalk,683,needs_review,
+sites with AJCC7 rows,75,needs_review,
+sites with AJCC8 rows,54,needs_review,
+sites with both editions rows,50,needs_review,
+sites with AJCC7-only rows,25,needs_review,
+sites with AJCC8-only rows,4,needs_review,
+sites with no import rows,20,needs_review,
+coverage sentinel Lung,ajcc7_only_import_rows,pass,coverage row exists
+coverage sentinel Breast,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Prostate,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Kidney,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Exocrine pancreas,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Oral Cavity,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Nasopharynx,ajcc7_only_import_rows,pass,coverage row exists
+coverage sentinel Thyroid – Differentiated,both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Urinary Bladder: Urothelial Carcinomas,both_editions_have_import_rows,pass,coverage row exists
+"coverage sentinel Ovary, Fallopian Tube and Primary Peritoneal Carcinoma",both_editions_have_import_rows,pass,coverage row exists
+coverage sentinel Hodgkin Lymphoma,site_present_no_import_rows,pass,coverage row exists
+no-row sites with chapter pages flagged,47,pass,These are not silently hidden; coverage matrix identifies them.
+quick-staging.html JavaScript syntax,pass,pass,node --check

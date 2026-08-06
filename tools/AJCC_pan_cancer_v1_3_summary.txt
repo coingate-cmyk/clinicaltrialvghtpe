@@ -1,0 +1,29 @@
+AJCC pan-cancer CSV import v1.3 crosswalk + full coverage audit
+
+Purpose:
+- Fix the confusing situation where some cancer sites appeared to have AJCC7 but not AJCC8 rows, or vice versa, due to edition-specific chapter renaming/splitting/merging.
+- Keep all 99 pan-cancer tool sites visible.
+- Crosswalk AJCC7 broad chapters to AJCC8 split sites where clinically reasonable, and mark those rows for cancer committee review.
+
+Counts after v1.3 crosswalk:
+- Tool sites in registry: 99
+- AJCC7 import rows: 1525
+- AJCC8 import rows: 683
+- Sites with both AJCC7 and AJCC8 import rows: 50
+- Sites with AJCC7 rows only: 25
+- Sites with AJCC8 rows only: 4
+- Sites present but no import rows: 20
+
+Important explanation:
+- Some apparent gaps were not true missing cancers; they were name/scope mismatches. Example: AJCC7 has a broad Pharynx chapter, while AJCC8 splits nasopharynx, HPV-mediated oropharynx, p16-negative oropharynx/hypopharynx.
+- The uploaded AJCC8 file appears to be an updates/corrections PDF with many site chapters but not always a complete, consistently extractable stage-grouping table for every site. v1.3 therefore exposes these in the coverage matrix instead of pretending complete extraction.
+- No guessed stage rows were created where a stage grouping row could not be extracted. Missing rule rows are flagged in staging_site_coverage_matrix_v1_3.csv.
+
+Key review files:
+- staging_site_coverage_matrix_v1_3.csv: first file cancer committee should inspect.
+- staging_site_crosswalk_v1_3.csv: shows how AJCC7 source chapters were mapped to AJCC8/current tool sites.
+- staging_rules_7.csv and staging_rules_8.csv: import files for the tool.
+- staging_rules_7_review_with_source.csv / staging_rules_8_review_with_source.csv / staging_table_raw_lines_extracted.csv: raw extraction audit.
+
+Deployment:
+Upload tools/ contents to repo tools/. v1.3 quick-staging.html loads staging_site_coverage_matrix_v1_3.csv and shows coverage notes when a version has no matched rule.

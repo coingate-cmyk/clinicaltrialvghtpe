@@ -85,7 +85,7 @@ const CLASS_NOTES={
  recurrence:'Recurrence / rTNM：復發或再治療時使用；需根據復發當下的臨床/病理資訊，第一版僅保留架構與補充 CSV。'
 };
 const ORD={t:['Any','Tis','Tis(LAMN)','T0','T1','T1a','T1b','T1c','T2','T2a','T2b','T3','T3a','T3b','T4','T4a','T4b','TX'],n:['Any','NX','N0','N1','N1a','N1b','N1c','N2','N2a','N2b','N3','N3a','N3b'],m:['M0','M1','M1a','M1b','M1c','Any'],grade:['Any','N/A','G1','G2','G3','GX'],location:['Any','Upper','Middle','Lower','Location X']};
-let staticRules=[];let staticDefinitions=[];let loadStatus=[];
+let staticRules=[];let staticDefinitions=[];let staticCoverage=[];let loadStatus=[];
 function saved(){try{return JSON.parse(localStorage.getItem('staging_rules_user')||'[]')}catch(e){return[]}}
 function normalizeClassification(v){const x=String(v||'any').trim().toLowerCase().replace(/[\s_\-]+/g,'');if(!x||x==='any'||x==='all'||x==='both')return'any';if(['c','ctnm','clinical'].includes(x))return'clinical';if(['p','ptnm','pathologic','pathological'].includes(x))return'pathological';if(['yp','yptnm','postneoadjuvant','posttherapy','posttreatment'].includes(x))return'yp';if(['r','rtnm','recurrence','recurrent','retreatment'].includes(x))return'recurrence';return x}
 function classLabel(v){const x=normalizeClassification(v);return x==='any'?'any':x==='clinical'?'Clinical / cTNM':x==='pathological'?'Pathological / pTNM':x==='yp'?'Post-neoadjuvant / ypTNM':x==='recurrence'?'Recurrence / rTNM':x}
@@ -143,6 +143,40 @@ function parseDefinitionCSV(s){
 }
 function allDefinitions(){return (staticDefinitions||[]).map(normalizeDefinition).filter(d=>d.site&&d.edition&&d.category_type&&d.category&&d.short_definition)}
 
+function parseCoverageCSV(s){
+  const lines=String(s||'').split(/\r?\n/).filter(x=>x.trim());
+  if(!lines.length)return[];
+  const header=parseCSVLine(lines[0]).map(x=>x.trim());
+  const idx=(name,fallback)=>{const i=header.indexOf(name);return i>=0?i:fallback};
+  return lines.slice(1).map(line=>{const c=parseCSVLine(line);return {
+    tool_site:c[idx('tool_site',2)]||'',
+    ajcc7_import_rule_rows:c[idx('ajcc7_import_rule_rows',5)]||'0',
+    ajcc8_import_rule_rows:c[idx('ajcc8_import_rule_rows',8)]||'0',
+    ajcc7_source_pages:c[idx('ajcc7_source_pages',4)]||'',
+    ajcc8_source_pages:c[idx('ajcc8_source_pages',7)]||'',
+    coverage_status:c[idx('coverage_status',9)]||'',
+    crosswalk_note:c[idx('crosswalk_note',10)]||''
+  }}).filter(r=>r.tool_site);
+}
+function coverageFor(siteName){return (staticCoverage||[]).find(r=>String(r.tool_site||'')===String(siteName||''))||null}
+function coverageHTML(siteName, edition){
+  const c=coverageFor(siteName);
+  if(!c)return'';
+  const is7=edition==='AJCC7';
+  const rows=Number(is7?c.ajcc7_import_rule_rows:c.ajcc8_import_rule_rows)||0;
+  const pages=is7?c.ajcc7_source_pages:c.ajcc8_source_pages;
+  const other=Number(is7?c.ajcc8_import_rule_rows:c.ajcc7_import_rule_rows)||0;
+  const edLabel=is7?'AJCC7':'AJCC8';
+  let msg='';
+  if(rows>0) msg=`${edLabel} import rows：${rows}。`;
+  else if(pages) msg=`${edLabel} 章節在上傳 manual 中有對應頁面（${pages}），但本版沒有抽到可直接匯入的 stage-grouping rows；請看 coverage matrix / review CSV 補表。`;
+  else msg=`${edLabel} 在本 crosswalk 沒有直接對應章節；可能是新版拆分/合併或不適用。`;
+  if(other>0 && rows===0) msg += ` 另一版已有 ${other} 筆可測試 rows。`;
+  if(c.crosswalk_note) msg += ` Crosswalk note：${c.crosswalk_note}`;
+  return `<div class="mt-2 text-xs text-slate-500 border-t pt-2">${escapeHTML(msg)}</div>`;
+}
+
+
 function stageRank(stage){const order=['0','IA','IB','IC','I','IIA','IIB','IIC','II','IIIA','IIIB','IIIC','III','IVA','IVB','IVC','IV'];const i=order.indexOf(String(stage||'').toUpperCase());return i<0?999:i}
 function categoryPrefix(v){return String(v||'').replace(/[abc]$/i,'')}
 function categoryFamily(v){const m=String(v||'').match(/^([TNM])(\d)/i);return m?(m[1].toUpperCase()+m[2]):String(v||'')}
@@ -157,7 +191,7 @@ function classExactness(ruleClass,userClass){const r=normalizeClassification(rul
 function specificityScore(rule,q){return (siteOK(rule.site,q.site)?3:-99)+exactness(rule.edition,q.edition)+classExactness(rule.classification,q.classification)+exactness(rule.t,q.t)+exactness(rule.n,q.n)+exactness(rule.m,q.m)+exactness(rule.grade||'Any',q.grade||'Any')+exactness(rule.location||'Any',q.location||'Any')}
 function match(rule,q){return siteOK(rule.site,q.site)&&ok(rule.edition,q.edition)&&classOK(rule.classification,q.classification)&&ok(rule.t,q.t)&&ok(rule.n,q.n)&&ok(rule.m,q.m)&&ok(rule.grade||'Any',q.grade||'Any')&&ok(rule.location||'Any',q.location||'Any')}
 function bestMatch(q){return allRules().filter(r=>match(r,q)).sort((a,b)=>specificityScore(b,q)-specificityScore(a,q)||stageRank(b.stage)-stageRank(a.stage))[0]||null}
-function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 staging rules ${staticRules.length} 筆、TNM definitions · v1.2 pan-cancer CSV import draft + system-grouped site list + exact matcher ${staticDefinitions.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；癌種 registry ${baseSites.length} 個；AJCC 7/8 merged import draft；aliases ${Object.keys(SITE_ALIASES).length} 組；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
+function setInfo(){const counts={};staticRules.forEach(r=>{const key=versionLabel(r.edition)+' '+classLabel(r.classification);counts[key]=(counts[key]||0)+1});info.textContent=`自動載入 staging rules ${staticRules.length} 筆、TNM definitions · v1.3 pan-cancer crosswalk + coverage audit + exact matcher ${staticDefinitions.length} 筆（${Object.entries(counts).map(([k,v])=>k+': '+v).join('；')||'無'}）；癌種 registry ${baseSites.length} 個；AJCC 7/8 merged import + site crosswalk audit；aliases ${Object.keys(SITE_ALIASES).length} 組；手動匯入 ${saved().length} 筆。${loadStatus.length?'｜'+loadStatus.join('；'):''}`}
 function siteGroup(site){return SITE_GROUPS[site]||'Other / Special / 其他特殊'}
 function siteGroupRank(group){return SITE_GROUP_ORDER[group]||999}
 function sortSitesForDisplay(vals){return uniq(vals).sort((a,b)=>siteGroupRank(siteGroup(a))-siteGroupRank(siteGroup(b))||(SITE_SORT_ORDER[a]||9999)-(SITE_SORT_ORDER[b]||9999)||siteDisplayLabel(a).localeCompare(siteDisplayLabel(b)))}
@@ -249,7 +283,7 @@ function resultCard(edition,found,q){
   const defs=renderCategoryDefinitions(q);
   if(!found){
     const note=SITE_NOTES[q.site]||'可能尚未建置此癌種 / 版本 / stage basis，或此癌種需要額外 prognostic factors。';
-    return`<div class="rounded-xl border bg-slate-50 p-4"><div class="text-sm font-semibold text-slate-500">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-2xl font-bold text-slate-500 mt-1">未找到規則</div><div class="mt-2 text-sm text-slate-600">${escapeHTML(note)}</div>${defs}</div>`;
+    return`<div class="rounded-xl border bg-slate-50 p-4"><div class="text-sm font-semibold text-slate-500">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-2xl font-bold text-slate-500 mt-1">未找到規則</div><div class="mt-2 text-sm text-slate-600">${escapeHTML(note)}</div>${coverageHTML(q.site, edition)}${defs}</div>`;
   }
   return`<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><div class="text-sm font-semibold text-emerald-700">AJCC ${label}｜${escapeHTML(classLabel(q.classification))}</div><div class="text-3xl font-bold text-emerald-800 mt-1">Stage ${escapeHTML(found.stage)}</div><div class="mt-2 text-sm text-emerald-900">${escapeHTML(siteDisplayLabel(found.site))} ${escapeHTML(found.t)}/${escapeHTML(found.n)}/${escapeHTML(found.m)}${found.grade&&found.grade!=='Any'?' · G '+escapeHTML(found.grade):''}${found.location&&found.location!=='Any'?' · L '+escapeHTML(found.location):''}</div><div class="mt-1 text-xs text-slate-600">rule basis: ${escapeHTML(classLabel(found.classification))}</div>${defs}${found.note?`<div class="mt-2 text-xs text-amber-800">${escapeHTML(found.note)}</div>`:''}</div>`;
 }
@@ -266,7 +300,10 @@ function copyResult(){const rows=(window.lastResults||[]).map(r=>{const q=r.q||{
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 async function loadRulesFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
 async function loadDefinitionsFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseDefinitionCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
-async function boot(){refreshSites();refreshCascade('site');lookup();const packs=await Promise.all([loadRulesFromFile('staging_rules_7.csv'),loadRulesFromFile('staging_rules_8.csv'),loadDefinitionsFromFile('staging_category_definitions.csv')]);staticRules=packs.slice(0,2).flat().map(normalizeRule);staticDefinitions=(packs[2]||[]).map(normalizeDefinition);refreshSites();setInfo();refreshCascade('site');lookup()}
+
+async function loadCoverageFromFile(file){try{const r=await fetch(file,{cache:'no-store'});if(!r.ok){loadStatus.push(`${file} 未載入`);return[]}const rows=parseCoverageCSV(await r.text());loadStatus.push(`${file}: ${rows.length} 筆`);return rows}catch(e){loadStatus.push(`${file} 讀取失敗`);return[]}}
+
+async function boot(){refreshSites();refreshCascade('site');lookup();const packs=await Promise.all([loadRulesFromFile('staging_rules_7.csv'),loadRulesFromFile('staging_rules_8.csv'),loadDefinitionsFromFile('staging_category_definitions.csv'),loadCoverageFromFile('staging_site_coverage_matrix_v1_3.csv')]);staticRules=packs.slice(0,2).flat().map(normalizeRule);staticDefinitions=(packs[2]||[]).map(normalizeDefinition);staticCoverage=(packs[3]||[]);refreshSites();setInfo();refreshCascade('site');lookup()}
 setInfo();boot();
 </script>
 </body></html>
