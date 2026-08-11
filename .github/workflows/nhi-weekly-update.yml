@@ -1,0 +1,85 @@
+name: Weekly NHI Oncology Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub cron uses UTC: Monday 02:15 = Taiwan Monday 10:15
+    - cron: '15 2 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/nhi_update.py'
+      - 'tools/nhi/config/cancer_aliases.json'
+      - '.github/workflows/nhi-weekly-update.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nhi-weekly-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install parser dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+
+      - name: Fetch official chapter 9 and build audit
+        run: python scripts/nhi_update.py
+
+      - name: Validate generated files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          current=json.loads(Path('tools/nhi/data/raw/current.json').read_text(encoding='utf-8'))
+          coverage=json.loads(Path('tools/nhi/data/coverage-report.json').read_text(encoding='utf-8'))
+          review=json.loads(Path('tools/nhi/data/review-queue.json').read_text(encoding='utf-8'))
+          assert current['section_count'] >= 80, current['section_count']
+          assert coverage['status'] == 'ok'
+          assert review['status'] == 'ok'
+          assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
+          print('NHI validation OK:', current['section_count'], 'sections;', coverage['missing_candidate_count'], 'coverage candidates to review')
+          PY
+
+      - name: Commit source snapshot and review queue to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/data tools/nhi/assets/nhi-status.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update NHI chapter 9 snapshot and audit'
+            git push origin main
+          fi
+          rm -rf /tmp/nhi-data
+          mkdir -p /tmp/nhi-data
+          cp -a tools/nhi/data /tmp/nhi-data/data
+          cp tools/nhi/assets/nhi-status.js /tmp/nhi-data/nhi-status.js
+
+      - name: Publish generated audit data to live Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          rm -rf tools/nhi/data
+          mkdir -p tools/nhi/assets
+          cp -a /tmp/nhi-data/data tools/nhi/data
+          cp /tmp/nhi-data/nhi-status.js tools/nhi/assets/nhi-status.js
+          git add tools/nhi/data tools/nhi/assets/nhi-status.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI chapter 9 audit data'
+            git push origin pages-clean-ajcc-v2-3
+          fi
