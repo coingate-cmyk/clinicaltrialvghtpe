@@ -1,0 +1,67 @@
+name: Add NHI Navigator to homepage
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/patch_nhi_home.py'
+      - '.github/workflows/patch-nhi-home.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch main homepage
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp scripts/patch_nhi_home.py /tmp/patch_nhi_home.py
+          python /tmp/patch_nhi_home.py
+          node - <<'NODE'
+          const fs = require('fs'), vm = require('vm');
+          const html = fs.readFileSync('index.html','utf8');
+          const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
+            .map(x => x[1]).filter(x => x.trim());
+          scripts.forEach((s,i) => new vm.Script(s,{filename:`inline-${i}.js`}));
+          if (!html.includes('./tools/nhi/index.html')) throw new Error('NHI homepage link missing');
+          console.log(`main homepage OK; ${scripts.length} inline scripts parsed`);
+          NODE
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html 404.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add NHI Navigator homepage entry'
+            git push origin main
+          fi
+
+      - name: Patch live Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          python /tmp/patch_nhi_home.py
+          node - <<'NODE'
+          const fs = require('fs'), vm = require('vm');
+          const html = fs.readFileSync('index.html','utf8');
+          const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
+            .map(x => x[1]).filter(x => x.trim());
+          scripts.forEach((s,i) => new vm.Script(s,{filename:`inline-${i}.js`}));
+          if (!html.includes('./tools/nhi/index.html')) throw new Error('NHI homepage link missing');
+          console.log(`Pages homepage OK; ${scripts.length} inline scripts parsed`);
+          NODE
+          git add index.html 404.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add NHI Navigator homepage entry'
+            git push origin pages-clean-ajcc-v2-3
+          fi
