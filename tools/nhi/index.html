@@ -30,9 +30,9 @@
   <main class="shell">
     <section class="hero">
       <div>
-        <p class="eyebrow">GI BETA · V0.2</p>
+        <p class="eyebrow">ALL CANCERS · V0.3 BETA</p>
         <h1>先從癌種開始，<br><span>再找健保能不能用。</span></h1>
-        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。保留健保章節與原始 PDF 入口，摘要只做臨床導航，不取代正式規定。</p>
+        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。全癌種先進入自動監測；只有人工核對完成的給付情境才顯示臨床摘要。</p>
       </div>
       <div class="hero-stat-grid" id="heroStats"></div>
     </section>
@@ -45,7 +45,7 @@
           <p class="eyebrow">BROWSE BY CANCER</p>
           <h2>依癌種查詢</h2>
         </div>
-        <button id="showAllBtn" class="ghost-button" type="button">全部給付情境</button>
+        <button id="showAllBtn" class="ghost-button" type="button">全部已整理情境</button>
       </div>
       <div id="cancerGrid" class="cancer-grid"></div>
     </section>
@@ -53,7 +53,7 @@
     <section id="resultsSection" class="results-section section-block" hidden>
       <div class="results-head">
         <div>
-          <button id="backBtn" class="back-link" type="button">← 六癌種</button>
+          <button id="backBtn" class="back-link" type="button">← 全癌種</button>
           <p id="resultEyebrow" class="eyebrow">CANCER</p>
           <h2 id="resultTitle">給付情境</h2>
           <p id="resultDescription" class="muted"></p>
@@ -62,12 +62,8 @@
       </div>
 
       <div class="filter-bar" aria-label="篩選條件">
-        <select id="lineFilter" aria-label="治療線別">
-          <option value="">所有線別</option>
-        </select>
-        <select id="biomarkerFilter" aria-label="Biomarker">
-          <option value="">所有 biomarker</option>
-        </select>
+        <select id="lineFilter" aria-label="治療線別"><option value="">所有線別</option></select>
+        <select id="biomarkerFilter" aria-label="Biomarker"><option value="">所有 biomarker</option></select>
         <select id="authFilter" aria-label="事前審查">
           <option value="">事審不限</option>
           <option value="yes">需事前審查</option>
@@ -78,34 +74,27 @@
 
       <div id="activeFilters" class="active-filters"></div>
       <div id="results" class="result-list"></div>
-      <div id="emptyState" class="empty-state" hidden>
-        <strong>沒有符合條件的項目</strong>
-        <span>換一個線別、biomarker 或搜尋詞試試。</span>
-      </div>
+      <div id="emptyState" class="empty-state" hidden></div>
     </section>
 
     <section class="section-block methodology">
       <div>
         <p class="eyebrow">HOW IT UPDATES</p>
-        <h2>自動抓新版，人工只審「有變的地方」</h2>
+        <h2>每週抓新版，人工只審「有變或可能漏掉的地方」</h2>
       </div>
       <div class="pipeline">
-        <div><b>1</b><span>健保署第 9 節 ODT</span></div>
-        <i>→</i>
-        <div><b>2</b><span>解析 9.x 條文</span></div>
-        <i>→</i>
-        <div><b>3</b><span>癌種候選分類</span></div>
-        <i>→</i>
-        <div><b>4</b><span>新舊版本 diff</span></div>
-        <i>→</i>
-        <div><b>5</b><span>review queue</span></div>
+        <div><b>1</b><span>健保署第 9 節</span></div><i>→</i>
+        <div><b>2</b><span>解析 9.x 條文</span></div><i>→</i>
+        <div><b>3</b><span>全癌種候選掃描</span></div><i>→</i>
+        <div><b>4</b><span>新舊版本 diff</span></div><i>→</i>
+        <div><b>5</b><span>漏項 / 變更 review queue</span></div>
       </div>
-      <p class="muted methodology-note">設計原則：爬蟲可以自動偵測變更，但不讓規則引擎直接覆寫臨床摘要；跨癌種、多層次事審條文先進 review queue，再更新 curated data。</p>
+      <p class="muted methodology-note">設計原則：官方原始條文、變更偵測與漏項掃描可以自動；line、biomarker、事審條件與臨床摘要必須經人工核對後才進 curated data。</p>
     </section>
   </main>
 
   <footer>
-    <p><strong>重要：</strong>此網站為臨床快速查詢 prototype；申報、處方與治療決策請以健保署最新公告、藥品許可證與院內規範為準。</p>
+    <p><strong>重要：</strong>此網站為臨床快速查詢 beta；申報、處方與治療決策請以健保署最新公告、藥品許可證與院內規範為準。</p>
     <p id="footerMeta"></p>
   </footer>
 
@@ -123,9 +112,7 @@
   <script src="assets/data-hcc.js"></script>
   <script src="assets/data-biliary.js"></script>
   <script src="assets/data-pancreatic.js"></script>
+  <script src="assets/nhi-status.js"></script>
   <script src="assets/app.js"></script>
-  <script>
-    document.getElementById('changePanel').innerHTML = '<div><strong>目前為團隊測試版</strong><span>每週自動爬取與條文 diff workflow 尚未接入正式系統；本版先使用人工核對後的 curated snapshot，收集完整性與介面回饋。</span></div>';
-  </script>
 </body>
 </html>
