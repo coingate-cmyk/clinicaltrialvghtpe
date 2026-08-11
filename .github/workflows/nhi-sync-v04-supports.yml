@@ -1,0 +1,48 @@
+name: Sync NHI v0.4 Support Modules
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/nhi-sync-v04-supports.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stage live support files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/nhi-v04-supports
+          mkdir -p /tmp/nhi-v04-supports/assets
+          cp tools/nhi/index.html /tmp/nhi-v04-supports/index.html
+          cp tools/nhi/assets/data-breast-support.js /tmp/nhi-v04-supports/assets/
+          cp tools/nhi/assets/data-lung-support.js /tmp/nhi-v04-supports/assets/
+          cp tools/nhi/assets/data-prostate-support.js /tmp/nhi-v04-supports/assets/
+
+      - name: Publish to Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/nhi-v04-supports/index.html tools/nhi/index.html
+          cp /tmp/nhi-v04-supports/assets/* tools/nhi/assets/
+          git add tools/nhi/index.html tools/nhi/assets/data-breast-support.js tools/nhi/assets/data-lung-support.js tools/nhi/assets/data-prostate-support.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI v0.4 support modules'
+            git push origin pages-clean-ajcc-v2-3
+          fi
