@@ -12,6 +12,7 @@ import io
 import json
 import re
 import zipfile
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
@@ -172,6 +173,10 @@ def make_diff(old_sections: dict, new_sections: dict, fetched_at: str) -> dict:
 def alias_found(text: str, alias: str) -> bool:
     if not alias:
         return False
+    # NHI PDFs sometimes use CJK compatibility glyphs (e.g. 泌尿).
+    # NFKC makes those equivalent to normal clinical search terms before matching.
+    text = unicodedata.normalize("NFKC", str(text))
+    alias = unicodedata.normalize("NFKC", str(alias))
     if re.fullmatch(r"[A-Za-z0-9+\-/ ]+", alias):
         pattern = r"(?<![A-Za-z0-9])" + re.escape(alias) + r"(?![A-Za-z0-9])"
         return re.search(pattern, text, re.I) is not None

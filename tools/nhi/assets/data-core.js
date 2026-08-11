@@ -5,9 +5,9 @@ window.NHI_DATA = {
     "source_update": "115/7/23",
     "verified_on": "2026-08-11",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
-    "scope": "全癌種 taxonomy；目前 GI 六癌種已有 curated records，其餘癌種由每週 coverage audit 逐步補齊",
-    "note": "V0.3：加入全癌種分類骨架、官方第 9 節自動 diff 與漏項偵測。未人工核對的候選條文不會自動變成臨床摘要。",
-    "version": "0.3"
+    "scope": "全癌種 taxonomy；GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌已有 curated records，其餘癌種由每週 coverage audit 逐步補齊",
+    "note": "V0.4：新增乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 curated retrieval；全癌種每週第 9 節自動 diff 與漏項偵測持續運作。",
+    "version": "0.4"
   },
   "cancers": [
     {"id":"gastric","name":"胃癌 / GEJ","en":"Gastric / GEJ","icon":"胃","group":"GI","curated":true,"description":"胃腺癌與胃食道接合處腺癌"},
@@ -17,17 +17,17 @@ window.NHI_DATA = {
     {"id":"biliary","name":"膽道癌","en":"Biliary tract","icon":"膽","group":"GI","curated":true,"description":"BTC / cholangiocarcinoma / gallbladder"},
     {"id":"pancreatic","name":"胰臟癌","en":"Pancreatic","icon":"胰","group":"GI","curated":true,"description":"胰臟癌系統性治療與標靶例外情境"},
 
-    {"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":false,"description":"NSCLC / SCLC；自動掃描後逐項人工核對"},
+    {"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":true,"description":"NSCLC / SCLC；EGFR / ALK / ROS1 / BRAF / MET / NTRK 與免疫治療"},
     {"id":"mesothelioma","name":"惡性間皮瘤","en":"Mesothelioma","icon":"胸","group":"Thoracic","curated":false,"description":"胸膜等惡性間皮瘤"},
-    {"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":false,"description":"HER2 / HR / TNBC 等給付情境"},
-    {"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":false,"description":"HNSCC 系統性治療"},
+    {"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":true,"description":"HER2 / HR / TNBC；早期與轉移性給付情境"},
+    {"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":true,"description":"HNSCC（不含鼻咽癌）局部晚期與復發/轉移治療"},
     {"id":"nasopharyngeal","name":"鼻咽癌","en":"Nasopharyngeal","icon":"鼻","group":"Head & Neck","curated":false,"description":"NPC 給付條文"},
     {"id":"thyroid","name":"甲狀腺癌","en":"Thyroid","icon":"甲","group":"Endocrine","curated":false,"description":"DTC / MTC 等情境"},
     {"id":"neuroendocrine","name":"神經內分泌腫瘤","en":"Neuroendocrine","icon":"NET","group":"Endocrine","curated":false,"description":"NET / NEC 相關給付"},
 
     {"id":"renal","name":"腎細胞癌","en":"Renal cell","icon":"腎","group":"GU","curated":false,"description":"RCC 標靶與免疫治療"},
-    {"id":"urothelial","name":"泌尿道上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":false,"description":"Urothelial / bladder cancer"},
-    {"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":false,"description":"mHSPC / mCRPC 等情境"},
+    {"id":"urothelial","name":"泌尿上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":true,"description":"局部晚期 / 轉移性 urothelial carcinoma；ICI、maintenance、ADC"},
+    {"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":true,"description":"mCSPC / nmCRPC / mCRPC；NHA、PARP、化療與骨轉移治療"},
     {"id":"germ_cell","name":"生殖細胞腫瘤","en":"Germ cell","icon":"GCT","group":"GU / Gyn","curated":false,"description":"睪丸與其他生殖細胞腫瘤"},
 
     {"id":"ovarian","name":"卵巢 / 輸卵管 / 原發腹膜癌","en":"Ovarian / FT / PPC","icon":"卵","group":"Gynecologic","curated":false,"description":"卵巢、輸卵管與原發腹膜癌"},
