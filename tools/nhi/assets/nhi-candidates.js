@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-11T08:39:21Z",
+    "fetched_at": "2026-08-11T08:42:42Z",
     "source_update": "115.7.23",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
@@ -13,6 +13,11 @@ window.NHI_CANDIDATES = {
       "curated_count": 7,
       "candidates": [
         {
+          "section_id": "9.3",
+          "title": "Docetaxel",
+          "official_only": true
+        },
+        {
           "section_id": "9.10",
           "title": "Oxaliplatin： （需符合藥品許可證登載之適應症）",
           "official_only": true
@@ -23,11 +28,6 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
-          "section_id": "9.133",
-          "title": "Zolbetuximab (如 Vyloy)",
-          "official_only": true
-        },
-        {
           "section_id": "9.17",
           "title": "Capecitabine（如 Xeloda）",
           "official_only": true
@@ -35,11 +35,6 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.18",
           "title": "Trastuzumab (如 Herceptin)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.3",
-          "title": "Docetaxel",
           "official_only": true
         },
         {
@@ -55,6 +50,11 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.69",
           "title": "免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dos…",
+          "official_only": true
+        },
+        {
+          "section_id": "9.133",
+          "title": "Zolbetuximab (如 Vyloy)",
           "official_only": true
         }
       ]
@@ -99,16 +99,6 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
-          "section_id": "9.134",
-          "title": "Encorafenib (如 Braftovi)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.136",
-          "title": "Fruquintinib (如 Fruzaqla)",
-          "official_only": true
-        },
-        {
           "section_id": "9.17",
           "title": "Capecitabine（如 Xeloda）",
           "official_only": true
@@ -146,6 +136,16 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.95",
           "title": "Larotrectinib (如 Vitrakvi)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.134",
+          "title": "Encorafenib (如 Braftovi)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.136",
+          "title": "Fruquintinib (如 Fruzaqla)",
           "official_only": true
         }
       ]
@@ -225,26 +225,26 @@ window.NHI_CANDIDATES = {
       "name": "胰臟癌",
       "group": "GI",
       "candidate_count": 5,
-      "curated_count": 6,
+      "curated_count": 5,
       "candidates": [
-        {
-          "section_id": "9.12",
-          "title": "Irinotecan",
-          "official_only": true
-        },
         {
           "section_id": "9.4",
           "title": "Gemcitabine（如 Gemzar）",
           "official_only": true
         },
         {
-          "section_id": "9.46",
-          "title": "Tegafur/gimeracil/oteracil 複方製劑(如 TS-1）",
+          "section_id": "9.5",
+          "title": "Paclitaxel 成分劑",
           "official_only": true
         },
         {
-          "section_id": "9.5",
-          "title": "Paclitaxel 成分劑",
+          "section_id": "9.12",
+          "title": "Irinotecan",
+          "official_only": true
+        },
+        {
+          "section_id": "9.46",
+          "title": "Tegafur/gimeracil/oteracil 複方製劑(如 TS-1）",
           "official_only": true
         },
         {
@@ -261,8 +261,28 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
-          "section_id": "9.101",
-          "title": "Tepotinib (如 Tepmetko)",
+          "section_id": "9.2",
+          "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.3",
+          "title": "Docetaxel",
+          "official_only": true
+        },
+        {
+          "section_id": "9.4",
+          "title": "Gemcitabine（如 Gemzar）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.5",
+          "title": "Paclitaxel 成分劑",
+          "official_only": true
+        },
+        {
+          "section_id": "9.9",
+          "title": "Vinorelbine",
           "official_only": true
         },
         {
@@ -271,28 +291,8 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
-          "section_id": "9.126",
-          "title": "Amivantamab(如 Rybrevant)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.131",
-          "title": "Repotrectinib(如 Augtyro)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.138",
-          "title": "Aumolertinib (如 Pulmivex)",
-          "official_only": true
-        },
-        {
           "section_id": "9.16",
           "title": "Topotecan（如 Hycamtin）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.2",
-          "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
           "official_only": true
         },
         {
@@ -311,18 +311,8 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
-          "section_id": "9.3",
-          "title": "Docetaxel",
-          "official_only": true
-        },
-        {
           "section_id": "9.37",
           "title": "Bevacizumab(如 Avastin)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.4",
-          "title": "Gemcitabine（如 Gemzar）",
           "official_only": true
         },
         {
@@ -333,11 +323,6 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.46",
           "title": "Tegafur/gimeracil/oteracil 複方製劑(如 TS-1）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.5",
-          "title": "Paclitaxel 成分劑",
           "official_only": true
         },
         {
@@ -376,11 +361,6 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
-          "section_id": "9.9",
-          "title": "Vinorelbine",
-          "official_only": true
-        },
-        {
           "section_id": "9.91",
           "title": "Dabrafenib (如 Tafinlar)、Trametinib (如 Mekinist)",
           "official_only": true
@@ -393,6 +373,26 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.95",
           "title": "Larotrectinib (如 Vitrakvi)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.101",
+          "title": "Tepotinib (如 Tepmetko)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.126",
+          "title": "Amivantamab(如 Rybrevant)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.131",
+          "title": "Repotrectinib(如 Augtyro)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.138",
+          "title": "Aumolertinib (如 Pulmivex)",
           "official_only": true
         }
       ]
@@ -422,6 +422,101 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
+          "section_id": "9.2",
+          "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.3",
+          "title": "Docetaxel",
+          "official_only": true
+        },
+        {
+          "section_id": "9.4",
+          "title": "Gemcitabine（如 Gemzar）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.5",
+          "title": "Paclitaxel 成分劑",
+          "official_only": true
+        },
+        {
+          "section_id": "9.8",
+          "title": "Toremifene（如 Fareston）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.9",
+          "title": "Vinorelbine",
+          "official_only": true
+        },
+        {
+          "section_id": "9.11",
+          "title": "Uracil-Tegafur：(如 Ufur)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.14",
+          "title": "Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.17",
+          "title": "Capecitabine（如 Xeloda）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.18",
+          "title": "Trastuzumab (如 Herceptin)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.36",
+          "title": "Everolimus",
+          "official_only": true
+        },
+        {
+          "section_id": "9.47",
+          "title": "Lapatinib（如 Tykerb）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.48",
+          "title": "Eribulin（如 Halaven）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.69",
+          "title": "免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dos…",
+          "official_only": true
+        },
+        {
+          "section_id": "9.70",
+          "title": "Pertuzumab(如 Perjeta)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.72",
+          "title": "CDK4/6抑制劑 (如 ribociclib；palbociclib)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.85",
+          "title": "PARP 抑制劑(如 olaparib、niraparib、talazoparib)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.87",
+          "title": "Trastuzumab emtansine (如 Kadcyla)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.88",
+          "title": "Ixabepilone (如 Ixempra)",
+          "official_only": true
+        },
+        {
           "section_id": "9.106",
           "title": "Sacituzumab govitecan (如 Trodelvy）",
           "official_only": true
@@ -429,11 +524,6 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.107",
           "title": "Abemaciclib (如 Verzenio)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.11",
-          "title": "Uracil-Tegafur：(如 Ufur)",
           "official_only": true
         },
         {
@@ -465,96 +555,6 @@ window.NHI_CANDIDATES = {
           "section_id": "9.135",
           "title": "Capivasertib (如 Truqap)",
           "official_only": true
-        },
-        {
-          "section_id": "9.14",
-          "title": "Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.17",
-          "title": "Capecitabine（如 Xeloda）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.18",
-          "title": "Trastuzumab (如 Herceptin)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.2",
-          "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.3",
-          "title": "Docetaxel",
-          "official_only": true
-        },
-        {
-          "section_id": "9.36",
-          "title": "Everolimus",
-          "official_only": true
-        },
-        {
-          "section_id": "9.4",
-          "title": "Gemcitabine（如 Gemzar）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.47",
-          "title": "Lapatinib（如 Tykerb）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.48",
-          "title": "Eribulin（如 Halaven）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.5",
-          "title": "Paclitaxel 成分劑",
-          "official_only": true
-        },
-        {
-          "section_id": "9.69",
-          "title": "免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dos…",
-          "official_only": true
-        },
-        {
-          "section_id": "9.70",
-          "title": "Pertuzumab(如 Perjeta)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.72",
-          "title": "CDK4/6抑制劑 (如 ribociclib；palbociclib)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.8",
-          "title": "Toremifene（如 Fareston）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.85",
-          "title": "PARP 抑制劑(如 olaparib、niraparib、talazoparib)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.87",
-          "title": "Trastuzumab emtansine (如 Kadcyla)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.88",
-          "title": "Ixabepilone (如 Ixempra)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.9",
-          "title": "Vinorelbine",
-          "official_only": true
         }
       ]
     },
@@ -565,13 +565,13 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
-          "section_id": "9.27",
-          "title": "Cetuximab(如 Erbitux)",
+          "section_id": "9.3",
+          "title": "Docetaxel",
           "official_only": true
         },
         {
-          "section_id": "9.3",
-          "title": "Docetaxel",
+          "section_id": "9.27",
+          "title": "Cetuximab(如 Erbitux)",
           "official_only": true
         },
         {
@@ -728,18 +728,13 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
-          "section_id": "9.137",
-          "title": "Cabazitaxel(如 Cabazred)",
+          "section_id": "9.3",
+          "title": "Docetaxel",
           "official_only": true
         },
         {
           "section_id": "9.19",
           "title": "Estramustine sod. phosphate monohydrate(如 Estracyt)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.3",
-          "title": "Docetaxel",
           "official_only": true
         },
         {
@@ -781,6 +776,11 @@ window.NHI_CANDIDATES = {
           "section_id": "9.94",
           "title": "Darolutamide(如 Nubeqa)",
           "official_only": true
+        },
+        {
+          "section_id": "9.137",
+          "title": "Cabazitaxel(如 Cabazred)",
+          "official_only": true
         }
       ]
     },
@@ -798,23 +798,8 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
-          "section_id": "9.14",
-          "title": "Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.16",
-          "title": "Topotecan（如 Hycamtin）",
-          "official_only": true
-        },
-        {
           "section_id": "9.2",
           "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.37",
-          "title": "Bevacizumab(如 Avastin)",
           "official_only": true
         },
         {
@@ -825,6 +810,21 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.5",
           "title": "Paclitaxel 成分劑",
+          "official_only": true
+        },
+        {
+          "section_id": "9.14",
+          "title": "Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.16",
+          "title": "Topotecan（如 Hycamtin）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.37",
+          "title": "Bevacizumab(如 Avastin)",
           "official_only": true
         },
         {
@@ -930,11 +930,6 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
-          "section_id": "9.123",
-          "title": "Ripretinib(如 Qinlock）",
-          "official_only": true
-        },
-        {
           "section_id": "9.22",
           "title": "Imatinib(如 Glivec)",
           "official_only": true
@@ -952,6 +947,11 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.95",
           "title": "Larotrectinib (如 Vitrakvi)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.123",
+          "title": "Ripretinib(如 Qinlock）",
           "official_only": true
         }
       ]
@@ -1019,6 +1019,36 @@ window.NHI_CANDIDATES = {
       "curated_count": 0,
       "candidates": [
         {
+          "section_id": "9.20",
+          "title": "Rituximab 注射劑(如 Mabthera，不同劑型之適用範圍需符合藥品許可證登載之適 應症)：用於抗癌瘤部分",
+          "official_only": true
+        },
+        {
+          "section_id": "9.28",
+          "title": "Bortezomib（如 Velcade）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.42",
+          "title": "Bendamustine（如 Innomustine）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.43",
+          "title": "Lenalidomide(如 Revlimid)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.61",
+          "title": "Ibrutinib (如 Imbruvica)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.79",
+          "title": "Obinutuzumab(如 Gazyva)",
+          "official_only": true
+        },
+        {
           "section_id": "9.100",
           "title": "Acalabrutinib(如 Calquence)",
           "official_only": true
@@ -1052,36 +1082,6 @@ window.NHI_CANDIDATES = {
           "section_id": "9.124",
           "title": "Tafasitamab（如 Minjuvi）",
           "official_only": true
-        },
-        {
-          "section_id": "9.20",
-          "title": "Rituximab 注射劑(如 Mabthera，不同劑型之適用範圍需符合藥品許可證登載之適 應症)：用於抗癌瘤部分",
-          "official_only": true
-        },
-        {
-          "section_id": "9.28",
-          "title": "Bortezomib（如 Velcade）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.42",
-          "title": "Bendamustine（如 Innomustine）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.43",
-          "title": "Lenalidomide(如 Revlimid)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.61",
-          "title": "Ibrutinib (如 Imbruvica)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.79",
-          "title": "Obinutuzumab(如 Gazyva)",
-          "official_only": true
         }
       ]
     },
@@ -1091,26 +1091,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 11,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.108",
-          "title": "Isatuximab(如 Sarclisa)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.111",
-          "title": "Elotuzumab (如 Empliciti)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.118",
-          "title": "Elranatamab (如 Elrexfio)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.119",
-          "title": "Teclistamab (如 Tecvayli)",
-          "official_only": true
-        },
         {
           "section_id": "9.28",
           "title": "Bortezomib（如 Velcade）",
@@ -1145,6 +1125,26 @@ window.NHI_CANDIDATES = {
           "section_id": "9.78",
           "title": "Daratumumab(如 Darzalex 靜脈注射劑與皮下注射劑)",
           "official_only": true
+        },
+        {
+          "section_id": "9.108",
+          "title": "Isatuximab(如 Sarclisa)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.111",
+          "title": "Elotuzumab (如 Empliciti)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.118",
+          "title": "Elranatamab (如 Elrexfio)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.119",
+          "title": "Teclistamab (如 Tecvayli)",
+          "official_only": true
         }
       ]
     },
@@ -1154,26 +1154,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 10,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.113",
-          "title": "Gemtuzumab ozogamicin(如 Mylotarg)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.114",
-          "title": "Fedratinib (如 Inrebic)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.125",
-          "title": "Quizartinib（如 Vanflyta）",
-          "official_only": true
-        },
-        {
-          "section_id": "9.127",
-          "title": "Momelotinib (如 Omjjara)",
-          "official_only": true
-        },
         {
           "section_id": "9.44",
           "title": "Azacitidine",
@@ -1203,6 +1183,26 @@ window.NHI_CANDIDATES = {
           "section_id": "9.99",
           "title": "Gilteritinib(如 Xospata)",
           "official_only": true
+        },
+        {
+          "section_id": "9.113",
+          "title": "Gemtuzumab ozogamicin(如 Mylotarg)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.114",
+          "title": "Fedratinib (如 Inrebic)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.125",
+          "title": "Quizartinib（如 Vanflyta）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.127",
+          "title": "Momelotinib (如 Omjjara)",
+          "official_only": true
         }
       ]
     },
@@ -1212,11 +1212,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 6,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.103",
-          "title": "Tisagenlecleucel(如 Kymriah)",
-          "official_only": true
-        },
         {
           "section_id": "9.22",
           "title": "Imatinib(如 Glivec)",
@@ -1241,6 +1236,11 @@ window.NHI_CANDIDATES = {
           "section_id": "9.67",
           "title": "Ponatinib(如 Iclusig)",
           "official_only": true
+        },
+        {
+          "section_id": "9.103",
+          "title": "Tisagenlecleucel(如 Kymriah)",
+          "official_only": true
         }
       ]
     },
@@ -1250,16 +1250,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 6,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.122",
-          "title": "Asciminib (如 Scemblix)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.132",
-          "title": "Bosutinib(如 Bostini)",
-          "official_only": true
-        },
         {
           "section_id": "9.22",
           "title": "Imatinib(如 Glivec)",
@@ -1279,6 +1269,16 @@ window.NHI_CANDIDATES = {
           "section_id": "9.67",
           "title": "Ponatinib(如 Iclusig)",
           "official_only": true
+        },
+        {
+          "section_id": "9.122",
+          "title": "Asciminib (如 Scemblix)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.132",
+          "title": "Bosutinib(如 Bostini)",
+          "official_only": true
         }
       ]
     },
@@ -1288,16 +1288,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 8,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.100",
-          "title": "Acalabrutinib(如 Calquence)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.104",
-          "title": "Zanubrutinib(如 Brukinsa)",
-          "official_only": true
-        },
         {
           "section_id": "9.20",
           "title": "Rituximab 注射劑(如 Mabthera，不同劑型之適用範圍需符合藥品許可證登載之適 應症)：用於抗癌瘤部分",
@@ -1327,6 +1317,16 @@ window.NHI_CANDIDATES = {
           "section_id": "9.79",
           "title": "Obinutuzumab(如 Gazyva)",
           "official_only": true
+        },
+        {
+          "section_id": "9.100",
+          "title": "Acalabrutinib(如 Calquence)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.104",
+          "title": "Zanubrutinib(如 Brukinsa)",
+          "official_only": true
         }
       ]
     },
@@ -1336,16 +1336,6 @@ window.NHI_CANDIDATES = {
       "candidate_count": 7,
       "curated_count": 0,
       "candidates": [
-        {
-          "section_id": "9.114",
-          "title": "Fedratinib (如 Inrebic)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.127",
-          "title": "Momelotinib (如 Omjjara)",
-          "official_only": true
-        },
         {
           "section_id": "9.22",
           "title": "Imatinib(如 Glivec)",
@@ -1369,6 +1359,16 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.96",
           "title": "Decitabine",
+          "official_only": true
+        },
+        {
+          "section_id": "9.114",
+          "title": "Fedratinib (如 Inrebic)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.127",
+          "title": "Momelotinib (如 Omjjara)",
           "official_only": true
         }
       ]

@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "fetched_at": "2026-08-11T08:39:21Z",
-  "item_count": 193,
+  "fetched_at": "2026-08-11T08:42:42Z",
+  "item_count": 191,
   "items": [
     {
       "priority": "normal",
@@ -118,15 +118,6 @@
       "cancer": "ovarian",
       "cancer_name": "卵巢 / 輸卵管 / 原發腹膜癌",
       "title": "9.4.Gemcitabine（如 Gemzar） ：（92/12/1、93/8/1、94/10/1、96/5/1、99/10/1、 105/2/1、114/2/1、115/2/1、115/6/1） 1.本類藥品(除 Gemmis 之外)依藥品許可證登載之適應症範圍內給付於非小細胞肺癌、胰 臟癌、膀胱癌、乳癌、卵巢癌及膽道癌之病例；倘併用其他標靶治療、免疫檢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.5",
-      "cancer": "pancreatic",
-      "cancer_name": "胰臟癌",
-      "title": "9.5.Paclitaxel 成分劑： （88/8/1、88/11/1、89/6/1、89/10/1、91/4/1、91/8/1、 93/8/1、94/1/1、98/8/1、108/11/1、112/12/1、114/6/1、114/8/1、115/6/1、 115/8/1） 9.5.1.Paclitaxel 成分注射劑：(108/11/1、112/12/1",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -252,15 +243,6 @@
       "section_id": "9.12",
       "cancer": "colorectal",
       "cancer_name": "大腸直腸癌",
-      "title": "9.12.Irinotecan(90/10/1、107/8/1、110/5/1、110/7/1、110/8/1、112/2/1、 114/12/1) 第9節-6",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.12",
-      "cancer": "pancreatic",
-      "cancer_name": "胰臟癌",
       "title": "9.12.Irinotecan(90/10/1、107/8/1、110/5/1、110/7/1、110/8/1、112/2/1、 114/12/1) 第9節-6",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
