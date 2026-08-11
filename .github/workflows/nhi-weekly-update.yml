@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/nhi_update.py'
+      - 'scripts/nhi_update_reader.py'
       - 'tools/nhi/config/cancer_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
 
@@ -46,8 +47,16 @@ jobs:
           p.write_text(s.replace(old,new,1),encoding='utf-8')
           PY
 
-      - name: Fetch official chapter 9 and build audit
-        run: python scripts/nhi_update.py
+      - name: Fetch chapter 9 and build audit
+        shell: bash
+        run: |
+          set -uo pipefail
+          if python scripts/nhi_update.py; then
+            echo 'Direct official ODT fetch succeeded.'
+          else
+            echo 'Direct NHI fetch blocked/failed; trying reader transport against official page/PDF.'
+            python scripts/nhi_update_reader.py
+          fi
 
       - name: Validate generated files
         shell: bash
@@ -62,6 +71,7 @@ jobs:
           assert current['section_count'] >= 80, current['section_count']
           assert coverage['status'] == 'ok'
           assert review['status'] == 'ok'
+          assert current['source'].get('page','').startswith('https://www.nhi.gov.tw/')
           assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
           print('NHI validation OK:', current['section_count'], 'sections;', coverage['missing_candidate_count'], 'coverage candidates to review')
           PY
