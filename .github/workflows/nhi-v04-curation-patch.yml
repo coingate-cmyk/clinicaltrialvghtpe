@@ -1,0 +1,114 @@
+name: Publish NHI v0.4 Curated Cancers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/nhi-v04-curation-patch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nhi-v04-curation-patch
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch v0.4 metadata, loaders, and Unicode coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          core = Path('tools/nhi/assets/data-core.js')
+          s = core.read_text(encoding='utf-8')
+          replacements = {
+            '"scope": "全癌種 taxonomy；目前 GI 六癌種已有 curated records，其餘癌種由每週 coverage audit 逐步補齊"': '"scope": "全癌種 taxonomy；GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌已有 curated records，其餘癌種由每週 coverage audit 逐步補齊"',
+            '"note": "V0.3：加入全癌種分類骨架、官方第 9 節自動 diff 與漏項偵測。未人工核對的候選條文不會自動變成臨床摘要。"': '"note": "V0.4：新增乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 curated retrieval；全癌種每週第 9 節自動 diff 與漏項偵測持續運作。"',
+            '"version": "0.3"': '"version": "0.4"',
+            '{"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":false,"description":"NSCLC / SCLC；自動掃描後逐項人工核對"}': '{"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":true,"description":"NSCLC / SCLC；EGFR / ALK / ROS1 / BRAF / MET / NTRK 與免疫治療"}',
+            '{"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":false,"description":"HER2 / HR / TNBC 等給付情境"}': '{"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":true,"description":"HER2 / HR / TNBC；早期與轉移性給付情境"}',
+            '{"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":false,"description":"HNSCC 系統性治療"}': '{"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":true,"description":"HNSCC（不含鼻咽癌）局部晚期與復發/轉移治療"}',
+            '{"id":"urothelial","name":"泌尿道上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":false,"description":"Urothelial / bladder cancer"}': '{"id":"urothelial","name":"泌尿上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":true,"description":"局部晚期 / 轉移性 urothelial carcinoma；ICI、maintenance、ADC"}',
+            '{"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":false,"description":"mHSPC / mCRPC 等情境"}': '{"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":true,"description":"mCSPC / nmCRPC / mCRPC；NHA、PARP、化療與骨轉移治療"}',
+          }
+          for old, new in replacements.items():
+              if old not in s:
+                  raise SystemExit(f'data-core anchor missing: {old[:70]}')
+              s = s.replace(old, new, 1)
+          core.write_text(s, encoding='utf-8')
+
+          idx = Path('tools/nhi/index.html')
+          h = idx.read_text(encoding='utf-8')
+          if 'ALL CANCERS · V0.3 BETA' not in h:
+              raise SystemExit('index version anchor missing')
+          h = h.replace('ALL CANCERS · V0.3 BETA', 'ALL CANCERS · V0.4 BETA', 1)
+          anchor = '  <script src="assets/data-pancreatic.js"></script>\n'
+          loaders = (
+              '  <script src="assets/data-pancreatic.js"></script>\n'
+              '  <script src="assets/data-breast.js"></script>\n'
+              '  <script src="assets/data-lung.js"></script>\n'
+              '  <script src="assets/data-prostate.js"></script>\n'
+              '  <script src="assets/data-headneck.js"></script>\n'
+              '  <script src="assets/data-urothelial.js"></script>\n'
+          )
+          if anchor not in h:
+              raise SystemExit('index loader anchor missing')
+          h = h.replace(anchor, loaders, 1)
+          idx.write_text(h, encoding='utf-8')
+
+          upd = Path('scripts/nhi_update.py')
+          u = upd.read_text(encoding='utf-8')
+          if 'import unicodedata' not in u:
+              if 'import zipfile\n' not in u:
+                  raise SystemExit('nhi_update import anchor missing')
+              u = u.replace('import zipfile\n', 'import zipfile\nimport unicodedata\n', 1)
+          old_fn = '''def alias_found(text: str, alias: str) -> bool:\n    if not alias:\n        return False\n    if re.fullmatch(r"[A-Za-z0-9+\\-/ ]+", alias):\n        pattern = r"(?<![A-Za-z0-9])" + re.escape(alias) + r"(?![A-Za-z0-9])"\n        return re.search(pattern, text, re.I) is not None\n    return alias in text\n'''
+          new_fn = '''def alias_found(text: str, alias: str) -> bool:\n    if not alias:\n        return False\n    # NHI PDFs sometimes use CJK compatibility glyphs (e.g. 泌尿).\n    # NFKC makes those equivalent to normal clinical search terms before matching.\n    text = unicodedata.normalize("NFKC", str(text))\n    alias = unicodedata.normalize("NFKC", str(alias))\n    if re.fullmatch(r"[A-Za-z0-9+\\-/ ]+", alias):\n        pattern = r"(?<![A-Za-z0-9])" + re.escape(alias) + r"(?![A-Za-z0-9])"\n        return re.search(pattern, text, re.I) is not None\n    return alias in text\n'''
+          if old_fn not in u:
+              raise SystemExit('alias_found function anchor missing')
+          u = u.replace(old_fn, new_fn, 1)
+          upd.write_text(u, encoding='utf-8')
+          PY
+
+      - name: Commit v0.4 source changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/assets/data-core.js tools/nhi/index.html scripts/nhi_update.py
+          git commit -m 'Enable five curated NHI cancer modules and Unicode audit matching'
+          git push origin main
+
+      - name: Publish curated modules to live Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/nhi-v04
+          mkdir -p /tmp/nhi-v04/assets
+          cp tools/nhi/index.html /tmp/nhi-v04/index.html
+          cp tools/nhi/assets/data-core.js /tmp/nhi-v04/assets/data-core.js
+          cp tools/nhi/assets/data-breast.js /tmp/nhi-v04/assets/data-breast.js
+          cp tools/nhi/assets/data-lung.js /tmp/nhi-v04/assets/data-lung.js
+          cp tools/nhi/assets/data-prostate.js /tmp/nhi-v04/assets/data-prostate.js
+          cp tools/nhi/assets/data-headneck.js /tmp/nhi-v04/assets/data-headneck.js
+          cp tools/nhi/assets/data-urothelial.js /tmp/nhi-v04/assets/data-urothelial.js
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/nhi-v04/index.html tools/nhi/index.html
+          cp /tmp/nhi-v04/assets/* tools/nhi/assets/
+          git add tools/nhi/index.html tools/nhi/assets/data-core.js tools/nhi/assets/data-breast.js tools/nhi/assets/data-lung.js tools/nhi/assets/data-prostate.js tools/nhi/assets/data-headneck.js tools/nhi/assets/data-urothelial.js
+          git commit -m 'Publish NHI Navigator v0.4 curated cancers'
+          git push origin pages-clean-ajcc-v2-3
