@@ -119,4 +119,4 @@ jobs:
             git push origin pages-clean-ajcc-v2-3
           fi
 
-# v0.4 curated-cancer validation trigger: 2026-08-11
+# v0.4 completeness validation trigger: 2026-08-11
