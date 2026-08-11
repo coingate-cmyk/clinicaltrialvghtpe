@@ -1,10 +1,10 @@
 {
   "status": "ok",
-  "fetched_at": "2026-08-11T09:22:59Z",
+  "fetched_at": "2026-08-11T09:34:15Z",
   "official_section_count": 138,
-  "curated_record_count": 115,
+  "curated_record_count": 140,
   "candidate_pair_count": 222,
-  "missing_candidate_count": 145,
+  "missing_candidate_count": 120,
   "orphan_count": 0,
   "by_cancer": [
     {
@@ -184,8 +184,21 @@
       ],
       "candidate_count": 27,
       "curated_sections": [
+        "9.2",
+        "9.3",
+        "9.4",
+        "9.5",
+        "9.9",
+        "9.11",
+        "9.16",
         "9.24",
+        "9.26",
+        "9.29",
+        "9.37",
+        "9.45",
+        "9.46",
         "9.50",
+        "9.59",
         "9.60",
         "9.69",
         "9.80",
@@ -199,8 +212,8 @@
         "9.131",
         "9.138"
       ],
-      "curated_count": 14,
-      "missing_count": 13
+      "curated_count": 27,
+      "missing_count": 0
     },
     {
       "cancer": "mesothelioma",
@@ -250,11 +263,18 @@
       ],
       "candidate_count": 28,
       "curated_sections": [
+        "9.1",
+        "9.2",
         "9.3",
         "9.4",
         "9.5",
+        "9.8",
+        "9.9",
+        "9.11",
+        "9.14",
         "9.17",
         "9.18",
+        "9.36",
         "9.47",
         "9.48",
         "9.69",
@@ -262,16 +282,18 @@
         "9.72",
         "9.85",
         "9.87",
+        "9.88",
         "9.106",
         "9.107",
         "9.112",
         "9.115",
         "9.128",
         "9.129",
+        "9.130",
         "9.135"
       ],
-      "curated_count": 19,
-      "missing_count": 9
+      "curated_count": 28,
+      "missing_count": 0
     },
     {
       "cancer": "headneck",
@@ -391,6 +413,9 @@
       "candidate_count": 11,
       "curated_sections": [
         "9.3",
+        "9.19",
+        "9.39",
+        "9.40",
         "9.49",
         "9.54",
         "9.68",
@@ -399,8 +424,8 @@
         "9.94",
         "9.137"
       ],
-      "curated_count": 8,
-      "missing_count": 3
+      "curated_count": 11,
+      "missing_count": 0
     },
     {
       "cancer": "germ_cell",
@@ -814,69 +839,6 @@
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
-      "section_id": "9.1",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.1.Aromatase Inhibitors 9.1.1.Exemestane(如 Aromasin Sugar Coated Tablets)： （88/11/1、90/10/1、99/6/1、 105/8/1) 1.限停經後或卵巢切除後，且女性荷爾蒙受體(estrogen receptor)陽性之晚期乳癌病 患，經使用 tamoxifen 無效後，方",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.2",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.2.Carboplatin(如 Paraplatin；Carboplatin inj)：(112/12/1、114/2/1、114/6/1、 114/8/1、114/10/1、115/6/1、115/8/1) 限1.卵巢癌患者. 2.腎功能不佳(CCr<60)或曾作單側或以上腎切除之惡性腫瘤患者使用.",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.8",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.8.Toremifene（如 Fareston） ：（88/6/1） 限用於停經後，且女性荷爾蒙接受體(estrogen receptor)為陽性之轉移性乳癌病 第9節-5",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.9",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.9.Vinorelbine：(91/1/1、95/6/1、96/9/1、101/3/1 、106/11/1) 1.限用於： (1)晚期或無法手術切除之非小細胞肺癌及轉移性乳癌病患. (2)病理分期第二期及第三期前半(stageII & stageIIIA)非小細胞肺癌於接受根治性 手術後與鉑金類藥品併用之輔助治療，最多可使用4療程(106/11/1). ",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.11",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.11.Uracil-Tegafur：(如 Ufur)(100/1/1) 1.限轉移性胃癌、轉移性直腸癌、轉移性結腸癌、轉移性乳癌之病患使用（89/10/1、 97/12/1） .2.頭頸部鱗狀上皮癌(93/4/1、98/3/1、99/10/1). 3.與 cisplatin 併用治療轉移及末期肺癌. 4.直腸癌、結腸癌第Ⅱ、Ⅲ期患者之術後輔助性治療，且使",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.14",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.14.Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)： (91/3/1、93/8/1、93/11/1、99/10/1) 限用於下列適應症:(99/10/1) 1.用於治療曾接受第一線含 platinum 及 paclitaxel 化學治療而失敗者或再復發之進 行性或轉移性卵巢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.36",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.36.Everolimus： （100/2/1、102/1/1）附表九之九 9.36.1.Everolimus 5mg 及10mg(如 Afinitor 5mg 及10mg)： （100/2/1、102/1/1、 104/9/1、104/12/1、106/3/1、108/10/1、109/4/1、114/12/1） 1.治療經 VEGF-targeted",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.88",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.88.Ixabepilone (如 Ixempra)：(110/2/1) 第9節-71",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.130",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.130.Fulvestrant(如 Fustron)：(115/1/1、115/6/1) 1.單獨使用於患有雌激素受體陽性的局部晚期或轉移性乳癌之停經病人，其已接受輔 助抗雌激素療法但疾病仍復發，或使用抗雌激素療法但疾病仍惡化. 2.與 alpelisib 或 capivasertib 併用於曾接受 CDK4/6抑制劑治療但疾病惡化的停經後 轉移性乳癌病",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
       "section_id": "9.37",
       "cancer": "cervical",
       "cancer_name": "子宮頸癌",
@@ -1126,97 +1088,6 @@
       "cancer": "hodgkin",
       "cancer_name": "霍奇金淋巴瘤",
       "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.2",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.2.Carboplatin(如 Paraplatin；Carboplatin inj)：(112/12/1、114/2/1、114/6/1、 114/8/1、114/10/1、115/6/1、115/8/1) 限1.卵巢癌患者. 2.腎功能不佳(CCr<60)或曾作單側或以上腎切除之惡性腫瘤患者使用.",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.3",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.3.Docetaxel： （87/7/1、92/11/1、93/8/1、95/8/1、96/1/1、99/6/1、100/1/1、 101/9/1、108/1/1、113/5/1、115/6/1、115/8/1） 第9節-3",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.4",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.4.Gemcitabine（如 Gemzar） ：（92/12/1、93/8/1、94/10/1、96/5/1、99/10/1、 105/2/1、114/2/1、115/2/1、115/6/1） 1.本類藥品(除 Gemmis 之外)依藥品許可證登載之適應症範圍內給付於非小細胞肺癌、胰 臟癌、膀胱癌、乳癌、卵巢癌及膽道癌之病例；倘併用其他標靶治療、免疫檢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.5",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.5.Paclitaxel 成分劑： （88/8/1、88/11/1、89/6/1、89/10/1、91/4/1、91/8/1、 93/8/1、94/1/1、98/8/1、108/11/1、112/12/1、114/6/1、114/8/1、115/6/1、 115/8/1） 9.5.1.Paclitaxel 成分注射劑：(108/11/1、112/12/1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.9",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.9.Vinorelbine：(91/1/1、95/6/1、96/9/1、101/3/1 、106/11/1) 1.限用於： (1)晚期或無法手術切除之非小細胞肺癌及轉移性乳癌病患. (2)病理分期第二期及第三期前半(stageII & stageIIIA)非小細胞肺癌於接受根治性 手術後與鉑金類藥品併用之輔助治療，最多可使用4療程(106/11/1). ",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.11",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.11.Uracil-Tegafur：(如 Ufur)(100/1/1) 1.限轉移性胃癌、轉移性直腸癌、轉移性結腸癌、轉移性乳癌之病患使用（89/10/1、 97/12/1） .2.頭頸部鱗狀上皮癌(93/4/1、98/3/1、99/10/1). 3.與 cisplatin 併用治療轉移及末期肺癌. 4.直腸癌、結腸癌第Ⅱ、Ⅲ期患者之術後輔助性治療，且使",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.16",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.16.Topotecan（如 Hycamtin） ：（88/10/1、93/8/1、98/11/1、100/6/1） 9.16.1.Topotecan 注射劑（88/10/1、93/8/1、98/11/1） 1.限卵巢癌及小細胞肺癌之第二線化學治療（第一線治療應包括白金化合物） .2.與 cisplatin 併用適用於治療經組織學檢查確定患有第 IV-B",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.26",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.26.Pemetrexed(如 Alimta)：(95/3/1、95/7/1、97/11/1、98/9/1、103/4/1、 103/9/1、106/11/1、111/2/1、114/6/1、114/8/1、114/10/1、115/8/1) 1.限用於 (1)與 cisplatin 併用於惡性肋膜間質細胞瘤. (2)以含鉑之化學療法治療或70歲以上接受",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.29",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.29. Erlotinib（如 Tarceva） ：（96/6/1、96/8/1、97/6/1、101/5/1、101/10/1、 102/4/1、102/11/1、103/5/1、106/11/1、108/6/1、108/11/1、109/4/1、109/6/1、 109/10/1、111/2/1、111/4/1、113/3/1、113/6/1、113",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.37",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.37.Bevacizumab(如 Avastin)： （100/6/1、101/05/1、106/4/1、108/3/1、109/6/1、 112/8/1、113/3/1、113/6/1、113/9/1、114/3/1、114/6/1、114/8/1、114/10/1) 1.轉移性大腸或直腸癌： (1)Bevacizumab 與 FOLFIRI（Foli",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.45",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.45.Afatinib（如 Giotrif） ：(103/5/1、106/11/1、108/6/1、108/11/1、109/4/1、 109/6/1、109/10/1、111/4/1、113/3/1、113/6/1、113/10/1、115/8/1) 1. 限單獨使用於： (1)具有 EGFR-TK 基因突變之局部晚期或轉移性(即第ⅢB、ⅢC 期或第Ⅳ",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.46",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.46.Tegafur/gimeracil/oteracil 複方製劑(如 TS-1） ：(103/6/1、105/12/1、 109/2/1、113/2/1) 1.治療局部晚期無法手術切除或轉移性胰臟癌病人. 2.胃癌(105/12/1) (1)胃癌術後輔助性化療，用於罹患 TNMS tageⅡ(排除 T1)、ⅢA 或ⅢB 胃癌且接受過 胃癌根除性手術的",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.59",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.59.Ceritinib(如 Zykadia)：(106/9/1、106/11/1、108/7/1、108/12/1、111/2/1、 111/8/1、112/11/1、113/6/1) 1. 適用於 ALK 陽性之晚期非小細胞肺癌第一線治療.(108/7/1、111/8/1) 2. 須經事前審查核准後使用： (1)每次申請事前審查之療程以三個月為限，每",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1546,27 +1417,6 @@
       "cancer": "ovarian",
       "cancer_name": "卵巢 / 輸卵管 / 原發腹膜癌",
       "title": "9.85.PARP 抑制劑(如 olaparib、niraparib、talazoparib)：(109/11/1、111/6/1、 111/8/1、112/1/1、112/11/1、113/3/1、113/6/1、113/9/1、114/3/1、114/6/1、 114/8/1、114/10/1) 1.卵巢、輸卵管或原發性腹膜癌(olaparib、nira",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.19",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.19.Estramustine sod. phosphate monohydrate(如 Estracyt)：(91/4/1) 限晚期前列腺癌病患且符合下列條件之一者使用： 1.經荷爾蒙治療無效. 2.經診斷對單獨使用荷爾蒙治療，具有預後療效不佳因素的初次治療病患.",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.39",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.39.Flutamide；buserelin： （90/8/1、101/7/1） 1.晚期（包括 T3、淋巴腺轉移、器官轉移）之腫瘤. 2.攝護腺癌病人接受根除性攝護腺切除手術治療後，PSA 逐漸升高有局部復發或遠處轉 移之情況. 3.癌症臨床期別為 T2、T3，準備接受根除性攝護腺切除手術治療或其他定效治療，包 括 irradiation 之前為求 t",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "section_id": "9.40",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.40.Bicalutamide： （89/10/1、101/7/1） 限用於與 LHRH 類似劑療法或手術去勢療法併用於進展性攝護腺癌.",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {

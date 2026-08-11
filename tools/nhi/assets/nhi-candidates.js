@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-11T09:22:59Z",
+    "fetched_at": "2026-08-11T09:34:15Z",
     "source_update": "115.7.23",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
@@ -258,7 +258,7 @@ window.NHI_CANDIDATES = {
       "name": "肺癌",
       "group": "Thoracic",
       "candidate_count": 27,
-      "curated_count": 14,
+      "curated_count": 27,
       "candidates": [
         {
           "section_id": "9.2",
@@ -414,7 +414,7 @@ window.NHI_CANDIDATES = {
       "name": "乳癌",
       "group": "Breast",
       "candidate_count": 28,
-      "curated_count": 19,
+      "curated_count": 28,
       "candidates": [
         {
           "section_id": "9.1",
@@ -730,7 +730,7 @@ window.NHI_CANDIDATES = {
       "name": "攝護腺癌",
       "group": "GU",
       "candidate_count": 11,
-      "curated_count": 8,
+      "curated_count": 11,
       "candidates": [
         {
           "section_id": "9.3",
