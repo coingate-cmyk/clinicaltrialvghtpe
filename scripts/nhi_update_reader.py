@@ -15,11 +15,11 @@ import requests
 from nhi_update import (
     PAGE_URL, ALIAS_FILE, CURRENT_FILE, RAW_DIR, SNAPSHOT_DIR, DATA_DIR, ASSET_DIR,
     CHANGES_FILE, COVERAGE_FILE, REVIEW_FILE, STATUS_JS,
-    now_iso, sha, split_sections, load_json, make_diff, make_coverage,
+    now_iso, sha, load_json, make_diff, make_coverage,
 )
 
 READER = "https://r.jina.ai/"
-UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.2)"
+UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.3)"
 
 
 def reader_get(url: str) -> str:
@@ -36,10 +36,6 @@ def discover_from_markdown(md: str) -> dict:
     marker = re.search(r"第九節\s*抗癌瘤藥物[^\n]*", md)
     if not marker:
         raise RuntimeError("Reader page does not contain 第九節 抗癌瘤藥物")
-
-    # IMPORTANT: only inspect links AFTER the chapter-9 marker. Looking before the
-    # marker can accidentally pick the chapter-8 PDF because the official page lists
-    # each chapter's DOC/ODT/PDF links consecutively.
     tail = md[marker.end():marker.end()+7000]
     urls = re.findall(r"https://www\.nhi\.gov\.tw/[^\s)\]>\"']+", tail)
     out = {"page": PAGE_URL, "label": marker.group(0).strip(), "transport": "reader-proxy"}
@@ -53,7 +49,6 @@ def discover_from_markdown(md: str) -> dict:
             out.setdefault("doc", clean)
         if all(k in out for k in ("pdf", "odt", "doc")):
             break
-
     m = re.search(r"(\d{3}[./]\d{1,2}[./]\d{1,2})\s*更新", out["label"])
     out["source_update"] = m.group(1) if m else ""
     if "pdf" not in out:
@@ -61,62 +56,91 @@ def discover_from_markdown(md: str) -> dict:
     return out
 
 
-def normalize_reader_line(raw: str) -> str:
-    """Normalize PDF-to-Markdown artifacts so top-level 9.x headings are detectable."""
-    line = raw.strip()
-    if not line:
-        return ""
-    line = re.sub(r"^#{1,6}\s*", "", line)
-    line = re.sub(r"^[-*]\s+", "", line)
-    line = line.replace("**", "").replace("__", "")
-    line = line.replace("．", ".").replace("。", ".")
-    line = line.strip("| ")
-    line = re.sub(r"\s+", " ", line).strip()
-
-    # PDF readers sometimes render headings as `9. 69.` or table cells. Only
-    # canonicalize a 9.x token near the beginning; reject 9.69.1 subsections.
-    m = re.search(r"(?<!\d)9\s*\.\s*(\d{1,3})(?!\s*\.\s*\d)", line)
-    if m and m.start() <= 24:
-        sid = f"9.{int(m.group(1))}"
-        tail = line[m.end():].lstrip(" .、:：|-–—")
-        line = f"{sid} {tail}".strip()
-    return line
-
-
-def markdown_paragraphs(md: str) -> list[str]:
-    lines = []
+def clean_reader_text(md: str) -> str:
+    """Remove Markdown decoration but preserve document order and enough separators."""
+    cleaned = []
     for raw in md.splitlines():
-        line = normalize_reader_line(raw)
+        line = raw.strip()
+        if not line:
+            continue
+        line = re.sub(r"^#{1,6}\s*", "", line)
+        line = re.sub(r"^[-*]\s+", "", line)
+        line = line.replace("**", "").replace("__", "")
+        line = line.replace("．", ".").replace("。", ".")
+        line = line.strip("| ")
+        line = re.sub(r"\s+", " ", line).strip()
         if line:
-            lines.append(line)
-    if len(lines) < 100:
-        raise RuntimeError(f"Reader PDF produced too few text lines: {len(lines)}")
-    return lines
+            cleaned.append(line)
+    text = "\n".join(cleaned)
+    if len(text) < 5000:
+        raise RuntimeError(f"Reader PDF text unexpectedly small: {len(text)} chars")
+    return text
 
 
-def split_reader_sections(paragraphs: list[str]) -> dict:
-    try:
-        sections = split_sections(paragraphs)
-    except RuntimeError as exc:
-        candidates = []
-        for line in paragraphs:
-            if re.search(r"9\s*[.．]\s*\d", line):
-                candidates.append(line[:300])
-            if len(candidates) >= 80:
-                break
-        print("Reader section diagnostics (first matching lines):")
-        for line in candidates:
-            print(repr(line))
-        if not candidates:
-            print("No lines matching a 9.x-like token. First 60 normalized lines:")
-            for line in paragraphs[:60]:
-                print(repr(line[:300]))
-        raise exc
+def section_number_pattern(n: int) -> re.Pattern:
+    # PDF extraction occasionally inserts spaces inside a number: `9.1 2.1` for 9.12.1.
+    digits = r"\s*".join(re.escape(ch) for ch in str(n))
+    return re.compile(
+        rf"(?<!\d)9\s*\.\s*{digits}(?!\s*\d)(?:\s*\.\s*\d+)?",
+        re.I,
+    )
 
-    # Sanity check that this is really Chapter 9, not a neighboring chapter PDF.
-    ids = set(sections)
-    if "9.1" not in ids or len(ids) < 80:
-        raise RuntimeError(f"Chapter-9 sanity check failed; section count={len(ids)}, first={sorted(ids)[:10]}")
+
+def is_likely_heading(text: str, match: re.Match) -> bool:
+    before = text[max(0, match.start()-35):match.start()]
+    after = text[match.end():match.end()+80].lstrip(" .、:：|-–—\n")
+    # Explicit body references are common in reimbursement rules; do not use them as boundaries.
+    if re.search(r"(?:依|符合|參照|詳見|請見|依據)\s*$", before):
+        return False
+    if re.match(r"(?:規定|之規定|項規定|條規定|給付規定|辦理)", after):
+        return False
+    # Headings normally introduce a drug/class name or deletion marker and are not bare references.
+    return bool(after)
+
+
+def find_section_heading(text: str, n: int, start: int) -> re.Match | None:
+    pat = section_number_pattern(n)
+    fallback = None
+    for m in pat.finditer(text, start):
+        if fallback is None:
+            fallback = m
+        if is_likely_heading(text, m):
+            return m
+        # Do not scan arbitrarily far past the first few candidates for the same number.
+        if m.start() - (fallback.start() if fallback else m.start()) > 25000:
+            break
+    return fallback
+
+
+def split_reader_sections(text: str) -> dict:
+    """Split chapter 9 by ordered section-number positions, independent of PDF line wrapping."""
+    headings: list[tuple[int, re.Match]] = []
+    cursor = 0
+    # Current chapter has ~130 top-level numbers; leave headroom for future additions.
+    for n in range(1, 251):
+        m = find_section_heading(text, n, cursor)
+        if not m:
+            continue
+        # Reject absurd backward/duplicate situations; positions must advance.
+        if m.start() < cursor:
+            continue
+        headings.append((n, m))
+        cursor = m.start() + 1
+
+    if len(headings) < 80:
+        preview = [(n, m.start(), text[m.start():m.start()+90].replace("\n", " ")) for n, m in headings[:30]]
+        raise RuntimeError(f"Reader positional parser found only {len(headings)} sections; preview={preview}")
+
+    sections = {}
+    for idx, (n, m) in enumerate(headings):
+        end = headings[idx+1][1].start() if idx+1 < len(headings) else len(text)
+        body = text[m.start():end].strip()
+        # Canonicalize the boundary only; preserve the rest of official text.
+        body = re.sub(section_number_pattern(n), f"9.{n}", body, count=1)
+        sections[f"9.{n}"] = {"text": body, "sha256": sha(body)}
+
+    if "9.1" not in sections:
+        raise RuntimeError("Chapter-9 sanity check failed: 9.1 missing")
     return sections
 
 
@@ -132,8 +156,8 @@ def main():
     sources = discover_from_markdown(page_md)
     print("Reader selected official chapter-9 PDF:", sources["pdf"])
     pdf_md = reader_get(sources["pdf"])
-    paragraphs = markdown_paragraphs(pdf_md)
-    sections = split_reader_sections(paragraphs)
+    document_text = clean_reader_text(pdf_md)
+    sections = split_reader_sections(document_text)
     previous = load_json(CURRENT_FILE, {})
     old_sections = previous.get("sections", {}) if isinstance(previous, dict) else {}
 
@@ -144,7 +168,7 @@ def main():
         "source": sources,
         "odt_sha256": source_hash,
         "transport_note": "Text fetched through reader proxy because nhi.gov.tw blocks GitHub-hosted runner IPs; official source URL retained.",
-        "paragraph_count": len(paragraphs),
+        "paragraph_count": document_text.count("\n") + 1,
         "section_count": len(sections),
         "sections": sections,
     }
