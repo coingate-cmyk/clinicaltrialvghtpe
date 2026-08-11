@@ -19,7 +19,7 @@ from nhi_update import (
 )
 
 READER = "https://r.jina.ai/"
-UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.1)"
+UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.2)"
 
 
 def reader_get(url: str) -> str:
@@ -36,10 +36,12 @@ def discover_from_markdown(md: str) -> dict:
     marker = re.search(r"第九節\s*抗癌瘤藥物[^\n]*", md)
     if not marker:
         raise RuntimeError("Reader page does not contain 第九節 抗癌瘤藥物")
-    start = max(0, marker.start() - 500)
-    end = min(len(md), marker.end() + 3500)
-    window = md[start:end]
-    urls = re.findall(r"https://www\.nhi\.gov\.tw/[^\s)\]>\"']+", window)
+
+    # IMPORTANT: only inspect links AFTER the chapter-9 marker. Looking before the
+    # marker can accidentally pick the chapter-8 PDF because the official page lists
+    # each chapter's DOC/ODT/PDF links consecutively.
+    tail = md[marker.end():marker.end()+7000]
+    urls = re.findall(r"https://www\.nhi\.gov\.tw/[^\s)\]>\"']+", tail)
     out = {"page": PAGE_URL, "label": marker.group(0).strip(), "transport": "reader-proxy"}
     for url in urls:
         clean = url.rstrip(".,;：，")
@@ -49,25 +51,18 @@ def discover_from_markdown(md: str) -> dict:
             out.setdefault("odt", clean)
         elif re.search(r"\.doc(?:\?|$)", clean, re.I):
             out.setdefault("doc", clean)
+        if all(k in out for k in ("pdf", "odt", "doc")):
+            break
+
     m = re.search(r"(\d{3}[./]\d{1,2}[./]\d{1,2})\s*更新", out["label"])
     out["source_update"] = m.group(1) if m else ""
     if "pdf" not in out:
-        tail = md[marker.end():marker.end()+7000]
-        m_pdf = re.search(r"https://www\.nhi\.gov\.tw/[^\s)\]>\"']+\.pdf(?:\?[^\s)\]>\"']*)?", tail, re.I)
-        if m_pdf:
-            out["pdf"] = m_pdf.group(0)
-    if "pdf" not in out:
-        raise RuntimeError("Cannot discover official chapter 9 PDF URL through reader page")
+        raise RuntimeError("Cannot discover official chapter 9 PDF URL after chapter marker")
     return out
 
 
 def normalize_reader_line(raw: str) -> str:
-    """Normalize PDF-to-Markdown artifacts so top-level 9.x headings are detectable.
-
-    Reader/PDF output may render headings as `| 9. 69. | ...`, `**9．69** ...`, or
-    insert spaces around punctuation. We canonicalize only a 9.x token occurring near
-    the beginning of the line. Subsections such as 9.69.1 are intentionally excluded.
-    """
+    """Normalize PDF-to-Markdown artifacts so top-level 9.x headings are detectable."""
     line = raw.strip()
     if not line:
         return ""
@@ -78,9 +73,8 @@ def normalize_reader_line(raw: str) -> str:
     line = line.strip("| ")
     line = re.sub(r"\s+", " ", line).strip()
 
-    # A table cell / PDF heading can start with a short non-semantic prefix.
-    # Require the 9.x token to occur within the first 24 characters to avoid
-    # turning body references into section headings.
+    # PDF readers sometimes render headings as `9. 69.` or table cells. Only
+    # canonicalize a 9.x token near the beginning; reject 9.69.1 subsections.
     m = re.search(r"(?<!\d)9\s*\.\s*(\d{1,3})(?!\s*\.\s*\d)", line)
     if m and m.start() <= 24:
         sid = f"9.{int(m.group(1))}"
@@ -102,9 +96,8 @@ def markdown_paragraphs(md: str) -> list[str]:
 
 def split_reader_sections(paragraphs: list[str]) -> dict:
     try:
-        return split_sections(paragraphs)
+        sections = split_sections(paragraphs)
     except RuntimeError as exc:
-        # Emit useful diagnostics to Actions logs, while avoiding dumping the whole document.
         candidates = []
         for line in paragraphs:
             if re.search(r"9\s*[.．]\s*\d", line):
@@ -120,6 +113,12 @@ def split_reader_sections(paragraphs: list[str]) -> dict:
                 print(repr(line[:300]))
         raise exc
 
+    # Sanity check that this is really Chapter 9, not a neighboring chapter PDF.
+    ids = set(sections)
+    if "9.1" not in ids or len(ids) < 80:
+        raise RuntimeError(f"Chapter-9 sanity check failed; section count={len(ids)}, first={sorted(ids)[:10]}")
+    return sections
+
 
 def main():
     for d in (DATA_DIR, RAW_DIR, SNAPSHOT_DIR, ASSET_DIR):
@@ -131,6 +130,7 @@ def main():
     fetched_at = now_iso()
     page_md = reader_get(PAGE_URL)
     sources = discover_from_markdown(page_md)
+    print("Reader selected official chapter-9 PDF:", sources["pdf"])
     pdf_md = reader_get(sources["pdf"])
     paragraphs = markdown_paragraphs(pdf_md)
     sections = split_reader_sections(paragraphs)
