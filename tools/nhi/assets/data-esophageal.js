@@ -1,0 +1,40 @@
+window.NHI_DATA.indications.push(...[
+  {
+    "id": "escc-nivo-1l",
+    "cancer": "esophageal",
+    "drug": "Nivolumab",
+    "regimen": "Nivolumab + fluoropyrimidine + cisplatin/oxaliplatin",
+    "setting": "晚期 / 轉移性 ESCC，不適合治癒性 CRT 或手術",
+    "line": "1L",
+    "biomarker": "PD-L1 TC ≥1%",
+    "prior_auth": true,
+    "review": "每次申請以 12 週為原則",
+    "duration": "ICI 給付時程依 9.69",
+    "section": "9.69",
+    "pdf_page": 49,
+    "effective": "115/2/1",
+    "status": "給付",
+    "summary": "無法接受治癒性化放療或手術之晚期 / 轉移性食道鱗癌，第一線可申請 nivolumab 併 fluoropyrimidine 與 platinum；PD-L1 表格要求 TC ≥1%。",
+    "tags": ["1L","ESCC","PD-L1","P102"],
+    "line_group": "1L"
+  },
+  {
+    "id": "escc-nivo-2l",
+    "cancer": "esophageal",
+    "drug": "Nivolumab",
+    "regimen": "Nivolumab monotherapy",
+    "setting": "無法切除晚期 / 復發性 ESCC",
+    "line": "2L+",
+    "biomarker": "PD-L1 TC ≥1%",
+    "prior_auth": true,
+    "review": "每次申請以 12 週為原則",
+    "duration": "ICI 給付時程依 9.69",
+    "section": "9.69",
+    "pdf_page": 47,
+    "effective": "115/2/1",
+    "status": "給付",
+    "summary": "曾接受含 platinum 與 fluoropyrimidine 化療後惡化的無法切除晚期或復發性 ESCC，可申請 nivolumab 單藥；PD-L1 表格要求 TC ≥1%。",
+    "tags": ["2L","ESCC","PD-L1","P101"],
+    "line_group": "2L+"
+  }
+]);

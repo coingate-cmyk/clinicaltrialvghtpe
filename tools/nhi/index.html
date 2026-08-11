@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="以癌種、治療線別與 biomarker 瀏覽台灣健保抗癌藥物給付規定。" />
+  <title>Taiwan Oncology NHI Navigator</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="#/" aria-label="回首頁">
+        <span class="brand-mark">NHI</span>
+        <span>
+          <strong>Taiwan Oncology Navigator</strong>
+          <small>癌種導向健保抗癌藥物查詢</small>
+        </span>
+      </a>
+      <span id="sourceBadge" class="source-badge"></span>
+      <a href="../index.html" class="source-badge" style="text-decoration:none;background:#fff;color:#114a61">← 臨床工具</a>
+    </div>
+    <div class="header-search">
+      <label class="sr-only" for="globalSearch">搜尋藥物、癌種或 biomarker</label>
+      <input id="globalSearch" type="search" placeholder="搜尋 drug / regimen / biomarker…" autocomplete="off" />
+      <kbd>/</kbd>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">GI BETA · V0.2</p>
+        <h1>先從癌種開始，<br><span>再找健保能不能用。</span></h1>
+        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。保留健保章節與原始 PDF 入口，摘要只做臨床導航，不取代正式規定。</p>
+      </div>
+      <div class="hero-stat-grid" id="heroStats"></div>
+    </section>
+
+    <section id="changePanel" class="change-panel" aria-live="polite"></section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">BROWSE BY CANCER</p>
+          <h2>依癌種查詢</h2>
+        </div>
+        <button id="showAllBtn" class="ghost-button" type="button">全部給付情境</button>
+      </div>
+      <div id="cancerGrid" class="cancer-grid"></div>
+    </section>
+
+    <section id="resultsSection" class="results-section section-block" hidden>
+      <div class="results-head">
+        <div>
+          <button id="backBtn" class="back-link" type="button">← 六癌種</button>
+          <p id="resultEyebrow" class="eyebrow">CANCER</p>
+          <h2 id="resultTitle">給付情境</h2>
+          <p id="resultDescription" class="muted"></p>
+        </div>
+        <div id="resultCount" class="result-count"></div>
+      </div>
+
+      <div class="filter-bar" aria-label="篩選條件">
+        <select id="lineFilter" aria-label="治療線別">
+          <option value="">所有線別</option>
+        </select>
+        <select id="biomarkerFilter" aria-label="Biomarker">
+          <option value="">所有 biomarker</option>
+        </select>
+        <select id="authFilter" aria-label="事前審查">
+          <option value="">事審不限</option>
+          <option value="yes">需事前審查</option>
+          <option value="no">不需事前審查</option>
+        </select>
+        <button id="resetFilters" type="button" class="ghost-button compact">清除篩選</button>
+      </div>
+
+      <div id="activeFilters" class="active-filters"></div>
+      <div id="results" class="result-list"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        <strong>沒有符合條件的項目</strong>
+        <span>換一個線別、biomarker 或搜尋詞試試。</span>
+      </div>
+    </section>
+
+    <section class="section-block methodology">
+      <div>
+        <p class="eyebrow">HOW IT UPDATES</p>
+        <h2>自動抓新版，人工只審「有變的地方」</h2>
+      </div>
+      <div class="pipeline">
+        <div><b>1</b><span>健保署第 9 節 ODT</span></div>
+        <i>→</i>
+        <div><b>2</b><span>解析 9.x 條文</span></div>
+        <i>→</i>
+        <div><b>3</b><span>癌種候選分類</span></div>
+        <i>→</i>
+        <div><b>4</b><span>新舊版本 diff</span></div>
+        <i>→</i>
+        <div><b>5</b><span>review queue</span></div>
+      </div>
+      <p class="muted methodology-note">設計原則：爬蟲可以自動偵測變更，但不讓規則引擎直接覆寫臨床摘要；跨癌種、多層次事審條文先進 review queue，再更新 curated data。</p>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>重要：</strong>此網站為臨床快速查詢 prototype；申報、處方與治療決策請以健保署最新公告、藥品許可證與院內規範為準。</p>
+    <p id="footerMeta"></p>
+  </footer>
+
+  <dialog id="detailDialog">
+    <form method="dialog" class="dialog-card">
+      <button class="dialog-close" value="close" aria-label="關閉">×</button>
+      <div id="dialogContent"></div>
+    </form>
+  </dialog>
+
+  <script src="assets/data-core.js"></script>
+  <script src="assets/data-gastric.js"></script>
+  <script src="assets/data-esophageal.js"></script>
+  <script src="assets/data-colorectal.js"></script>
+  <script src="assets/data-hcc.js"></script>
+  <script src="assets/data-biliary.js"></script>
+  <script src="assets/data-pancreatic.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
