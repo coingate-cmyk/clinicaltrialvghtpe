@@ -15,11 +15,11 @@ import requests
 from nhi_update import (
     PAGE_URL, ALIAS_FILE, CURRENT_FILE, RAW_DIR, SNAPSHOT_DIR, DATA_DIR, ASSET_DIR,
     CHANGES_FILE, COVERAGE_FILE, REVIEW_FILE, STATUS_JS,
-    now_iso, sha, split_sections, load_json, make_diff, make_coverage, section_title,
+    now_iso, sha, split_sections, load_json, make_diff, make_coverage,
 )
 
 READER = "https://r.jina.ai/"
-UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.0)"
+UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.1)"
 
 
 def reader_get(url: str) -> str:
@@ -52,7 +52,6 @@ def discover_from_markdown(md: str) -> dict:
     m = re.search(r"(\d{3}[./]\d{1,2}[./]\d{1,2})\s*更新", out["label"])
     out["source_update"] = m.group(1) if m else ""
     if "pdf" not in out:
-        # Wider fallback: take the first official PDF after the chapter marker.
         tail = md[marker.end():marker.end()+7000]
         m_pdf = re.search(r"https://www\.nhi\.gov\.tw/[^\s)\]>\"']+\.pdf(?:\?[^\s)\]>\"']*)?", tail, re.I)
         if m_pdf:
@@ -62,20 +61,64 @@ def discover_from_markdown(md: str) -> dict:
     return out
 
 
+def normalize_reader_line(raw: str) -> str:
+    """Normalize PDF-to-Markdown artifacts so top-level 9.x headings are detectable.
+
+    Reader/PDF output may render headings as `| 9. 69. | ...`, `**9．69** ...`, or
+    insert spaces around punctuation. We canonicalize only a 9.x token occurring near
+    the beginning of the line. Subsections such as 9.69.1 are intentionally excluded.
+    """
+    line = raw.strip()
+    if not line:
+        return ""
+    line = re.sub(r"^#{1,6}\s*", "", line)
+    line = re.sub(r"^[-*]\s+", "", line)
+    line = line.replace("**", "").replace("__", "")
+    line = line.replace("．", ".").replace("。", ".")
+    line = line.strip("| ")
+    line = re.sub(r"\s+", " ", line).strip()
+
+    # A table cell / PDF heading can start with a short non-semantic prefix.
+    # Require the 9.x token to occur within the first 24 characters to avoid
+    # turning body references into section headings.
+    m = re.search(r"(?<!\d)9\s*\.\s*(\d{1,3})(?!\s*\.\s*\d)", line)
+    if m and m.start() <= 24:
+        sid = f"9.{int(m.group(1))}"
+        tail = line[m.end():].lstrip(" .、:：|-–—")
+        line = f"{sid} {tail}".strip()
+    return line
+
+
 def markdown_paragraphs(md: str) -> list[str]:
     lines = []
     for raw in md.splitlines():
-        line = raw.strip()
-        if not line:
-            continue
-        line = re.sub(r"^#{1,6}\s*", "", line)
-        line = re.sub(r"^[-*]\s+", "", line)
-        line = re.sub(r"\s+", " ", line).strip()
+        line = normalize_reader_line(raw)
         if line:
             lines.append(line)
     if len(lines) < 100:
         raise RuntimeError(f"Reader PDF produced too few text lines: {len(lines)}")
     return lines
+
+
+def split_reader_sections(paragraphs: list[str]) -> dict:
+    try:
+        return split_sections(paragraphs)
+    except RuntimeError as exc:
+        # Emit useful diagnostics to Actions logs, while avoiding dumping the whole document.
+        candidates = []
+        for line in paragraphs:
+            if re.search(r"9\s*[.．]\s*\d", line):
+                candidates.append(line[:300])
+            if len(candidates) >= 80:
+                break
+        print("Reader section diagnostics (first matching lines):")
+        for line in candidates:
+            print(repr(line))
+        if not candidates:
+            print("No lines matching a 9.x-like token. First 60 normalized lines:")
+            for line in paragraphs[:60]:
+                print(repr(line[:300]))
+        raise exc
 
 
 def main():
@@ -90,7 +133,7 @@ def main():
     sources = discover_from_markdown(page_md)
     pdf_md = reader_get(sources["pdf"])
     paragraphs = markdown_paragraphs(pdf_md)
-    sections = split_sections(paragraphs)
+    sections = split_reader_sections(paragraphs)
     previous = load_json(CURRENT_FILE, {})
     old_sections = previous.get("sections", {}) if isinstance(previous, dict) else {}
 
