@@ -32,6 +32,20 @@ jobs:
       - name: Install parser dependencies
         run: python -m pip install --disable-pip-version-check requests beautifulsoup4
 
+      - name: Use browser-compatible NHI request headers
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/nhi_update.py')
+          s=p.read_text(encoding='utf-8')
+          old='SESSION.headers.update({"User-Agent": "clinicaltrialvghtpe NHI updater/1.0 (+GitHub Actions; clinical reference mirror)"})'
+          new='SESSION.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.7", "Referer": "https://www.nhi.gov.tw/"})'
+          if old not in s:
+              raise SystemExit('NHI session header anchor missing')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+          PY
+
       - name: Fetch official chapter 9 and build audit
         run: python scripts/nhi_update.py
 
@@ -56,6 +70,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Do not commit the temporary runtime header substitution.
+          git checkout -- scripts/nhi_update.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add tools/nhi/data tools/nhi/assets/nhi-status.js
