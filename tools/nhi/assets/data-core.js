@@ -5,17 +5,49 @@ window.NHI_DATA = {
     "source_update": "115/7/23",
     "verified_on": "2026-08-11",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
-    "scope": "GI beta：胃癌、食道癌、大腸直腸癌、肝細胞癌、膽道癌、胰臟癌",
-    "note": "V0.2：修正治療線別正規化；HCC 的 sorafenib/lenvatinib 均明確歸入 1L。正式申報仍應以健保署最新公告原文為準。",
-    "version": "0.2"
+    "scope": "全癌種 taxonomy；目前 GI 六癌種已有 curated records，其餘癌種由每週 coverage audit 逐步補齊",
+    "note": "V0.3：加入全癌種分類骨架、官方第 9 節自動 diff 與漏項偵測。未人工核對的候選條文不會自動變成臨床摘要。",
+    "version": "0.3"
   },
   "cancers": [
-    {"id":"gastric","name":"胃癌 / GEJ","en":"Gastric / GEJ","icon":"胃","description":"胃腺癌與胃食道接合處腺癌"},
-    {"id":"esophageal","name":"食道癌","en":"Esophageal","icon":"食","description":"目前 beta 先整理食道鱗狀細胞癌"},
-    {"id":"colorectal","name":"大腸直腸癌","en":"Colorectal","icon":"腸","description":"mCRC、RAS / BRAF / MSI-dMMR 導向"},
-    {"id":"hcc","name":"肝細胞癌","en":"HCC","icon":"肝","description":"晚期 HCC 一線與後線健保選項"},
-    {"id":"biliary","name":"膽道癌","en":"Biliary tract","icon":"膽","description":"BTC / intrahepatic cholangiocarcinoma"},
-    {"id":"pancreatic","name":"胰臟癌","en":"Pancreatic","icon":"胰","description":"轉移性胰臟癌與標靶例外情境"}
+    {"id":"gastric","name":"胃癌 / GEJ","en":"Gastric / GEJ","icon":"胃","group":"GI","curated":true,"description":"胃腺癌與胃食道接合處腺癌"},
+    {"id":"esophageal","name":"食道癌","en":"Esophageal","icon":"食","group":"GI","curated":true,"description":"食道癌，現有 curated records 以 ESCC 為主"},
+    {"id":"colorectal","name":"大腸直腸癌","en":"Colorectal","icon":"腸","group":"GI","curated":true,"description":"mCRC、RAS / BRAF / MSI-dMMR 導向"},
+    {"id":"hcc","name":"肝細胞癌","en":"HCC","icon":"肝","group":"GI","curated":true,"description":"晚期 HCC 一線與後線健保選項"},
+    {"id":"biliary","name":"膽道癌","en":"Biliary tract","icon":"膽","group":"GI","curated":true,"description":"BTC / cholangiocarcinoma / gallbladder"},
+    {"id":"pancreatic","name":"胰臟癌","en":"Pancreatic","icon":"胰","group":"GI","curated":true,"description":"胰臟癌系統性治療與標靶例外情境"},
+
+    {"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":false,"description":"NSCLC / SCLC；自動掃描後逐項人工核對"},
+    {"id":"mesothelioma","name":"惡性間皮瘤","en":"Mesothelioma","icon":"胸","group":"Thoracic","curated":false,"description":"胸膜等惡性間皮瘤"},
+    {"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":false,"description":"HER2 / HR / TNBC 等給付情境"},
+    {"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":false,"description":"HNSCC 系統性治療"},
+    {"id":"nasopharyngeal","name":"鼻咽癌","en":"Nasopharyngeal","icon":"鼻","group":"Head & Neck","curated":false,"description":"NPC 給付條文"},
+    {"id":"thyroid","name":"甲狀腺癌","en":"Thyroid","icon":"甲","group":"Endocrine","curated":false,"description":"DTC / MTC 等情境"},
+    {"id":"neuroendocrine","name":"神經內分泌腫瘤","en":"Neuroendocrine","icon":"NET","group":"Endocrine","curated":false,"description":"NET / NEC 相關給付"},
+
+    {"id":"renal","name":"腎細胞癌","en":"Renal cell","icon":"腎","group":"GU","curated":false,"description":"RCC 標靶與免疫治療"},
+    {"id":"urothelial","name":"泌尿道上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":false,"description":"Urothelial / bladder cancer"},
+    {"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":false,"description":"mHSPC / mCRPC 等情境"},
+    {"id":"germ_cell","name":"生殖細胞腫瘤","en":"Germ cell","icon":"GCT","group":"GU / Gyn","curated":false,"description":"睪丸與其他生殖細胞腫瘤"},
+
+    {"id":"ovarian","name":"卵巢 / 輸卵管 / 原發腹膜癌","en":"Ovarian / FT / PPC","icon":"卵","group":"Gynecologic","curated":false,"description":"卵巢、輸卵管與原發腹膜癌"},
+    {"id":"cervical","name":"子宮頸癌","en":"Cervical","icon":"頸","group":"Gynecologic","curated":false,"description":"子宮頸癌系統性治療"},
+    {"id":"endometrial","name":"子宮內膜癌","en":"Endometrial","icon":"宮","group":"Gynecologic","curated":false,"description":"子宮內膜癌與 biomarker 導向治療"},
+
+    {"id":"melanoma","name":"黑色素瘤","en":"Melanoma","icon":"黑","group":"Skin","curated":false,"description":"Melanoma 免疫與標靶治療"},
+    {"id":"cutaneous_scc","name":"皮膚鱗狀細胞癌","en":"Cutaneous SCC","icon":"皮","group":"Skin","curated":false,"description":"cSCC 系統性治療"},
+    {"id":"brain","name":"腦瘤 / 膠質瘤","en":"CNS / Glioma","icon":"腦","group":"CNS","curated":false,"description":"GBM / malignant glioma 等"},
+    {"id":"gist","name":"胃腸道基質瘤 GIST","en":"GIST","icon":"GIST","group":"Sarcoma","curated":false,"description":"GIST 標靶治療"},
+    {"id":"sarcoma","name":"肉瘤","en":"Sarcoma","icon":"肉","group":"Sarcoma","curated":false,"description":"軟組織與骨肉瘤相關給付"},
+
+    {"id":"hodgkin","name":"霍奇金淋巴瘤","en":"Hodgkin lymphoma","icon":"HL","group":"Hematologic","curated":false,"description":"Classical Hodgkin lymphoma"},
+    {"id":"nhl","name":"非霍奇金淋巴瘤","en":"Non-Hodgkin lymphoma","icon":"NHL","group":"Hematologic","curated":false,"description":"DLBCL / FL / MCL 等先以共同入口整理"},
+    {"id":"myeloma","name":"多發性骨髓瘤","en":"Multiple myeloma","icon":"MM","group":"Hematologic","curated":false,"description":"Multiple myeloma 給付規定"},
+    {"id":"aml","name":"急性骨髓性白血病 AML","en":"AML","icon":"AML","group":"Hematologic","curated":false,"description":"AML 標靶與系統性治療"},
+    {"id":"all","name":"急性淋巴性白血病 ALL","en":"ALL","icon":"ALL","group":"Hematologic","curated":false,"description":"ALL / lymphoblastic leukemia"},
+    {"id":"cml","name":"慢性骨髓性白血病 CML","en":"CML","icon":"CML","group":"Hematologic","curated":false,"description":"CML TKI 等給付"},
+    {"id":"cll","name":"CLL / SLL","en":"CLL / SLL","icon":"CLL","group":"Hematologic","curated":false,"description":"慢性淋巴性白血病 / 小淋巴球性淋巴瘤"},
+    {"id":"mds_mpn","name":"MDS / MPN","en":"MDS / MPN","icon":"MDS","group":"Hematologic","curated":false,"description":"骨髓增生不良與骨髓增生性腫瘤"}
   ],
   "indications": []
 };
