@@ -1,0 +1,40 @@
+{
+  "gastric": {"name":"胃癌 / GEJ","group":"GI","aliases":["胃癌","胃腺癌","胃食道接合處","胃食道交界","胃食道接合","GEJ","gastric cancer","gastric adenocarcinoma"]},
+  "esophageal": {"name":"食道癌","group":"GI","aliases":["食道癌","食道鱗狀細胞癌","食道鱗癌","ESCC","esophageal cancer","esophageal squamous"]},
+  "colorectal": {"name":"大腸直腸癌","group":"GI","aliases":["大腸直腸癌","大腸癌","直腸癌","結腸癌","結直腸癌","CRC","mCRC","colorectal cancer","colon cancer","rectal cancer"]},
+  "hcc": {"name":"肝細胞癌","group":"GI","aliases":["肝細胞癌","肝癌","HCC","hepatocellular carcinoma"]},
+  "biliary": {"name":"膽道癌","group":"GI","aliases":["膽道癌","膽管癌","膽囊癌","膽管細胞癌","BTC","cholangiocarcinoma","biliary tract cancer","gallbladder cancer"]},
+  "pancreatic": {"name":"胰臟癌","group":"GI","aliases":["胰臟癌","胰腺癌","胰管腺癌","PDAC","pancreatic cancer","pancreatic adenocarcinoma"]},
+
+  "lung": {"name":"肺癌","group":"Thoracic","aliases":["肺癌","非小細胞肺癌","小細胞肺癌","NSCLC","SCLC","non-small cell lung","small cell lung","lung cancer"]},
+  "mesothelioma": {"name":"惡性間皮瘤","group":"Thoracic","aliases":["間皮瘤","mesothelioma","malignant pleural mesothelioma"]},
+  "breast": {"name":"乳癌","group":"Breast","aliases":["乳癌","乳房癌","breast cancer","breast carcinoma"]},
+  "headneck": {"name":"頭頸癌","group":"Head & Neck","aliases":["頭頸癌","頭頸部鱗狀細胞癌","HNSCC","head and neck cancer","head and neck squamous"]},
+  "nasopharyngeal": {"name":"鼻咽癌","group":"Head & Neck","aliases":["鼻咽癌","NPC","nasopharyngeal carcinoma"]},
+  "thyroid": {"name":"甲狀腺癌","group":"Endocrine","aliases":["甲狀腺癌","甲狀腺髓質癌","分化型甲狀腺癌","thyroid cancer","thyroid carcinoma","DTC","MTC"]},
+  "neuroendocrine": {"name":"神經內分泌腫瘤","group":"Endocrine","aliases":["神經內分泌腫瘤","神經內分泌癌","NET","neuroendocrine tumor","neuroendocrine tumour","neuroendocrine carcinoma"]},
+
+  "renal": {"name":"腎細胞癌","group":"GU","aliases":["腎細胞癌","腎癌","RCC","renal cell carcinoma","kidney cancer"]},
+  "urothelial": {"name":"泌尿道上皮癌","group":"GU","aliases":["泌尿道上皮癌","尿路上皮癌","膀胱癌","UC","urothelial carcinoma","bladder cancer"]},
+  "prostate": {"name":"攝護腺癌","group":"GU","aliases":["攝護腺癌","前列腺癌","prostate cancer","prostate carcinoma","mCRPC","CRPC"]},
+  "germ_cell": {"name":"生殖細胞腫瘤","group":"GU / Gyn","aliases":["生殖細胞腫瘤","睪丸癌","testicular cancer","germ cell tumor","germ cell tumour"]},
+
+  "ovarian": {"name":"卵巢 / 輸卵管 / 原發腹膜癌","group":"Gynecologic","aliases":["卵巢癌","輸卵管癌","原發性腹膜癌","ovarian cancer","fallopian tube cancer","primary peritoneal cancer"]},
+  "cervical": {"name":"子宮頸癌","group":"Gynecologic","aliases":["子宮頸癌","cervical cancer","cervical carcinoma"]},
+  "endometrial": {"name":"子宮內膜癌","group":"Gynecologic","aliases":["子宮內膜癌","子宮體癌","endometrial cancer","endometrial carcinoma"]},
+
+  "melanoma": {"name":"黑色素瘤","group":"Skin","aliases":["黑色素瘤","melanoma","malignant melanoma"]},
+  "cutaneous_scc": {"name":"皮膚鱗狀細胞癌","group":"Skin","aliases":["皮膚鱗狀細胞癌","皮膚鱗癌","cSCC","cutaneous squamous cell carcinoma"]},
+  "brain": {"name":"腦瘤 / 膠質瘤","group":"CNS","aliases":["膠質母細胞瘤","惡性神經膠質瘤","腦瘤","GBM","glioblastoma","malignant glioma"]},
+  "gist": {"name":"胃腸道基質瘤 GIST","group":"Sarcoma","aliases":["胃腸道基質瘤","GIST","gastrointestinal stromal tumor","gastrointestinal stromal tumour"]},
+  "sarcoma": {"name":"肉瘤","group":"Sarcoma","aliases":["軟組織肉瘤","骨肉瘤","脂肪肉瘤","平滑肌肉瘤","sarcoma","soft tissue sarcoma","osteosarcoma","liposarcoma","leiomyosarcoma"]},
+
+  "hodgkin": {"name":"霍奇金淋巴瘤","group":"Hematologic","aliases":["霍奇金淋巴瘤","何杰金氏淋巴瘤","Hodgkin lymphoma","classical Hodgkin lymphoma","cHL"]},
+  "nhl": {"name":"非霍奇金淋巴瘤","group":"Hematologic","aliases":["非霍奇金淋巴瘤","瀰漫性大型B細胞淋巴瘤","濾泡性淋巴瘤","套細胞淋巴瘤","DLBCL","follicular lymphoma","mantle cell lymphoma","non-Hodgkin lymphoma"]},
+  "myeloma": {"name":"多發性骨髓瘤","group":"Hematologic","aliases":["多發性骨髓瘤","骨髓瘤","multiple myeloma","plasma cell myeloma"]},
+  "aml": {"name":"急性骨髓性白血病 AML","group":"Hematologic","aliases":["急性骨髓性白血病","急性骨髓性白血病 AML","AML","acute myeloid leukemia","acute myelogenous leukemia"]},
+  "all": {"name":"急性淋巴性白血病 ALL","group":"Hematologic","aliases":["急性淋巴性白血病","急性淋巴芽細胞白血病","acute lymphoblastic leukemia","acute lymphocytic leukemia"]},
+  "cml": {"name":"慢性骨髓性白血病 CML","group":"Hematologic","aliases":["慢性骨髓性白血病","慢性骨髓性白血病 CML","CML","chronic myeloid leukemia","chronic myelogenous leukemia"]},
+  "cll": {"name":"慢性淋巴性白血病 CLL / SLL","group":"Hematologic","aliases":["慢性淋巴性白血病","小淋巴球性淋巴瘤","CLL","SLL","chronic lymphocytic leukemia","small lymphocytic lymphoma"]},
+  "mds_mpn": {"name":"MDS / MPN","group":"Hematologic","aliases":["骨髓增生不良症候群","骨髓增生性腫瘤","MDS","MPN","myelodysplastic syndrome","myeloproliferative neoplasm"]}
+}
