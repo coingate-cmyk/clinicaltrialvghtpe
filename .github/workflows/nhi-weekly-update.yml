@@ -10,6 +10,7 @@ on:
     paths:
       - 'scripts/nhi_update.py'
       - 'scripts/nhi_update_reader.py'
+      - 'scripts/normalize_nhi_coverage.py'
       - 'scripts/build_nhi_candidates.py'
       - 'tools/nhi/config/cancer_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
@@ -58,6 +59,7 @@ jobs:
             echo 'Direct NHI fetch blocked/failed; trying reader transport against official page/PDF.'
             python scripts/nhi_update_reader.py
           fi
+          python scripts/normalize_nhi_coverage.py
           python scripts/build_nhi_candidates.py
 
       - name: Validate generated files
@@ -74,6 +76,7 @@ jobs:
           assert coverage['status'] == 'ok'
           assert review['status'] == 'ok'
           assert current['source'].get('page','').startswith('https://www.nhi.gov.tw/')
+          assert coverage.get('orphan_count', 0) == 0, coverage.get('orphans')
           assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
           candidate_js=Path('tools/nhi/assets/nhi-candidates.js')
           assert candidate_js.stat().st_size > 500
