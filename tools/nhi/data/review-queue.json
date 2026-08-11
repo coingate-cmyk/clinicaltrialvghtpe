@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "fetched_at": "2026-08-11T08:42:42Z",
-  "item_count": 191,
+  "fetched_at": "2026-08-11T09:22:59Z",
+  "item_count": 145,
   "items": [
     {
       "priority": "normal",
@@ -60,54 +60,9 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.3",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.3.Docetaxel： （87/7/1、92/11/1、93/8/1、95/8/1、96/1/1、99/6/1、100/1/1、 101/9/1、108/1/1、113/5/1、115/6/1、115/8/1） 第9節-3",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.3",
-      "cancer": "headneck",
-      "cancer_name": "頭頸癌",
-      "title": "9.3.Docetaxel： （87/7/1、92/11/1、93/8/1、95/8/1、96/1/1、99/6/1、100/1/1、 101/9/1、108/1/1、113/5/1、115/6/1、115/8/1） 第9節-3",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.3",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.3.Docetaxel： （87/7/1、92/11/1、93/8/1、95/8/1、96/1/1、99/6/1、100/1/1、 101/9/1、108/1/1、113/5/1、115/6/1、115/8/1） 第9節-3",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.4",
       "cancer": "lung",
       "cancer_name": "肺癌",
-      "title": "9.4.Gemcitabine（如 Gemzar） ：（92/12/1、93/8/1、94/10/1、96/5/1、99/10/1、 105/2/1、114/2/1、115/2/1、115/6/1） 1.本類藥品(除 Gemmis 之外)依藥品許可證登載之適應症範圍內給付於非小細胞肺癌、胰 臟癌、膀胱癌、乳癌、卵巢癌及膽道癌之病例；倘併用其他標靶治療、免疫檢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.4",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.4.Gemcitabine（如 Gemzar） ：（92/12/1、93/8/1、94/10/1、96/5/1、99/10/1、 105/2/1、114/2/1、115/2/1、115/6/1） 1.本類藥品(除 Gemmis 之外)依藥品許可證登載之適應症範圍內給付於非小細胞肺癌、胰 臟癌、膀胱癌、乳癌、卵巢癌及膽道癌之病例；倘併用其他標靶治療、免疫檢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.4",
-      "cancer": "urothelial",
-      "cancer_name": "泌尿道上皮癌",
       "title": "9.4.Gemcitabine（如 Gemzar） ：（92/12/1、93/8/1、94/10/1、96/5/1、99/10/1、 105/2/1、114/2/1、115/2/1、115/6/1） 1.本類藥品(除 Gemmis 之外)依藥品許可證登載之適應症範圍內給付於非小細胞肺癌、胰 臟癌、膀胱癌、乳癌、卵巢癌及膽道癌之病例；倘併用其他標靶治療、免疫檢",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
@@ -126,15 +81,6 @@
       "section_id": "9.5",
       "cancer": "lung",
       "cancer_name": "肺癌",
-      "title": "9.5.Paclitaxel 成分劑： （88/8/1、88/11/1、89/6/1、89/10/1、91/4/1、91/8/1、 93/8/1、94/1/1、98/8/1、108/11/1、112/12/1、114/6/1、114/8/1、115/6/1、 115/8/1） 9.5.1.Paclitaxel 成分注射劑：(108/11/1、112/12/1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.5",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
       "title": "9.5.Paclitaxel 成分劑： （88/8/1、88/11/1、89/6/1、89/10/1、91/4/1、91/8/1、 93/8/1、94/1/1、98/8/1、108/11/1、112/12/1、114/6/1、114/8/1、115/6/1、 115/8/1） 9.5.1.Paclitaxel 成分注射劑：(108/11/1、112/12/1",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
@@ -312,24 +258,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.17",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.17.Capecitabine（如 Xeloda） ：（88/10/1、91/4/1、92/6/1、93/8/1、96/9/1、 97/12/1、110/2/1、113/4/1、113/6/1、115/2/1） 第9節-7",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.18",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.18. Trastuzumab (如 Herceptin)：(91/4/1、93/8/1、95/2/1、99/1/1、99/8/1、 99/10/1、101/1/1、105/11/1、108/5/1、109/2/1、111/12/1、112/10/1、 113/8/1、113/12/1、114/1/1、114/5/1、114/12/1、115/7/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.19",
       "cancer": "prostate",
       "cancer_name": "攝護腺癌",
@@ -411,15 +339,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.24",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.24.Gefitinib(如 Iressa):(93/11/1、96/8/1、96/11/1、100/6/1、101/5/1、 101/10/1、103/5/1、106/11/1、 108/6/1、108/11/1、109/4/1、109/6/1、 109/10/1、111/2/1、111/4/1、113/3/1、113/6/1、113/10/1、115",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.25",
       "cancer": "brain",
       "cancer_name": "腦瘤 / 膠質瘤",
@@ -441,15 +360,6 @@
       "section_id": "9.27",
       "cancer": "colorectal",
       "cancer_name": "大腸直腸癌",
-      "title": "9.27.Cetuximab(如 Erbitux)：(96/3/1、98/7/1、98/8/1、99/10/1、101/12/1、 104/11/1、106/1/1、106/4/1、107/6/1、110/6/1、111/2/1、112/12/1、113/6/1、 第9節-14",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.27",
-      "cancer": "headneck",
-      "cancer_name": "頭頸癌",
       "title": "9.27.Cetuximab(如 Erbitux)：(96/3/1、98/7/1、98/8/1、99/10/1、101/12/1、 104/11/1、106/1/1、106/4/1、107/6/1、110/6/1、111/2/1、112/12/1、113/6/1、 第9節-14",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
@@ -762,46 +672,10 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.47",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.47.Lapatinib（如 Tykerb） ：（103/9/1、106/11/1、110/2/1、114/2/1） 1.與 capecitabine 併用，使用於曾接受 anthracycline, taxane 以及 trastuzumab 治",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.48",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.48.Eribulin（如 Halaven） ：（103/12/1、106/11/1、108/12/1、110/2/1） 1.轉移性乳癌： (1)用於治療轉移性乳癌患者且先前曾接受過 anthracycline 和 taxane 兩種針對轉 移性乳癌之化學治療輔助性治療. (2)每3個療程需進行療效評估，病歷應留存評估紀錄，無疾病惡化方可繼續使用. (1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.48",
       "cancer": "sarcoma",
       "cancer_name": "肉瘤",
       "title": "9.48.Eribulin（如 Halaven） ：（103/12/1、106/11/1、108/12/1、110/2/1） 1.轉移性乳癌： (1)用於治療轉移性乳癌患者且先前曾接受過 anthracycline 和 taxane 兩種針對轉 移性乳癌之化學治療輔助性治療. (2)每3個療程需進行療效評估，病歷應留存評估紀錄，無疾病惡化方可繼續使用. (1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.49",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.49. Abiraterone(如 Zytiga） ：（103/12/1、105/9/1、106/9/1、108/3/1、109/5/1、 109/10/1、110/2/1、110/3/1、110/11/1、111/3/1、112/9/1、113/8/1、113/9/1、 114/6/1） 1.與雄性素去除療法及 prednisone 或 prednis",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.50",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.50.Crizotinib (如 Xalkori)：(104/9/1、106/11/1、107/5/1、108/7/1、108/9/1、 108/12/1、110/7/1、111/2/1、111/8/1、112/11/1、113/6/1、113/9/1) 1. 適用於 ALK 陽性之晚期非小細胞肺癌第一線治療，且於113年9月1日前經審核同意",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -820,15 +694,6 @@
       "cancer": "melanoma",
       "cancer_name": "黑色素瘤",
       "title": "9.52.Vemurafenib(如 Zelboraf)：(104/11/1、110/3/1、113/6/1） 1. 用於治療 BRAF V600突變陽性 ECOG ≤2且罹患無法切除(第ⅢC 期)或轉移性(第Ⅳ期) 黑色素瘤之病人.需檢附 BRAF V600基因突變分析檢測報告，且需符合全民健康保 險藥品給付規定之通則十二.(113/6/1) 2.需經事前",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.54",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.54. Enzalutamide（如 Xtandi） ：（105/9/1、106/9/1、108/3/1、109/10/1、110/3/1、 110/11/1、111/3/1、112/9/1、113/8/1、114/6/1、114/10/1） 1.治療高風險非轉移性去勢抗性前列腺癌(high risk nmCRPC)的成年男性.(112/9/1) (1)",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -883,15 +748,6 @@
       "cancer": "lung",
       "cancer_name": "肺癌",
       "title": "9.59.Ceritinib(如 Zykadia)：(106/9/1、106/11/1、108/7/1、108/12/1、111/2/1、 111/8/1、112/11/1、113/6/1) 1. 適用於 ALK 陽性之晚期非小細胞肺癌第一線治療.(108/7/1、111/8/1) 2. 須經事前審查核准後使用： (1)每次申請事前審查之療程以三個月為限，每",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.60",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.60.Alectinib(如 Alecensa)：(106/11/1、108/12/1、111/2/1、111/8/1、112/11/1、 113/6/1) 1. 適用於 ALK 陽性之晚期非小細胞肺癌第一線治療.(108/12/1、111/8/1) 2. 須經事前審查核准後使用: (1)每次申請事前審查之療程以三個月為限，每三個月需再次申請. (2)初",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -960,45 +816,9 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.68",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.68.Radium-223(如 Xofigo)：(108/3/1) 第9節-45",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.69",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.69",
       "cancer": "mesothelioma",
       "cancer_name": "惡性間皮瘤",
-      "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.69",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.69",
-      "cancer": "headneck",
-      "cancer_name": "頭頸癌",
       "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
@@ -1033,15 +853,6 @@
       "priority": "normal",
       "type": "coverage-gap",
       "section_id": "9.69",
-      "cancer": "urothelial",
-      "cancer_name": "泌尿道上皮癌",
-      "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.69",
       "cancer": "endometrial",
       "cancer_name": "子宮內膜癌",
       "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
@@ -1063,15 +874,6 @@
       "cancer": "hodgkin",
       "cancer_name": "霍奇金淋巴瘤",
       "title": "9.69.免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dostarlimab 製 劑)：(108/4/1、108/6/1、109/4/1、109/6/1、109/11/1、110/5/1、1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.70",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.70. Pertuzumab(如 Perjeta)：(108/5/1、108/12/1、112/8/1、113/12/1、 114/1/1、114/5/1、114/12/1) 1.本藥品與 trastuzumab 及化學療法併用於具 HER2過度表現（IHC3+或 FISH+） ，且具 腋下淋巴結轉移但無遠處臟器轉移之早期乳癌病人（113/12/1、11",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1099,15 +901,6 @@
       "cancer": "mds_mpn",
       "cancer_name": "MDS / MPN",
       "title": "9.71. Venetoclax (如 Venclexta)：(108/9/1、110/7/1、112/7/1、114/8/1、114/10/1) 第9節-56",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.72",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.72.CDK4/6抑制劑 (如 ribociclib；palbociclib)：(108/10/1、108/12/1、 109/4/1、109/10/1、110/5/1、110/10/1、113/1/1、113/3/1、114/7/1、115/1/1) 1.用於停經後乳癌婦女發生遠端轉移後之全身性藥物治療，須完全符合以下條件： (109/10/1、110",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1185,51 +978,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.80",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.80.Osimertinib (如 Tagrisso)：(109/4/1、109/6/1、109/10/1、111/4/1、 113/6/1、113/10/1、115/8/1) 1.限單獨使用於： (1) 具有 EGFR Exon 19 Del 或 Exon 21 L858R 基因突變之局部侵犯性或轉移性 （即為 IIIB、IIIC 期或第Ⅳ期）肺腺癌病",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.81",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.81.Lorlatinib (如 Lorviqua)：(109/6/1、112/11/1、113/4/1、113/6/1) 1.適用於 ALK 陽性的晚期非小細胞肺癌第一線治療.(112/11/1) (1)須經事前審查核准後使用： I.每次申請事前審查之療程以三個月為限，每三個月需再次申請. II.初次申請時需檢具確實患有非小細胞肺癌之病理或細胞檢查報告",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.82",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.82.Brigatinib (如 Alunbrig)：(109/8/1、111/8/1、112/11/1、113/6/1)",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.85",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.85.PARP 抑制劑(如 olaparib、niraparib、talazoparib)：(109/11/1、111/6/1、 111/8/1、112/1/1、112/11/1、113/3/1、113/6/1、113/9/1、114/3/1、114/6/1、 114/8/1、114/10/1) 1.卵巢、輸卵管或原發性腹膜癌(olaparib、nira",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.85",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.85.PARP 抑制劑(如 olaparib、niraparib、talazoparib)：(109/11/1、111/6/1、 111/8/1、112/1/1、112/11/1、113/3/1、113/6/1、113/9/1、114/3/1、114/6/1、 114/8/1、114/10/1) 1.卵巢、輸卵管或原發性腹膜癌(olaparib、nira",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.85",
       "cancer": "ovarian",
       "cancer_name": "卵巢 / 輸卵管 / 原發腹膜癌",
@@ -1248,37 +996,10 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.87",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.87.Trastuzumab emtansine (如 Kadcyla)：(110/2/1、113/8/1、114/2/1、114/5/1) 1.早期乳癌(113/8/1、114/2/1、114/5/1) (1)使用於具 HER2過度表現(IHC 3+或 FISH+)之早期乳癌病人，曾接受過至少6個療 程（每3週一療程，至少16週）的化學治療（其中至少3",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.88",
       "cancer": "breast",
       "cancer_name": "乳癌",
       "title": "9.88.Ixabepilone (如 Ixempra)：(110/2/1) 第9節-71",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.90",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.90. Apalutamide (如 Erleada)：(110/3/1、110/11/1、111/3/1、112/9/1、 113/8/1、114/6/1) 1.治療高風險非轉移性去勢抗性前列腺癌(high risk nmCRPC)的成年男性. (1)須經事前審查核准後使用. (2)初次申請時需檢附病理報告、使用雄性素去除療法紀錄，系列 PSA 和睪固",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.91",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.91.Dabrafenib (如 Tafinlar)、Trametinib (如 Mekinist)：(110/3/1、113/3/1、 113/6/1) 1.Dabrafenib 和 trametinib 併用於治療 BRAF V600突變陽性 ECOG ≤ 2且罹患無法切除 (第ⅢC 期)或轉移性(第Ⅳ期)黑色素瘤之病人： (1)需經事前審查核准後使",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1293,36 +1014,9 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.93",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.93.Entrectinib (如 Rozlytrek)：(110/7/1、113/6/1) 1.單獨使用於 ROS-1陽性之局部晚期或轉移性非小細胞肺癌的成人病人. 2.須經事前審查核准後使用：(113/6/1) (1) 需檢具確實患有非小細胞肺癌之病理或細胞檢查報告，以及符合診斷之 ROS-1 突變檢測報告，且需符合全民健康保險藥品給付規定之通則十二",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.94",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.94. Darolutamide(如 Nubeqa)：(110/11/1、112/9/1、113/5/1、113/8/1、115/4/1) 1.作為單一療法或與 docetaxel 併用於治療高風險轉移性的去勢敏感性前列腺癌 (mCSPC)，總療程以36個月為上限.(113/5/1、114/6/1、115/4/1) (1)須經事前審查核准後使用. (2)",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.95",
       "cancer": "colorectal",
       "cancer_name": "大腸直腸癌",
-      "title": "9.95.Larotrectinib (如 Vitrakvi)：(111/3/1、111/6/1、112/12/1、113/6/1) 1.適用於有 NTRK 基因融合的實體腫瘤成人和兒童病人，並應符合以下條件： (112/12/1) (1)具 NTRK 基因融合且無已知的後天阻抗性突變(acquired resistance mutation). (2)為轉",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.95",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
       "title": "9.95.Larotrectinib (如 Vitrakvi)：(111/3/1、111/6/1、112/12/1、113/6/1) 1.適用於有 NTRK 基因融合的實體腫瘤成人和兒童病人，並應符合以下條件： (112/12/1) (1)具 NTRK 基因融合且無已知的後天阻抗性突變(acquired resistance mutation). (2)為轉",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
@@ -1419,15 +1113,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.101",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.101.Tepotinib (如 Tepmetko):(112/7/1、113/6/1) 第9節-79",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.103",
       "cancer": "nhl",
       "cancer_name": "非霍奇金淋巴瘤",
@@ -1473,24 +1158,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.106",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.106.Sacituzumab govitecan (如 Trodelvy） ：(113/2/1、114/2/1、114/10/1) 1.用於治療先前已接受兩次以上全身性治療無效(其中一次需為治療晚期疾病)之無法切 除的局部晚期或轉移性的三陰性乳癌成人病人.(113/2/1、114/2/1) (1)須符合下列各項條件： Ⅰ.病人身體狀況良好（ECOG≦1",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.107",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.107.Abemaciclib (如 Verzenio)：(113/3/1、113/6/1)",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.108",
       "cancer": "myeloma",
       "cancer_name": "多發性骨髓瘤",
@@ -1504,15 +1171,6 @@
       "cancer": "myeloma",
       "cancer_name": "多發性骨髓瘤",
       "title": "9.111.Elotuzumab (如 Empliciti)：(113/9/1) 1.與 pomalidomide 及 dexamethasone 併用，治療之前曾接受過至少兩種療法（包括",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.112",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.112.Pertuzumab 與 trastuzumab 皮下注射複方製劑(如 Phesgo):(113/12/1、114/5/1) 1.本藥品及化學療法併用於具 HER2過度表現（IHC3+或 FISH+） ，且具腋下淋巴結轉移但 無遠處臟器轉移之早期乳癌病人（113/12/1、114/5/1） (1)使用於術前輔助治療，經外科手術後達病理上完全緩解者",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1540,15 +1198,6 @@
       "cancer": "mds_mpn",
       "cancer_name": "MDS / MPN",
       "title": "9.114.Fedratinib (如 Inrebic)：(114/1/1、114/10/1)",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.115",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.115.Trastuzumab deruxtecan (如 Enhertu)：(114/2/1) 1.單獨使用於具 HER2過度表現(IHC3+或 FISH+)之轉移性乳癌病人作為二線治療，並同 時符合下列情形： (1)之前分別接受過 trastuzumab 與一種 taxane 藥物治療，或其合併療法，或 pertuzumab 與 trastuzuma",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     },
     {
@@ -1626,15 +1275,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.126",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.126.Amivantamab(如 Rybrevant)：(114/10/1) 1.與 carboplatin 及 pemetrexed 併用，適用於罹患帶有表皮生長因子受體(EGFR) exon 20 插入突變之局部晚期或轉移性非小細胞肺癌(NSCLC)的成人病人，作為第一線治 療. 2.需經事前審查核准後使用： (1)初次申請時需檢具確實患有非小細胞",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.127",
       "cancer": "aml",
       "cancer_name": "急性骨髓性白血病 AML",
@@ -1653,24 +1293,6 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.128",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.128.Tucidinostat (如 Kepida)：(114/12/1) 1.與 exemestane 併用，適用於曾接受過至少一種治療轉移性的內分泌併用 CDK4/6抑制 劑治療後復發或惡化，且未曾使用 exemestane 之荷爾蒙接受體陽性、HER2受體陰 性，且尚未出現器官轉移危急症狀 (visceral crisis)之停經後轉移性乳癌病人",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.129",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.129.Alpelisib (如 Piqray）：(115/1/1、115/6/1) 1.與 fulvestrant 併用於曾接受 CDK4/6抑制劑治療但疾病惡化的停經後轉移性乳癌病 人，且須完全符合下列條件： (1)荷爾蒙受體為：ER 或 PR＞30%. (2)HER-2 檢測為陰性. (3)具有 PIK3CA 基因突變. 2.需經事前審查核准後使用",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.130",
       "cancer": "breast",
       "cancer_name": "乳癌",
@@ -1680,46 +1302,10 @@
     {
       "priority": "normal",
       "type": "coverage-gap",
-      "section_id": "9.131",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.131.Repotrectinib(如 Augtyro)：(115/2/1) 1.單獨給付於在 crizotinib 或 entrectinib 治療中惡化之 ROS1陽性之局部晚期或轉移 性非小細胞肺癌的成人病人. 2.須經事前審查核准後使用： (1)需檢具確實患有非小細胞肺癌之病理或細胞檢查報告，以及符合診斷之 ROS-1突變 檢測報告，且需符合全民",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
       "section_id": "9.132",
       "cancer": "cml",
       "cancer_name": "慢性骨髓性白血病 CML",
       "title": "9.132.Bosutinib(如 Bostini)：(115/2/1) 1.第一線使用： (1)治療新診斷的費城染色體陽性之慢性期慢性骨髓性白血病的成人病人. (2)限每日最大劑量400mg. 2.第二線使用： (1)治療患有慢性、加速或急性期慢性骨髓性白血病，對先前經 imatinib 400mg(含)以上治療後有抗藥性或無耐受性的成人病人. (2)需檢",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.135",
-      "cancer": "breast",
-      "cancer_name": "乳癌",
-      "title": "9.135. Capivasertib (如 Truqap)：(115/6/1) 1.與 fulvestrant 併用於曾接受 CDK4/6抑制劑治療但疾病惡化的停經後轉移性乳癌病 人，且須完全符合下列條件： (1)荷爾蒙受體為陽性(ER 或 PR>30%). (2)第二型人類表皮生長因子受體(HER2)陰性. (3)具 PIK3CA/AKT1/PTEN 任",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.137",
-      "cancer": "prostate",
-      "cancer_name": "攝護腺癌",
-      "title": "9.137.Cabazitaxel(如 Cabazred):(115/8/1) 1.與 prednisone 或 prednisolone 併用，治療對荷爾蒙無效的轉移性前列腺癌(mCRPC)， 且已接受過 docetaxel 治療者，須完全符合下列條件： (1)曾經接受過 docetaxel 至少3個療程. (2)曾經接受過新型荷爾蒙藥品(abirater",
-      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
-    },
-    {
-      "priority": "normal",
-      "type": "coverage-gap",
-      "section_id": "9.138",
-      "cancer": "lung",
-      "cancer_name": "肺癌",
-      "title": "9.138.Aumolertinib (如 Pulmivex)：(115/8/1) 1.限單獨使用於： (1)具有 EGFR Exon 19 Del 或 Exon 21 L858R 基因突變之局部侵犯性或轉移性（即為 IIIB、IIIC 期或第Ⅳ期）肺腺癌病人之第一線治療. (2)先前已接受過 EGFR 標靶藥物 gefitinib、erlotinib、af",
       "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
     }
   ]

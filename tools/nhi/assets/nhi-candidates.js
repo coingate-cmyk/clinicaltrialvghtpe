@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-11T08:42:42Z",
+    "fetched_at": "2026-08-11T09:22:59Z",
     "source_update": "115.7.23",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
@@ -258,7 +258,7 @@ window.NHI_CANDIDATES = {
       "name": "肺癌",
       "group": "Thoracic",
       "candidate_count": 27,
-      "curated_count": 0,
+      "curated_count": 14,
       "candidates": [
         {
           "section_id": "9.2",
@@ -414,7 +414,7 @@ window.NHI_CANDIDATES = {
       "name": "乳癌",
       "group": "Breast",
       "candidate_count": 28,
-      "curated_count": 0,
+      "curated_count": 19,
       "candidates": [
         {
           "section_id": "9.1",
@@ -562,7 +562,7 @@ window.NHI_CANDIDATES = {
       "name": "頭頸癌",
       "group": "Head & Neck",
       "candidate_count": 3,
-      "curated_count": 0,
+      "curated_count": 3,
       "candidates": [
         {
           "section_id": "9.3",
@@ -706,8 +706,8 @@ window.NHI_CANDIDATES = {
     "urothelial": {
       "name": "泌尿道上皮癌",
       "group": "GU",
-      "candidate_count": 2,
-      "curated_count": 0,
+      "candidate_count": 3,
+      "curated_count": 3,
       "candidates": [
         {
           "section_id": "9.4",
@@ -718,6 +718,11 @@ window.NHI_CANDIDATES = {
           "section_id": "9.69",
           "title": "免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dos…",
           "official_only": true
+        },
+        {
+          "section_id": "9.109",
+          "title": "Enfortumab vedotin(如 Padcev）",
+          "official_only": true
         }
       ]
     },
@@ -725,7 +730,7 @@ window.NHI_CANDIDATES = {
       "name": "攝護腺癌",
       "group": "GU",
       "candidate_count": 11,
-      "curated_count": 0,
+      "curated_count": 8,
       "candidates": [
         {
           "section_id": "9.3",
