@@ -7,7 +7,7 @@
   const $ = (id) => document.getElementById(id);
   const state = { cancer: null, query: '', line: '', biomarker: '', auth: '' };
   const cancerMap = Object.fromEntries(data.cancers.map(c => [c.id, c]));
-  const sourcePdf = data.meta.source_url;
+  const sourcePdf = changes.source_url || data.meta.source_url;
 
   function esc(s='') {
     return String(s).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
@@ -18,35 +18,41 @@
   function pdfLink(item) { return `${sourcePdf}#page=${Number(item.pdf_page || 1)}`; }
 
   function renderHeader() {
-    $('sourceBadge').textContent = `官方來源 ${data.meta.source_update}`;
+    const sourceUpdate = changes.source_update || data.meta.source_update;
+    $('sourceBadge').textContent = `官方來源 ${sourceUpdate}`;
     $('footerMeta').textContent = `${data.meta.source_name}｜資料核對 ${data.meta.verified_on}｜${data.meta.scope}`;
+    const curatedCancers = new Set(data.indications.map(x => x.cancer)).size;
     const authCount = data.indications.filter(x => x.prior_auth).length;
     const biomarkerCount = data.indications.filter(x => x.biomarker && x.biomarker !== '—').length;
     $('heroStats').innerHTML = [
-      [data.cancers.length, '癌種'], [data.indications.length, '給付情境'], [authCount, '需事前審查'], [biomarkerCount, 'biomarker-linked']
+      [data.cancers.length, '癌種 taxonomy'], [curatedCancers, '已有 curated data'], [data.indications.length, '給付情境'], [authCount, '需事前審查']
     ].map(([n,l]) => `<div class="stat-card"><b>${n}</b><span>${l}</span></div>`).join('');
   }
 
   function renderChanges() {
     const panel = $('changePanel');
     const n = Array.isArray(changes.changes) ? changes.changes.length : 0;
-    if (changes.status === 'ok' && n) {
-      panel.innerHTML = `<div><strong>本次偵測到 ${n} 個條文章節有變更</strong><span>自動更新只建立 review queue，不會直接改寫臨床摘要。</span></div><button class="ghost-button compact" id="showChanges">查看變更</button>`;
-      $('showChanges').addEventListener('click', () => showChangesDialog());
-    } else if (changes.status === 'ok') {
-      panel.innerHTML = `<div><strong>本次沒有偵測到第 9 節條文變更</strong><span>來源擷取成功；curated data 維持原版本。</span></div>`;
+    const gaps = Number(changes.coverage?.missing_candidate_count || 0);
+    const sections = Number(changes.section_count || 0);
+    if (changes.status === 'ok') {
+      const headline = n ? `本次偵測到 ${n} 個第 9 節條文章節變更` : '第 9 節自動擷取與比對成功';
+      const detail = `${sections ? `已解析 ${sections} 個 9.x 章節；` : ''}漏項偵測目前有 ${gaps} 個「癌種 × 條文」候選待人工核對。curated 臨床摘要不會自動覆寫。`;
+      panel.innerHTML = `<div><strong>${esc(headline)}</strong><span>${esc(detail)}</span></div>${n ? '<button class="ghost-button compact" id="showChanges">查看變更</button>' : ''}`;
+      if (n) $('showChanges').addEventListener('click', () => showChangesDialog());
     } else {
-      panel.innerHTML = `<div><strong>自動更新尚未在這份離線 prototype 執行</strong><span>部署到 GitHub 後，每週 workflow 會抓官方 ODT、比對 section diff，再產生 review queue。</span></div>`;
+      panel.innerHTML = `<div><strong>每週自動更新管線建置中</strong><span>正式流程：健保署第 9 節 → section diff → 癌種漏項偵測 → review queue；只有人工核對後才更新臨床摘要。</span></div>`;
     }
   }
 
   function renderCancerGrid() {
     $('cancerGrid').innerHTML = data.cancers.map(c => {
       const count = data.indications.filter(x => x.cancer === c.id).length;
-      return `<button class="cancer-card" data-cancer="${esc(c.id)}">
+      const status = count ? `${count} 個給付情境 →` : '已納入監測 · 待整理 →';
+      return `<button class="cancer-card${count ? '' : ' pending'}" data-cancer="${esc(c.id)}">
         <span class="cancer-icon">${esc(c.icon)}</span>
         <h3>${esc(c.name)}</h3><p>${esc(c.description)}</p>
-        <span class="count">${count} 個給付情境 →</span>
+        <small class="muted">${esc(c.group || '')}</small>
+        <span class="count">${esc(status)}</span>
       </button>`;
     }).join('');
     document.querySelectorAll('[data-cancer]').forEach(btn => btn.addEventListener('click', () => openCancer(btn.dataset.cancer)));
@@ -87,9 +93,9 @@
 
   function renderResults() {
     const c = state.cancer ? cancerMap[state.cancer] : null;
-    $('resultEyebrow').textContent = c ? c.en : 'ALL GI CANCERS';
-    $('resultTitle').textContent = c ? c.name : '全部 GI 給付情境';
-    $('resultDescription').textContent = c ? c.description : '六癌種目前已結構化的給付項目。';
+    $('resultEyebrow').textContent = c ? `${c.group || ''} · ${c.en}` : 'ALL CURATED CANCERS';
+    $('resultTitle').textContent = c ? c.name : '全部已整理給付情境';
+    $('resultDescription').textContent = c ? c.description : '目前已完成人工結構化的給付項目；其他癌種已進入每週自動 coverage audit。';
 
     const base = baseItems();
     setOptions($('lineFilter'), uniq(base.map(lineGroup)), '所有線別');
@@ -102,6 +108,11 @@
     $('resultCount').innerHTML = `<b>${items.length}</b><span> 項符合</span>`;
     $('results').innerHTML = items.map(cardHtml).join('');
     $('emptyState').hidden = items.length > 0;
+    if (!items.length) {
+      $('emptyState').innerHTML = c && !c.curated
+        ? `<strong>${esc(c.name)} 已納入自動監測</strong><span>目前尚未完成 curated records；coverage audit 會先列出健保第 9 節的候選條文，人工核對後再上線。</span>`
+        : '<strong>沒有符合條件的項目</strong><span>換一個線別、biomarker 或搜尋詞試試。</span>';
+    }
     renderFilterChips();
 
     document.querySelectorAll('[data-detail]').forEach(btn => btn.addEventListener('click', () => showDetail(btn.dataset.detail)));
@@ -188,6 +199,6 @@
   document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') { e.preventDefault(); $('globalSearch').focus(); } });
 
   renderHeader(); renderChanges(); renderCancerGrid();
-  const hashCancer = location.hash.match(/^#\/(gastric|esophageal|colorectal|hcc|biliary|pancreatic)$/)?.[1];
-  if (hashCancer) { state.cancer=hashCancer; $('resultsSection').hidden=false; renderResults(); }
+  const hashId = location.hash.match(/^#\/([^/?#]+)$/)?.[1];
+  if (hashId && cancerMap[hashId]) { state.cancer=hashId; $('resultsSection').hidden=false; renderResults(); }
 })();
