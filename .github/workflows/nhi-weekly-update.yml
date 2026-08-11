@@ -10,6 +10,7 @@ on:
     paths:
       - 'scripts/nhi_update.py'
       - 'scripts/nhi_update_reader.py'
+      - 'scripts/build_nhi_candidates.py'
       - 'tools/nhi/config/cancer_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
 
@@ -57,6 +58,7 @@ jobs:
             echo 'Direct NHI fetch blocked/failed; trying reader transport against official page/PDF.'
             python scripts/nhi_update_reader.py
           fi
+          python scripts/build_nhi_candidates.py
 
       - name: Validate generated files
         shell: bash
@@ -73,6 +75,8 @@ jobs:
           assert review['status'] == 'ok'
           assert current['source'].get('page','').startswith('https://www.nhi.gov.tw/')
           assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
+          candidate_js=Path('tools/nhi/assets/nhi-candidates.js')
+          assert candidate_js.stat().st_size > 500
           print('NHI validation OK:', current['section_count'], 'sections;', coverage['missing_candidate_count'], 'coverage candidates to review')
           PY
 
@@ -84,7 +88,7 @@ jobs:
           git checkout -- scripts/nhi_update.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add tools/nhi/data tools/nhi/assets/nhi-status.js
+          git add tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js
           if ! git diff --cached --quiet; then
             git commit -m 'Update NHI chapter 9 snapshot and audit'
             git push origin main
@@ -93,6 +97,7 @@ jobs:
           mkdir -p /tmp/nhi-data
           cp -a tools/nhi/data /tmp/nhi-data/data
           cp tools/nhi/assets/nhi-status.js /tmp/nhi-data/nhi-status.js
+          cp tools/nhi/assets/nhi-candidates.js /tmp/nhi-data/nhi-candidates.js
 
       - name: Publish generated audit data to live Pages branch
         shell: bash
@@ -104,7 +109,8 @@ jobs:
           mkdir -p tools/nhi/assets
           cp -a /tmp/nhi-data/data tools/nhi/data
           cp /tmp/nhi-data/nhi-status.js tools/nhi/assets/nhi-status.js
-          git add tools/nhi/data tools/nhi/assets/nhi-status.js
+          cp /tmp/nhi-data/nhi-candidates.js tools/nhi/assets/nhi-candidates.js
+          git add tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js
           if ! git diff --cached --quiet; then
             git commit -m 'Publish NHI chapter 9 audit data'
             git push origin pages-clean-ajcc-v2-3
