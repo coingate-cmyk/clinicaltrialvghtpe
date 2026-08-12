@@ -1,0 +1,44 @@
+name: Validate NHI Clinical Pathway UI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/nhi/assets/clinical-map.js'
+      - 'tools/nhi/assets/clinical-map.css'
+      - 'tools/nhi/index.html'
+      - 'tools/nhi/assets/data-*.js'
+      - '.github/workflows/validate-nhi-pathway.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check tools/nhi/assets/clinical-map.js
+          node --check tools/nhi/assets/app.js
+      - name: Validate pathway references
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          assets = Path('tools/nhi/assets')
+          all_data = '\n'.join(p.read_text(encoding='utf-8') for p in sorted(assets.glob('data-*.js')))
+          data_ids = set(re.findall(r'"id"\s*:\s*"([^"]+)"', all_data))
+          pathway = (assets / 'clinical-map.js').read_text(encoding='utf-8')
+          refs = set(re.findall(r"items:\s*\[([^\]]*)\]", pathway))
+          item_ids = set()
+          for group in refs:
+              item_ids.update(re.findall(r"['\"]([^'\"]+)['\"]", group))
+          missing = sorted(item_ids - data_ids)
+          if missing:
+              raise SystemExit(f'Clinical pathway references missing curated IDs: {missing}')
+          html = Path('tools/nhi/index.html').read_text(encoding='utf-8')
+          assert 'assets/clinical-map.css' in html
+          assert 'assets/clinical-map.js' in html
+          print(f'Pathway validation OK: {len(item_ids)} referenced curated records')
+          PY
