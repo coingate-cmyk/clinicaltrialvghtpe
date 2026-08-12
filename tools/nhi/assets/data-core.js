@@ -3,11 +3,11 @@ window.NHI_DATA = {
     "title": "Taiwan Oncology NHI Navigator",
     "source_name": "衛生福利部中央健康保險署－第九節 抗癌瘤藥物",
     "source_update": "115/7/23",
-    "verified_on": "2026-08-12",
+    "verified_on": "2026-08-13",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
-    "scope": "GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 + 鼻咽癌、甲狀腺癌、NET、RCC、黑色素瘤、GIST、肉瘤、HL/NHL、MM 已有 curated records；其餘癌種由每週 coverage audit 逐步補齊",
-    "note": "V0.5：新增 NPC、thyroid、NET、RCC、melanoma、GIST、sarcoma、lymphoma、multiple myeloma curated retrieval；排除句以提示卡處理，避免把『不含／排除』誤判為給付。",
-    "version": "0.5"
+    "scope": "GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 + NPC、thyroid、NET、RCC、melanoma、GIST、sarcoma、HL/NHL、MM + 婦癌（ovarian/cervical/endometrial）與 AML/ALL/CML/CLL/MDS-MPN 已有 curated records；其餘癌種由每週 coverage audit 逐步補齊",
+    "note": "V0.6：新增卵巢/輸卵管/原發腹膜癌、子宮頸癌、子宮內膜癌、AML、ALL、CML、CLL、MDS/MPN curated retrieval；補強來源斷字 alias，並以非適用提示處理 AML/MDS 的 transformation 或 prior-treatment 假陽性。",
+    "version": "0.6"
   },
   "cancers": [
     {"id":"gastric","name":"胃癌 / GEJ","en":"Gastric / GEJ","icon":"胃","group":"GI","curated":true,"description":"胃腺癌與胃食道接合處腺癌"},
@@ -27,9 +27,9 @@ window.NHI_DATA = {
     {"id":"urothelial","name":"泌尿上皮癌","en":"Urothelial","icon":"尿","group":"GU","curated":true,"description":"局部晚期 / 轉移性 urothelial carcinoma；ICI、maintenance、ADC"},
     {"id":"prostate","name":"攝護腺癌","en":"Prostate","icon":"攝","group":"GU","curated":true,"description":"mCSPC / nmCRPC / mCRPC；NHA、PARP、化療與骨轉移治療"},
     {"id":"germ_cell","name":"生殖細胞腫瘤","en":"Germ cell","icon":"GCT","group":"GU / Gyn","curated":false,"description":"睪丸與其他生殖細胞腫瘤"},
-    {"id":"ovarian","name":"卵巢 / 輸卵管 / 原發腹膜癌","en":"Ovarian / FT / PPC","icon":"卵","group":"Gynecologic","curated":false,"description":"卵巢、輸卵管與原發腹膜癌"},
-    {"id":"cervical","name":"子宮頸癌","en":"Cervical","icon":"頸","group":"Gynecologic","curated":false,"description":"子宮頸癌系統性治療"},
-    {"id":"endometrial","name":"子宮內膜癌","en":"Endometrial","icon":"宮","group":"Gynecologic","curated":false,"description":"子宮內膜癌與 biomarker 導向治療"},
+    {"id":"ovarian","name":"卵巢 / 輸卵管 / 原發腹膜癌","en":"Ovarian / FT / PPC","icon":"卵","group":"Gynecologic","curated":true,"description":"卵巢、輸卵管與原發腹膜癌；platinum、bevacizumab 與 PARP 維持"},
+    {"id":"cervical","name":"子宮頸癌","en":"Cervical","icon":"頸","group":"Gynecologic","curated":true,"description":"持續/復發/轉移子宮頸癌；topotecan 與 bevacizumab 組合"},
+    {"id":"endometrial","name":"子宮內膜癌","en":"Endometrial","icon":"宮","group":"Gynecologic","curated":true,"description":"dMMR/MSI-H 晚期/首次復發子宮內膜癌第一線 dostarlimab 組合"},
     {"id":"melanoma","name":"黑色素瘤","en":"Melanoma","icon":"黑","group":"Skin","curated":true,"description":"BRAF V600、ICI、術後輔助與 NTRK fusion"},
     {"id":"cutaneous_scc","name":"皮膚鱗狀細胞癌","en":"Cutaneous SCC","icon":"皮","group":"Skin","curated":false,"description":"cSCC 系統性治療"},
     {"id":"brain","name":"腦瘤 / 膠質瘤","en":"CNS / Glioma","icon":"腦","group":"CNS","curated":false,"description":"GBM / malignant glioma 等"},
@@ -38,11 +38,11 @@ window.NHI_DATA = {
     {"id":"hodgkin","name":"霍奇金淋巴瘤","en":"Hodgkin lymphoma","icon":"HL","group":"Hematologic","curated":true,"description":"cHL：brentuximab vedotin、ASCT 後與 ICI 後線"},
     {"id":"nhl","name":"非霍奇金淋巴瘤","en":"Non-Hodgkin lymphoma","icon":"NHL","group":"Hematologic","curated":true,"description":"DLBCL / FL / MCL / PTCL / CTCL / PCNSL；CAR-T、bispecific 與標靶"},
     {"id":"myeloma","name":"多發性骨髓瘤","en":"Multiple myeloma","icon":"MM","group":"Hematologic","curated":true,"description":"PI / IMiD / anti-CD38 / SLAMF7 / XPO1 / BCMA bispecific"},
-    {"id":"aml","name":"急性骨髓性白血病 AML","en":"AML","icon":"AML","group":"Hematologic","curated":false,"description":"AML 標靶與系統性治療"},
-    {"id":"all","name":"急性淋巴性白血病 ALL","en":"ALL","icon":"ALL","group":"Hematologic","curated":false,"description":"ALL / lymphoblastic leukemia"},
-    {"id":"cml","name":"慢性骨髓性白血病 CML","en":"CML","icon":"CML","group":"Hematologic","curated":false,"description":"CML TKI 等給付"},
-    {"id":"cll","name":"CLL / SLL","en":"CLL / SLL","icon":"CLL","group":"Hematologic","curated":false,"description":"慢性淋巴性白血病 / 小淋巴球性淋巴瘤"},
-    {"id":"mds_mpn","name":"MDS / MPN","en":"MDS / MPN","icon":"MDS","group":"Hematologic","curated":false,"description":"骨髓增生不良與骨髓增生性腫瘤"}
+    {"id":"aml","name":"急性骨髓性白血病 AML","en":"AML","icon":"AML","group":"Hematologic","curated":true,"description":"AML：unfit venetoclax 組合、FLT3、CD33、維持與移植前後情境"},
+    {"id":"all","name":"急性淋巴性白血病 ALL","en":"ALL","icon":"ALL","group":"Hematologic","curated":true,"description":"ALL：Ph+/BCR-ABL、CD22、MRD、CAR-T 與 HSCT bridge"},
+    {"id":"cml","name":"慢性骨髓性白血病 CML","en":"CML","icon":"CML","group":"Hematologic","curated":true,"description":"CML：BCR-ABL TKI 第一線、後線與 T315I/多重 TKI failure"},
+    {"id":"cll","name":"CLL / SLL","en":"CLL / SLL","icon":"CLL","group":"Hematologic","curated":true,"description":"CLL/SLL：chemoimmunotherapy、BTKi、venetoclax 與 17p/IGHV 條件"},
+    {"id":"mds_mpn","name":"MDS / MPN","en":"MDS / MPN","icon":"MDS","group":"Hematologic","curated":true,"description":"MDS/MPN：HMA、PDGFR、myelofibrosis JAK inhibitors 與續審條件"}
   ],
   "indications": []
 };
