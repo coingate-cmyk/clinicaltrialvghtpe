@@ -1,0 +1,66 @@
+name: Patch NHI reimbursement status badge
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-nhi-status-badge.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch app.js on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/nhi/assets/app.js')
+          s=p.read_text(encoding='utf-8')
+          auth_line="          ${x.prior_auth ? '<span class=\"badge auth\">事前審查</span>' : ''}"
+          status_line="          ${x.status && x.status !== '給付' ? `<span class=\"badge\">${esc(x.status)}</span>` : ''}"
+          if status_line not in s:
+              if auth_line not in s: raise SystemExit('card auth anchor missing')
+              s=s.replace(auth_line, status_line+'\n'+auth_line,1)
+          detail_anchor='        <dt>治療情境</dt><dd>${esc(x.setting)}</dd>'
+          detail_status='        <dt>給付狀態</dt><dd>${esc(x.status || \'給付\')}</dd>'
+          if detail_status not in s:
+              if detail_anchor not in s: raise SystemExit('detail setting anchor missing')
+              s=s.replace(detail_anchor, detail_anchor+'\n'+detail_status,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -q "給付狀態" tools/nhi/assets/app.js
+          grep -q "x.status && x.status !== '給付'" tools/nhi/assets/app.js
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/assets/app.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Show NHI reimbursement status badges'
+            git push origin main
+          fi
+          cp tools/nhi/assets/app.js /tmp/nhi-app-v05.js
+
+      - name: Publish app.js to Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/nhi-app-v05.js tools/nhi/assets/app.js
+          grep -q "給付狀態" tools/nhi/assets/app.js
+          git add tools/nhi/assets/app.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI reimbursement status badges'
+            git push origin pages-clean-ajcc-v2-3
+          fi
