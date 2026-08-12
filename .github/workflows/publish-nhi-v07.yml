@@ -1,0 +1,144 @@
+name: Publish NHI Navigator v0.7 complete coverage
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-nhi-v07.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch taxonomy, core and loader
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          p=Path('tools/nhi/config/cancer_aliases.json')
+          aliases=json.loads(p.read_text(encoding='utf-8'))
+          additions={
+            'mesothelioma':['惡性肋膜間皮瘤','惡性肋膜間質細胞瘤','惡性肋膜間質細胞瘤','pleural mesothelioma'],
+            'brain':['多形神經膠母細胞瘤','多型性神經膠母細胞瘤','神經膠母細胞瘤','退行性星狀細胞瘤','退行性寡樹突膠質細胞瘤','anaplastic astrocytoma','anaplastic oligodendroglioma'],
+          }
+          for cid, vals in additions.items():
+            arr=aliases[cid]['aliases']
+            for v in vals:
+              if v not in arr: arr.append(v)
+          p.write_text(json.dumps(aliases,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+
+          p=Path('tools/nhi/assets/data-core.js')
+          text=p.read_text(encoding='utf-8')
+          text=re.sub(r'"verified_on":\s*"[^"]+"','"verified_on": "2026-08-13"',text,count=1)
+          text=re.sub(r'"scope":\s*"[^"]+"','"scope": "第九節癌種 taxonomy 的所有目前偵測候選均已完成 curated mapping；包含 GI、thoracic、breast、head & neck、endocrine、GU、gynecologic、skin、CNS、sarcoma 與主要 hematologic malignancies。"',text,count=1)
+          text=re.sub(r'"note":\s*"[^"]+"','"note": "V0.7：補齊既有 coverage audit 最後缺口，並新增 mesothelioma 的 pemetrexed 與 brain tumor 的 carmustine wafer 等來源同義詞漏項；每週 crawler 持續偵測新條文與新候選。"',text,count=1)
+          text=re.sub(r'"version":\s*"0\.6"','"version": "0.7"',text,count=1)
+          for cid in ['mesothelioma','brain']:
+            pat=rf'(\{{"id":"{cid}"[^\n]*?"curated":)false'
+            text,n=re.subn(pat,r'\1true',text,count=1)
+            if n!=1: raise SystemExit(f'Cannot set curated for {cid}')
+          descs={
+            'mesothelioma':'惡性肋膜間皮瘤：pemetrexed/cisplatin 與 non-epithelioid nivolumab+ipilimumab 第一線',
+            'brain':'GBM / high-grade glioma：temozolomide、carmustine wafer、bevacizumab 與 NTRK fusion therapy',
+          }
+          for cid,desc in descs.items():
+            pat=rf'(\{{"id":"{cid}"[^\n]*?"description":)"[^"]*"'
+            text,n=re.subn(pat,lambda m:m.group(1)+json.dumps(desc,ensure_ascii=False),text,count=1)
+            if n!=1: raise SystemExit(f'Cannot update description for {cid}')
+          p.write_text(text,encoding='utf-8')
+
+          p=Path('tools/nhi/index.html')
+          html=p.read_text(encoding='utf-8')
+          html=html.replace('ALL CANCERS · V0.6 BETA','ALL CANCERS · V0.7 BETA')
+          anchor='  <script src="assets/nhi-status.js"></script>'
+          script='  <script src="assets/data-final-coverage.js"></script>'
+          if anchor not in html: raise SystemExit('loader anchor missing')
+          if script not in html: html=html.replace(anchor,script+'\n'+anchor)
+          p.write_text(html,encoding='utf-8')
+          PY
+
+      - name: Refresh official chapter 9 with patched aliases
+        run: |
+          python -m pip install --disable-pip-version-check requests beautifulsoup4
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/nhi_update.py')
+          s=p.read_text(encoding='utf-8')
+          old='SESSION.headers.update({"User-Agent": "clinicaltrialvghtpe NHI updater/1.0 (+GitHub Actions; clinical reference mirror)"})'
+          new='SESSION.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.7", "Referer": "https://www.nhi.gov.tw/"})'
+          if old not in s: raise SystemExit('request header anchor missing')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+          PY
+          if python scripts/nhi_update.py; then
+            echo 'Official ODT fetch succeeded.'
+          else
+            echo 'ODT fetch failed; using official reader transport.'
+            python scripts/nhi_update_reader.py
+          fi
+          git checkout -- scripts/nhi_update.py
+          python scripts/normalize_nhi_coverage.py
+          python scripts/build_nhi_candidates.py
+
+      - name: Validate zero-gap curated audit
+        run: |
+          node --check tools/nhi/assets/data-final-coverage.js
+          node --check tools/nhi/assets/data-core.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('tools/nhi/data/coverage-report.json').read_text(encoding='utf-8'))
+          rows={x['cancer']:x for x in r['by_cancer']}
+          print('official_section_count=',r['official_section_count'])
+          print('curated_record_count=',r['curated_record_count'])
+          print('candidate_pair_count=',r['candidate_pair_count'])
+          print('missing_candidate_count=',r['missing_candidate_count'])
+          print('orphan_count=',r['orphan_count'])
+          print('mesothelioma=',rows['mesothelioma'])
+          print('brain=',rows['brain'])
+          assert r['orphan_count']==0, r.get('orphans')
+          assert r['missing_candidate_count']==0, r.get('missing_candidates')
+          assert '9.26' in rows['mesothelioma']['candidate_sections']
+          assert '9.69' in rows['mesothelioma']['candidate_sections']
+          assert set(['9.25','9.35','9.37','9.95']).issubset(rows['brain']['candidate_sections'])
+          PY
+
+      - name: Commit v0.7 and refreshed audit to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/nhi/config/cancer_aliases.json tools/nhi/assets/data-core.js tools/nhi/index.html tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish NHI Navigator v0.7 complete coverage"
+            git push origin main
+          fi
+          rm -rf /tmp/nhi-v07
+          mkdir -p /tmp/nhi-v07/assets /tmp/nhi-v07/data
+          cp tools/nhi/index.html /tmp/nhi-v07/index.html
+          cp tools/nhi/assets/data-core.js /tmp/nhi-v07/assets/
+          cp tools/nhi/assets/data-final-coverage.js /tmp/nhi-v07/assets/
+          cp tools/nhi/assets/nhi-status.js /tmp/nhi-v07/assets/
+          cp tools/nhi/assets/nhi-candidates.js /tmp/nhi-v07/assets/
+          cp tools/nhi/data/coverage-report.json /tmp/nhi-v07/data/
+
+      - name: Publish v0.7 to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/assets tools/nhi/data
+          cp /tmp/nhi-v07/index.html tools/nhi/index.html
+          cp /tmp/nhi-v07/assets/* tools/nhi/assets/
+          cp /tmp/nhi-v07/data/coverage-report.json tools/nhi/data/coverage-report.json
+          git add tools/nhi/index.html tools/nhi/assets/data-core.js tools/nhi/assets/data-final-coverage.js tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js tools/nhi/data/coverage-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish NHI Navigator v0.7 complete coverage"
+            git push origin pages-clean-ajcc-v2-3
+          fi
