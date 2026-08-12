@@ -1,0 +1,127 @@
+name: Publish NHI Navigator v0.5 modules
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-nhi-v05.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-nhi-v05
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch v0.5 loader on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tools/nhi/index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('ALL CANCERS · V0.4 BETA', 'ALL CANCERS · V0.5 BETA')
+          marker = '  <script src="assets/nhi-status.js"></script>'
+          additions = [
+              '  <script src="assets/data-solid-wave2.js"></script>',
+              '  <script src="assets/data-lymphoma.js"></script>',
+              '  <script src="assets/data-myeloma.js"></script>',
+          ]
+          if marker not in s:
+              raise SystemExit('nhi-status loader anchor missing')
+          for line in additions:
+              if line not in s:
+                  s = s.replace(marker, line + '\n' + marker, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+          python - <<'PY'
+          from pathlib import Path
+          required = [
+            'tools/nhi/assets/data-solid-wave2.js',
+            'tools/nhi/assets/data-lymphoma.js',
+            'tools/nhi/assets/data-myeloma.js',
+          ]
+          for f in required:
+              p=Path(f)
+              assert p.exists() and p.stat().st_size > 1000, f
+          html=Path('tools/nhi/index.html').read_text(encoding='utf-8')
+          assert 'V0.5 BETA' in html
+          for f in required:
+              assert Path(f).name in html
+          core=Path('tools/nhi/assets/data-core.js').read_text(encoding='utf-8')
+          assert '"version": "0.5"' in core
+          print('v0.5 main validation OK')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Load NHI Navigator v0.5 modules'
+            git push origin main
+          fi
+
+      - name: Stage v0.5 files for Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/nhi-v05
+          mkdir -p /tmp/nhi-v05/assets /tmp/nhi-v05/config
+          cp tools/nhi/assets/data-core.js /tmp/nhi-v05/assets/
+          cp tools/nhi/assets/data-solid-wave2.js /tmp/nhi-v05/assets/
+          cp tools/nhi/assets/data-lymphoma.js /tmp/nhi-v05/assets/
+          cp tools/nhi/assets/data-myeloma.js /tmp/nhi-v05/assets/
+          cp tools/nhi/config/cancer_aliases.json /tmp/nhi-v05/config/
+
+      - name: Publish v0.5 files to live Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/assets tools/nhi/config
+          cp /tmp/nhi-v05/assets/* tools/nhi/assets/
+          cp /tmp/nhi-v05/config/cancer_aliases.json tools/nhi/config/cancer_aliases.json
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tools/nhi/index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('ALL CANCERS · V0.4 BETA', 'ALL CANCERS · V0.5 BETA')
+          marker = '  <script src="assets/nhi-status.js"></script>'
+          additions = [
+              '  <script src="assets/data-solid-wave2.js"></script>',
+              '  <script src="assets/data-lymphoma.js"></script>',
+              '  <script src="assets/data-myeloma.js"></script>',
+          ]
+          if marker not in s:
+              raise SystemExit('Pages nhi-status loader anchor missing')
+          for line in additions:
+              if line not in s:
+                  s = s.replace(marker, line + '\n' + marker, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('tools/nhi/index.html').read_text(encoding='utf-8')
+          assert 'V0.5 BETA' in html
+          for name in ['data-solid-wave2.js','data-lymphoma.js','data-myeloma.js']:
+              assert name in html and Path('tools/nhi/assets/'+name).exists()
+          assert '"version": "0.5"' in Path('tools/nhi/assets/data-core.js').read_text(encoding='utf-8')
+          print('v0.5 Pages validation OK')
+          PY
+          git add tools/nhi/index.html tools/nhi/assets/data-core.js tools/nhi/assets/data-solid-wave2.js tools/nhi/assets/data-lymphoma.js tools/nhi/assets/data-myeloma.js tools/nhi/config/cancer_aliases.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI Navigator v0.5 curated modules'
+            git push origin pages-clean-ajcc-v2-3
+          fi
