@@ -1,6 +1,6 @@
 window.NHI_CHANGES = {
   "status": "ok",
-  "fetched_at": "2026-08-11T09:34:15Z",
+  "fetched_at": "2026-08-12T15:04:16Z",
   "change_count": 0,
   "changes": [],
   "transport": "reader-proxy",
@@ -9,8 +9,8 @@ window.NHI_CHANGES = {
   "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
   "section_count": 138,
   "coverage": {
-    "missing_candidate_count": 120,
+    "missing_candidate_count": 61,
     "orphan_count": 0,
-    "review_item_count": 120
+    "review_item_count": 61
   }
 };
