@@ -1,0 +1,148 @@
+name: Publish NHI Navigator v0.6
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-nhi-v06.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch taxonomy, core and loader
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          # Fix aliases that are broken by spaces / terminology in the source extraction.
+          p = Path('tools/nhi/config/cancer_aliases.json')
+          aliases = json.loads(p.read_text(encoding='utf-8'))
+          additions = {
+              'cervical': ['子宮 頸癌'],
+              'endometrial': ['子宮內 膜癌'],
+              'all': ['B-ALL', 'B 細胞急性淋巴性白血病', 'B 細胞前驅因子之急性淋巴芽細胞白血病'],
+              'mds_mpn': ['骨髓纖維化', '原發性骨髓纖維化', '真性紅血球增多症後骨髓纖維化', '血小板增多症後骨髓纖維化', 'myelofibrosis', 'CMML'],
+          }
+          for cid, vals in additions.items():
+              arr = aliases[cid]['aliases']
+              for value in vals:
+                  if value not in arr:
+                      arr.append(value)
+          p.write_text(json.dumps(aliases, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+
+          # Core metadata + curated flags.
+          p = Path('tools/nhi/assets/data-core.js')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(r'"verified_on":\s*"[^"]+"', '"verified_on": "2026-08-13"', text, count=1)
+          text = re.sub(r'"scope":\s*"[^"]+"', '"scope": "GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 + NPC、thyroid、NET、RCC、melanoma、GIST、sarcoma、HL/NHL、MM + 婦癌（ovarian/cervical/endometrial）與 AML/ALL/CML/CLL/MDS-MPN 已有 curated records；其餘癌種由每週 coverage audit 逐步補齊"', text, count=1)
+          text = re.sub(r'"note":\s*"[^"]+"', '"note": "V0.6：新增卵巢/輸卵管/原發腹膜癌、子宮頸癌、子宮內膜癌、AML、ALL、CML、CLL、MDS/MPN curated retrieval；補強來源斷字 alias，並以非適用提示處理 AML/MDS 的 transformation 或 prior-treatment 假陽性。"', text, count=1)
+          text = re.sub(r'"version":\s*"0\.5"', '"version": "0.6"', text, count=1)
+          for cid in ['ovarian','cervical','endometrial','aml','all','cml','cll','mds_mpn']:
+              pat = rf'(\{{"id":"{re.escape(cid)}"[^\n]*?"curated":)false'
+              text, n = re.subn(pat, r'\1true', text, count=1)
+              if n != 1:
+                  raise SystemExit(f'Could not set curated=true for {cid}')
+          replacements = {
+              'ovarian': '卵巢、輸卵管與原發腹膜癌；platinum、bevacizumab 與 PARP 維持',
+              'cervical': '持續/復發/轉移子宮頸癌；topotecan 與 bevacizumab 組合',
+              'endometrial': 'dMMR/MSI-H 晚期/首次復發子宮內膜癌第一線 dostarlimab 組合',
+              'aml': 'AML：unfit venetoclax 組合、FLT3、CD33、維持與移植前後情境',
+              'all': 'ALL：Ph+/BCR-ABL、CD22、MRD、CAR-T 與 HSCT bridge',
+              'cml': 'CML：BCR-ABL TKI 第一線、後線與 T315I/多重 TKI failure',
+              'cll': 'CLL/SLL：chemoimmunotherapy、BTKi、venetoclax 與 17p/IGHV 條件',
+              'mds_mpn': 'MDS/MPN：HMA、PDGFR、myelofibrosis JAK inhibitors 與續審條件',
+          }
+          for cid, desc in replacements.items():
+              pat = rf'(\{{"id":"{re.escape(cid)}"[^\n]*?"description":)"[^"]*"'
+              text, n = re.subn(pat, lambda m: m.group(1) + json.dumps(desc, ensure_ascii=False), text, count=1)
+              if n != 1:
+                  raise SystemExit(f'Could not update description for {cid}')
+          p.write_text(text, encoding='utf-8')
+
+          # Load the new modules and bump the visible beta version.
+          p = Path('tools/nhi/index.html')
+          html = p.read_text(encoding='utf-8')
+          html = html.replace('ALL CANCERS · V0.5 BETA', 'ALL CANCERS · V0.6 BETA')
+          anchor = '  <script src="assets/nhi-status.js"></script>'
+          scripts = [
+              '  <script src="assets/data-gynecologic.js"></script>',
+              '  <script src="assets/data-leukemia.js"></script>',
+              '  <script src="assets/data-cll-mds-mpn.js"></script>',
+          ]
+          if anchor not in html:
+              raise SystemExit('nhi-status loader anchor not found')
+          for script in scripts:
+              if script not in html:
+                  html = html.replace(anchor, script + '\n' + anchor)
+          p.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Normalize coverage and validate modules
+        run: |
+          python scripts/normalize_nhi_coverage.py
+          python scripts/build_nhi_candidates.py
+          node --check tools/nhi/assets/data-gynecologic.js
+          node --check tools/nhi/assets/data-leukemia.js
+          node --check tools/nhi/assets/data-cll-mds-mpn.js
+          node --check tools/nhi/assets/data-core.js
+          python - <<'PY'
+          import json
+          r=json.load(open('tools/nhi/data/coverage-report.json',encoding='utf-8'))
+          print('curated_record_count=',r['curated_record_count'])
+          print('missing_candidate_count=',r['missing_candidate_count'])
+          print('orphan_count=',r['orphan_count'])
+          if r['orphan_count'] != 0:
+              raise SystemExit('Orphan curated sections found')
+          targets={'ovarian','cervical','endometrial','aml','all','cml','cll','mds_mpn'}
+          rows={x['cancer']:x for x in r['by_cancer']}
+          for cid in targets:
+              print(cid, 'candidates=', rows[cid]['candidate_count'], 'curated=', rows[cid]['curated_count'], 'missing=', rows[cid]['missing_count'])
+              if rows[cid]['missing_count'] != 0:
+                  raise SystemExit(f'Coverage gap remains for {cid}')
+          PY
+
+      - name: Commit v0.6 metadata and audit to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/nhi/config/cancer_aliases.json tools/nhi/assets/data-core.js tools/nhi/index.html tools/nhi/data/coverage-report.json tools/nhi/data/review-queue.json tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish NHI Navigator v0.6 taxonomy and coverage"
+            git push origin main
+          fi
+
+      - name: Stage v0.6 live files
+        run: |
+          mkdir -p /tmp/nhi-v06/assets /tmp/nhi-v06/data
+          cp tools/nhi/index.html /tmp/nhi-v06/index.html
+          cp tools/nhi/assets/data-core.js /tmp/nhi-v06/assets/
+          cp tools/nhi/assets/data-gynecologic.js /tmp/nhi-v06/assets/
+          cp tools/nhi/assets/data-leukemia.js /tmp/nhi-v06/assets/
+          cp tools/nhi/assets/data-cll-mds-mpn.js /tmp/nhi-v06/assets/
+          cp tools/nhi/assets/nhi-status.js /tmp/nhi-v06/assets/
+          cp tools/nhi/assets/nhi-candidates.js /tmp/nhi-v06/assets/
+          cp tools/nhi/data/coverage-report.json /tmp/nhi-v06/data/
+
+      - name: Publish v0.6 to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git checkout -B pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/assets tools/nhi/data
+          cp /tmp/nhi-v06/index.html tools/nhi/index.html
+          cp /tmp/nhi-v06/assets/* tools/nhi/assets/
+          cp /tmp/nhi-v06/data/coverage-report.json tools/nhi/data/coverage-report.json
+          git add tools/nhi/index.html tools/nhi/assets/data-core.js tools/nhi/assets/data-gynecologic.js tools/nhi/assets/data-leukemia.js tools/nhi/assets/data-cll-mds-mpn.js tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js tools/nhi/data/coverage-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish NHI Navigator v0.6"
+            git push origin pages-clean-ajcc-v2-3
+          fi
