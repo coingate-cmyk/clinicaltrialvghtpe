@@ -126,6 +126,7 @@
         <div class="regimen">${esc(x.regimen)}</div>
         <div class="badges">
           <span class="badge">${esc(lineGroup(x))}</span>
+          ${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}
           ${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}
           ${bio ? `<span class="badge bio">${esc(x.biomarker)}</span>` : ''}
           <span class="badge">§ ${esc(x.section)}</span>
@@ -163,6 +164,7 @@
       <p class="dialog-summary">${esc(x.summary)}</p>
       <dl class="detail-table">
         <dt>治療情境</dt><dd>${esc(x.setting)}</dd>
+        <dt>給付狀態</dt><dd>${esc(x.status || '給付')}</dd>
         <dt>治療線別</dt><dd>${esc(lineGroup(x))}${x.line && x.line !== lineGroup(x) ? `（${esc(x.line)}）` : ``}</dd>
         <dt>Biomarker</dt><dd>${esc(x.biomarker)}</dd>
         <dt>事前審查</dt><dd>${x.prior_auth ? '需要' : '條目未標為需要'}</dd>
