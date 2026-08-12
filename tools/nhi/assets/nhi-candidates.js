@@ -800,7 +800,7 @@ window.NHI_CANDIDATES = {
       "name": "卵巢 / 輸卵管 / 原發腹膜癌",
       "group": "Gynecologic",
       "candidate_count": 7,
-      "curated_count": 0,
+      "curated_count": 7,
       "candidates": [
         {
           "section_id": "9.2",
@@ -843,7 +843,7 @@ window.NHI_CANDIDATES = {
       "name": "子宮頸癌",
       "group": "Gynecologic",
       "candidate_count": 1,
-      "curated_count": 0,
+      "curated_count": 2,
       "candidates": [
         {
           "section_id": "9.37",
@@ -856,7 +856,7 @@ window.NHI_CANDIDATES = {
       "name": "子宮內膜癌",
       "group": "Gynecologic",
       "candidate_count": 2,
-      "curated_count": 0,
+      "curated_count": 3,
       "candidates": [
         {
           "section_id": "9.2",
@@ -1167,7 +1167,7 @@ window.NHI_CANDIDATES = {
       "name": "急性骨髓性白血病 AML",
       "group": "Hematologic",
       "candidate_count": 10,
-      "curated_count": 0,
+      "curated_count": 10,
       "candidates": [
         {
           "section_id": "9.44",
@@ -1225,7 +1225,7 @@ window.NHI_CANDIDATES = {
       "name": "急性淋巴性白血病 ALL",
       "group": "Hematologic",
       "candidate_count": 6,
-      "curated_count": 0,
+      "curated_count": 7,
       "candidates": [
         {
           "section_id": "9.22",
@@ -1263,7 +1263,7 @@ window.NHI_CANDIDATES = {
       "name": "慢性骨髓性白血病 CML",
       "group": "Hematologic",
       "candidate_count": 6,
-      "curated_count": 0,
+      "curated_count": 6,
       "candidates": [
         {
           "section_id": "9.22",
@@ -1301,7 +1301,7 @@ window.NHI_CANDIDATES = {
       "name": "慢性淋巴性白血病 CLL / SLL",
       "group": "Hematologic",
       "candidate_count": 8,
-      "curated_count": 0,
+      "curated_count": 8,
       "candidates": [
         {
           "section_id": "9.20",
@@ -1349,7 +1349,7 @@ window.NHI_CANDIDATES = {
       "name": "MDS / MPN",
       "group": "Hematologic",
       "candidate_count": 7,
-      "curated_count": 0,
+      "curated_count": 7,
       "candidates": [
         {
           "section_id": "9.22",
