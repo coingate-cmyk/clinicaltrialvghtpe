@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-11T09:34:15Z",
+    "fetched_at": "2026-08-12T15:04:16Z",
     "source_update": "115.7.23",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
@@ -585,7 +585,7 @@ window.NHI_CANDIDATES = {
       "name": "鼻咽癌",
       "group": "Head & Neck",
       "candidate_count": 1,
-      "curated_count": 0,
+      "curated_count": 1,
       "candidates": [
         {
           "section_id": "9.69",
@@ -598,7 +598,7 @@ window.NHI_CANDIDATES = {
       "name": "甲狀腺癌",
       "group": "Endocrine",
       "candidate_count": 5,
-      "curated_count": 0,
+      "curated_count": 5,
       "candidates": [
         {
           "section_id": "9.34",
@@ -631,7 +631,7 @@ window.NHI_CANDIDATES = {
       "name": "神經內分泌腫瘤",
       "group": "Endocrine",
       "candidate_count": 3,
-      "curated_count": 0,
+      "curated_count": 3,
       "candidates": [
         {
           "section_id": "9.31",
@@ -654,7 +654,7 @@ window.NHI_CANDIDATES = {
       "name": "腎細胞癌",
       "group": "GU",
       "candidate_count": 9,
-      "curated_count": 0,
+      "curated_count": 9,
       "candidates": [
         {
           "section_id": "9.13",
@@ -873,9 +873,14 @@ window.NHI_CANDIDATES = {
     "melanoma": {
       "name": "黑色素瘤",
       "group": "Skin",
-      "candidate_count": 4,
-      "curated_count": 0,
+      "candidate_count": 5,
+      "curated_count": 5,
       "candidates": [
+        {
+          "section_id": "9.13",
+          "title": "Aldesleukin(如 Proleukin for Injection)",
+          "official_only": true
+        },
         {
           "section_id": "9.52",
           "title": "Vemurafenib(如 Zelboraf)",
@@ -932,7 +937,7 @@ window.NHI_CANDIDATES = {
       "name": "胃腸道基質瘤 GIST",
       "group": "Sarcoma",
       "candidate_count": 5,
-      "curated_count": 0,
+      "curated_count": 7,
       "candidates": [
         {
           "section_id": "9.22",
@@ -965,11 +970,11 @@ window.NHI_CANDIDATES = {
       "name": "肉瘤",
       "group": "Sarcoma",
       "candidate_count": 4,
-      "curated_count": 0,
+      "curated_count": 4,
       "candidates": [
         {
-          "section_id": "9.14",
-          "title": "Doxorubicin hydrochloride liposome injection(如 Lipo-Dox、Caelyx)",
+          "section_id": "9.22",
+          "title": "Imatinib(如 Glivec)",
           "official_only": true
         },
         {
@@ -992,19 +997,9 @@ window.NHI_CANDIDATES = {
     "hodgkin": {
       "name": "霍奇金淋巴瘤",
       "group": "Hematologic",
-      "candidate_count": 4,
-      "curated_count": 0,
+      "candidate_count": 2,
+      "curated_count": 2,
       "candidates": [
-        {
-          "section_id": "9.20",
-          "title": "Rituximab 注射劑(如 Mabthera，不同劑型之適用範圍需符合藥品許可證登載之適 應症)：用於抗癌瘤部分",
-          "official_only": true
-        },
-        {
-          "section_id": "9.42",
-          "title": "Bendamustine（如 Innomustine）",
-          "official_only": true
-        },
         {
           "section_id": "9.56",
           "title": "Brentuximab vedotin(如 Adcetris)",
@@ -1020,8 +1015,8 @@ window.NHI_CANDIDATES = {
     "nhl": {
       "name": "非霍奇金淋巴瘤",
       "group": "Hematologic",
-      "candidate_count": 13,
-      "curated_count": 0,
+      "candidate_count": 16,
+      "curated_count": 16,
       "candidates": [
         {
           "section_id": "9.20",
@@ -1044,8 +1039,18 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
+          "section_id": "9.56",
+          "title": "Brentuximab vedotin(如 Adcetris)",
+          "official_only": true
+        },
+        {
           "section_id": "9.61",
           "title": "Ibrutinib (如 Imbruvica)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.65",
+          "title": "Pralatrexate(如 Folotyn)",
           "official_only": true
         },
         {
@@ -1074,6 +1079,11 @@ window.NHI_CANDIDATES = {
           "official_only": true
         },
         {
+          "section_id": "9.110",
+          "title": "Tirabrutinib (如 Velexbru）",
+          "official_only": true
+        },
+        {
           "section_id": "9.120",
           "title": "Glofitamab（如 Columvi）",
           "official_only": true
@@ -1094,7 +1104,7 @@ window.NHI_CANDIDATES = {
       "name": "多發性骨髓瘤",
       "group": "Hematologic",
       "candidate_count": 11,
-      "curated_count": 0,
+      "curated_count": 12,
       "candidates": [
         {
           "section_id": "9.28",
