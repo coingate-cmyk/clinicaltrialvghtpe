@@ -6,6 +6,7 @@
   <meta name="description" content="以癌種、治療線別與 biomarker 瀏覽台灣健保抗癌藥物給付規定。" />
   <title>Taiwan Oncology NHI Navigator</title>
   <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/clinical-map.css" />
 </head>
 <body>
   <header class="topbar">
@@ -30,9 +31,9 @@
   <main class="shell">
     <section class="hero">
       <div>
-        <p class="eyebrow">ALL CANCERS · V0.7 BETA</p>
+        <p class="eyebrow">ALL CANCERS · V0.8 PATHWAY PILOT</p>
         <h1>先從癌種開始，<br><span>再找健保能不能用。</span></h1>
-        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。全癌種先進入自動監測；只有人工核對完成的給付情境才顯示臨床摘要。</p>
+        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。全癌種先進入自動監測；只有人工核對完成的給付情境才顯示臨床摘要。胃癌、HCC、AML 先試行臨床路徑視圖。</p>
       </div>
       <div class="hero-stat-grid" id="heroStats"></div>
     </section>
@@ -131,5 +132,6 @@
   <script src="assets/nhi-candidates.js"></script>
   <script src="assets/app.js"></script>
   <script src="assets/candidates-ui.js"></script>
+  <script src="assets/clinical-map.js"></script>
 </body>
 </html>
