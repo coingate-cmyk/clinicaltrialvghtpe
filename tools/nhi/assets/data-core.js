@@ -5,9 +5,9 @@ window.NHI_DATA = {
     "source_update": "115/7/23",
     "verified_on": "2026-08-13",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
-    "scope": "GI 六癌種 + 乳癌、肺癌、攝護腺癌、頭頸癌、泌尿上皮癌 + NPC、thyroid、NET、RCC、melanoma、GIST、sarcoma、HL/NHL、MM + 婦癌（ovarian/cervical/endometrial）與 AML/ALL/CML/CLL/MDS-MPN 已有 curated records；其餘癌種由每週 coverage audit 逐步補齊",
-    "note": "V0.6：新增卵巢/輸卵管/原發腹膜癌、子宮頸癌、子宮內膜癌、AML、ALL、CML、CLL、MDS/MPN curated retrieval；補強來源斷字 alias，並以非適用提示處理 AML/MDS 的 transformation 或 prior-treatment 假陽性。",
-    "version": "0.6"
+    "scope": "第九節癌種 taxonomy 的所有目前偵測候選均已完成 curated mapping；包含 GI、thoracic、breast、head & neck、endocrine、GU、gynecologic、skin、CNS、sarcoma 與主要 hematologic malignancies。",
+    "note": "V0.7：補齊既有 coverage audit 最後缺口，並新增 mesothelioma 的 pemetrexed 與 brain tumor 的 carmustine wafer 等來源同義詞漏項；每週 crawler 持續偵測新條文與新候選。",
+    "version": "0.7"
   },
   "cancers": [
     {"id":"gastric","name":"胃癌 / GEJ","en":"Gastric / GEJ","icon":"胃","group":"GI","curated":true,"description":"胃腺癌與胃食道接合處腺癌"},
@@ -17,7 +17,7 @@ window.NHI_DATA = {
     {"id":"biliary","name":"膽道癌","en":"Biliary tract","icon":"膽","group":"GI","curated":true,"description":"BTC / cholangiocarcinoma / gallbladder"},
     {"id":"pancreatic","name":"胰臟癌","en":"Pancreatic","icon":"胰","group":"GI","curated":true,"description":"胰臟癌系統性治療與標靶例外情境"},
     {"id":"lung","name":"肺癌","en":"Lung","icon":"肺","group":"Thoracic","curated":true,"description":"NSCLC / SCLC；EGFR / ALK / ROS1 / BRAF / MET / NTRK 與免疫治療"},
-    {"id":"mesothelioma","name":"惡性間皮瘤","en":"Mesothelioma","icon":"胸","group":"Thoracic","curated":false,"description":"胸膜等惡性間皮瘤"},
+    {"id":"mesothelioma","name":"惡性間皮瘤","en":"Mesothelioma","icon":"胸","group":"Thoracic","curated":true,"description":"惡性肋膜間皮瘤：pemetrexed/cisplatin 與 non-epithelioid nivolumab+ipilimumab 第一線"},
     {"id":"breast","name":"乳癌","en":"Breast","icon":"乳","group":"Breast","curated":true,"description":"HER2 / HR / TNBC；早期與轉移性給付情境"},
     {"id":"headneck","name":"頭頸癌","en":"Head & Neck","icon":"頸","group":"Head & Neck","curated":true,"description":"HNSCC（不含鼻咽癌）局部晚期與復發/轉移治療"},
     {"id":"nasopharyngeal","name":"鼻咽癌","en":"Nasopharyngeal","icon":"鼻","group":"Head & Neck","curated":true,"description":"NPC；現行 §9.69 HNSCC ICI 條文明確排除鼻咽癌，並顯示排除提示"},
@@ -32,7 +32,7 @@ window.NHI_DATA = {
     {"id":"endometrial","name":"子宮內膜癌","en":"Endometrial","icon":"宮","group":"Gynecologic","curated":true,"description":"dMMR/MSI-H 晚期/首次復發子宮內膜癌第一線 dostarlimab 組合"},
     {"id":"melanoma","name":"黑色素瘤","en":"Melanoma","icon":"黑","group":"Skin","curated":true,"description":"BRAF V600、ICI、術後輔助與 NTRK fusion"},
     {"id":"cutaneous_scc","name":"皮膚鱗狀細胞癌","en":"Cutaneous SCC","icon":"皮","group":"Skin","curated":false,"description":"cSCC 系統性治療"},
-    {"id":"brain","name":"腦瘤 / 膠質瘤","en":"CNS / Glioma","icon":"腦","group":"CNS","curated":false,"description":"GBM / malignant glioma 等"},
+    {"id":"brain","name":"腦瘤 / 膠質瘤","en":"CNS / Glioma","icon":"腦","group":"CNS","curated":true,"description":"GBM / high-grade glioma：temozolomide、carmustine wafer、bevacizumab 與 NTRK fusion therapy"},
     {"id":"gist","name":"胃腸道基質瘤 GIST","en":"GIST","icon":"GIST","group":"Sarcoma","curated":true,"description":"Imatinib → sunitinib → regorafenib → ripretinib；PDGFRA D842V / NTRK 例外"},
     {"id":"sarcoma","name":"肉瘤","en":"Sarcoma","icon":"肉","group":"Sarcoma","curated":true,"description":"STS、liposarcoma、DFSP、NTRK-fusion STS / bone cancer"},
     {"id":"hodgkin","name":"霍奇金淋巴瘤","en":"Hodgkin lymphoma","icon":"HL","group":"Hematologic","curated":true,"description":"cHL：brentuximab vedotin、ASCT 後與 ICI 後線"},

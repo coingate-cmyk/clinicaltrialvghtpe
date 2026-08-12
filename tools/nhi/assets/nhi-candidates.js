@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-12T15:04:16Z",
+    "fetched_at": "2026-08-12T22:51:55Z",
     "source_update": "115.7.23",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
@@ -10,7 +10,7 @@ window.NHI_CANDIDATES = {
       "name": "胃癌 / GEJ",
       "group": "GI",
       "candidate_count": 9,
-      "curated_count": 7,
+      "curated_count": 9,
       "candidates": [
         {
           "section_id": "9.3",
@@ -63,7 +63,7 @@ window.NHI_CANDIDATES = {
       "name": "食道癌",
       "group": "GI",
       "candidate_count": 2,
-      "curated_count": 1,
+      "curated_count": 2,
       "candidates": [
         {
           "section_id": "9.10",
@@ -81,7 +81,7 @@ window.NHI_CANDIDATES = {
       "name": "大腸直腸癌",
       "group": "GI",
       "candidate_count": 13,
-      "curated_count": 7,
+      "curated_count": 13,
       "candidates": [
         {
           "section_id": "9.10",
@@ -154,7 +154,7 @@ window.NHI_CANDIDATES = {
       "name": "肝細胞癌",
       "group": "GI",
       "candidate_count": 6,
-      "curated_count": 5,
+      "curated_count": 6,
       "candidates": [
         {
           "section_id": "9.34",
@@ -400,9 +400,14 @@ window.NHI_CANDIDATES = {
     "mesothelioma": {
       "name": "惡性間皮瘤",
       "group": "Thoracic",
-      "candidate_count": 1,
-      "curated_count": 0,
+      "candidate_count": 2,
+      "curated_count": 2,
       "candidates": [
+        {
+          "section_id": "9.26",
+          "title": "Pemetrexed(如 Alimta)",
+          "official_only": true
+        },
         {
           "section_id": "9.69",
           "title": "免疫檢查點抑制劑(如 atezolizumab；nivolumab；pembrolizumab；avelumab； ipilimumab；durvalumab；tremelimumab；cemiplimab 製劑；dos…",
@@ -842,9 +847,14 @@ window.NHI_CANDIDATES = {
     "cervical": {
       "name": "子宮頸癌",
       "group": "Gynecologic",
-      "candidate_count": 1,
+      "candidate_count": 2,
       "curated_count": 2,
       "candidates": [
+        {
+          "section_id": "9.16",
+          "title": "Topotecan（如 Hycamtin）",
+          "official_only": true
+        },
         {
           "section_id": "9.37",
           "title": "Bevacizumab(如 Avastin)",
@@ -855,12 +865,17 @@ window.NHI_CANDIDATES = {
     "endometrial": {
       "name": "子宮內膜癌",
       "group": "Gynecologic",
-      "candidate_count": 2,
+      "candidate_count": 3,
       "curated_count": 3,
       "candidates": [
         {
           "section_id": "9.2",
           "title": "Carboplatin(如 Paraplatin；Carboplatin inj)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.5",
+          "title": "Paclitaxel 成分劑",
           "official_only": true
         },
         {
@@ -913,12 +928,17 @@ window.NHI_CANDIDATES = {
     "brain": {
       "name": "腦瘤 / 膠質瘤",
       "group": "CNS",
-      "candidate_count": 3,
-      "curated_count": 0,
+      "candidate_count": 4,
+      "curated_count": 4,
       "candidates": [
         {
           "section_id": "9.25",
           "title": "Temozolomide(如 Temodal)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.35",
+          "title": "carmustine 植入劑(如 Gliadel Wafer)",
           "official_only": true
         },
         {
@@ -1224,7 +1244,7 @@ window.NHI_CANDIDATES = {
     "all": {
       "name": "急性淋巴性白血病 ALL",
       "group": "Hematologic",
-      "candidate_count": 6,
+      "candidate_count": 7,
       "curated_count": 7,
       "candidates": [
         {
@@ -1250,6 +1270,11 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.67",
           "title": "Ponatinib(如 Iclusig)",
+          "official_only": true
+        },
+        {
+          "section_id": "9.73",
+          "title": "Inotuzumab ozogamicin (如 Besponsa)",
           "official_only": true
         },
         {
