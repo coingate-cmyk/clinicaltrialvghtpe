@@ -21,8 +21,8 @@
 
   const heroEyebrow = document.querySelector('.hero .eyebrow');
   const heroCopy = document.querySelector('.hero-copy');
-  if (heroEyebrow) heroEyebrow.textContent = 'ALL CANCERS · V0.9 CLINICAL NAVIGATOR';
-  if (heroCopy) heroCopy.textContent = '兩種查法並存：Cancer → setting → line → biomarker → reimbursed regimen；或直接用藥名反查所有健保適應症。所有癌種皆可使用臨床路徑視圖，完整條文仍隨時可切回。';
+  if (heroEyebrow) heroEyebrow.textContent = 'ALL CANCERS · V1.0 REVIEW NAVIGATOR';
+  if (heroCopy) heroCopy.textContent = '兩種查法並存：先依癌種看臨床路徑；或在癌種列表下方直接用藥名反查。藥物搜尋會把「此藥本身的給付」和「給付條件中提及此藥」分開呈現。';
 
   function esc(value='') {
     return String(value).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
@@ -318,20 +318,20 @@
       <button type="button" class="active" data-lookup-mode="cancer">依癌種 / 臨床路徑</button>
       <button type="button" data-lookup-mode="drug">依藥物查所有適應症</button>
     </div>`;
-  changePanel.insertAdjacentElement('afterend', lookupBar);
+  cancerBrowseSection.insertAdjacentElement('afterend', lookupBar);
 
   const drugSection = document.createElement('section');
   drugSection.id = 'drugLookupSection';
   drugSection.className = 'section-block drug-lookup-section';
   drugSection.hidden = true;
   drugSection.innerHTML = `
-    <div class="section-heading drug-heading"><div><p class="eyebrow">SEARCH BY DRUG</p><h2>用藥名反查健保適應症</h2><p class="muted">可輸入 generic name；常用商品名亦支援別名轉換。結果會跨癌種列出 setting、line、biomarker、事審與 §9.x。</p></div><div id="drugLookupCount" class="result-count"></div></div>
+    <div class="section-heading drug-heading"><div><p class="eyebrow">SEARCH BY DRUG</p><h2>用藥名反查健保適應症</h2><p class="muted">搜尋結果先列「此藥本身的給付」，再列「給付條件 / 摘要中提及此藥」；每個癌種與治療線別分開顯示。</p></div><div id="drugLookupCount" class="result-count"></div></div>
     <div class="drug-search-box"><input id="drugLookupInput" type="search" autocomplete="off" placeholder="例如：nivolumab、bevacizumab、Keytruda、Tagrisso…"><button id="clearDrugLookup" type="button" class="ghost-button">清除</button></div>
     <div class="drug-filter-row"><select id="drugCancerFilter"><option value="">所有癌種</option></select><select id="drugAuthFilter"><option value="">事審不限</option><option value="yes">需事前審查</option><option value="no">未標示事審</option></select><label class="drug-hint-toggle"><input id="includeDrugHints" type="checkbox"> 包含「非適用 / 提示」</label></div>
     <div id="drugAliasNotice" class="drug-alias-notice" hidden></div>
-    <div id="drugDirectory" class="drug-directory"></div>
-    <div id="drugLookupResults" class="drug-lookup-results"></div>`;
-  cancerBrowseSection.insertAdjacentElement('afterend', drugSection);
+    <div id="drugLookupResults" class="drug-lookup-results"></div>
+    <div id="drugDirectory" class="drug-directory"></div>`;
+  lookupBar.insertAdjacentElement('afterend', drugSection);
 
   const drugInput = document.getElementById('drugLookupInput');
   const drugCancerFilter = document.getElementById('drugCancerFilter');
@@ -357,22 +357,29 @@
     }
     return {terms:unique(terms), alias:hit};
   }
-  function drugHay(x) {
-    const c = cancerMap[x.cancer];
-    return norm([x.drug,x.regimen,x.setting,x.line,lineGroup(x),x.biomarker,x.summary,x.section,(x.tags||[]).join(' '),c?.name,c?.en].join(' '));
+  function directDrugHay(x) {
+    return norm([x.drug,x.regimen].join(' '));
   }
-  function drugFilteredRecords() {
+  function relatedDrugHay(x) {
+    return norm([x.setting,x.line,lineGroup(x),x.biomarker,x.summary,x.review,x.duration,(x.tags||[]).join(' ')].join(' '));
+  }
+  function passesDrugFilters(x) {
+    if (!includeDrugHints.checked && !isReimbursed(x)) return false;
+    if (drugCancerFilter.value && x.cancer !== drugCancerFilter.value) return false;
+    if (drugAuthFilter.value === 'yes' && !x.prior_auth) return false;
+    if (drugAuthFilter.value === 'no' && x.prior_auth) return false;
+    return true;
+  }
+  function drugMatchBuckets() {
     const {terms, alias} = aliasExpansion(drugInput.value);
     aliasNotice.hidden = !alias;
     if (alias) aliasNotice.textContent = `商品名別名：${alias}`;
-    return data.indications.filter(x => {
-      if (!includeDrugHints.checked && !isReimbursed(x)) return false;
-      if (drugCancerFilter.value && x.cancer !== drugCancerFilter.value) return false;
-      if (drugAuthFilter.value === 'yes' && !x.prior_auth) return false;
-      if (drugAuthFilter.value === 'no' && x.prior_auth) return false;
-      if (terms.length && !terms.some(t => drugHay(x).includes(t))) return false;
-      return true;
-    });
+    const eligible = data.indications.filter(passesDrugFilters);
+    if (!terms.length) return {direct:eligible, related:[], terms, alias};
+    const direct = eligible.filter(x => terms.some(t => directDrugHay(x).includes(t)));
+    const directIds = new Set(direct.map(x => x.id));
+    const related = eligible.filter(x => !directIds.has(x.id) && terms.some(t => relatedDrugHay(x).includes(t)));
+    return {direct, related, terms, alias};
   }
   function groupByDrug(records) {
     const groups = new Map();
@@ -383,29 +390,50 @@
     });
     return [...groups.entries()].sort((a,b) => a[0].localeCompare(b[0],'en',{sensitivity:'base'}));
   }
+  function groupByCancerAndLine(records) {
+    const cancers = new Map();
+    records.forEach(x => {
+      const cancerName = cancerMap[x.cancer]?.name || x.cancer;
+      if (!cancers.has(cancerName)) cancers.set(cancerName, new Map());
+      const line = lineGroup(x) || x.line || '未指定線別';
+      const lines = cancers.get(cancerName);
+      if (!lines.has(line)) lines.set(line, []);
+      lines.get(line).push(x);
+    });
+    return [...cancers.entries()]
+      .sort((a,b)=>a[0].localeCompare(b[0],'zh-Hant'))
+      .map(([cancer,lines]) => [cancer,[...lines.entries()].sort((a,b)=>a[0].localeCompare(b[0],'zh-Hant',{numeric:true}))]);
+  }
   function drugHitHtml(x) {
-    const c = cancerMap[x.cancer];
     const bio = x.biomarker && x.biomarker !== '—' ? `<span class="badge bio">${esc(x.biomarker)}</span>` : '';
-    return `<article class="drug-hit"><div class="drug-hit-main"><div class="drug-hit-kicker"><span>${esc(c?.name || x.cancer)}</span><span>${esc(lineGroup(x))}</span></div><h4>${esc(x.regimen)}</h4><p>${esc(x.setting)}</p><div class="badges">${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}${bio}<span class="badge">§ ${esc(x.section)}</span></div></div><div class="drug-hit-actions"><button type="button" class="action-button primary" data-drug-detail="${esc(x.id)}">摘要</button><a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">官方 PDF ↗</a></div></article>`;
+    return `<article class="drug-hit"><div class="drug-hit-main"><h4>${esc(x.drug)}</h4><div class="regimen">${esc(x.regimen)}</div><p>${esc(x.setting)}</p><div class="badges">${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}${bio}<span class="badge">§ ${esc(x.section)}</span></div></div><div class="drug-hit-actions"><button type="button" class="action-button primary" data-drug-detail="${esc(x.id)}">摘要</button><a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">官方 PDF ↗</a></div></article>`;
+  }
+  function groupedDrugResultsHtml(records) {
+    return groupByCancerAndLine(records).map(([cancer,lines]) => `<section class="drug-cancer-group"><div class="drug-cancer-head"><h3>${esc(cancer)}</h3><span>${lines.reduce((n,[,rows])=>n+rows.length,0)} 筆</span></div>${lines.map(([line,rows]) => `<div class="drug-line-group"><div class="drug-line-head"><strong>${esc(line)}</strong><span>${rows.length} 個給付情境</span></div><div class="drug-group-list">${rows.map(drugHitHtml).join('')}</div></div>`).join('')}</section>`).join('');
   }
   function renderDrugDirectory() {
     if (drugInput.value.trim()) { drugDirectory.hidden = true; return; }
     const active = data.indications.filter(isReimbursed);
     const groups = groupByDrug(active);
     drugDirectory.hidden = false;
-    drugDirectory.innerHTML = `<div class="drug-directory-head"><strong>${groups.length} 個藥物 / 組合名稱</strong><span>點一下直接反查跨癌種適應症</span></div><div class="drug-chip-grid">${groups.map(([name,rows]) => `<button type="button" data-drug-chip="${esc(name)}"><strong>${esc(name)}</strong><span>${rows.length} 筆</span></button>`).join('')}</div>`;
+    drugDirectory.innerHTML = `<div class="drug-directory-head"><strong>${groups.length} 個藥物 / 組合名稱</strong><span>常用藥物索引；點一下即可帶入上方搜尋</span></div><div class="drug-chip-grid">${groups.map(([name,rows]) => `<button type="button" data-drug-chip="${esc(name)}"><strong>${esc(name)}</strong><span>${rows.length} 筆</span></button>`).join('')}</div>`;
   }
   function renderDrugLookup() {
-    const records = drugFilteredRecords();
-    const groups = groupByDrug(records);
-    const actual = records.filter(isReimbursed).length;
-    drugCount.innerHTML = `<b>${actual}</b><span> 給付情境</span>`;
+    const {direct, related} = drugMatchBuckets();
+    const directActive = direct.filter(isReimbursed).length;
+    drugCount.innerHTML = `<b>${directActive}</b><span> 直接給付情境</span>`;
     renderDrugDirectory();
     if (!drugInput.value.trim()) {
-      drugResults.innerHTML = '<div class="drug-lookup-empty">輸入藥名或點上方藥物名稱，即可反查所有癌種的健保適應症。</div>';
+      drugResults.innerHTML = '<div class="drug-lookup-empty">輸入藥名。結果會緊接在搜尋框下方，並將「此藥本身」與「條件中提及此藥」分開。</div>';
       return;
     }
-    drugResults.innerHTML = groups.length ? groups.map(([name,rows]) => `<section class="drug-group"><div class="drug-group-head"><h3>${esc(name)}</h3><span>${rows.filter(isReimbursed).length} 個 active reimbursement record${rows.length !== rows.filter(isReimbursed).length ? ` · ${rows.length-rows.filter(isReimbursed).length} 個提示` : ''}</span></div><div class="drug-group-list">${rows.map(drugHitHtml).join('')}</div></section>`).join('') : '<div class="drug-lookup-empty"><strong>找不到符合的 curated record</strong><span>可以改用 generic name，或切回癌種模式查看完整條文。</span></div>';
+    const directHtml = direct.length
+      ? `<section class="drug-match-section direct"><div class="drug-match-head"><div><p class="eyebrow">DIRECT INDICATIONS</p><h3>此藥本身的健保給付</h3></div><span>${direct.length} 筆</span></div>${groupedDrugResultsHtml(direct)}</section>`
+      : '<section class="drug-match-section direct"><div class="drug-lookup-empty"><strong>沒有找到此藥本身的 curated 給付 record</strong><span>仍可查看下方是否有其他藥物的給付條件提到這個藥。</span></div></section>';
+    const relatedHtml = related.length
+      ? `<section class="drug-match-section related"><div class="drug-match-head"><div><p class="eyebrow">CLAUSE / CONDITION MENTIONS</p><h3>給付條件或摘要中提及此藥</h3><p>這些結果的「被申請藥」不是搜尋的藥；例如前線使用、治療失敗或互斥條件中提到它。</p></div><span>${related.length} 筆</span></div>${groupedDrugResultsHtml(related)}</section>`
+      : '';
+    drugResults.innerHTML = directHtml + relatedHtml;
   }
 
   function showDrugDetail(id) {
@@ -420,11 +448,11 @@
     lookupBar.querySelectorAll('[data-lookup-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.lookupMode === mode));
     if (mode === 'drug') {
       previousResultsHidden = resultsSection.hidden;
-      cancerBrowseSection.hidden = true;
+      cancerBrowseSection.hidden = false;
       resultsSection.hidden = true;
       drugSection.hidden = false;
       renderDrugLookup();
-      setTimeout(() => drugInput.focus({preventScroll:true}), 0);
+      setTimeout(() => { drugSection.scrollIntoView({behavior:'smooth',block:'start'}); drugInput.focus({preventScroll:true}); }, 0);
     } else {
       cancerBrowseSection.hidden = false;
       drugSection.hidden = true;
