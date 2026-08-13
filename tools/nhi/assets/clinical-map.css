@@ -200,3 +200,16 @@
   .drug-directory-head { align-items:flex-start; flex-direction:column; gap:2px; }
   .drug-group-head { align-items:flex-start; flex-direction:column; gap:4px; }
 }
+
+/* v1.0 review-oriented drug lookup */
+.drug-directory[hidden],.drug-lookup-section[hidden],.clinical-view-toolbar[hidden],.clinical-map-panel[hidden]{display:none!important}
+.lookup-mode-bar{scroll-margin-top:92px}
+.drug-lookup-section{scroll-margin-top:92px}
+.drug-match-section{margin:14px 0 22px}
+.drug-match-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:14px 16px;background:#f7faf9;border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.drug-match-head h3{margin:0;font-size:20px}.drug-match-head p{margin:4px 0 0;color:var(--muted);font-size:12px;max-width:760px}.drug-match-head>span{font-size:12px;color:var(--muted);white-space:nowrap}
+.drug-match-section.related .drug-match-head{background:#fff8e8;border-color:#ead9a9}.drug-match-section.related .drug-match-head .eyebrow{color:#8a5a08}
+.drug-cancer-group{border:1px solid var(--line);background:#fff;border-radius:15px;margin:10px 0;overflow:hidden}.drug-cancer-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 15px;background:#f4f7f7;border-bottom:1px solid var(--line)}.drug-cancer-head h3{margin:0;font-size:17px}.drug-cancer-head span{font-size:11px;color:var(--muted)}
+.drug-line-group{padding:13px 15px}.drug-line-group+.drug-line-group{border-top:1px solid var(--line)}.drug-line-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.drug-line-head strong{font-size:13px;color:var(--accent-2)}.drug-line-head span{font-size:10px;color:var(--muted)}
+.drug-directory{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line)}
+@media(max-width:610px){.drug-match-head,.drug-line-head{align-items:flex-start;flex-direction:column}.drug-cancer-head{align-items:flex-start}}
