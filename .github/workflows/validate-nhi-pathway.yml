@@ -16,10 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Check JavaScript syntax
         run: |
           node --check tools/nhi/assets/clinical-map.js
           node --check tools/nhi/assets/app.js
+
       - name: Validate pathway references
         run: |
           python - <<'PY'
@@ -37,8 +39,40 @@ jobs:
           missing = sorted(item_ids - data_ids)
           if missing:
               raise SystemExit(f'Clinical pathway references missing curated IDs: {missing}')
+          assert 'buildGenericMap' in pathway, 'All-cancer generic pathway fallback missing'
+          assert '依藥物查所有適應症' in pathway, 'Drug-centric lookup entry missing'
+          assert "keytruda:'pembrolizumab'" in pathway, 'Brand-name alias mapping missing'
           html = Path('tools/nhi/index.html').read_text(encoding='utf-8')
           assert 'assets/clinical-map.css' in html
           assert 'assets/clinical-map.js' in html
-          print(f'Pathway validation OK: {len(item_ids)} referenced curated records')
+          print(f'Pathway static validation OK: {len(item_ids)} manual referenced curated records')
           PY
+
+      - name: Validate curated data for two-way lookup
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const html = fs.readFileSync('tools/nhi/index.html','utf8');
+          global.window = global;
+          const scripts = [...html.matchAll(/<script src="assets\/(data-[^"]+\.js)"><\/script>/g)].map(m=>m[1]);
+          for (const file of scripts) {
+            vm.runInThisContext(fs.readFileSync('tools/nhi/assets/'+file,'utf8'), {filename:file});
+          }
+          const data = global.NHI_DATA;
+          if (!data || !Array.isArray(data.indications)) throw new Error('NHI data failed to load');
+          if (data.indications.length < 299) throw new Error('Unexpected curated record count: '+data.indications.length);
+          const withRecords = new Set(data.indications.map(x=>x.cancer));
+          for (const id of withRecords) {
+            if (!data.cancers.some(c=>c.id===id)) throw new Error('Record cancer missing from taxonomy: '+id);
+          }
+          const hay = x => [x.drug,x.regimen,x.setting,x.biomarker,x.summary,...(x.tags||[])].join(' ').toLowerCase();
+          const find = q => data.indications.filter(x=>hay(x).includes(q.toLowerCase()));
+          const nivo = find('nivolumab');
+          const bev = find('bevacizumab');
+          const pembro = find('pembrolizumab');
+          if (new Set(nivo.map(x=>x.cancer)).size < 4) throw new Error('Nivolumab cross-cancer lookup unexpectedly narrow');
+          if (new Set(bev.map(x=>x.cancer)).size < 4) throw new Error('Bevacizumab cross-cancer lookup unexpectedly narrow');
+          if (new Set(pembro.map(x=>x.cancer)).size < 3) throw new Error('Pembrolizumab cross-cancer lookup unexpectedly narrow');
+          console.log('Two-way lookup data OK:', data.indications.length, 'records;', withRecords.size, 'cancers with records;', nivo.length, 'nivolumab hits;', bev.length, 'bevacizumab hits');
+          NODE
