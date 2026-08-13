@@ -52,3 +52,5 @@ jobs:
             git commit -m 'Publish NHI Navigator v0.9 UI'
             git push origin pages-clean-ajcc-v2-3
           fi
+
+# v0.9 all-cancer pathway + drug-centric lookup publisher
