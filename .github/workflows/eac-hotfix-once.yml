@@ -1,0 +1,162 @@
+name: EAC classification hotfix once
+
+on:
+  push:
+    branches:
+      - eac-hotfix-20260813
+    paths:
+      - .github/workflows/eac-hotfix-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eac-hotfix-20260813
+          fetch-depth: 0
+
+      - name: Patch production index safely
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          original = text
+
+          helper = r'''
+// 2026-08-13 EAC display-category hotfix.
+// UI grouping: EAC / esophageal adenocarcinoma / GEJ adenocarcinoma => 胃癌；ESCC => 食道癌。
+// Protocol eligibility text is preserved; this only repairs the display/filter category.
+const inferSpecificUpperGiDisplayCancerType = (value) => {
+    const text = String(value || '');
+    if (!text) return '';
+    const hasEac = /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|(?:gej|gastroesophageal\s+junction|gastro-esophageal\s+junction)[^\n，,、；;。()（）]{0,30}adenocarcinoma|胃食道(?:接合|交接|交界)[^\n，,、；;。()（）]{0,20}腺癌)/i.test(text);
+    const hasEscc = /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/i.test(text);
+    if (hasEac && !hasEscc) return '胃癌';
+    if (hasEscc && !hasEac) return '食道癌';
+    return '';
+};
+
+const hasNonUpperGiCancerEvidence = (value) => /(胰臟癌|胰管腺癌|pancreatic|\bpdac\b|肝癌|肝細胞癌|\bhcc\b|hepatocellular|膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma|大腸癌|大腸直腸癌|結直腸癌|結直腸|colorectal|colon|\bcrc\b|攝護腺癌|前列腺癌|prostate|\bcrpc\b)/i.test(String(value || ''));
+
+const reconcileSpecificUpperGiDisplayCategory = (trial, evidenceText) => {
+    const out = { ...(trial || {}) };
+    const specificType = inferSpecificUpperGiDisplayCancerType(evidenceText);
+    if (!specificType) return out;
+
+    const hasOtherCancer = hasNonUpperGiCancerEvidence(evidenceText);
+    const currentType = normalizeCancerTypeLabel(out.cancerType || '');
+    const items = Array.isArray(out.cancerTypes) ? out.cancerTypes : [];
+
+    if (items.length) {
+        out.cancerTypes = normalizeCancerTypes(items.map(ct => {
+            const normalizedType = normalizeCancerTypeLabel(ct && ct.type || '');
+            if (specificType === '胃癌' && normalizedType === '食道癌') return { ...ct, type: '胃癌' };
+            if (specificType === '食道癌' && normalizedType === '胃癌') return { ...ct, type: '食道癌' };
+            if (!hasOtherCancer && normalizedType && normalizedType !== specificType) return { ...ct, type: specificType };
+            return { ...ct, type: normalizedType || (ct && ct.type) || '' };
+        }));
+    }
+
+    if (!currentType
+        || (specificType === '胃癌' && currentType === '食道癌')
+        || (specificType === '食道癌' && currentType === '胃癌')
+        || (!hasOtherCancer && currentType !== specificType)) {
+        out.cancerType = specificType;
+    }
+
+    if ((!Array.isArray(out.cancerTypes) || !out.cancerTypes.length) && out.line) {
+        out.cancerTypes = normalizeCancerTypes([{ type: specificType, lines: [out.line] }]);
+    }
+    return out;
+};
+'''.strip('\n')
+
+          anchor = "const normalizeCancerTypes = (list) => mergeCancerTypes(list);"
+          if 'const inferSpecificUpperGiDisplayCancerType = (value) =>' not in text:
+              if anchor not in text:
+                  raise SystemExit('normalizeCancerTypes anchor not found; aborting')
+              text = text.replace(anchor, anchor + '\n\n\n' + helper, 1)
+
+          fn_start = text.find('const sanitizeTrialForRuntime = (trial) => {')
+          if fn_start < 0:
+              raise SystemExit('sanitizeTrialForRuntime not found; aborting')
+          fn_end = text.find('\n};', fn_start)
+          if fn_end < 0:
+              raise SystemExit('sanitizeTrialForRuntime end not found; aborting')
+          segment = text[fn_start:fn_end]
+          runtime_call = "    const upperGiClassificationEvidence = [t.studyTitle, t.inclusion, t.comments].filter(Boolean).join(' ');\n    t = reconcileSpecificUpperGiDisplayCategory(t, upperGiClassificationEvidence);"
+          if 'reconcileSpecificUpperGiDisplayCategory(t, upperGiClassificationEvidence)' not in segment:
+              needle = "    const rowText = [t.studyTitle, t.inclusion, t.exclusion, t.comments, t.sponsor, t.code].filter(Boolean).join(' ');"
+              if needle not in segment:
+                  raise SystemExit('runtime rowText anchor not found; aborting')
+              segment = segment.replace(needle, runtime_call + '\n' + needle, 1)
+              text = text[:fn_start] + segment + text[fn_end:]
+
+          # Safety checks: recent tool entry points must survive untouched.
+          required = [
+              "./tools/nhi/index.html",
+              "抗癌藥物健保給付 Navigator BETA",
+              "./tools/index.html",
+              "const sanitizeTrialForRuntime = (trial) => {",
+              "MK-3475-06C",
+              "MK-3475-06D",
+          ]
+          missing = [x for x in required if x not in text]
+          if missing:
+              raise SystemExit('safety check failed; missing: ' + ', '.join(missing))
+
+          if text.count('const inferSpecificUpperGiDisplayCancerType = (value) =>') != 1:
+              raise SystemExit('helper count is not exactly 1')
+          if text.count('reconcileSpecificUpperGiDisplayCategory(t, upperGiClassificationEvidence)') != 1:
+              raise SystemExit('runtime reconciliation call count is not exactly 1')
+
+          # Regression checks equivalent to the JS classification gate.
+          def classify(s):
+              has_eac = bool(re.search(r'(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|(?:gej|gastroesophageal\s+junction|gastro-esophageal\s+junction)[^\n，,、；;。()（）]{0,30}adenocarcinoma|胃食道(?:接合|交接|交界)[^\n，,、；;。()（）]{0,20}腺癌)', s, re.I))
+              has_escc = bool(re.search(r'(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)', s, re.I))
+              if has_eac and not has_escc: return '胃癌'
+              if has_escc and not has_eac: return '食道癌'
+              return ''
+
+          cases = {
+              'esophageal adenocarcinoma': '胃癌',
+              'EAC second line': '胃癌',
+              'GEJ adenocarcinoma': '胃癌',
+              '胃食道交界腺癌與食道腺癌': '胃癌',
+              'esophageal squamous cell carcinoma ESCC': '食道癌',
+              'Cohort A esophageal adenocarcinoma; Cohort B ESCC': '',
+          }
+          failures = [(s, expected, classify(s)) for s, expected in cases.items() if classify(s) != expected]
+          if failures:
+              raise SystemExit('classification regression failed: ' + repr(failures))
+
+          if text == original:
+              print('No patch required; file already contains hotfix.')
+          else:
+              path.write_text(text, encoding='utf-8')
+              print('Patched index.html safely.')
+          PY
+
+          git diff --check
+          git diff -- index.html
+
+      - name: Commit hotfix
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index.html changes to commit."
+            exit 0
+          fi
+          git config user.name "chatgpt-deploy-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "fix: classify esophageal adenocarcinoma with gastric trials"
+          git push origin HEAD:eac-hotfix-20260813
