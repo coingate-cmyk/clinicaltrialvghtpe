@@ -1,0 +1,54 @@
+name: Publish NHI Navigator UI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/nhi/assets/clinical-map.js'
+      - 'tools/nhi/assets/clinical-map.css'
+      - 'tools/nhi/index.html'
+      - '.github/workflows/publish-nhi-ui.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-nhi-ui
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stage current NHI UI
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/nhi-ui
+          mkdir -p /tmp/nhi-ui/assets
+          cp tools/nhi/index.html /tmp/nhi-ui/index.html
+          cp tools/nhi/assets/clinical-map.js /tmp/nhi-ui/assets/clinical-map.js
+          cp tools/nhi/assets/clinical-map.css /tmp/nhi-ui/assets/clinical-map.css
+
+      - name: Publish to live Pages branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/assets
+          cp /tmp/nhi-ui/index.html tools/nhi/index.html
+          cp /tmp/nhi-ui/assets/clinical-map.js tools/nhi/assets/clinical-map.js
+          cp /tmp/nhi-ui/assets/clinical-map.css tools/nhi/assets/clinical-map.css
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI Navigator v0.9 UI'
+            git push origin pages-clean-ajcc-v2-3
+          fi
