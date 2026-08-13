@@ -1156,6 +1156,54 @@ const inferCancerTypeFromText = (value) => {
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
 
+// 2026-08-13 EAC display-category hotfix.
+// UI grouping: EAC / esophageal adenocarcinoma / GEJ adenocarcinoma => 胃癌；ESCC => 食道癌。
+// Protocol eligibility text is preserved; this only repairs the display/filter category.
+const inferSpecificUpperGiDisplayCancerType = (value) => {
+    const text = String(value || '');
+    if (!text) return '';
+    const hasEac = /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|(?:gej|gastroesophageal\s+junction|gastro-esophageal\s+junction)[^\n，,、；;。()（）]{0,30}adenocarcinoma|胃食道(?:接合|交接|交界)[^\n，,、；;。()（）]{0,20}腺癌)/i.test(text);
+    const hasEscc = /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/i.test(text);
+    if (hasEac && !hasEscc) return '胃癌';
+    if (hasEscc && !hasEac) return '食道癌';
+    return '';
+};
+
+const hasNonUpperGiCancerEvidence = (value) => /(胰臟癌|胰管腺癌|pancreatic|\bpdac\b|肝癌|肝細胞癌|\bhcc\b|hepatocellular|膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma|大腸癌|大腸直腸癌|結直腸癌|結直腸|colorectal|colon|\bcrc\b|攝護腺癌|前列腺癌|prostate|\bcrpc\b)/i.test(String(value || ''));
+
+const reconcileSpecificUpperGiDisplayCategory = (trial, evidenceText) => {
+    const out = { ...(trial || {}) };
+    const specificType = inferSpecificUpperGiDisplayCancerType(evidenceText);
+    if (!specificType) return out;
+
+    const hasOtherCancer = hasNonUpperGiCancerEvidence(evidenceText);
+    const currentType = normalizeCancerTypeLabel(out.cancerType || '');
+    const items = Array.isArray(out.cancerTypes) ? out.cancerTypes : [];
+
+    if (items.length) {
+        out.cancerTypes = normalizeCancerTypes(items.map(ct => {
+            const normalizedType = normalizeCancerTypeLabel(ct && ct.type || '');
+            if (specificType === '胃癌' && normalizedType === '食道癌') return { ...ct, type: '胃癌' };
+            if (specificType === '食道癌' && normalizedType === '胃癌') return { ...ct, type: '食道癌' };
+            if (!hasOtherCancer && normalizedType && normalizedType !== specificType) return { ...ct, type: specificType };
+            return { ...ct, type: normalizedType || (ct && ct.type) || '' };
+        }));
+    }
+
+    if (!currentType
+        || (specificType === '胃癌' && currentType === '食道癌')
+        || (specificType === '食道癌' && currentType === '胃癌')
+        || (!hasOtherCancer && currentType !== specificType)) {
+        out.cancerType = specificType;
+    }
+
+    if ((!Array.isArray(out.cancerTypes) || !out.cancerTypes.length) && out.line) {
+        out.cancerTypes = normalizeCancerTypes([{ type: specificType, lines: [out.line] }]);
+    }
+    return out;
+};
+
+
 const KNOWN_PI_NAMES = ['洪逸平', '陳明晃', '楊慕華', '李重賓', '姜乃榕', '鄧豪偉', '黃怡翔', '蕭育和', '張牧新'];
 const KNOWN_STUDY_NURSE_NAMES = ['Abby', '宋秀薇', '王秋眉', '賴姵妤', '周淑慧', '吳佳勳', '林韋秀', '王昭蘋', '陳秀玲', '孔亭方', '張台依', '邱佩玲', '李杰如', '李杰如醫師'];
 
@@ -1264,6 +1312,8 @@ const sanitizeTrialForRuntime = (trial) => {
     t.cancerType = normalizeCancerTypeLabel(t.cancerType);
     t.line = normalizeTreatmentLine(t.line);
     t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
+    const upperGiClassificationEvidence = [t.studyTitle, t.inclusion, t.comments].filter(Boolean).join(' ');
+    t = reconcileSpecificUpperGiDisplayCategory(t, upperGiClassificationEvidence);
     const rowText = [t.studyTitle, t.inclusion, t.exclusion, t.comments, t.sponsor, t.code].filter(Boolean).join(' ');
     if ((!Array.isArray(t.cancerTypes) || !t.cancerTypes.length) && t.cancerType && t.line) {
         t.cancerTypes = normalizeCancerTypes([{ type: t.cancerType, lines: [t.line], closedLines: t.closedLines || [] }]);
