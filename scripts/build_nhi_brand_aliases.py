@@ -12,16 +12,20 @@ from pathlib import Path
 
 import requests
 
-SOURCE_URL = "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-E41001-001"
+RESOURCE_ID = "A21030000I-E41001-001"
+DATASTORE_URL = f"https://info.nhi.gov.tw/api/iode0010/v1/rest/datastore/{RESOURCE_ID}"
+LEGACY_URL = f"https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId={RESOURCE_ID}"
+SOURCE_PAGE = "https://info.nhi.gov.tw/IODE0000/IODE0000S09?id=111"
 OUT = Path("tools/nhi/assets/nhi-brand-aliases.js")
 RAW = Path("tools/nhi/data/brands/current.json")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
-    "Accept": "text/csv,application/zip,application/octet-stream,*/*",
+    "Accept": "application/json,text/csv,application/zip,application/octet-stream,*/*",
     "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.7",
     "Referer": "https://info.nhi.gov.tw/",
 }
+EXPECTED = {"藥品代號", "藥品英文名稱", "藥品中文名稱", "成分"}
 
 
 def decode_bytes(data: bytes) -> str:
@@ -40,7 +44,11 @@ def decode_bytes(data: bytes) -> str:
 
 
 def clean(s: str | None) -> str:
-    return re.sub(r"\s+", " ", (s or "").strip())
+    return re.sub(r"\s+", " ", str(s or "").strip())
+
+
+def normalize_row(row: dict) -> dict[str, str]:
+    return {clean(k): clean(v) for k, v in row.items()}
 
 
 def active_row(row: dict[str, str]) -> bool:
@@ -50,7 +58,6 @@ def active_row(row: dict[str, str]) -> bool:
     digits = re.sub(r"\D", "", end)
     if not digits:
         return True
-    # ROC yyyMMdd or Gregorian yyyyMMdd. Keep future/current rows; old rows are not useful aliases.
     try:
         if len(digits) == 7:
             y = int(digits[:3]) + 1911
@@ -68,28 +75,81 @@ def oncology_row(row: dict[str, str]) -> bool:
     chapter = clean(row.get("給付規定章節"))
     atc = clean(row.get("ATC代碼")).upper()
     category = clean(row.get("分類分組名稱")) + " " + clean(row.get("藥品分類"))
-    # Chapter 9 is the primary source; ATC L01/L02 catches oncology items whose chapter field is blank/oddly formatted.
     return bool(re.search(r"(^|\D)9(?:\.|$)", chapter)) or atc.startswith(("L01", "L02")) or "抗癌" in category or "抗腫瘤" in category
 
 
 def parse_csv(text: str) -> list[dict[str, str]]:
-    # The official file is CSV; sniff defensively because older exports have varied quoting/delimiters.
     sample = text[:10000]
     try:
         dialect = csv.Sniffer().sniff(sample, delimiters=",\t;")
     except csv.Error:
         dialect = csv.excel
-    rows = list(csv.DictReader(io.StringIO(text), dialect=dialect))
+    rows = [normalize_row(r) for r in csv.DictReader(io.StringIO(text), dialect=dialect)]
     if not rows:
         raise RuntimeError("NHI drug dataset parsed zero rows")
-    expected = {"藥品代號", "藥品英文名稱", "藥品中文名稱", "成分"}
-    missing = expected - set(rows[0].keys())
+    missing = EXPECTED - set(rows[0].keys())
     if missing:
         raise RuntimeError(f"NHI drug dataset missing expected columns: {sorted(missing)}; got {list(rows[0].keys())[:12]}")
     return rows
 
 
-def build(rows: list[dict[str, str]]) -> dict:
+def find_record_list(obj):
+    if isinstance(obj, list) and obj and isinstance(obj[0], dict):
+        keys = {clean(k) for k in obj[0].keys()}
+        if len(EXPECTED & keys) >= 2:
+            return obj
+    if isinstance(obj, dict):
+        for key in ("records", "data", "result", "items"):
+            if key in obj:
+                hit = find_record_list(obj[key])
+                if hit is not None:
+                    return hit
+        for value in obj.values():
+            hit = find_record_list(value)
+            if hit is not None:
+                return hit
+    return None
+
+
+def fetch_datastore_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    limit = 5000
+    offset = 0
+    while True:
+        r = requests.get(DATASTORE_URL, params={"limit": limit, "offset": offset}, headers=HEADERS, timeout=30)
+        r.raise_for_status()
+        payload = r.json()
+        batch = find_record_list(payload)
+        if batch is None:
+            raise RuntimeError(f"Cannot locate record list in NHI datastore response; top keys={list(payload)[:10] if isinstance(payload, dict) else type(payload)}")
+        norm_batch = [normalize_row(x) for x in batch]
+        if norm_batch:
+            missing = EXPECTED - set(norm_batch[0].keys())
+            if missing:
+                raise RuntimeError(f"NHI datastore missing expected columns: {sorted(missing)}; got {list(norm_batch[0].keys())[:12]}")
+        rows.extend(norm_batch)
+        print(f"Fetched NHI datastore rows: {len(rows)}", flush=True)
+        if len(batch) < limit:
+            break
+        offset += len(batch)
+        if offset > 100000:
+            raise RuntimeError("NHI datastore pagination exceeded safety limit")
+    if not rows:
+        raise RuntimeError("NHI datastore returned zero rows")
+    return rows
+
+
+def fetch_rows() -> tuple[list[dict[str, str]], str]:
+    try:
+        return fetch_datastore_rows(), DATASTORE_URL
+    except Exception as exc:
+        print(f"Modern NHI datastore fetch failed: {exc}; trying legacy CSV endpoint", file=sys.stderr, flush=True)
+    r = requests.get(LEGACY_URL, headers=HEADERS, timeout=35)
+    r.raise_for_status()
+    return parse_csv(decode_bytes(r.content)), LEGACY_URL
+
+
+def build(rows: list[dict[str, str]], transport: str) -> dict:
     products = []
     seen = set()
     for r in rows:
@@ -120,7 +180,9 @@ def build(rows: list[dict[str, str]]) -> dict:
     ingredients = sorted({p["ingredient"] for p in products if p["ingredient"]}, key=str.lower)
     return {
         "meta": {
-            "source": SOURCE_URL,
+            "source": SOURCE_PAGE,
+            "transport": transport,
+            "resource_id": RESOURCE_ID,
             "dataset": "健保用藥品項查詢項目檔",
             "fetched_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "scope": "active oncology-related NHI listed products; Chapter 9 and oncology ATC/category filters",
@@ -135,16 +197,13 @@ def build(rows: list[dict[str, str]]) -> dict:
 def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     RAW.parent.mkdir(parents=True, exist_ok=True)
-    r = requests.get(SOURCE_URL, headers=HEADERS, timeout=90)
-    r.raise_for_status()
-    text = decode_bytes(r.content)
-    rows = parse_csv(text)
-    payload = build(rows)
+    rows, transport = fetch_rows()
+    payload = build(rows, transport)
     if payload["meta"]["product_count"] < 50:
         raise RuntimeError(f"Suspiciously small oncology brand index: {payload['meta']['product_count']}")
     RAW.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     OUT.write_text("window.NHI_BRAND_INDEX = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
-    print(f"NHI brand index OK: {payload['meta']['product_count']} products / {payload['meta']['ingredient_count']} ingredients")
+    print(f"NHI brand index OK: {payload['meta']['product_count']} products / {payload['meta']['ingredient_count']} ingredients; transport={transport}")
     return 0
 
 
