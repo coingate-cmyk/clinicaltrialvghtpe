@@ -75,7 +75,9 @@ def oncology_row(row: dict[str, str]) -> bool:
     chapter = clean(row.get("給付規定章節"))
     atc = clean(row.get("ATC代碼")).upper()
     category = clean(row.get("分類分組名稱")) + " " + clean(row.get("藥品分類"))
-    return bool(re.search(r"(^|\D)9(?:\.|$)", chapter)) or atc.startswith(("L01", "L02")) or "抗癌" in category or "抗腫瘤" in category
+    # Chapter 9 must be the top-level chapter, not e.g. 10.9. ATC L01/L02 is kept as a safety net.
+    chapter9 = bool(re.match(r"^9(?:\.|$)", chapter))
+    return chapter9 or atc.startswith(("L01", "L02")) or "抗癌" in category or "抗腫瘤" in category
 
 
 def parse_csv(text: str) -> list[dict[str, str]]:
@@ -185,7 +187,7 @@ def build(rows: list[dict[str, str]], transport: str) -> dict:
             "resource_id": RESOURCE_ID,
             "dataset": "健保用藥品項查詢項目檔",
             "fetched_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-            "scope": "active oncology-related NHI listed products; Chapter 9 and oncology ATC/category filters",
+            "scope": "active oncology-related NHI listed products; top-level Chapter 9 and oncology ATC/category filters",
             "product_count": len(products),
             "ingredient_count": len(ingredients),
             "classification_note": "Official NHI dataset does not reliably label originator vs generic; products are indexed as NHI-listed brand names. Known originator brand aliases remain separately curated in the UI.",
