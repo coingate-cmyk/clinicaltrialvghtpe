@@ -402,6 +402,24 @@
     if (!rows.length) return '';
     return `<details class="nhi-brand-list"><summary>健保收載商品名（含原廠 / 學名藥） <b>${rows.length}</b></summary><div class="nhi-brand-grid">${rows.map(p => `<div class="nhi-brand-item"><strong>${esc(productName(p))}</strong><span>${esc(p.company || p.manufacturer || '')}${p.code ? ` · ${esc(p.code)}` : ''}</span></div>`).join('')}</div></details>`;
   }
+  function isDrugLikeQuery(q) {
+    const n = norm(q);
+    if (!n || n.length < 3) return false;
+    if (Object.keys(brandAliases).some(brand => brand === n || brand.startsWith(n) || n.startsWith(brand))) return true;
+    if (officialBrandMatches(n).length) return true;
+    return data.indications.some(x => {
+      const d = norm(x.drug || '');
+      return d && (d === n || d.includes(n) || n.includes(d));
+    });
+  }
+  function routeHeaderSearchToDrug(q) {
+    const value = String(q || '').trim();
+    if (!isDrugLikeQuery(value)) return false;
+    drugInput.value = value;
+    if (document.body.dataset.lookupMode !== 'drug') setLookupMode('drug');
+    else renderDrugLookup();
+    return true;
+  }
   function directDrugHay(x) {
     return norm([x.drug,x.regimen].join(' '));
   }
@@ -507,6 +525,10 @@
   }
   lookupBar.addEventListener('click', e => { const btn = e.target.closest('[data-lookup-mode]'); if (btn) setLookupMode(btn.dataset.lookupMode); });
   drugInput.addEventListener('input', renderDrugLookup);
+  globalSearch?.addEventListener('input', e => {
+    const q = e.target.value;
+    if (routeHeaderSearchToDrug(q)) return;
+  });
   drugCancerFilter.addEventListener('change', renderDrugLookup);
   drugAuthFilter.addEventListener('change', renderDrugLookup);
   includeDrugHints.addEventListener('change', renderDrugLookup);
