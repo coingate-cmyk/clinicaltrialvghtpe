@@ -384,8 +384,10 @@
   }
   function brandsForRecord(x) {
     if (!officialBrandProducts.length) return [];
-    const hay = directDrugHay(x);
-    const rows = officialBrandProducts.filter(p => ingredientTerms(p.ingredient).some(t => t.length >= 4 && hay.includes(t)));
+    const matchIngredient = hay => officialBrandProducts.filter(p => ingredientTerms(p.ingredient).some(t => t.length >= 4 && hay.includes(t)));
+    // Prefer the reimbursed drug field. Only fall back to the regimen when the record's drug label is a class/combination label.
+    let rows = matchIngredient(norm(x.drug || ''));
+    if (!rows.length) rows = matchIngredient(norm(x.regimen || ''));
     const seen = new Set();
     return rows.filter(p => {
       const name = productName(p);
