@@ -299,6 +299,8 @@
   });
 
   // -------- Drug-centric reimbursement lookup --------
+  const officialBrandIndex = window.NHI_BRAND_INDEX || {meta:{}, products:[]};
+  const officialBrandProducts = Array.isArray(officialBrandIndex.products) ? officialBrandIndex.products : [];
   const brandAliases = {
     keytruda:'pembrolizumab', opdivo:'nivolumab', tecentriq:'atezolizumab', bavencio:'avelumab', yervoy:'ipilimumab', imfinzi:'durvalumab', imjudo:'tremelimumab', libtayo:'cemiplimab', jemperli:'dostarlimab',
     herceptin:'trastuzumab', perjeta:'pertuzumab', phesgo:'pertuzumab trastuzumab', kadcyla:'trastuzumab emtansine', enhertu:'trastuzumab deruxtecan', avastin:'bevacizumab', erbitux:'cetuximab', vectibix:'panitumumab', cyramza:'ramucirumab',
@@ -325,8 +327,8 @@
   drugSection.className = 'section-block drug-lookup-section';
   drugSection.hidden = true;
   drugSection.innerHTML = `
-    <div class="section-heading drug-heading"><div><p class="eyebrow">SEARCH BY DRUG</p><h2>用藥名反查健保適應症</h2><p class="muted">搜尋結果先列「此藥本身的給付」，再列「給付條件 / 摘要中提及此藥」；每個癌種與治療線別分開顯示。</p></div><div id="drugLookupCount" class="result-count"></div></div>
-    <div class="drug-search-box"><input id="drugLookupInput" type="search" autocomplete="off" placeholder="例如：nivolumab、bevacizumab、Keytruda、Tagrisso…"><button id="clearDrugLookup" type="button" class="ghost-button">清除</button></div>
+    <div class="section-heading drug-heading"><div><p class="eyebrow">SEARCH BY DRUG</p><h2>用藥名反查健保適應症</h2><p class="muted">可輸入學名、原廠商品名或健保收載學名藥商品名。搜尋結果先列「此藥本身的給付」，再列「給付條件 / 摘要中提及此藥」；每個癌種與治療線別分開顯示。</p></div><div id="drugLookupCount" class="result-count"></div></div>
+    <div class="drug-search-box"><input id="drugLookupInput" type="search" autocomplete="off" placeholder="例如：nivolumab、Keytruda、中文商品名、學名藥商品名…"><button id="clearDrugLookup" type="button" class="ghost-button">清除</button></div>
     <div class="drug-filter-row"><select id="drugCancerFilter"><option value="">所有癌種</option></select><select id="drugAuthFilter"><option value="">事審不限</option><option value="yes">需事前審查</option><option value="no">未標示事審</option></select><label class="drug-hint-toggle"><input id="includeDrugHints" type="checkbox"> 包含「非適用 / 提示」</label></div>
     <div id="drugAliasNotice" class="drug-alias-notice" hidden></div>
     <div id="drugLookupResults" class="drug-lookup-results"></div>
@@ -347,15 +349,56 @@
     const o = document.createElement('option'); o.value = c.id; o.textContent = c.name; drugCancerFilter.appendChild(o);
   });
 
+  const ingredientStopwords = new Set(['sodium','hydrochloride','hydrochloridehydrate','hydrate','monohydrate','dihydrate','anhydrous','maleate','dimaleate','mesylate','mesilate','acetate','citrate','phosphate','sulfate','succinate','tartrate','potassium','calcium','trihydrate']);
+  function ingredientTerms(value='') {
+    const n = norm(value);
+    const tokens = n.match(/[a-z0-9][a-z0-9-]{3,}/g) || [];
+    return unique([n, ...tokens.filter(t => !ingredientStopwords.has(t))]);
+  }
+  function productName(p) {
+    return [p.brand_en, p.brand_zh].filter(Boolean).join(' / ');
+  }
+  function officialBrandMatches(q) {
+    const n = norm(q);
+    if (!n || n.length < 2) return [];
+    return officialBrandProducts.filter(p => norm([p.brand_en,p.brand_zh].join(' ')).includes(n)).slice(0,120);
+  }
   function aliasExpansion(q) {
     const n = norm(q);
-    if (!n) return {terms:[], alias:null};
+    if (!n) return {terms:[], alias:null, products:[]};
     const terms = [n];
-    let hit = null;
+    const notices = [];
     for (const [brand,generic] of Object.entries(brandAliases)) {
-      if (brand.includes(n) || n.includes(brand)) { terms.push(norm(generic)); hit = `${brand} → ${generic}`; }
+      if (brand.includes(n) || n.includes(brand)) {
+        terms.push(norm(generic));
+        notices.push(`${brand} → ${generic}`);
+      }
     }
-    return {terms:unique(terms), alias:hit};
+    const products = officialBrandMatches(n);
+    products.forEach(p => terms.push(...ingredientTerms(p.ingredient)));
+    if (products.length) {
+      const ingredients = unique(products.map(p=>p.ingredient)).slice(0,5);
+      notices.push(`健保商品名 → ${ingredients.join(' / ')}`);
+    }
+    return {terms:unique(terms), alias:notices.length ? notices.join('；') : null, products};
+  }
+  function brandsForRecord(x) {
+    if (!officialBrandProducts.length) return [];
+    const hay = directDrugHay(x);
+    const rows = officialBrandProducts.filter(p => ingredientTerms(p.ingredient).some(t => t.length >= 4 && hay.includes(t)));
+    const seen = new Set();
+    return rows.filter(p => {
+      const name = productName(p);
+      const k = norm(name);
+      if (!name || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    }).sort((a,b)=>productName(a).localeCompare(productName(b),'zh-Hant',{sensitivity:'base'}));
+  }
+  function brandListHtml(x) {
+    const rows = brandsForRecord(x);
+    if (!rows.length) return '';
+    return `<details class="nhi-brand-list"><summary>健保收載商品名（含原廠 / 學名藥） <b>${rows.length}</b></summary><div class="nhi-brand-grid">${rows.map(p => `<div class="nhi-brand-item"><strong>${esc(productName(p))}</strong><span>${esc(p.company || p.manufacturer || '')}${p.code ? ` · ${esc(p.code)}` : ''}</span></div>`).join('')}</div></details>`;
   }
   function directDrugHay(x) {
     return norm([x.drug,x.regimen].join(' '));
@@ -373,7 +416,7 @@
   function drugMatchBuckets() {
     const {terms, alias} = aliasExpansion(drugInput.value);
     aliasNotice.hidden = !alias;
-    if (alias) aliasNotice.textContent = `商品名別名：${alias}`;
+    if (alias) aliasNotice.textContent = `商品名 / 成分解析：${alias}`;
     const eligible = data.indications.filter(passesDrugFilters);
     if (!terms.length) return {direct:eligible, related:[], terms, alias};
     const direct = eligible.filter(x => terms.some(t => directDrugHay(x).includes(t)));
@@ -406,7 +449,7 @@
   }
   function drugHitHtml(x) {
     const bio = x.biomarker && x.biomarker !== '—' ? `<span class="badge bio">${esc(x.biomarker)}</span>` : '';
-    return `<article class="drug-hit"><div class="drug-hit-main"><h4>${esc(x.drug)}</h4><div class="regimen">${esc(x.regimen)}</div><p>${esc(x.setting)}</p><div class="badges">${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}${bio}<span class="badge">§ ${esc(x.section)}</span></div></div><div class="drug-hit-actions"><button type="button" class="action-button primary" data-drug-detail="${esc(x.id)}">摘要</button><a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">官方 PDF ↗</a></div></article>`;
+    return `<article class="drug-hit"><div class="drug-hit-main"><h4>${esc(x.drug)}</h4><div class="regimen">${esc(x.regimen)}</div><p>${esc(x.setting)}</p><div class="badges">${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}${bio}<span class="badge">§ ${esc(x.section)}</span></div>${brandListHtml(x)}</div><div class="drug-hit-actions"><button type="button" class="action-button primary" data-drug-detail="${esc(x.id)}">摘要</button><a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">官方 PDF ↗</a></div></article>`;
   }
   function groupedDrugResultsHtml(records) {
     return groupByCancerAndLine(records).map(([cancer,lines]) => `<section class="drug-cancer-group"><div class="drug-cancer-head"><h3>${esc(cancer)}</h3><span>${lines.reduce((n,[,rows])=>n+rows.length,0)} 筆</span></div>${lines.map(([line,rows]) => `<div class="drug-line-group"><div class="drug-line-head"><strong>${esc(line)}</strong><span>${rows.length} 個給付情境</span></div><div class="drug-group-list">${rows.map(drugHitHtml).join('')}</div></div>`).join('')}</section>`).join('');
