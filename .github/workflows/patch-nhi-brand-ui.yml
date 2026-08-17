@@ -1,0 +1,75 @@
+name: Wire NHI Brand Index into Search
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/patch_nhi_brand_ui.py'
+      - '.github/workflows/patch-nhi-brand-ui.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply brand-search UI patch
+        run: python scripts/patch_nhi_brand_ui.py
+
+      - name: Validate UI and official brand index
+        run: |
+          set -euo pipefail
+          node --check tools/nhi/assets/clinical-map.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          html=Path('tools/nhi/index.html').read_text(encoding='utf-8')
+          js=Path('tools/nhi/assets/clinical-map.js').read_text(encoding='utf-8')
+          brand=json.loads(Path('tools/nhi/data/brands/current.json').read_text(encoding='utf-8'))
+          assert 'assets/nhi-brand-aliases.js' in html
+          assert 'officialBrandIndex' in js
+          assert '健保收載商品名（含原廠 / 學名藥）' in js
+          assert brand['meta']['product_count'] >= 1000
+          names=' '.join((p.get('brand_en','')+' '+p.get('brand_zh','')+' '+p.get('ingredient','')).lower() for p in brand['products'])
+          for q in ('docetaxel','afatinib','nivolumab'):
+              assert q in names
+          print('Brand UI validation OK:',brand['meta']['product_count'],'NHI-listed oncology products')
+          PY
+
+      - name: Commit UI integration to main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          if ! git diff --cached --quiet; then
+            git commit -m 'Search NHI oncology drugs by listed brand names'
+            git push origin main
+          fi
+          rm -rf /tmp/nhi-brand-ui
+          mkdir -p /tmp/nhi-brand-ui
+          cp tools/nhi/index.html /tmp/nhi-brand-ui/index.html
+          cp tools/nhi/assets/clinical-map.js /tmp/nhi-brand-ui/clinical-map.js
+          cp tools/nhi/assets/clinical-map.css /tmp/nhi-brand-ui/clinical-map.css
+
+      - name: Publish UI integration to Pages
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/nhi-brand-ui/index.html tools/nhi/index.html
+          cp /tmp/nhi-brand-ui/clinical-map.js tools/nhi/assets/clinical-map.js
+          cp /tmp/nhi-brand-ui/clinical-map.css tools/nhi/assets/clinical-map.css
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI brand-name drug search'
+            git push origin pages-clean-ajcc-v2-3
+          fi
