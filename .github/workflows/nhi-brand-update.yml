@@ -1,0 +1,77 @@
+name: Update NHI Brand Index
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Official dataset updates monthly; weekly refresh keeps the search index current without extra maintenance.
+    - cron: '35 2 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_nhi_brand_aliases.py'
+      - '.github/workflows/nhi-brand-update.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nhi-brand-update
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependency
+        run: python -m pip install --disable-pip-version-check requests
+
+      - name: Build brand alias index from official NHI dataset
+        run: python scripts/build_nhi_brand_aliases.py
+
+      - name: Validate brand index
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('tools/nhi/data/brands/current.json').read_text(encoding='utf-8'))
+          assert p['meta']['product_count'] >= 50
+          assert p['meta']['ingredient_count'] >= 20
+          assert p['meta']['source'].startswith('https://info.nhi.gov.tw/')
+          names=' '.join((x.get('brand_en','')+' '+x.get('brand_zh','')+' '+x.get('ingredient','')).lower() for x in p['products'])
+          for q in ('docetaxel','afatinib','nivolumab'):
+              assert q in names, q
+          print('Brand validation OK:',p['meta']['product_count'],'products /',p['meta']['ingredient_count'],'ingredients')
+          PY
+          test -s tools/nhi/assets/nhi-brand-aliases.js
+
+      - name: Commit generated brand index to main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/data/brands/current.json tools/nhi/assets/nhi-brand-aliases.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update NHI listed oncology brand index'
+            git push origin main
+          fi
+          mkdir -p /tmp/nhi-brand
+          cp tools/nhi/assets/nhi-brand-aliases.js /tmp/nhi-brand/nhi-brand-aliases.js
+
+      - name: Publish brand index to live Pages branch
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/assets
+          cp /tmp/nhi-brand/nhi-brand-aliases.js tools/nhi/assets/nhi-brand-aliases.js
+          git add tools/nhi/assets/nhi-brand-aliases.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish NHI oncology brand index'
+            git push origin pages-clean-ajcc-v2-3
+          fi
