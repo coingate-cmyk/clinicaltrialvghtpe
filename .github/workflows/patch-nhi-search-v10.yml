@@ -18,62 +18,54 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Apply patch
-        run: python scripts/patch_nhi_search_v10.py
+      - name: Apply official NHI brand-name search integration
+        run: python scripts/patch_nhi_brand_ui.py
 
-      - name: Validate JavaScript and data semantics
+      - name: Validate brand search
         run: |
+          set -euo pipefail
           node --check tools/nhi/assets/clinical-map.js
-          node --check tools/nhi/assets/data-lung-support.js
           python - <<'PY'
+          import json
           from pathlib import Path
-          s=Path('tools/nhi/assets/clinical-map.js').read_text(encoding='utf-8')
-          assert 'directDrugHay' in s and 'relatedDrugHay' in s
-          assert '此藥本身的健保給付' in s
-          assert '給付條件或摘要中提及此藥' in s
-          assert "cancerBrowseSection.insertAdjacentElement('afterend', lookupBar)" in s
-          d=Path('tools/nhi/assets/data-lung-support.js').read_text(encoding='utf-8')
-          assert 'lc-afatinib-egfr-1l' in d and 'lc-afatinib-sq-2l' in d and '"id":"lc-afatinib"' not in d
-          print('Static validation OK')
+          html=Path('tools/nhi/index.html').read_text(encoding='utf-8')
+          js=Path('tools/nhi/assets/clinical-map.js').read_text(encoding='utf-8')
+          brand=json.loads(Path('tools/nhi/data/brands/current.json').read_text(encoding='utf-8'))
+          assert 'assets/nhi-brand-aliases.js' in html
+          assert 'officialBrandIndex' in js
+          assert 'officialBrandMatches' in js
+          assert '健保收載商品名（含原廠 / 學名藥）' in js
+          assert brand['meta']['product_count'] >= 1000
+          print('Brand search validation OK:',brand['meta']['product_count'],'products')
           PY
-          node - <<'NODE'
-          const fs=require('fs'),vm=require('vm'); global.window=global;
-          const html=fs.readFileSync('tools/nhi/index.html','utf8');
-          const scripts=[...html.matchAll(/<script src="assets\/(data-[^"]+\.js)"><\/script>/g)].map(m=>m[1]);
-          for(const f of scripts) vm.runInThisContext(fs.readFileSync('tools/nhi/assets/'+f,'utf8'),{filename:f});
-          const rows=global.NHI_DATA.indications;
-          const lungAf=rows.filter(x=>x.drug==='Afatinib' && x.cancer==='lung');
-          if(!lungAf.some(x=>x.line_group==='1L') || !lungAf.some(x=>x.line_group==='2L')) throw new Error('Afatinib split missing');
-          const q='docetaxel';
-          const direct=rows.filter(x=>[x.drug,x.regimen].join(' ').toLowerCase().includes(q));
-          const related=rows.filter(x=>![x.drug,x.regimen].join(' ').toLowerCase().includes(q) && [x.setting,x.line,x.line_group,x.biomarker,x.summary,x.review,x.duration,...(x.tags||[])].join(' ').toLowerCase().includes(q));
-          console.log('Semantic check:',rows.length,'records;',direct.length,'direct docetaxel;',related.length,'related docetaxel; afatinib lines=',lungAf.map(x=>x.line_group).join(','));
-          NODE
 
       - name: Commit to main
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css tools/nhi/assets/data-lung-support.js
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
           if ! git diff --cached --quiet; then
-            git commit -m "Refine drug lookup semantics and grouping"
+            git commit -m "Search oncology reimbursement by NHI-listed brand names"
             git push origin main
           fi
+          mkdir -p /tmp/nhi-brand-ui
+          cp tools/nhi/index.html /tmp/nhi-brand-ui/
+          cp tools/nhi/assets/clinical-map.js /tmp/nhi-brand-ui/
+          cp tools/nhi/assets/clinical-map.css /tmp/nhi-brand-ui/
 
       - name: Publish to Pages branch
         run: |
-          mkdir -p /tmp/nhi-v10
-          cp tools/nhi/assets/clinical-map.js /tmp/nhi-v10/
-          cp tools/nhi/assets/clinical-map.css /tmp/nhi-v10/
-          cp tools/nhi/assets/data-lung-support.js /tmp/nhi-v10/
+          set -euo pipefail
           git fetch origin pages-clean-ajcc-v2-3
           git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
-          cp /tmp/nhi-v10/clinical-map.js tools/nhi/assets/clinical-map.js
-          cp /tmp/nhi-v10/clinical-map.css tools/nhi/assets/clinical-map.css
-          cp /tmp/nhi-v10/data-lung-support.js tools/nhi/assets/data-lung-support.js
-          git add tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css tools/nhi/assets/data-lung-support.js
+          cp /tmp/nhi-brand-ui/index.html tools/nhi/index.html
+          cp /tmp/nhi-brand-ui/clinical-map.js tools/nhi/assets/clinical-map.js
+          cp /tmp/nhi-brand-ui/clinical-map.css tools/nhi/assets/clinical-map.css
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
           if ! git diff --cached --quiet; then
-            git commit -m "Publish NHI review-oriented drug search v1.0"
+            git commit -m "Publish NHI-listed brand-name search"
             git push origin pages-clean-ajcc-v2-3
           fi
