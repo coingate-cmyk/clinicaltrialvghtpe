@@ -5,7 +5,6 @@ on:
   push:
     branches: [main]
     paths:
-      - 'scripts/patch_nhi_brand_ui.py'
       - 'scripts/patch_nhi_brand_precision.py'
       - '.github/workflows/patch-nhi-search-v10.yml'
 
@@ -22,10 +21,8 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Apply official NHI brand-name search integration
-        run: |
-          python scripts/patch_nhi_brand_ui.py
-          python scripts/patch_nhi_brand_precision.py
+      - name: Tighten brand list to primary reimbursed drug
+        run: python scripts/patch_nhi_brand_precision.py
 
       - name: Validate brand search
         run: |
@@ -43,7 +40,7 @@ jobs:
           assert "matchIngredient(norm(x.drug || ''))" in js
           assert '健保收載商品名（含原廠 / 學名藥）' in js
           assert brand['meta']['product_count'] >= 1000
-          print('Brand search validation OK:',brand['meta']['product_count'],'products')
+          print('Brand precision validation OK:',brand['meta']['product_count'],'products')
           PY
 
       - name: Commit to main
@@ -51,26 +48,22 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          git add tools/nhi/assets/clinical-map.js
           if ! git diff --cached --quiet; then
-            git commit -m "Tighten NHI brand-name reimbursement search"
+            git commit -m "Prefer primary drug for NHI brand-name display"
             git push origin main
           fi
           mkdir -p /tmp/nhi-brand-ui
-          cp tools/nhi/index.html /tmp/nhi-brand-ui/
           cp tools/nhi/assets/clinical-map.js /tmp/nhi-brand-ui/
-          cp tools/nhi/assets/clinical-map.css /tmp/nhi-brand-ui/
 
       - name: Publish to Pages branch
         run: |
           set -euo pipefail
           git fetch origin pages-clean-ajcc-v2-3
           git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
-          cp /tmp/nhi-brand-ui/index.html tools/nhi/index.html
           cp /tmp/nhi-brand-ui/clinical-map.js tools/nhi/assets/clinical-map.js
-          cp /tmp/nhi-brand-ui/clinical-map.css tools/nhi/assets/clinical-map.css
-          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          git add tools/nhi/assets/clinical-map.js
           if ! git diff --cached --quiet; then
-            git commit -m "Publish refined NHI brand-name search"
+            git commit -m "Publish precise NHI brand-name display"
             git push origin pages-clean-ajcc-v2-3
           fi
