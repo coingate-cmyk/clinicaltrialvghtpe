@@ -5,6 +5,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/patch_nhi_brand_ui.py'
+      - 'scripts/patch_nhi_brand_precision.py'
       - '.github/workflows/patch-nhi-search-v10.yml'
 
 permissions:
@@ -21,7 +23,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Apply official NHI brand-name search integration
-        run: python scripts/patch_nhi_brand_ui.py
+        run: |
+          python scripts/patch_nhi_brand_ui.py
+          python scripts/patch_nhi_brand_precision.py
 
       - name: Validate brand search
         run: |
@@ -36,6 +40,7 @@ jobs:
           assert 'assets/nhi-brand-aliases.js' in html
           assert 'officialBrandIndex' in js
           assert 'officialBrandMatches' in js
+          assert "matchIngredient(norm(x.drug || ''))" in js
           assert '健保收載商品名（含原廠 / 學名藥）' in js
           assert brand['meta']['product_count'] >= 1000
           print('Brand search validation OK:',brand['meta']['product_count'],'products')
@@ -48,7 +53,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
           if ! git diff --cached --quiet; then
-            git commit -m "Search oncology reimbursement by NHI-listed brand names"
+            git commit -m "Tighten NHI brand-name reimbursement search"
             git push origin main
           fi
           mkdir -p /tmp/nhi-brand-ui
@@ -66,6 +71,6 @@ jobs:
           cp /tmp/nhi-brand-ui/clinical-map.css tools/nhi/assets/clinical-map.css
           git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
           if ! git diff --cached --quiet; then
-            git commit -m "Publish NHI-listed brand-name search"
+            git commit -m "Publish refined NHI brand-name search"
             git push origin pages-clean-ajcc-v2-3
           fi
