@@ -1,0 +1,94 @@
+name: Publish line provenance and chemo calculator
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-line-provenance-chemo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply line provenance patch
+        run: python scripts/patch_line_provenance_chemo.py
+
+      - name: Validate clinical trial runtime and dose calculator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          index = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              'v4.3.4-line-provenance-20260820',
+              "'T1223': [",
+              "{ type: '胃癌', lines: ['二線'] }",
+              'getTrialLineSource',
+              'trialHasLineSourceNeedingReview',
+              '只顯示線別需核對',
+              './tools/chemo-dose.html',
+              'v4.3.4 Firebase版',
+          ]
+          for token in required:
+              assert token in index, token
+
+          # Verify that known legacy classifications are represented by curated runtime repairs.
+          for code in ['D9800C00001','MK-3475-06C','MK-3475-06D','MK-3475-06E','MK-3475-06B','DS7300-202','61186372COR3002','TT420C2308','MK-9999-02A','MK5909-005']:
+              assert f"'{code}': [" in index, code
+
+          chemo = Path('tools/chemo-dose.html').read_text(encoding='utf-8')
+          for token in ['Mosteller', 'Carboplatin AUC', "std * (p.renal + 25)", 'Adjusted BW', 'mg/m²', 'mg/kg']:
+              assert token in chemo, token
+
+          tools = Path('tools/index.html').read_text(encoding='utf-8')
+          assert './chemo-dose.html' in tools
+
+          # Syntax-check inline JavaScript from the two standalone pages.
+          def inline_scripts(html):
+              scripts = []
+              for attrs, body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>', html, flags=re.I):
+                  if 'src=' not in attrs.lower() and body.strip(): scripts.append(body)
+              return '\n'.join(scripts)
+          Path('/tmp/index-inline.js').write_text(inline_scripts(index), encoding='utf-8')
+          Path('/tmp/chemo-inline.js').write_text(inline_scripts(chemo), encoding='utf-8')
+          PY
+          node --check /tmp/index-inline.js
+          node --check /tmp/chemo-inline.js
+
+      - name: Commit patched application to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Add trial line provenance and review filter"
+            git push origin main
+          fi
+          rm -rf /tmp/clinical-tools-release
+          mkdir -p /tmp/clinical-tools-release/tools
+          cp index.html /tmp/clinical-tools-release/index.html
+          cp tools/index.html /tmp/clinical-tools-release/tools/index.html
+          cp tools/chemo-dose.html /tmp/clinical-tools-release/tools/chemo-dose.html
+
+      - name: Publish to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools
+          cp /tmp/clinical-tools-release/index.html index.html
+          cp /tmp/clinical-tools-release/tools/index.html tools/index.html
+          cp /tmp/clinical-tools-release/tools/chemo-dose.html tools/chemo-dose.html
+          git add index.html tools/index.html tools/chemo-dose.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish trial line provenance and chemo calculator"
+            git push origin pages-clean-ajcc-v2-3
+          fi
