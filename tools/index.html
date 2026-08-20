@@ -10,11 +10,20 @@
   <main class="max-w-4xl mx-auto p-6">
     <a href="../index.html" class="text-blue-700 hover:underline">← 回臨床試驗系統</a>
     <h1 class="text-3xl font-bold mt-6 mb-2">臨床工具</h1>
-    <p class="text-slate-600 mb-6">院內 quick-check tools；RECIST、分期、CTCAE 與健保查詢工具不使用 Firebase、不同步。</p>
+    <p class="text-slate-600 mb-6">院內 quick-check tools；計算、RECIST、分期、CTCAE 與健保查詢工具不使用 Firebase、不同步。</p>
     <div class="grid md:grid-cols-2 gap-4">
       <a class="block bg-white rounded-xl border p-5 shadow hover:shadow-md" href="./renal.html">
         <div class="text-xl font-bold text-blue-800">腎功能 / BSA 計算機</div>
         <div class="text-slate-600 mt-2">Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff。</div>
+      </a>
+      <a class="block bg-white rounded-xl border p-5 shadow hover:shadow-md" href="./chemo-dose.html">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-xl font-bold text-cyan-800">化療 / 抗癌藥物劑量計算機</div>
+            <div class="text-slate-600 mt-2">BSA、IBW/AdjBW、mg/m²、mg/kg、flat dose、dose reduction、rounding、Carboplatin AUC。</div>
+          </div>
+          <div class="text-2xl" aria-hidden="true">🧮</div>
+        </div>
       </a>
       <a class="block bg-white rounded-xl border p-5 shadow hover:shadow-md" href="./quick-staging.html">
         <div class="text-xl font-bold text-emerald-800">腫瘤分期速查器</div>
@@ -32,7 +41,7 @@
         <div class="flex items-start justify-between gap-4">
           <div>
             <div class="text-xl font-bold text-teal-800">抗癌藥物健保給付 Navigator <span class="text-sm font-semibold text-teal-600">BETA</span></div>
-            <div class="text-slate-600 mt-2">全癌種已納入監測；GI 六癌種已有 curated 給付情境，其餘依健保條文漏項偵測逐步核對上線。</div>
+            <div class="text-slate-600 mt-2">全癌種 Section 9 curated mapping + 藥名 / 商品名檢索；每週監測健保條文異動。</div>
           </div>
           <div class="text-2xl" aria-hidden="true">💊</div>
         </div>
