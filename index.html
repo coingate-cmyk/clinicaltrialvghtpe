@@ -132,6 +132,30 @@ const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
 const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
 const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
 
+// Curated cancer/line repairs for records known to have stale classifications from older imports.
+// Keep this list small and evidence-based; do not turn free-text eligibility into an automatic treatment-line label.
+const TRIAL_CLASSIFICATION_REPAIR_VERSION = 'v4.3.3-20260820-gastric-line-repair';
+const TRIAL_CLASSIFICATION_REPAIRS = {
+    // COOL trial: title explicitly says second-line metastatic gastric cancer.
+    'T1223': [
+        { type: '胃癌', lines: ['二線'] }
+    ],
+    // AZD0901: current cohort notes explicitly separate pancreatic 1L, gastric 2/3L, biliary 2/3L.
+    'D9800C00001': [
+        { type: '胃癌', lines: ['二線', '三線'] },
+        { type: '胰臟癌', lines: ['一線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] }
+    ],
+    // KEYMAKER 06C: GEA (gastric/GEJ/EAC) first-line; older seed was wrongly carried as pancreatic cancer.
+    'MK-3475-06C': [
+        { type: '胃癌', lines: ['一線'] }
+    ],
+    // KEYMAKER 06D: previously treated gastric/GEJ/EAC, explicitly 2L.
+    'MK-3475-06D': [
+        { type: '胃癌', lines: ['二線'] }
+    ]
+};
+
 const getCancerRank = (type) => {
     const normalized = normalizeCancerTypeLabel(type || '');
     const idx = CANCER_SORT_ORDER.findIndex(v => valueMatches(v, normalized));
@@ -336,7 +360,10 @@ const lineMatchesSelection = (line, selected) => {
     if (!selected || selected === '全部') return true;
     const n = normalizeFilterValue(line);
     if (!n) return false;
-    if (selected === '第一線') return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    if (selected === '第一線') {
+        if (n.includes('一線後') || n.includes('1l後') || n.includes('post1l') || n.includes('postfirstline') || n.includes('afterfirstline') || n.includes('secondline')) return false;
+        return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    }
     if (selected === '第二線') return lineHasTreatmentNumber(line, '二') || n.includes('一線後') || n.includes('secondline');
     if (selected === '第三線') return lineHasTreatmentNumber(line, '三') || n.includes('二線後') || n.includes('thirdline');
     if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
@@ -1156,51 +1183,19 @@ const inferCancerTypeFromText = (value) => {
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
 
-// 2026-08-13 EAC display-category hotfix.
-// UI grouping: EAC / esophageal adenocarcinoma / GEJ adenocarcinoma => 胃癌；ESCC => 食道癌。
-// Protocol eligibility text is preserved; this only repairs the display/filter category.
-const inferSpecificUpperGiDisplayCancerType = (value) => {
-    const text = String(value || '');
-    if (!text) return '';
-    const hasEac = /(\beac\b|食道腺癌|食道[^\n，,、；;。()（）]*腺癌|esophageal\s+adenocarcinoma|adenocarcinoma\s+of\s+the\s+esophagus|(?:gej|gastroesophageal\s+junction|gastro-esophageal\s+junction)[^\n，,、；;。()（）]{0,30}adenocarcinoma|胃食道(?:接合|交接|交界)[^\n，,、；;。()（）]{0,20}腺癌)/i.test(text);
-    const hasEscc = /(\bescc\b|食道鱗|食道[^\n，,、；;。()（）]*鱗|esophageal\s+squamous|squamous\s+cell\s+carcinoma\s+of\s+the\s+esophagus)/i.test(text);
-    if (hasEac && !hasEscc) return '胃癌';
-    if (hasEscc && !hasEac) return '食道癌';
-    return '';
-};
-
-const hasNonUpperGiCancerEvidence = (value) => /(胰臟癌|胰管腺癌|pancreatic|\bpdac\b|肝癌|肝細胞癌|\bhcc\b|hepatocellular|膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma|大腸癌|大腸直腸癌|結直腸癌|結直腸|colorectal|colon|\bcrc\b|攝護腺癌|前列腺癌|prostate|\bcrpc\b)/i.test(String(value || ''));
-
-const reconcileSpecificUpperGiDisplayCategory = (trial, evidenceText) => {
-    const out = { ...(trial || {}) };
-    const specificType = inferSpecificUpperGiDisplayCancerType(evidenceText);
-    if (!specificType) return out;
-
-    const hasOtherCancer = hasNonUpperGiCancerEvidence(evidenceText);
-    const currentType = normalizeCancerTypeLabel(out.cancerType || '');
-    const items = Array.isArray(out.cancerTypes) ? out.cancerTypes : [];
-
-    if (items.length) {
-        out.cancerTypes = normalizeCancerTypes(items.map(ct => {
-            const normalizedType = normalizeCancerTypeLabel(ct && ct.type || '');
-            if (specificType === '胃癌' && normalizedType === '食道癌') return { ...ct, type: '胃癌' };
-            if (specificType === '食道癌' && normalizedType === '胃癌') return { ...ct, type: '食道癌' };
-            if (!hasOtherCancer && normalizedType && normalizedType !== specificType) return { ...ct, type: specificType };
-            return { ...ct, type: normalizedType || (ct && ct.type) || '' };
-        }));
-    }
-
-    if (!currentType
-        || (specificType === '胃癌' && currentType === '食道癌')
-        || (specificType === '食道癌' && currentType === '胃癌')
-        || (!hasOtherCancer && currentType !== specificType)) {
-        out.cancerType = specificType;
-    }
-
-    if ((!Array.isArray(out.cancerTypes) || !out.cancerTypes.length) && out.line) {
-        out.cancerTypes = normalizeCancerTypes([{ type: specificType, lines: [out.line] }]);
-    }
-    return out;
+const applyKnownTrialClassificationRepair = (trial) => {
+    const t = { ...(trial || {}) };
+    const code = normalizeCode(t.code);
+    const override = TRIAL_CLASSIFICATION_REPAIRS[code];
+    if (!override) return t;
+    const repaired = normalizeCancerTypes(override);
+    if (!repaired.length) return t;
+    t.cancerTypes = repaired;
+    t.cancerType = repaired[0].type || '';
+    t.line = (repaired[0].lines || [])[0] || '';
+    t.classificationRepairVersion = TRIAL_CLASSIFICATION_REPAIR_VERSION;
+    t.classificationRepairReason = 'Curated correction of stale cancer/treatment-line mapping from legacy import.';
+    return t;
 };
 
 
@@ -1312,8 +1307,6 @@ const sanitizeTrialForRuntime = (trial) => {
     t.cancerType = normalizeCancerTypeLabel(t.cancerType);
     t.line = normalizeTreatmentLine(t.line);
     t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
-    const upperGiClassificationEvidence = [t.studyTitle, t.inclusion, t.comments].filter(Boolean).join(' ');
-    t = reconcileSpecificUpperGiDisplayCategory(t, upperGiClassificationEvidence);
     const rowText = [t.studyTitle, t.inclusion, t.exclusion, t.comments, t.sponsor, t.code].filter(Boolean).join(' ');
     if ((!Array.isArray(t.cancerTypes) || !t.cancerTypes.length) && t.cancerType && t.line) {
         t.cancerTypes = normalizeCancerTypes([{ type: t.cancerType, lines: [t.line], closedLines: t.closedLines || [] }]);
@@ -1332,6 +1325,8 @@ const sanitizeTrialForRuntime = (trial) => {
         t.cancerType = t.cancerTypes[0].type;
         t.line = (t.cancerTypes[0].lines || [])[0] || t.line || '';
     }
+    // Known clinical corrections must win over stale legacy/Firestore classifications.
+    t = applyKnownTrialClassificationRepair(t);
     return t;
 };
 
