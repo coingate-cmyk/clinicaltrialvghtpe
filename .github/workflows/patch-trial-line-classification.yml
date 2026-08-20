@@ -1,0 +1,81 @@
+name: Repair clinical trial cancer-line classification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/patch_trial_line_classification.py'
+      - '.github/workflows/patch-trial-line-classification.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply classification repair
+        run: python scripts/patch_trial_line_classification.py
+
+      - name: Validate JavaScript and clinical mappings
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
+            .map(m => m[1]).filter(s => s.trim());
+          scripts.forEach((script, i) => new vm.Script(script, {filename:`inline-${i}.js`}));
+          console.log(`JavaScript syntax OK (${scripts.length} inline scripts)`);
+
+          const must = [
+            "'T1223': [\n        { type: '胃癌', lines: ['二線'] }",
+            "'MK-3475-06C': [\n        { type: '胃癌', lines: ['一線'] }",
+            "'MK-3475-06D': [\n        { type: '胃癌', lines: ['二線'] }",
+            "{ type: '胃癌', lines: ['二線', '三線'] }",
+            "t = applyKnownTrialClassificationRepair(t);",
+            "n.includes('一線後')"
+          ];
+          for (const text of must) if (!html.includes(text)) throw new Error(`Missing repair assertion: ${text}`);
+
+          // Source seed was the exact regression: T1223 is a 2L trial even if a stale seed/cloud row says 1L.
+          const seedMatch = html.match(/const INITIAL_TRIALS = (\[[\s\S]*?\]);\n\nfunction AccessPasswordModal/);
+          if (!seedMatch) throw new Error('Cannot locate INITIAL_TRIALS');
+          const trials = JSON.parse(seedMatch[1]);
+          const t1223 = trials.find(t => t.code === 'T1223');
+          if (!t1223 || !/二線治療/.test(t1223.studyTitle || '')) throw new Error('T1223 title no longer proves 2L');
+          console.log('Regression source confirmed: T1223 title = 2L; runtime override = gastric 2L');
+          NODE
+
+      - name: Commit repaired main page
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Repair gastric trial treatment-line classification"
+            git push origin main
+          fi
+          cp index.html /tmp/repaired-index.html
+
+      - name: Publish repaired page to GitHub Pages branch
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/repaired-index.html index.html
+          cp /tmp/repaired-index.html 404.html
+          git add index.html 404.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish gastric trial line classification repair"
+            git push origin pages-clean-ajcc-v2-3
+          fi
