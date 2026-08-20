@@ -135,6 +135,28 @@ const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四'
 // Curated cancer/line repairs for records known to have stale classifications from older imports.
 // Keep this list small and evidence-based; do not turn free-text eligibility into an automatic treatment-line label.
 const TRIAL_CLASSIFICATION_REPAIR_VERSION = 'v4.3.3-20260820-gastric-line-repair';
+
+// v4.3.4-line-provenance-20260820
+const LINE_SOURCE_LABELS = {
+    'manual': '人工設定',
+    'curated-repair': '人工核對',
+    'trial-title': '試驗標題明示',
+    'cohort-explicit': 'Cohort 明示',
+    'table-explicit': '線別欄位',
+    'table-inherited': '⚠ 表格沿用',
+    'auto-inferred': '⚠ 自動推論',
+    'legacy': '? 舊資料未標記'
+};
+const LINE_SOURCE_REVIEW_REQUIRED = new Set(['table-inherited', 'auto-inferred', 'legacy']);
+const lineSourceKey = (type, line) => `${normalizeFilterValue(normalizeCancerTypeLabel(type || '') || type || '')}|${normalizeFilterValue(normalizeTreatmentLine(line) || line || '')}`;
+const getLineSourceLabel = (source) => LINE_SOURCE_LABELS[source] || LINE_SOURCE_LABELS.legacy;
+const getLineSourceBadgeClass = (source) => {
+    if (source === 'manual' || source === 'curated-repair') return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+    if (source === 'trial-title' || source === 'cohort-explicit') return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (source === 'table-explicit') return 'bg-violet-100 text-violet-800 border-violet-200';
+    if (LINE_SOURCE_REVIEW_REQUIRED.has(source)) return 'bg-amber-100 text-amber-900 border-amber-300';
+    return 'bg-slate-100 text-slate-700 border-slate-200';
+};
 const TRIAL_CLASSIFICATION_REPAIRS = {
     // COOL trial: title explicitly says second-line metastatic gastric cancer.
     'T1223': [
@@ -695,6 +717,15 @@ const trialHasOpenEnrollment = (trial, selectedCancerType = '全部', selectedTr
     return pairs.some(pair => !isClosedTreatmentLine(pair.ct, pair.line));
 };
 
+const trialHasLineSourceNeedingReview = (trial, selectedCancerType = '全部', selectedTreatmentLine = '全部') => {
+    if (!trial) return false;
+    return getTrialCancerLinePairs(trial).some(pair => {
+        if (selectedCancerType !== '全部' && !valueMatches(pair.type, selectedCancerType)) return false;
+        if (selectedTreatmentLine !== '全部' && !lineMatchesSelection(pair.line, selectedTreatmentLine)) return false;
+        return LINE_SOURCE_REVIEW_REQUIRED.has(getTrialLineSource(trial, pair.type, pair.line));
+    });
+};
+
 const formatCancerTypesForExport = (cancerTypes) => {
     return (Array.isArray(cancerTypes) ? cancerTypes : [])
         .map(ct => {
@@ -1232,6 +1263,38 @@ const inferCancerTypeFromText = (value) => {
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
 
+const pairListHasCancerLine = (pairs, type, line) => (Array.isArray(pairs) ? pairs : []).some(ct =>
+    valueMatches(ct.type, type) && Array.isArray(ct.lines) && ct.lines.some(v => valueMatches(v, line))
+);
+
+const getTrialLineSource = (trial, type, line) => {
+    const sources = trial && trial.lineSources && typeof trial.lineSources === 'object' ? trial.lineSources : {};
+    return sources[lineSourceKey(type, line)] || trial && trial.lineSourceDefault || 'legacy';
+};
+
+const annotateTrialLineSources = (trial) => {
+    const t = { ...(trial || {}) };
+    const sources = { ...(t.lineSources || {}) };
+    const titlePairs = inferCancerLinePairsFromText(t.studyTitle || '');
+    const eligibilityText = [t.inclusion, t.exclusion, t.comments].filter(Boolean).join(' ');
+    const eligibilityPairs = inferCancerLinePairsFromText(eligibilityText);
+    const hasCohortCue = /cohort|arm\s*[a-z0-9]+|substudy|sub-study|specific\s+inclusion|part\s*[a-z0-9]+|組別|子試驗/i.test(eligibilityText);
+    const cancerTypes = Array.isArray(t.cancerTypes) && t.cancerTypes.length
+        ? t.cancerTypes
+        : (t.cancerType && t.line ? [{ type: t.cancerType, lines: [t.line] }] : []);
+    cancerTypes.forEach(ct => (ct.lines || []).forEach(line => {
+        const key = lineSourceKey(ct.type, line);
+        if (sources[key]) return;
+        if (pairListHasCancerLine(titlePairs, ct.type, line)) sources[key] = 'trial-title';
+        else if (hasCohortCue && pairListHasCancerLine(eligibilityPairs, ct.type, line)) sources[key] = 'cohort-explicit';
+        else if (pairListHasCancerLine(eligibilityPairs, ct.type, line)) sources[key] = 'auto-inferred';
+        else sources[key] = t.lineSourceDefault || 'legacy';
+    }));
+    t.lineSources = sources;
+    return t;
+};
+
+
 const applyKnownTrialClassificationRepair = (trial) => {
     const t = { ...(trial || {}) };
     const code = normalizeCode(t.code);
@@ -1244,6 +1307,9 @@ const applyKnownTrialClassificationRepair = (trial) => {
     t.line = (repaired[0].lines || [])[0] || '';
     t.classificationRepairVersion = TRIAL_CLASSIFICATION_REPAIR_VERSION;
     t.classificationRepairReason = 'Curated correction of stale cancer/treatment-line mapping from legacy import.';
+    const sources = { ...(t.lineSources || {}) };
+    repaired.forEach(ct => (ct.lines || []).forEach(line => { sources[lineSourceKey(ct.type, line)] = 'curated-repair'; }));
+    t.lineSources = sources;
     return t;
 };
 
@@ -1376,6 +1442,8 @@ const sanitizeTrialForRuntime = (trial) => {
     }
     // Known clinical corrections must win over stale legacy/Firestore classifications.
     t = applyKnownTrialClassificationRepair(t);
+    // Stamp line provenance after final cancer/line normalization so stale parser guesses stay visible.
+    t = annotateTrialLineSources(t);
     return t;
 };
 
@@ -1489,6 +1557,12 @@ const normalizeImportedTrialFields = (item, options = {}) => {
         out.cancerTypes = mergedPairs;
         out.cancerType = mergedPairs[0].type || out.cancerType || '';
         out.line = mergedPairs[0].lines && mergedPairs[0].lines.length ? mergedPairs[0].lines.join('、') : (out.line || '');
+    }
+    if (!out.lineSourceDefault) {
+        if (options.explicitLineOnRow) out.lineSourceDefault = 'table-explicit';
+        else if (reliableInferredPairs.length || contextLinesForExplicitCancer.length) out.lineSourceDefault = 'auto-inferred';
+        else if (out.line) out.lineSourceDefault = 'table-inherited';
+        else out.lineSourceDefault = 'legacy';
     }
     return out;
 };
@@ -1655,7 +1729,7 @@ const parseRowsWithHeaderMapping = (rows) => {
         item.code = code;
 
         const explicitCancerOnRow = Boolean(cancerCell && !isMetaCancerCell(cancerCell));
-        parsed.push(normalizeImportedTrialFields(item, { explicitCancerOnRow }));
+        parsed.push(normalizeImportedTrialFields(item, { explicitCancerOnRow, explicitLineOnRow: Boolean(lineCell && isValidTreatmentLineText(normalizeTreatmentLine(lineCell))) }));
     }
 
     return consolidateParsedTrials(parsed.filter(item => normalizeCode(item.code))).rows;
@@ -2243,7 +2317,7 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                     // 避免錯誤的無代號殘片跨頁黏到下一個完整 trial。
                     pendingFragment = null;
                 }
-                const normalized = normalizeImportedTrialFields(fragment, { explicitCancerOnRow: cancerLine.explicitCancer });
+                const normalized = normalizeImportedTrialFields(fragment, { explicitCancerOnRow: cancerLine.explicitCancer, explicitLineOnRow: Boolean(raw.cancerLine && cancerLine.line) });
                 if (normalized.code) parsed.push(normalized);
             } else if (fragment.studyTitle && fragment.studyTitle.length > 20) {
                 // 例如 WO42758：標題在前一頁底端、代號與其餘欄位在下一頁。
@@ -2426,6 +2500,10 @@ function AccessPasswordModal(props) {
                         e('div', {className: 'font-semibold text-gray-900'}, '腎功能 / BSA 計算機'),
                         e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff')
                     ),
+                    e('a', {href: './tools/chemo-dose.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-cyan-800'}, '化療 / 抗癌藥物劑量計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'BSA、IBW/AdjBW、mg/m²、mg/kg、dose reduction、rounding、Carboplatin AUC')
+                    ),
                     e('a', {href: './tools/quick-staging.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
                         e('div', {className: 'font-semibold text-gray-900'}, '腫瘤分期速查器'),
                         e('div', {className: 'text-xs text-gray-500 mt-1'}, '6.0 / 7.0 / 8.0；目前 7.0 規則自動載入，8.0 日後補院內版')
@@ -2454,7 +2532,7 @@ function AccessPasswordModal(props) {
             e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
                 e('div', null,
                     e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
-                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.2 Firebase版'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.4 Firebase版'),
                     e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
                 ),
                 e('form', {onSubmit: handleSubmit},
@@ -2509,13 +2587,17 @@ function TrialCard(props) {
                         if (ct.lines) {
                             ct.lines.forEach((line, lineIdx) => {
                                 const closed = isClosedTreatmentLine(ct, line);
+                                const lineSource = getTrialLineSource(trial, ct.type, line);
                                 tags.push(e('span', {
                                     key: idx + '-' + lineIdx,
-                                    title: closed ? '此癌種 / 線數目前收滿或暫停收案' : '',
+                                    title: (closed ? '此癌種 / 線數目前收滿或暫停收案；' : '') + '線別來源：' + getLineSourceLabel(lineSource),
                                     className: closed
-                                        ? 'px-3 py-1 bg-gray-200 text-gray-500 border border-gray-300 rounded-full text-sm line-through decoration-red-500 decoration-2'
-                                        : 'px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
-                                }, (closed ? '✕ ' : '') + ct.type + ' - ' + line));
+                                        ? 'inline-flex items-center gap-1.5 px-3 py-1 bg-gray-200 text-gray-500 border border-gray-300 rounded-full text-sm line-through decoration-red-500 decoration-2'
+                                        : 'inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
+                                },
+                                    e('span', null, (closed ? '✕ ' : '') + ct.type + ' - ' + line),
+                                    e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource))
+                                ));
                             });
                         }
                     });
@@ -2908,6 +2990,14 @@ function TrialFormModal(props) {
         const trialData = {
             ...form,
             cancerTypes: cancerTypes,
+            lineSources: (() => {
+                const sources = { ...(form.lineSources || {}) };
+                cancerTypes.forEach(ct => (ct.lines || []).forEach(line => {
+                    const key = lineSourceKey(ct.type, line);
+                    if (!sources[key]) sources[key] = 'manual';
+                }));
+                return sources;
+            })(),
             id: isEdit ? form.id : Date.now(),
             targetNum: normalizeText(form.targetNum),
             enrolled: normalizeText(form.enrolled),
@@ -3412,6 +3502,7 @@ function App() {
     const [syncStatus, setSyncStatus] = useState('');
     const [showArchived, setShowArchived] = useState(false);
     const [onlyOpenEnrollment, setOnlyOpenEnrollment] = useState(false);
+    const [onlyLineNeedsReview, setOnlyLineNeedsReview] = useState(false);
     const [firebaseConfig, setFirebaseConfig] = useState(DEFAULT_FIREBASE_CONFIG);
     const [firebaseEnabled, setFirebaseEnabled] = useState(true);
     const [showFirebaseModal, setShowFirebaseModal] = useState(false);
@@ -3861,6 +3952,11 @@ function App() {
         if (onlyOpenEnrollment) {
             result = result.filter(t => trialHasOpenEnrollment(t, cancerType, selectedLine));
         }
+
+        // 線別來源稽核：只顯示 parser 自動推論、表格沿用或尚未標記的舊資料。
+        if (onlyLineNeedsReview) {
+            result = result.filter(t => trialHasLineSourceNeedingReview(t, cancerType, selectedLine));
+        }
         
         // 搜尋篩選
         if (search) {
@@ -3919,7 +4015,7 @@ function App() {
             const bk = trialSortKey(b);
             return ak.cancerRank - bk.cancerRank || ak.lineRank - bk.lineRank || ak.code.localeCompare(bk.code);
         });
-    }, [trials, search, cancerType, selectedLine, showArchived, onlyOpenEnrollment]);
+    }, [trials, search, cancerType, selectedLine, showArchived, onlyOpenEnrollment, onlyLineNeedsReview]);
     
     const cancerTypes = useMemo(() => {
         const map = new Map();
@@ -3981,7 +4077,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.2 Firebase版'),
+                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.4 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
@@ -4088,6 +4184,24 @@ function App() {
                         className: 'w-4 h-4'
                     }),
                     e('span', null, onlyOpenEnrollment ? '✓ 只顯示仍能收案（已啟用）' : '只顯示仍能收案')
+                ),
+                e('label', {
+                    className: 'flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border font-medium ' +
+                        (onlyLineNeedsReview ? 'bg-amber-100 border-amber-400 text-amber-950' : 'bg-amber-50 border-amber-200 text-amber-900')
+                },
+                    e('input', {
+                        type: 'checkbox',
+                        checked: onlyLineNeedsReview,
+                        onChange: (ev) => setOnlyLineNeedsReview(ev.target.checked),
+                        className: 'w-4 h-4'
+                    }),
+                    e('span', null, onlyLineNeedsReview ? '⚠ 只顯示線別需核對（已啟用）' : '只顯示線別需核對')
+                )
+            ),
+            e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
+                e('span', {className: 'font-semibold'}, '線別來源標記：'),
+                ['manual','curated-repair','trial-title','cohort-explicit','table-explicit','table-inherited','auto-inferred','legacy'].map(source =>
+                    e('span', {key: source, className: 'px-2 py-1 rounded-full border ' + getLineSourceBadgeClass(source)}, getLineSourceLabel(source))
                 )
             ),
             e('div', {className: 'mb-6 space-y-4'},
@@ -4116,7 +4230,7 @@ function App() {
                 )
             ),
             e('div', {className: 'text-gray-600 mb-4'},
-                '找到 ' + filtered.length + ' 個試驗' + (onlyOpenEnrollment ? '（已篩選仍能收案）' : '')
+                '找到 ' + filtered.length + ' 個試驗' + (onlyOpenEnrollment ? '（仍能收案）' : '') + (onlyLineNeedsReview ? '（線別需核對）' : '')
             ),
             e('div', {className: 'grid gap-6'},
                 filtered.map(trial =>
