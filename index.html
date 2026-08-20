@@ -132,6 +132,30 @@ const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
 const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
 const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
 
+// Curated cancer/line repairs for records known to have stale classifications from older imports.
+// Keep this list small and evidence-based; do not turn free-text eligibility into an automatic treatment-line label.
+const TRIAL_CLASSIFICATION_REPAIR_VERSION = 'v4.3.3-20260820-gastric-line-repair';
+const TRIAL_CLASSIFICATION_REPAIRS = {
+    // COOL trial: title explicitly says second-line metastatic gastric cancer.
+    'T1223': [
+        { type: '胃癌', lines: ['二線'] }
+    ],
+    // AZD0901: current cohort notes explicitly separate pancreatic 1L, gastric 2/3L, biliary 2/3L.
+    'D9800C00001': [
+        { type: '胃癌', lines: ['二線', '三線'] },
+        { type: '胰臟癌', lines: ['一線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] }
+    ],
+    // KEYMAKER 06C: GEA (gastric/GEJ/EAC) first-line; older seed was wrongly carried as pancreatic cancer.
+    'MK-3475-06C': [
+        { type: '胃癌', lines: ['一線'] }
+    ],
+    // KEYMAKER 06D: previously treated gastric/GEJ/EAC, explicitly 2L.
+    'MK-3475-06D': [
+        { type: '胃癌', lines: ['二線'] }
+    ]
+};
+
 const getCancerRank = (type) => {
     const normalized = normalizeCancerTypeLabel(type || '');
     const idx = CANCER_SORT_ORDER.findIndex(v => valueMatches(v, normalized));
@@ -336,7 +360,10 @@ const lineMatchesSelection = (line, selected) => {
     if (!selected || selected === '全部') return true;
     const n = normalizeFilterValue(line);
     if (!n) return false;
-    if (selected === '第一線') return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    if (selected === '第一線') {
+        if (n.includes('一線後') || n.includes('1l後') || n.includes('post1l') || n.includes('postfirstline') || n.includes('afterfirstline') || n.includes('secondline')) return false;
+        return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    }
     if (selected === '第二線') return lineHasTreatmentNumber(line, '二') || n.includes('一線後') || n.includes('secondline');
     if (selected === '第三線') return lineHasTreatmentNumber(line, '三') || n.includes('二線後') || n.includes('thirdline');
     if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
@@ -1156,6 +1183,22 @@ const inferCancerTypeFromText = (value) => {
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
 
+const applyKnownTrialClassificationRepair = (trial) => {
+    const t = { ...(trial || {}) };
+    const code = normalizeCode(t.code);
+    const override = TRIAL_CLASSIFICATION_REPAIRS[code];
+    if (!override) return t;
+    const repaired = normalizeCancerTypes(override);
+    if (!repaired.length) return t;
+    t.cancerTypes = repaired;
+    t.cancerType = repaired[0].type || '';
+    t.line = (repaired[0].lines || [])[0] || '';
+    t.classificationRepairVersion = TRIAL_CLASSIFICATION_REPAIR_VERSION;
+    t.classificationRepairReason = 'Curated correction of stale cancer/treatment-line mapping from legacy import.';
+    return t;
+};
+
+
 const KNOWN_PI_NAMES = ['洪逸平', '陳明晃', '楊慕華', '李重賓', '姜乃榕', '鄧豪偉', '黃怡翔', '蕭育和', '張牧新'];
 const KNOWN_STUDY_NURSE_NAMES = ['Abby', '宋秀薇', '王秋眉', '賴姵妤', '周淑慧', '吳佳勳', '林韋秀', '王昭蘋', '陳秀玲', '孔亭方', '張台依', '邱佩玲', '李杰如', '李杰如醫師'];
 
@@ -1282,6 +1325,8 @@ const sanitizeTrialForRuntime = (trial) => {
         t.cancerType = t.cancerTypes[0].type;
         t.line = (t.cancerTypes[0].lines || [])[0] || t.line || '';
     }
+    // Known clinical corrections must win over stale legacy/Firestore classifications.
+    t = applyKnownTrialClassificationRepair(t);
     return t;
 };
 
