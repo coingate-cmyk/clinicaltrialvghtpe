@@ -153,6 +153,55 @@ const TRIAL_CLASSIFICATION_REPAIRS = {
     // KEYMAKER 06D: previously treated gastric/GEJ/EAC, explicitly 2L.
     'MK-3475-06D': [
         { type: '胃癌', lines: ['二線'] }
+    ],
+
+    // v4.3.4-20260820-explicit-line-audit
+    // CHS-114-02 has explicit cohort labels: 2L GEA, 2L/1L ESCC and 4L+ CRC.
+    'CHS-114-02': [
+        { type: '胃癌', lines: ['二線'] },
+        { type: '食道癌', lines: ['一線', '二線'] },
+        { type: '大腸癌', lines: ['四線以上'] }
+    ],
+    // KEYMAKER 06E is explicitly first-line ESCC.
+    'MK-3475-06E': [
+        { type: '食道癌', lines: ['一線'] }
+    ],
+    // KEYMAKER 06B requires progression after one prior line including platinum + PD-1/PD-L1.
+    'MK-3475-06B': [
+        { type: '食道癌', lines: ['二線'] }
+    ],
+    // IDeate-Esophageal01: pretreated ESCC, maximum one prior systemic line.
+    'DS7300-202': [
+        { type: '食道癌', lines: ['二線'] }
+    ],
+    // mCRC study explicitly requires one prior systemic line for metastatic disease.
+    '61186372COR3002': [
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // KANDLELIT-012: Part 1 allows treatment-naive or one prior line; Part 2 is treatment-naive.
+    'MK-1082-012': [
+        { type: '大腸癌', lines: ['一線', '二線'] }
+    ],
+    // FIRST-308 requires prior chemotherapy plus a prior FGFR inhibitor: two prior treatment lines.
+    'TT420C2308': [
+        { type: '膽道癌', lines: ['三線'] }
+    ],
+    // MK-9999-02A cohort wording explicitly lists pancreatic/CRC 2L and biliary 2/3L.
+    'MK-9999-02A': [
+        { type: '胰臟癌', lines: ['二線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] },
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // MK5909-005 explicitly lists pancreatic/CRC 2L, biliary 2/3L and gastric 3L+.
+    'MK5909-005': [
+        { type: '胃癌', lines: ['三線以上'] },
+        { type: '胰臟癌', lines: ['二線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] },
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // SUFR-431 enrollment note says patients may have any number of prior therapies / later-line HCC.
+    'TYR430-101': [
+        { type: '肝癌', lines: ['多線'] }
     ]
 };
 
