@@ -2699,13 +2699,13 @@ function TrialCard(props) {
                                 const lineSource = getTrialLineSource(trial, ct.type, line);
                                 tags.push(e('span', {
                                     key: idx + '-' + lineIdx,
-                                    title: (closed ? '此癌種 / 線數目前收滿或暫停收案；' : '') + '線別來源：' + getLineSourceLabel(lineSource),
+                                    title: (closed ? '此癌種 / 線數目前收滿或暫停收案；' : '') + (props.isLoggedIn ? '線別來源：' + getLineSourceLabel(lineSource) : ''),
                                     className: closed
                                         ? 'inline-flex items-center gap-1.5 px-3 py-1 bg-gray-200 text-gray-500 border border-gray-300 rounded-full text-sm line-through decoration-red-500 decoration-2'
                                         : 'inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
                                 },
                                     e('span', null, (closed ? '✕ ' : '') + ct.type + ' - ' + line),
-                                    e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource))
+                                    props.isLoggedIn ? e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource)) : null
                                 ));
                             });
                         }
@@ -4307,7 +4307,7 @@ function App() {
                     e('span', null, onlyLineNeedsReview ? '⚠ 只顯示線別需核對（已啟用）' : '只顯示線別需核對')
                 )
             ),
-            e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
+            isAdmin && e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
                 e('span', {className: 'font-semibold'}, '線別來源標記：'),
                 ['manual','curated-repair','trial-title','cohort-explicit','table-explicit','table-inherited','auto-inferred','legacy'].map(source =>
                     e('span', {key: source, className: 'px-2 py-1 rounded-full border ' + getLineSourceBadgeClass(source)}, getLineSourceLabel(source))
