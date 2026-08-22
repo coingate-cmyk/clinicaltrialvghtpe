@@ -8,14 +8,14 @@
       "code": "DB1311-201",
       "phase": "I",
       "sponsor": "",
-      "targetNum": 6,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "3",
+      "enrolled": "3",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "楊慕華",
       "nurse": "Abby",
       "phone": "82935/82999",
-      "status": "進行中",
+      "status": "暫停收案",
       "inclusion": "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL",
       "exclusion": "",
       "cancerTypes": [
@@ -27,7 +27,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 2,
@@ -37,10 +39,10 @@
       "code": "TTY",
       "phase": "4",
       "sponsor": "TTY",
-      "targetNum": 150,
-      "enrolled": 16,
-      "monthSigned": 1,
-      "monthEnrolled": 1,
+      "targetNum": "150",
+      "enrolled": "16",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
       "pi": "洪逸平",
       "nurse": "宋秀薇",
       "phone": "2935/2999",
@@ -55,7 +57,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 3,
@@ -93,10 +97,10 @@
       "code": "D702AC00001",
       "phase": "III",
       "sponsor": "AZ",
-      "targetNum": 5,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "5",
+      "enrolled": "pre-screen 1 /screen 0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉",
       "phone": "0927751328",
@@ -111,7 +115,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 5,
@@ -177,14 +183,14 @@
       "code": "D967LC0001",
       "phase": "1b/2",
       "sponsor": "AZ",
-      "targetNum": 3,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "3",
+      "enrolled": "0",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "周淑慧",
       "phone": "82935/82999",
-      "status": "暫停收案",
+      "status": "暫無slot",
       "inclusion": "目前 4A,4B cohort已滿,暫停收案。1. 僅收一線病人 2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative ) --> Arm 4B 用藥: T-Dxd + capecitabine + rilvegostomig 3. HER2 high ( IHC 3+ / IHC 2+ with FISH-positive ) --> Arm 4A 4. HBsAg(-) , anti-HBc(+) --> B肝不能收 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion",
       "exclusion": "B肝",
       "cancerTypes": [
@@ -195,7 +201,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 8,
@@ -205,14 +213,14 @@
       "code": "8951-CL-0305",
       "phase": "III",
       "sponsor": "Astellas",
-      "targetNum": 2,
-      "enrolled": 0,
-      "monthSigned": 2,
-      "monthEnrolled": 0,
+      "targetNum": "2",
+      "enrolled": "0 / 6 Prescreen",
+      "monthSigned": "1 screen",
+      "monthEnrolled": "0",
       "pi": "洪逸平",
       "nurse": "賴姵妤, 宋秀薇",
       "phone": "82935/82999",
-      "status": "進行中",
+      "status": "停止收案",
       "inclusion": "1. Histologically confirmed gastric or GEJ adenocarcinoma 2. HER2-negative,(可以院內驗) 3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗) 4. HBsAg(-) ; HCV(-) ; CCr >=30 5. Slide片*9 ( 4-5u),10個工作天發報告 6. At least one measurable lesion",
       "exclusion": "HBsAg(+), HCV(+)",
       "cancerTypes": [
@@ -223,7 +231,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 9,
@@ -233,10 +243,10 @@
       "code": "DS8201-724",
       "phase": "III",
       "sponsor": "第一三共",
-      "targetNum": 7,
-      "enrolled": 0,
-      "monthSigned": 1,
-      "monthEnrolled": 0,
+      "targetNum": "7",
+      "enrolled": "5(screen failure)/1",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "宋秀薇, 賴姵妤",
       "phone": "82935/82999",
@@ -251,7 +261,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 10,
@@ -289,10 +301,10 @@
       "code": "T1223",
       "phase": "Ib/II",
       "sponsor": "IIT",
-      "targetNum": 25,
-      "enrolled": 9,
-      "monthSigned": 0,
-      "monthEnrolled": 1,
+      "targetNum": "25",
+      "enrolled": "15",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "林韋秀",
       "phone": "0963501682",
@@ -307,7 +319,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 12,
@@ -317,14 +331,14 @@
       "code": "CHS-114-02",
       "phase": "Ib",
       "sponsor": "美捷",
-      "targetNum": 6,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "4 (Cohort A 1 / Cohort B 1 / Cohort C 2)",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "林韋秀, 王秋眉",
       "phone": "0963501682",
-      "status": "進行中",
+      "status": "需問slot",
       "inclusion": "1.C2需要再次切片 2.Slide*15 (4-5u) ,C1D1前需寄出 4.需有Target Lesion (Recist 1.1) 5.ILD or Pneumonitis 病史不能收 Cohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma)",
       "exclusion": "ILD或Pneumonitis病史",
       "cancerTypes": [
@@ -335,7 +349,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 13,
@@ -345,14 +361,14 @@
       "code": "D9800C00001",
       "phase": "Ib/II",
       "sponsor": "AZ",
-      "targetNum": 10,
-      "enrolled": 3,
-      "monthSigned": 1,
-      "monthEnrolled": 0,
+      "targetNum": "10",
+      "enrolled": "3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌",
+      "monthSigned": "1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉, 王昭蘋, 吳佳勳",
       "phone": "0927751328",
-      "status": "進行中",
+      "status": "名額已滿",
       "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌 (1)胰臟癌 ,一線治療 (2)胃癌,正二.三線治療 (3)膽管癌,正二.三線治療 2. HER2 (-) 3. 胃癌需PD後再次切片,C3要再切片一次 4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<2000 需使用抗病毒用藥 ,排除C肝及HIV(+) 7.ECOG 0-1 8.體重 >= 35 KG",
       "exclusion": "C肝, HIV(+)",
       "cancerTypes": [
@@ -363,7 +379,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 14,
@@ -429,14 +447,14 @@
       "code": "BBI-4182-101",
       "phase": "I/II",
       "sponsor": "Bolt",
-      "targetNum": 2,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "2",
+      "enrolled": "1",
+      "monthSigned": "",
+      "monthEnrolled": "1",
       "pi": "陳明晃",
       "nurse": "王秋眉, 林韋秀",
       "phone": "0927751328",
-      "status": "進行中",
+      "status": "暫無slot",
       "inclusion": "1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。5. 腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。",
       "exclusion": "",
       "cancerTypes": [
@@ -447,7 +465,10 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "comments": "目前沒名額/可以預排/已排3個病人",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 17,
@@ -457,14 +478,14 @@
       "code": "MK-3475-06E",
       "phase": "I/II",
       "sponsor": "MSD",
-      "targetNum": 5,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "3-5",
+      "enrolled": "2",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "孔亭方, 陳秀玲, 王秋眉",
       "phone": "0981764403",
-      "status": "進行中",
+      "status": "暫無slot",
       "inclusion": "1- 您必須經過組織學或細胞學確診為第 1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。2- ccr > =50 ml/min",
       "exclusion": "1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加 2. 在使用試驗治療前 4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。3. QTcF value >470 msec / LVEF < 50",
       "cancerTypes": [
@@ -475,7 +496,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 18,
@@ -485,10 +508,10 @@
       "code": "MK-3475-06C",
       "phase": "I/II",
       "sponsor": "MSD",
-      "targetNum": 3,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "孔亭方, 陳秀玲",
       "phone": "0981764403",
@@ -503,7 +526,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 19,
@@ -513,10 +538,10 @@
       "code": "DS7300-202",
       "phase": "III",
       "sponsor": "DAIICHI SANKYO",
-      "targetNum": 4,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "4",
+      "enrolled": "0 / 4 screen failure",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "孔亭方, 陳秀玲, 王秋眉",
       "phone": "0981764403",
@@ -531,7 +556,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 20,
@@ -541,14 +568,14 @@
       "code": "MK-3475-06D",
       "phase": "I/II",
       "sponsor": "MSD",
-      "targetNum": 6,
-      "enrolled": 1,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "3-6",
+      "enrolled": "1",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "孔亭方, 王秋眉",
       "phone": "0981764403",
-      "status": "進行中",
+      "status": "暫無slot",
       "inclusion": "1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma. 2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.",
       "exclusion": "1. Has squamous cell or undifferentiated esophageal gastric cancer. 2. Received prior treatment with a TROP2-targeted ADC",
       "cancerTypes": [
@@ -559,7 +586,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 21,
@@ -569,10 +598,10 @@
       "code": "C3651021",
       "phase": "2b/3",
       "sponsor": "輝瑞",
-      "targetNum": 15,
-      "enrolled": 1,
-      "monthSigned": 1,
-      "monthEnrolled": 0,
+      "targetNum": "15",
+      "enrolled": "7",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
       "pi": "李重賓",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -587,7 +616,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 22,
@@ -625,14 +656,14 @@
       "code": "CA2400030",
       "phase": "2/3",
       "sponsor": "必治妥",
-      "targetNum": 5,
-      "enrolled": 3,
-      "monthSigned": 1,
-      "monthEnrolled": 0,
+      "targetNum": "12",
+      "enrolled": "10",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "姜乃榕",
       "nurse": "王昭蘋",
       "phone": "0919377185",
-      "status": "進行中",
+      "status": "暫停收案",
       "inclusion": "● 經組織學或細胞學方法確診患有轉移性 PDAC。● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。",
       "exclusion": "排除b,c肝",
       "cancerTypes": [
@@ -643,7 +674,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 24,
@@ -653,10 +686,10 @@
       "code": "D702NC00001",
       "phase": "III",
       "sponsor": "AZ",
-      "targetNum": 15,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "15",
+      "enrolled": "5 screen failure / 3 有用藥",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "林韋秀, 王秋眉",
       "phone": "0963501682",
@@ -671,7 +704,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 25,
@@ -681,10 +716,10 @@
       "code": "DESTINY-Biliary Tract",
       "phase": "3",
       "sponsor": "AZ",
-      "targetNum": 6,
-      "enrolled": 6,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "5(有用藥)/ 3(screen failure)",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉, 王昭蘋",
       "phone": "0927751328",
@@ -699,7 +734,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 26,
@@ -709,14 +746,14 @@
       "code": "TT420C2308",
       "phase": "3",
       "sponsor": "藥捷安康",
-      "targetNum": 6,
-      "enrolled": 4,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "4",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "周淑慧",
       "phone": "82935/82999",
-      "status": "進行中",
+      "status": "停止收案",
       "inclusion": "1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥 2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要 ≥1.5cm 3. Gemcitabine+Cisplatin washout period > 21days 4. HBsAg(+), HBV DNA<500 IU/mL 5. Anti-HCV(+), HCV RNA(-)",
       "exclusion": "",
       "cancerTypes": [
@@ -727,7 +764,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 27,
@@ -765,10 +804,10 @@
       "code": "MK-1082-012",
       "phase": "III",
       "sponsor": "MSD",
-      "targetNum": 4,
-      "enrolled": 2,
-      "monthSigned": 2,
-      "monthEnrolled": 2,
+      "targetNum": "Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)",
+      "enrolled": "Part 1: 2",
+      "monthSigned": "2",
+      "monthEnrolled": "2",
       "pi": "鄧豪偉",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -783,7 +822,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 29,
@@ -793,10 +834,10 @@
       "code": "M24-533",
       "phase": "2",
       "sponsor": "Abbive",
-      "targetNum": 3,
-      "enrolled": 1,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "5",
+      "enrolled": "3",
+      "monthSigned": "2",
+      "monthEnrolled": "1",
       "pi": "鄧豪偉",
       "nurse": "陳秀玲, 吳佳勳, 孔亭方",
       "phone": "0988660381",
@@ -811,7 +852,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 30,
@@ -821,10 +864,10 @@
       "code": "20210081",
       "phase": "3",
       "sponsor": "Amgen Inc",
-      "targetNum": 2,
-      "enrolled": 1,
-      "monthSigned": 1,
-      "monthEnrolled": 0,
+      "targetNum": "2",
+      "enrolled": "1",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -839,7 +882,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 31,
@@ -849,10 +894,10 @@
       "code": "SGNTUC-029",
       "phase": "III",
       "sponsor": "Seagen",
-      "targetNum": 6,
-      "enrolled": 3,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "3",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
       "nurse": "陳秀玲, 孔亭方",
       "phone": "0988660381",
@@ -867,7 +912,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 32,
@@ -877,10 +924,10 @@
       "code": "WO42758",
       "phase": "I/Ib",
       "sponsor": "Roche",
-      "targetNum": 10,
-      "enrolled": 6,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "10",
+      "enrolled": "6",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
       "nurse": "陳秀玲, 孔亭方",
       "phone": "0988660381",
@@ -895,7 +942,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 33,
@@ -933,10 +982,10 @@
       "code": "61186372COR3002",
       "phase": "III",
       "sponsor": "J & J",
-      "targetNum": 5,
-      "enrolled": 4,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "5",
+      "enrolled": "4",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
       "nurse": "陳秀玲, 孔亭方",
       "phone": "0988660381",
@@ -951,7 +1000,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 35,
@@ -989,10 +1040,10 @@
       "code": "TAI-301",
       "phase": "1",
       "sponsor": "泰瑋",
-      "targetNum": 15,
-      "enrolled": 6,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "15",
+      "enrolled": "6",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "宋秀薇, 王秋眉",
       "phone": "7270#268",
@@ -1007,7 +1058,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 37,
@@ -1045,10 +1098,10 @@
       "code": "MK-1022",
       "phase": "1/2",
       "sponsor": "MSD",
-      "targetNum": 6,
-      "enrolled": 1,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "6",
+      "enrolled": "2",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉, 王昭蘋, 陳秀玲",
       "phone": "0927751328",
@@ -1063,7 +1116,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 39,
@@ -1073,14 +1128,14 @@
       "code": "PEP07-102",
       "phase": "I",
       "sponsor": "智擎生技",
-      "targetNum": 20,
-      "enrolled": 2,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "20",
+      "enrolled": "3",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
       "pi": "姜乃榕",
       "nurse": "王昭蘋",
       "phone": "7270#262",
-      "status": "進行中",
+      "status": "需問slot",
       "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治療、或任何試驗治療，或在30天內接受過免疫治療。 3 收案前後都要再切片 . 4.需詢問SLOT",
       "exclusion": "",
       "cancerTypes": [
@@ -1091,7 +1146,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 40,
@@ -1129,10 +1186,10 @@
       "code": "MK-9999-02A",
       "phase": "II",
       "sponsor": "MSD",
-      "targetNum": 4,
-      "enrolled": 1,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "4",
+      "enrolled": "pancrea ca:1 / CHOLANGIOCARCINOMA:1",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉, 王昭蘋, 陳秀玲",
       "phone": "0927751328",
@@ -1147,7 +1204,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 42,
@@ -1157,14 +1216,14 @@
       "code": "MK5909-005",
       "phase": "II",
       "sponsor": "MSD",
-      "targetNum": 6,
-      "enrolled": 4,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "4-6",
+      "enrolled": "pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "王秋眉, 王昭蘋, 陳秀玲",
       "phone": "0927751328",
-      "status": "進行中",
+      "status": "名額已滿",
       "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線 、胃癌3L以上 2.需要21片切片 3.CT必須得到廠商確認才能用藥 4.HIV只要有病史不收 5.心超LVEF > 50%",
       "exclusion": "HIV病史",
       "cancerTypes": [
@@ -1175,7 +1234,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 43,
@@ -1185,10 +1246,10 @@
       "code": "TYR430-101",
       "phase": "I",
       "sponsor": "Tyra Biosciences",
-      "targetNum": 15,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "15",
+      "enrolled": "",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "李重賓",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -1203,7 +1264,9 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     },
     {
       "id": 44,
@@ -1213,14 +1276,14 @@
       "code": "GW-020202",
       "phase": "II",
       "sponsor": "共信",
-      "targetNum": 3,
-      "enrolled": 0,
-      "monthSigned": 0,
-      "monthEnrolled": 0,
+      "targetNum": "3",
+      "enrolled": "0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "黃怡翔",
       "nurse": "李杰如, 吳佳勳",
       "phone": "0939859265",
-      "status": "進行中",
+      "status": "還未SIV",
       "inclusion": "Major protocol amedmnet in processing.",
       "exclusion": "",
       "cancerTypes": [
@@ -1231,9 +1294,166 @@
           ]
         }
       ],
-      "subjects": []
+      "subjects": [],
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "id": 45,
+      "code": "C6461016",
+      "status": "進行中",
+      "subjects": [],
+      "exclusion": "",
+      "cancerType": "胃癌",
+      "line": "一線",
+      "studyTitle": "一項第 2/3 期介入性試驗，旨在評估 PF-08634404 併用化療，用於先前未接受治療之局部晚期或轉移性胃腺癌、胃食道交界腺癌或食道腺癌參與者",
+      "phase": "2/3期",
+      "sponsor": "PFIZER",
+      "pi": "陳明晃",
+      "nurse": "王秋眉",
+      "phone": "0927751328",
+      "inclusion": "1. HER2 (-)；院內驗 CPS > 1\n2. Measurable lesion by RECIST 1.1\n3. ECOG 0-1\n4. 不可收 B 肝；治療後 C 肝病毒量需驗不到\n5. CCr >=50 mL/min，Hb >9 g/dL，7天內不可輸血或使用 G-CSF\n6. 肺結核、心律不整、心臟疾病或控制不佳高血壓不能進案\n7. 6個月內腸胃道出血不能進案",
+      "cancerTypes": [
+        {
+          "type": "胃癌",
+          "lines": [
+            "一線"
+          ]
+        }
+      ],
+      "targetNum": "3",
+      "enrolled": "1",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "id": 46,
+      "code": "20250004",
+      "status": "需問slot",
+      "subjects": [],
+      "exclusion": "",
+      "cancerType": "多種癌症",
+      "line": "二線後",
+      "studyTitle": "這是一項第 1/1b 期、開放標記、多中心試驗，探討 AMG 436 用於患有高度 微衛星不穩定/錯配修復缺陷 (MSI-H/dMMR) 的實體腫瘤成人參與者",
+      "phase": "1/1b",
+      "sponsor": "Amgen Inc",
+      "pi": "陳明晃",
+      "nurse": "陳秀玲 / 孔亭方",
+      "phone": "0988660381",
+      "inclusion": "1. 經組織學或細胞學確認患有轉移性或局部晚期實體腫瘤\n(MSIH/dMMR)\n2. 至少接受過一線全身性療法(包含先前至少1線的PD-1抗體\n/PD-L1治療)。\n3. 5年內 Tumor Slide: 20片\n4. B / C 型肝炎可納入須為HBV DNA/HCV RNA nondectable",
+      "comments": "須向 sponsor 申請 slot",
+      "contractNo": "C2602500",
+      "cancerTypes": [
+        {
+          "type": "多種癌症",
+          "lines": [
+            "二線後"
+          ]
+        }
+      ],
+      "targetNum": "5",
+      "enrolled": "1",
+      "monthSigned": "1 (planning on 2026/8/24)",
+      "monthEnrolled": "0",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "id": 47,
+      "code": "C23-101",
+      "status": "進行中",
+      "subjects": [],
+      "exclusion": "",
+      "cancerType": "多種癌症",
+      "line": "二線後",
+      "studyTitle": "一項評估P1101及P1801接續性治療對末期實體腫瘤患者安全性、藥物動力學、藥 效動力學及臨床療效的開放性第一期臨床試驗",
+      "phase": "1",
+      "sponsor": "藥華",
+      "pi": "陳明晃",
+      "nurse": "陳秀玲 / 吳佳勳 / 王秋眉",
+      "phone": "0988660381",
+      "inclusion": "納入條件：\n1.標準療法後疾病惡化，無法耐受標準療法，或沒有適用的標準\n療法之病患。\n2.ECOG ≤ 1，\n3.Dose Escalation Phase:所有末期實體腫瘤(Arm A and Arm B)\n4.Dose Expansion Cohort:限腎細胞癌及大腸直腸癌(Arm C)。\nARM A:沒有接受過Anti-PD1 or Anti-PDL1(治療 P1801 IV Q2W)\nARM B: 有接受過Anti-PD1 or Anti-PDL1 (治療P1101 Q2W ,3-\n6 dose then\nP1801 Q2W\n5.先前接受的化學治療wash out 至少2週 或免疫治療至少wash\nout4週\n6眼底檢查(fundus examination):Arm B\n7甲狀腺功能相關之實驗室數值需為正常\n排除條件\n1 自體免疫疾病患者，接受全身性類固醇或免疫抑制劑治療之自\n體免疫疾病\n2 有症狀的腦部腫瘤轉移；或腦膜轉移。\n3.HbA1c ≥7.4%（無法控制之糖尿病）。\n4 控制不佳重度精神疾病，包括嚴重憂鬱、雙極性疾患、思覺失\n調、自殺意念\n5 控制不佳之心血管疾病，\n6 在接受第一劑P1101前4週內使用其他臨床試驗藥物。\n7 曾有藥物誘發肺炎病史或目前患有肺炎。\n8 需全身性抗生素治療之急性感染。\n9. HBV DNA ≥2,000、HCV RNA 陽性或已知 HIV 感染。\n10 在接受第一劑P1101前4週內曾使用telbivudine或在接受第一\n劑P1101後使用telbivudine。",
+      "cancerTypes": [
+        {
+          "type": "多種癌症",
+          "lines": [
+            "二線後"
+          ]
+        }
+      ],
+      "targetNum": "10",
+      "enrolled": "0",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "id": 48,
+      "code": "CA266-0003",
+      "status": "進行中",
+      "subjects": [],
+      "exclusion": "",
+      "cancerType": "大腸癌",
+      "line": "一線",
+      "studyTitle": "ROSETTA CRC-203：一項以 Pumitamig 合併化療相較於 Bevacizumab 合併化療用於未曾接受治療、無法切除或轉移性大 腸直腸癌參與者的盲性、隨機分配、第 2/3 期試驗",
+      "phase": "III",
+      "sponsor": "BMS",
+      "pi": "陳明晃",
+      "nurse": "陳秀玲 / 孔亭方",
+      "phone": "0988660381",
+      "inclusion": "Inclusion:\n1. Completion of adjuvant or neoadjuvant chemotherapy with >6 months before metastatic treatment.\n2. MSS and BRAF V600E wild-type; all RAS (wild-type or mutation) allowed.\n3. Measurable lesion.\n4. Tumor tissue within 3 years (at least 15-20 unstained slides).\nExclusion/other key points:\n1. Ongoing grade 2 diarrhea at screening is excluded.\n2. HBsAg positive or chronic liver disease is excluded.\n3. Treated HCV may be allowed with documented sustained virologic response for 12 weeks.",
+      "cancerTypes": [
+        {
+          "type": "大腸癌",
+          "lines": [
+            "一線"
+          ]
+        }
+      ],
+      "targetNum": "8",
+      "enrolled": "0",
+      "monthSigned": "2",
+      "monthEnrolled": "2",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "id": 49,
+      "code": "MS914001_0002",
+      "status": "進行中",
+      "subjects": [],
+      "exclusion": "",
+      "cancerType": "大腸癌",
+      "line": "三線",
+      "studyTitle": "一項隨機、開放性、三組的第 3 期試驗，研究 precemtabart tocentecan 併用或不併用 bevacizumab 相較於 trifluridine/tipiracil 加上 bevacizumab 用於先前曾接受治療的 轉移性大腸直腸癌參與者 (PROCEADE-CRC-03)",
+      "phase": "3",
+      "sponsor": "Merck",
+      "pi": "鄧豪偉",
+      "nurse": "陳秀玲 / 孔亭方 / 吳佳勳",
+      "phone": "0988660381",
+      "inclusion": "納入條件\n1. 轉移情境下接受不超過 2 種全身性治療方案\n2. 接受過fluoropyrimidine, irinotecan, platinum\nagent (e.g. oxaliplatin) 的治療\n3. 接受過 bevacizumab 的治療\n4. RAS/BRAF wt and left-sided tumors: anti-\nEGFR agent :\n5. MSI-H: immune checkpoint inhibitor\n6. BRAF V600E mutation: encorafenib and\ncetuximab\nor encorafenib, cetuximab, and binimetinib\n7. HER-2 targeted therapy: trastuzumab plus\ntucatinib\n8. (neo)adjuvant therapy with PD during or within\n6 months after regimen completion is considered as\n1 regimen line in the metastatic setting\n9.tissue slide 15 片。\n10. measurable lesion or non measurable lesion\n11.必須能夠吞服口服藥錠\n排除條件\n1.在隨機分配前< 4 週內進行過重大手術計在試驗期間\n需要進行重大手術。\n2.無法控制的高血壓（BP 150 /100 mmHg）。\n3 接受過 FTD-TPI、CEACAM5 含有 TOP1 抑制劑載\n荷藥物的 ADC治療。\n5.HBV DNA>2000 IU/ml",
+      "contractNo": "C2609800",
+      "cancerTypes": [
+        {
+          "type": "大腸癌",
+          "lines": [
+            "三線"
+          ]
+        }
+      ],
+      "targetNum": "9",
+      "enrolled": "0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     }
   ],
   "subjects": [],
-  "updatedAt": null
+  "updatedAt": null,
+  "studyStatusSnapshotVersion": "v4.3.5-20260822-study-status-pdf",
+  "studyStatusSnapshotDate": "2026-08-22"
 }
