@@ -46,23 +46,25 @@ jobs:
           ];
           for (const text of must) if (!html.includes(text)) throw new Error(`Missing repair assertion: ${text}`);
 
-          // Source seed was the exact regression: T1223 is a 2L trial even if a stale seed/cloud row says 1L.
           const seedMatch = html.match(/const INITIAL_TRIALS = (\[[\s\S]*?\]);\n\nfunction AccessPasswordModal/);
           if (!seedMatch) throw new Error('Cannot locate INITIAL_TRIALS');
           const trials = JSON.parse(seedMatch[1]);
           const t1223 = trials.find(t => t.code === 'T1223');
           if (!t1223 || !/二線治療/.test(t1223.studyTitle || '')) throw new Error('T1223 title no longer proves 2L');
-          console.log('Regression source confirmed: T1223 title = 2L; runtime override = gastric 2L');
+          if (!html.includes("STUDY_STATUS_SNAPSHOT_VERSION = 'v4.3.5-20260822-study-status-pdf'")) throw new Error('Study Status snapshot missing');
+          if (!trials.some(t => t.code === 'MS914001_0002')) throw new Error('New 2026-08-22 trial missing');
+          console.log('Regression source confirmed; Study Status 2026-08-22 patch present');
           NODE
+          python -m json.tool data.json >/dev/null
 
-      - name: Commit repaired main page
+      - name: Commit repaired main page and data
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
+          git add index.html data.json
           if ! git diff --cached --quiet; then
-            git commit -m "Repair gastric trial treatment-line classification"
+            git commit -m "Repair clinical trial data and Study Status import"
             git push origin main
           fi
           cp index.html /tmp/repaired-index.html
@@ -76,6 +78,6 @@ jobs:
           cp /tmp/repaired-index.html 404.html
           git add index.html 404.html
           if ! git diff --cached --quiet; then
-            git commit -m "Publish gastric trial line classification repair"
+            git commit -m "Publish clinical trial Study Status repair"
             git push origin pages-clean-ajcc-v2-3
           fi
