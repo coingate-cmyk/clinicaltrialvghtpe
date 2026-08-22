@@ -11,12 +11,13 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 overflow-x-hidden">
     <div id="app"></div>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script>
 const {useState, useEffect, useMemo, useRef} = React;
+// v4.3.5-mobile-layout-20260822
 const e = React.createElement;
 
 const CONFIG = {
@@ -2669,17 +2670,17 @@ function TrialCard(props) {
     const [expanded, setExpanded] = useState(false);
     const trial = props.trial;
     
-    return e('div', {className: 'bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow'},
-        e('div', {className: 'flex justify-between items-start mb-4'},
-            e('div', null,
-                e('h3', {className: 'text-xl font-bold text-gray-800'}, trial.code),
+    return e('div', {className: 'min-w-0 bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow'},
+        e('div', {className: 'flex justify-between items-start gap-3 min-w-0 mb-4'},
+            e('div', {className: 'min-w-0 flex-1'},
+                e('h3', {className: 'text-lg sm:text-xl font-bold leading-tight text-gray-800 break-all'}, trial.code),
                 e('p', {
                     className: expanded
                         ? 'text-gray-600 mt-1 whitespace-pre-wrap break-words'
-                        : 'text-gray-600 mt-1'
+                        : 'text-gray-600 mt-1 break-words'
                 }, expanded ? trial.studyTitle : (trial.studyTitle && trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : (trial.studyTitle || '')))
             ),
-            e('div', {className: 'flex items-center gap-2'},
+            e('div', {className: 'flex items-center gap-2 shrink-0'},
                 e('span', {
                     className: getTrialStatusBadgeClass(trial)
                 }, trial.status),
@@ -2705,7 +2706,7 @@ function TrialCard(props) {
                                         : 'inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
                                 },
                                     e('span', null, (closed ? '✕ ' : '') + ct.type + ' - ' + line),
-                                    props.isLoggedIn ? e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource)) : null
+                                    props.isLoggedIn ? props.isLoggedIn ? e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource)) : null : null
                                 ));
                             });
                         }
@@ -2719,7 +2720,7 @@ function TrialCard(props) {
             })()
         ),
 
-                e('div', {className: 'grid grid-cols-3 gap-4 text-sm'},
+                e('div', {className: 'grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-sm'},
             e('div', null,
                 e('span', {className: 'text-gray-600'}, 'PI: '),
                 e('span', {className: 'font-semibold'}, trial.pi)
@@ -2738,7 +2739,7 @@ function TrialCard(props) {
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '完整試驗名稱:'),
                 e('div', {className: 'text-gray-800 whitespace-pre-wrap break-words'}, trial.studyTitle)
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '試驗期別: '),
                     e('span', null, trial.phase || '')
@@ -2748,7 +2749,7 @@ function TrialCard(props) {
                     e('span', null, trial.sponsor || '')
                 )
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '研究護士: '),
                     e('span', null, trial.nurse || '')
@@ -2758,7 +2759,7 @@ function TrialCard(props) {
                     e('span', null, trial.phone || '')
                 )
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '目標收案: '),
                     e('span', null, trial.targetNum || 0)
@@ -4184,17 +4185,17 @@ function App() {
     
     return e('div', {className: 'min-h-screen'},
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
-            e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
+            e('div', {className: 'max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.3.4 Firebase版'),
+                    e('h1', {className: 'min-w-0 text-lg sm:text-2xl font-bold leading-tight text-slate-800'}, '臨床試驗管理系統 v4.3.4 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
-                        className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+                        className: 'shrink-0 ml-3 px-3 sm:px-6 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700'
                     }, isAdmin ? '登出' : '管理員登入')
                 )
             )
         ),
-        e('div', {className: 'max-w-7xl mx-auto px-4 py-8'},
+        e('div', {className: 'max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8'},
             e('div', {className: 'flex flex-wrap gap-3 mb-6'},
                 isAdmin && e('button', {
                     onClick: () => setShowAddModal(true),
@@ -4307,7 +4308,7 @@ function App() {
                     e('span', null, onlyLineNeedsReview ? '⚠ 只顯示線別需核對（已啟用）' : '只顯示線別需核對')
                 )
             ),
-            isAdmin && e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
+            isAdmin && isAdmin && e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
                 e('span', {className: 'font-semibold'}, '線別來源標記：'),
                 ['manual','curated-repair','trial-title','cohort-explicit','table-explicit','table-inherited','auto-inferred','legacy'].map(source =>
                     e('span', {key: source, className: 'px-2 py-1 rounded-full border ' + getLineSourceBadgeClass(source)}, getLineSourceLabel(source))
@@ -4321,7 +4322,7 @@ function App() {
                     placeholder: '搜尋試驗代碼、標題、PI...',
                     className: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500'
                 }),
-                e('div', {className: 'grid grid-cols-2 gap-4'},
+                e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                     e('select', {
                         value: cancerType,
                         onChange: (ev) => setCancerType(ev.target.value),
