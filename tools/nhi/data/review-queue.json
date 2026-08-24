@@ -1,48 +1,13 @@
 {
   "status": "ok",
-  "fetched_at": "2026-08-17T03:12:04Z",
-  "item_count": 135,
+  "fetched_at": "2026-08-24T03:15:45Z",
+  "item_count": 95,
   "items": [
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.1",
-      "title": "9.1.Aromatase Inhibitors",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.2",
-      "title": "9.2.Carboplatin( 如 Paraplatin ；Carboplatin inj) ：(112/12/1 、114/2/1 、114/6/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.3",
-      "title": "9.3.Docetaxel ：（87/7/1 、92/11/1 、93/8/1 、95/8/1 、96/1/1 、99/6/1 、100/1/1 、",
-      "change_type": "modified"
-    },
     {
       "priority": "high",
       "type": "section-change",
       "section_id": "9.4",
       "title": "9.4.Gemcitabine （如 Gemzar ）：（92/12/1 、93/8/1 、94/10/1 、96/5/1 、99/10/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.6",
-      "title": "9.6.Streptococcus pyrogene( 如 Picibanil) ：",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.7",
-      "title": "9.7. （刪除） （87/7/1 、94/1/1 、109/10/1 ）",
       "change_type": "modified"
     },
     {
@@ -55,50 +20,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.9",
-      "title": "9.9.Vinorelbine ：(91/1/1 、95/6/1 、96/9/1 、101/3/1 、106/11/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.10",
       "title": "9.10.Oxaliplatin ：（需符合藥品許可證登載之適應症） （89/7/1 、91/10/1 、93/8/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.11",
-      "title": "9.11.Uracil -Tegafur ：(如 Ufur)(100/1/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.13",
-      "title": "9.13.Aldesleukin( 如 Proleukin for Injection) ：(90/10/1 、93/8/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.14",
-      "title": "9.14.Doxorubicin hydrochloride liposome injection( 如 Lipo -Dox 、Caelyx) ：",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.15",
-      "title": "9.15.Tretinoin （如 Vesanoid Soft Gelatin ）：（88/10/1 ）",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.16",
-      "title": "9.16.Topotecan （如 Hycamtin ）：（88/10/1 、93/8/1 、98/11/1 、100/6/1 ）",
       "change_type": "modified"
     },
     {
@@ -112,14 +35,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.18",
-      "title": "9.18. Trastuzumab ( 如 Herceptin) ：(91/4/1 、93/8/1 、95/2/1 、99/1/1 、99/8/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.19",
-      "title": "9.19.Estramustine sod. phosphate monohydrate( 如 Estracyt) ：(91/4/1)",
+      "title": "9.18. Trastuzumab (如 Herceptin) ：(91/4/1 、93/8/1 、95/2/1 、99/1/1 、99/8/1 、",
       "change_type": "modified"
     },
     {
@@ -146,13 +62,6 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.23",
-      "title": "9.23.Arsenic trioxide( 如 Asadin Inj.) ：(91/8/1 、92/9/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.24",
       "title": "9.24.Gefitinib( 如 Iressa):(93/11/1 、96/8/1 、96/11/1 、100/6/1 、101/5/1 、",
       "change_type": "modified"
@@ -162,13 +71,6 @@
       "type": "section-change",
       "section_id": "9.25",
       "title": "9.25.Temozolomide( 如 Temodal) ：(94/3/1 、97/1/1 、98/9/1 、111/9/1) 附表八之二",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.26",
-      "title": "9.26.Pemetrexed( 如 Alimta) ：(95/3/1 、95/7/1 、97/11/1 、98/9/1 、103/4/1 、",
       "change_type": "modified"
     },
     {
@@ -196,7 +98,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.30",
-      "title": "9.30.Dasatinib( 如 Sprycel) ：(98/1/1 、102/4/1 、104/12/1 、110/5/1 、113/6/1 、",
+      "title": "9.30.Dasatinib( 如 Sprycel )：(98/1/1 、102/4/1 、104/12/1 、110/5/1 、113/6/1 、",
       "change_type": "modified"
     },
     {
@@ -216,22 +118,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.33",
-      "title": "9.33.Thalidomide （如 Thado ）：(98/7/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.34",
-      "title": "9.34.Sorafenib( 如 Nexavar) ：(98/10/1 、100/6/1 、101/8/1 、104/12/1 、105/11/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.35",
-      "title": "9.35.carmustine 植入劑 (如 Gliadel Wafer) ：(100/2/1) 附表八之四",
+      "title": "9.34.Sorafenib( 如 Nexavar )：(98/10/1 、100/6/1 、101/8/1 、104/12/1 、105/11/1 、",
       "change_type": "modified"
     },
     {
@@ -259,14 +147,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.39",
-      "title": "9.39.Flutamide ；buserelin ：（90/8/1 、101/7/1 ）",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.40",
-      "title": "9.40.Bicalutamide ：（89/10/1 、101/7/1 ）",
+      "title": "9.39.Flutamide ；buserelin ：（90/8/1 、101/7/1 ）第9節-24",
       "change_type": "modified"
     },
     {
@@ -307,13 +188,6 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.47",
-      "title": "9.47.Lapatinib （如 Tykerb ）：（103/9/1 、106/11/1 、110/2/1 、114/2/1 ）",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.48",
       "title": "9.48.Eribulin （如 Halaven ）：（103/12/1 、106/11/1 、108/12/1 、110/2/1 ）",
       "change_type": "modified"
@@ -337,13 +211,6 @@
       "type": "section-change",
       "section_id": "9.51",
       "title": "9.51.Regorafenib （如 Stivarga ）：（104/9/1 、105/8/1 、107/12/1 、108/6/1 、",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.52",
-      "title": "9.52.Vemurafenib( 如 Zelboraf) ：(104/11/1 、110/3/1 、113/6/1 ）",
       "change_type": "modified"
     },
     {
@@ -377,22 +244,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.57",
-      "title": "9.57.Clofarabine （如 Evoltra ）：（106/1/1 、109/12/1 ）",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.58",
       "title": "9.58.Axitinib( 如 Inlyta) ：（106/1/1 、108/12/1 ）",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.59",
-      "title": "9.59.Ceritinib( 如 Zykadia) ：(106/9/1 、106/11/1 、108/7/1 、108/12/1 、111/2/1 、",
       "change_type": "modified"
     },
     {
@@ -434,7 +287,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.65",
-      "title": "9.65.Pralatrexate( 如 Folotyn) ：(107/10/1 、110/5/1) 第9節-44",
+      "title": "9.65.Pralatrexate( 如 Folotyn) ：(107/10/1 、110/5/1)",
       "change_type": "modified"
     },
     {
@@ -447,15 +300,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.67",
-      "title": "9.67.Ponatinib( 如 Iclusig) ：(107/12/1 、113/6/1 、115/2/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.68",
-      "title": "9.68.Radium -223( 如 Xofigo) ：(108/3/1) 第9節-45",
+      "title": "9.68.Radium -223( 如 Xofigo) ：(108/3/1)",
       "change_type": "modified"
     },
     {
@@ -510,13 +356,6 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.76",
-      "title": "9.76.Midostaurin ( 如 Rydapt) ：(109/2/1 、113/6/1 、114/10/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.77",
       "title": "9.77.Ixazomib ( 如 Ninlaro) ：(109/3/1 、112/4/1)",
       "change_type": "modified"
@@ -532,7 +371,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.79",
-      "title": "9.79.Obinutuzumab( 如 Gazyva) ：（109/4/1 、113/2/1 、114/8/1 ）",
+      "title": "9.79.Obinutuzumab( 如 Gazyva )：（109/4/1 、113/2/1 、114/8/1 ）",
       "change_type": "modified"
     },
     {
@@ -560,14 +399,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.83",
-      "title": "9.83.Dacomitinib ( 如 Vizimpro )：(109/10/1 、111/9/1 、113/6/1 、115/8/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.84",
-      "title": "9.84.Copanlisib ( 如 Aliqopa ）(刪除 )：(109/11/1 、113/6/1)",
+      "title": "9.83.Dacomitinib ( 如 Vizimpro) ：(109/10/1 、111/9/1 、113/6/1 、115/8/1 )",
       "change_type": "modified"
     },
     {
@@ -581,7 +413,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.86",
-      "title": "9.86.Vandetanib ( 如 Caprelsa) ：(109/11/1)",
+      "title": "9.86.Vandetanib ( 如 Caprelsa) ：(109/11/1) 第9節-70",
       "change_type": "modified"
     },
     {
@@ -589,20 +421,6 @@
       "type": "section-change",
       "section_id": "9.87",
       "title": "9.87.Trastuzumab emtansine ( 如 Kadcyla) ：(110/2/1 、113/8/1 、114/2/1 、114/5/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.88",
-      "title": "9.88.Ixabepilone ( 如 Ixempra) ：(110/2/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.89",
-      "title": "9.89.( 刪除 )：(110/3/1 、111/6/1 、111/8/1 、112 /1/1)",
       "change_type": "modified"
     },
     {
@@ -622,20 +440,6 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.92",
-      "title": "9.92. Ramucirumab ( 如 Cyramza) ：(110/5/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.93",
-      "title": "9.93.Entrectinib ( 如 Rozlytrek) ：(110/7/1 、113/6/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.94",
       "title": "9.94. Darolutamide( 如 Nubeqa) ：(110/11/1 、112/9/1 、113/5/1 、113/8/1 、115/4/1 )",
       "change_type": "modified"
@@ -645,13 +449,6 @@
       "type": "section-change",
       "section_id": "9.95",
       "title": "9.95.Larotrectinib ( 如 Vitrakvi) ：(111/3/1 、111/6/1 、112/12/1 、113/6/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.96",
-      "title": "9.96.Decitabine ：(111/5/1)",
       "change_type": "modified"
     },
     {
@@ -680,20 +477,6 @@
       "type": "section-change",
       "section_id": "9.100",
       "title": "9.100.Acalabrutinib( 如 Calquence) ：(112/7/1 、112/12/1 、114/10/1 、115/5/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.101",
-      "title": "9.101.Tepotinib ( 如 Tepmetko):(112/7/1 、113/6/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.102",
-      "title": "9.102.Dinutuximab beta ( 如 Qarziba) ：(112/8/1)",
       "change_type": "modified"
     },
     {
@@ -728,7 +511,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.107",
-      "title": "9.107.Abemaciclib ( 如 Verzenio )：(113/3/1 、113/6/1)",
+      "title": "9.107.Abemaciclib ( 如 Verzenio) ：(113/3/1 、113/6/1)",
       "change_type": "modified"
     },
     {
@@ -748,15 +531,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.110",
-      "title": "9.110.Tirabrutinib ( 如 Velexbru ）：(113/6/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.111",
-      "title": "9.111.Elotuzumab ( 如 Empliciti) ：(113/9/1) 第9節-88",
+      "title": "9.111.Elotuzumab ( 如 Empliciti) ：(113/9/1)",
       "change_type": "modified"
     },
     {
@@ -764,13 +540,6 @@
       "type": "section-change",
       "section_id": "9.112",
       "title": "9.112.Pertuzumab 與 trastuzumab 皮下注射複方製劑 (如 Phesgo):(113/12/1 、114/5/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.113",
-      "title": "9.113.Gemtuzumab ozogamicin( 如 Mylotarg) ：(114/1/1)",
       "change_type": "modified"
     },
     {
@@ -805,7 +574,7 @@
       "priority": "high",
       "type": "section-change",
       "section_id": "9.118",
-      "title": "9.118 .Elranatamab ( 如 Elrexfio) ：(114/5/1 、114/8/1 )第9節-93",
+      "title": "9.118 .Elranatamab ( 如 Elrexfio) ：(114/5/1 、114/8/1 )",
       "change_type": "modified"
     },
     {
@@ -832,36 +601,15 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.122",
-      "title": "9.122 .As ciminib ( 如 Scemblix) ：(114 /9/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.123",
-      "title": "9.123.Ripretinib( 如 Qinlock ）：(114/9/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.124",
-      "title": "9.124.Tafasitamab （如 Minjuvi ）：（114/10/1 、115/3/1 、115/4/1 ）第9節-97",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.125",
-      "title": "9.125.Quizartinib （如 Vanflyta ）：（114/10/1)",
+      "title": "9.124.Tafasitamab （如 Minjuvi ）：（114/10/1 、115/3/1 、115/4/1 ）",
       "change_type": "modified"
     },
     {
       "priority": "high",
       "type": "section-change",
       "section_id": "9.126",
-      "title": "9.126 .Amivantamab (如 Rybrevant) ：(114/ 10 /1) 第9節-98",
+      "title": "9.126 .Amivantamab (如 Rybrevant) ：(114/ 10 /1)",
       "change_type": "modified"
     },
     {
@@ -874,13 +622,6 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.128",
-      "title": "9.128. Tucidinostat (如 Kepida )：(114/12/1)",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.129",
       "title": "9.129 .Alpelisib ( 如 Piqray ）： (115/1/1 、115/6/1 )",
       "change_type": "modified"
@@ -888,15 +629,8 @@
     {
       "priority": "high",
       "type": "section-change",
-      "section_id": "9.130",
-      "title": "9.130. Fulvestrant (如 Fustron) ：(115/1/1 、115/6/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
       "section_id": "9.131",
-      "title": "9.131.Repotrectinib( 如 Augtyro) ：(115/2/1)",
+      "title": "9.131.Repotrectinib( 如 Augtyro )：(115/2/1)",
       "change_type": "modified"
     },
     {
@@ -904,13 +638,6 @@
       "type": "section-change",
       "section_id": "9.132",
       "title": "9.132.B osutinib( 如 Bostini) ：(115/2/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.133",
-      "title": "9.133.Zolbetuximab ( 如 Vyloy) ：(115/4/1)",
       "change_type": "modified"
     },
     {
@@ -925,13 +652,6 @@
       "type": "section-change",
       "section_id": "9.135",
       "title": "9.135. Capivasertib ( 如 Truqap) ：(115/6/1 )",
-      "change_type": "modified"
-    },
-    {
-      "priority": "high",
-      "type": "section-change",
-      "section_id": "9.136",
-      "title": "9.136.Fruqui ntinib ( 如 Fruzaqla) ：(115/6/1)",
       "change_type": "modified"
     },
     {

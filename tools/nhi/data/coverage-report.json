@@ -1,9 +1,9 @@
 {
   "status": "ok",
-  "fetched_at": "2026-08-17T03:12:04Z",
+  "fetched_at": "2026-08-24T03:15:45Z",
   "official_section_count": 138,
   "curated_record_count": 300,
-  "candidate_pair_count": 227,
+  "candidate_pair_count": 226,
   "missing_candidate_count": 0,
   "orphan_count": 0,
   "by_cancer": [
@@ -249,7 +249,6 @@
         "9.1",
         "9.2",
         "9.3",
-        "9.4",
         "9.5",
         "9.8",
         "9.9",
@@ -275,7 +274,7 @@
         "9.130",
         "9.135"
       ],
-      "candidate_count": 28,
+      "candidate_count": 27,
       "curated_sections": [
         "9.1",
         "9.2",

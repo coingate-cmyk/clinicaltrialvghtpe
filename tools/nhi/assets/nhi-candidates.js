@@ -1,7 +1,7 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-08-17T03:12:04Z",
-    "source_update": "115.7.23",
+    "fetched_at": "2026-08-24T03:15:45Z",
+    "source_update": "115.8.21",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
   },
@@ -34,7 +34,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.18",
-          "title": "Trastuzumab ( 如 Herceptin)",
+          "title": "Trastuzumab (如 Herceptin)",
           "official_only": true
         },
         {
@@ -158,7 +158,7 @@ window.NHI_CANDIDATES = {
       "candidates": [
         {
           "section_id": "9.34",
-          "title": "Sorafenib( 如 Nexavar)",
+          "title": "Sorafenib( 如 Nexavar )",
           "official_only": true
         },
         {
@@ -387,7 +387,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.131",
-          "title": "Repotrectinib( 如 Augtyro)",
+          "title": "Repotrectinib( 如 Augtyro )",
           "official_only": true
         },
         {
@@ -418,7 +418,7 @@ window.NHI_CANDIDATES = {
     "breast": {
       "name": "乳癌",
       "group": "Breast",
-      "candidate_count": 28,
+      "candidate_count": 27,
       "curated_count": 28,
       "candidates": [
         {
@@ -434,11 +434,6 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.3",
           "title": "Docetaxel",
-          "official_only": true
-        },
-        {
-          "section_id": "9.4",
-          "title": "Gemcitabine （如 Gemzar ）",
           "official_only": true
         },
         {
@@ -473,7 +468,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.18",
-          "title": "Trastuzumab ( 如 Herceptin)",
+          "title": "Trastuzumab (如 Herceptin)",
           "official_only": true
         },
         {
@@ -528,7 +523,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.107",
-          "title": "Abemaciclib ( 如 Verzenio )",
+          "title": "Abemaciclib ( 如 Verzenio)",
           "official_only": true
         },
         {
@@ -607,7 +602,7 @@ window.NHI_CANDIDATES = {
       "candidates": [
         {
           "section_id": "9.34",
-          "title": "Sorafenib( 如 Nexavar)",
+          "title": "Sorafenib( 如 Nexavar )",
           "official_only": true
         },
         {
@@ -673,7 +668,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.34",
-          "title": "Sorafenib( 如 Nexavar)",
+          "title": "Sorafenib( 如 Nexavar )",
           "official_only": true
         },
         {
@@ -1070,7 +1065,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.79",
-          "title": "Obinutuzumab( 如 Gazyva)",
+          "title": "Obinutuzumab( 如 Gazyva )",
           "official_only": true
         },
         {
@@ -1249,7 +1244,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.30",
-          "title": "Dasatinib( 如 Sprycel)",
+          "title": "Dasatinib( 如 Sprycel )",
           "official_only": true
         },
         {
@@ -1287,7 +1282,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.30",
-          "title": "Dasatinib( 如 Sprycel)",
+          "title": "Dasatinib( 如 Sprycel )",
           "official_only": true
         },
         {
@@ -1345,7 +1340,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.79",
-          "title": "Obinutuzumab( 如 Gazyva)",
+          "title": "Obinutuzumab( 如 Gazyva )",
           "official_only": true
         },
         {
