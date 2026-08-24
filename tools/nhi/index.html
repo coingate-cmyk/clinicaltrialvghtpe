@@ -23,7 +23,7 @@
     </div>
     <div class="header-search">
       <label class="sr-only" for="globalSearch">搜尋藥物、癌種或 biomarker</label>
-      <input id="globalSearch" type="search" placeholder="搜尋藥名 / 商品名 / 癌種 / biomarker…" autocomplete="off" />
+      <input id="globalSearch" type="search" placeholder="搜尋藥名 / 癌種 / biomarker / dose / q3w…" autocomplete="off" />
       <kbd>/</kbd>
     </div>
   </header>
@@ -33,7 +33,7 @@
       <div>
         <p class="eyebrow">ALL CANCERS · V0.8 PATHWAY PILOT</p>
         <h1>先從癌種開始，<br><span>再找健保能不能用。</span></h1>
-        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen。全癌種先進入自動監測；只有人工核對完成的給付情境才顯示臨床摘要。胃癌、HCC、AML 先試行臨床路徑視圖。</p>
+        <p class="hero-copy">Cancer → setting → line → biomarker → reimbursed regimen → TFDA label dose。全癌種先進入自動監測；只有人工核對完成的給付情境才顯示臨床摘要。胃癌、HCC、AML 先試行臨床路徑視圖。</p>
       </div>
       <div class="hero-stat-grid" id="heroStats"></div>
     </section>
@@ -95,7 +95,7 @@
   </main>
 
   <footer>
-    <p><strong>重要：</strong>此網站為臨床快速查詢 beta；申報、處方與治療決策請以健保署最新公告、藥品許可證與院內規範為準。</p>
+    <p><strong>重要：</strong>此網站為臨床快速查詢 beta；健保給付與 TFDA 核准仿單分開標示來源。申報、處方與治療決策請以健保署最新公告、TFDA 最新藥品許可證／仿單與院內規範為準。</p>
     <p id="footerMeta"></p>
   </footer>
 
@@ -130,6 +130,7 @@
   <script src="assets/data-final-coverage.js"></script>
   <script src="assets/nhi-status.js"></script>
   <script src="assets/nhi-candidates.js"></script>
+  <script src="assets/tfda-labels.js"></script>
   <script src="assets/app.js"></script>
   <script src="assets/candidates-ui.js"></script>
   <script src="assets/nhi-brand-aliases.js"></script>

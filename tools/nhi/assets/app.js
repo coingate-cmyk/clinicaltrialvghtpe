@@ -2,6 +2,10 @@
   'use strict';
   const data = window.NHI_DATA;
   const changes = window.NHI_CHANGES || { status: 'not-run', changes: [] };
+  const tfda = window.TFDA_LABELS || { meta: {}, byIndicationId: {} };
+  const tfdaFor = (item) => (tfda.byIndicationId || {})[item?.id] || null;
+  const tfdaVisible = (item) => { const t=tfdaFor(item); return t && (t.status === 'matched' || t.status === 'generic-label'); };
+  const tfdaSearchText = (item) => { const t=tfdaFor(item); return t ? [t.product_zh,t.product_en,t.permit,t.dosage,...(t.dose_mentions||[]),...(t.frequency_mentions||[])].filter(Boolean).join(' ') : ''; };
   if (!data) throw new Error('NHI_DATA not loaded');
 
   const $ = (id) => document.getElementById(id);
@@ -75,7 +79,7 @@
       if (state.auth === 'yes' && !x.prior_auth) return false;
       if (state.auth === 'no' && x.prior_auth) return false;
       if (q) {
-        const hay = normalize([x.drug,x.regimen,x.setting,x.line,lineGroup(x),x.biomarker,x.summary,x.section,...(x.tags||[]),cancerMap[x.cancer]?.name].join(' '));
+        const hay = normalize([x.drug,x.regimen,x.setting,x.line,lineGroup(x),x.biomarker,x.summary,x.section,...(x.tags||[]),cancerMap[x.cancer]?.name,tfdaSearchText(x)].join(' '));
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -120,6 +124,11 @@
 
   function cardHtml(x) {
     const bio = x.biomarker && x.biomarker !== '—';
+    const t = tfdaFor(x);
+    const showTfda = tfdaVisible(x);
+    const doseChip = showTfda && (t.dose_mentions || []).length ? (t.dose_mentions || []).slice(0,3).join(' / ') : '';
+    const freqChip = showTfda && (t.frequency_mentions || []).length ? (t.frequency_mentions || []).slice(0,3).join(' / ') : '';
+    const tfdaMeta = showTfda ? `<div class="tfda-card-dose"><small>TFDA 核准仿單</small><span>${esc(doseChip || '用法用量詳見仿單')}${freqChip ? ` · ${esc(freqChip)}` : ''}</span></div>` : '';
     return `<article class="drug-card">
       <div>
         <h3>${esc(x.drug)}</h3>
@@ -129,8 +138,10 @@
           ${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}
           ${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}
           ${bio ? `<span class="badge bio">${esc(x.biomarker)}</span>` : ''}
+          ${showTfda ? '<span class="badge tfda">TFDA dose</span>' : ''}
           <span class="badge">§ ${esc(x.section)}</span>
         </div>
+        ${tfdaMeta}
       </div>
       <div class="meta-grid">
         <div class="meta-item"><small>Setting</small><span>${esc(x.setting)}</span></div>
@@ -139,8 +150,9 @@
         <div class="meta-item"><small>Duration</small><span>${esc(x.duration)}</span></div>
       </div>
       <div class="card-actions">
-        <button class="action-button primary" data-detail="${esc(x.id)}">摘要</button>
-        <a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">官方 PDF ↗</a>
+        <button class="action-button primary" data-detail="${esc(x.id)}">摘要 / 劑量</button>
+        <a class="action-button" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">健保 PDF ↗</a>
+        ${showTfda && t.label_url ? `<a class="action-button tfda-link" href="${esc(t.label_url)}" target="_blank" rel="noopener">TFDA 仿單 ↗</a>` : ''}
       </div>
     </article>`;
   }
@@ -158,21 +170,39 @@
     const x = data.indications.find(i => i.id === id);
     if (!x) return;
     const c = cancerMap[x.cancer];
+    const t = tfdaFor(x);
+    const showTfda = tfdaVisible(x);
+    const tfdaDate = tfda.meta?.fetched_at ? String(tfda.meta.fetched_at).slice(0,10) : '';
+    const tfdaPanel = showTfda ? `<section class="source-panel tfda-panel">
+      <div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>${esc(t.product_zh || t.product_en || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
+      <dl class="detail-table compact-table">
+        <dt>許可證</dt><dd>${esc(t.permit || '')}</dd>
+        <dt>核准適應症</dt><dd>${esc(t.indication || '—')}</dd>
+        <dt>劑量</dt><dd>${esc((t.dose_mentions || []).join(' / ') || '仿單未能自動拆出單一劑量')}</dd>
+        <dt>頻次</dt><dd>${esc((t.frequency_mentions || []).join(' / ') || '仿單未能自動拆出單一頻次')}</dd>
+        <dt>官方用法用量</dt><dd class="dose-text">${esc(t.dosage || '詳如仿單')}</dd>
+        <dt>TFDA 資料同步</dt><dd>${esc(tfdaDate || '—')}${t.license_modified ? `；藥證異動 ${esc(t.license_modified)}` : ''}</dd>
+      </dl>
+      <p class="source-note">健保「能不能用」與 TFDA「核准怎麼用」是不同來源；若兩者限制不同，申報與處方仍分別依最新官方規定。</p>
+    </section>` : `<section class="source-panel tfda-panel pending"><div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>此情境尚未有可安全自動對應的劑量</strong></div></div><p class="source-note">可能是同成分多藥證、仿單只寫「詳如仿單」，或癌種對應仍在 review queue；系統不會自行猜測。</p></section>`;
     $('dialogContent').innerHTML = `<p class="eyebrow">${esc(c.name)} · § ${esc(x.section)}</p>
       <h3 class="dialog-title">${esc(x.drug)}</h3>
       <div class="regimen">${esc(x.regimen)}</div>
-      <p class="dialog-summary">${esc(x.summary)}</p>
-      <dl class="detail-table">
-        <dt>治療情境</dt><dd>${esc(x.setting)}</dd>
-        <dt>給付狀態</dt><dd>${esc(x.status || '給付')}</dd>
-        <dt>治療線別</dt><dd>${esc(lineGroup(x))}${x.line && x.line !== lineGroup(x) ? `（${esc(x.line)}）` : ``}</dd>
-        <dt>Biomarker</dt><dd>${esc(x.biomarker)}</dd>
-        <dt>事前審查</dt><dd>${x.prior_auth ? '需要' : '條目未標為需要'}</dd>
-        <dt>審查 / 追蹤</dt><dd>${esc(x.review)}</dd>
-        <dt>療程限制</dt><dd>${esc(x.duration)}</dd>
-        <dt>條文生效</dt><dd>${esc(x.effective)}</dd>
-      </dl>
-      <div class="dialog-actions"><a class="action-button primary" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">開啟健保署原始 PDF ↗</a><button class="action-button" value="close">關閉</button></div>`;
+      <section class="source-panel nhi-panel">
+        <div class="source-panel-head"><div><small>健保給付規定</small><strong>${esc(x.setting)}</strong></div><span>§ ${esc(x.section)}</span></div>
+        <p class="dialog-summary">${esc(x.summary)}</p>
+        <dl class="detail-table compact-table">
+          <dt>給付狀態</dt><dd>${esc(x.status || '給付')}</dd>
+          <dt>治療線別</dt><dd>${esc(lineGroup(x))}${x.line && x.line !== lineGroup(x) ? `（${esc(x.line)}）` : ``}</dd>
+          <dt>Biomarker</dt><dd>${esc(x.biomarker)}</dd>
+          <dt>事前審查</dt><dd>${x.prior_auth ? '需要' : '條目未標為需要'}</dd>
+          <dt>審查 / 追蹤</dt><dd>${esc(x.review)}</dd>
+          <dt>療程限制</dt><dd>${esc(x.duration)}</dd>
+          <dt>條文生效</dt><dd>${esc(x.effective)}</dd>
+        </dl>
+      </section>
+      ${tfdaPanel}
+      <div class="dialog-actions"><a class="action-button primary" href="${esc(pdfLink(x))}" target="_blank" rel="noopener">健保署原始 PDF ↗</a>${showTfda && t.label_url ? `<a class="action-button tfda-link" href="${esc(t.label_url)}" target="_blank" rel="noopener">TFDA 官方仿單 ↗</a>` : ''}<button class="action-button" value="close">關閉</button></div>`;
     $('detailDialog').showModal();
   }
 

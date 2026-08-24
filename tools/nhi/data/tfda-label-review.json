@@ -1,0 +1,159 @@
+{
+  "status": "ok",
+  "fetched_at": "2026-08-24T08:21:11Z",
+  "item_count": 5,
+  "items": [
+    {
+      "id": "bc-carboplatin-tnbc-support",
+      "cancer": "breast",
+      "drug": "Carboplatin",
+      "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
+      "candidates": [
+        {
+          "permit": "衛署藥製字第057314號",
+          "product": "\"杏輝\"剋鉑停靜脈注射液10毫克/毫升",
+          "dosage": "請詳見說明書",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第057314號"
+        },
+        {
+          "permit": "衛署藥輸字第024804號",
+          "product": "爾定康靜脈注射液",
+          "dosage": "詳見仿單。",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024804號"
+        }
+      ]
+    },
+    {
+      "id": "escc-oxaliplatin-nivo-support",
+      "cancer": "esophageal",
+      "drug": "Oxaliplatin",
+      "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
+      "candidates": [
+        {
+          "permit": "衛署藥製字第044508號",
+          "product": "歐力普注射劑",
+          "dosage": "詳見仿單",
+          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        },
+        {
+          "permit": "衛署藥製字第048838號",
+          "product": "奧力美靜脈注射液5毫克/毫升",
+          "dosage": "詳見仿單。",
+          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第048838號"
+        },
+        {
+          "permit": "衛部藥製字第058094號",
+          "product": "\"永信\"鉑瑞停注射液5毫克/毫升",
+          "dosage": "請詳細參閱說明書",
+          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058094號"
+        },
+        {
+          "permit": "衛部藥輸字第028098號",
+          "product": "奧沙利鉑",
+          "dosage": "製劑原料",
+          "indication": "抗腫瘤藥",
+          "label_url": "https://mcp.fda.gov.tw/im_detail_1/%E8%A1%9B%E9%83%A8%E8%97%A5%E8%BC%B8%E5%AD%97%E7%AC%AC028098%E8%99%9F"
+        },
+        {
+          "permit": "衛署藥輸字第025631號",
+          "product": "歐思廷注射液",
+          "dosage": "請詳見仿單",
+          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和fluoropyrimidine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025631號"
+        }
+      ]
+    },
+    {
+      "id": "ec-carboplatin-support",
+      "cancer": "endometrial",
+      "drug": "Carboplatin",
+      "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
+      "candidates": [
+        {
+          "permit": "衛署藥製字第057314號",
+          "product": "\"杏輝\"剋鉑停靜脈注射液10毫克/毫升",
+          "dosage": "請詳見說明書",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第057314號"
+        },
+        {
+          "permit": "衛署藥輸字第024804號",
+          "product": "爾定康靜脈注射液",
+          "dosage": "詳見仿單。",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024804號"
+        }
+      ]
+    },
+    {
+      "id": "ec-paclitaxel-support",
+      "cancer": "endometrial",
+      "drug": "Paclitaxel",
+      "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
+      "candidates": [
+        {
+          "permit": "衛署藥輸字第025586號",
+          "product": "紫杉醇",
+          "dosage": "製劑原料",
+          "indication": "抗癌藥。",
+          "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_f246204a-8231-488c-aec0-4d64bafc68f7?c=2"
+        },
+        {
+          "permit": "衛署藥製字第044601號",
+          "product": "\"永信\" 伏摩素注射液",
+          "dosage": "詳見仿單。",
+          "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(doxorubicin)在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用anthracycline抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病人、與Herceptin併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044601號"
+        },
+        {
+          "permit": "衛部藥陸輸字第001249號",
+          "product": "紫杉醇",
+          "dosage": "製劑原料",
+          "indication": "抗腫瘤藥。",
+          "label_url": "https://mcp.fda.gov.tw/im_detail_1/%E8%A1%9B%E9%83%A8%E8%97%A5%E9%99%B8%E8%BC%B8%E5%AD%97%E7%AC%AC001249%E8%99%9F"
+        },
+        {
+          "permit": "衛署藥輸字第024738號",
+          "product": "癌克平注射液",
+          "dosage": "詳見仿單。",
+          "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        },
+        {
+          "permit": "衛部藥製字第058996號",
+          "product": "\"永信\"半合成派立達師",
+          "dosage": "原料藥",
+          "indication": "抗癌藥物。",
+          "label_url": "https://mcp.fda.gov.tw/im_detail_1/%E8%A1%9B%E9%83%A8%E8%97%A5%E8%A3%BD%E5%AD%97%E7%AC%AC058996%E8%99%9F"
+        }
+      ]
+    },
+    {
+      "id": "lc-carboplatin-support",
+      "cancer": "lung",
+      "drug": "Carboplatin",
+      "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
+      "candidates": [
+        {
+          "permit": "衛署藥製字第057314號",
+          "product": "\"杏輝\"剋鉑停靜脈注射液10毫克/毫升",
+          "dosage": "請詳見說明書",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第057314號"
+        },
+        {
+          "permit": "衛署藥輸字第024804號",
+          "product": "爾定康靜脈注射液",
+          "dosage": "詳見仿單。",
+          "indication": "卵巢癌。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024804號"
+        }
+      ]
+    }
+  ]
+}
