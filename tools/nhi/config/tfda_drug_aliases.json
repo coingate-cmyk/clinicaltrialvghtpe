@@ -1,0 +1,22 @@
+{
+  "5-FU": ["FLUOROURACIL"],
+  "Fluorouracil (5-FU)": ["FLUOROURACIL"],
+  "Tegafur/gimeracil/oteracil (S-1)": ["TEGAFUR", "GIMERACIL", "OTERACIL"],
+  "Trifluridine/tipiracil": ["TRIFLURIDINE", "TIPIRACIL"],
+  "Leucovorin": ["LEUCOVORIN"],
+  "Folinic acid": ["LEUCOVORIN"],
+  "Ado-trastuzumab emtansine": ["TRASTUZUMAB", "EMTANSINE"],
+  "Trastuzumab emtansine": ["TRASTUZUMAB", "EMTANSINE"],
+  "Trastuzumab deruxtecan": ["TRASTUZUMAB", "DERUXTECAN"],
+  "Sacituzumab govitecan": ["SACITUZUMAB", "GOVITECAN"],
+  "Enfortumab vedotin": ["ENFORTUMAB", "VEDOTIN"],
+  "Brentuximab vedotin": ["BRENTUXIMAB", "VEDOTIN"],
+  "Polatuzumab vedotin": ["POLATUZUMAB", "VEDOTIN"],
+  "Belantamab mafodotin": ["BELANTAMAB", "MAFODOTIN"],
+  "Liposomal doxorubicin": ["DOXORUBICIN"],
+  "Pegylated liposomal doxorubicin": ["DOXORUBICIN"],
+  "nab-Paclitaxel": ["PACLITAXEL"],
+  "Albumin-bound paclitaxel": ["PACLITAXEL"],
+  "Calcium folinate": ["LEUCOVORIN"],
+  "All-trans retinoic acid (ATRA)": ["TRETINOIN"]
+}
