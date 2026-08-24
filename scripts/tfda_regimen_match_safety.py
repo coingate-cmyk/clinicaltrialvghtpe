@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Prevent a single-component TFDA licence from being presented as a whole combination regimen.
+"""Safety normalization for TFDA label mappings.
 
-Curated NHI records sometimes put a true regimen in `drug` (e.g. "S-1 + gemcitabine").
-Until component-wise label rendering is implemented, those records must not inherit the label
-of only one component. Fixed-dose combination products can be explicitly allow-listed later.
+- Prevent a single-component licence from being presented as a whole '+' combination regimen.
+- Normalize TFDA dataset-39 fields that concatenate multiple official PDF URLs with ';': keep
+  all links in `label_urls`, while `label_url` is the first valid URL used by the UI.
 """
 from pathlib import Path
 import json
@@ -44,6 +44,20 @@ def curated_drugs():
     return out
 
 
+def split_official_urls(value: str) -> list[str]:
+    value = str(value or '').strip()
+    if not value:
+        return []
+    parts = re.split(r';(?=https?://)', value)
+    out = []
+    for part in parts:
+        part = part.strip()
+        if part.startswith('https://mcp.fda.gov.tw/') or part.startswith('http://mcp.fda.gov.tw/'):
+            if part not in out:
+                out.append(part)
+    return out
+
+
 def is_multi_product_regimen(drug: str) -> bool:
     # '+' is used in curated data for separately supplied regimen components.
     # Slash is NOT used here because several slash names are fixed combination products
@@ -55,11 +69,20 @@ def main():
     data = load_tfda()
     drugs = curated_drugs()
     changed = 0
+    normalized_links = 0
     for item_id, entry in (data.get('byIndicationId') or {}).items():
-        drug = drugs.get(item_id, entry.get('drug', '') if isinstance(entry, dict) else '')
-        if item_id in FIXED_COMBINATION_IDS or not is_multi_product_regimen(drug):
-            continue
         if not isinstance(entry, dict):
+            continue
+
+        urls = split_official_urls(entry.get('label_url', ''))
+        if urls:
+            entry['label_urls'] = urls
+            if entry.get('label_url') != urls[0]:
+                entry['label_url'] = urls[0]
+                normalized_links += 1
+
+        drug = drugs.get(item_id, entry.get('drug', ''))
+        if item_id in FIXED_COMBINATION_IDS or not is_multi_product_regimen(drug):
             continue
         entry.clear()
         entry.update({
@@ -68,10 +91,12 @@ def main():
             'note': 'Combination regimen requires component-wise TFDA label mapping; a single component licence is intentionally not shown as the whole regimen.'
         })
         changed += 1
+
     meta = data.setdefault('meta', {})
     meta['combination_regimen_withheld_count'] = changed
+    meta['multi_insert_link_normalized_count'] = normalized_links
     TFDA_JS.write_text('window.TFDA_LABELS = ' + json.dumps(data, ensure_ascii=False, indent=2) + ';\n', encoding='utf-8')
-    print(json.dumps({'combination_regimen_withheld': changed}, ensure_ascii=False))
+    print(json.dumps({'combination_regimen_withheld': changed, 'multi_insert_links_normalized': normalized_links}, ensure_ascii=False))
 
 
 if __name__ == '__main__':
