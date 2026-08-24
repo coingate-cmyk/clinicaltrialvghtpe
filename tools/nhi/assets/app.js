@@ -5,7 +5,7 @@
   const tfda = window.TFDA_LABELS || { meta: {}, byIndicationId: {} };
   const tfdaFor = (item) => (tfda.byIndicationId || {})[item?.id] || null;
   const tfdaVisible = (item) => { const t=tfdaFor(item); return t && (t.status === 'matched' || t.status === 'generic-label'); };
-  const tfdaSearchText = (item) => { const t=tfdaFor(item); return t ? [t.product_zh,t.product_en,t.permit,t.dosage,...(t.dose_mentions||[]),...(t.frequency_mentions||[])].filter(Boolean).join(' ') : ''; };
+  const tfdaSearchText = (item) => { const t=tfdaFor(item); if (!t) return ''; const safe=t.dose_confidence === 'high'; return [t.product_zh,t.product_en,t.permit,safe ? t.dosage_excerpt || t.dosage : '',...(safe ? (t.dose_mentions||[]) : []),...(safe ? (t.frequency_mentions||[]) : [])].filter(Boolean).join(' '); };
   if (!data) throw new Error('NHI_DATA not loaded');
 
   const $ = (id) => document.getElementById(id);
@@ -126,9 +126,10 @@
     const bio = x.biomarker && x.biomarker !== '—';
     const t = tfdaFor(x);
     const showTfda = tfdaVisible(x);
-    const doseChip = showTfda && (t.dose_mentions || []).length ? (t.dose_mentions || []).slice(0,3).join(' / ') : '';
-    const freqChip = showTfda && (t.frequency_mentions || []).length ? (t.frequency_mentions || []).slice(0,3).join(' / ') : '';
-    const tfdaMeta = showTfda ? `<div class="tfda-card-dose"><small>TFDA 核准仿單</small><span>${esc(doseChip || '用法用量詳見仿單')}${freqChip ? ` · ${esc(freqChip)}` : ''}</span></div>` : '';
+    const safeDose = showTfda && t.dose_confidence === 'high';
+    const doseChip = safeDose && (t.dose_mentions || []).length ? (t.dose_mentions || []).slice(0,3).join(' / ') : '';
+    const freqChip = safeDose && (t.frequency_mentions || []).length ? (t.frequency_mentions || []).slice(0,3).join(' / ') : '';
+    const tfdaMeta = showTfda ? `<div class="tfda-card-dose${safeDose ? '' : ' withheld'}"><small>TFDA 核准仿單</small><span>${safeDose ? `${esc(doseChip || '仿單劑量已核對')}${freqChip ? ` · ${esc(freqChip)}` : ''}` : '已對應官方仿單 · 此癌種劑量未安全自動拆出'}</span></div>` : '';
     return `<article class="drug-card">
       <div>
         <h3>${esc(x.drug)}</h3>
@@ -138,7 +139,7 @@
           ${x.status && x.status !== '給付' ? `<span class="badge">${esc(x.status)}</span>` : ''}
           ${x.prior_auth ? '<span class="badge auth">事前審查</span>' : ''}
           ${bio ? `<span class="badge bio">${esc(x.biomarker)}</span>` : ''}
-          ${showTfda ? '<span class="badge tfda">TFDA dose</span>' : ''}
+          ${showTfda ? `<span class="badge tfda">${safeDose ? 'TFDA dose' : 'TFDA label'}</span>` : ''}
           <span class="badge">§ ${esc(x.section)}</span>
         </div>
         ${tfdaMeta}
@@ -172,19 +173,25 @@
     const c = cancerMap[x.cancer];
     const t = tfdaFor(x);
     const showTfda = tfdaVisible(x);
+    const safeDose = showTfda && t.dose_confidence === 'high';
     const tfdaDate = tfda.meta?.fetched_at ? String(tfda.meta.fetched_at).slice(0,10) : '';
-    const tfdaPanel = showTfda ? `<section class="source-panel tfda-panel">
+    const doseStatus = safeDose
+      ? `<dt>劑量</dt><dd>${esc((t.dose_mentions || []).join(' / ') || '請見下方官方用法用量')}</dd>
+         <dt>頻次</dt><dd>${esc((t.frequency_mentions || []).join(' / ') || '依仿單療程／週期')}</dd>
+         <dt>對應依據</dt><dd>${esc(t.dose_match_basis || '適應症特異仿單段落')}</dd>
+         <dt>官方用法用量</dt><dd class="dose-text">${esc(t.dosage_excerpt || t.dosage || '詳如仿單')}</dd>`
+      : `<dt>劑量 / 頻次</dt><dd><strong>未自動顯示</strong> — 此藥證雖已對應，但無法確定目前癌種對應的單一劑量段落。</dd>
+         <dt>原因</dt><dd>${esc(t.dose_withheld_reason || '多適應症仿單或仿單文字無法安全拆分')}</dd>`;
+    const tfdaPanel = showTfda ? `<section class="source-panel tfda-panel${safeDose ? '' : ' pending'}">
       <div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>${esc(t.product_zh || t.product_en || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
       <dl class="detail-table compact-table">
         <dt>許可證</dt><dd>${esc(t.permit || '')}</dd>
         <dt>核准適應症</dt><dd>${esc(t.indication || '—')}</dd>
-        <dt>劑量</dt><dd>${esc((t.dose_mentions || []).join(' / ') || '仿單未能自動拆出單一劑量')}</dd>
-        <dt>頻次</dt><dd>${esc((t.frequency_mentions || []).join(' / ') || '仿單未能自動拆出單一頻次')}</dd>
-        <dt>官方用法用量</dt><dd class="dose-text">${esc(t.dosage || '詳如仿單')}</dd>
+        ${doseStatus}
         <dt>TFDA 資料同步</dt><dd>${esc(tfdaDate || '—')}${t.license_modified ? `；藥證異動 ${esc(t.license_modified)}` : ''}</dd>
       </dl>
-      <p class="source-note">健保「能不能用」與 TFDA「核准怎麼用」是不同來源；若兩者限制不同，申報與處方仍分別依最新官方規定。</p>
-    </section>` : `<section class="source-panel tfda-panel pending"><div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>此情境尚未有可安全自動對應的劑量</strong></div></div><p class="source-note">可能是同成分多藥證、仿單只寫「詳如仿單」，或癌種對應仍在 review queue；系統不會自行猜測。</p></section>`;
+      <p class="source-note">健保「能不能用」與 TFDA「核准怎麼用」是不同來源。只有明確對到此癌種用法用量小節，或單一適應症藥證時，系統才自動顯示 dose / frequency；其他情況只提供官方仿單，不猜。</p>
+    </section>` : `<section class="source-panel tfda-panel pending"><div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>此情境尚未有可安全自動對應的藥證</strong></div></div><p class="source-note">可能是同成分多藥證或癌種對應仍在 review queue；系統不會自行猜測。</p></section>`;
     $('dialogContent').innerHTML = `<p class="eyebrow">${esc(c.name)} · § ${esc(x.section)}</p>
       <h3 class="dialog-title">${esc(x.drug)}</h3>
       <div class="regimen">${esc(x.regimen)}</div>
