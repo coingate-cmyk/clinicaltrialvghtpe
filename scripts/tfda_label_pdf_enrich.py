@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Enrich TFDA oncology mappings with dose/frequency extracted from official package-insert PDFs.
+"""Conservatively enrich TFDA oncology mappings with indication-specific dose/frequency.
 
-This is deliberately conservative: parsed dose chips are accepted only when they are found
-near the relevant cancer/indication wording in the official insert, or when a clearly named
-Dosage/Administration section yields an unambiguous general regimen. Scanned/unreadable PDFs
-are left as '詳見仿單' rather than guessed.
+Safety rules:
+1. Never search the whole insert for a nearby cancer word and call that a dose.
+2. First isolate the official Dosage/Administration section.
+3. For multi-indication licences, expose dose chips only from an explicit cancer-specific
+   subsection inside that dosage section.
+4. A general dosage section may be used only when the approved-indication text maps to one
+   cancer category and that category matches the NHI record.
+5. Otherwise keep the official permit/insert link but withhold dose/frequency instead of guessing.
 """
 from __future__ import annotations
 
@@ -48,6 +52,7 @@ STOP_HEADINGS = [
     "禁忌", "警語", "注意事項", "不良反應", "交互作用", "特殊族群", "藥物動力學",
     "contraindication", "warnings", "adverse reactions", "drug interactions", "use in specific populations",
 ]
+PLACEHOLDER_DOSE_RE = re.compile(r"^(?:請)?(?:詳|參閱|請參閱).{0,12}(?:仿單|說明書).{0,8}$")
 
 
 def norm_text(s: str) -> str:
@@ -56,6 +61,10 @@ def norm_text(s: str) -> str:
 
 def clean(s: str) -> str:
     return re.sub(r"[ \t]+", " ", norm_text(s)).strip()
+
+
+def compact_key(s: str) -> str:
+    return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", norm_text(s).lower())
 
 
 def load_tfda() -> dict:
@@ -100,9 +109,7 @@ def split_urls(value: str) -> list[str]:
     value = clean(value)
     if not value:
         return []
-    # Dataset 39 occasionally concatenates multiple official insert PDFs with ';'.
-    parts = re.split(r";(?=https?://)", value)
-    return [p.strip() for p in parts if p.strip().startswith("http")]
+    return [p.strip() for p in re.split(r";(?=https?://)", value) if p.strip().startswith("http")]
 
 
 def fetch_pdf_text(urls: list[str]) -> tuple[str, str]:
@@ -134,12 +141,11 @@ def fetch_pdf_text(urls: list[str]) -> tuple[str, str]:
 
 
 def uniq(values: list[str], limit=10) -> list[str]:
-    out = []
-    seen = set()
+    out, seen = [], set()
     for v in values:
         v = clean(v)
-        k = v.lower().replace(" ", "")
-        if v and k not in seen:
+        k = compact_key(v)
+        if v and k and k not in seen:
             seen.add(k)
             out.append(v)
         if len(out) >= limit:
@@ -148,51 +154,50 @@ def uniq(values: list[str], limit=10) -> list[str]:
 
 
 def mentions(text: str) -> tuple[list[str], list[str]]:
-    doses = uniq([m.group(0) for m in DOSE_RE.finditer(text)], 12)
+    doses = uniq([m.group(0) for m in DOSE_RE.finditer(text)], 8)
     freqs = []
     for pat in FREQ_PATTERNS:
         freqs.extend(m.group(0) for m in pat.finditer(text))
-    return doses, uniq(freqs, 12)
+    return doses, uniq(freqs, 8)
 
 
-def cancer_terms(cancer_id: str, aliases: dict) -> list[str]:
+def alias_terms_for_cancer(cancer_id: str, aliases: dict) -> list[str]:
     cfg = aliases.get(cancer_id, {}) if isinstance(aliases, dict) else {}
     vals = []
     if isinstance(cfg, dict):
         vals.extend(cfg.get("aliases", []) or [])
         vals.append(cfg.get("name", ""))
-    terms = []
-    for v in vals:
-        v = clean(v)
-        if len(v) >= 2 and v.lower() not in {x.lower() for x in terms}:
-            terms.append(v)
-    return sorted(terms, key=len, reverse=True)
+    out = []
+    for value in vals:
+        value = clean(value)
+        if len(value) < 2:
+            continue
+        # Avoid ultra-generic aliases as subsection headings.
+        if compact_key(value) in {"cancer", "tumor", "tumour", "solidtumor", "solidtumour", "癌", "腫瘤"}:
+            continue
+        if value.lower() not in {x.lower() for x in out}:
+            out.append(value)
+    return sorted(out, key=len, reverse=True)
 
 
-def relevant_context(text: str, terms: list[str]) -> tuple[str, bool]:
-    low = text.lower()
-    windows = []
-    for term in terms[:20]:
-        t = term.lower()
-        start = 0
-        hits = 0
-        while hits < 3:
-            pos = low.find(t, start)
-            if pos < 0:
+def all_heading_terms(aliases: dict) -> list[tuple[str, str]]:
+    rows = []
+    for cid in aliases:
+        for term in alias_terms_for_cancer(cid, aliases):
+            if len(term) >= 2:
+                rows.append((cid, term))
+    return sorted(rows, key=lambda x: len(x[1]), reverse=True)
+
+
+def indication_cancer_ids(indication: str, aliases: dict) -> set[str]:
+    low = norm_text(indication).lower()
+    found = set()
+    for cid in aliases:
+        for term in alias_terms_for_cancer(cid, aliases):
+            if term.lower() in low:
+                found.add(cid)
                 break
-            a = max(0, pos - 1000)
-            b = min(len(text), pos + len(term) + 1800)
-            snippet = text[a:b]
-            d, f = mentions(snippet)
-            if d or f:
-                windows.append(snippet)
-            start = pos + len(t)
-            hits += 1
-        if windows:
-            break
-    if windows:
-        return "\n…\n".join(windows[:3]), True
-    return "", False
+    return found
 
 
 def dosage_section(text: str) -> str:
@@ -205,48 +210,151 @@ def dosage_section(text: str) -> str:
     if not starts:
         return ""
     start = min(starts)
-    end = min(len(text), start + 12000)
-    tail_low = low[start + 40:end]
+    # Inserts may have long tables; allow a larger section but stop at the next major safety heading.
+    end = min(len(text), start + 30000)
+    tail_low = low[start + 80:end]
     stops = []
     for heading in STOP_HEADINGS:
         p = tail_low.find(heading.lower())
-        if p >= 400:
-            stops.append(start + 40 + p)
+        if p >= 600:
+            stops.append(start + 80 + p)
     if stops:
         end = min(stops)
     return text[start:end]
 
 
-def compact_excerpt(text: str, max_chars=2200) -> str:
-    text = re.sub(r"\n{3,}", "\n\n", clean(text.replace("\r", "\n")))
-    return text[:max_chars].strip()
+def looks_like_heading(line: str) -> bool:
+    s = clean(line)
+    if not s or len(s) > 180:
+        return False
+    if re.match(r"^\s*(?:\d+(?:\.\d+){1,3}|[一二三四五六七八九十]+[、.．])\s*", s):
+        return True
+    # A short line without sentence punctuation is commonly a PDF subsection heading.
+    return len(s) <= 70 and not re.search(r"[。；;]", s)
+
+
+def specific_dosage_subsection(section: str, target_cancer: str, aliases: dict) -> str:
+    target_terms = alias_terms_for_cancer(target_cancer, aliases)
+    if not target_terms:
+        return ""
+    lines = section.splitlines()
+    starts = []
+    for i, raw in enumerate(lines):
+        line = clean(raw)
+        low = line.lower()
+        if not looks_like_heading(line):
+            continue
+        for term in target_terms:
+            if term.lower() in low:
+                score = 0
+                if re.match(r"^\s*\d+(?:\.\d+){1,3}", line):
+                    score += 3
+                if compact_key(line) == compact_key(term):
+                    score += 3
+                if len(line) <= 90:
+                    score += 1
+                starts.append((score, i))
+                break
+    if not starts:
+        return ""
+    _, start_i = max(starts, key=lambda x: (x[0], -x[1]))
+
+    heading_terms = all_heading_terms(aliases)
+    end_i = min(len(lines), start_i + 80)
+    start_line = clean(lines[start_i])
+    num_match = re.match(r"^\s*(\d+)\.(\d+)", start_line)
+    parent_major = num_match.group(1) if num_match else None
+    current_minor = int(num_match.group(2)) if num_match else None
+
+    for j in range(start_i + 1, min(len(lines), start_i + 100)):
+        line = clean(lines[j])
+        if not line:
+            continue
+        # Strongest stop: next sibling numbered subsection (e.g. 6.1 -> 6.2).
+        nm = re.match(r"^\s*(\d+)\.(\d+)\b", line)
+        if parent_major and nm and nm.group(1) == parent_major and int(nm.group(2)) > (current_minor or -1):
+            end_i = j
+            break
+        # Also stop at another short cancer-specific heading.
+        if looks_like_heading(line):
+            low = line.lower()
+            other = False
+            for cid, term in heading_terms:
+                if cid != target_cancer and term.lower() in low:
+                    other = True
+                    break
+            if other:
+                end_i = j
+                break
+    ctx = "\n".join(lines[start_i:end_i])
+    return ctx[:6000]
+
+
+def compact_excerpt(text: str, max_chars=2400) -> str:
+    text = norm_text(text).replace("\r", "\n")
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text).strip()
+    return text[:max_chars]
+
+
+def clear_unsafe_dose(entry: dict, reason: str) -> None:
+    entry["dose_mentions"] = []
+    entry["frequency_mentions"] = []
+    entry.pop("dosage_excerpt", None)
+    entry.pop("dose_source_url", None)
+    entry["dose_confidence"] = "withheld"
+    entry["dose_withheld_reason"] = reason
+    entry["dose_indication_specific"] = False
 
 
 def enrich_entry(entry: dict, cancer_id: str, pdf_text: str, source_url: str, aliases: dict) -> bool:
-    if not pdf_text:
-        return False
-    terms = cancer_terms(cancer_id, aliases)
-    ctx, specific = relevant_context(pdf_text, terms)
-    if not ctx:
-        ctx = dosage_section(pdf_text)
-        specific = False
-    if not ctx:
-        return False
-    doses, freqs = mentions(ctx)
-    if not (doses or freqs):
-        return False
-    # For a generic dosage section, require both a dose and a frequency before exposing chips.
-    if not specific and not (doses and freqs):
-        return False
-    entry["dose_mentions"] = doses
-    entry["frequency_mentions"] = freqs
-    entry["dosage_excerpt"] = compact_excerpt(ctx)
-    if re.fullmatch(r"請?(?:詳|參閱).{0,8}仿單.{0,8}", clean(entry.get("dosage", ""))):
-        entry["dosage"] = entry["dosage_excerpt"]
-    entry["dose_source"] = "TFDA 官方仿單 PDF"
-    entry["dose_source_url"] = source_url
-    entry["dose_indication_specific"] = specific
-    return True
+    section = dosage_section(pdf_text) if pdf_text else ""
+    licence_cancers = indication_cancer_ids(str(entry.get("indication", "")), aliases)
+
+    # Multi-indication licences: only an explicit target-cancer subsection is safe enough.
+    ctx = specific_dosage_subsection(section, cancer_id, aliases) if section else ""
+    basis = "cancer-specific dosage subsection" if ctx else ""
+
+    # Single-cancer licence: a general dosage section is still indication-specific by construction.
+    if not ctx and section and licence_cancers == {cancer_id}:
+        ctx = section[:8000]
+        basis = "single-indication licence dosage section"
+
+    if ctx:
+        doses, freqs = mentions(ctx)
+        # We need at least a dose. Frequency may be expressed as day numbers/cycles and not match regex.
+        if doses:
+            entry["dose_mentions"] = doses
+            entry["frequency_mentions"] = freqs
+            entry["dosage_excerpt"] = compact_excerpt(ctx)
+            entry["dose_source"] = "TFDA 官方仿單 PDF"
+            entry["dose_source_url"] = source_url
+            entry["dose_indication_specific"] = True
+            entry["dose_confidence"] = "high"
+            entry["dose_match_basis"] = basis
+            entry.pop("dose_withheld_reason", None)
+            return True
+
+    # Dataset-37 free-text dose can still be safe for a single-cancer licence.
+    raw_dosage = clean(str(entry.get("dosage", "")))
+    base_doses, base_freqs = mentions(raw_dosage)
+    if licence_cancers == {cancer_id} and base_doses and not PLACEHOLDER_DOSE_RE.match(raw_dosage):
+        entry["dose_mentions"] = base_doses
+        entry["frequency_mentions"] = base_freqs
+        entry["dose_source"] = "TFDA 未註銷藥品許可證資料集－用法用量"
+        entry["dose_indication_specific"] = True
+        entry["dose_confidence"] = "high"
+        entry["dose_match_basis"] = "single-indication licence structured dosage"
+        entry.pop("dose_withheld_reason", None)
+        return True
+
+    reason = "multi-indication licence without an explicit target-cancer dosage subsection"
+    if not section:
+        reason = "official insert PDF text unavailable or dosage section not machine-readable"
+    elif licence_cancers == {cancer_id}:
+        reason = "single-indication dosage section found but no reliable dose token was extracted"
+    clear_unsafe_dose(entry, reason)
+    return False
 
 
 def main():
@@ -255,11 +363,10 @@ def main():
     cancer_by_id = parse_curated_cancers()
     entries = data.get("byIndicationId", {})
 
+    # Re-evaluate every visible mapping from scratch so a previous broad extraction cannot survive.
     permit_urls = {}
     for item_id, entry in entries.items():
         if not isinstance(entry, dict) or entry.get("status") not in {"matched", "generic-label"}:
-            continue
-        if entry.get("dose_mentions") and entry.get("frequency_mentions"):
             continue
         permit = str(entry.get("permit", ""))
         urls = split_urls(str(entry.get("label_url", "")))
@@ -277,7 +384,8 @@ def main():
             except Exception as exc:
                 pdf_cache[permit] = ("", type(exc).__name__)
 
-    enriched = 0
+    high_confidence = 0
+    withheld = 0
     parsed_pdfs = sum(1 for text, _ in pdf_cache.values() if text)
     for item_id, entry in entries.items():
         if not isinstance(entry, dict) or entry.get("status") not in {"matched", "generic-label"}:
@@ -285,15 +393,27 @@ def main():
         permit = str(entry.get("permit", ""))
         text, source = pdf_cache.get(permit, ("", ""))
         if enrich_entry(entry, cancer_by_id.get(item_id, ""), text, source, aliases):
-            enriched += 1
+            high_confidence += 1
+        else:
+            withheld += 1
 
     meta = data.setdefault("meta", {})
     meta["package_insert_pdf_attempted_count"] = attempted
     meta["package_insert_pdf_parsed_count"] = parsed_pdfs
-    meta["indication_dose_enriched_count"] = enriched
-    meta["dose_extraction_note"] = "Dose/frequency chips are extracted from official TFDA package-insert PDFs; indication-context matches are preferred, ambiguous/unreadable PDFs remain unparsed."
+    meta["indication_dose_enriched_count"] = high_confidence
+    meta["high_confidence_dose_count"] = high_confidence
+    meta["dose_withheld_count"] = withheld
+    meta["dose_extraction_note"] = (
+        "Dose/frequency is shown only for an explicit cancer-specific dosage subsection or a single-indication licence. "
+        "Multi-indication labels without a target-cancer dosage subsection are linked but dose is withheld."
+    )
     save_tfda(data)
-    print(json.dumps({"pdf_attempted": attempted, "pdf_parsed": parsed_pdfs, "indication_dose_enriched": enriched}, ensure_ascii=False))
+    print(json.dumps({
+        "pdf_attempted": attempted,
+        "pdf_parsed": parsed_pdfs,
+        "high_confidence_dose": high_confidence,
+        "dose_withheld": withheld,
+    }, ensure_ascii=False))
 
 
 if __name__ == "__main__":
