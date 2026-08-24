@@ -1,7 +1,7 @@
 window.TFDA_LABELS = {
   "meta": {
     "schema_version": "tfda-oncology-label-v1",
-    "fetched_at": "2026-08-24T08:35:01Z",
+    "fetched_at": "2026-08-24T08:38:40Z",
     "active_dataset": "https://data.gov.tw/dataset/9123",
     "insert_dataset": "https://data.gov.tw/dataset/9117",
     "active_row_count": 26054,
