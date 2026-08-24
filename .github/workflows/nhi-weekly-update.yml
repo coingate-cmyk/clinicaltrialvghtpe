@@ -13,6 +13,7 @@ on:
       - 'scripts/normalize_nhi_coverage.py'
       - 'scripts/build_nhi_candidates.py'
       - 'scripts/tfda_label_update.py'
+      - 'scripts/tfda_regimen_match_safety.py'
       - 'scripts/tfda_label_pdf_enrich.py'
       - 'scripts/patch_nhi_tfda_ui.py'
       - 'scripts/patch_nhi_tfda_safety.py'
@@ -67,6 +68,7 @@ jobs:
           python scripts/normalize_nhi_coverage.py
           python scripts/build_nhi_candidates.py
           python scripts/tfda_label_update.py
+          python scripts/tfda_regimen_match_safety.py
           python scripts/tfda_label_pdf_enrich.py
           python scripts/patch_nhi_tfda_ui.py
           python scripts/patch_nhi_tfda_safety.py
@@ -102,18 +104,24 @@ jobs:
           assert meta.get('package_insert_pdf_parsed_count',0) >= 1, meta
           assert meta.get('high_confidence_dose_count',0) >= 1, meta
           assert meta.get('dose_withheld_count',0) >= 1, meta
+          assert meta.get('combination_regimen_withheld_count',0) >= 1, meta
           app=Path('tools/nhi/assets/app.js').read_text(encoding='utf-8')
           index=Path('tools/nhi/index.html').read_text(encoding='utf-8')
           assert 'TFDA 核准仿單' in app
           assert "t.dose_confidence === 'high'" in app
           assert '此癌種劑量未安全自動拆出' in app
           assert 'assets/tfda-labels.js' in index
-          # Regression guard: a withheld mapping must not retain searchable dose chips.
+          # Regression guards: withheld mappings must not retain searchable dose chips.
           for entry in tfda.get('byIndicationId',{}).values():
-              if isinstance(entry,dict) and entry.get('dose_confidence') == 'withheld':
+              if not isinstance(entry,dict):
+                  continue
+              if entry.get('dose_confidence') == 'withheld':
                   assert not entry.get('dose_mentions'), entry.get('permit')
                   assert not entry.get('frequency_mentions'), entry.get('permit')
-          print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('high_confidence_dose_count'), 'high-confidence doses;', meta.get('dose_withheld_count'), 'withheld;', meta.get('review_count'), 'permit reviews')
+              if entry.get('status') == 'regimen-components-required':
+                  assert not entry.get('permit'), entry
+                  assert not entry.get('label_url'), entry
+          print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('high_confidence_dose_count'), 'high-confidence doses;', meta.get('dose_withheld_count'), 'dose withheld;', meta.get('combination_regimen_withheld_count'), 'combination regimens withheld;', meta.get('review_count'), 'permit reviews')
           PY
           node --check tools/nhi/assets/app.js
 
