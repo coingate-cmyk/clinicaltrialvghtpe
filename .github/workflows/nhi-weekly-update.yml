@@ -15,6 +15,7 @@ on:
       - 'scripts/tfda_label_update.py'
       - 'scripts/tfda_label_pdf_enrich.py'
       - 'scripts/patch_nhi_tfda_ui.py'
+      - 'scripts/patch_nhi_tfda_safety.py'
       - 'tools/nhi/config/cancer_aliases.json'
       - 'tools/nhi/config/tfda_drug_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
@@ -68,6 +69,7 @@ jobs:
           python scripts/tfda_label_update.py
           python scripts/tfda_label_pdf_enrich.py
           python scripts/patch_nhi_tfda_ui.py
+          python scripts/patch_nhi_tfda_safety.py
 
       - name: Validate generated NHI and TFDA files
         shell: bash
@@ -98,12 +100,20 @@ jobs:
           assert meta.get('matched_indication_count',0) >= 10, meta
           assert meta.get('package_insert_pdf_attempted_count',0) >= 1, meta
           assert meta.get('package_insert_pdf_parsed_count',0) >= 1, meta
-          assert meta.get('indication_dose_enriched_count',0) >= 1, meta
+          assert meta.get('high_confidence_dose_count',0) >= 1, meta
+          assert meta.get('dose_withheld_count',0) >= 1, meta
           app=Path('tools/nhi/assets/app.js').read_text(encoding='utf-8')
           index=Path('tools/nhi/index.html').read_text(encoding='utf-8')
           assert 'TFDA 核准仿單' in app
+          assert "t.dose_confidence === 'high'" in app
+          assert '此癌種劑量未安全自動拆出' in app
           assert 'assets/tfda-labels.js' in index
-          print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('indication_dose_enriched_count'), 'dose/frequency enriched;', meta.get('review_count'), 'TFDA reviews')
+          # Regression guard: a withheld mapping must not retain searchable dose chips.
+          for entry in tfda.get('byIndicationId',{}).values():
+              if isinstance(entry,dict) and entry.get('dose_confidence') == 'withheld':
+                  assert not entry.get('dose_mentions'), entry.get('permit')
+                  assert not entry.get('frequency_mentions'), entry.get('permit')
+          print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('high_confidence_dose_count'), 'high-confidence doses;', meta.get('dose_withheld_count'), 'withheld;', meta.get('review_count'), 'permit reviews')
           PY
           node --check tools/nhi/assets/app.js
 
@@ -157,4 +167,4 @@ jobs:
             git push origin pages-clean-ajcc-v2-3
           fi
 
-# v0.8 NHI + TFDA label-dose enrichment; TFDA datasets 37/39 refresh weekly.
+# v0.8 NHI + TFDA label-dose enrichment; only high-confidence indication-specific dose is displayed.
