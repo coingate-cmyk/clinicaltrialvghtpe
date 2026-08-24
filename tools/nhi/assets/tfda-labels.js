@@ -1,7 +1,7 @@
 window.TFDA_LABELS = {
   "meta": {
     "schema_version": "tfda-oncology-label-v1",
-    "fetched_at": "2026-08-24T08:21:11Z",
+    "fetched_at": "2026-08-24T08:23:57Z",
     "active_dataset": "https://data.gov.tw/dataset/9123",
     "insert_dataset": "https://data.gov.tw/dataset/9117",
     "active_row_count": 26054,
@@ -9,7 +9,11 @@ window.TFDA_LABELS = {
     "curated_indication_count": 300,
     "matched_indication_count": 266,
     "review_count": 5,
-    "note": "Dose/interval is derived only from official TFDA licence dosage text. Ambiguous mappings are withheld for review."
+    "note": "Dose/interval is derived only from official TFDA licence dosage text. Ambiguous mappings are withheld for review.",
+    "package_insert_pdf_attempted_count": 130,
+    "package_insert_pdf_parsed_count": 10,
+    "indication_dose_enriched_count": 24,
+    "dose_extraction_note": "Dose/frequency chips are extracted from official TFDA package-insert PDFs; indication-context matches are preferred, ambiguous/unreadable PDFs remain unparsed."
   },
   "byIndicationId": {
     "btc-gemcitabine": {
@@ -21,13 +25,29 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "0 \n脫髮(%) \n 第 3/4 級 11 55 \n口腔黏膜炎(%) \n 第 3、4 級 1 22 p=0.001 \n噁心嘔吐(%) \n 第 3、4 級 22 21 \na 病人因發熱性嗜中性白血球減少症住院照護。 \nb 因發熱性嗜中性白血球減少症住院照護天數。 \n生活品質(QoL) \n使用 EORTC QLQ-C30 測量生活品質,評估身體與心理功能,以及與膀胱癌及其治療相關的症狀。二試驗組皆顯示對疼痛\n與情緒有改善。於 MVAC 組病人疲勞感加重,而於 Gemcitabine 併用 Cisplatin 組則未改變。於其他評估指標,二試驗組皆\n維持相當的生活品質。 \n其他佐證的臨床試驗 \n一個非隨機分配的第二期臨床試驗,以 Gemcitabine 併用 Cisplatin 治療 46 名未接受治療的第四期(轉移)轉移性泌尿道移形\n上皮細胞癌(TCC of the urothelium)病人,證實 Gemcitabine 併用 Cisplatin 可做為此疾病之治療用藥。其療程以 28 天為一週\n期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 1 天給予 Cisplatin 75 mg/m 2。首批 11 名病人於第\n1 天使用 Cisplatin 100 mg/m2,但 此11 名病人發生第 3/4 級嗜中性白血球減少症(100%)與血小板減少症(73%),故 將Cisplatin\n劑量降至 75 mg/m2。此試驗反應率為 41%,中位存活期為 14.3 個月。另一個第二期臨床試驗[31 名第四期(局部晚期或轉\n移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)的病人],使用相同療程,為隨機分配的臨床試驗。此試驗反應率\n為 57%,中位存活期為 12.6 個月。這二個臨床試驗之總體毒性反應,與第三期隨機臨床 試驗之報告相似。 \n \n五、 【適應症】(依文獻記載) \n非小細胞肺癌、胰臟癌、膀胱癌。 \nGemcitabine 與 Paclitaxel 併用,可使用於曾經使用過 Anthracycline 之局部復發且無法手術切除或轉移性之乳癌病人 。 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,作為第二線治療。 \n膽道癌。 \n \n說明 \n非小細胞肺癌 \nGemcitabine 併用 Cisplatin 是治療無法手術、局部晚期(第 IIIa 期或第 IIIb 期)或有轉移(第 IV 期)之非小細胞肺癌之第一線\n治療用藥。Gemcitabine 用於緩和治療局部晚期或轉移性非小細胞肺癌成人病人。 \n胰臟癌 \nGemcitabine 是治療局部惡化性 (無法手術治療之第 II 期或第 III 期)或有轉移(第 IV 期)之胰臟癌之第一線治療用藥。\nGemcitabine 亦可用於曾接受過 5-FU 治療之病人。 \n膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \nGemcitabine 併用 Cisplatin 是治療第四期(局部晚期或轉移)轉移泌尿道移形上皮細胞癌(TCC of the urothelium)之第一線治療\n用藥。 \n乳癌 \nGemcitabine 與 paclitaxel 併用,可使用於曾經使用過 antracycline 之局部復發且無法手術切除或轉移性之乳癌 病人,除非\nanthracycline 為臨床上使用禁忌。 \n卵巢癌 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,做為第二線治療。 \n膽道癌 \nGemcitabine 可用於治療晚期或復發之膽道癌(含肝內膽管),目前尚未有證據支持用於膽道癌之手術後輔助治療。 \n \n六、 【劑量與給藥方式】(依文獻記載) \n6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "75 mg",
+        "100 mg/m2",
+        "75 mg/m2",
+        "800 mg/m2",
+        "1250 mg/m2",
+        "175 mg/m2",
+        "1250 mg"
+      ],
+      "frequency_mentions": [
+        "每 4 週",
+        "每 3 週"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "0 \n脫髮(%) \n 第 3/4 級 11 55 \n口腔黏膜炎(%) \n 第 3、4 級 1 22 p=0.001 \n噁心嘔吐(%) \n 第 3、4 級 22 21 \na 病人因發熱性嗜中性白血球減少症住院照護。 \nb 因發熱性嗜中性白血球減少症住院照護天數。 \n生活品質(QoL) \n使用 EORTC QLQ-C30 測量生活品質,評估身體與心理功能,以及與膀胱癌及其治療相關的症狀。二試驗組皆顯示對疼痛\n與情緒有改善。於 MVAC 組病人疲勞感加重,而於 Gemcitabine 併用 Cisplatin 組則未改變。於其他評估指標,二試驗組皆\n維持相當的生活品質。 \n其他佐證的臨床試驗 \n一個非隨機分配的第二期臨床試驗,以 Gemcitabine 併用 Cisplatin 治療 46 名未接受治療的第四期(轉移)轉移性泌尿道移形\n上皮細胞癌(TCC of the urothelium)病人,證實 Gemcitabine 併用 Cisplatin 可做為此疾病之治療用藥。其療程以 28 天為一週\n期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 1 天給予 Cisplatin 75 mg/m 2。首批 11 名病人於第\n1 天使用 Cisplatin 100 mg/m2,但 此11 名病人發生第 3/4 級嗜中性白血球減少症(100%)與血小板減少症(73%),故 將Cisplatin\n劑量降至 75 mg/m2。此試驗反應率為 41%,中位存活期為 14.3 個月。另一個第二期臨床試驗[31 名第四期(局部晚期或轉\n移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)的病人],使用相同療程,為隨機分配的臨床試驗。此試驗反應率\n為 57%,中位存活期為 12.6 個月。這二個臨床試驗之總體毒性反應,與第三期隨機臨床 試驗之報告相似。 \n \n五、 【適應症】(依文獻記載) \n非小細胞肺癌、胰臟癌、膀胱癌。 \nGemcitabine 與 Paclitaxel 併用,可使用於曾經使用過 Anthracycline 之局部復發且無法手術切除或轉移性之乳癌病人 。 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,作為第二線治療。 \n膽道癌。 \n \n說明 \n非小細胞肺癌 \nGemcitabine 併用 Cisplatin 是治療無法手術、局部晚期(第 IIIa 期或第 IIIb 期)或有轉移(第 IV 期)之非小細胞肺癌之第一線\n治療用藥。Gemcitabine 用於緩和治療局部晚期或轉移性非小細胞肺癌成人病人。 \n胰臟癌 \nGemcitabine 是治療局部惡化性 (無法手術治療之第 II 期或第 III 期)或有轉移(第 IV 期)之胰臟癌之第一線治療用藥。\nGemcitabine 亦可用於曾接受過 5-FU 治療之病人。 \n膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \nGemcitabine 併用 Cisplatin 是治療第四期(局部晚期或轉移)轉移泌尿道移形上皮細胞癌(TCC of the urothelium)之第一線治療\n用藥。 \n乳癌 \nGemcitabine 與 paclitaxel 併用,可使用於曾經使用過 antracycline 之局部復發且無法手術切除或轉移性之乳癌 病人,除非\nanthracycline 為臨床上使用禁忌。 \n卵巢癌 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,做為第二線治療。 \n膽道癌 \nGemcitabine 可用於治療晚期或復發之膽道癌(含肝內膽管),目前尚未有證據支持用於膽道癌之手術後輔助治療。 \n \n六、 【劑量與給藥方式】(依文獻記載) \n6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "btc-s1-gem": {
       "status": "matched",
@@ -38,13 +58,29 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "0 \n脫髮(%) \n 第 3/4 級 11 55 \n口腔黏膜炎(%) \n 第 3、4 級 1 22 p=0.001 \n噁心嘔吐(%) \n 第 3、4 級 22 21 \na 病人因發熱性嗜中性白血球減少症住院照護。 \nb 因發熱性嗜中性白血球減少症住院照護天數。 \n生活品質(QoL) \n使用 EORTC QLQ-C30 測量生活品質,評估身體與心理功能,以及與膀胱癌及其治療相關的症狀。二試驗組皆顯示對疼痛\n與情緒有改善。於 MVAC 組病人疲勞感加重,而於 Gemcitabine 併用 Cisplatin 組則未改變。於其他評估指標,二試驗組皆\n維持相當的生活品質。 \n其他佐證的臨床試驗 \n一個非隨機分配的第二期臨床試驗,以 Gemcitabine 併用 Cisplatin 治療 46 名未接受治療的第四期(轉移)轉移性泌尿道移形\n上皮細胞癌(TCC of the urothelium)病人,證實 Gemcitabine 併用 Cisplatin 可做為此疾病之治療用藥。其療程以 28 天為一週\n期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 1 天給予 Cisplatin 75 mg/m 2。首批 11 名病人於第\n1 天使用 Cisplatin 100 mg/m2,但 此11 名病人發生第 3/4 級嗜中性白血球減少症(100%)與血小板減少症(73%),故 將Cisplatin\n劑量降至 75 mg/m2。此試驗反應率為 41%,中位存活期為 14.3 個月。另一個第二期臨床試驗[31 名第四期(局部晚期或轉\n移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)的病人],使用相同療程,為隨機分配的臨床試驗。此試驗反應率\n為 57%,中位存活期為 12.6 個月。這二個臨床試驗之總體毒性反應,與第三期隨機臨床 試驗之報告相似。 \n \n五、 【適應症】(依文獻記載) \n非小細胞肺癌、胰臟癌、膀胱癌。 \nGemcitabine 與 Paclitaxel 併用,可使用於曾經使用過 Anthracycline 之局部復發且無法手術切除或轉移性之乳癌病人 。 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,作為第二線治療。 \n膽道癌。 \n \n說明 \n非小細胞肺癌 \nGemcitabine 併用 Cisplatin 是治療無法手術、局部晚期(第 IIIa 期或第 IIIb 期)或有轉移(第 IV 期)之非小細胞肺癌之第一線\n治療用藥。Gemcitabine 用於緩和治療局部晚期或轉移性非小細胞肺癌成人病人。 \n胰臟癌 \nGemcitabine 是治療局部惡化性 (無法手術治療之第 II 期或第 III 期)或有轉移(第 IV 期)之胰臟癌之第一線治療用藥。\nGemcitabine 亦可用於曾接受過 5-FU 治療之病人。 \n膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \nGemcitabine 併用 Cisplatin 是治療第四期(局部晚期或轉移)轉移泌尿道移形上皮細胞癌(TCC of the urothelium)之第一線治療\n用藥。 \n乳癌 \nGemcitabine 與 paclitaxel 併用,可使用於曾經使用過 antracycline 之局部復發且無法手術切除或轉移性之乳癌 病人,除非\nanthracycline 為臨床上使用禁忌。 \n卵巢癌 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,做為第二線治療。 \n膽道癌 \nGemcitabine 可用於治療晚期或復發之膽道癌(含肝內膽管),目前尚未有證據支持用於膽道癌之手術後輔助治療。 \n \n六、 【劑量與給藥方式】(依文獻記載) \n6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "75 mg",
+        "100 mg/m2",
+        "75 mg/m2",
+        "800 mg/m2",
+        "1250 mg/m2",
+        "175 mg/m2",
+        "1250 mg"
+      ],
+      "frequency_mentions": [
+        "每 4 週",
+        "每 3 週"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "0 \n脫髮(%) \n 第 3/4 級 11 55 \n口腔黏膜炎(%) \n 第 3、4 級 1 22 p=0.001 \n噁心嘔吐(%) \n 第 3、4 級 22 21 \na 病人因發熱性嗜中性白血球減少症住院照護。 \nb 因發熱性嗜中性白血球減少症住院照護天數。 \n生活品質(QoL) \n使用 EORTC QLQ-C30 測量生活品質,評估身體與心理功能,以及與膀胱癌及其治療相關的症狀。二試驗組皆顯示對疼痛\n與情緒有改善。於 MVAC 組病人疲勞感加重,而於 Gemcitabine 併用 Cisplatin 組則未改變。於其他評估指標,二試驗組皆\n維持相當的生活品質。 \n其他佐證的臨床試驗 \n一個非隨機分配的第二期臨床試驗,以 Gemcitabine 併用 Cisplatin 治療 46 名未接受治療的第四期(轉移)轉移性泌尿道移形\n上皮細胞癌(TCC of the urothelium)病人,證實 Gemcitabine 併用 Cisplatin 可做為此疾病之治療用藥。其療程以 28 天為一週\n期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 1 天給予 Cisplatin 75 mg/m 2。首批 11 名病人於第\n1 天使用 Cisplatin 100 mg/m2,但 此11 名病人發生第 3/4 級嗜中性白血球減少症(100%)與血小板減少症(73%),故 將Cisplatin\n劑量降至 75 mg/m2。此試驗反應率為 41%,中位存活期為 14.3 個月。另一個第二期臨床試驗[31 名第四期(局部晚期或轉\n移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)的病人],使用相同療程,為隨機分配的臨床試驗。此試驗反應率\n為 57%,中位存活期為 12.6 個月。這二個臨床試驗之總體毒性反應,與第三期隨機臨床 試驗之報告相似。 \n \n五、 【適應症】(依文獻記載) \n非小細胞肺癌、胰臟癌、膀胱癌。 \nGemcitabine 與 Paclitaxel 併用,可使用於曾經使用過 Anthracycline 之局部復發且無法手術切除或轉移性之乳癌病人 。 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,作為第二線治療。 \n膽道癌。 \n \n說明 \n非小細胞肺癌 \nGemcitabine 併用 Cisplatin 是治療無法手術、局部晚期(第 IIIa 期或第 IIIb 期)或有轉移(第 IV 期)之非小細胞肺癌之第一線\n治療用藥。Gemcitabine 用於緩和治療局部晚期或轉移性非小細胞肺癌成人病人。 \n胰臟癌 \nGemcitabine 是治療局部惡化性 (無法手術治療之第 II 期或第 III 期)或有轉移(第 IV 期)之胰臟癌之第一線治療用藥。\nGemcitabine 亦可用於曾接受過 5-FU 治療之病人。 \n膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \nGemcitabine 併用 Cisplatin 是治療第四期(局部晚期或轉移)轉移泌尿道移形上皮細胞癌(TCC of the urothelium)之第一線治療\n用藥。 \n乳癌 \nGemcitabine 與 paclitaxel 併用,可使用於曾經使用過 antracycline 之局部復發且無法手術切除或轉移性之乳癌 病人,除非\nanthracycline 為臨床上使用禁忌。 \n卵巢癌 \n用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少 6 個月之卵巢癌,做為第二線治療。 \n膽道癌 \nGemcitabine 可用於治療晚期或復發之膽道癌(含肝內膽管),目前尚未有證據支持用於膽道癌之手術後輔助治療。 \n \n六、 【劑量與給藥方式】(依文獻記載) \n6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "btc-durva": {
       "status": "matched",
@@ -144,13 +180,25 @@ window.TFDA_LABELS = {
       "applicant": "美時化學製藥股份有限公司",
       "form": "軟膠囊劑",
       "indication": "1.非小細胞肺癌。2.轉移性乳癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
+      "dosage": "威若賓軟膠囊 Vinobin Soft Capsules \n20 毫克 衛部藥製字第 060841 號 \n本藥須由醫師處方使用 \n1.成分 \n威若賓20 毫克軟膠囊: \n每一顆膠囊含vinorelbine tartrate 27.70毫克,相當於Vinorelbine \n20 毫克,賦形劑(詳見5.1賦形劑) \n2.藥物劑型 \n 軟膠囊 \n威若賓 20 毫克軟膠囊: 淺棕色軟膠囊 \n3.臨床資料 \n3.1 適應症 \nVinorelbine 軟 膠 囊 係 為 下 列 適 應 症 的 單 一 化 學 治 療\n(single-agent chemotherapy)藥物: \n 1. 非小細胞肺癌 \n 2. 轉移性乳癌 \n3.2 劑量及用藥方法 \n僅用於口服 \nVinorelbine 軟膠囊必須在用餐時以水整顆吞服 (不可嚼食或剝 \n開膠囊)。 \nVinorelbine 軟膠囊僅用於單一化學療法。 \n建議劑量: \n前三次: 依體表面積每週給藥60mg/m2一次。 \n第四次開始: 增加為每週給藥80mg/m2 一次,除非在前三次服用\n60mg/m2時 , 病人的嗜中性白血球數目曾低於500/mm3或曾經一次\n以上嗜中性白血球數目介於500~1000/mm3之間。 \n前三次用藥時\n(60mg/m2/week)\n的嗜中性白血\n球數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白血\n球數目 \n≧500 及<\n1000(一次偶\n發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n第四次開始的\n建議用量 \n80 80 60 60 \n在每週給藥80mg/m2用量的治療期間,若病人的嗜中性白血球數\n目低於 500/mm3 或曾經一次以上嗜中性白血球數目介於\n500~1000/mm3之間,治療時間必須暫緩到數目回復正常值,同時\n必須降低劑量至每週60mg/m2。 \n在第四次用藥後\n(80mg/m2/week)\n的嗜中性白血球\n數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白\n血球數目\n≧500 及\n<1000(一\n次偶發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n下一次開始的建\n議用量 \n80 60 \n在最近三次使用每週60mg/m2用量的治療期間,如果嗜中性白血\n球數目不低於500或超過一次以上介於500~1000/mm3之間,可再\n次 將 用 量 增 加 為 每 週80mg/m2 。 當 嗜 中 性 白 血 球 數 目 低 於\n1500/mm3和/或血小板數目介於75,000~100,000/mm3之間 , 治療時\n間應該延緩至數目恢復正常時,並應嚴密監視病人狀況:詳見3.4\n警語及注意事項。 \n不同劑量的膠囊可適當的混合使用以達到需要的用量。下表顯示\n依據體表面積所需要的使用量。 \n體表面積(m2) \n60mg/m2 \n劑量(mg) \n80mg/m2 \n劑量(mg) \n0.95 to 1.0 60 80 \n1.05 to 1.14 70 90 \n1.15 to 1.24 70 100 \n1.25 to 1.34 80 100 \n1.35 to 1.44 80 110 \n1.45 to 1.54 90 120 \n1.55 to 1.64 100 130 \n1.65 to 1.74 100 140 \n1.75 to 1.84 110 140 \n1.85 to 1.94 110 150 \n=1.95 120 160 \n即使病人的體表面積大於2m2,每週的總用藥量也不可超過\n120mg(單次給藥60mg/m2)或160mg(單次給藥80mg/m2)。 \n依據血液中劑量,口服劑量80 mg/m2 相對應於靜脈注射劑量 30 \nmg/m2,口服劑量60 mg/m2 相對應於靜脈注射劑量25 mg/m2。 \n年長病人的用藥 \n臨床試驗顯示,年長病人與年輕病人在用藥的反應上並無顯著的\n不同,但某些年長病人可能會有較強烈的反應。年齡並不會改變\nvinorelbine的藥物動力學。 \n孩童病人的用藥 \n尚無本藥對於孩童的安全性及有效性的研究報告。因此不建議讓\n孩童使用本藥。 \n肝功能不全病人的用藥 \n患 有 輕 度 肝 功 能 不 全 的病人 ( 膽紅素 < 1.5 倍 正 常 值 上 限\n[ULN] ,且 ALAT和/或ASA T為1.5至2.5倍ULN),每週可給予\nvinorelbine 60 mg/m2的標準劑量。患有中度肝功能不全的病人(膽\n紅素為1.5至3倍ULN,且無論ALA T和ASAT的數值為何),每週應\n給予 vinorelbine 50mg/m2的 劑 量 。由於尚未 有 足 夠 資 料 確 認\nvinorelbine在嚴重肝功能不全 病人 之藥物動力學、療效及安全\n性,因此不建議患有嚴重肝功能不全的病人服用vinorelbine。 \n腎功能不全病人的用藥 \n由於僅有少量經由腎臟排泄,因此依照藥物動力學的觀點來看,\n對於嚴重腎功能不佳\n...\n的危險。 \n*長春花屬植物鹼特有的交互作用 \n不建議之混合服用 \n+Itraconazole、posaconazole、ketoconazole \n經由降低肝代謝而增加長春花生物鹼藥",
+      "dose_mentions": [
+        "60mg/m2",
+        "80mg/m2",
+        "120mg",
+        "160mg",
+        "30 \nmg/m2",
+        "25 mg/m2",
+        "50mg/m2"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_1e35844f-c95f-48c8-99e0-6e82b7c27eae?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_ec237e87-8860-4264-a9d5-f7e4be0b9e5c?c=2",
       "license_modified": "2025/11/25",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 15
+      "candidate_count": 15,
+      "dosage_excerpt": "威若賓軟膠囊 Vinobin Soft Capsules \n20 毫克 衛部藥製字第 060841 號 \n本藥須由醫師處方使用 \n1.成分 \n威若賓20 毫克軟膠囊: \n每一顆膠囊含vinorelbine tartrate 27.70毫克,相當於Vinorelbine \n20 毫克,賦形劑(詳見5.1賦形劑) \n2.藥物劑型 \n 軟膠囊 \n威若賓 20 毫克軟膠囊: 淺棕色軟膠囊 \n3.臨床資料 \n3.1 適應症 \nVinorelbine 軟 膠 囊 係 為 下 列 適 應 症 的 單 一 化 學 治 療\n(single-agent chemotherapy)藥物: \n 1. 非小細胞肺癌 \n 2. 轉移性乳癌 \n3.2 劑量及用藥方法 \n僅用於口服 \nVinorelbine 軟膠囊必須在用餐時以水整顆吞服 (不可嚼食或剝 \n開膠囊)。 \nVinorelbine 軟膠囊僅用於單一化學療法。 \n建議劑量: \n前三次: 依體表面積每週給藥60mg/m2一次。 \n第四次開始: 增加為每週給藥80mg/m2 一次,除非在前三次服用\n60mg/m2時 , 病人的嗜中性白血球數目曾低於500/mm3或曾經一次\n以上嗜中性白血球數目介於500~1000/mm3之間。 \n前三次用藥時\n(60mg/m2/week)\n的嗜中性白血\n球數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白血\n球數目 \n≧500 及<\n1000(一次偶\n發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n第四次開始的\n建議用量 \n80 80 60 60 \n在每週給藥80mg/m2用量的治療期間,若病人的嗜中性白血球數\n目低於 500/mm3 或曾經一次以上嗜中性白血球數目介於\n500~1000/mm3之間,治療時間必須暫緩到數目回復正常值,同時\n必須降低劑量至每週60mg/m2。 \n在第四次用藥後\n(80mg/m2/week)\n的嗜中性白血球\n數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白\n血球數目\n≧500 及\n<1000(一\n次偶發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n下一次開始的建\n議用量 \n80 60 \n在最近三次使用每週60mg/m2用量的治療期間,如果嗜中性白血\n球數目不低於500或超過一次以上介於500~1000/mm3之間,可再\n次 將 用 量 增 加 為 每 週80mg/m2 。 當 嗜 中 性 白 血 球 數 目 低 於\n1500/mm3和/或血小板數目介於75,000~100,000/mm3之間 , 治療時\n間應該延緩至數目恢復正常時,並應嚴密監視病人狀況:詳見3.4\n警語及注意事項。 \n不同劑量的膠囊可適當的混合使用以達到需要的用量。下表顯示\n依據體表面積所需要的使用量。 \n體表面積(m2) \n60mg/m2 \n劑量(mg) \n80mg/m2 \n劑量(mg) \n0.95 to 1.0 60 80 \n1.05 to 1.14 70 90 \n1.15 to 1.24 70 100 \n1.25 to 1.34 80 100 \n1.35 to 1.44 80 110 \n1.45 to 1.54 90 120 \n1.55 to 1.64 100 130 \n1.65 to 1.74 100 140 \n1.75 to 1.84 110 140 \n1.85 to 1.94 110 150 \n=1.95 120 160 \n即使病人的體表面積大於2m2,每週的總用藥量也不可超過\n120mg(單次給藥60mg/m2)或160mg(單次給藥80mg/m2)。 \n依據血液中劑量,口服劑量80 mg/m2 相對應於靜脈注射劑量 30 \nmg/m2,口服劑量60 mg/m2 相對應於靜脈注射劑量25 mg/m2。 \n年長病人的用藥 \n臨床試驗顯示,年長病人與年輕病人在用藥的反應上並無顯著的\n不同,但某些年長病人可能會有較強烈的反應。年齡並不會改變\nvinorelbine的藥物動力學。 \n孩童病人的用藥 \n尚無本藥對於孩童的安全性及有效性的研究報告。因此不建議讓\n孩童使用本藥。 \n肝功能不全病人的用藥 \n患 有 輕 度 肝 功 能 不 全 的病人 ( 膽紅素 < 1.5 倍 正 常 值 上 限\n[ULN] ,且 ALAT和/或ASA T為1.5至2.5倍ULN),每週可給予\nvinorelbine 60 mg/m2的標準劑量。患有中度肝功能不全的病人(膽\n紅素為1.5至3倍ULN,且無論ALA T和ASAT的數值為何),每週應\n給予 vinorelbine 50mg/m2的 劑 量 。由於尚未 有 足 夠 資 料 確 認\nvinorelbine在嚴重肝功能不全 病人 之藥物動力學、療效及安全\n性,因此不建議患有嚴重肝功能不全的病人服用vinorelbine。 \n腎功能不全病人的用藥 \n由於僅有少量經由腎臟排泄,因此依照藥物動力學的觀點來看,\n對於嚴重腎功能不佳\n...\n的危險。 \n*長春花屬植物鹼特有的交互作用 \n不建議之混合服用 \n+Itraconazole、posaconazole、ketoconazole \n經由降低肝代謝而增加長春花生物鹼藥",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_1e35844f-c95f-48c8-99e0-6e82b7c27eae?c=2",
+      "dose_indication_specific": true
     },
     "bc-ufur": {
       "status": "matched",
@@ -197,13 +245,19 @@ window.TFDA_LABELS = {
       "applicant": "台灣諾華股份有限公司",
       "form": "錠劑",
       "indication": "AFINITOR® 合併exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過letrozole 或anastrozole 復發或惡化之停經後晚期乳癌患者。 AFINITOR® 適用於進展性，無法切除或轉移性分化良好或中度分化(well-differentiated or moderately-differentitated) 之胰臟神經內分泌腫瘤成人患者。 AFINITOR® 適用於治療在經VEGF-targeted 療法無效後之晚期腎細胞癌患者。 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道(GI)或肺部來源之非功能性神經內分泌腫瘤(NET)成人患者。",
-      "dosage": "詳如仿單",
-      "dose_mentions": [],
+      "dosage": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分",
+      "dose_mentions": [
+        "5 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 18
+      "candidate_count": 18,
+      "dosage_excerpt": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+      "dose_indication_specific": true
     },
     "bc-ixabepilone": {
       "status": "matched",
@@ -265,13 +319,28 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "次劑量:1000 mg/m2/30 分鐘輸注的病人進行 Gemcitabine 的分佈研究。一週內 92~98%\n的劑量幾乎全由尿液回收。其中 Gemcitabine(<10%)與不具活性之 uracil 代謝物 2 deoxy-2,2’-difluorouridine (dFdU) 佔了排\n出劑量之 99%,血漿中亦發現 dFdU 代謝物。 \n特殊族群 \n老年病人 \nGemcitabine 的清除率受年齡的影響。老年病人皆因較低的清除率而有較高的濃度。因為病人特性或是輸注時間不同導致\n之清除率與分佈體積的差異,造成半衰期與血漿濃度的變化。表一顯示不同年齡、不同性別的典型病人 在短時間輸注後,\nGemcitabine 的血漿清除率與半衰期。 \n表一、Gemcitabine 在典型病人體內之清除率與半衰期 \n年齡 男性清除率(L/hr/m2) 女性清除率(L/hr/m2) 男性半衰期 a(分鐘) 女性半衰期 a(分鐘) \n29 92.2 69.4 42 49 \n45 75.7 57.0 48 57 \n65 55.1 41.5 61 73 \n79 40.7 30.7 79 94 \na 病人接受< 70 分鐘輸注之藥物半衰期。 \n依據年齡與性別的差異,短時間輸注的半衰期為 42 至 94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示。增加 Gemcitabine 於 Carboplatin 之治療組 ,顯著且有統計意義的改善疾病無進展存活期(PFS)\n及總體積反應率。兩組皆有約 75%病人於完成試驗後接受更後續的化療 。Carboplatin 治療組接受後續化療的 120 位病人中,\n僅 13 位在腫瘤惡化後接受 Gemcitabine 治療。兩組間之整體存活無顯著差異。 \n表二、試驗 1 之基期基本資料與臨床特徵 \n Gemcitabine/Carboplatin(N=178) Carboplatin(N=178) \n年齡中位數,年 59 58 \n範圍",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "1250 mg/m2",
+        "75 mg/m2",
+        "0.5 mg/kg",
+        "1.5 mg/kg",
+        "0.25 mg/kg",
+        "175 mg/m2",
+        "100 mg/m2"
+      ],
+      "frequency_mentions": [
+        "每 21 天"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "次劑量:1000 mg/m2/30 分鐘輸注的病人進行 Gemcitabine 的分佈研究。一週內 92~98%\n的劑量幾乎全由尿液回收。其中 Gemcitabine(<10%)與不具活性之 uracil 代謝物 2 deoxy-2,2’-difluorouridine (dFdU) 佔了排\n出劑量之 99%,血漿中亦發現 dFdU 代謝物。 \n特殊族群 \n老年病人 \nGemcitabine 的清除率受年齡的影響。老年病人皆因較低的清除率而有較高的濃度。因為病人特性或是輸注時間不同導致\n之清除率與分佈體積的差異,造成半衰期與血漿濃度的變化。表一顯示不同年齡、不同性別的典型病人 在短時間輸注後,\nGemcitabine 的血漿清除率與半衰期。 \n表一、Gemcitabine 在典型病人體內之清除率與半衰期 \n年齡 男性清除率(L/hr/m2) 女性清除率(L/hr/m2) 男性半衰期 a(分鐘) 女性半衰期 a(分鐘) \n29 92.2 69.4 42 49 \n45 75.7 57.0 48 57 \n65 55.1 41.5 61 73 \n79 40.7 30.7 79 94 \na 病人接受< 70 分鐘輸注之藥物半衰期。 \n依據年齡與性別的差異,短時間輸注的半衰期為 42 至 94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示。增加 Gemcitabine 於 Carboplatin 之治療組 ,顯著且有統計意義的改善疾病無進展存活期(PFS)\n及總體積反應率。兩組皆有約 75%病人於完成試驗後接受更後續的化療 。Carboplatin 治療組接受後續化療的 120 位病人中,\n僅 13 位在腫瘤惡化後接受 Gemcitabine 治療。兩組間之整體存活無顯著差異。 \n表二、試驗 1 之基期基本資料與臨床特徵 \n Gemcitabine/Carboplatin(N=178) Carboplatin(N=178) \n年齡中位數,年 59 58 \n範圍",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "bc-paclitaxel": {
       "status": "matched",
@@ -766,13 +835,19 @@ window.TFDA_LABELS = {
       "applicant": "臺灣阿斯特捷利康股份有限公司",
       "form": "膠囊劑",
       "indication": "1.先前曾接受至少一種治療的被套細胞淋巴瘤 (Mantle Cell Lymphoma, MCL) 成年病人。 2.慢性淋巴球性白血病 (Chronic Lymphocytic Leukemia, CLL) 或小淋巴球性淋巴瘤 (Small Lymphocytic Lymphoma, SLL) 成年病人。",
-      "dosage": "詳見仿單",
-      "dose_mentions": [],
+      "dosage": "дᆯੰᇭᚾ 100 ૩д\nCALQUENCE® capsules 100 mg\nஈ ̇Դ͜\nሊ௅ᖹ፩οୋ 028047 ໮\n1 ቇᏐस\n1.1 ૸ˋᆯ MCL\n૸ˋᆯ Mantle Cell Lymphoma, MCLΎ ϋ \nषɛf\nԱኽ዆᜗ˀᏐଟ Overall response rate༊\nूf\n1.2 ͣАष CLL૸ˋᆯ SLL\nͣАष Chronic lymphocytic leukemia, CLL૸ˋᆯ\nSmall lymphocytic lymphoma, SLL Ύϋषɛf\n2 ͜ඎ\n2.1 ᙄኒඎ\nCALQUENCEج\n׵MCLeCLLאSLL षɛdCALQUENCEމ100 mgՇϣd\nߒ12f\nCALQUENCE ၾObinutuzumab Ի͜\nٙCLLאSLL षɛdCALQUENCEމ100 mg ӊ ̊ɹ\nߒ12fӊ 28ᐕ඄ಂd\nІୋ 1֐CALQUENCEᐕdobinutuzumabІୋ 2΍ҳʚ 6඄\nᙄኒඎሗਞቡ obinutuzumabd΋ҳʚ CALQUENCE Ύ\nҳʚ obinutuzumabf\nէᘍᇭᚾfCALQUENCEي࠮\n͜CALQUENCEග൴ཀ3dᏐ༈༪ཀ༈ϣኒඎd\n͜CALQUENCEኒඎf\n2.2 ᙄኒඎ\nषɛᒒеԴ͜ CALQUENCEf\nૄ໊Դ͜ 8.6 ձᑗґᖹଣኪ\n12.3f\n2.3 ᙄኒඎ\nၾCYP3Aኒඎሜ዆\nڌ׵ࠑ1 ʹʝЪ͜ 7f\nڌ1jၾ CYP3Aᙄኒඎሜ዆\nCYP3AيCALQUENCEج\nҵՓЪ͜\n੶CYP3A ҵՓኒ\nᒒеԻ͜f\nᖹ௰ε 7 ˂ d\nʕᓙ CALQUENCEf\nܓCYP3A ҵՓኒ 100 mgӊ˂ɓϣf\nႰኬЪ͜ ੶CYP3A Ⴐኬኒ\nᒒеԻ͜f\nਗ਼ CALQUENCE ኒඎ \nᄣЇӊ 12ࣛ200 mgf\nაʕձҵՓኒԻ͜\nሯɿᏍऌҵՓኒ PPIʹʝЪ͜ 7f\nH2͜ H2ۃ2͜ CALQUENCEʹʝЪ͜\n7f\n*͜Їˇ 2ʹʝЪ͜ 7f\n2.4 ኒඎሜ዆\nʔԄˀᏐ\nڌ2ୋ3ٙCALQUENCEᙄኒඎሜ዆f\nڌ2ᙄኒඎሜ዆\nԫ΁ ʔԄˀᏐ\n೯͛\nኒඎሜ዆\nኒඎ =100 mgӊ 12ɓϣ\n3d \n3ಯˇΥԻ̈Аd \n4א4 ॴෘʕ\nᚃ൴ཀ 7 ˂\nୋɓϣձ \nୋɚϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1࿒ baselined \n̙˸ 100 mgӊ 12ɓϣʘኒ\n֐CALQUENCEᐕf\nୋɧϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1̙\n˸100 mgอ\n֐CALQUENCEᐕf\nୋ̬ϣ ୞˟ CALQUENCEᐕf\nӺ৫ʔԄԫ΁੬͜ஔႧᅺ๟ NCI CTCAEf\nஈଣ obinutuzumabሗਞቡ obinutuzumab ͷఊf\n3 ࣸ\n100 mgᇭᚾf\n4 ຫҚस\nຫມ11f\n5 จԫධ\n5.1 ݑ\nટա CALQUENCEܼ\nf\n׵CALQUENCEٙ1029 ΤषɛdϞ 19%אࠠ3 ॴ˸ɪ\nٙ11%d\nՉʕ 6%ͣАଢಯˇ 3 ॴ\nא4neutropenic infectionස Ц1.9%f\nCALQUENCE׵ࠢB٬׌\nᚾᔥ Pneumocystis jirovecieEpstein-Barrݭ\ncytomegalovirusͣሯ໘ष PMLषɛ\nᐕf\n5.2 ̈А\nટա CALQUENCËАԫ΁f\n׵CALQUENCEٙ1029 ΤषɛdϞ 3.0%ࠠ\nא3ܼ0.1%̈АiϞ 22%\n̈Аf\nᖹၾ CALQUENCEᎈfίᑗґ༊᜕ʕd\nԴ͜ CALQUENCEषɛʕϞ 2.7%ɽ̈А major \nhemorrhageᖹձ CALQUENCE षɛʕϞ 3.6% ೯͛ɽ̈Аfၾ\nCALQUENCEщϞ̈А\nᅄΊf\nʕᓙ\nCALQUENCE 3-7ᎈf\n5.3 Аଢಯˇ\nԴ͜ CALQUENCEАଢಯˇ 3א\n4ͣАଢಯˇ 23% eமА 8%ಯˇ 7% ձ૸ˋଢಯ\nˇ7%f12%षɛ೯͛ 4ٙ\nኒඎሜ዆\n2.4f\n5.4 ໕ᆯ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 12%໕ᆯ\nͤᇮᐖdϞ 6%ष\nจԣ᛼f\n5.5 ᅝਗ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 1.1% ೯͛ 3Ϟ\nٙ4.1%ܛ\nԷνː\nʚ˸ஈໄf\n6 ʔԄˀᏐ\nীሞj\n • จԫධ 5.1\n • จԫධ 5.2\n • จԫධ 5.3\n • จԫධ 5.4\n • จԫධ 5.5\n6.1 ᑗґ༊᜕຾᜕\nʔԄˀᏐ೯͛\n݈\n೯͛ଟf\n׵1029ࠑ\nટաʘ CALQUENCEމ100 ૩ дmgՇ\nߒ12f6ٙ820 Τषɛટա CALQUENCEd˸ʿ 2\nٙ209",
+      "dose_mentions": [
+        "100 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_35330813-0255-440a-8d80-649b8a607480?c=2",
       "license_modified": "2022/05/11",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 2
+      "candidate_count": 2,
+      "dosage_excerpt": "дᆯੰᇭᚾ 100 ૩д\nCALQUENCE® capsules 100 mg\nஈ ̇Դ͜\nሊ௅ᖹ፩οୋ 028047 ໮\n1 ቇᏐस\n1.1 ૸ˋᆯ MCL\n૸ˋᆯ Mantle Cell Lymphoma, MCLΎ ϋ \nषɛf\nԱኽ዆᜗ˀᏐଟ Overall response rate༊\nूf\n1.2 ͣАष CLL૸ˋᆯ SLL\nͣАष Chronic lymphocytic leukemia, CLL૸ˋᆯ\nSmall lymphocytic lymphoma, SLL Ύϋषɛf\n2 ͜ඎ\n2.1 ᙄኒඎ\nCALQUENCEج\n׵MCLeCLLאSLL षɛdCALQUENCEމ100 mgՇϣd\nߒ12f\nCALQUENCE ၾObinutuzumab Ի͜\nٙCLLאSLL षɛdCALQUENCEމ100 mg ӊ ̊ɹ\nߒ12fӊ 28ᐕ඄ಂd\nІୋ 1֐CALQUENCEᐕdobinutuzumabІୋ 2΍ҳʚ 6඄\nᙄኒඎሗਞቡ obinutuzumabd΋ҳʚ CALQUENCE Ύ\nҳʚ obinutuzumabf\nէᘍᇭᚾfCALQUENCEي࠮\n͜CALQUENCEග൴ཀ3dᏐ༈༪ཀ༈ϣኒඎd\n͜CALQUENCEኒඎf\n2.2 ᙄኒඎ\nषɛᒒеԴ͜ CALQUENCEf\nૄ໊Դ͜ 8.6 ձᑗґᖹଣኪ\n12.3f\n2.3 ᙄኒඎ\nၾCYP3Aኒඎሜ዆\nڌ׵ࠑ1 ʹʝЪ͜ 7f\nڌ1jၾ CYP3Aᙄኒඎሜ዆\nCYP3AيCALQUENCEج\nҵՓЪ͜\n੶CYP3A ҵՓኒ\nᒒеԻ͜f\nᖹ௰ε 7 ˂ d\nʕᓙ CALQUENCEf\nܓCYP3A ҵՓኒ 100 mgӊ˂ɓϣf\nႰኬЪ͜ ੶CYP3A Ⴐኬኒ\nᒒеԻ͜f\nਗ਼ CALQUENCE ኒඎ \nᄣЇӊ 12ࣛ200 mgf\nაʕձҵՓኒԻ͜\nሯɿᏍऌҵՓኒ PPIʹʝЪ͜ 7f\nH2͜ H2ۃ2͜ CALQUENCEʹʝЪ͜\n7f\n*͜Їˇ 2ʹʝЪ͜ 7f\n2.4 ኒඎሜ዆\nʔԄˀᏐ\nڌ2ୋ3ٙCALQUENCEᙄኒඎሜ዆f\nڌ2ᙄኒඎሜ዆\nԫ΁ ʔԄˀᏐ\n೯͛\nኒඎሜ዆\nኒඎ =100 mgӊ 12ɓϣ\n3d \n3ಯˇΥԻ̈Аd \n4א4 ॴෘʕ\nᚃ൴ཀ 7 ˂\nୋɓϣձ \nୋɚϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1࿒ baselined \n̙˸ 100 mgӊ 12ɓϣʘኒ\n֐CALQUENCEᐕf\nୋɧϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1̙\n˸100 mgอ\n֐CALQUENCEᐕf\nୋ̬ϣ ୞˟ CALQUENCEᐕf\nӺ৫ʔԄԫ΁੬͜ஔႧᅺ๟ NCI CTCAEf\nஈଣ obinutuzumabሗਞቡ obinutuzumab ͷఊf\n3 ࣸ\n100 mgᇭᚾf\n4 ຫҚस\nຫມ11f\n5 จԫධ\n5.1 ݑ\nટա CALQUENCEܼ\nf\n׵CALQUENCEٙ1029 ΤषɛdϞ 19%אࠠ3 ॴ˸ɪ\nٙ11%d\nՉʕ 6%ͣАଢಯˇ 3 ॴ\nא4neutropenic infectionස Ц1.9%f\nCALQUENCE׵ࠢB٬׌\nᚾᔥ Pneumocystis jirovecieEpstein-Barrݭ\ncytomegalovirusͣሯ໘ष PMLषɛ\nᐕf\n5.2 ̈А\nટա CALQUENCËАԫ΁f\n׵CALQUENCEٙ1029 ΤषɛdϞ 3.0%ࠠ\nא3ܼ0.1%̈АiϞ 22%\n̈Аf\nᖹၾ CALQUENCEᎈfίᑗґ༊᜕ʕd\nԴ͜ CALQUENCEषɛʕϞ 2.7%ɽ̈А major \nhemorrhageᖹձ CALQUENCE षɛʕϞ 3.6% ೯͛ɽ̈Аfၾ\nCALQUENCEщϞ̈А\nᅄΊf\nʕᓙ\nCALQUENCE 3-7ᎈf\n5.3 Аଢಯˇ\nԴ͜ CALQUENCEАଢಯˇ 3א\n4ͣАଢಯˇ 23% eமА 8%ಯˇ 7% ձ૸ˋଢಯ\nˇ7%f12%षɛ೯͛ 4ٙ\nኒඎሜ዆\n2.4f\n5.4 ໕ᆯ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 12%໕ᆯ\nͤᇮᐖdϞ 6%ष\nจԣ᛼f\n5.5 ᅝਗ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 1.1% ೯͛ 3Ϟ\nٙ4.1%ܛ\nԷνː\nʚ˸ஈໄf\n6 ʔԄˀᏐ\nীሞj\n • จԫධ 5.1\n • จԫධ 5.2\n • จԫධ 5.3\n • จԫධ 5.4\n • จԫධ 5.5\n6.1 ᑗґ༊᜕຾᜕\nʔԄˀᏐ೯͛\n݈\n೯͛ଟf\n׵1029ࠑ\nટաʘ CALQUENCEމ100 ૩ дmgՇ\nߒ12f6ٙ820 Τषɛટա CALQUENCEd˸ʿ 2\nٙ209",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_35330813-0255-440a-8d80-649b8a607480?c=2",
+      "dose_indication_specific": true
     },
     "cll-zanubrutinib": {
       "status": "matched",
@@ -868,13 +943,21 @@ window.TFDA_LABELS = {
       "applicant": "曜盟醫藥生技股份有限公司",
       "form": "凍晶注射劑",
       "indication": "(1) Decitabine適用於治療不適合進行標準誘導化學療法之新診斷出患有原發性或續發性急性骨髓性白血病病患(AML，依據世界衛生組織(WHO)分類)。須符合Poor-or intermediate-risk Cytogenetics，且不適合用於Acute Promyelocytic Leukemia (M3 Classification)。(2) Decitabine適用於治療骨髓化生不良症候群(MDS)患者，包括先前曾接受治療及未曾接受治療、所有French-American-British亞型之原發性與續發性MDS(頑固性貧血、環形鐵粒幼細胞的頑固性貧血、頑固性貧血併有過量芽細胞、頑固性貧血併有過量芽細胞轉變型、以及慢性骨髓單核球性白血病)、以及國際預後評分系統分類為中度危險-1、中度危險-2與高危險的患者。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "的毒性為骨髓抑制作用 , 包括對\n骨髓的影響 , 但此作用在停止治療後便會回復 。 另外也觀察到胃腸道\n毒性反應 , 及雄性動物睪丸萎縮的現象 , 此現象在經過預定的恢復期\n後並未回復 。 對新生/幼齡的大鼠投予 decitabine 後所呈現的整體毒性\n概況和在較大之大鼠中所見者相當。對新生/幼齡的大鼠投予會誘發\n骨髓抑制作用的劑量時 , 神經行為發展與生殖能力皆未受到影響 。 關\n於兒童之使用方面的資訊,請參見第 4.2 節。 \n5.4 臨床研究(依文獻記載)5.4.1 單組研究 \n有三項開放性、單組、多中心研究曾針對任一 FAB 亞型的 MDS 病\n人評估 Decitabine 的安全性與療效。在一項於北美洲所進行的研究\n中,99 位 IPSS 預後評分為中度危險-1、中度危險-2 或高危險的病人\n每 4 週(1 個治療週期)一次,於第 1 週的第 1-5 天,每天以超過 1 小\n時的時間緩慢靜脈輸注 20 毫克/米 2 的 Decitabine。這項研究的結果\n和對照性試驗的結果相符合,並摘列於表 6。 \n表 5 基礎人口統計學及其他病人特性(ITT 族群) \n人口統計學或其他病人特性 \n \nDecitabine \nN=99 \n年齡(歲) \n平均值(±SD) \n中位數(IQR) \n \n71±9 \n72 (34-87) \n性別 n(%) \n男性 \n女性 \n \n71 (72) \n28 (28) \n種族 n(%) \n白人 \n黑人 \n亞洲人 \n其他 \n \n86 (87) \n6 (6) \n4 (4) \n3 (3) \n自 MDS 確診後至首次投藥的天\n數 \n平均值(±SD) \n中位數( 範圍:最低– 最高) \n \n444±626 \n154 (7-3079) \n先前曾接受 MDS 治療 n(%) \n是 \n否 \n \n27 (27) \n72 (73) \nRBC 輸注狀態 n(%) \n不須依賴 \n必須依賴 \n \n33 (33) \n66 (67) \n血小板輸注狀態 n(%) \n不須依賴 \n必須依賴 \n \n84 (85) \n15 (15) \nIPSS 分類 n(%) \n低危險 \n中度危險- 1 \n中度危險- 2 \n高危險 \n \n1 (1) \n52 (53) \n23 (23) \n23 (23) \nFAB 分類 n(%) \nRA \nRARS \nRAEB \nRAEB-t \nCMML \n \n20 (20) \n17 (17) \n45 (45) \n6 (6) \n11 (11) \n \n表 6 療效反應分析(ITT)* \n參數 Decitabine \nN=99 \n整體療效反應率(CR+PR) \n完全療效反應(CR) \n部份療效反應(PR) \n16(16%) \n15 (15%) \n1 (1%) \n療效反應持續時間 \n產生(CR+PR)療效反應之時間的\n中位數–天(範圍) \n(CR+PR)療效反應持續時間的中\n位數–天(範圍) \n \n162 (50-267) \n \n443 (72-722+) \n+ 表示設限的觀察範圍 \n* Cheson BD, Bennett JM, et al. Report of an International Working \nGroup to Standardize Response Criteria for MDS. Blood . 2000; \n96:3671-3674. \n此試驗有 11 位病人(11%)在接受 decitabine 藥品治療後 30 天內發生\n死亡案例 。 其中5 位病人 , 研究調查發現認為死亡事件與試驗治療無\n關。 \n在另一個第 2 期、多中心、使用單一 decitabine 藥品臨床試驗於台灣\nMDS 病人 , 在為期28 天週期之第 1 天至第 5 天以 1 小時時間靜脈輸\n注 20 mg/m2 劑量,在完成 8 個週期期間,有 19% ( 7 位病人)發生死\n亡案例,7 位病人中有 3 位死亡案例與 Decitabine 有關。 \n \n6 藥劑學特性(依文獻記載) \n6.1 賦形劑 \nPotassium Phosphate monobasic \nSodium Hydroxide \nWater for injection \n1N Sodium Hydroxide \n1N Hydrochloric Acid \n6.2 不相容性(依文獻記載) \n除了在第 6.6 節中所提及的藥品之外,本品不可與其他藥品混合使\n用。 \n6.3 貯架期(依文獻記載) \n未開封的藥瓶 \n2 年。 \n泡製及稀釋後的溶液 \n在 15 分鐘內必須將泡製好的濃縮液(以 10 毫升的無菌注射用水泡製)\n以預冷(2 ̊C - 8 ̊C)的輸注液加以稀釋。準備好的靜脈輸注用稀釋溶液\n必須於在 2 ̊C - 8 ̊C 的溫度下冷藏貯存,最長可存放 3 小時,之後在\n投藥前可於室溫(20 ̊C - 25 ̊C)下存放達 1 小時。 \n從微生物學的觀點來看 , 本品應於以上所建議的時間期限內使用 。 使\n用者應負責維持建議的存放時間與存放條件 , 並應確保是在無菌條件\n下進行泡製。 \n6.4 特殊貯存注意事項(依文獻記載) \n請勿貯存於超過 25 ̊C 的環境,架儲期 2 年。 \n泡製及稀釋後之藥品的存放條件請參見第 6.3 節。 \n6.5",
+      "dose_mentions": [
+        "20 mg/m2"
+      ],
+      "frequency_mentions": [
+        "每 4 週"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_2fec6150-ba66-4769-8a7d-5e97b1d0d5a5?c=2",
       "license_modified": "2026/03/20",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 7
+      "candidate_count": 7,
+      "dosage_excerpt": "的毒性為骨髓抑制作用 , 包括對\n骨髓的影響 , 但此作用在停止治療後便會回復 。 另外也觀察到胃腸道\n毒性反應 , 及雄性動物睪丸萎縮的現象 , 此現象在經過預定的恢復期\n後並未回復 。 對新生/幼齡的大鼠投予 decitabine 後所呈現的整體毒性\n概況和在較大之大鼠中所見者相當。對新生/幼齡的大鼠投予會誘發\n骨髓抑制作用的劑量時 , 神經行為發展與生殖能力皆未受到影響 。 關\n於兒童之使用方面的資訊,請參見第 4.2 節。 \n5.4 臨床研究(依文獻記載)5.4.1 單組研究 \n有三項開放性、單組、多中心研究曾針對任一 FAB 亞型的 MDS 病\n人評估 Decitabine 的安全性與療效。在一項於北美洲所進行的研究\n中,99 位 IPSS 預後評分為中度危險-1、中度危險-2 或高危險的病人\n每 4 週(1 個治療週期)一次,於第 1 週的第 1-5 天,每天以超過 1 小\n時的時間緩慢靜脈輸注 20 毫克/米 2 的 Decitabine。這項研究的結果\n和對照性試驗的結果相符合,並摘列於表 6。 \n表 5 基礎人口統計學及其他病人特性(ITT 族群) \n人口統計學或其他病人特性 \n \nDecitabine \nN=99 \n年齡(歲) \n平均值(±SD) \n中位數(IQR) \n \n71±9 \n72 (34-87) \n性別 n(%) \n男性 \n女性 \n \n71 (72) \n28 (28) \n種族 n(%) \n白人 \n黑人 \n亞洲人 \n其他 \n \n86 (87) \n6 (6) \n4 (4) \n3 (3) \n自 MDS 確診後至首次投藥的天\n數 \n平均值(±SD) \n中位數( 範圍:最低– 最高) \n \n444±626 \n154 (7-3079) \n先前曾接受 MDS 治療 n(%) \n是 \n否 \n \n27 (27) \n72 (73) \nRBC 輸注狀態 n(%) \n不須依賴 \n必須依賴 \n \n33 (33) \n66 (67) \n血小板輸注狀態 n(%) \n不須依賴 \n必須依賴 \n \n84 (85) \n15 (15) \nIPSS 分類 n(%) \n低危險 \n中度危險- 1 \n中度危險- 2 \n高危險 \n \n1 (1) \n52 (53) \n23 (23) \n23 (23) \nFAB 分類 n(%) \nRA \nRARS \nRAEB \nRAEB-t \nCMML \n \n20 (20) \n17 (17) \n45 (45) \n6 (6) \n11 (11) \n \n表 6 療效反應分析(ITT)* \n參數 Decitabine \nN=99 \n整體療效反應率(CR+PR) \n完全療效反應(CR) \n部份療效反應(PR) \n16(16%) \n15 (15%) \n1 (1%) \n療效反應持續時間 \n產生(CR+PR)療效反應之時間的\n中位數–天(範圍) \n(CR+PR)療效反應持續時間的中\n位數–天(範圍) \n \n162 (50-267) \n \n443 (72-722+) \n+ 表示設限的觀察範圍 \n* Cheson BD, Bennett JM, et al. Report of an International Working \nGroup to Standardize Response Criteria for MDS. Blood . 2000; \n96:3671-3674. \n此試驗有 11 位病人(11%)在接受 decitabine 藥品治療後 30 天內發生\n死亡案例 。 其中5 位病人 , 研究調查發現認為死亡事件與試驗治療無\n關。 \n在另一個第 2 期、多中心、使用單一 decitabine 藥品臨床試驗於台灣\nMDS 病人 , 在為期28 天週期之第 1 天至第 5 天以 1 小時時間靜脈輸\n注 20 mg/m2 劑量,在完成 8 個週期期間,有 19% ( 7 位病人)發生死\n亡案例,7 位病人中有 3 位死亡案例與 Decitabine 有關。 \n \n6 藥劑學特性(依文獻記載) \n6.1 賦形劑 \nPotassium Phosphate monobasic \nSodium Hydroxide \nWater for injection \n1N Sodium Hydroxide \n1N Hydrochloric Acid \n6.2 不相容性(依文獻記載) \n除了在第 6.6 節中所提及的藥品之外,本品不可與其他藥品混合使\n用。 \n6.3 貯架期(依文獻記載) \n未開封的藥瓶 \n2 年。 \n泡製及稀釋後的溶液 \n在 15 分鐘內必須將泡製好的濃縮液(以 10 毫升的無菌注射用水泡製)\n以預冷(2 ̊C - 8 ̊C)的輸注液加以稀釋。準備好的靜脈輸注用稀釋溶液\n必須於在 2 ̊C - 8 ̊C 的溫度下冷藏貯存,最長可存放 3 小時,之後在\n投藥前可於室溫(20 ̊C - 25 ̊C)下存放達 1 小時。 \n從微生物學的觀點來看 , 本品應於以上所建議的時間期限內使用 。 使\n用者應負責維持建議的存放時間與存放條件 , 並應確保是在無菌條件\n下進行泡製。 \n6.4 特殊貯存注意事項(依文獻記載) \n請勿貯存於超過 25 ̊C 的環境,架儲期 2 年。 \n泡製及稀釋後之藥品的存放條件請參見第 6.3 節。 \n6.5",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_2fec6150-ba66-4769-8a7d-5e97b1d0d5a5?c=2",
+      "dose_indication_specific": true
     },
     "mpn-fedratinib": {
       "status": "matched",
@@ -1005,12 +1088,24 @@ window.TFDA_LABELS = {
       "form": "膜衣錠",
       "indication": "大腸直腸癌： Regorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)患者，療法包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子((anti-VEGF)等療法；若KRAS為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。 腸胃道間質腫瘤： 適用於治療先前曾接受imatinib mesylate和sunitinib malate患者之局部晚期、無法切除或轉移性的胃腸道間質瘤。 肝細胞癌： 適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病患。",
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dose_mentions": [
+        "40mg",
+        "160 mg",
+        "80 mg",
+        "120 mg"
+      ],
+      "frequency_mentions": [
+        "每四週",
+        "每日一次"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 1
+      "candidate_count": 1,
+      "dosage_excerpt": "1 \n \n \n癌瑞格膜衣錠40毫克 \nStivarga Film‐Coated Tablets 40mg \n衛部藥輸字第026168號 \n本藥須由醫師處方使用 \n警告:肝毒性 \n 在臨床試驗中曾出現重度且有時致命的肝中毒現象[請參閱警語與注意\n事項(5.1(1))]。 \n 請在治療之前和治療期間監測肝功能[請參閱警語與注意事項(5.1(1))]。 \n 藉由肝功能檢測的數值上升程度與肝細胞壞死情形,可了解肝中毒程\n度,再依據其嚴重程度及持續時間來決定中斷使用STIVARGA後,接下\n來應該降低藥量或中止使用STIVARGA [請參閱用法用量(3.1(2))]。 \n1. 性狀 \n1.1 有效成分及含量 \nRegorafenib 40mg \n1.2 賦形劑 \n微晶纖維素、交聯羧甲基纖維素鈉、硬脂酸鎂、交聯聚維酮與膠態二氧化矽。膜衣則含有\n下列非活性成分:三氧化二鐵紅、三氧化二鐵黃、卵磷脂(大豆)、聚乙二醇、聚乙烯醇、\n滑石粉與二氧化鈦。 \n1.3 劑型 \n錠劑 \n1.4 藥品外觀 \n設計為淡粉紅色的橢圓型藥錠,一面刻有「BAYER」字樣,而另一面則刻有「40」字樣 \n2. 適應症 \n適應症與使用方式 \n(1) 大腸直腸癌 \nRegorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)病人,療法包含\nfluoropyrimidine‐, oxaliplatin‐ 和 irinotecan‐ 為基礎的化療,和抗血管內皮生長因子(anti‐VEGF)\n等療法;若KRAS為原生型(wild type)則須接受過抗表皮生長因子受體(anti‐EGFR)療法。 \n(2) 腸胃道間質腫瘤 \n適用於治療先前曾接受imatinib mesylate與sunitinib malate病人之局部晚期、無法切除或轉\n移性的腸胃道間質腫瘤病人。 \n \n\n \n2 \n \n(3) 肝細胞癌 \n適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病人。 \n3. 用法及用量 \n3.1 用法用量 \n(1) 建議劑量 \n一個服藥週期為 28 天,建議劑量為每個週期的前 21 天,每日一次口服 160 mg STIVARGA \n(四顆 40 mg 藥錠)。持續接受治療直到病況惡化或發生無法接受的毒性。 \n請於每日同一時間服用STIVARGA。請在食用一份所含熱量不到600卡路里且所含脂肪不到\n30%的低脂餐點後,配水吞服整顆藥錠 [藥物動力學特性 (11)]。請勿為了彌補前一日的劑量,\n而在一日內服用兩份劑量的STIVARGA。 \n(2) 劑量修正 \n如果需要調整劑量,請以 40 mg (一顆藥錠)的變化量調降劑量;STIVARGA 的最低建議每日\n劑量為每日 80 mg。 \n若出現以下情形,請中斷STIVARGA治療: \n 屬於復發狀況或調降劑量後 7 天內仍未改善的第 2 級手足皮膚反應(HFSR) [肢端紅腫症\n候群(PPES)];第 3 級的 HFSR 需中斷治療至少 7 天 \n 第 2 級高血壓症狀 \n 任何第 3 或 4 級的不良反應 \n 任何級別的感染惡化 \n降低STIVARGA劑量至120 mg: \n 任何時期第一次發生第 2 級 HFSR \n 自任何第 3 或 4 級不良反應(不含感染)恢復後 \n 針對第 3 級天門冬胺酸轉胺酶(AST)/丙胺酸轉胺酶(ALT)量上升,只有當潛在效益大於肝\n中毒風險時才會繼續治療 \n降低STIVARGA劑量至80 mg: \n 服用 120 mg 劑量時再度發生第 2 級 HFSR \n 服用 120 mg 劑量期間,自任何第 3 或 4 級不良反應(肝中毒或感染除外)恢復後 \n \n若有下列情形,請永久停用STIVARGA: \n 對 80 mg 劑量耐受性不佳 \n AST 或 ALT 的數值超過正常值上限(ULN) 20 倍 \n \n3 \n \n AST 或 ALT 的數值超過正常值上限 3 倍,同時膽紅素超過正常值上限 2 倍 \n 儘管劑量已降至 120 mg,AST 或 ALT 再次超過正常值上限 5 倍 \n 針對任何第 4 級不良反應;只有當潛在效益大於風險時才會繼續治療 \n4. 禁忌 \n無。 \n5. 警語及注意事項 \n5.1警語/注意事項 \n(1) 肝毒性 \n在臨床試驗中,接受 STIVARGA 治療的病人曾發生最終致死的重度藥物誘發性肝臟傷害。在\n多數案例中,肝功能障礙都是在治療最初 2 個月內發生,且特徵為肝細胞層級的損傷型\n態。 \n在 CORRECT 試驗中,致命性肝衰竭在 regorafenib 組病人中有 1.6%發生,在安慰劑組病人\n中有 0.4%發生。在 GRID 試驗中,致命性肝衰竭在 regorafenib 組病人中有 0.8%發生。在\nRESORCE 試驗中,致命性肝衰竭的發生率與安慰劑相比並未上升 [請參閱臨床試驗經驗\n(8.2)]。 \n在開始 STIVARGA 治療之前須進行肝功能檢測(ALT、AST 與膽紅素),且在治療的前 2 個月,\n至少每兩週要監測一次;接下來,依照臨床指示,每月至少須監測一次。肝功能檢測數值\n升高的病人,須每週進行肝功能檢測,直到數值低於正常值上限或基期的三倍。 \n藉由肝功能檢測的數值上升程度與肝細胞壞",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "dose_indication_specific": true
     },
     "crc-lonsurf": {
       "status": "matched",
@@ -1410,7 +1505,11 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
       "license_modified": "2026/05/26",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 16
+      "candidate_count": 16,
+      "dosage_excerpt": "dazo[5,1-d]-as-tetrazine-8-carboxamide、分子量 194.15、分子式 C6H6N6O2、結構式如下: \n \n \n \nTemozolomide 分子在酸中安定 (pH< 5) ,因此適於口服。在中性酸鹼值下 temozolomide 容易水解成具活性的 成分 \n5-(3-methyltriazen-1-yl) imidazole-4-carboxamide (MTIC),在鹼性中水解更迅速。 \nTEMODAL 膠囊 \n每一個 TEMODAL 膠囊含有 20 毫克 、100 毫克 、140 毫克 、180 毫克或者 250 毫克的 temozolomide, 另含賦形劑 anhydrous lactose, \nsodium starch glycollate, stearic acid, tartaric acid 及 colloidal anhydrous silica。膠囊體均為白色不透明,成分為 titanium dioxide, \nsodium lauryl sulfate 及 gelatin; 膠囊帽具不同顏色 ,20 毫克及 180 毫克含 Iron Oxide Yellow、100 毫克及 180 毫克含 Iron Oxide \nRed、140 毫克含 Indigo Carmine ;均印有黑色字,墨汁成分為 shellac, dehydrated alcohol, isopropyl alcohol, butyl alcohol, \npropylene glycol, water, ammonium hydroxide, potassium hydroxide, 及 black iron oxide。 \n \n【作用】 \nTEMODAL 是一個具有抗腫瘤活性,含有 imidazotetrazine 環的烷基化作用劑;它在全身循環中會在生理酸鹼值的狀態下,\n快速地透過化學轉化作用形成活性化合物 MTIC(Monomethyl triazeno imidazole carboxamide) 。理論上,MTIC 的細胞毒性主\n要是藉由與鳥糞鹼的第六位氧原子產生烷基化作用,同時也會與鳥糞鹼的第七位氮原子發生次要的附加性烷基化作用,因此\n隨後發生的細胞毒性被認為是與這些異常修復的甲基化合物有關。 \n \n【適應症】 \n--新診斷的多形神經膠母細胞瘤,與放射治療同步進行,然後作為輔助性治療。 \n--給予標準治療後復發性或惡化之惡性神經膠質瘤,例如多形神經膠母細胞瘤或退行性星狀細胞瘤。 \n \n【用法用量】 \n新診斷的多形神經膠母細胞瘤的成年病人: \n同步治療期 \nTEMODAL 口服投予四十二天,每天七十五毫克/平方公尺體表面積,與放射治療(60 Gy,分成三十次投予)同步進行,接\n著給予六個療程的輔助性 TEMODAL。不建議減低劑量;然而可能會因病人的耐受性而發生劑量中斷的情況。如果完全符合\n下列條件,四十二天同步治療期的 TEMODAL 劑量可持續至最長四十九天:絕對嗜中性白血球計數大於等於每公升十五億\n個(1.5 x 109/L),血小板計數大於等於每公升一千億個(100 x 109/L) ,以及通用毒性標準(CTC)的非血液學毒性小於等於\n第一級(除了禿髮、噁心、嘔吐以外) 。治療期間每週須測量一次全血球計數。同步治療期間應根據表一的血液學和非血液\n學毒性標準,中斷或停止投予 TEMODAL。 \n \n表一 在放射治療與 TEMODAL 同步治療期間,中斷或停止投予 TEMODAL \n毒性 中斷 TMZa 停止 TMZ \n絕對嗜中性白血球計數 ≧0.5 且<1.5 x 109/L <0.5 x 109/L \n血小板計數 ≧10 且<100 x 109/L <10 x 109/L \nCTC 非血液學毒性(禿髮、噁心、嘔吐\n除外) \nCTC 第二級 CTC 第三級或第四級 \na:如果完全符合下列條件,可以繼續 TMZ 同步治療:絕對嗜中性白血球計數≧1.5 x 109/L,血小板計數≧100 x 109/L,以及\nCTC 非血液學毒性≦第一級(除了禿髮、噁心、嘔吐以外) 。 \nTMZ = TEMODAL,CTC = 通用毒性標準 \n \n輔助性治療期 (劑量調整之檢驗及參數,見後述之同步治療後輔助性治療及復發性或進行性惡性神 經膠質瘤劑量調整的檢驗\n參數) \n完成 TEMODAL 與放射治療同步治療之後四週,再給予六個療程的 TEMODAL 輔助性治療。第一個(輔助性)療程的劑量\n是 TEMODAL 口服一百五十毫克/平方公尺體表面積,每天一次,投予五天,接著二十三天不用服藥。開始第二個療程時,\n如果第一個療程的 CTC 非血液學毒性小於等於第二級(除了禿髮、噁心、嘔吐以外) ,絕對嗜中性白血球計數(ANC)大於\n等於每公升十五億個(1.5 x 109/L),血小板計數大於等於每公升一千億個(100 x 109/L),便可將治療劑量增加為每天二百毫\n克/平方公尺體表面積。如果劑量在第二個療程沒有增加,以後的療程就不應該增加劑量。以後每個療程最初五天的劑量要保\n持在每天二百毫克/平方公尺體表面積,除非毒性出現。輔助性治療期間,應該根據 表二和表三來降低劑量。 \n在治療期間,第二十二天 (",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
+      "dose_indication_specific": true
     },
     "brain-temozolomide-new-gbm": {
       "status": "matched",
@@ -1430,7 +1529,11 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
       "license_modified": "2026/05/26",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 16
+      "candidate_count": 16,
+      "dosage_excerpt": "dazo[5,1-d]-as-tetrazine-8-carboxamide、分子量 194.15、分子式 C6H6N6O2、結構式如下: \n \n \n \nTemozolomide 分子在酸中安定 (pH< 5) ,因此適於口服。在中性酸鹼值下 temozolomide 容易水解成具活性的 成分 \n5-(3-methyltriazen-1-yl) imidazole-4-carboxamide (MTIC),在鹼性中水解更迅速。 \nTEMODAL 膠囊 \n每一個 TEMODAL 膠囊含有 20 毫克 、100 毫克 、140 毫克 、180 毫克或者 250 毫克的 temozolomide, 另含賦形劑 anhydrous lactose, \nsodium starch glycollate, stearic acid, tartaric acid 及 colloidal anhydrous silica。膠囊體均為白色不透明,成分為 titanium dioxide, \nsodium lauryl sulfate 及 gelatin; 膠囊帽具不同顏色 ,20 毫克及 180 毫克含 Iron Oxide Yellow、100 毫克及 180 毫克含 Iron Oxide \nRed、140 毫克含 Indigo Carmine ;均印有黑色字,墨汁成分為 shellac, dehydrated alcohol, isopropyl alcohol, butyl alcohol, \npropylene glycol, water, ammonium hydroxide, potassium hydroxide, 及 black iron oxide。 \n \n【作用】 \nTEMODAL 是一個具有抗腫瘤活性,含有 imidazotetrazine 環的烷基化作用劑;它在全身循環中會在生理酸鹼值的狀態下,\n快速地透過化學轉化作用形成活性化合物 MTIC(Monomethyl triazeno imidazole carboxamide) 。理論上,MTIC 的細胞毒性主\n要是藉由與鳥糞鹼的第六位氧原子產生烷基化作用,同時也會與鳥糞鹼的第七位氮原子發生次要的附加性烷基化作用,因此\n隨後發生的細胞毒性被認為是與這些異常修復的甲基化合物有關。 \n \n【適應症】 \n--新診斷的多形神經膠母細胞瘤,與放射治療同步進行,然後作為輔助性治療。 \n--給予標準治療後復發性或惡化之惡性神經膠質瘤,例如多形神經膠母細胞瘤或退行性星狀細胞瘤。 \n \n【用法用量】 \n新診斷的多形神經膠母細胞瘤的成年病人: \n同步治療期 \nTEMODAL 口服投予四十二天,每天七十五毫克/平方公尺體表面積,與放射治療(60 Gy,分成三十次投予)同步進行,接\n著給予六個療程的輔助性 TEMODAL。不建議減低劑量;然而可能會因病人的耐受性而發生劑量中斷的情況。如果完全符合\n下列條件,四十二天同步治療期的 TEMODAL 劑量可持續至最長四十九天:絕對嗜中性白血球計數大於等於每公升十五億\n個(1.5 x 109/L),血小板計數大於等於每公升一千億個(100 x 109/L) ,以及通用毒性標準(CTC)的非血液學毒性小於等於\n第一級(除了禿髮、噁心、嘔吐以外) 。治療期間每週須測量一次全血球計數。同步治療期間應根據表一的血液學和非血液\n學毒性標準,中斷或停止投予 TEMODAL。 \n \n表一 在放射治療與 TEMODAL 同步治療期間,中斷或停止投予 TEMODAL \n毒性 中斷 TMZa 停止 TMZ \n絕對嗜中性白血球計數 ≧0.5 且<1.5 x 109/L <0.5 x 109/L \n血小板計數 ≧10 且<100 x 109/L <10 x 109/L \nCTC 非血液學毒性(禿髮、噁心、嘔吐\n除外) \nCTC 第二級 CTC 第三級或第四級 \na:如果完全符合下列條件,可以繼續 TMZ 同步治療:絕對嗜中性白血球計數≧1.5 x 109/L,血小板計數≧100 x 109/L,以及\nCTC 非血液學毒性≦第一級(除了禿髮、噁心、嘔吐以外) 。 \nTMZ = TEMODAL,CTC = 通用毒性標準 \n \n輔助性治療期 (劑量調整之檢驗及參數,見後述之同步治療後輔助性治療及復發性或進行性惡性神 經膠質瘤劑量調整的檢驗\n參數) \n完成 TEMODAL 與放射治療同步治療之後四週,再給予六個療程的 TEMODAL 輔助性治療。第一個(輔助性)療程的劑量\n是 TEMODAL 口服一百五十毫克/平方公尺體表面積,每天一次,投予五天,接著二十三天不用服藥。開始第二個療程時,\n如果第一個療程的 CTC 非血液學毒性小於等於第二級(除了禿髮、噁心、嘔吐以外) ,絕對嗜中性白血球計數(ANC)大於\n等於每公升十五億個(1.5 x 109/L),血小板計數大於等於每公升一千億個(100 x 109/L),便可將治療劑量增加為每天二百毫\n克/平方公尺體表面積。如果劑量在第二個療程沒有增加,以後的療程就不應該增加劑量。以後每個療程最初五天的劑量要保\n持在每天二百毫克/平方公尺體表面積,除非毒性出現。輔助性治療期間,應該根據 表二和表三來降低劑量。 \n在治療期間,第二十二天 (",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
+      "dose_indication_specific": true
     },
     "brain-carmustine-wafer": {
       "status": "not-found",
@@ -1615,13 +1718,28 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
+      "dosage": "94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示。增加 Gemcitabine 於 Carboplatin 之治療組 ,顯著且有統計意義的改善疾病無進展存活期(PFS)\n及總體積反應率。兩組皆有約 75%病人於完成試驗後接受更後續的化療 。Carboplatin 治療組接受後續化療的 120 位病人中,\n僅 13 位在腫瘤惡化後接受 Gemcitabine 治療。兩組間之整體存活無顯著差異。 \n表二、試驗 1 之基期基本資料與臨床特徵 \n Gemcitabine/Carboplatin(N=178) Carboplatin(N=178) \n年齡中位數,年 59 58 \n範圍 36 to 78 21 to 81 \n治療前 ECOG 體能狀況 0-1a 94% 95% \n病情程度 \n 可評估(Evaluable) 8% 3% \n 雙方位可測量(Bidimensionally Measurable) 92% 96% \nPlatinum 治療後至疾病惡化的期間(PFI)b \n6-12 月 40% 40% \n>12 月 59% 60% \n第一線治療用藥 \n Platinum-taxane 合併治療 70% 71% \n Platinum-non-taxane 合併治療 29% 28% \n Platinum 單一治療 1% 1% \na Gemcitabine 併用 Carboplatin 組有 5 位病人,Carboplatin 組有 4 位病人未記錄治療前 ECOG 體能狀況(ECOG:Eastern \nCooperative Oncology Group 美國東岸癌症臨床研究合作組織)。 \nb Gemcitabine 併用 Carboplatin 組有 2 位病人,Carboplatin 組有 1 位病人,其無鉑金間隔(platinum-free int erval, PFI)小於 6\n個月。 \n \n表三、試驗 1 之療效結果 \n療效參數 Gemcitabi",
+      "dose_mentions": [
+        "1250 mg/m2",
+        "75 mg/m2",
+        "0.5 mg/kg",
+        "1000 mg/m2",
+        "1.5 mg/kg",
+        "0.25 mg/kg",
+        "75 mg",
+        "100 mg/m2",
+        "800 mg/m2",
+        "175 mg/m2"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示。增加 Gemcitabine 於 Carboplatin 之治療組 ,顯著且有統計意義的改善疾病無進展存活期(PFS)\n及總體積反應率。兩組皆有約 75%病人於完成試驗後接受更後續的化療 。Carboplatin 治療組接受後續化療的 120 位病人中,\n僅 13 位在腫瘤惡化後接受 Gemcitabine 治療。兩組間之整體存活無顯著差異。 \n表二、試驗 1 之基期基本資料與臨床特徵 \n Gemcitabine/Carboplatin(N=178) Carboplatin(N=178) \n年齡中位數,年 59 58 \n範圍 36 to 78 21 to 81 \n治療前 ECOG 體能狀況 0-1a 94% 95% \n病情程度 \n 可評估(Evaluable) 8% 3% \n 雙方位可測量(Bidimensionally Measurable) 92% 96% \nPlatinum 治療後至疾病惡化的期間(PFI)b \n6-12 月 40% 40% \n>12 月 59% 60% \n第一線治療用藥 \n Platinum-taxane 合併治療 70% 71% \n Platinum-non-taxane 合併治療 29% 28% \n Platinum 單一治療 1% 1% \na Gemcitabine 併用 Carboplatin 組有 5 位病人,Carboplatin 組有 4 位病人未記錄治療前 ECOG 體能狀況(ECOG:Eastern \nCooperative Oncology Group 美國東岸癌症臨床研究合作組織)。 \nb Gemcitabine 併用 Carboplatin 組有 2 位病人,Carboplatin 組有 1 位病人,其無鉑金間隔(platinum-free int erval, PFI)小於 6\n個月。 \n \n表三、試驗 1 之療效結果 \n療效參數 Gemcitabi",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "ov-paclitaxel": {
       "status": "matched",
@@ -1904,12 +2022,24 @@ window.TFDA_LABELS = {
       "form": "膜衣錠",
       "indication": "大腸直腸癌： Regorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)患者，療法包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子((anti-VEGF)等療法；若KRAS為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。 腸胃道間質腫瘤： 適用於治療先前曾接受imatinib mesylate和sunitinib malate患者之局部晚期、無法切除或轉移性的胃腸道間質瘤。 肝細胞癌： 適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病患。",
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dose_mentions": [
+        "40mg",
+        "160 mg",
+        "80 mg",
+        "120 mg",
+        "160 \nmg"
+      ],
+      "frequency_mentions": [
+        "每日一次"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 1
+      "candidate_count": 1,
+      "dosage_excerpt": "1 \n \n \n癌瑞格膜衣錠40毫克 \nStivarga Film‐Coated Tablets 40mg \n衛部藥輸字第026168號 \n本藥須由醫師處方使用 \n警告:肝毒性 \n 在臨床試驗中曾出現重度且有時致命的肝中毒現象[請參閱警語與注意\n事項(5.1(1))]。 \n 請在治療之前和治療期間監測肝功能[請參閱警語與注意事項(5.1(1))]。 \n 藉由肝功能檢測的數值上升程度與肝細胞壞死情形,可了解肝中毒程\n度,再依據其嚴重程度及持續時間來決定中斷使用STIVARGA後,接下\n來應該降低藥量或中止使用STIVARGA [請參閱用法用量(3.1(2))]。 \n1. 性狀 \n1.1 有效成分及含量 \nRegorafenib 40mg \n1.2 賦形劑 \n微晶纖維素、交聯羧甲基纖維素鈉、硬脂酸鎂、交聯聚維酮與膠態二氧化矽。膜衣則含有\n下列非活性成分:三氧化二鐵紅、三氧化二鐵黃、卵磷脂(大豆)、聚乙二醇、聚乙烯醇、\n滑石粉與二氧化鈦。 \n1.3 劑型 \n錠劑 \n1.4 藥品外觀 \n設計為淡粉紅色的橢圓型藥錠,一面刻有「BAYER」字樣,而另一面則刻有「40」字樣 \n2. 適應症 \n適應症與使用方式 \n(1) 大腸直腸癌 \nRegorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)病人,療法包含\nfluoropyrimidine‐, oxaliplatin‐ 和 irinotecan‐ 為基礎的化療,和抗血管內皮生長因子(anti‐VEGF)\n等療法;若KRAS為原生型(wild type)則須接受過抗表皮生長因子受體(anti‐EGFR)療法。 \n(2) 腸胃道間質腫瘤 \n適用於治療先前曾接受imatinib mesylate與sunitinib malate病人之局部晚期、無法切除或轉\n移性的腸胃道間質腫瘤病人。 \n \n\n \n2 \n \n(3) 肝細胞癌 \n適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病人。 \n3. 用法及用量 \n3.1 用法用量 \n(1) 建議劑量 \n一個服藥週期為 28 天,建議劑量為每個週期的前 21 天,每日一次口服 160 mg STIVARGA \n(四顆 40 mg 藥錠)。持續接受治療直到病況惡化或發生無法接受的毒性。 \n請於每日同一時間服用STIVARGA。請在食用一份所含熱量不到600卡路里且所含脂肪不到\n30%的低脂餐點後,配水吞服整顆藥錠 [藥物動力學特性 (11)]。請勿為了彌補前一日的劑量,\n而在一日內服用兩份劑量的STIVARGA。 \n(2) 劑量修正 \n如果需要調整劑量,請以 40 mg (一顆藥錠)的變化量調降劑量;STIVARGA 的最低建議每日\n劑量為每日 80 mg。 \n若出現以下情形,請中斷STIVARGA治療: \n 屬於復發狀況或調降劑量後 7 天內仍未改善的第 2 級手足皮膚反應(HFSR) [肢端紅腫症\n候群(PPES)];第 3 級的 HFSR 需中斷治療至少 7 天 \n 第 2 級高血壓症狀 \n 任何第 3 或 4 級的不良反應 \n 任何級別的感染惡化 \n降低STIVARGA劑量至120 mg: \n 任何時期第一次發生第 2 級 HFSR \n 自任何第 3 或 4 級不良反應(不含感染)恢復後 \n 針對第 3 級天門冬胺酸轉胺酶(AST)/丙胺酸轉胺酶(ALT)量上升,只有當潛在效益大於肝\n中毒風險時才會繼續治療 \n降低STIVARGA劑量至80 mg: \n 服用 120 mg 劑量時再度發生第 2 級 HFSR \n 服用 120 mg 劑量期間,自任何第 3 或 4 級不良反應(肝中毒或感染除外)恢復後 \n \n若有下列情形,請永久停用STIVARGA: \n 對 80 mg 劑量耐受性不佳 \n AST 或 ALT 的數值超過正常值上限(ULN) 20 倍 \n \n3 \n \n AST 或 ALT 的數值超過正常值上限 3 倍,同時膽紅素超過正常值上限 2 倍 \n 儘管劑量已降至 120 mg,AST 或 ALT 再次超過正常值上限 5 倍 \n 針對任何第 4 級不良反應;只有當潛在效益大於風險時才會繼續治療 \n4. 禁忌 \n無。 \n5. 警語及注意事項 \n5.1警語/注意事項 \n(1) 肝毒性 \n在臨床試驗中,接受 STIVARGA 治療的病人曾發生最終致死的重度藥物誘發性肝臟傷害。在\n多數案例中,肝功能障礙都是在治療最初 2 個月內發生,且特徵為肝細胞層級的損傷型\n態。 \n在 CORRECT 試驗中,致命性肝衰竭在 regorafenib 組病人中有 1.6%發生,在安慰劑組病人\n中有 0.4%發生。在 GRID 試驗中,致命性肝衰竭在 regorafenib 組病人中有 0.8%發生。在\nRESORCE 試驗中,致命性肝衰竭的發生率與安慰劑相比並未上升 [請參閱臨床試驗經驗\n(8.2)]。 \n在開始 STIVARGA 治療之前須進行肝功能檢測(ALT、AST 與膽紅素),且在治療的前 2 個月,\n至少每兩週要監測一次;接下來,依照臨床指示,每月至少須監測一次。肝功能檢測數值\n升高的病人,須每週進行肝功能檢測,直到數值低於正常值上限或基期的三倍。 \n藉由肝功能檢測的數值上升程度與肝細胞壞",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "dose_indication_specific": true
     },
     "hcc-ramucirumab": {
       "status": "matched",
@@ -2196,13 +2326,21 @@ window.TFDA_LABELS = {
       "applicant": "曜盟醫藥生技股份有限公司",
       "form": "凍晶注射劑",
       "indication": "(1) Decitabine適用於治療不適合進行標準誘導化學療法之新診斷出患有原發性或續發性急性骨髓性白血病病患(AML，依據世界衛生組織(WHO)分類)。須符合Poor-or intermediate-risk Cytogenetics，且不適合用於Acute Promyelocytic Leukemia (M3 Classification)。(2) Decitabine適用於治療骨髓化生不良症候群(MDS)患者，包括先前曾接受治療及未曾接受治療、所有French-American-British亞型之原發性與續發性MDS(頑固性貧血、環形鐵粒幼細胞的頑固性貧血、頑固性貧血併有過量芽細胞、頑固性貧血併有過量芽細胞轉變型、以及慢性骨髓單核球性白血病)、以及國際預後評分系統分類為中度危險-1、中度危險-2與高危險的患者。",
-      "dosage": "請詳見仿單",
+      "dosage": "1 \n \n特喜達凍晶注射劑 \nDemylocan Lyophilized Powder for injection \n衛部藥輸字第 027930 號 \n本藥限由醫師使用 \n \n1 藥品名稱 \nDemylocan Lyophilized Powder for injection \n \n2 定性與定量組成 \n每小瓶凍晶注射劑含有 50 毫克 decitabine。 \n以 10 毫升的注射用水泡製之後 , 每毫升濃縮液含有5 毫克 decitabine。 \n具有已知作用的賦形劑 \n每小瓶含有 0.5 毫莫耳的鉀(E340)與 0.29 毫莫耳的鈉(E524)。 \n完整的賦形劑清單請參見第 6.1 節。 \n \n3 劑型 \n用以泡製輸注用濃縮液的粉劑(輸注用粉劑)。 \n白色至幾近白色的冷凍乾燥粉劑。 \n \n4 臨床特性(依文獻記載) \n4.1 適應症(依文獻記載) \n(1) \nDecitabine 適用於治療不適合進行標準誘導化學療法之新診斷出患有\n原發性或續發性急性骨髓性白血病病人(AML,依據世界衛生組織\n(WHO)分類)。須符合 Poor-or intermediaterisk Cytogenetics,且不適合\n用於 Acute Promyelocytic Leukemia (M3 Classification)。 \n(2) \nDecitabine 適用於治療骨髓化生不良症候群(MDS)病人,包括先前曾\n接受治療及未曾接受治療、所有 French-American-British 亞型之原發\n性與續發性 MDS(頑固性貧血、環形鐵粒幼細胞的頑固性貧血、頑固\n性貧血併有過量芽細胞 、 頑固性貧血併有過量芽細胞轉變型 、 以及慢\n性骨髓單核球性白血病)、以及國際預後評分系統分類為中度危險\n-1、中度危險-2 與高危險的病人。 \n4.2 劑量與用法(依文獻記載) \n(1) AML 適應症 \n必須在有化學治療藥品使用經驗之醫師的監督下才可投予\nDecitabine。 \n劑量 \n在一個治療週期中,應連續 5 天,每天重複一次,以1 小時的時間靜\n脈輸注一劑 20 毫克/米 2 體表面積的 Decitabine (亦即每一個治療週期\n總共投予 5 劑)。每日總劑量不可超過 20 毫克/米 2,且每一治療週期\n的總劑量不可超過 100 毫克/米 2。 \n如果漏打一劑 , 應儘快恢復治療 。 視病人的臨床反應及所觀察到的毒\n性反應而定 , 此治療週期應每4 週重複進行一次 。 建議病人至少要治\n療 4 個週期 ; 不過 , 要達到完全或部份緩解的效果可能需要較4 個週\n期更長的時間 。 只要病人出現療效反應 、 仍可獲得治療效益或病情呈\n現穩定狀態,亦即沒有明顯惡化的現象,即可繼續進行治療。 \n治療 4 個週期之後 , 如果病人的血液學檢測值( 如血小板計數或絕對\n嗜中性白血球計數)並未回復到治療前的程度,或是出現病情惡化的\n現象(周邊血球母細胞計數增加或骨髓母細胞計數惡化),可能要將病\n人視為無反應者,並應考慮改用 Decitabine 以外的其他治療選擇。 \n事先投予預防噁心及嘔吐的藥物並非常規的建議 , 但如果需要還是可\n以預先給藥。 \n骨髓抑制及相關併發症的處置 \n骨髓抑制以及與骨髓抑制相關的不良事件(血小板減少症、貧血、嗜\n中性白血球減少症及發燒性嗜中性白血球減少症)在接受治療與未治\n療的 AML 病人中都相當常見。骨髓抑制的併發症包括感染與出血。\n如果病人發生下述的骨髓抑制相關併發症 , 視治療醫師的判斷而定,\n有可能必須延緩治療: \n• 發燒性嗜中性白血球減少症(體溫≥ 38.5 ̊C 且絕對嗜中性白血球計\n數< 1,000 /μL ) \n• 活動性病毒、細菌或黴菌感染(亦即須靜脈注射抗感染藥物或進行\n廣泛的支持性照護) \n• 出血(胃腸道、生殖泌尿道或肺部出血,且血小板< 25,000 /μL,\n或任何中樞神經系統出血) \n一旦這些狀況有所改善或在適當治療(抗感染治療、輸血或投予生長\n因子)後達到穩定狀態,或可重新開始使用 Decitabine 治療。 \n在臨床研究中 , 接受Decitabine 治療的病人約有三分之一必須延緩投\n藥。不建議降低劑量。 \n兒童 \nDecitabine 用於年齡< 18 歲之兒童的安全性與療效尚未確立。目前並\n無任何相關的資料。 \n肝功能不全 \n目前尚未進行過以肝功能不全之病人為對象的研究 。 目前也未針對肝\n功能不全的病人評估過調整劑量的必要性 。 如果出現肝功能惡化的現\n象,應對病人進行嚴密的監視(參見第 4.4 與第 5.2 節)。 \n腎功能不全 \n目前尚未進行過以腎功能不全之病人為對象的研究 。 目前也未針對腎\n功能不全的病人評估過調整劑量的必要性(參見第 4.4 與第 5.2 節)。 \n用法 \nDecitabine 係透過靜脈輸注給藥。並不須使用中央靜脈導管。關於投\n予本藥前的泡製步驟與稀釋步驟,請參見第 6.6 節。 \n(2) MDS 適應症 \nDecitabine 的療程建議病人至少要治療 4 個週期;不過,要達到完全\n或部份療效反應可能需要 4 個療程以上的時間。 \n應視需要檢測全血球數值與血小板數值 , 藉以監視療效反應與毒性,\n但至少在每一治療週期前要檢測一次 。 開始",
       "dose_mentions": [],
-      "frequency_mentions": [],
+      "frequency_mentions": [
+        "每4 週",
+        "每天一次",
+        "q8h"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_2fec6150-ba66-4769-8a7d-5e97b1d0d5a5?c=2",
       "license_modified": "2026/03/20",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 7
+      "candidate_count": 7,
+      "dosage_excerpt": "1 \n \n特喜達凍晶注射劑 \nDemylocan Lyophilized Powder for injection \n衛部藥輸字第 027930 號 \n本藥限由醫師使用 \n \n1 藥品名稱 \nDemylocan Lyophilized Powder for injection \n \n2 定性與定量組成 \n每小瓶凍晶注射劑含有 50 毫克 decitabine。 \n以 10 毫升的注射用水泡製之後 , 每毫升濃縮液含有5 毫克 decitabine。 \n具有已知作用的賦形劑 \n每小瓶含有 0.5 毫莫耳的鉀(E340)與 0.29 毫莫耳的鈉(E524)。 \n完整的賦形劑清單請參見第 6.1 節。 \n \n3 劑型 \n用以泡製輸注用濃縮液的粉劑(輸注用粉劑)。 \n白色至幾近白色的冷凍乾燥粉劑。 \n \n4 臨床特性(依文獻記載) \n4.1 適應症(依文獻記載) \n(1) \nDecitabine 適用於治療不適合進行標準誘導化學療法之新診斷出患有\n原發性或續發性急性骨髓性白血病病人(AML,依據世界衛生組織\n(WHO)分類)。須符合 Poor-or intermediaterisk Cytogenetics,且不適合\n用於 Acute Promyelocytic Leukemia (M3 Classification)。 \n(2) \nDecitabine 適用於治療骨髓化生不良症候群(MDS)病人,包括先前曾\n接受治療及未曾接受治療、所有 French-American-British 亞型之原發\n性與續發性 MDS(頑固性貧血、環形鐵粒幼細胞的頑固性貧血、頑固\n性貧血併有過量芽細胞 、 頑固性貧血併有過量芽細胞轉變型 、 以及慢\n性骨髓單核球性白血病)、以及國際預後評分系統分類為中度危險\n-1、中度危險-2 與高危險的病人。 \n4.2 劑量與用法(依文獻記載) \n(1) AML 適應症 \n必須在有化學治療藥品使用經驗之醫師的監督下才可投予\nDecitabine。 \n劑量 \n在一個治療週期中,應連續 5 天,每天重複一次,以1 小時的時間靜\n脈輸注一劑 20 毫克/米 2 體表面積的 Decitabine (亦即每一個治療週期\n總共投予 5 劑)。每日總劑量不可超過 20 毫克/米 2,且每一治療週期\n的總劑量不可超過 100 毫克/米 2。 \n如果漏打一劑 , 應儘快恢復治療 。 視病人的臨床反應及所觀察到的毒\n性反應而定 , 此治療週期應每4 週重複進行一次 。 建議病人至少要治\n療 4 個週期 ; 不過 , 要達到完全或部份緩解的效果可能需要較4 個週\n期更長的時間 。 只要病人出現療效反應 、 仍可獲得治療效益或病情呈\n現穩定狀態,亦即沒有明顯惡化的現象,即可繼續進行治療。 \n治療 4 個週期之後 , 如果病人的血液學檢測值( 如血小板計數或絕對\n嗜中性白血球計數)並未回復到治療前的程度,或是出現病情惡化的\n現象(周邊血球母細胞計數增加或骨髓母細胞計數惡化),可能要將病\n人視為無反應者,並應考慮改用 Decitabine 以外的其他治療選擇。 \n事先投予預防噁心及嘔吐的藥物並非常規的建議 , 但如果需要還是可\n以預先給藥。 \n骨髓抑制及相關併發症的處置 \n骨髓抑制以及與骨髓抑制相關的不良事件(血小板減少症、貧血、嗜\n中性白血球減少症及發燒性嗜中性白血球減少症)在接受治療與未治\n療的 AML 病人中都相當常見。骨髓抑制的併發症包括感染與出血。\n如果病人發生下述的骨髓抑制相關併發症 , 視治療醫師的判斷而定,\n有可能必須延緩治療: \n• 發燒性嗜中性白血球減少症(體溫≥ 38.5 ̊C 且絕對嗜中性白血球計\n數< 1,000 /μL ) \n• 活動性病毒、細菌或黴菌感染(亦即須靜脈注射抗感染藥物或進行\n廣泛的支持性照護) \n• 出血(胃腸道、生殖泌尿道或肺部出血,且血小板< 25,000 /μL,\n或任何中樞神經系統出血) \n一旦這些狀況有所改善或在適當治療(抗感染治療、輸血或投予生長\n因子)後達到穩定狀態,或可重新開始使用 Decitabine 治療。 \n在臨床研究中 , 接受Decitabine 治療的病人約有三分之一必須延緩投\n藥。不建議降低劑量。 \n兒童 \nDecitabine 用於年齡< 18 歲之兒童的安全性與療效尚未確立。目前並\n無任何相關的資料。 \n肝功能不全 \n目前尚未進行過以肝功能不全之病人為對象的研究 。 目前也未針對肝\n功能不全的病人評估過調整劑量的必要性 。 如果出現肝功能惡化的現\n象,應對病人進行嚴密的監視(參見第 4.4 與第 5.2 節)。 \n腎功能不全 \n目前尚未進行過以腎功能不全之病人為對象的研究 。 目前也未針對腎\n功能不全的病人評估過調整劑量的必要性(參見第 4.4 與第 5.2 節)。 \n用法 \nDecitabine 係透過靜脈輸注給藥。並不須使用中央靜脈導管。關於投\n予本藥前的泡製步驟與稀釋步驟,請參見第 6.6 節。 \n(2) MDS 適應症 \nDecitabine 的療程建議病人至少要治療 4 個週期;不過,要達到完全\n或部份療效反應可能需要 4 個療程以上的時間。 \n應視需要檢測全血球數值與血小板數值 , 藉以監視療效反應與毒性,\n但至少在每一治療週期前要檢測一次 。 開始",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_2fec6150-ba66-4769-8a7d-5e97b1d0d5a5?c=2",
+      "dose_indication_specific": true
     },
     "aml-fedratinib-exclusion": {
       "status": "generic-label",
@@ -2519,13 +2657,29 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "0 L/m2;長時間輸注時,分佈體積增加至\n370 L/m2。 \nGemcitabine 的藥物動力學為線性、2-compartment 模式。合併分析單次劑量與多次劑量的族群動力學顯示,Gemcitabine 的\n分佈體積顯著受到輸注時間與性別的影響。Gemcitabine 與血漿蛋白的結合可忽略。 \n排除 \n代謝 \n活性代謝物 Gemcitabine triphosphate 可自周邊血液中之單核球細胞萃取出來, 其自單核球細胞萃取後的半衰期介於 1.7 至\n19.4 小時之間。 \n排泄 \n以 5 名接受放射線標定過藥物之單次劑量:1000 mg/m2/30 分鐘輸注的病人進行 Gemcitabine 的分佈研究。一週內 92~98%\n的劑量幾乎全由尿液回收。其中 Gemcitabine(<10%)與不具活性之 uracil 代謝物 2 deoxy-2,2’-difluorouridine (dFdU) 佔了排\n出劑量之 99%,血漿中亦發現 dFdU 代謝物。 \n特殊族群 \n老年病人 \nGemcitabine 的清除率受年齡的影響。老年病人皆因較低的清除率而有較高的濃度。因為病人特性或是輸注時間不同導致\n之清除率與分佈體積的差異,造成半衰期與血漿濃度的變化。表一顯示不同年齡、不同性別的典型病人 在短時間輸注後,\nGemcitabine 的血漿清除率與半衰期。 \n表一、Gemcitabine 在典型病人體內之清除率與半衰期 \n年齡 男性清除率(L/hr/m2) 女性清除率(L/hr/m2) 男性半衰期 a(分鐘) 女性半衰期 a(分鐘) \n29 92.2 69.4 42 49 \n45 75.7 57.0 48 57 \n65 55.1 41.5 61 73 \n79 40.7 30.7 79 94 \na 病人接受< 70 分鐘輸注之藥物半衰期。 \n依據年齡與性別的差異,短時間輸注的半衰期為 42 至 94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "1250 mg/m2",
+        "75 mg/m2",
+        "0.5 mg/kg",
+        "1.5 mg/kg",
+        "0.25 mg/kg",
+        "175 mg/m2",
+        "100 mg/m2"
+      ],
+      "frequency_mentions": [
+        "每 21 天",
+        "每 28 天"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "0 L/m2;長時間輸注時,分佈體積增加至\n370 L/m2。 \nGemcitabine 的藥物動力學為線性、2-compartment 模式。合併分析單次劑量與多次劑量的族群動力學顯示,Gemcitabine 的\n分佈體積顯著受到輸注時間與性別的影響。Gemcitabine 與血漿蛋白的結合可忽略。 \n排除 \n代謝 \n活性代謝物 Gemcitabine triphosphate 可自周邊血液中之單核球細胞萃取出來, 其自單核球細胞萃取後的半衰期介於 1.7 至\n19.4 小時之間。 \n排泄 \n以 5 名接受放射線標定過藥物之單次劑量:1000 mg/m2/30 分鐘輸注的病人進行 Gemcitabine 的分佈研究。一週內 92~98%\n的劑量幾乎全由尿液回收。其中 Gemcitabine(<10%)與不具活性之 uracil 代謝物 2 deoxy-2,2’-difluorouridine (dFdU) 佔了排\n出劑量之 99%,血漿中亦發現 dFdU 代謝物。 \n特殊族群 \n老年病人 \nGemcitabine 的清除率受年齡的影響。老年病人皆因較低的清除率而有較高的濃度。因為病人特性或是輸注時間不同導致\n之清除率與分佈體積的差異,造成半衰期與血漿濃度的變化。表一顯示不同年齡、不同性別的典型病人 在短時間輸注後,\nGemcitabine 的血漿清除率與半衰期。 \n表一、Gemcitabine 在典型病人體內之清除率與半衰期 \n年齡 男性清除率(L/hr/m2) 女性清除率(L/hr/m2) 男性半衰期 a(分鐘) 女性半衰期 a(分鐘) \n29 92.2 69.4 42 49 \n45 75.7 57.0 48 57 \n65 55.1 41.5 61 73 \n79 40.7 30.7 79 94 \na 病人接受< 70 分鐘輸注之藥物半衰期。 \n依據年齡與性別的差異,短時間輸注的半衰期為 42 至 94 分鐘,長時間輸注的半衰期為 245 至 638 分鐘,反應出較長的輸\n注時間會增加分佈體積。 \n男性與女性病人 \n相較於男性病人,女性的清除率較低以及半衰期較長,如表一所示。 \n腎功能不全病人 \n並未對腎功能降低的病人進行 Gemcitabine 臨床試驗。 \n肝功能不全病人 \n並未對肝功能降低的病人進行 Gemcitabine 臨床試驗。 \n藥物交互作用試驗 \n非小細胞肺癌病人併用 Gemcitabine(第 1 天與第 8 天輸注 1250 mg/m2)與 Cisplatin(第 1 天輸注 75 mg/m2),Gemcitabine 清除\n率於第 1 天為 128 L/hr/m2,於 第8 天為 107 L/hr/m2。非小細胞肺癌病人之試驗結果顯示 , 與單一藥物治療比較 ,Gemcitabine\n併用 Carboplatin 不影響 Gemcitabine 或 Carboplatin 之藥物動力學。然而,由於較寬的信賴區間與較少的病人人數,仍有可\n能發生病人間的差異。 \n轉移性乳癌病人的數據顯 示,Gemcitabine 對於 Paclitaxel 的藥物動力學(清除率和半衰期)影響很小或無影響,而且 Paclitaxel\n對於 Gemcitabine 的藥物動力學影響很小或無影響。\n \n三、 【非臨床毒理學】(依文獻記載) \n3.1 致癌性、基因突變性與對生育力的傷害 \nGemcitabine 尚未以長期的動物實驗評估其致癌性 。在一小鼠淋巴癌的體外定量分析(L5178Y)顯示 Gemcitabine 有基因突變\n性;在一小鼠微細胞核的體內定量分析顯示 Gemcitabine 具基因切斷性。公鼠腹腔注射 0.5 mg/kg/day 的劑量時(依據體表面\n積(BSA)給予 1000 mg/m2 臨床劑量的 1/700)造成:中度至重度的降低精子生成作用、生育力降低、著床率降低。母鼠的生\n育力不受影響,但當靜脈給予 1.5 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/200),出現對母\n鼠之毒性;靜脈給予 0.25 mg/kg/day 的劑量時(依據體表面積(BSA)給予 1000 mg/m2 臨床劑量的 1/1300),出現胎兒毒性或\n胚胎之死亡。 \n \n四、 【臨床研究】(依文獻記載) \n4.1 卵巢癌 \n一個隨機分組臨床試驗(試驗 1),研究 Gemcitabine 治療晚期(advanced)卵巢癌病人的療效,這些病人皆曾接受第一線含鉑\n藥物(platinum-based)治療,並於至少 6 個月後復發。病人隨機分組接受治療組或對照組治療。治療組 療程為:以 21 天為\n一週期,於第 1、8 天輸注 Gemcitabine 1000 mg/m2,第 1 天輸注 Gemcitabine 後,再輸注 Carboplatin 劑量 AUC 4 (n=178)。\n對照組療程為:以 21 天為一週期,於第 1 天輸注單一藥物 Carboplatin 劑量 AUC 5(n=178)。主要療效終點指標為疾病無進\n展存活期(progression free survival, PFS)。一共納入 356 位病人。表二為基本資料與基期特徵。 \n療效結果如表三及圖一所示",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "lc-paclitaxel": {
       "status": "matched",
@@ -2553,13 +2707,25 @@ window.TFDA_LABELS = {
       "applicant": "美時化學製藥股份有限公司",
       "form": "軟膠囊劑",
       "indication": "1.非小細胞肺癌。2.轉移性乳癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
+      "dosage": "威若賓軟膠囊 Vinobin Soft Capsules \n20 毫克 衛部藥製字第 060841 號 \n本藥須由醫師處方使用 \n1.成分 \n威若賓20 毫克軟膠囊: \n每一顆膠囊含vinorelbine tartrate 27.70毫克,相當於Vinorelbine \n20 毫克,賦形劑(詳見5.1賦形劑) \n2.藥物劑型 \n 軟膠囊 \n威若賓 20 毫克軟膠囊: 淺棕色軟膠囊 \n3.臨床資料 \n3.1 適應症 \nVinorelbine 軟 膠 囊 係 為 下 列 適 應 症 的 單 一 化 學 治 療\n(single-agent chemotherapy)藥物: \n 1. 非小細胞肺癌 \n 2. 轉移性乳癌 \n3.2 劑量及用藥方法 \n僅用於口服 \nVinorelbine 軟膠囊必須在用餐時以水整顆吞服 (不可嚼食或剝 \n開膠囊)。 \nVinorelbine 軟膠囊僅用於單一化學療法。 \n建議劑量: \n前三次: 依體表面積每週給藥60mg/m2一次。 \n第四次開始: 增加為每週給藥80mg/m2 一次,除非在前三次服用\n60mg/m2時 , 病人的嗜中性白血球數目曾低於500/mm3或曾經一次\n以上嗜中性白血球數目介於500~1000/mm3之間。 \n前三次用藥時\n(60mg/m2/week)\n的嗜中性白血\n球數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白血\n球數目 \n≧500 及<\n1000(一次偶\n發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n第四次開始的\n建議用量 \n80 80 60 60 \n在每週給藥80mg/m2用量的治療期間,若病人的嗜中性白血球數\n目低於 500/mm3 或曾經一次以上嗜中性白血球數目介於\n500~1000/mm3之間,治療時間必須暫緩到數目回復正常值,同時\n必須降低劑量至每週60mg/m2。 \n在第四次用藥後\n(80mg/m2/week)\n的嗜中性白血球\n數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白\n血球數目\n≧500 及\n<1000(一\n次偶發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n下一次開始的建\n議用量 \n80 60 \n在最近三次使用每週60mg/m2用量的治療期間,如果嗜中性白血\n球數目不低於500或超過一次以上介於500~1000/mm3之間,可再\n次 將 用 量 增 加 為 每 週80mg/m2 。 當 嗜 中 性 白 血 球 數 目 低 於\n1500/mm3和/或血小板數目介於75,000~100,000/mm3之間 , 治療時\n間應該延緩至數目恢復正常時,並應嚴密監視病人狀況:詳見3.4\n警語及注意事項。 \n不同劑量的膠囊可適當的混合使用以達到需要的用量。下表顯示\n依據體表面積所需要的使用量。 \n體表面積(m2) \n60mg/m2 \n劑量(mg) \n80mg/m2 \n劑量(mg) \n0.95 to 1.0 60 80 \n1.05 to 1.14 70 90 \n1.15 to 1.24 70 100 \n1.25 to 1.34 80 100 \n1.35 to 1.44 80 110 \n1.45 to 1.54 90 120 \n1.55 to 1.64 100 130 \n1.65 to 1.74 100 140 \n1.75 to 1.84 110 140 \n1.85 to 1.94 110 150 \n=1.95 120 160 \n即使病人的體表面積大於2m2,每週的總用藥量也不可超過\n120mg(單次給藥60mg/m2)或160mg(單次給藥80mg/m2)。 \n依據血液中劑量,口服劑量80 mg/m2 相對應於靜脈注射劑量 30 \nmg/m2,口服劑量60 mg/m2 相對應於靜脈注射劑量25 mg/m2。 \n年長病人的用藥 \n臨床試驗顯示,年長病人與年輕病人在用藥的反應上並無顯著的\n不同,但某些年長病人可能會有較強烈的反應。年齡並不會改變\nvinorelbine的藥物動力學。 \n孩童病人的用藥 \n尚無本藥對於孩童的安全性及有效性的研究報告。因此不建議讓\n孩童使用本藥。 \n肝功能不全病人的用藥 \n患 有 輕 度 肝 功 能 不 全 的病人 ( 膽紅素 < 1.5 倍 正 常 值 上 限\n[ULN] ,且 ALAT和/或ASA T為1.5至2.5倍ULN),每週可給予\nvinorelbine 60 mg/m2的標準劑量。患有中度肝功能不全的病人(膽\n紅素為1.5至3倍ULN,且無論ALA T和ASAT的數值為何),每週應\n給予 vinorelbine 50mg/m2的 劑 量 。由於尚未 有 足 夠 資 料 確 認\nvinorelbine在嚴重肝功能不全 病人 之藥物動力學、療效及安全\n性,因此不建議患有嚴重肝功能不全的病人服用vinorelbine。 \n腎功能不全病人的用藥 \n由於僅有少量經由腎臟排泄,因此依照藥物動力學的觀點",
+      "dose_mentions": [
+        "60mg/m2",
+        "80mg/m2",
+        "120mg",
+        "160mg",
+        "30 \nmg/m2",
+        "25 mg/m2",
+        "50mg/m2"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_1e35844f-c95f-48c8-99e0-6e82b7c27eae?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_ec237e87-8860-4264-a9d5-f7e4be0b9e5c?c=2",
       "license_modified": "2025/11/25",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 15
+      "candidate_count": 15,
+      "dosage_excerpt": "威若賓軟膠囊 Vinobin Soft Capsules \n20 毫克 衛部藥製字第 060841 號 \n本藥須由醫師處方使用 \n1.成分 \n威若賓20 毫克軟膠囊: \n每一顆膠囊含vinorelbine tartrate 27.70毫克,相當於Vinorelbine \n20 毫克,賦形劑(詳見5.1賦形劑) \n2.藥物劑型 \n 軟膠囊 \n威若賓 20 毫克軟膠囊: 淺棕色軟膠囊 \n3.臨床資料 \n3.1 適應症 \nVinorelbine 軟 膠 囊 係 為 下 列 適 應 症 的 單 一 化 學 治 療\n(single-agent chemotherapy)藥物: \n 1. 非小細胞肺癌 \n 2. 轉移性乳癌 \n3.2 劑量及用藥方法 \n僅用於口服 \nVinorelbine 軟膠囊必須在用餐時以水整顆吞服 (不可嚼食或剝 \n開膠囊)。 \nVinorelbine 軟膠囊僅用於單一化學療法。 \n建議劑量: \n前三次: 依體表面積每週給藥60mg/m2一次。 \n第四次開始: 增加為每週給藥80mg/m2 一次,除非在前三次服用\n60mg/m2時 , 病人的嗜中性白血球數目曾低於500/mm3或曾經一次\n以上嗜中性白血球數目介於500~1000/mm3之間。 \n前三次用藥時\n(60mg/m2/week)\n的嗜中性白血\n球數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白血\n球數目 \n≧500 及<\n1000(一次偶\n發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n第四次開始的\n建議用量 \n80 80 60 60 \n在每週給藥80mg/m2用量的治療期間,若病人的嗜中性白血球數\n目低於 500/mm3 或曾經一次以上嗜中性白血球數目介於\n500~1000/mm3之間,治療時間必須暫緩到數目回復正常值,同時\n必須降低劑量至每週60mg/m2。 \n在第四次用藥後\n(80mg/m2/week)\n的嗜中性白血球\n數目 \n嗜中性\n白血球\n數目>\n1000 \n嗜中性白\n血球數目\n≧500 及\n<1000(一\n次偶發) \n嗜中性白\n血球數目\n≧500 及\n<1000(二\n次偶發) \n嗜中性\n白血球\n數目<\n500 \n下一次開始的建\n議用量 \n80 60 \n在最近三次使用每週60mg/m2用量的治療期間,如果嗜中性白血\n球數目不低於500或超過一次以上介於500~1000/mm3之間,可再\n次 將 用 量 增 加 為 每 週80mg/m2 。 當 嗜 中 性 白 血 球 數 目 低 於\n1500/mm3和/或血小板數目介於75,000~100,000/mm3之間 , 治療時\n間應該延緩至數目恢復正常時,並應嚴密監視病人狀況:詳見3.4\n警語及注意事項。 \n不同劑量的膠囊可適當的混合使用以達到需要的用量。下表顯示\n依據體表面積所需要的使用量。 \n體表面積(m2) \n60mg/m2 \n劑量(mg) \n80mg/m2 \n劑量(mg) \n0.95 to 1.0 60 80 \n1.05 to 1.14 70 90 \n1.15 to 1.24 70 100 \n1.25 to 1.34 80 100 \n1.35 to 1.44 80 110 \n1.45 to 1.54 90 120 \n1.55 to 1.64 100 130 \n1.65 to 1.74 100 140 \n1.75 to 1.84 110 140 \n1.85 to 1.94 110 150 \n=1.95 120 160 \n即使病人的體表面積大於2m2,每週的總用藥量也不可超過\n120mg(單次給藥60mg/m2)或160mg(單次給藥80mg/m2)。 \n依據血液中劑量,口服劑量80 mg/m2 相對應於靜脈注射劑量 30 \nmg/m2,口服劑量60 mg/m2 相對應於靜脈注射劑量25 mg/m2。 \n年長病人的用藥 \n臨床試驗顯示,年長病人與年輕病人在用藥的反應上並無顯著的\n不同,但某些年長病人可能會有較強烈的反應。年齡並不會改變\nvinorelbine的藥物動力學。 \n孩童病人的用藥 \n尚無本藥對於孩童的安全性及有效性的研究報告。因此不建議讓\n孩童使用本藥。 \n肝功能不全病人的用藥 \n患 有 輕 度 肝 功 能 不 全 的病人 ( 膽紅素 < 1.5 倍 正 常 值 上 限\n[ULN] ,且 ALAT和/或ASA T為1.5至2.5倍ULN),每週可給予\nvinorelbine 60 mg/m2的標準劑量。患有中度肝功能不全的病人(膽\n紅素為1.5至3倍ULN,且無論ALA T和ASAT的數值為何),每週應\n給予 vinorelbine 50mg/m2的 劑 量 。由於尚未 有 足 夠 資 料 確 認\nvinorelbine在嚴重肝功能不全 病人 之藥物動力學、療效及安全\n性,因此不建議患有嚴重肝功能不全的病人服用vinorelbine。 \n腎功能不全病人的用藥 \n由於僅有少量經由腎臟排泄,因此依照藥物動力學的觀點",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_1e35844f-c95f-48c8-99e0-6e82b7c27eae?c=2",
+      "dose_indication_specific": true
     },
     "lc-ufur": {
       "status": "matched",
@@ -2819,12 +2985,22 @@ window.TFDA_LABELS = {
       "form": "膜衣錠",
       "indication": "Gefitinib適用於具有EGFR-TK突變之局部侵犯性或轉移性之非小細胞肺癌(NSCLC)病患之第一線治療。Gefitinib適用於先前已接受過化學治療後，但仍局部惡化或轉移之肺腺癌病患之第二線用藥。",
       "dosage": "請詳閱說明書後使用",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dose_mentions": [
+        "000 mg",
+        "500 mg",
+        "250 mg"
+      ],
+      "frequency_mentions": [
+        "每天 1 次"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_95f480d6-7470-47c1-9dcd-de1fbb677668?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_0f149194-d9ef-4109-8de5-5add10fd11be?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_55fa4b80-4196-4490-94cf-41a5dbffb7fb?c=2",
       "license_modified": "2026/07/28",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 6
+      "candidate_count": 6,
+      "dosage_excerpt": "輕或中度(CTC \n第 1 或 2 級)。 \n●總膽固醇上升 (2.7% ): 多為輕或中度 。 \n腎與泌尿異常 \n●無症狀之血中肌酸酐實驗室數值上升(1.5%)。 \n●蛋白尿(7.7%)。 \n●膀胱炎 (1.1% )。 \n皮膚與皮下組織異常 \n●指甲異常(7.9%)。 \n●脫髮症(4.7%)。 \n●過敏反應 (1.1%) ,包括血管性水腫和蕁麻疹 。 \n一般異常與給藥部位 \n狀況 ●發燒(8.7%)。 \n眼睛異常 ●結膜炎、瞼緣炎及乾眼症*(6.7%):多為輕度本質(\nCTC 第 1 級)。 \n呼吸 、 胸腔與縱隔異常 ●間質性肺病(1.3%):常為重度(CTC 第 3 ~ 4 級)。 \n曾有致死之報告 。 \n少見 \n(≧0.1 -<1% ) 胃腸異常 ●胰臟炎(0.1%)。 \n●胃腸穿孔 (0.2% )。 \n \n肝膽異常 ●肝炎 ** (0.2% )。 \n眼睛異常 ●角膜炎(0.12%)、角膜糜爛(0.3%):可逆性,且有 \n時與睫毛雜亂有關。 \n 皮膚與皮下組織異常 ●肢端紅腫症候群 (Palmar- plantar erythrodysesthesia \nsyndrome) \n罕見 \n(≧0.01-<0.1%) \n皮膚與皮下組織異常 \n●水泡性狀況包括毒性表皮壞死、史帝文生強生症候群 (\nStevens Johnson syndrome)及多形性紅斑(0.04%)。 \n●皮膚血管炎 *** 。 \n腎與泌尿異常 ●出血性膀胱炎 *** 。 \n*此項反應的發生可能合併其他 Gefitinib 所引起的乾燥症狀(主要為皮膚的反應)。 \n**這包括個別分離的肝衰竭報告,在某些情況下造成致命的結果。 \n***不可能根據 phase III 臨床試驗區分皮膚血管炎和出血性膀胱炎的頻率,因為可檢測它們的臨床 \n試驗並沒有這些反應的報告,因此頻率是根據歐盟委員會指引(2009 年 9 月)估計的,該指引假\n設橫跨單一治療臨床試驗有 3 例報告 。 \n上市後經驗:曾報告有貧血、血小板低下之不良反應。 \n在一項 phase III 雙盲臨床試驗中(1,692 位病人 ),比較 Gefitinib 加上最佳支持性照護(BSC)以及安 \n慰劑加上最佳支持性照護(BSC)使用於先前已接受過 1 或 2 個化學療程而對於最近一次療程有抵抗 \n性或不耐受之晚期非小細胞肺癌 病人 ,其間質性肺病(ILD)之總發生率為相似的,在兩個治療組皆為 \n約 1%。大部分發生間質性肺病(ILD)的病人 為東方人種,且在這些接受 Gefitinib 治療之東方人種中 \n,比較接受Gefitinib 治療及接受安慰劑治療之 病人 ,其間質性肺病(ILD)的發生率是相似的,分別各 \n為約 3%及 4%。其中一例為致命性案例,此案例發生於接受安慰劑治療之 病人 。在一項日本執行之 \n上市後監視研究中(3,350 位病人 ),間質性肺病(ILD)在接受 Gefitinib 治療之 病人 的通報率為 5.8%。 \n在一項日本之藥物流行病學研究中 【參閱 「警語及注意事項 」章節 】, 追蹤罹患非小細胞肺癌之 病\n人為期 12 週 , 其間質性肺病 (ILD) 累積起來的發生率 (未以 病人 特徵不平衡校正過) 在接受 Gefitinib \n治療的 病人 組為 4.0%,而在接受化學治療的病人 組為 2.1%;若以接受 Gefitinib 治療的 病人 組比上 \n接受化學治療的 病人 組,其發展成間質性肺病(ILD)之校正勝算比(OR)為 3.2(95%信賴區間 \nCI : 1.9 ~ 5.4)。在治療的前 4 週,接受 Gefitinib 治療的 病人 組明顯地比接受化學治療的 病人 組有 \n增加間質性肺病(ILD)的危險性(校正勝算比為 3.8;95% CI : 1.9 ~ 7.7);但在之後 其相對危險 \n性就較低(校正勝算比為 2.5;95% CI : 1.1 ~ 5.8)。 \n在一項 phase III 臨床試驗中(1,217 名病人 ),比較 Gefitinib 與 carboplatin/paclitaxel 雙重化學 \n治療作為第一線治療,使用治療於亞洲地區之晚期非小細胞肺癌 病人 ,ILD 類型事件的發生率在接 \n受 Gefitinib 治療的 病人 組為 2.6%,而在接受 carboplatin/paclitaxel 雙重治療的 病人 組為 1.4%。 \n【使用過量 】(依文獻記載 ) \nGefitinib 藥物過量時,並無專一性之療法。與藥物過量有關之不良反應,應給予症狀療法,尤其是 \n嚴重腹瀉應按照臨床需要處理。在第一階段臨床研究中,有少數 病人 曾已每日高達 1,000 mg 之劑 \n量治療。發現有些不良反應之發生頻率及嚴重度會增加,主為腹瀉及皮疹為主。在一項研究中,數\n量有限的 病人 每週接受 1,500 mg 至 3,500 mg 之治療。在這項研究中,Gefitinib 的暴露量並未隨劑 \n量的增加而增加,不良反應的嚴重度多為輕度到中度,與已知的 Gefitinib 安全性一致 。 \n【藥理學性質 】(依文獻記載 ) \n藥效學性質 (依文獻記載 ) \nGefitinib 為表皮生長因子接受體(epidermal growth fact",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_95f480d6-7470-47c1-9dcd-de1fbb677668?c=2",
+      "dose_indication_specific": true
     },
     "lc-osimertinib-1l": {
       "status": "matched",
@@ -3314,13 +3490,19 @@ window.TFDA_LABELS = {
       "applicant": "臺灣阿斯特捷利康股份有限公司",
       "form": "膠囊劑",
       "indication": "1.先前曾接受至少一種治療的被套細胞淋巴瘤 (Mantle Cell Lymphoma, MCL) 成年病人。 2.慢性淋巴球性白血病 (Chronic Lymphocytic Leukemia, CLL) 或小淋巴球性淋巴瘤 (Small Lymphocytic Lymphoma, SLL) 成年病人。",
-      "dosage": "詳見仿單",
-      "dose_mentions": [],
+      "dosage": "дᆯੰᇭᚾ 100 ૩д\nCALQUENCE® capsules 100 mg\nஈ ̇Դ͜\nሊ௅ᖹ፩οୋ 028047 ໮\n1 ቇᏐस\n1.1 ૸ˋᆯ MCL\n૸ˋᆯ Mantle Cell Lymphoma, MCLΎ ϋ \nषɛf\nԱኽ዆᜗ˀᏐଟ Overall response rate༊\nूf\n1.2 ͣАष CLL૸ˋᆯ SLL\nͣАष Chronic lymphocytic leukemia, CLL૸ˋᆯ\nSmall lymphocytic lymphoma, SLL Ύϋषɛf\n2 ͜ඎ\n2.1 ᙄኒඎ\nCALQUENCEج\n׵MCLeCLLאSLL षɛdCALQUENCEމ100 mgՇϣd\nߒ12f\nCALQUENCE ၾObinutuzumab Ի͜\nٙCLLאSLL षɛdCALQUENCEމ100 mg ӊ ̊ɹ\nߒ12fӊ 28ᐕ඄ಂd\nІୋ 1֐CALQUENCEᐕdobinutuzumabІୋ 2΍ҳʚ 6඄\nᙄኒඎሗਞቡ obinutuzumabd΋ҳʚ CALQUENCE Ύ\nҳʚ obinutuzumabf\nէᘍᇭᚾfCALQUENCEي࠮\n͜CALQUENCEග൴ཀ3dᏐ༈༪ཀ༈ϣኒඎd\n͜CALQUENCEኒඎf\n2.2 ᙄኒඎ\nषɛᒒеԴ͜ CALQUENCEf\nૄ໊Դ͜ 8.6 ձᑗґᖹଣኪ\n12.3f\n2.3 ᙄኒඎ\nၾCYP3Aኒඎሜ዆\nڌ׵ࠑ1 ʹʝЪ͜ 7f\nڌ1jၾ CYP3Aᙄኒඎሜ዆\nCYP3AيCALQUENCEج\nҵՓЪ͜\n੶CYP3A ҵՓኒ\nᒒеԻ͜f\nᖹ௰ε 7 ˂ d\nʕᓙ CALQUENCEf\nܓCYP3A ҵՓኒ 100 mgӊ˂ɓϣf\nႰኬЪ͜ ੶CYP3A Ⴐኬኒ\nᒒеԻ͜f\nਗ਼ CALQUENCE ኒඎ \nᄣЇӊ 12ࣛ200 mgf\nაʕձҵՓኒԻ͜\nሯɿᏍऌҵՓኒ PPIʹʝЪ͜ 7f\nH2͜ H2ۃ2͜ CALQUENCEʹʝЪ͜\n7f\n*͜Їˇ 2ʹʝЪ͜ 7f\n2.4 ኒඎሜ዆\nʔԄˀᏐ\nڌ2ୋ3ٙCALQUENCEᙄኒඎሜ዆f\nڌ2ᙄኒඎሜ዆\nԫ΁ ʔԄˀᏐ\n೯͛\nኒඎሜ዆\nኒඎ =100 mgӊ 12ɓϣ\n3d \n3ಯˇΥԻ̈Аd \n4א4 ॴෘʕ\nᚃ൴ཀ 7 ˂\nୋɓϣձ \nୋɚϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1࿒ baselined \n̙˸ 100 mgӊ 12ɓϣʘኒ\n֐CALQUENCEᐕf\nୋɧϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1̙\n˸100 mgอ\n֐CALQUENCEᐕf\nୋ̬ϣ ୞˟ CALQUENCEᐕf\nӺ৫ʔԄԫ΁੬͜ஔႧᅺ๟ NCI CTCAEf\nஈଣ obinutuzumabሗਞቡ obinutuzumab ͷఊf\n3 ࣸ\n100 mgᇭᚾf\n4 ຫҚस\nຫມ11f\n5 จԫධ\n5.1 ݑ\nટա CALQUENCEܼ\nf\n׵CALQUENCEٙ1029 ΤषɛdϞ 19%אࠠ3 ॴ˸ɪ\nٙ11%d\nՉʕ 6%ͣАଢಯˇ 3 ॴ\nא4neutropenic infectionස Ц1.9%f\nCALQUENCE׵ࠢB٬׌\nᚾᔥ Pneumocystis jirovecieEpstein-Barrݭ\ncytomegalovirusͣሯ໘ष PMLषɛ\nᐕf\n5.2 ̈А\nટա CALQUENCËАԫ΁f\n׵CALQUENCEٙ1029 ΤषɛdϞ 3.0%ࠠ\nא3ܼ0.1%̈АiϞ 22%\n̈Аf\nᖹၾ CALQUENCEᎈfίᑗґ༊᜕ʕd\nԴ͜ CALQUENCEषɛʕϞ 2.7%ɽ̈А major \nhemorrhageᖹձ CALQUENCE षɛʕϞ 3.6% ೯͛ɽ̈Аfၾ\nCALQUENCEщϞ̈А\nᅄΊf\nʕᓙ\nCALQUENCE 3-7ᎈf\n5.3 Аଢಯˇ\nԴ͜ CALQUENCEАଢಯˇ 3א\n4ͣАଢಯˇ 23% eமА 8%ಯˇ 7% ձ૸ˋଢಯ\nˇ7%f12%षɛ೯͛ 4ٙ\nኒඎሜ዆\n2.4f\n5.4 ໕ᆯ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 12%໕ᆯ\nͤᇮᐖdϞ 6%ष\nจԣ᛼f\n5.5 ᅝਗ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 1.1% ೯͛ 3Ϟ\nٙ4.1%ܛ\nԷνː\nʚ˸ஈໄf\n6 ʔԄˀᏐ\nীሞj\n • จԫධ 5.1\n • จԫධ 5.2\n • จԫධ 5.3\n • จԫධ 5.4\n •",
+      "dose_mentions": [
+        "100 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_35330813-0255-440a-8d80-649b8a607480?c=2",
       "license_modified": "2022/05/11",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 2
+      "candidate_count": 2,
+      "dosage_excerpt": "дᆯੰᇭᚾ 100 ૩д\nCALQUENCE® capsules 100 mg\nஈ ̇Դ͜\nሊ௅ᖹ፩οୋ 028047 ໮\n1 ቇᏐस\n1.1 ૸ˋᆯ MCL\n૸ˋᆯ Mantle Cell Lymphoma, MCLΎ ϋ \nषɛf\nԱኽ዆᜗ˀᏐଟ Overall response rate༊\nूf\n1.2 ͣАष CLL૸ˋᆯ SLL\nͣАष Chronic lymphocytic leukemia, CLL૸ˋᆯ\nSmall lymphocytic lymphoma, SLL Ύϋषɛf\n2 ͜ඎ\n2.1 ᙄኒඎ\nCALQUENCEج\n׵MCLeCLLאSLL षɛdCALQUENCEމ100 mgՇϣd\nߒ12f\nCALQUENCE ၾObinutuzumab Ի͜\nٙCLLאSLL षɛdCALQUENCEމ100 mg ӊ ̊ɹ\nߒ12fӊ 28ᐕ඄ಂd\nІୋ 1֐CALQUENCEᐕdobinutuzumabІୋ 2΍ҳʚ 6඄\nᙄኒඎሗਞቡ obinutuzumabd΋ҳʚ CALQUENCE Ύ\nҳʚ obinutuzumabf\nէᘍᇭᚾfCALQUENCEي࠮\n͜CALQUENCEග൴ཀ3dᏐ༈༪ཀ༈ϣኒඎd\n͜CALQUENCEኒඎf\n2.2 ᙄኒඎ\nषɛᒒеԴ͜ CALQUENCEf\nૄ໊Դ͜ 8.6 ձᑗґᖹଣኪ\n12.3f\n2.3 ᙄኒඎ\nၾCYP3Aኒඎሜ዆\nڌ׵ࠑ1 ʹʝЪ͜ 7f\nڌ1jၾ CYP3Aᙄኒඎሜ዆\nCYP3AيCALQUENCEج\nҵՓЪ͜\n੶CYP3A ҵՓኒ\nᒒеԻ͜f\nᖹ௰ε 7 ˂ d\nʕᓙ CALQUENCEf\nܓCYP3A ҵՓኒ 100 mgӊ˂ɓϣf\nႰኬЪ͜ ੶CYP3A Ⴐኬኒ\nᒒеԻ͜f\nਗ਼ CALQUENCE ኒඎ \nᄣЇӊ 12ࣛ200 mgf\nაʕձҵՓኒԻ͜\nሯɿᏍऌҵՓኒ PPIʹʝЪ͜ 7f\nH2͜ H2ۃ2͜ CALQUENCEʹʝЪ͜\n7f\n*͜Їˇ 2ʹʝЪ͜ 7f\n2.4 ኒඎሜ዆\nʔԄˀᏐ\nڌ2ୋ3ٙCALQUENCEᙄኒඎሜ዆f\nڌ2ᙄኒඎሜ዆\nԫ΁ ʔԄˀᏐ\n೯͛\nኒඎሜ዆\nኒඎ =100 mgӊ 12ɓϣ\n3d \n3ಯˇΥԻ̈Аd \n4א4 ॴෘʕ\nᚃ൴ཀ 7 ˂\nୋɓϣձ \nୋɚϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1࿒ baselined \n̙˸ 100 mgӊ 12ɓϣʘኒ\n֐CALQUENCEᐕf\nୋɧϣ\nʕᓙ CALQUENCEᐕf\nᇠ༆Ї 1̙\n˸100 mgอ\n֐CALQUENCEᐕf\nୋ̬ϣ ୞˟ CALQUENCEᐕf\nӺ৫ʔԄԫ΁੬͜ஔႧᅺ๟ NCI CTCAEf\nஈଣ obinutuzumabሗਞቡ obinutuzumab ͷఊf\n3 ࣸ\n100 mgᇭᚾf\n4 ຫҚस\nຫມ11f\n5 จԫධ\n5.1 ݑ\nટա CALQUENCEܼ\nf\n׵CALQUENCEٙ1029 ΤषɛdϞ 19%אࠠ3 ॴ˸ɪ\nٙ11%d\nՉʕ 6%ͣАଢಯˇ 3 ॴ\nא4neutropenic infectionස Ц1.9%f\nCALQUENCE׵ࠢB٬׌\nᚾᔥ Pneumocystis jirovecieEpstein-Barrݭ\ncytomegalovirusͣሯ໘ष PMLषɛ\nᐕf\n5.2 ̈А\nટա CALQUENCËАԫ΁f\n׵CALQUENCEٙ1029 ΤषɛdϞ 3.0%ࠠ\nא3ܼ0.1%̈АiϞ 22%\n̈Аf\nᖹၾ CALQUENCEᎈfίᑗґ༊᜕ʕd\nԴ͜ CALQUENCEषɛʕϞ 2.7%ɽ̈А major \nhemorrhageᖹձ CALQUENCE षɛʕϞ 3.6% ೯͛ɽ̈Аfၾ\nCALQUENCEщϞ̈А\nᅄΊf\nʕᓙ\nCALQUENCE 3-7ᎈf\n5.3 Аଢಯˇ\nԴ͜ CALQUENCEАଢಯˇ 3א\n4ͣАଢಯˇ 23% eமА 8%ಯˇ 7% ձ૸ˋଢಯ\nˇ7%f12%षɛ೯͛ 4ٙ\nኒඎሜ዆\n2.4f\n5.4 ໕ᆯ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 12%໕ᆯ\nͤᇮᐖdϞ 6%ष\nจԣ᛼f\n5.5 ᅝਗ\n׵CALQUENCEٙ1029 ΤषɛʕϞ 1.1% ೯͛ 3Ϟ\nٙ4.1%ܛ\nԷνː\nʚ˸ஈໄf\n6 ʔԄˀᏐ\nীሞj\n • จԫධ 5.1\n • จԫධ 5.2\n • จԫධ 5.3\n • จԫධ 5.4\n •",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_35330813-0255-440a-8d80-649b8a607480?c=2",
+      "dose_indication_specific": true
     },
     "nhl-zanubrutinib-mcl": {
       "status": "matched",
@@ -3467,13 +3649,19 @@ window.TFDA_LABELS = {
       "applicant": "美時化學製藥股份有限公司",
       "form": "膠囊劑",
       "indication": "治療新診斷多發性骨髓瘤。使用時須和prednisolone及oral melphalan併用，或和骨髓移植併用，或和palmidronate併用於骨髓移植後之治療。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
+      "dosage": "8,3%)\n3(8.3%)\n0\n0\n4(11.1%)\n0\n8(22.2%)\n2(5.6%)\n6(16.7%)\n2(5.6%)\n8(22.2%)\n3(8.3%)\n2(5.6%)\n1(2.8%)\n19(52.8%)\n0\n7(19.4%)\n0\n1(2.8%)\n3(8.3%)\n2(5.6%)\n13(36.1%)\n19(59.4%)\n1(3.1%)\n7(21.9%)\n0\n3(9.4%)\n0\n7(21.9%)\n6(18.7%)\n2(6.3%)\n0\n0\n0\n1(3.1%)\n16(50%)\n3(9.4%)\n3(9.4%)\n6(18.7%)\n3(9.4%)\n0\n3(9.4%)\n4(12.5%)\n2(6.3%)\n0\n13(40.6%)\n4(12.5%)\n8(25%)\n4(12.5%)\n12(37.5%)\n1(3.1%)\n3(9.4%))\n4(12.5%)\n18(56.3%)\n3(9.4%)\n6(18.7%)\n3(9.4%)\n3(9.4%)\n0\n5(15.6%)\n12(37.5%)\n13(37.1%)\n4(11.4%)\n1(2.9%)\n0\n4(11.4%)\n0\n6(17.1%)\n4(11.4%)\n1(2.9%)\n0\n0\n0\n(5.7%)\n15(42.9%)\n2(5.7%)\n0\n6(17.1%)\n2(5.7%)\n2(5.7%)\n0\n1(2.9%)\n0\n0\n10(28.6%)\n3(8.6%)\n3(8.6%)\n3(8.6%)\n8(22.9%)\n0\n1(2.9%)\n2(5.7%)\n12(34.3%)\n0\n0\n2(5.7%)\n0\n0\n4(11.4%)\n4(11.4%)\nʔԄˀᏐԫ΁\n਷dthalidomide ӊ˂৷༺ 400ܝۃ19\n׵1465 З ENLٙڌ\nϞ̤̮ 1678əϞจ່\nʔԄԫ΁\nٙCOSTART ਖ਼ุஔႧοՊ̋˸ᓥᗳdɦΎ΢\nࠦۃ\nజѓԫ΁ேึΐ\nᆽͭԫ\nவԬԫ΁ၾ thalidomideٙ\nί\n\u0001˴Ύɦ\u0001\nThali ӊ୐ᇭᚾў 50mg Thalidomidef\n\u0001̍\u0001\u0001\u0001ༀ\u0001\n8-1000 ୐෧ᇭଧༀe቙ၓଷༀf\n\u0001Ꮇπ ̇ό\u0001\n׵25Ċ˸ɨf\nટΈ๫f\nФ˓ʔʿʘஈf\nԴ͜f\n\nሗਞԈ̮ଷᅺͪf\n\n͜ඎ\u0001\nஈ ̇Դ͜f\n͜ Thali(Thalidomide)d\nʑ̙ஈ ͉̇ᖹf\nϞ᜕̳\n؈)-( dʑ̙Դ͉͜ᖹ ( ሗਞԈ\nจԫධ )f\n৶᜖ᆯ (Multiple myeloma)\nThali(Thalidomide)) Ի͜ dexamethasoneᐕ඄ಂ\nމ28 ˂fThali؂200mgd\n͜d௰ɽԴ͜ኒඎӊ ̊\n400mgfDexamethasone؂40mgd\nӊ 28ᐕ඄ಂʕୋ 1-4e9-12e17-20͜f\n඄ᗙग़຾षᜊd\nᐕաूf຅ਓЪ͜\nኒඎක\n͜ᖹf\nPhysic ians ' Des k Refer ence 58 e diti on (2004), \nPp1122-1127\nMa nson JM. 1986 T eratogenicity . Cassar ett \nandDoull's T oxi col ogy : The Basic Sci ence of \nPoisons. Third Edition. Pages 195-220. New York: \nMacMillan Publishing Co.\nSmi thels R W and Newma n CG . 1992. J. Med. \nGenet. 29(10):716-723.\nSampain EP, Kaplan G, Miranda A, et al. 1993. J. \nlnfect. Dis. 168(2):408-414.\nSarno EN, Grau GE, Vieira LM, et al. 1991. Clin. \nExp. Immunol. 84:103-108.\nSampain EP, Moreira AL, Sarno EN, et al, 1992. J. \nExp. Med. 175:1729-1737l.\nNogueira AC, Neubert R, Hel ge H, et al. 1994. \nLife Sciences. 55(2):77-92.\nJacobson JM, Gr eenspan JS , Spri tzler J, et al. \n1997. New Eng. J. Med. 336(21):1487-1493\nErik sson t, Bjorkma n S, Roth B , et a l. 1998. \nChirality. 10(3):223-228.\nSchumarker H, Smith RL, and Williams RT. 1965. Br. \nJ. Pharmacol. 25:324-337.\nIyer CGS, Languillon J, Ramanujam K, et al. 1971. \nBull. WHO. 45:719-732.\nSheski n J and Convit J. 1969. Intl . J. Lepro sy. \n37:135-146.\nWaters MFR. 1971 Lepr. Rev. 42:26-",
+      "dose_mentions": [
+        "50mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_9b4f9e56-6863-4d9f-b3ca-c9bc02c37cff?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
       "license_modified": "2022/12/05",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 6
+      "candidate_count": 6,
+      "dosage_excerpt": "8,3%)\n3(8.3%)\n0\n0\n4(11.1%)\n0\n8(22.2%)\n2(5.6%)\n6(16.7%)\n2(5.6%)\n8(22.2%)\n3(8.3%)\n2(5.6%)\n1(2.8%)\n19(52.8%)\n0\n7(19.4%)\n0\n1(2.8%)\n3(8.3%)\n2(5.6%)\n13(36.1%)\n19(59.4%)\n1(3.1%)\n7(21.9%)\n0\n3(9.4%)\n0\n7(21.9%)\n6(18.7%)\n2(6.3%)\n0\n0\n0\n1(3.1%)\n16(50%)\n3(9.4%)\n3(9.4%)\n6(18.7%)\n3(9.4%)\n0\n3(9.4%)\n4(12.5%)\n2(6.3%)\n0\n13(40.6%)\n4(12.5%)\n8(25%)\n4(12.5%)\n12(37.5%)\n1(3.1%)\n3(9.4%))\n4(12.5%)\n18(56.3%)\n3(9.4%)\n6(18.7%)\n3(9.4%)\n3(9.4%)\n0\n5(15.6%)\n12(37.5%)\n13(37.1%)\n4(11.4%)\n1(2.9%)\n0\n4(11.4%)\n0\n6(17.1%)\n4(11.4%)\n1(2.9%)\n0\n0\n0\n(5.7%)\n15(42.9%)\n2(5.7%)\n0\n6(17.1%)\n2(5.7%)\n2(5.7%)\n0\n1(2.9%)\n0\n0\n10(28.6%)\n3(8.6%)\n3(8.6%)\n3(8.6%)\n8(22.9%)\n0\n1(2.9%)\n2(5.7%)\n12(34.3%)\n0\n0\n2(5.7%)\n0\n0\n4(11.4%)\n4(11.4%)\nʔԄˀᏐԫ΁\n਷dthalidomide ӊ˂৷༺ 400ܝۃ19\n׵1465 З ENLٙڌ\nϞ̤̮ 1678əϞจ່\nʔԄԫ΁\nٙCOSTART ਖ਼ุஔႧοՊ̋˸ᓥᗳdɦΎ΢\nࠦۃ\nజѓԫ΁ேึΐ\nᆽͭԫ\nவԬԫ΁ၾ thalidomideٙ\nί\n\u0001˴Ύɦ\u0001\nThali ӊ୐ᇭᚾў 50mg Thalidomidef\n\u0001̍\u0001\u0001\u0001ༀ\u0001\n8-1000 ୐෧ᇭଧༀe቙ၓଷༀf\n\u0001Ꮇπ ̇ό\u0001\n׵25Ċ˸ɨf\nટΈ๫f\nФ˓ʔʿʘஈf\nԴ͜f\n\nሗਞԈ̮ଷᅺͪf\n\n͜ඎ\u0001\nஈ ̇Դ͜f\n͜ Thali(Thalidomide)d\nʑ̙ஈ ͉̇ᖹf\nϞ᜕̳\n؈)-( dʑ̙Դ͉͜ᖹ ( ሗਞԈ\nจԫධ )f\n৶᜖ᆯ (Multiple myeloma)\nThali(Thalidomide)) Ի͜ dexamethasoneᐕ඄ಂ\nމ28 ˂fThali؂200mgd\n͜d௰ɽԴ͜ኒඎӊ ̊\n400mgfDexamethasone؂40mgd\nӊ 28ᐕ඄ಂʕୋ 1-4e9-12e17-20͜f\n඄ᗙग़຾षᜊd\nᐕաूf຅ਓЪ͜\nኒඎක\n͜ᖹf\nPhysic ians ' Des k Refer ence 58 e diti on (2004), \nPp1122-1127\nMa nson JM. 1986 T eratogenicity . Cassar ett \nandDoull's T oxi col ogy : The Basic Sci ence of \nPoisons. Third Edition. Pages 195-220. New York: \nMacMillan Publishing Co.\nSmi thels R W and Newma n CG . 1992. J. Med. \nGenet. 29(10):716-723.\nSampain EP, Kaplan G, Miranda A, et al. 1993. J. \nlnfect. Dis. 168(2):408-414.\nSarno EN, Grau GE, Vieira LM, et al. 1991. Clin. \nExp. Immunol. 84:103-108.\nSampain EP, Moreira AL, Sarno EN, et al, 1992. J. \nExp. Med. 175:1729-1737l.\nNogueira AC, Neubert R, Hel ge H, et al. 1994. \nLife Sciences. 55(2):77-92.\nJacobson JM, Gr eenspan JS , Spri tzler J, et al. \n1997. New Eng. J. Med. 336(21):1487-1493\nErik sson t, Bjorkma n S, Roth B , et a l. 1998. \nChirality. 10(3):223-228.\nSchumarker H, Smith RL, and Williams RT. 1965. Br. \nJ. Pharmacol. 25:324-337.\nIyer CGS, Languillon J, Ramanujam K, et al. 1971. \nBull. WHO. 45:719-732.\nSheski n J and Convit J. 1969. Intl . J. Lepro sy. \n37:135-146.\nWaters MFR. 1971 Lepr. Rev. 42:26-",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
+      "dose_indication_specific": true
     },
     "mm-lenalidomide-1l": {
       "status": "matched",
@@ -3688,13 +3876,23 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dosage": "資料與臨床特徵 \n試驗 \n每 28 天為一週期(試驗 3) 每 21 天為一週期(試驗 4) \nGemcitabine/Cisplatin \n(N=260) \nCisplatin \n(N=262) \nGemcitabine/Cisplatin \n(N=69) \nCisplatin/Etoposide \n(N=66) \n男性 70% 71% 93% 92% \n年齡中位數,歲 62 63 58 60 \n範圍 36 至 88 35 至 79 33 至 76 35 至 75 \n第 IIIA 期 7% 7% N/Aa N/Aa \n第 IIIB 期 26% 23% 48% 52% \n第 IV 期 67% 70% 52% 49% \n治療前之 KPS 指數 b \n70 至 80 41% 44% 45% 52% \n治療前之 KPS 指數 b \n90 至 100 57% 55% 55% 49% \na N/A 不適用。 \nb Karnofsky Performance Status。 \n表七、試驗 3 與試驗 4 之療效結果 \n試驗 \n療效參數 \n每 28 天為一週期(試驗 3) 每 21 天為一週期(試驗 4) \nGemcitabine/Cisplatin \n(N=260) \nCisplatin \n(N=262) \nGemcitabine/Cisplatin \n(N=69) \nCisplatin/Etoposide \n(N=66) \n存活期 \n 中位數(95% CI a),月 9.0 (8.2, 11.0) 7.6 (6.6, 8.8) 8.7 (7.8, 10.1) 7.0 (6.0, 9.7) \n p-valuea p=0.008 p=0.18 \n到病程惡化前之時間 \n 中位數(95% CI a),月 5.2 (4.2, 5.7) 3.7 (3.0, 4.3) 5.0 (4.2, 6.4) 4.1 (2.4, 4.5) \np-valueb p=0.009 p=0.015 \n腫瘤反應率 26% 10% 33% 33% \np-valueb p<0.0001 p=0.01 \na CI=信賴區間 \nb 二項式比率差異的 p 值雙側費雪精確檢定;事件發生時間分析的對數等級檢定 。 \n \n圖三、試驗 3 整體存活期之 Kaplan-Meier 曲線圖 \n \n \n4.4 胰臟癌 \nGemcitabine 的療效在兩個臨床試驗(試驗 5 及試驗 6)進行評估,其一為隨機分配、單盲、兩組、活性藥物對照,針對未曾\n接受過化學治療,局部晚期或轉移性胰臟癌病人 進行評估的試驗(試驗 5)。另一個為單一治療組、開放標記、多中心,針\n對曾接受過 Fluorouracil 或含 Fluorouracil 療程,局部晚期或轉移性胰臟癌病人進行評估的臨床試驗(試驗 6)。試驗 5 中,\n病人隨機分組,一組在第一個治療週期時給予 Gemcitabine 1000 mg/m2,靜脈輸注 30 分鐘,每週一次,連續 7 週,接著休\n息一週。後續給藥週期為每週給藥一次,連續 3 週,第 4 週休息(n=63);另一組給予 Fluorouracil 600 mg/m2,靜脈輸注 30\n分鐘,每週一次(n=63)。試驗 6 中,所有病人均在第一個治療週期時給予 Gemcitabine 1000 mg/m2,靜脈輸注 30 分鐘,每\n週一次,連續 7 週,接著休息一週。後續給藥為 28 天為一週期,每週給藥一次,連續 3 週,第 4 週休息。 \n這兩個試驗的主要療效指標為“臨床效益反應“(Clinical Benefit Response),若下列任一情況發生,則病人被視為有臨床效益\n反應: \n1) 病人之疼痛強度降低(疼痛評估卡)或止痛藥用量減少≧50%、或身體狀況(Karnofsky 狀況表)的評分為 20 分或更大的改\n善,持續至少四週以上,且其他參數均無持續性惡化現象。持續性惡化現象定義為:在開始治療後的 12 週內,連續四\n週的疼痛強度增加、止痛藥用量上升、或身體狀況評分降低 20 分。 \n或 \n2) 病人之前述三種參數均維持穩定,同時體重有顯著 且持續增加(持續 4 週以上體重增加≧7%),且體重增加並非為體液\n蓄積造成之結果。 \n試驗 5 納入 126 位病人。兩治療組間的基本資料與基期特徵彼此類似(表八)。療效結果呈現如表九與圖四。Gemcitabine 組\n的病人在臨床效益反應、存活期、到病程 惡化前之時間方面和隨機分配至接受 Fluorouracil 組病人相比,有統計意義之改\n善。兩組均無可確定之客觀腫瘤反應率。 \n \n表八、試驗 5 之基期基本資料與臨床特徵 \n Gemcitabine (N=63) Fluorouracil (N=63) \n男性 54% 54% \n年齡中位數,年 62 61 \n 範圍 37 至 79 36 至 77 \n病程為第四期 71% 76% \n治療前之 KPS 指數 a≦70 70% 68% \na Karofsky Performance Status \n表九、試驗 5 之基期基本資料與臨床特徵 \n療效參數 Gemcitabine (N=63) Fluorouracil (N=63) \n臨床效益反應率 22.2% 4.8% \np-va",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "600 mg/m2"
+      ],
+      "frequency_mentions": [
+        "每 28 天",
+        "每 21 天"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "資料與臨床特徵 \n試驗 \n每 28 天為一週期(試驗 3) 每 21 天為一週期(試驗 4) \nGemcitabine/Cisplatin \n(N=260) \nCisplatin \n(N=262) \nGemcitabine/Cisplatin \n(N=69) \nCisplatin/Etoposide \n(N=66) \n男性 70% 71% 93% 92% \n年齡中位數,歲 62 63 58 60 \n範圍 36 至 88 35 至 79 33 至 76 35 至 75 \n第 IIIA 期 7% 7% N/Aa N/Aa \n第 IIIB 期 26% 23% 48% 52% \n第 IV 期 67% 70% 52% 49% \n治療前之 KPS 指數 b \n70 至 80 41% 44% 45% 52% \n治療前之 KPS 指數 b \n90 至 100 57% 55% 55% 49% \na N/A 不適用。 \nb Karnofsky Performance Status。 \n表七、試驗 3 與試驗 4 之療效結果 \n試驗 \n療效參數 \n每 28 天為一週期(試驗 3) 每 21 天為一週期(試驗 4) \nGemcitabine/Cisplatin \n(N=260) \nCisplatin \n(N=262) \nGemcitabine/Cisplatin \n(N=69) \nCisplatin/Etoposide \n(N=66) \n存活期 \n 中位數(95% CI a),月 9.0 (8.2, 11.0) 7.6 (6.6, 8.8) 8.7 (7.8, 10.1) 7.0 (6.0, 9.7) \n p-valuea p=0.008 p=0.18 \n到病程惡化前之時間 \n 中位數(95% CI a),月 5.2 (4.2, 5.7) 3.7 (3.0, 4.3) 5.0 (4.2, 6.4) 4.1 (2.4, 4.5) \np-valueb p=0.009 p=0.015 \n腫瘤反應率 26% 10% 33% 33% \np-valueb p<0.0001 p=0.01 \na CI=信賴區間 \nb 二項式比率差異的 p 值雙側費雪精確檢定;事件發生時間分析的對數等級檢定 。 \n \n圖三、試驗 3 整體存活期之 Kaplan-Meier 曲線圖 \n \n \n4.4 胰臟癌 \nGemcitabine 的療效在兩個臨床試驗(試驗 5 及試驗 6)進行評估,其一為隨機分配、單盲、兩組、活性藥物對照,針對未曾\n接受過化學治療,局部晚期或轉移性胰臟癌病人 進行評估的試驗(試驗 5)。另一個為單一治療組、開放標記、多中心,針\n對曾接受過 Fluorouracil 或含 Fluorouracil 療程,局部晚期或轉移性胰臟癌病人進行評估的臨床試驗(試驗 6)。試驗 5 中,\n病人隨機分組,一組在第一個治療週期時給予 Gemcitabine 1000 mg/m2,靜脈輸注 30 分鐘,每週一次,連續 7 週,接著休\n息一週。後續給藥週期為每週給藥一次,連續 3 週,第 4 週休息(n=63);另一組給予 Fluorouracil 600 mg/m2,靜脈輸注 30\n分鐘,每週一次(n=63)。試驗 6 中,所有病人均在第一個治療週期時給予 Gemcitabine 1000 mg/m2,靜脈輸注 30 分鐘,每\n週一次,連續 7 週,接著休息一週。後續給藥為 28 天為一週期,每週給藥一次,連續 3 週,第 4 週休息。 \n這兩個試驗的主要療效指標為“臨床效益反應“(Clinical Benefit Response),若下列任一情況發生,則病人被視為有臨床效益\n反應: \n1) 病人之疼痛強度降低(疼痛評估卡)或止痛藥用量減少≧50%、或身體狀況(Karnofsky 狀況表)的評分為 20 分或更大的改\n善,持續至少四週以上,且其他參數均無持續性惡化現象。持續性惡化現象定義為:在開始治療後的 12 週內,連續四\n週的疼痛強度增加、止痛藥用量上升、或身體狀況評分降低 20 分。 \n或 \n2) 病人之前述三種參數均維持穩定,同時體重有顯著 且持續增加(持續 4 週以上體重增加≧7%),且體重增加並非為體液\n蓄積造成之結果。 \n試驗 5 納入 126 位病人。兩治療組間的基本資料與基期特徵彼此類似(表八)。療效結果呈現如表九與圖四。Gemcitabine 組\n的病人在臨床效益反應、存活期、到病程 惡化前之時間方面和隨機分配至接受 Fluorouracil 組病人相比,有統計意義之改\n善。兩組均無可確定之客觀腫瘤反應率。 \n \n表八、試驗 5 之基期基本資料與臨床特徵 \n Gemcitabine (N=63) Fluorouracil (N=63) \n男性 54% 54% \n年齡中位數,年 62 61 \n 範圍 37 至 79 36 至 77 \n病程為第四期 71% 76% \n治療前之 KPS 指數 a≦70 70% 68% \na Karofsky Performance Status \n表九、試驗 5 之基期基本資料與臨床特徵 \n療效參數 Gemcitabine (N=63) Fluorouracil (N=63) \n臨床效益反應率 22.2% 4.8% \np-va",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "pc-abraxane": {
       "status": "not-found",
@@ -4180,13 +4378,19 @@ window.TFDA_LABELS = {
       "applicant": "台灣諾華股份有限公司",
       "form": "錠劑",
       "indication": "AFINITOR® 合併exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過letrozole 或anastrozole 復發或惡化之停經後晚期乳癌患者。 AFINITOR® 適用於進展性，無法切除或轉移性分化良好或中度分化(well-differentiated or moderately-differentitated) 之胰臟神經內分泌腫瘤成人患者。 AFINITOR® 適用於治療在經VEGF-targeted 療法無效後之晚期腎細胞癌患者。 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道(GI)或肺部來源之非功能性神經內分泌腫瘤(NET)成人患者。",
-      "dosage": "詳如仿單",
-      "dose_mentions": [],
+      "dosage": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚",
+      "dose_mentions": [
+        "5 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 18
+      "candidate_count": 18,
+      "dosage_excerpt": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+      "dose_indication_specific": true
     },
     "net-everolimus-gi-lung": {
       "status": "matched",
@@ -4197,13 +4401,19 @@ window.TFDA_LABELS = {
       "applicant": "台灣諾華股份有限公司",
       "form": "錠劑",
       "indication": "AFINITOR® 合併exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過letrozole 或anastrozole 復發或惡化之停經後晚期乳癌患者。 AFINITOR® 適用於進展性，無法切除或轉移性分化良好或中度分化(well-differentiated or moderately-differentitated) 之胰臟神經內分泌腫瘤成人患者。 AFINITOR® 適用於治療在經VEGF-targeted 療法無效後之晚期腎細胞癌患者。 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道(GI)或肺部來源之非功能性神經內分泌腫瘤(NET)成人患者。",
-      "dosage": "詳如仿單",
-      "dose_mentions": [],
+      "dosage": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚",
+      "dose_mentions": [
+        "5 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 18
+      "candidate_count": 18,
+      "dosage_excerpt": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+      "dose_indication_specific": true
     },
     "rcc-aldesleukin": {
       "status": "not-found",
@@ -4290,13 +4500,19 @@ window.TFDA_LABELS = {
       "applicant": "台灣諾華股份有限公司",
       "form": "錠劑",
       "indication": "AFINITOR® 合併exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過letrozole 或anastrozole 復發或惡化之停經後晚期乳癌患者。 AFINITOR® 適用於進展性，無法切除或轉移性分化良好或中度分化(well-differentiated or moderately-differentitated) 之胰臟神經內分泌腫瘤成人患者。 AFINITOR® 適用於治療在經VEGF-targeted 療法無效後之晚期腎細胞癌患者。 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道(GI)或肺部來源之非功能性神經內分泌腫瘤(NET)成人患者。",
-      "dosage": "詳如仿單",
-      "dose_mentions": [],
+      "dosage": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥物治療及監測。\n第 2 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥物治療及監測。\n若毒性變為無法忍受時,應中斷藥物直到回復至≤第 1\n級或消失。重新開始以原劑量治療。\n若再次出現第 2 級毒性,中斷治療直到回復至≤第 1\n級。重新開始以較低劑\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字",
+      "dose_mentions": [
+        "5 mg"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 18
+      "candidate_count": 18,
+      "dosage_excerpt": "癌伏妥\n® 錠 5 毫克 衛署藥輸字第 025165 號\nAFINITOR ® 5 mg tablets\n適應症\nAFINITOR® 合併 exemestane 適用於治療荷爾蒙接受體陽性、HER2 受體陰性且之前使用過 letrozole 或\nanastrozole 復發或惡化之停經後晚期乳癌病人。\nAFINITOR® 適用於進展性,無法切除或轉移性分化良好或中度分化 (well-differentiated or moderately-\ndifferentitated) 之胰臟神經內分泌腫瘤成人病人。\nAFINITOR® 適用於治療無法切除、局部晚期或轉移之進展性、分化良好、胃腸道 (GI) 或肺部來源之非\n功能性神經內分泌腫瘤 (NET) 成人病人。\nAFINITOR® 適用於治療在經 VEGF-targeted 療法無效後之晚期腎細胞癌病人。\n用法用量\nAFINITOR 應於每天同一時間服用一次,與食物或不與食物併服都可以 ( 請參見臨床藥理學 部份 )。\nAFINITOR 需以整杯水吞服整顆藥錠。AFINITOR 不可咀嚼或咬碎錠劑。對無法吞服錠劑的病人,應將\nAfinitor 錠劑以輕輕攪拌的方式完全溶散 ( 約 7 分鐘 ) 於一杯水 ( 約 30 毫升 ) 中,並立即喝下。再於杯\n中倒入等量的水洗滌,然後將洗滌液全部喝掉,以確保服下完整劑量。\n觀察到臨床效益或在出現不能接受的毒性反應前,應持續治療。\n建議劑量\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌的\nAfinitor 建議用量為 10 毫克。\n忘記服藥\n若忘記服用 Afinitor,在正常服藥時間後六小時內可以補服。若超過六小時,則應跳過漏掉的劑量,並\n於隔天原定服藥時間服用 Afinitor。請勿因忘記服藥而一次使用兩倍的劑量。\n劑量調整\n治療荷爾蒙接受體陽性、HER2 受體陰性的停經後晚期乳癌、胰臟神經內分泌腫瘤、晚期腎細胞癌。\n處理不良反應\n處理嚴重和 / 或不耐受的不良反應時可能需要暫時調降劑量和 / 或中斷 Afinitor 療法。需要調降劑量\n時,建議調降至每天原給予劑量的 50%,若使用的已經是最低劑量,建議將給藥頻次降低為隔天給藥。 \n( 請參見警語與注意事項 )。\n表 1 摘錄有關處理不良反應時可能需要調降、中斷或停用 AFINITOR 療法的建議。亦提供一般處理的\n建議。診治之醫師應依個別病人的利害考量且遵循此處理計畫做臨床判斷。\n表 1:AFINITOR 劑量調整與不良反應的處理建議\n藥物不良反應 嚴重度 a AFINITOR 劑量調整 b 與不良反應的處理建議\n非感染性肺炎 第 1 級\n無症狀,僅臨床診斷\n發現;不須醫療介入\n無須調整劑量\n給予適當的監測。\n第 2 級\n有症狀;需要醫療介\n入,日常作息 (ADLc) 受\n限\n考慮中斷治療,排除感染並考慮給予類固醇治療直到\n症狀獲得改善至≤第 1 級或消失。\n重新開始以較低劑量的治療。\n如果在 4 週內無法恢復則應停止治療。\n第 3 級\n有嚴重症狀,日常\n作息 (ADLc) 的自理能力\n受限,需要給予氧氣\n中斷治療直到症狀改善至≤第 1 級或消失。\n排除感染並考慮給予類固醇治療。\n考慮重新開始以較低劑量治療。如果再次發生第 3 級\n毒性,則需考慮停止治療。\n第 4 級\n危及生命;呼吸衰竭,\n需要緊急醫療介入\n( 如:氣切或插管 )\n停止治療,排除感染並考慮給予類固醇治療。\n口腔炎 第 1 級\n無症狀或輕微症狀, \n不須醫療介入\n無須調整劑量\n以無酒精漱口水或食鹽水 (0.9%) 漱口,一天多次。\n第 2 級\n中度疼痛;不影響口服\n飲食;給予改良的飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以原劑量治療。\n若再次出現第 2 級口腔炎,中斷治療直到症狀改善至\n≤第 1 級。重新開始以較低劑量的 AFINITOR 治療。\n給予口腔局部止痛治療 ( 例如:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 3 級\n嚴重疼痛且影響口服\n飲食\n暫時中斷治療直到回復至≤第 1 級或消失。 \n重新以較低劑量治療。\n給予口腔局部止痛治療 ( 即:benzocaine、butyl \naminobenzoate、 tetracaine hydrochloride、menthol 或 \nphenol) 併用或不併用局部類固醇 ( 即:triamcinolone 口\n內膏 )。d\n第 4 級\n危及生命;\n需緊急醫療介入\n停用 AFINITOR 並給予適當藥物治療。\n其他非血液毒性\n( 排除代謝不良\n反應 )\n第 1 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥物治療及監測。\n第 2 級 若毒性為可忍受的,無須調整劑量。\n開始給予適當的藥物治療及監測。\n若毒性變為無法忍受時,應中斷藥物直到回復至≤第 1\n級或消失。重新開始以原劑量治療。\n若再次出現第 2 級毒性,中斷治療直到回復至≤第 1\n級。重新開始以較低劑\n...\n癌伏妥\n® 錠 5 毫克 衛署藥輸字",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+      "dose_indication_specific": true
     },
     "rcc-axitinib": {
       "status": "matched",
@@ -4460,12 +4676,23 @@ window.TFDA_LABELS = {
       "form": "膜衣錠",
       "indication": "大腸直腸癌： Regorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)患者，療法包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子((anti-VEGF)等療法；若KRAS為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。 腸胃道間質腫瘤： 適用於治療先前曾接受imatinib mesylate和sunitinib malate患者之局部晚期、無法切除或轉移性的胃腸道間質瘤。 肝細胞癌： 適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病患。",
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
-      "dose_mentions": [],
-      "frequency_mentions": [],
+      "dose_mentions": [
+        "160 mg",
+        "400 mg"
+      ],
+      "frequency_mentions": [
+        "每四週",
+        "每日一次",
+        "每天一次"
+      ],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分（跨適應症仿單）",
-      "candidate_count": 1
+      "candidate_count": 1,
+      "dosage_excerpt": "YP3A4抑制劑同時施用,會提升regorafenib的血漿濃度,並降低活性代\n謝物M‐2和M‐5的血漿濃度[藥物動力學特性(11)],而且可能導致毒性上升。請避免同時使用\nSTIVARGA與強效CYP3A4抑制劑(如clarithromycin、葡萄柚汁、itraconazole、ketoconazole、\nnefazodone、posaconazole、telithromycin和voriconazole)。 \n \n(3) Regorafenib 對乳癌抗藥蛋白(BCRP)受質的影響 \nSTIVARGA若與BCRP受質同時施用,會提升BCRP受質的血漿濃度[藥物動力學特性(11)]。請密\n切監測病人是否有對BCRP受質(如methotrexate、fluvastatin、atorvastatin)產生暴露相關毒性\n的徵象與症狀。考慮將這類產品與STIVARGA一同施用時,請參閱同時施用之BCRP受質的產\n品資訊。 \n8. 副作用/不良反應 \n \n9 \n \n8.1 臨床重要副作用/不良反應 \n不良反應 \n在產品說明中有下列嚴重不良反應的相關資訊: \n 肝中毒[請警語與注意事項(5.1(1))] \n 感染[請參閱警語與注意事項(5.(2))] \n 出血[請參閱警語與注意事項(5. 1(3))] \n 胃腸道穿孔或瘻管[請參閱警語與注意事項(5. 1(4))] \n 皮膚毒性[請參閱警語與注意事項(5. 1(5))] \n 高血壓[請參閱警語與注意事項(5. 1(6))] \n 心臟缺血與梗塞[請參閱警語與注意事項(5. 1(7))] \n 可逆性後腦白質病變症候群(RPLS) [請參閱警語與注意事項(5. 1(8))] \n8.2 臨床試驗經驗 \n由於臨床試驗是在各種不同的狀況下進行,某項藥物臨床試驗所觀察到的不良反應率,無\n法與其他藥物臨床試驗的不良反應率直接比較,亦不能反映實際臨床觀察到的不良反應\n率。 \n警語與注意事項一節描述的資料,在四項隨機分配、安慰劑對照試驗(n = 1142)、一項擴大\n用藥計畫(CONSIGN,n = 2864)或單組臨床試驗(單用或併用其他藥物)所納入的超過 4800 位\n病人中,反映出 STIVARGA 暴露情形。有 4518 位病人單用 STIVARGA;潛在惡性腫瘤的分佈\n情形為 80% CRC、4% GIST、10% HCC、6%其他實體腫瘤;且 74%為白人、11%亞洲人,15%\n人種未知。在這 4518 位病人中,有 83%使用 STIVARGA 的時間至少達 21 天,有 20%使用\nSTIVARGA 的時間達到 6 個月以上。 \n在隨機分配、安慰劑對照試驗中(CORRECT、GRID、RESORCE 和 CONCUR),在使用 STIVARGA\n的病人中最常見的藥物不良反應 (≥20%)為疼痛(包括胃腸疼痛和腹痛 )、HFSR、無力/疲累、\n腹瀉、食慾減退/食量減少、高血壓、感染、發音困難、高膽紅素血症、發燒、黏膜炎、體\n重減輕、皮疹以及噁心。 \n大腸直腸癌 \n下述安全性資料(除了額外註明處)出自於一項隨機分配(2:1)、雙盲、以安慰劑為對照組的試\n驗(CORRECT),此試驗中有 500 位(年齡中位數為 61 歲;男性佔 61%)曾治療過轉移性結直腸\n癌(CRC)的病人,他們以 STIVARGA 作為單一治療藥物,每四週為一個治療週期,每個週期\n的前三週每日服用 160 mg 藥物,另外有 253 位病人接受安慰劑治療(年齡中位數為 61 歲;\n男性佔 60%)。接受 STIVARGA 治療的病人,其治療期中位數為 1.7 個月(範圍為 2 天至 10.8\n \n10 \n \n個月)。由於發生不良反應,接受 STIVARGA 的病人中,61%須中斷服藥,38%須降低劑量。\n在接受 STIVARGA 治療的病人中,出現導致治療中止之不良反應的病人佔 8.2%,而在接受\n安慰劑治療的病人中則佔 1.2%。導致永久停用 STIVARGA 的最常見原因為手足皮膚反應\n(HFSR)與皮疹。 \n \n表 1 提供在 CORRECT 中病人的不良反應(≥ 10%)發生率。 \n \n表1:在CORRECT試驗中,經通報出現於≥ 10%接受STIVARGA治療的病人身上,且較接受安\n慰劑病人常見的不良藥物反應a \n不良反應 \nSTIVARGA \n(N = 500) \n安慰劑 \n(N = 253) \n級數 級數 \n所有 \n% \n≥ 3 \n% \n所有 \n% \n≥ 3 \n% \n全身性異常與用藥部位症狀 \n全身無力/疲倦 \n疼痛 \n發燒 \n64 \n59 \n28 \n15 \n9 \n2 \n46 \n48 \n15 \n9 \n7 \n0 \n新陳代謝與營養異常 \n食慾降低及食物攝取減少 47 5 28 4 \n皮膚與皮下組織異常 \n手足皮膚反應/肢端紅腫症候群 \n皮疹b \n45 \n26 \n17 \n6 \n7 \n4 \n0 \n<1 \n胃腸不適 \n腹瀉 \n黏膜炎 \n43 \n33 \n8 \n4 \n17 \n5 \n2 \n0 \n檢查 \n體重減輕 32 <1 10 0 \n感染與寄生蟲感染 \n感染c 31 9 17 6 \n血管異常 \n高血壓 \n出血c \n30 \n21 \n8 \n2 \n8 \n8 \n<1 \n<1 \n呼吸道、胸腔與縱膈膜異常",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "dose_indication_specific": true
     },
     "gist-ripretinib": {
       "status": "matched",
@@ -4629,13 +4856,25 @@ window.TFDA_LABELS = {
       "applicant": "台灣費森尤斯卡比股份有限公司",
       "form": "凍晶注射劑",
       "indication": "非小細胞肺癌、胰臟癌、膀胱癌。Gemcitabine與paclitaxel併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病患。用於曾經使用含鉑類藥物(platinum-based)治療後復發且間隔至少6個月之卵巢癌，作為第二線治療。膽道癌。",
-      "dosage": "請詳見仿單",
-      "dose_mentions": [],
+      "dosage": "al Benefit Response),若下列任一情況發生,則病人被視為有臨床效益\n反應: \n1) 病人之疼痛強度降低(疼痛評估卡)或止痛藥用量減少≧50%、或身體狀況(Karnofsky 狀況表)的評分為 20 分或更大的改\n善,持續至少四週以上,且其他參數均無持續性惡化現象。持續性惡化現象定義為:在開始治療後的 12 週內,連續四\n週的疼痛強度增加、止痛藥用量上升、或身體狀況評分降低 20 分。 \n或 \n2) 病人之前述三種參數均維持穩定,同時體重有顯著 且持續增加(持續 4 週以上體重增加≧7%),且體重增加並非為體液\n蓄積造成之結果。 \n試驗 5 納入 126 位病人。兩治療組間的基本資料與基期特徵彼此類似(表八)。療效結果呈現如表九與圖四。Gemcitabine 組\n的病人在臨床效益反應、存活期、到病程 惡化前之時間方面和隨機分配至接受 Fluorouracil 組病人相比,有統計意義之改\n善。兩組均無可確定之客觀腫瘤反應率。 \n \n表八、試驗 5 之基期基本資料與臨床特徵 \n Gemcitabine (N=63) Fluorouracil (N=63) \n男性 54% 54% \n年齡中位數,年 62 61 \n 範圍 37 至 79 36 至 77 \n病程為第四期 71% 76% \n治療前之 KPS 指數 a≦70 70% 68% \na Karofsky Performance Status \n表九、試驗 5 之基期基本資料與臨床特徵 \n療效參數 Gemcitabine (N=63) Fluorouracil (N=63) \n臨床效益反應率 22.2% 4.8% \np-valuea p=0.004 \n整體存活期 \n 中位數(95%信賴區間),月 5.7 (4.7,6.9) 4.2 (3.1,5.1) \np-valuea p=0.0009 \n到病程惡化前之時間 \n 中位數(95%信賴區間),月 2.1 (1.9,3.4) 0.9 (0.9,1.1) \np-valuea p=0.0013 \na 臨床效益反應率的 p 值使用 binominal proportions 之 2-sided test 分析差異,其他 p 值用 log rank test 計算。 \n \n圖四、試驗 5 整體存活期之 Kaplan-Meier 曲線圖 \n \n \n4.5 膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \n一個隨機分配、 多中心的第三期臨床試驗(405 名第四期轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)病人)與兩個第\n二期臨床試驗的 數 據,證 實Gemcitabine 併用Cisplatin 可作為第四期(局部晚期或轉移)轉移性泌尿道移形上皮細胞癌(TCC of \nthe urothelium)之第一線用藥。 \n第三期隨機分配臨床試驗的主要目的 , 為比較第四期(局部晚期或轉移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)\n病人之存活期, 病人分別以 Gemcitabine 併用 Cisplatin 組治療,或以併用 Methotrexate、Vinblastine、Doxorubicin、\nCisplatin(MVAC)組治療。病人未曾接受過全身性化學治療。 \n病人隨機以下列注射療程之一治療: \n1) 以 28 天為一週期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 2 天給予 Cisplatin 70 mg/m2。 \nGemcitabine \nGemcitabine/Paclitaxel \nGemcitabine/Paclitaxel \n2) 以 28 天為一週期 , 每週期的第1、15、22 天給予 Methotrexate 30 mg/m2,每 週期的第 2、15、22 天給予 Vinblastine 3 mg/m2,\n每週期的第 2 天給予 Doxorubicin 30 mg/m2 及 Cisplatin 70 mg/m2。 \n此試驗之次要研究目的包括:一年存活率、病程惡化前之時間、反應率、反應持續時間、毒性反應及生活品質的改善。表\n十為病人之基本資料。 \n圖五為 Kaplan-Meier 存活曲線。Gemcitabine 併用 Cisplatin 組的中位存活期為 12.8 個月,相較於 MVAC 組的 14.8 個月\n(Logrank p=0.55)。比較病程惡化前之時間長短的中位時間,Gemcitabine 併用 Cisplatin 組為 7.4 個月,MVAC 組為 7.6 個\n月(Logrank p=0.84)。Gemcitabine 併用 Cisplatin 組的總反應率為 49.4%,相較於 MVAC 組的 45.7% (Chi-square p=0.51)。\nGemcitabine 併用 Cisplatin 組的中位反應持續時間為 9.6 個月,相較於 MVAC 組的 10.7 個月。比較到治療失敗的時間,\nGemcitabine 併用 Cisplatin 組為 5.8 個月,MVAC 組為 4.6 個月(Logrank p=0.139)。於 Gemcita",
+      "dose_mentions": [
+        "1000 mg/m2",
+        "70 mg/m2",
+        "30 mg/m2",
+        "3 mg/m2",
+        "75 mg",
+        "100 mg/m2",
+        "75 mg/m2"
+      ],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2;https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 10
+      "candidate_count": 10,
+      "dosage_excerpt": "al Benefit Response),若下列任一情況發生,則病人被視為有臨床效益\n反應: \n1) 病人之疼痛強度降低(疼痛評估卡)或止痛藥用量減少≧50%、或身體狀況(Karnofsky 狀況表)的評分為 20 分或更大的改\n善,持續至少四週以上,且其他參數均無持續性惡化現象。持續性惡化現象定義為:在開始治療後的 12 週內,連續四\n週的疼痛強度增加、止痛藥用量上升、或身體狀況評分降低 20 分。 \n或 \n2) 病人之前述三種參數均維持穩定,同時體重有顯著 且持續增加(持續 4 週以上體重增加≧7%),且體重增加並非為體液\n蓄積造成之結果。 \n試驗 5 納入 126 位病人。兩治療組間的基本資料與基期特徵彼此類似(表八)。療效結果呈現如表九與圖四。Gemcitabine 組\n的病人在臨床效益反應、存活期、到病程 惡化前之時間方面和隨機分配至接受 Fluorouracil 組病人相比,有統計意義之改\n善。兩組均無可確定之客觀腫瘤反應率。 \n \n表八、試驗 5 之基期基本資料與臨床特徵 \n Gemcitabine (N=63) Fluorouracil (N=63) \n男性 54% 54% \n年齡中位數,年 62 61 \n 範圍 37 至 79 36 至 77 \n病程為第四期 71% 76% \n治療前之 KPS 指數 a≦70 70% 68% \na Karofsky Performance Status \n表九、試驗 5 之基期基本資料與臨床特徵 \n療效參數 Gemcitabine (N=63) Fluorouracil (N=63) \n臨床效益反應率 22.2% 4.8% \np-valuea p=0.004 \n整體存活期 \n 中位數(95%信賴區間),月 5.7 (4.7,6.9) 4.2 (3.1,5.1) \np-valuea p=0.0009 \n到病程惡化前之時間 \n 中位數(95%信賴區間),月 2.1 (1.9,3.4) 0.9 (0.9,1.1) \np-valuea p=0.0013 \na 臨床效益反應率的 p 值使用 binominal proportions 之 2-sided test 分析差異,其他 p 值用 log rank test 計算。 \n \n圖四、試驗 5 整體存活期之 Kaplan-Meier 曲線圖 \n \n \n4.5 膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \n一個隨機分配、 多中心的第三期臨床試驗(405 名第四期轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)病人)與兩個第\n二期臨床試驗的 數 據,證 實Gemcitabine 併用Cisplatin 可作為第四期(局部晚期或轉移)轉移性泌尿道移形上皮細胞癌(TCC of \nthe urothelium)之第一線用藥。 \n第三期隨機分配臨床試驗的主要目的 , 為比較第四期(局部晚期或轉移)轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)\n病人之存活期, 病人分別以 Gemcitabine 併用 Cisplatin 組治療,或以併用 Methotrexate、Vinblastine、Doxorubicin、\nCisplatin(MVAC)組治療。病人未曾接受過全身性化學治療。 \n病人隨機以下列注射療程之一治療: \n1) 以 28 天為一週期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,每週期的第 2 天給予 Cisplatin 70 mg/m2。 \nGemcitabine \nGemcitabine/Paclitaxel \nGemcitabine/Paclitaxel \n2) 以 28 天為一週期 , 每週期的第1、15、22 天給予 Methotrexate 30 mg/m2,每 週期的第 2、15、22 天給予 Vinblastine 3 mg/m2,\n每週期的第 2 天給予 Doxorubicin 30 mg/m2 及 Cisplatin 70 mg/m2。 \n此試驗之次要研究目的包括:一年存活率、病程惡化前之時間、反應率、反應持續時間、毒性反應及生活品質的改善。表\n十為病人之基本資料。 \n圖五為 Kaplan-Meier 存活曲線。Gemcitabine 併用 Cisplatin 組的中位存活期為 12.8 個月,相較於 MVAC 組的 14.8 個月\n(Logrank p=0.55)。比較病程惡化前之時間長短的中位時間,Gemcitabine 併用 Cisplatin 組為 7.4 個月,MVAC 組為 7.6 個\n月(Logrank p=0.84)。Gemcitabine 併用 Cisplatin 組的總反應率為 49.4%,相較於 MVAC 組的 45.7% (Chi-square p=0.51)。\nGemcitabine 併用 Cisplatin 組的中位反應持續時間為 9.6 個月,相較於 MVAC 組的 10.7 個月。比較到治療失敗的時間,\nGemcitabine 併用 Cisplatin 組為 5.8 個月,MVAC 組為 4.6 個月(Logrank p=0.139)。於 Gemcita",
+      "dose_source": "TFDA 官方仿單 PDF",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_indication_specific": true
     },
     "uc-pembro-1l": {
       "status": "matched",
