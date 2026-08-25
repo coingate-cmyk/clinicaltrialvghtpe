@@ -10,7 +10,7 @@
   const cancerMap = Object.fromEntries((data.cancers || []).map(x => [x.id, x]));
   const sourcePdf = window.NHI_CHANGES?.source_url || data.meta?.source_url || '';
 
-  const esc = (s='') => String(s).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
+  const esc = (s='') => String(s).replace(/[&<>'\"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[m]));
   const lineGroup = x => x.line_group || x.line || '';
   const tfdaFor = x => (tfda.byIndicationId || {})[x?.id] || null;
   const tfdaVisible = t => t && (t.status === 'matched' || t.status === 'generic-label');
@@ -20,7 +20,7 @@
   function productName(x) {
     const t = tfdaFor(x);
     if (!tfdaVisible(t)) return '';
-    return String(t.product_zh || t.product_en || '').trim();
+    return String(t.product_en || t.product_zh || '').trim();
   }
 
   function displayDrugName(x) {
@@ -58,7 +58,7 @@
          <dt>原因</dt><dd>${esc(t.dose_withheld_reason || '多適應症仿單或仿單文字無法安全拆分')}</dd>`;
 
     return `<section class="source-panel tfda-panel${safeDose ? '' : ' pending'}">
-      <div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>${esc(t.product_zh || t.product_en || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
+      <div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>${esc(t.product_en || t.product_zh || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
       <dl class="detail-table compact-table">
         <dt>許可證</dt><dd>${esc(t.permit || '—')}</dd>
         <dt>核准適應症</dt><dd>${esc(t.indication || '—')}</dd>
