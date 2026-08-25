@@ -7,6 +7,7 @@ on:
     paths:
       - 'tools/nhi/assets/clinical-map.js'
       - 'tools/nhi/assets/clinical-map.css'
+      - 'tools/nhi/assets/drug-dose-ui.js'
       - 'tools/nhi/index.html'
       - '.github/workflows/publish-nhi-ui.yml'
 
@@ -35,6 +36,7 @@ jobs:
           cp tools/nhi/index.html /tmp/nhi-ui/index.html
           cp tools/nhi/assets/clinical-map.js /tmp/nhi-ui/assets/clinical-map.js
           cp tools/nhi/assets/clinical-map.css /tmp/nhi-ui/assets/clinical-map.css
+          cp tools/nhi/assets/drug-dose-ui.js /tmp/nhi-ui/assets/drug-dose-ui.js
 
       - name: Publish to live Pages branch
         run: |
@@ -47,10 +49,11 @@ jobs:
           cp /tmp/nhi-ui/index.html tools/nhi/index.html
           cp /tmp/nhi-ui/assets/clinical-map.js tools/nhi/assets/clinical-map.js
           cp /tmp/nhi-ui/assets/clinical-map.css tools/nhi/assets/clinical-map.css
-          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css
+          cp /tmp/nhi-ui/assets/drug-dose-ui.js tools/nhi/assets/drug-dose-ui.js
+          git add tools/nhi/index.html tools/nhi/assets/clinical-map.js tools/nhi/assets/clinical-map.css tools/nhi/assets/drug-dose-ui.js
           if ! git diff --cached --quiet; then
-            git commit -m 'Publish NHI Navigator v0.9 UI'
+            git commit -m 'Publish NHI Navigator v1.1 UI'
             git push origin pages-clean-ajcc-v2-3
           fi
 
-# v0.9 all-cancer pathway + drug-centric lookup publisher
+# v1.1 all-cancer pathway + drug-centric lookup + unified NHI/TFDA dose detail publisher
