@@ -152,6 +152,13 @@
       showUnifiedDetail(drugBtn.dataset.drugDetail);
       return;
     }
+    const detailBtn = e.target.closest?.('[data-detail]');
+    if (detailBtn) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      showUnifiedDetail(detailBtn.dataset.detail);
+      return;
+    }
     const mapBtn = e.target.closest?.('[data-map-item]');
     if (mapBtn) {
       e.preventDefault();
