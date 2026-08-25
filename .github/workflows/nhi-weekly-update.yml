@@ -17,6 +17,7 @@ on:
       - 'scripts/tfda_label_pdf_enrich.py'
       - 'scripts/patch_nhi_tfda_ui.py'
       - 'scripts/patch_nhi_tfda_safety.py'
+      - 'tools/nhi/assets/drug-dose-ui.js'
       - 'tools/nhi/config/cancer_aliases.json'
       - 'tools/nhi/config/tfda_drug_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
@@ -97,6 +98,7 @@ jobs:
           assert coverage.get('orphan_count', 0) == 0, coverage.get('orphans')
           assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
           assert Path('tools/nhi/assets/nhi-candidates.js').stat().st_size > 500
+          assert Path('tools/nhi/assets/drug-dose-ui.js').stat().st_size > 1000
           assert meta.get('active_row_count',0) > 1000, meta
           assert meta.get('insert_row_count',0) > 1000, meta
           assert meta.get('matched_indication_count',0) >= 10, meta
@@ -111,6 +113,7 @@ jobs:
           assert "t.dose_confidence === 'high'" in app
           assert '此癌種劑量未安全自動拆出' in app
           assert 'assets/tfda-labels.js' in index
+          assert 'assets/drug-dose-ui.js' in index
           # Regression guards: withheld mappings must not retain searchable dose chips.
           for entry in tfda.get('byIndicationId',{}).values():
               if not isinstance(entry,dict):
@@ -124,6 +127,7 @@ jobs:
           print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('high_confidence_dose_count'), 'high-confidence doses;', meta.get('dose_withheld_count'), 'dose withheld;', meta.get('combination_regimen_withheld_count'), 'combination regimens withheld;', meta.get('review_count'), 'permit reviews')
           PY
           node --check tools/nhi/assets/app.js
+          node --check tools/nhi/assets/drug-dose-ui.js
 
       - name: Commit official snapshots, TFDA index and UI to main
         shell: bash
@@ -139,6 +143,7 @@ jobs:
                   tools/nhi/assets/tfda-labels.js \
                   tools/nhi/assets/app.js \
                   tools/nhi/assets/style.css \
+                  tools/nhi/assets/drug-dose-ui.js \
                   tools/nhi/index.html
           if ! git diff --cached --quiet; then
             git commit -m 'Update NHI and TFDA oncology label data'
@@ -152,6 +157,7 @@ jobs:
           cp tools/nhi/assets/tfda-labels.js /tmp/nhi-publish/assets/tfda-labels.js
           cp tools/nhi/assets/app.js /tmp/nhi-publish/assets/app.js
           cp tools/nhi/assets/style.css /tmp/nhi-publish/assets/style.css
+          cp tools/nhi/assets/drug-dose-ui.js /tmp/nhi-publish/assets/drug-dose-ui.js
           cp tools/nhi/index.html /tmp/nhi-publish/index.html
 
       - name: Publish NHI + TFDA data and UI to live Pages branch
@@ -168,11 +174,12 @@ jobs:
           cp /tmp/nhi-publish/assets/tfda-labels.js tools/nhi/assets/tfda-labels.js
           cp /tmp/nhi-publish/assets/app.js tools/nhi/assets/app.js
           cp /tmp/nhi-publish/assets/style.css tools/nhi/assets/style.css
+          cp /tmp/nhi-publish/assets/drug-dose-ui.js tools/nhi/assets/drug-dose-ui.js
           cp /tmp/nhi-publish/index.html tools/nhi/index.html
-          git add tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js tools/nhi/assets/tfda-labels.js tools/nhi/assets/app.js tools/nhi/assets/style.css tools/nhi/index.html
+          git add tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js tools/nhi/assets/tfda-labels.js tools/nhi/assets/app.js tools/nhi/assets/style.css tools/nhi/assets/drug-dose-ui.js tools/nhi/index.html
           if ! git diff --cached --quiet; then
             git commit -m 'Publish NHI and TFDA oncology label update'
             git push origin pages-clean-ajcc-v2-3
           fi
 
-# v0.8 NHI + TFDA label-dose enrichment; only high-confidence indication-specific dose is displayed.
+# v0.9 NHI + TFDA label-dose enrichment; unified detail UI persists across weekly refreshes.
