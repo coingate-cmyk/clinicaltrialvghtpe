@@ -30,6 +30,14 @@
       : (x.drug || brand || '未命名藥物');
   }
 
+  function compactDoseText(x) {
+    const t = tfdaFor(x);
+    if (!tfdaVisible(t) || t.dose_confidence !== 'high') return '';
+    const doses = (t.dose_mentions || []).slice(0, 3).join(' / ');
+    const freqs = (t.frequency_mentions || []).slice(0, 3).join(' / ');
+    return [doses, freqs].filter(Boolean).join(' · ');
+  }
+
   function tfdaPanelHtml(x) {
     const t = tfdaFor(x);
     if (!tfdaVisible(t)) {
@@ -92,22 +100,46 @@
     dialog.showModal();
   }
 
+  function addDosePreview(container, x) {
+    if (!container || container.querySelector('.tfda-card-dose.unified-dose-preview')) return;
+    const text = compactDoseText(x);
+    if (!text) return;
+    const box = document.createElement('div');
+    box.className = 'tfda-card-dose unified-dose-preview';
+    box.innerHTML = `<small>TFDA 劑量 / 頻次</small><span>${esc(text)}</span>`;
+    const regimen = container.querySelector('.regimen');
+    (regimen || container.firstElementChild)?.insertAdjacentElement('afterend', box);
+  }
+
   function decorateDrugNames(root=document) {
     root.querySelectorAll?.('[data-map-item]').forEach(btn => {
       const x = byId[btn.dataset.mapItem];
       const strong = btn.querySelector('strong');
       if (x && strong) strong.textContent = displayDrugName(x);
+      if (x) {
+        const text = compactDoseText(x);
+        if (text && !btn.querySelector('.pathway-dose-preview')) {
+          const small = document.createElement('small');
+          small.className = 'pathway-dose-preview';
+          small.textContent = `TFDA: ${text}`;
+          btn.appendChild(small);
+        }
+      }
     });
     root.querySelectorAll?.('[data-drug-detail]').forEach(btn => {
       const x = byId[btn.dataset.drugDetail];
-      const title = btn.closest('.drug-hit')?.querySelector('h4');
+      const hit = btn.closest('.drug-hit');
+      const title = hit?.querySelector('h4');
       if (x && title) title.textContent = displayDrugName(x);
+      if (x && hit) addDosePreview(hit.querySelector('.drug-hit-main'), x);
       if (btn && btn.textContent.trim() === '摘要') btn.textContent = '健保 / 劑量';
     });
     root.querySelectorAll?.('[data-detail]').forEach(btn => {
       const x = byId[btn.dataset.detail];
-      const title = btn.closest('.drug-card')?.querySelector('h3');
+      const card = btn.closest('.drug-card');
+      const title = card?.querySelector('h3');
       if (x && title) title.textContent = displayDrugName(x);
+      if (x && card) addDosePreview(card.firstElementChild, x);
       if (btn.textContent.includes('摘要')) btn.textContent = '健保 / 劑量';
     });
   }
