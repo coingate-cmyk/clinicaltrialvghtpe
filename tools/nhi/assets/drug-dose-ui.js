@@ -10,12 +10,50 @@
   const cancerMap = Object.fromEntries((data.cancers || []).map(x => [x.id, x]));
   const sourcePdf = window.NHI_CHANGES?.source_url || data.meta?.source_url || '';
 
-  const esc = (s='') => String(s).replace(/[&<>'\"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[m]));
+  const esc = (s='') => String(s).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
   const lineGroup = x => x.line_group || x.line || '';
   const tfdaFor = x => (tfda.byIndicationId || {})[x?.id] || null;
   const tfdaVisible = t => t && (t.status === 'matched' || t.status === 'generic-label');
   const pdfLink = x => `${sourcePdf}#page=${Number(x.pdf_page || 1)}`;
   const firstLabelUrl = t => (Array.isArray(t?.label_urls) && t.label_urls[0]) || String(t?.label_url || '').split(';')[0] || '';
+
+  // Curated originator/trade-name aliases are intentionally separate from the TFDA licence selected
+  // for dose extraction. The title helps clinicians recognize the drug; the TFDA panel below still
+  // names the exact product/licence that supplied the official indication or dosage text.
+  const originatorBrandByGeneric = {
+    'pembrolizumab':'KEYTRUDA', 'nivolumab':'OPDIVO', 'atezolizumab':'TECENTRIQ', 'avelumab':'BAVENCIO',
+    'ipilimumab':'YERVOY', 'durvalumab':'IMFINZI', 'tremelimumab':'IMJUDO', 'cemiplimab':'LIBTAYO', 'dostarlimab':'JEMPERLI',
+    'trastuzumab':'HERCEPTIN', 'pertuzumab':'PERJETA', 'trastuzumab emtansine':'KADCYLA', 'ado-trastuzumab emtansine':'KADCYLA',
+    'trastuzumab deruxtecan':'ENHERTU', 'bevacizumab':'AVASTIN', 'cetuximab':'ERBITUX', 'panitumumab':'VECTIBIX', 'ramucirumab':'CYRAMZA',
+    'sorafenib':'NEXAVAR', 'lenvatinib':'LENVIMA', 'regorafenib':'STIVARGA', 'capecitabine':'XELODA',
+    'nab-paclitaxel':'ABRAXANE', 'albumin-bound paclitaxel':'ABRAXANE', 'irinotecan liposome':'ONIVYDE',
+    'trifluridine/tipiracil':'LONSURF', 'larotrectinib':'VITRAKVI', 'entrectinib':'ROZLYTREK',
+    'osimertinib':'TAGRISSO', 'gefitinib':'IRESSA', 'erlotinib':'TARCEVA', 'afatinib':'GIOTRIF', 'dacomitinib':'VIZIMPRO',
+    'crizotinib':'XALKORI', 'ceritinib':'ZYKADIA', 'alectinib':'ALECENSA', 'brigatinib':'ALUNBRIG', 'lorlatinib':'LORBRENA', 'amivantamab':'RYBREVANT',
+    'abiraterone':'ZYTIGA', 'abiraterone acetate':'ZYTIGA', 'enzalutamide':'XTANDI', 'apalutamide':'ERLEADA', 'darolutamide':'NUBEQA',
+    'olaparib':'LYNPARZA', 'niraparib':'ZEJULA', 'enfortumab vedotin':'PADCEV',
+    'imatinib':'GLEEVEC', 'dasatinib':'SPRYCEL', 'nilotinib':'TASIGNA', 'ponatinib':'ICLUSIG', 'asciminib':'SCEMBLIX',
+    'blinatumomab':'BLINCYTO', 'inotuzumab ozogamicin':'BESPONSA', 'inotuzumab':'BESPONSA', 'gilteritinib':'XOSPATA', 'midostaurin':'RYDAPT',
+    'daratumumab':'DARZALEX', 'carfilzomib':'KYPROLIS', 'ixazomib':'NINLARO', 'pomalidomide':'POMALYST',
+    'lenalidomide':'REVLIMID', 'bortezomib':'VELCADE'
+  };
+
+  function normalizeGenericName(value='') {
+    return String(value).toLowerCase().replace(/[‐‑–—]/g, '-').replace(/\s+/g, ' ').trim();
+  }
+
+  function originatorBrandName(x) {
+    const raw = normalizeGenericName(x?.drug || '');
+    if (!raw) return '';
+    if (originatorBrandByGeneric[raw]) return originatorBrandByGeneric[raw];
+    // Curated combination labels normally use '+'. Show recognizable brands for components
+    // that have a verified alias, without claiming that they are one fixed-combination product.
+    if (raw.includes('+')) {
+      const brands = raw.split('+').map(p => originatorBrandByGeneric[p.trim()] || '').filter(Boolean);
+      return brands.length ? brands.join(' + ') : '';
+    }
+    return '';
+  }
 
   function productName(x) {
     const t = tfdaFor(x);
@@ -24,7 +62,9 @@
   }
 
   function displayDrugName(x) {
-    const brand = productName(x);
+    const originator = originatorBrandName(x);
+    const mappedProduct = productName(x);
+    const brand = originator || mappedProduct;
     return brand && !brand.toLowerCase().includes(String(x.drug || '').toLowerCase())
       ? `${x.drug}（${brand}）`
       : (x.drug || brand || '未命名藥物');
@@ -58,14 +98,14 @@
          <dt>原因</dt><dd>${esc(t.dose_withheld_reason || '多適應症仿單或仿單文字無法安全拆分')}</dd>`;
 
     return `<section class="source-panel tfda-panel${safeDose ? '' : ' pending'}">
-      <div class="source-panel-head"><div><small>TFDA 核准仿單</small><strong>${esc(t.product_en || t.product_zh || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
+      <div class="source-panel-head"><div><small>TFDA 核准仿單 · 實際對應藥證</small><strong>${esc(t.product_en || t.product_zh || x.drug)}</strong></div><span>${esc(t.match_basis || '')}</span></div>
       <dl class="detail-table compact-table">
         <dt>許可證</dt><dd>${esc(t.permit || '—')}</dd>
         <dt>核准適應症</dt><dd>${esc(t.indication || '—')}</dd>
         ${doseRows}
         <dt>TFDA 資料同步</dt><dd>${esc(syncDate)}${t.license_modified ? `；藥證異動 ${esc(t.license_modified)}` : ''}</dd>
       </dl>
-      <p class="source-note">健保「能不能用」與 TFDA「核准怎麼用」分開標示。只有高信心對到此癌種用法用量時才直接顯示 dose / frequency。</p>
+      <p class="source-note">標題括號內優先顯示常用 originator brand，方便臨床辨識；本區則固定顯示實際用來核對 TFDA 適應症／劑量的藥證產品，兩者可能不同。健保「能不能用」與 TFDA「核准怎麼用」仍分開標示。</p>
     </section>`;
   }
 
