@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Internal clinical-trial working data. Anonymous Firebase Authentication
+    // keeps the existing zero-friction workflow while blocking unauthenticated
+    // Internet-wide reads/writes against Firestore.
+    match /trials/{trialId} {
+      allow read, create, update, delete: if signedIn();
+    }
+
+    match /meta/subjects {
+      allow read, create, update: if signedIn();
+      allow delete: if false;
+    }
+
+    // Public trial listing remains readable without authentication, but only an
+    // authenticated app session may publish/replace it.
+    match /public/clinical-trials {
+      allow read: if true;
+      allow create, update: if signedIn();
+      allow delete: if false;
+    }
+
+    // Deny everything else by default so a future collection is not
+    // accidentally exposed just because it was added from client code.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
