@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -778,8 +779,10 @@ const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY
 
 let firebaseAppInstance = null;
 let firestoreInstance = null;
+let firebaseAuthInstance = null;
+let firebaseAuthReadyPromise = null;
 
-const initializeFirebaseApp = (firebaseConfig) => {
+const initializeFirebaseCore = (firebaseConfig) => {
     if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
         throw new Error('Firebase 設定不完整');
     }
@@ -788,11 +791,30 @@ const initializeFirebaseApp = (firebaseConfig) => {
             ? firebase.app()
             : firebase.initializeApp(firebaseConfig);
     }
-    if (!firestoreInstance) {
-        firestoreInstance = firebase.firestore();
-    }
-    return firestoreInstance;
+    if (!firestoreInstance) firestoreInstance = firebase.firestore();
+    if (!firebaseAuthInstance) firebaseAuthInstance = firebase.auth();
+    return { db: firestoreInstance, auth: firebaseAuthInstance };
 };
+
+const ensureFirebaseAnonymousAuth = async (firebaseConfig) => {
+    const { db, auth } = initializeFirebaseCore(firebaseConfig);
+    if (auth.currentUser) return db;
+    if (!firebaseAuthReadyPromise) {
+        firebaseAuthReadyPromise = auth.signInAnonymously()
+            .then(() => db)
+            .catch((error) => {
+                firebaseAuthReadyPromise = null;
+                const code = error && error.code ? String(error.code) : '';
+                if (code.includes('operation-not-allowed')) {
+                    throw new Error('Firebase 匿名登入尚未在專案端啟用');
+                }
+                throw error;
+            });
+    }
+    return firebaseAuthReadyPromise;
+};
+
+const initializeFirebaseApp = (firebaseConfig) => initializeFirebaseCore(firebaseConfig).db;
 
 const cleanTrialForSave = (trial) => {
     const cleaned = { ...(trial || {}) };
@@ -846,8 +868,10 @@ const normalizeFirestoreTrial = (raw) => {
 };
 
 const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
-    try {
-        const db = initializeFirebaseApp(firebaseConfig);
+    let cancelled = false;
+    let unsubscribe = () => {};
+    ensureFirebaseAnonymousAuth(firebaseConfig).then((db) => {
+        if (cancelled) return;
         const unsubTrials = db.collection('trials').onSnapshot((snapshot) => {
             const list = snapshot.docs.map((doc) => normalizeFirestoreTrial({ ...doc.data(), code: doc.id }));
             const merged = sanitizeTrialListForRuntime(list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS);
@@ -860,18 +884,18 @@ const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus
             onSubjects(Array.isArray(data.items) ? data.items : []);
         }, onError);
 
-        return () => {
+        unsubscribe = () => {
             try { unsubTrials && unsubTrials(); } catch (e) {}
             try { unsubSubjects && unsubSubjects(); } catch (e) {}
         };
-    } catch (error) {
+    }).catch((error) => {
         onError && onError(error);
-        return () => {};
-    }
+    });
+    return () => { cancelled = true; unsubscribe(); };
 };
 
 const saveTrialToFirestore = async (firebaseConfig, trialData) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const cleaned = cleanTrialForSave(trialData);
     if (!cleaned) throw new Error('trial code 不可空白');
     await db.collection('trials').doc(cleaned.code).set(cleaned, { merge: true });
@@ -879,12 +903,12 @@ const saveTrialToFirestore = async (firebaseConfig, trialData) => {
 };
 
 const deleteTrialFromFirestore = async (firebaseConfig, code) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     await db.collection('trials').doc(normalizeCode(code)).delete();
 };
 
 const clearTrialsFromFirestore = async (firebaseConfig) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     let total = 0;
     while (true) {
         const snapshot = await db.collection('trials').limit(400).get();
@@ -899,7 +923,7 @@ const clearTrialsFromFirestore = async (firebaseConfig) => {
 };
 
 const saveSubjectsToFirestore = async (firebaseConfig, data) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     await db.collection('meta').doc('subjects').set({
         items: Array.isArray(data) ? data : [],
         updatedAt: new Date().toISOString()
@@ -907,7 +931,7 @@ const saveSubjectsToFirestore = async (firebaseConfig, data) => {
 };
 
 const seedInitialTrialsToFirestore = async (firebaseConfig, trialsData) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const existing = await db.collection('trials').limit(1).get();
     if (!existing.empty) return false;
     const batch = db.batch();
@@ -1037,7 +1061,7 @@ const buildPublicTrialsDataset = (sourceTrials) => {
 };
 
 const publishPublicTrialsToFirestore = async (firebaseConfig, sourceTrials) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const payload = buildPublicTrialsDataset(sourceTrials || []);
     await db.collection(PUBLIC_TRIALS_COLLECTION).doc(PUBLIC_TRIALS_DOC_ID).set(payload, { merge: false });
     return payload;
