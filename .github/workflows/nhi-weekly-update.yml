@@ -16,6 +16,7 @@ on:
       - 'scripts/tfda_regimen_match_safety.py'
       - 'scripts/tfda_label_pdf_enrich.py'
       - 'scripts/patch_nhi_tfda_ui.py'
+      - 'scripts/patch_nhi_tfda_ui_safe.py'
       - 'scripts/patch_nhi_tfda_safety.py'
       - 'tools/nhi/assets/drug-dose-ui.js'
       - 'tools/nhi/config/cancer_aliases.json'
@@ -71,7 +72,7 @@ jobs:
           python scripts/tfda_label_update.py
           python scripts/tfda_regimen_match_safety.py
           python scripts/tfda_label_pdf_enrich.py
-          python scripts/patch_nhi_tfda_ui.py
+          python scripts/patch_nhi_tfda_ui_safe.py
           python scripts/patch_nhi_tfda_safety.py
 
       - name: Validate generated NHI and TFDA files
