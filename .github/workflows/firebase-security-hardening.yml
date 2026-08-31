@@ -1,0 +1,63 @@
+name: Firebase Security Hardening
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/patch_firebase_anonymous_auth.py'
+      - 'firestore.rules'
+      - '.github/workflows/firebase-security-hardening.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch web app for Firebase anonymous auth
+        run: python scripts/patch_firebase_anonymous_auth.py
+
+      - name: Validate auth wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'firebase-auth-compat.js' index.html
+          grep -q 'ensureFirebaseAnonymousAuth' index.html
+          grep -q 'Firebase 匿名登入尚未在專案端啟用' index.html
+          grep -q 'request.auth != null' firestore.rules
+
+      - name: Commit hardened app to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html firestore.rules
+          if ! git diff --cached --quiet; then
+            git commit -m 'Enable anonymous Firebase auth in web app'
+            git push origin main
+          fi
+
+      - name: Publish hardened app to live Pages branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp index.html /tmp/index.firebase-auth.html
+          cp firestore.rules /tmp/firestore.rules
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/index.firebase-auth.html index.html
+          cp /tmp/firestore.rules firestore.rules
+          git add index.html firestore.rules
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish Firebase anonymous-auth hardening'
+            git push origin pages-clean-ajcc-v2-3
+          fi
