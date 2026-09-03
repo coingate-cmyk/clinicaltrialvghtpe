@@ -32,6 +32,18 @@
             <h2 class="text-xl font-bold">病人體型</h2>
             <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600">Adult helper</span>
           </div>
+          <div class="mb-4 rounded-xl border bg-slate-50 p-3">
+            <label class="block text-sm font-semibold">BSA 輸入方式
+              <select id="bsaMode" class="mt-1 w-full min-w-0 border bg-white rounded-lg p-2.5 font-normal">
+                <option value="calculated">由身高＋體重計算（Mosteller）</option>
+                <option value="manual">直接輸入 BSA</option>
+              </select>
+            </label>
+            <label id="manualBsaWrap" class="hidden block text-sm mt-3">BSA m²
+              <input id="manualBsa" type="number" min="0.3" max="4.0" step="0.01" value="1.80" inputmode="decimal" class="mt-1 w-full min-w-0 border bg-white rounded-lg p-2.5">
+              <span class="block mt-1 text-xs text-slate-500">直接使用已知 BSA 計算 mg/m² 劑量；不需要重新輸入身高與體重。</span>
+            </label>
+          </div>
           <div class="grid grid-cols-2 gap-3 min-w-0">
             <label class="block text-sm min-w-0">性別
               <select id="sex" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
@@ -109,7 +121,7 @@
         </div>
 
         <div class="mt-5 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm leading-relaxed text-blue-950">
-          <b>預設邏輯：</b>mg/m² 使用 actual-weight BSA；mg/kg 使用 actual BW。AdjBW / AdjBW-BSA 只有在你主動選擇時才套用。Dose reduction 先乘比例，再套 max dose，最後才做 rounding。
+          <b>預設邏輯：</b>mg/m² 預設使用 Mosteller actual-weight BSA；若切換為「直接輸入 BSA」，mg/m² 與相關 BSA-based 計算改用手動 BSA。mg/kg 仍使用 actual BW。AdjBW / AdjBW-BSA 只有在你主動選擇時才套用。Dose reduction 先乘比例，再套 max dose，最後才做 rounding。
         </div>
       </section>
     </div>
@@ -157,9 +169,12 @@ function ckdEpi2021(sex, age, scr){
 }
 function getPatient(){
   const sex = val('sex'), age = num('age'), h = num('height'), w = num('weight'), scr = num('scr');
+  const bsaMode = val('bsaMode');
+  const manualBSA = num('manualBsa');
+  const calculatedBSA = bsa(h, w);
+  const BSA = bsaMode === 'manual' ? manualBSA : calculatedBSA;
   const IBW = ibw(sex, h);
   const AdjBW = adjustedBw(w, IBW);
-  const BSA = bsa(h, w);
   const AdjBSA = bsa(h, AdjBW);
   const BMI = w / Math.pow(h/100, 2);
   const cgWeightChoice = val('cgWeight');
@@ -169,17 +184,23 @@ function getPatient(){
   const CKDde = CKD * BSA / 1.73;
   const renalSource = val('renalSource');
   const renal = renalSource === 'cg' ? CG : (renalSource === 'ckd' ? CKDde : num('manualGfr'));
-  return {sex, age, h, w, scr, IBW, AdjBW, BSA, AdjBSA, BMI, CG, CKD, CKDde, renal, renalSource};
+  return {sex, age, h, w, scr, bsaMode, manualBSA, calculatedBSA, IBW, AdjBW, BSA, AdjBSA, BMI, CG, CKD, CKDde, renal, renalSource};
 }
 
 function renderPatient(){
   const p = getPatient();
+  $('manualBsaWrap').classList.toggle('hidden', p.bsaMode !== 'manual');
+  const bsaLabel = p.bsaMode === 'manual' ? 'Dosing BSA（manual）' : 'Actual BSA（Mosteller）';
+  const calculatedBsaNote = p.bsaMode === 'manual'
+    ? `<div class="rounded-lg bg-blue-50 p-3 col-span-2 min-w-0"><div class="text-xs text-blue-700">Mosteller BSA（reference only）</div><div class="font-bold text-blue-950">${fmt(p.calculatedBSA,2)} m²</div></div>`
+    : '';
   $('bodyResults').innerHTML = `
-    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">Actual BSA</div><div class="font-bold text-lg">${fmt(p.BSA,2)} m²</div></div>
+    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">${bsaLabel}</div><div class="font-bold text-lg">${fmt(p.BSA,2)} m²</div></div>
     <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">BMI</div><div class="font-bold text-lg">${fmt(p.BMI,1)}</div></div>
     <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">IBW</div><div class="font-bold">${fmt(p.IBW,1)} kg</div></div>
     <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">Adjusted BW</div><div class="font-bold">${fmt(p.AdjBW,1)} kg</div></div>
-    <div class="rounded-lg bg-amber-50 p-3 col-span-2 min-w-0"><div class="text-xs text-amber-700">AdjBW-based BSA（reference）</div><div class="font-bold text-amber-950">${fmt(p.AdjBSA,2)} m²</div></div>`;
+    <div class="rounded-lg bg-amber-50 p-3 col-span-2 min-w-0"><div class="text-xs text-amber-700">AdjBW-based BSA（reference）</div><div class="font-bold text-amber-950">${fmt(p.AdjBSA,2)} m²</div></div>
+    ${calculatedBsaNote}`;
   $('manualGfrWrap').classList.toggle('hidden', p.renalSource !== 'manual');
   $('renalResults').innerHTML = `
     <div class="rounded-lg bg-slate-100 p-3 break-words"><b>Cockcroft-Gault CrCl</b> ${fmt(p.CG,1)} mL/min</div>
@@ -332,7 +353,10 @@ function renderDoseResults(){
 
 function summaryText(){
   const p = getPatient();
-  const lines = [`Height ${fmt(p.h,1)} cm / Weight ${fmt(p.w,1)} kg / BSA ${fmt(p.BSA,2)} m² / AdjBW ${fmt(p.AdjBW,1)} kg / AdjBW-BSA ${fmt(p.AdjBSA,2)} m²`];
+  const bodySummary = p.bsaMode === 'manual'
+    ? `BSA ${fmt(p.BSA,2)} m² (manual input)`
+    : `Height ${fmt(p.h,1)} cm / Weight ${fmt(p.w,1)} kg / BSA ${fmt(p.BSA,2)} m² / AdjBW ${fmt(p.AdjBW,1)} kg / AdjBW-BSA ${fmt(p.AdjBSA,2)} m²`;
+  const lines = [bodySummary];
   drugRows.forEach((row,index)=>{
     const c=calculateDrug(row,p); if(!finite(c.final)||!row.standard)return;
     lines.push(`${row.name||`Drug ${index+1}`}: ${methodLabel(row.method)} ${row.standard}, ${row.percent||0}% → ${fmt(c.final,1)} mg (=${fmt(c.final/p.BSA,2)} mg/m²; ${fmt(c.final/p.w,2)} mg/kg)`);
@@ -346,7 +370,7 @@ $('copySummary').addEventListener('click', async ()=>{
   catch(e){ window.prompt('複製以下內容：',summaryText()); }
 });
 
-['sex','age','height','weight','scr','cgWeight','renalSource','manualGfr'].forEach(id => {
+['bsaMode','manualBsa','sex','age','height','weight','scr','cgWeight','renalSource','manualGfr'].forEach(id => {
   $(id).addEventListener('input',()=>{renderPatient();renderDoseResults();});
   $(id).addEventListener('change',()=>{renderPatient();renderDoseResults();});
 });
