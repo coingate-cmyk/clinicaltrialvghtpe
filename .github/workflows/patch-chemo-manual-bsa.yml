@@ -1,0 +1,70 @@
+name: Patch chemo calculator manual BSA
+
+on:
+  push:
+    paths:
+      - 'scripts/patch_chemo_manual_bsa.py'
+      - '.github/workflows/patch-chemo-manual-bsa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Add manual BSA input mode
+        run: python scripts/patch_chemo_manual_bsa.py
+
+      - name: Validate calculator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('tools/chemo-dose.html').read_text(encoding='utf-8')
+          required = [
+              'id="bsaMode"',
+              'id="manualBsa"',
+              "bsaMode === 'manual' ? manualBSA : calculatedBSA",
+              'Dosing BSA（manual）',
+              'manual input',
+              "['bsaMode','manualBsa','sex','age','height','weight'",
+          ]
+          for token in required:
+              assert token in html, token
+          scripts = []
+          for attrs, body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>', html, flags=re.I):
+              if 'src=' not in attrs.lower() and body.strip():
+                  scripts.append(body)
+          Path('/tmp/chemo-inline.js').write_text('\n'.join(scripts), encoding='utf-8')
+          PY
+          node --check /tmp/chemo-inline.js
+
+      - name: Commit calculator to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/chemo-dose.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Allow direct BSA input in chemo dose calculator"
+            git push origin main
+          fi
+          cp tools/chemo-dose.html /tmp/chemo-dose.html
+
+      - name: Publish to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools
+          cp /tmp/chemo-dose.html tools/chemo-dose.html
+          git add tools/chemo-dose.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish manual BSA option for chemo calculator"
+            git push origin pages-clean-ajcc-v2-3
+          fi
