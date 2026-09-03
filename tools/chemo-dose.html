@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>化療 / 抗癌藥物劑量計算機</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { max-width: 100%; overflow-x: hidden; }
+    .dose-layout, .dose-panel, .dose-grid, .dose-grid > * { min-width: 0; }
+    .dose-grid input, .dose-grid select { min-width: 0; max-width: 100%; }
+    .result-basis { overflow-wrap: anywhere; word-break: break-word; }
+    @media (max-width: 1023px) {
+      input, select, textarea { font-size: 16px !important; }
+    }
+  </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
-  <main class="max-w-7xl mx-auto p-4 md:p-6">
+  <main class="max-w-[1600px] mx-auto p-4 md:p-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <a href="./index.html" class="text-blue-700 hover:underline">← 回工具首頁</a>
       <a href="./renal.html" class="text-sm text-slate-600 hover:text-blue-700 hover:underline">腎功能 / BSA 計算機 →</a>
@@ -16,91 +25,103 @@
     <h1 class="text-3xl font-bold mt-5 mb-2">化療 / 抗癌藥物劑量計算機</h1>
     <p class="text-slate-600 mb-5">Quick arithmetic for BSA、mg/m²、mg/kg、flat dose、dose reduction 與 Carboplatin AUC。所有結果仍須依 protocol / order / organ function 個別確認。</p>
 
-    <div class="grid xl:grid-cols-[420px_1fr] gap-5">
-      <div class="space-y-5">
-        <section class="bg-white rounded-2xl border shadow-sm p-5">
+    <div class="grid 2xl:grid-cols-[390px_minmax(0,1fr)] gap-5 dose-layout">
+      <div class="space-y-5 min-w-0">
+        <section class="bg-white rounded-2xl border shadow-sm p-5 min-w-0">
           <div class="flex items-center justify-between gap-3 mb-4">
             <h2 class="text-xl font-bold">病人體型</h2>
             <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600">Adult helper</span>
           </div>
-          <div class="grid grid-cols-2 gap-3">
-            <label class="block text-sm">性別
-              <select id="sex" class="mt-1 w-full border rounded-lg p-2.5">
+          <div class="mb-4 rounded-xl border bg-slate-50 p-3">
+            <label class="block text-sm font-semibold">BSA 輸入方式
+              <select id="bsaMode" class="mt-1 w-full min-w-0 border bg-white rounded-lg p-2.5 font-normal">
+                <option value="calculated">由身高＋體重計算（Mosteller）</option>
+                <option value="manual">直接輸入 BSA</option>
+              </select>
+            </label>
+            <label id="manualBsaWrap" class="hidden block text-sm mt-3">BSA m²
+              <input id="manualBsa" type="number" min="0.3" max="4.0" step="0.01" value="1.80" inputmode="decimal" class="mt-1 w-full min-w-0 border bg-white rounded-lg p-2.5">
+              <span class="block mt-1 text-xs text-slate-500">直接使用已知 BSA 計算 mg/m² 劑量；不需要重新輸入身高與體重。</span>
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-3 min-w-0">
+            <label class="block text-sm min-w-0">性別
+              <select id="sex" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
             </label>
-            <label class="block text-sm">年齡
-              <input id="age" type="number" min="18" value="60" class="mt-1 w-full border rounded-lg p-2.5">
+            <label class="block text-sm min-w-0">年齡
+              <input id="age" type="number" min="18" value="60" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
             </label>
-            <label class="block text-sm">身高 cm
-              <input id="height" type="number" min="80" max="250" step="0.1" value="170" class="mt-1 w-full border rounded-lg p-2.5">
+            <label class="block text-sm min-w-0">身高 cm
+              <input id="height" type="number" min="80" max="250" step="0.1" value="170" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
             </label>
-            <label class="block text-sm">實際體重 kg
-              <input id="weight" type="number" min="20" max="400" step="0.1" value="70" class="mt-1 w-full border rounded-lg p-2.5">
+            <label class="block text-sm min-w-0">實際體重 kg
+              <input id="weight" type="number" min="20" max="400" step="0.1" value="70" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
             </label>
           </div>
-          <div id="bodyResults" class="grid grid-cols-2 gap-2 mt-4 text-sm"></div>
+          <div id="bodyResults" class="grid grid-cols-2 gap-2 mt-4 text-sm min-w-0"></div>
           <div class="mt-3 text-xs leading-relaxed text-slate-500">
             AdjBW = IBW + 0.4 × (Actual BW − IBW)，僅作 protocol / renal calculation 需要時的參考；本工具不會因 BMI 高就自動改用 AdjBW。
           </div>
         </section>
 
-        <section class="bg-white rounded-2xl border shadow-sm p-5">
+        <section class="bg-white rounded-2xl border shadow-sm p-5 min-w-0">
           <h2 class="text-xl font-bold mb-4">腎功能 / Carboplatin</h2>
-          <div class="grid grid-cols-2 gap-3">
-            <label class="block text-sm">Scr mg/dL
-              <input id="scr" type="number" min="0.1" step="0.01" value="1.0" class="mt-1 w-full border rounded-lg p-2.5">
+          <div class="grid grid-cols-2 gap-3 min-w-0">
+            <label class="block text-sm min-w-0">Scr mg/dL
+              <input id="scr" type="number" min="0.1" step="0.01" value="1.0" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
             </label>
-            <label class="block text-sm">CG weight
-              <select id="cgWeight" class="mt-1 w-full border rounded-lg p-2.5">
+            <label class="block text-sm min-w-0">CG weight
+              <select id="cgWeight" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
                 <option value="actual">Actual BW</option>
                 <option value="ibw">IBW</option>
                 <option value="adjusted">Adjusted BW</option>
               </select>
             </label>
-            <label class="block text-sm col-span-2">Carboplatin renal input
-              <select id="renalSource" class="mt-1 w-full border rounded-lg p-2.5">
+            <label class="block text-sm col-span-2 min-w-0">Carboplatin renal input
+              <select id="renalSource" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
                 <option value="manual">Manual GFR / CrCl</option>
                 <option value="cg">Cockcroft-Gault CrCl</option>
                 <option value="ckd">CKD-EPI 2021 de-indexed</option>
               </select>
             </label>
-            <label id="manualGfrWrap" class="block text-sm col-span-2">Manual GFR / CrCl (mL/min)
-              <input id="manualGfr" type="number" min="0" step="0.1" value="80" class="mt-1 w-full border rounded-lg p-2.5">
+            <label id="manualGfrWrap" class="block text-sm col-span-2 min-w-0">Manual GFR / CrCl (mL/min)
+              <input id="manualGfr" type="number" min="0" step="0.1" value="80" class="mt-1 w-full min-w-0 border rounded-lg p-2.5">
             </label>
           </div>
-          <div id="renalResults" class="space-y-2 mt-4 text-sm"></div>
+          <div id="renalResults" class="space-y-2 mt-4 text-sm min-w-0"></div>
           <div class="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3 leading-relaxed">
             Calvert mode 只做公式運算；GFR / CrCl 的估算方法、是否 cap，以及 protocol-specific renal policy 請自行確認。預設不替你決定哪一個 renal estimate 應用於處方。
           </div>
         </section>
       </div>
 
-      <section class="bg-white rounded-2xl border shadow-sm p-4 md:p-5 min-w-0">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
+      <section class="bg-white rounded-2xl border shadow-sm p-4 md:p-5 min-w-0 dose-panel">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4 min-w-0">
+          <div class="min-w-0">
             <h2 class="text-xl font-bold">藥物劑量</h2>
             <p class="text-sm text-slate-500 mt-1">可同時放多個 regimen drugs；結果為每次給藥 dose。</p>
           </div>
-          <div class="flex gap-2">
+          <div class="flex flex-wrap gap-2">
             <button id="copySummary" type="button" class="px-3 py-2 rounded-lg border bg-white hover:bg-slate-50 text-sm font-semibold">複製摘要</button>
             <button id="addDrug" type="button" class="px-3 py-2 rounded-lg bg-blue-700 text-white hover:bg-blue-800 text-sm font-semibold">＋ 加藥</button>
           </div>
         </div>
 
-        <div class="hidden lg:grid grid-cols-[1.35fr_1fr_0.9fr_1.05fr_0.8fr_0.9fr_44px] gap-2 px-2 pb-2 text-xs font-semibold text-slate-500">
+        <div class="hidden xl:grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,1.05fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_44px] gap-2 px-2 pb-2 text-xs font-semibold text-slate-500 min-w-0">
           <div>藥物</div><div>計算法</div><div>標準劑量</div><div>Body-size basis</div><div>給藥 %</div><div>Max dose</div><div></div>
         </div>
-        <div id="drugRows" class="space-y-3"></div>
+        <div id="drugRows" class="space-y-3 min-w-0"></div>
 
-        <div class="mt-5 border-t pt-5">
+        <div class="mt-5 border-t pt-5 min-w-0">
           <h3 class="font-bold mb-3">結果摘要</h3>
-          <div id="doseResults" class="space-y-3"></div>
+          <div id="doseResults" class="space-y-3 min-w-0"></div>
         </div>
 
         <div class="mt-5 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm leading-relaxed text-blue-950">
-          <b>預設邏輯：</b>mg/m² 使用 actual-weight BSA；mg/kg 使用 actual BW。AdjBW / AdjBW-BSA 只有在你主動選擇時才套用。Dose reduction 先乘比例，再套 max dose，最後才做 rounding。
+          <b>預設邏輯：</b>mg/m² 預設使用 Mosteller actual-weight BSA；若切換為「直接輸入 BSA」，mg/m² 與相關 BSA-based 計算改用手動 BSA。mg/kg 仍使用 actual BW。AdjBW / AdjBW-BSA 只有在你主動選擇時才套用。Dose reduction 先乘比例，再套 max dose，最後才做 rounding。
         </div>
       </section>
     </div>
@@ -148,9 +169,12 @@ function ckdEpi2021(sex, age, scr){
 }
 function getPatient(){
   const sex = val('sex'), age = num('age'), h = num('height'), w = num('weight'), scr = num('scr');
+  const bsaMode = val('bsaMode');
+  const manualBSA = num('manualBsa');
+  const calculatedBSA = bsa(h, w);
+  const BSA = bsaMode === 'manual' ? manualBSA : calculatedBSA;
   const IBW = ibw(sex, h);
   const AdjBW = adjustedBw(w, IBW);
-  const BSA = bsa(h, w);
   const AdjBSA = bsa(h, AdjBW);
   const BMI = w / Math.pow(h/100, 2);
   const cgWeightChoice = val('cgWeight');
@@ -160,22 +184,28 @@ function getPatient(){
   const CKDde = CKD * BSA / 1.73;
   const renalSource = val('renalSource');
   const renal = renalSource === 'cg' ? CG : (renalSource === 'ckd' ? CKDde : num('manualGfr'));
-  return {sex, age, h, w, scr, IBW, AdjBW, BSA, AdjBSA, BMI, CG, CKD, CKDde, renal, renalSource};
+  return {sex, age, h, w, scr, bsaMode, manualBSA, calculatedBSA, IBW, AdjBW, BSA, AdjBSA, BMI, CG, CKD, CKDde, renal, renalSource};
 }
 
 function renderPatient(){
   const p = getPatient();
+  $('manualBsaWrap').classList.toggle('hidden', p.bsaMode !== 'manual');
+  const bsaLabel = p.bsaMode === 'manual' ? 'Dosing BSA（manual）' : 'Actual BSA（Mosteller）';
+  const calculatedBsaNote = p.bsaMode === 'manual'
+    ? `<div class="rounded-lg bg-blue-50 p-3 col-span-2 min-w-0"><div class="text-xs text-blue-700">Mosteller BSA（reference only）</div><div class="font-bold text-blue-950">${fmt(p.calculatedBSA,2)} m²</div></div>`
+    : '';
   $('bodyResults').innerHTML = `
-    <div class="rounded-lg bg-slate-100 p-3"><div class="text-xs text-slate-500">Actual BSA</div><div class="font-bold text-lg">${fmt(p.BSA,2)} m²</div></div>
-    <div class="rounded-lg bg-slate-100 p-3"><div class="text-xs text-slate-500">BMI</div><div class="font-bold text-lg">${fmt(p.BMI,1)}</div></div>
-    <div class="rounded-lg bg-slate-100 p-3"><div class="text-xs text-slate-500">IBW</div><div class="font-bold">${fmt(p.IBW,1)} kg</div></div>
-    <div class="rounded-lg bg-slate-100 p-3"><div class="text-xs text-slate-500">Adjusted BW</div><div class="font-bold">${fmt(p.AdjBW,1)} kg</div></div>
-    <div class="rounded-lg bg-amber-50 p-3 col-span-2"><div class="text-xs text-amber-700">AdjBW-based BSA（reference）</div><div class="font-bold text-amber-950">${fmt(p.AdjBSA,2)} m²</div></div>`;
+    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">${bsaLabel}</div><div class="font-bold text-lg">${fmt(p.BSA,2)} m²</div></div>
+    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">BMI</div><div class="font-bold text-lg">${fmt(p.BMI,1)}</div></div>
+    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">IBW</div><div class="font-bold">${fmt(p.IBW,1)} kg</div></div>
+    <div class="rounded-lg bg-slate-100 p-3 min-w-0"><div class="text-xs text-slate-500">Adjusted BW</div><div class="font-bold">${fmt(p.AdjBW,1)} kg</div></div>
+    <div class="rounded-lg bg-amber-50 p-3 col-span-2 min-w-0"><div class="text-xs text-amber-700">AdjBW-based BSA（reference）</div><div class="font-bold text-amber-950">${fmt(p.AdjBSA,2)} m²</div></div>
+    ${calculatedBsaNote}`;
   $('manualGfrWrap').classList.toggle('hidden', p.renalSource !== 'manual');
   $('renalResults').innerHTML = `
-    <div class="rounded-lg bg-slate-100 p-3"><b>Cockcroft-Gault CrCl</b> ${fmt(p.CG,1)} mL/min</div>
-    <div class="rounded-lg bg-slate-100 p-3"><b>CKD-EPI 2021</b> ${fmt(p.CKD,1)} mL/min/1.73m² · de-indexed ${fmt(p.CKDde,1)} mL/min</div>
-    <div class="rounded-lg bg-blue-50 p-3"><b>目前 Carboplatin renal input</b> ${fmt(p.renal,1)} mL/min</div>`;
+    <div class="rounded-lg bg-slate-100 p-3 break-words"><b>Cockcroft-Gault CrCl</b> ${fmt(p.CG,1)} mL/min</div>
+    <div class="rounded-lg bg-slate-100 p-3 break-words"><b>CKD-EPI 2021</b> ${fmt(p.CKD,1)} mL/min/1.73m² · de-indexed ${fmt(p.CKDde,1)} mL/min</div>
+    <div class="rounded-lg bg-blue-50 p-3 break-words"><b>目前 Carboplatin renal input</b> ${fmt(p.renal,1)} mL/min</div>`;
 }
 
 let drugSeq = 0;
@@ -227,25 +257,25 @@ function methodLabel(method){
 
 function renderDrugRows(){
   $('drugRows').innerHTML = drugRows.map(row => `
-    <div class="drug-row border rounded-xl p-3 lg:p-2 bg-slate-50" data-id="${row.id}">
-      <div class="grid lg:grid-cols-[1.35fr_1fr_0.9fr_1.05fr_0.8fr_0.9fr_44px] gap-2 items-end">
-        <label class="text-xs text-slate-500 lg:text-transparent">藥物<input data-field="name" value="${escapeHtml(row.name)}" placeholder="Drug name" class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
-        <label class="text-xs text-slate-500 lg:text-transparent">計算法<select data-field="method" class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900">
+    <div class="drug-row border rounded-xl p-3 xl:p-2 bg-slate-50 min-w-0" data-id="${row.id}">
+      <div class="dose-grid grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,1.05fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_44px] gap-2 items-end min-w-0">
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">藥物<input data-field="name" value="${escapeHtml(row.name)}" placeholder="Drug name" class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">計算法<select data-field="method" class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900">
           <option value="mgm2" ${row.method==='mgm2'?'selected':''}>mg/m²</option>
           <option value="mgkg" ${row.method==='mgkg'?'selected':''}>mg/kg</option>
           <option value="flat" ${row.method==='flat'?'selected':''}>Flat mg</option>
           <option value="auc" ${row.method==='auc'?'selected':''}>Carboplatin AUC</option>
         </select></label>
-        <label class="text-xs text-slate-500 lg:text-transparent">標準劑量<input data-field="standard" type="number" step="0.01" min="0" value="${row.standard}" placeholder="Dose" class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
-        <label class="text-xs text-slate-500 lg:text-transparent">Body-size basis<select data-field="basis" ${row.method==='flat'||row.method==='auc'?'disabled':''} class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900 disabled:bg-slate-100">${bodyBasisOptions(row.method,row.basis)}</select></label>
-        <label class="text-xs text-slate-500 lg:text-transparent">給藥 %<input data-field="percent" type="number" step="1" min="0" max="200" value="${row.percent}" class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
-        <label class="text-xs text-slate-500 lg:text-transparent">Max dose<input data-field="maxDose" type="number" step="0.1" min="0" value="${row.maxDose}" placeholder="optional" class="mt-1 w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
-        <button type="button" data-remove="${row.id}" class="h-[42px] rounded-lg border bg-white text-slate-500 hover:text-red-700 hover:border-red-300">×</button>
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">標準劑量<input data-field="standard" type="number" step="0.01" min="0" value="${row.standard}" placeholder="Dose" class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">Body-size basis<select data-field="basis" ${row.method==='flat'||row.method==='auc'?'disabled':''} class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900 disabled:bg-slate-100">${bodyBasisOptions(row.method,row.basis)}</select></label>
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">給藥 %<input data-field="percent" type="number" step="1" min="0" max="200" value="${row.percent}" class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
+        <label class="min-w-0 text-xs text-slate-500 xl:text-transparent">Max dose<input data-field="maxDose" type="number" step="0.1" min="0" value="${row.maxDose}" placeholder="optional" class="mt-1 w-full min-w-0 max-w-full border bg-white rounded-lg p-2.5 text-sm text-slate-900"></label>
+        <button type="button" data-remove="${row.id}" class="sm:col-span-2 lg:col-span-3 xl:col-span-1 h-[42px] rounded-lg border bg-white text-slate-500 hover:text-red-700 hover:border-red-300">×</button>
       </div>
-      <div class="mt-2 flex flex-wrap gap-2 items-center text-xs">
+      <div class="mt-2 flex flex-wrap gap-2 items-center text-xs min-w-0">
         <span class="text-slate-500">Rounding:</span>
         ${[['none','不取整'],['1','1 mg'],['5','5 mg'],['10','10 mg'],['25','25 mg'],['50','50 mg']].map(([v,t]) => `<button type="button" data-rounding="${v}" class="px-2 py-1 rounded border ${row.rounding===v?'bg-slate-800 text-white border-slate-800':'bg-white text-slate-600'}">${t}</button>`).join('')}
-        <span class="ml-auto text-slate-400">${methodLabel(row.method)}${row.method==='auc'?' · AUC × (GFR+25)':''}</span>
+        <span class="w-full sm:w-auto sm:ml-auto text-slate-400 break-words">${methodLabel(row.method)}${row.method==='auc'?' · AUC × (GFR+25)':''}</span>
       </div>
     </div>`).join('');
 
@@ -303,18 +333,18 @@ function renderDoseResults(){
   const html = drugRows.map((row,index) => {
     const c = calculateDrug(row,p);
     const name = escapeHtml(row.name || `Drug ${index+1}`);
-    if (!finite(c.final) || !row.standard) return `<div class="rounded-xl border border-dashed p-4 text-slate-400"><b>${name}</b>：請輸入標準劑量</div>`;
+    if (!finite(c.final) || !row.standard) return `<div class="rounded-xl border border-dashed p-4 text-slate-400 min-w-0 break-words"><b>${name}</b>：請輸入標準劑量</div>`;
     const capText = finite(c.maxDose) && c.maxDose > 0 ? ` · max ${fmt(c.maxDose,1)} mg` : '';
     const roundingText = row.rounding === 'none' ? '' : ` · rounded to ${row.rounding} mg`;
-    return `<div class="rounded-xl border p-4">
-      <div class="flex flex-wrap justify-between gap-3 items-start">
-        <div><div class="font-bold text-lg">${name}</div><div class="text-xs text-slate-500 mt-1">${c.basisText} · ${fmt(c.pct*100,0)}%${capText}${roundingText}</div></div>
-        <div class="text-right"><div class="text-xs text-slate-500">Final dose</div><div class="text-2xl font-bold text-blue-800">${fmt(c.final,1)} mg</div></div>
+    return `<div class="rounded-xl border p-4 min-w-0">
+      <div class="flex flex-wrap justify-between gap-3 items-start min-w-0">
+        <div class="min-w-0 flex-1"><div class="font-bold text-lg break-words">${name}</div><div class="result-basis text-xs text-slate-500 mt-1">${c.basisText} · ${fmt(c.pct*100,0)}%${capText}${roundingText}</div></div>
+        <div class="text-right shrink-0"><div class="text-xs text-slate-500">Final dose</div><div class="text-2xl font-bold text-blue-800">${fmt(c.final,1)} mg</div></div>
       </div>
-      <div class="grid sm:grid-cols-3 gap-2 mt-3 text-sm">
-        <div class="bg-slate-50 rounded-lg p-2.5"><span class="text-slate-500">Full calculated</span><br><b>${fmt(c.full,1)} mg</b></div>
-        <div class="bg-slate-50 rounded-lg p-2.5"><span class="text-slate-500">Equivalent</span><br><b>${fmt(c.final/p.BSA,2)} mg/m²</b></div>
-        <div class="bg-slate-50 rounded-lg p-2.5"><span class="text-slate-500">Equivalent</span><br><b>${fmt(c.final/p.w,2)} mg/kg</b></div>
+      <div class="grid sm:grid-cols-3 gap-2 mt-3 text-sm min-w-0">
+        <div class="bg-slate-50 rounded-lg p-2.5 min-w-0"><span class="text-slate-500">Full calculated</span><br><b>${fmt(c.full,1)} mg</b></div>
+        <div class="bg-slate-50 rounded-lg p-2.5 min-w-0"><span class="text-slate-500">Equivalent</span><br><b>${fmt(c.final/p.BSA,2)} mg/m²</b></div>
+        <div class="bg-slate-50 rounded-lg p-2.5 min-w-0"><span class="text-slate-500">Equivalent</span><br><b>${fmt(c.final/p.w,2)} mg/kg</b></div>
       </div>
     </div>`;
   }).join('');
@@ -323,7 +353,10 @@ function renderDoseResults(){
 
 function summaryText(){
   const p = getPatient();
-  const lines = [`Height ${fmt(p.h,1)} cm / Weight ${fmt(p.w,1)} kg / BSA ${fmt(p.BSA,2)} m² / AdjBW ${fmt(p.AdjBW,1)} kg / AdjBW-BSA ${fmt(p.AdjBSA,2)} m²`];
+  const bodySummary = p.bsaMode === 'manual'
+    ? `BSA ${fmt(p.BSA,2)} m² (manual input)`
+    : `Height ${fmt(p.h,1)} cm / Weight ${fmt(p.w,1)} kg / BSA ${fmt(p.BSA,2)} m² / AdjBW ${fmt(p.AdjBW,1)} kg / AdjBW-BSA ${fmt(p.AdjBSA,2)} m²`;
+  const lines = [bodySummary];
   drugRows.forEach((row,index)=>{
     const c=calculateDrug(row,p); if(!finite(c.final)||!row.standard)return;
     lines.push(`${row.name||`Drug ${index+1}`}: ${methodLabel(row.method)} ${row.standard}, ${row.percent||0}% → ${fmt(c.final,1)} mg (=${fmt(c.final/p.BSA,2)} mg/m²; ${fmt(c.final/p.w,2)} mg/kg)`);
@@ -337,7 +370,7 @@ $('copySummary').addEventListener('click', async ()=>{
   catch(e){ window.prompt('複製以下內容：',summaryText()); }
 });
 
-['sex','age','height','weight','scr','cgWeight','renalSource','manualGfr'].forEach(id => {
+['bsaMode','manualBsa','sex','age','height','weight','scr','cgWeight','renalSource','manualGfr'].forEach(id => {
   $(id).addEventListener('input',()=>{renderPatient();renderDoseResults();});
   $(id).addEventListener('change',()=>{renderPatient();renderDoseResults();});
 });
