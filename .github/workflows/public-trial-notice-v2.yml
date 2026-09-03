@@ -33,12 +33,15 @@ jobs:
           data=json.loads(Path('public_trials.json').read_text(encoding='utf-8'))
           required=[
               "PUBLIC_NOTICE_SCHEMA_VERSION = 'public-trials-v2.0-20260904'",
-              'publicDisclosureApproved: false',
+              'publicDisclosureApproved: true',
+              'checked: form.publicDisclosureApproved !== false',
               '可刊登於民眾版臨床試驗資訊公告',
               'PUBLIC_TRIAL_ALLOWED_KEYS',
               'assertPublicDatasetSafe',
+              'normalizePublicStudyTitle',
+              'studyTitle: normalizePublicStudyTitle',
               'departments: getSuggestedPublicDepartments(trial)',
-              'trial.publicDisclosureApproved === true',
+              'trial.publicDisclosureApproved !== false',
           ]
           for x in required: assert x in idx, x
           for x in ['臨床試驗資訊公開查詢','建議就診科別','前往掛號','FORBIDDEN']:
