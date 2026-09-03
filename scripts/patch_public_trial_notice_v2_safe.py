@@ -11,8 +11,8 @@ spec.loader.exec_module(mod)
 mod.main()
 
 text = INDEX.read_text(encoding='utf-8')
-# re.sub replacement strings interpret backslash escapes. The base patcher intentionally
-# emits a JS regex containing \\n; normalize the one affected sequence back to a literal JS escape.
+# re.sub replacement strings interpret backslash escapes. Normalize the affected
+# JavaScript regex back to a literal \\n escape before syntax validation.
 bad = "split(/[、,，;/；\n]+/)"
 good = "split(/[、,，;/；\\n]+/)"
 if bad in text:
