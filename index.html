@@ -1012,8 +1012,19 @@ const assertPublicDatasetSafe = (payload) => {
     return payload;
 };
 
+const normalizePublicStudyTitle = (value) => {
+    const lines = String(value || '').replace(/\r/g, '\n').split(/\n+/).map(x => x.trim()).filter(Boolean);
+    const kept = [];
+    for (const line of lines) {
+        if (/(specific\s+)?inclusion\s+criteria|exclusion\s+criteria|主要納入條件|主要排除條件|納入條件|排除條件|請洽|聯絡|contact\s*:|line\s*id\s*:|\b(?:09\d{8}|0\d{1,2}-?\d{6,8})\b/i.test(line)) break;
+        if (/^\s*\d{1,2}[\/.-]\d{1,2}\s+(?:SIV|COV|PSV)\b/i.test(line)) continue;
+        kept.push(line);
+    }
+    return normalizePublicText((kept.length ? kept : lines.slice(0, 1)).join(' '));
+};
+
 const shouldPublishPublicTrial = (trial, publicStatus) => !!(
-    trial && trial.publicDisclosureApproved === true && !trial.isArchived && PUBLIC_VISIBLE_STATUSES.has(publicStatus)
+    trial && trial.publicDisclosureApproved !== false && !trial.isArchived && PUBLIC_VISIBLE_STATUSES.has(publicStatus)
 );
 
 const getPublicCancerTypes = (trial) => {
@@ -1038,7 +1049,7 @@ const buildPublicTrialsDataset = (sourceTrials) => {
             if (!shouldPublishPublicTrial(trial, publicStatus)) return null;
             return {
                 code: normalizeCode(trial.code),
-                studyTitle: normalizePublicText(trial.studyTitle || ''),
+                studyTitle: normalizePublicStudyTitle(trial.studyTitle || ''),
                 phase: normalizePublicText(trial.phase || ''),
                 publicStatus,
                 statusClass: getPublicStatusClass(publicStatus),
@@ -3085,7 +3096,7 @@ function TrialFormModal(props) {
         archiveReason: '',
         inclusion: '',
         exclusion: '',
-        publicDisclosureApproved: false,
+        publicDisclosureApproved: true,
         publicDepartments: ''
     });
     
@@ -3386,13 +3397,13 @@ function TrialFormModal(props) {
                         e('input', {
                             id: 'publicDisclosureApproved',
                             type: 'checkbox',
-                            checked: form.publicDisclosureApproved === true,
+                            checked: form.publicDisclosureApproved !== false,
                             onChange: (ev) => update('publicDisclosureApproved', ev.target.checked),
                             className: 'mt-1 h-4 w-4'
                         }),
                         e('label', {htmlFor: 'publicDisclosureApproved', className: 'text-sm text-sky-950'},
                             e('div', {className: 'font-bold'}, '可刊登於民眾版臨床試驗資訊公告'),
-                            e('div', {className: 'mt-1 text-xs leading-relaxed'}, '勾選代表已確認此案可公開；民眾版只輸出疾病/癌種、試驗名稱、Phase、治療線別、招募狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註永不輸出。')
+                            e('div', {className: 'mt-1 text-xs leading-relaxed'}, '預設可刊登；若個別案件因 Sponsor、合約或保密限制不宜公開，取消勾選即可。民眾版只輸出疾病/癌種、試驗名稱、Phase、治療線別、招募狀態、建議科別與掛號入口；Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註永不輸出。')
                         )
                     ),
                     e('label', {className: 'block text-sm font-semibold text-slate-700 mt-3 mb-1'}, '民眾版建議科別（選填）'),
@@ -3870,7 +3881,7 @@ function App() {
             alert('Firebase 尚未啟用，無法發布公開查詢資料。');
             return;
         }
-        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含疾病/癌種、試驗名稱、Phase、治療線別、目前狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註不會輸出。未勾選『可刊登於民眾版』或已停止/收滿的試驗不會發布。');
+        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含疾病/癌種、試驗名稱、Phase、治療線別、目前狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註不會輸出。取消『可刊登於民眾版』或已停止/收滿的試驗不會發布。');
         if (!ok) return;
         try {
             setSyncStatus('正在發布公開查詢資料...');
