@@ -1,0 +1,87 @@
+name: Publish clinical trial information notice v2
+
+on:
+  push:
+    paths:
+      - 'scripts/patch_public_trial_notice_v2.py'
+      - '.github/workflows/public-trial-notice-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply public notice v2 patch
+        run: python scripts/patch_public_trial_notice_v2.py
+
+      - name: Validate public schema and JavaScript
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          idx=Path('index.html').read_text(encoding='utf-8')
+          pub=Path('public-trials.html').read_text(encoding='utf-8')
+          data=json.loads(Path('public_trials.json').read_text(encoding='utf-8'))
+          required=[
+              "PUBLIC_NOTICE_SCHEMA_VERSION = 'public-trials-v2.0-20260904'",
+              'publicDisclosureApproved: false',
+              '可刊登於民眾版臨床試驗資訊公告',
+              'PUBLIC_TRIAL_ALLOWED_KEYS',
+              'assertPublicDatasetSafe',
+              'departments: getSuggestedPublicDepartments(trial)',
+              'trial.publicDisclosureApproved === true',
+          ]
+          for x in required: assert x in idx, x
+          for x in ['臨床試驗資訊公開查詢','建議就診科別','前往掛號','FORBIDDEN']:
+              assert x in pub, x
+          forbidden={'inclusion','exclusion','pi','subI','sub_i','investigator','publicPhysicians','nurse','crc','phone','email','lineId','comments','subjects','sponsor','targetNum','enrolled','monthSigned','monthEnrolled'}
+          assert data.get('schemaVersion')=='public-trials-v2.0-20260904'
+          for i,t in enumerate(data.get('trials',[])):
+              bad=forbidden.intersection(t.keys())
+              assert not bad,(i,bad)
+              assert set(t.keys()) <= {'code','studyTitle','phase','publicStatus','statusClass','cancerTypes','departments','registrationUrl','updatedAt'}, (i,t.keys())
+          # Public UI must never render legacy I/E or physician/contact fields.
+          for token in ['t.inclusion','t.exclusion','t.publicPhysicians','主要納入條件','主要排除條件','公開洽詢醫師']:
+              assert token not in pub, token
+          def inline_scripts(html):
+              return '\n'.join(body for attrs,body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>',html,flags=re.I) if 'src=' not in attrs.lower() and body.strip())
+          Path('/tmp/index-inline.js').write_text(inline_scripts(idx),encoding='utf-8')
+          Path('/tmp/public-inline.js').write_text(inline_scripts(pub),encoding='utf-8')
+          print('fallback trialCount',data.get('trialCount'))
+          PY
+          node --check /tmp/index-inline.js
+          node --check /tmp/public-inline.js
+
+      - name: Commit patched application to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html public-trials.html public_trials.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Use strict public notice schema for clinical trials"
+            git push origin main
+          fi
+          rm -rf /tmp/public-notice-release
+          mkdir -p /tmp/public-notice-release
+          cp index.html public-trials.html public_trials.json /tmp/public-notice-release/
+
+      - name: Publish to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/public-notice-release/index.html index.html
+          cp /tmp/public-notice-release/public-trials.html public-trials.html
+          cp /tmp/public-notice-release/public_trials.json public_trials.json
+          git add index.html public-trials.html public_trials.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish clinical trial information notice v2"
+            git push origin pages-clean-ajcc-v2-3
+          fi
