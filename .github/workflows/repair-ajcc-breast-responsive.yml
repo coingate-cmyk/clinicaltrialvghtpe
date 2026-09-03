@@ -1,0 +1,174 @@
+name: Repair AJCC breast staging and width
+
+on:
+  push:
+    paths:
+      - '.github/workflows/repair-ajcc-breast-responsive.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Restore Breast rules from audited merged reference and harden width
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv, io, re
+
+          # Find the best existing Breast rule source already retained in the repository.
+          candidates = [
+              'tools/staging_rules_7_working_reference_v1_8.csv',
+              'tools/staging_rules_8_working_reference_v1_8.csv',
+              'tools/staging_rules_all_ajcc7_8.csv',
+              'tools/staging_rules_all_review_with_source.csv',
+          ]
+
+          def read_rows(path):
+              with open(path, encoding='utf-8-sig', newline='') as f:
+                  return list(csv.DictReader(f))
+
+          sources = {}
+          for p in candidates:
+              if Path(p).exists():
+                  rows = read_rows(p)
+                  breast = [r for r in rows if (r.get('site') or '').strip() == 'Breast']
+                  if breast:
+                      sources[p] = breast
+                      print('SOURCE', p, 'BREAST', len(breast), 'HEADERS', list(rows[0].keys()))
+                      for r in breast[:8]: print(' ', r)
+
+          # Prefer edition-specific working references, which are the retained reviewed working set.
+          def choose(edition):
+              pref = f'tools/staging_rules_{7 if edition=="AJCC7" else 8}_working_reference_v1_8.csv'
+              rows = sources.get(pref, [])
+              if not rows:
+                  rows = sources.get('tools/staging_rules_all_review_with_source.csv', [])
+              if not rows:
+                  rows = sources.get('tools/staging_rules_all_ajcc7_8.csv', [])
+              out=[]
+              for r in rows:
+                  ed=(r.get('edition') or '').strip().upper().replace(' ','')
+                  if ed and ed != edition:
+                      continue
+                  # Exclude explicitly suspect/unverified automated rows when provenance columns exist.
+                  blob=' '.join(str(r.get(k,'')) for k in r.keys()).lower()
+                  if any(x in blob for x in ['do_not_deploy','generic_fallback','surrogate','suspect']):
+                      continue
+                  out.append(r)
+              return out
+
+          cols=['site','edition','classification','t','n','m','grade','location','stage','note']
+          for edition, target in [('AJCC7','tools/staging_rules_7.csv'),('AJCC8','tools/staging_rules_8.csv')]:
+              existing=read_rows(target)
+              existing=[r for r in existing if (r.get('site') or '').strip()!='Breast']
+              chosen=choose(edition)
+              normalized=[]
+              for r in chosen:
+                  row={c:(r.get(c,'') or '').strip() for c in cols}
+                  row['site']='Breast'
+                  row['edition']=edition
+                  row['classification']=row['classification'] or 'any'
+                  for c in ['t','n','m','grade','location']:
+                      row[c]=row[c] or 'Any'
+                  if not row['stage']: continue
+                  if not row['note']:
+                      row['note']=f'Breast {edition} anatomic TNM stage grouping restored from repository reviewed working reference.'
+                  normalized.append(row)
+              # deduplicate
+              seen=set(); unique=[]
+              for r in normalized:
+                  key=tuple(r[c] for c in cols[:-1])
+                  if key in seen: continue
+                  seen.add(key); unique.append(r)
+              print('RESTORE', edition, 'ROWS', len(unique))
+              if not unique:
+                  raise SystemExit(f'No safe Breast rows found for {edition}')
+              with open(target,'w',encoding='utf-8',newline='') as f:
+                  w=csv.DictWriter(f,fieldnames=cols); w.writeheader(); w.writerows(existing+unique)
+
+          # Patch the embedded single-file runtime from the canonical rule CSVs.
+          htmlp=Path('tools/quick-staging.html')
+          html=htmlp.read_text(encoding='utf-8')
+
+          # Responsive guard: prevent result cards / long definitions from widening the document.
+          style='''\n<style id="ajcc-responsive-hotfix-20260903">\nhtml,body{max-width:100%;overflow-x:hidden;}\nmain,section,.grid,.grid>*{min-width:0;max-width:100%;}\n#result,#siteNote,#classificationNote,#hint,#info{min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:break-word;}\npre,code,table{max-width:100%;}\npre{white-space:pre-wrap;overflow-wrap:anywhere;}\ntable{display:block;overflow-x:auto;}\nselect,input,textarea{max-width:100%;min-width:0;}\n</style>\n'''
+          if 'ajcc-responsive-hotfix-20260903' not in html:
+              html=html.replace('</head>',style+'</head>',1)
+
+          # Replace embedded staticRules array using current canonical 7/8 CSVs.
+          allrows=[]
+          for target in ['tools/staging_rules_7.csv','tools/staging_rules_8.csv']:
+              allrows.extend(read_rows(target))
+          import json
+          payload=json.dumps(allrows,ensure_ascii=False,separators=(',',':'))
+          patterns=[
+              r'const staticRules\s*=\s*\[[\s\S]*?\];',
+              r'let staticRules\s*=\s*\[[\s\S]*?\];',
+          ]
+          replaced=False
+          for pat in patterns:
+              if re.search(pat,html):
+                  html=re.sub(pat,'const staticRules='+payload+';',html,count=1)
+                  replaced=True; break
+          if not replaced:
+              raise SystemExit('Could not locate embedded staticRules array')
+          htmlp.write_text(html,encoding='utf-8')
+          PY
+
+      - name: Breast regression and syntax validation
+        run: |
+          python - <<'PY'
+          import csv,re,json
+          from pathlib import Path
+          for fn in ['tools/staging_rules_7.csv','tools/staging_rules_8.csv']:
+              rows=list(csv.DictReader(open(fn,encoding='utf-8-sig')))
+              br=[r for r in rows if r['site']=='Breast']
+              print(fn,'Breast rows',len(br))
+              assert len(br)>0
+              assert any(r['m']=='M1' and str(r['stage']).upper().startswith('IV') for r in br), 'Breast M1->IV missing'
+              assert any(r['t'] in ('Tis','Tis (DCIS)') and r['n']=='N0' and r['m']=='M0' and str(r['stage']).startswith('0') for r in br), 'Breast Tis N0 M0 stage 0 missing'
+              # Common anatomic sentinel: T1 N0 M0 should be stage I/IA in both editions.
+              hits=[r for r in br if r['t'] in ('T1','T1mi|T1a|T1b|T1c') and r['n']=='N0' and r['m']=='M0']
+              assert hits, 'Breast T1 N0 M0 missing'
+              print('T1N0M0',[(r['edition'],r['classification'],r['stage']) for r in hits])
+          h=Path('tools/quick-staging.html').read_text(encoding='utf-8')
+          assert 'ajcc-responsive-hotfix-20260903' in h
+          assert h.count('"site":"Breast"')>0
+          # Extract inline scripts for JS syntax check.
+          scripts=[]
+          for attrs,body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>',h,flags=re.I):
+              if 'src=' not in attrs.lower() and body.strip(): scripts.append(body)
+          Path('/tmp/ajcc.js').write_text('\n'.join(scripts),encoding='utf-8')
+          PY
+          node --check /tmp/ajcc.js
+
+      - name: Commit repair to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/staging_rules_7.csv tools/staging_rules_8.csv tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Restore Breast staging and fix AJCC responsive width"
+            git push origin main
+          fi
+          cp tools/quick-staging.html /tmp/quick-staging.html
+
+      - name: Publish AJCC tool to live Pages branch
+        run: |
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools
+          cp /tmp/quick-staging.html tools/quick-staging.html
+          git add tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Breast staging and AJCC width fix"
+            git push origin pages-clean-ajcc-v2-3
+          fi
