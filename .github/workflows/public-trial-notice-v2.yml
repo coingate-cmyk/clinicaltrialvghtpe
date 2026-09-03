@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scripts/patch_public_trial_notice_v2.py'
+      - 'scripts/patch_public_trial_notice_v2_safe.py'
       - '.github/workflows/public-trial-notice-v2.yml'
   workflow_dispatch:
 
@@ -20,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Apply public notice v2 patch
-        run: python scripts/patch_public_trial_notice_v2.py
+        run: python scripts/patch_public_trial_notice_v2_safe.py
 
       - name: Validate public schema and JavaScript
         run: |
@@ -48,7 +49,6 @@ jobs:
               bad=forbidden.intersection(t.keys())
               assert not bad,(i,bad)
               assert set(t.keys()) <= {'code','studyTitle','phase','publicStatus','statusClass','cancerTypes','departments','registrationUrl','updatedAt'}, (i,t.keys())
-          # Public UI must never render legacy I/E or physician/contact fields.
           for token in ['t.inclusion','t.exclusion','t.publicPhysicians','主要納入條件','主要排除條件','公開洽詢醫師']:
               assert token not in pub, token
           def inline_scripts(html):
