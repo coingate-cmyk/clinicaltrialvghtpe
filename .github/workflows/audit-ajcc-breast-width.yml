@@ -1,0 +1,39 @@
+name: Audit AJCC breast and width
+
+on:
+  push:
+    paths:
+      - '.github/workflows/audit-ajcc-breast-width.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Audit Breast rows and layout hazards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,re
+          for fn in ['tools/staging_rules_7.csv','tools/staging_rules_8.csv']:
+              rows=list(csv.DictReader(open(fn,encoding='utf-8-sig')))
+              br=[r for r in rows if r.get('site')=='Breast']
+              print('\nFILE',fn,'BREAST ROWS',len(br))
+              for r in br[:80]:
+                  print(r)
+          html=Path('tools/quick-staging.html').read_text(encoding='utf-8')
+          print('\nHTML SIZE',len(html))
+          for token in ['min-w-','w-screen','100vw','whitespace-nowrap','overflow-x','grid-cols-','table','pre']:
+              print(token, html.count(token))
+          # Extract embedded breast rule appearances and key matcher code context.
+          print('embedded Breast count', html.count('Breast'))
+          for pattern in ['function lookup','function match','function rule','function stage','function choose']:
+              pos=html.find(pattern)
+              if pos>=0:
+                  print('\nCONTEXT',pattern,'\n',html[pos:pos+5000])
+          PY
