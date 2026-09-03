@@ -972,40 +972,49 @@ const normalizePublicText = (value) => stripPrivatePublicText(String(value || ''
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n'));
 
-const getPublicPhysicians = (trial) => {
-    const haystack = normalizeFilterValue([trial && trial.pi, trial && trial.studyTitle].filter(Boolean).join(' '));
-    const found = [];
-    if (haystack.includes(normalizeFilterValue('洪逸平')) || haystack.includes('yipinghung') || haystack.includes('yiphung')) found.push('洪逸平醫師');
-    if (haystack.includes(normalizeFilterValue('陳明晃')) || haystack.includes('minghuangchen')) found.push('陳明晃醫師');
-    if (haystack.includes(normalizeFilterValue('姜乃榕')) || haystack.includes('naijungchiang') || haystack.includes('nai-jungchiang')) found.push('姜乃榕醫師');
-    return found.length ? found : [...PUBLIC_TRIAL_CONTACT_PHYSICIANS];
+const PUBLIC_NOTICE_SCHEMA_VERSION = 'public-trials-v2.0-20260904';
+const PUBLIC_DEFAULT_REGISTRATION_URL = 'https://www6.vghtpe.gov.tw/reg/';
+const PUBLIC_VISIBLE_STATUSES = new Set(['收案中','需問名額','暫停收案','尚未開放','預備中']);
+const PUBLIC_FORBIDDEN_KEYS = new Set(['inclusion','exclusion','pi','subI','sub_i','investigator','publicPhysicians','nurse','crc','phone','email','lineId','comments','subjects','sponsor','targetNum','enrolled','monthSigned','monthEnrolled']);
+const PUBLIC_TRIAL_ALLOWED_KEYS = new Set(['code','studyTitle','phase','publicStatus','statusClass','cancerTypes','departments','registrationUrl','updatedAt']);
+
+const normalizeDepartmentList = (value) => {
+    const raw = Array.isArray(value) ? value : String(value || '').split(/[、,，;/；\n]+/);
+    return [...new Set(raw.map(normalizePublicText).filter(Boolean))];
 };
 
-const getPublicTrialStatusLabel = (trial) => {
-    if (!trial) return '狀態未明';
-    if (trial.isArchived) return '已封存';
-    const status = normalizeText(trial.status || '');
-    if (statusIncludesAny(status, ['需問slot', '需問 slot', '需問名額'])) return '需問名額';
-    if (statusIncludesAny(status, ['暫停收案', 'paused', 'suspended'])) return '暫停收案';
-    if (statusIncludesAny(status, ['名額已滿', '已收滿', '滿額', '收滿', '沒有slot', '暫無slot', 'no slot', 'full'])) return '名額已滿';
-    if (statusIncludesAny(status, ['停止收案', '試驗結束', '試驗終了', '結束收案', '收案結束', 'closed', 'terminated', 'completed', 'closeout'])) return '停止收案';
-    if (statusIncludesAny(status, ['還未siv', '未siv'])) return '尚未開放';
-    if (statusIncludesAny(status, ['預備中'])) return '預備中';
-    if (isExplicitOpenStatusText(status) || trialHasOpenEnrollment(trial)) return '收案中';
-    if (isTrialNumericallyFull(trial)) return '名額已滿';
-    return status || '狀態未明';
+const getSuggestedPublicDepartments = (trial) => {
+    const explicit = normalizeDepartmentList(trial && trial.publicDepartments);
+    if (explicit.length) return explicit;
+    const cancerTypes = getPublicCancerTypes(trial || []);
+    const haystack = cancerTypes.map(ct => ct.type).join(' ').toLowerCase();
+    const out = [];
+    const add = (x) => { if (x && !out.includes(x)) out.push(x); };
+    if (/乳|breast/i.test(haystack)) { add('乳房外科'); add('腫瘤醫學部'); }
+    if (/肺|lung|胸膜|mesothelioma/i.test(haystack)) { add('胸腔部'); add('腫瘤醫學部'); }
+    if (/攝護|前列腺|prostate|泌尿|膀胱|bladder|尿路|urothel|腎癌|kidney|renal|睪丸|testis|陰莖|penis/i.test(haystack)) { add('泌尿部'); add('腫瘤醫學部'); }
+    if (/胃|食道|胰|膽|肝|大腸|結腸|直腸|腸癌|gastric|stomach|esoph|pancre|biliary|cholangi|hcc|liver|colon|rect|gastro/i.test(haystack)) { add('腫瘤醫學部'); add('胃腸肝膽科'); }
+    if (/頭頸|口腔|鼻咽|咽|喉|salivary|orophary|nasophary|laryn/i.test(haystack)) { add('耳鼻喉頭頸部'); add('腫瘤醫學部'); }
+    if (/子宮|卵巢|婦|cervix|uter|ovary|vulva|vagina/i.test(haystack)) { add('婦女醫學部'); add('腫瘤醫學部'); }
+    if (/淋巴|白血|骨髓|myeloma|lymph|leuk|mds|mpn/i.test(haystack)) add('血液科');
+    if (!out.length) add('相關專科門診');
+    return out;
 };
 
-const getPublicStatusClass = (label) => {
-    const n = normalizeFilterValue(label);
-    if (n.includes('收案中')) return 'open';
-    if (n.includes('需問')) return 'ask';
-    if (n.includes('暫停')) return 'paused';
-    if (n.includes('滿')) return 'full';
-    if (n.includes('停止') || n.includes('結束') || n.includes('終了')) return 'closed';
-    if (n.includes('尚未') || n.includes('預備')) return 'preparing';
-    return 'unknown';
+const assertPublicDatasetSafe = (payload) => {
+    const trials = Array.isArray(payload && payload.trials) ? payload.trials : [];
+    trials.forEach((trial, index) => {
+        Object.keys(trial || {}).forEach(key => {
+            if (PUBLIC_FORBIDDEN_KEYS.has(key)) throw new Error(`公開資料安全檢查失敗：trial[${index}] 禁止欄位 ${key}`);
+            if (!PUBLIC_TRIAL_ALLOWED_KEYS.has(key)) throw new Error(`公開資料 schema 檢查失敗：trial[${index}] 未核准欄位 ${key}`);
+        });
+    });
+    return payload;
 };
+
+const shouldPublishPublicTrial = (trial, publicStatus) => !!(
+    trial && trial.publicDisclosureApproved === true && !trial.isArchived && PUBLIC_VISIBLE_STATUSES.has(publicStatus)
+);
 
 const getPublicCancerTypes = (trial) => {
     const cancerTypes = Array.isArray(trial && trial.cancerTypes) && trial.cancerTypes.length
@@ -1023,41 +1032,34 @@ const getPublicCancerTypes = (trial) => {
 const buildPublicTrialsDataset = (sourceTrials) => {
     const cleanTrials = sanitizeTrialListForRuntime(Array.isArray(sourceTrials) ? sourceTrials : []);
     const trials = cleanTrials
-        .filter(trial => trial && trial.code && !trial.isArchived)
+        .filter(trial => trial && trial.code)
         .map(trial => {
             const publicStatus = getPublicTrialStatusLabel(trial);
+            if (!shouldPublishPublicTrial(trial, publicStatus)) return null;
             return {
                 code: normalizeCode(trial.code),
                 studyTitle: normalizePublicText(trial.studyTitle || ''),
                 phase: normalizePublicText(trial.phase || ''),
                 publicStatus,
                 statusClass: getPublicStatusClass(publicStatus),
-                publicPhysicians: getPublicPhysicians(trial),
                 cancerTypes: getPublicCancerTypes(trial),
-                inclusion: normalizePublicText(trial.inclusion || ''),
-                exclusion: normalizePublicText(trial.exclusion || ''),
-                isOpenEnrollment: publicStatus === '收案中',
+                departments: getSuggestedPublicDepartments(trial),
+                registrationUrl: PUBLIC_DEFAULT_REGISTRATION_URL,
                 updatedAt: normalizePublicText(trial.updatedAt || trial.updated_at || '')
             };
         })
-        .sort((a, b) => {
-            const ac = a.cancerTypes && a.cancerTypes[0] ? getCancerRank(a.cancerTypes[0].type) : 999;
-            const bc = b.cancerTypes && b.cancerTypes[0] ? getCancerRank(b.cancerTypes[0].type) : 999;
-            if (ac !== bc) return ac - bc;
-            return normalizeCode(a.code).localeCompare(normalizeCode(b.code));
-        });
-    return {
-        schemaVersion: PUBLIC_TRIALS_SCHEMA_VERSION,
+        .filter(Boolean);
+    return assertPublicDatasetSafe({
+        schemaVersion: PUBLIC_NOTICE_SCHEMA_VERSION,
         generatedAt: new Date().toISOString(),
-        source: 'clinicaltrialvghtpe sanitized public dataset',
-        privacyLevel: 'sanitized-public',
-        publicPhysicianPolicy: 'Public page displays only 洪逸平醫師、陳明晃醫師、姜乃榕醫師.',
-        appointmentLinks: { ...PUBLIC_APPOINTMENT_LINKS },
-        disclaimer: '本頁僅供臨床試驗資訊查詢。實際收案狀態、納入/排除條件、名額與是否適合參加，仍以門診醫師評估、試驗團隊確認與 IRB 核准版本為準。',
-        contactPhysicians: [...PUBLIC_TRIAL_CONTACT_PHYSICIANS],
+        source: 'Taipei Veterans General Hospital internal clinical trial management system public notice projection',
+        privacyLevel: 'strict-public-allowlist',
+        noticeType: 'clinical-trial-information-notice',
+        appointmentLinks: { registration: PUBLIC_DEFAULT_REGISTRATION_URL },
+        disclaimer: '本頁為臺北榮民總醫院臨床試驗資訊公告與查詢。內容供民眾了解目前可公開之臨床試驗資訊；不提供納入或排除條件、主持人或研究團隊聯絡資訊。若對特定試驗有興趣，請至建議科別門診掛號，由臨床醫師進一步評估。',
         trialCount: trials.length,
         trials
-    };
+    });
 };
 
 const publishPublicTrialsToFirestore = async (firebaseConfig, sourceTrials) => {
@@ -3082,7 +3084,9 @@ function TrialFormModal(props) {
         archiveDate: '',
         archiveReason: '',
         inclusion: '',
-        exclusion: ''
+        exclusion: '',
+        publicDisclosureApproved: false,
+        publicDepartments: ''
     });
     
     const [cancerLines, setCancerLines] = useState(() => {
@@ -3375,6 +3379,29 @@ function TrialFormModal(props) {
                         rows: 2,
                         placeholder: '請輸入排除條件...',
                         className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
+                    })
+                ),
+                e('div', {className: 'sm:col-span-2 rounded-xl border border-sky-200 bg-sky-50 p-4'},
+                    e('div', {className: 'flex items-start gap-3'},
+                        e('input', {
+                            id: 'publicDisclosureApproved',
+                            type: 'checkbox',
+                            checked: form.publicDisclosureApproved === true,
+                            onChange: (ev) => update('publicDisclosureApproved', ev.target.checked),
+                            className: 'mt-1 h-4 w-4'
+                        }),
+                        e('label', {htmlFor: 'publicDisclosureApproved', className: 'text-sm text-sky-950'},
+                            e('div', {className: 'font-bold'}, '可刊登於民眾版臨床試驗資訊公告'),
+                            e('div', {className: 'mt-1 text-xs leading-relaxed'}, '勾選代表已確認此案可公開；民眾版只輸出疾病/癌種、試驗名稱、Phase、治療線別、招募狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註永不輸出。')
+                        )
+                    ),
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mt-3 mb-1'}, '民眾版建議科別（選填）'),
+                    e('input', {
+                        type: 'text',
+                        value: form.publicDepartments || '',
+                        onChange: (ev) => update('publicDepartments', ev.target.value),
+                        placeholder: '例如：腫瘤醫學部、胸腔部；留空則依癌種自動建議',
+                        className: 'w-full px-3 py-2 border-2 border-sky-200 rounded-lg bg-white focus:border-sky-500 focus:outline-none'
                     })
                 ),
                 e('div', null,
@@ -3843,7 +3870,7 @@ function App() {
             alert('Firebase 尚未啟用，無法發布公開查詢資料。');
             return;
         }
-        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含癌種、線別、收案狀態、納入/排除條件與公開洽詢醫師，不包含研究護理師、電話、LINE、受試者或內部備註。');
+        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含疾病/癌種、試驗名稱、Phase、治療線別、目前狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註不會輸出。未勾選『可刊登於民眾版』或已停止/收滿的試驗不會發布。');
         if (!ok) return;
         try {
             setSyncStatus('正在發布公開查詢資料...');
@@ -4260,12 +4287,12 @@ function App() {
                 ),
                 isAdmin && e('button', {
                     onClick: handlePublishPublicTrials,
-                    title: '將目前內部資料轉成去識別化公開版並發布到 Firestore public/clinical-trials',
+                    title: '依民眾版白名單 schema 發布到 Firestore public/clinical-trials；不輸出 I/E、PI/Sub-I、CRC 或聯絡資訊',
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg font-semibold'
                 }, '發布公開查詢'),
                 isAdmin && e('button', {
                     onClick: handleExportPublicTrialsJSON,
-                    title: '下載去識別化公開版 public_trials.json；不含研究護理師、電話、LINE、受試者或內部備註',
+                    title: '下載民眾版白名單 public_trials.json；不含 I/E、PI/Sub-I、CRC、電話、Email 或內部備註',
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-lime-500 to-green-600 text-white rounded-xl hover:from-lime-600 hover:to-green-700 transition-all shadow-lg font-semibold'
                 }, '下載公開JSON'),
                 isAdmin && e('button', {
