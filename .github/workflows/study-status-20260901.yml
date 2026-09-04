@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/patch_study_status_20260901.py'
+      - 'scripts/patch_study_status_20260901_runtime_merge.py'
       - '.github/workflows/study-status-20260901.yml'
 
 permissions:
@@ -22,7 +23,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Apply 2026-09-01 Study Status
-        run: python scripts/patch_study_status_20260901.py
+        run: |
+          python scripts/patch_study_status_20260901.py
+          python scripts/patch_study_status_20260901_runtime_merge.py
 
       - name: Validate latest Study Status and JavaScript
         run: |
@@ -39,7 +42,11 @@ jobs:
 
           if (!html.includes("STUDY_STATUS_SNAPSHOT_VERSION_20260901 = 'v4.3.6-20260901-study-status-pdf'")) throw new Error('2026-09-01 snapshot version missing');
           if (!html.includes('t = applyStudyStatusSnapshot20260822(t);\n    t = applyStudyStatusSnapshot20260901(t);')) throw new Error('Latest snapshot is not applied after 2026-08-22 baseline');
-          const snapshotMatch = html.match(/const STUDY_STATUS_SNAPSHOT_20260901 = (\{[\s\S]*?\});\nconst applyStudyStatusSnapshot20260901/);
+          if (!html.includes('const STUDY_STATUS_NEW_TRIALS_20260901')) throw new Error('Latest new-trial runtime additions missing');
+          if (!html.includes('const ensureStudyStatusAdditions20260901')) throw new Error('Older Firestore runtime merge guard missing');
+          if (!html.includes('sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20260901(list)')) throw new Error('Runtime list does not merge new 2026-09-01 studies');
+
+          const snapshotMatch = html.match(/const STUDY_STATUS_SNAPSHOT_20260901 = (\{[\s\S]*?\});\nconst STUDY_STATUS_NEW_TRIALS_20260901/);
           if (!snapshotMatch) throw new Error('Cannot locate 2026-09-01 snapshot');
           const snapshot = JSON.parse(snapshotMatch[1]);
           if (Object.keys(snapshot).length !== 45) throw new Error(`Expected 45 Study Status rows, got ${Object.keys(snapshot).length}`);
@@ -63,7 +70,7 @@ jobs:
             if (String(xl.line || '') !== '') throw new Error('XL092-311 treatment line must remain unassigned because source does not specify it');
             if (xl.studyStatusSnapshotDate !== '2026-09-01') throw new Error('XL092-311 snapshot date mismatch');
           }
-          console.log(`Study Status 2026-09-01 validated: ${Object.keys(snapshot).length} rows; ${seeds.length} internal trials.`);
+          console.log(`Study Status 2026-09-01 validated: ${Object.keys(snapshot).length} rows; ${seeds.length} internal trials; Firestore merge guard present.`);
           NODE
 
       - name: Commit updated status data to main
