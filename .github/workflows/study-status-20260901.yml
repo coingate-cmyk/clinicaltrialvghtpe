@@ -1,0 +1,92 @@
+name: Apply Study Status 2026-09-01
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/patch_study_status_20260901.py'
+      - '.github/workflows/study-status-20260901.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply 2026-09-01 Study Status
+        run: python scripts/patch_study_status_20260901.py
+
+      - name: Validate latest Study Status and JavaScript
+        run: |
+          set -euo pipefail
+          python -m json.tool data.json >/dev/null
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const html = fs.readFileSync('index.html','utf8');
+          const data = JSON.parse(fs.readFileSync('data.json','utf8'));
+          const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
+            .map(m => m[1]).filter(s => s.trim());
+          scripts.forEach((script,i) => new vm.Script(script,{filename:`inline-${i}.js`}));
+
+          if (!html.includes("STUDY_STATUS_SNAPSHOT_VERSION_20260901 = 'v4.3.6-20260901-study-status-pdf'")) throw new Error('2026-09-01 snapshot version missing');
+          if (!html.includes('t = applyStudyStatusSnapshot20260822(t);\n    t = applyStudyStatusSnapshot20260901(t);')) throw new Error('Latest snapshot is not applied after 2026-08-22 baseline');
+          const snapshotMatch = html.match(/const STUDY_STATUS_SNAPSHOT_20260901 = (\{[\s\S]*?\});\nconst applyStudyStatusSnapshot20260901/);
+          if (!snapshotMatch) throw new Error('Cannot locate 2026-09-01 snapshot');
+          const snapshot = JSON.parse(snapshotMatch[1]);
+          if (Object.keys(snapshot).length !== 45) throw new Error(`Expected 45 Study Status rows, got ${Object.keys(snapshot).length}`);
+
+          const seedMatch = html.match(/const INITIAL_TRIALS = (\[[\s\S]*?\]);\n\nfunction AccessPasswordModal/);
+          if (!seedMatch) throw new Error('Cannot locate INITIAL_TRIALS');
+          const seeds = JSON.parse(seedMatch[1]);
+          const byCode = arr => Object.fromEntries(arr.map(t => [String(t.code||'').toUpperCase(), t]));
+          const s = byCode(seeds), d = byCode(data.trials || []);
+          for (const source of [s,d]) {
+            const rmc = source['RMC-6236-303'];
+            if (!rmc) throw new Error('RMC-6236-303 missing');
+            if (String(rmc.targetNum) !== '15' || rmc.status !== '進行中') throw new Error('RMC-6236-303 status/count mismatch');
+            if (rmc.cancerType !== '胰臟癌' || rmc.line !== '一線') throw new Error('RMC-6236-303 pancreatic first-line mapping mismatch');
+            if (rmc.studyStatusSnapshotDate !== '2026-09-01') throw new Error('RMC-6236-303 snapshot date mismatch');
+
+            const xl = source['XL092-311'];
+            if (!xl) throw new Error('XL092-311 missing');
+            if (String(xl.targetNum) !== '3' || xl.status !== '進行中') throw new Error('XL092-311 status/count mismatch');
+            if (xl.cancerType !== '神經內分泌腫瘤') throw new Error('XL092-311 disease mapping mismatch');
+            if (String(xl.line || '') !== '') throw new Error('XL092-311 treatment line must remain unassigned because source does not specify it');
+            if (xl.studyStatusSnapshotDate !== '2026-09-01') throw new Error('XL092-311 snapshot date mismatch');
+          }
+          console.log(`Study Status 2026-09-01 validated: ${Object.keys(snapshot).length} rows; ${seeds.length} internal trials.`);
+          NODE
+
+      - name: Commit updated status data to main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html data.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update clinical trial Study Status to 2026-09-01"
+            git push origin main
+          fi
+          cp index.html /tmp/study-status-20260901-index.html
+
+      - name: Publish updated clinical trial system to Pages
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          cp /tmp/study-status-20260901-index.html index.html
+          cp /tmp/study-status-20260901-index.html 404.html
+          git add index.html 404.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Study Status 2026-09-01"
+            git push origin pages-clean-ajcc-v2-3
+          fi
