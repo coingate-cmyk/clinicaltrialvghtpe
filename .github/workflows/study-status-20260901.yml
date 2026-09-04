@@ -7,6 +7,7 @@ on:
     paths:
       - 'scripts/patch_study_status_20260901.py'
       - 'scripts/patch_study_status_20260901_runtime_merge.py'
+      - 'scripts/patch_homepage_qr.py'
       - '.github/workflows/study-status-20260901.yml'
 
 permissions:
@@ -22,12 +23,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Apply 2026-09-01 Study Status
+      - name: Install QR generator
+        run: python -m pip install --quiet qrcode
+
+      - name: Apply 2026-09-01 Study Status and homepage QR
         run: |
           python scripts/patch_study_status_20260901.py
           python scripts/patch_study_status_20260901_runtime_merge.py
+          python scripts/patch_homepage_qr.py
 
-      - name: Validate latest Study Status and JavaScript
+      - name: Validate latest Study Status, homepage QR and JavaScript
         run: |
           set -euo pipefail
           python -m json.tool data.json >/dev/null
@@ -45,6 +50,11 @@ jobs:
           if (!html.includes('const STUDY_STATUS_NEW_TRIALS_20260901')) throw new Error('Latest new-trial runtime additions missing');
           if (!html.includes('const ensureStudyStatusAdditions20260901')) throw new Error('Older Firestore runtime merge guard missing');
           if (!html.includes('sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20260901(list)')) throw new Error('Runtime list does not merge new 2026-09-01 studies');
+
+          if (!html.includes('homepage-qr-20260904')) throw new Error('Homepage QR marker missing');
+          if (!html.includes('https://coingate-cmyk.github.io/clinicaltrialvghtpe/')) throw new Error('Homepage QR target URL missing');
+          if (!html.includes('data:image/svg+xml;base64,')) throw new Error('Inline QR SVG missing');
+          if (!html.includes('手機掃描開啟系統')) throw new Error('Homepage QR label missing');
 
           const snapshotMatch = html.match(/const STUDY_STATUS_SNAPSHOT_20260901 = (\{[\s\S]*?\});\nconst STUDY_STATUS_NEW_TRIALS_20260901/);
           if (!snapshotMatch) throw new Error('Cannot locate 2026-09-01 snapshot');
@@ -70,17 +80,17 @@ jobs:
             if (String(xl.line || '') !== '') throw new Error('XL092-311 treatment line must remain unassigned because source does not specify it');
             if (xl.studyStatusSnapshotDate !== '2026-09-01') throw new Error('XL092-311 snapshot date mismatch');
           }
-          console.log(`Study Status 2026-09-01 validated: ${Object.keys(snapshot).length} rows; ${seeds.length} internal trials; Firestore merge guard present.`);
+          console.log(`Study Status + homepage QR validated; ${Object.keys(snapshot).length} status rows; ${seeds.length} internal trials.`);
           NODE
 
-      - name: Commit updated status data to main
+      - name: Commit updated app to main
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html data.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update clinical trial Study Status to 2026-09-01"
+            git commit -m "Update Study Status and homepage QR"
             git push origin main
           fi
           cp index.html /tmp/study-status-20260901-index.html
@@ -94,6 +104,6 @@ jobs:
           cp /tmp/study-status-20260901-index.html 404.html
           git add index.html 404.html
           if ! git diff --cached --quiet; then
-            git commit -m "Publish Study Status 2026-09-01"
+            git commit -m "Publish Study Status and homepage QR"
             git push origin pages-clean-ajcc-v2-3
           fi
