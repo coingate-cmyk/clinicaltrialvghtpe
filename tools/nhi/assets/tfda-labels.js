@@ -1,11 +1,11 @@
 window.TFDA_LABELS = {
   "meta": {
     "schema_version": "tfda-oncology-label-v1",
-    "fetched_at": "2026-08-31T09:40:49Z",
+    "fetched_at": "2026-09-07T07:18:29Z",
     "active_dataset": "https://data.gov.tw/dataset/9123",
     "insert_dataset": "https://data.gov.tw/dataset/9117",
-    "active_row_count": 26023,
-    "insert_row_count": 29842,
+    "active_row_count": 26027,
+    "insert_row_count": 29855,
     "curated_indication_count": 300,
     "matched_indication_count": 266,
     "review_count": 5,
@@ -13,10 +13,10 @@ window.TFDA_LABELS = {
     "combination_regimen_withheld_count": 14,
     "multi_insert_link_normalized_count": 23,
     "package_insert_pdf_attempted_count": 130,
-    "package_insert_pdf_parsed_count": 11,
-    "indication_dose_enriched_count": 7,
-    "high_confidence_dose_count": 7,
-    "dose_withheld_count": 256,
+    "package_insert_pdf_parsed_count": 10,
+    "indication_dose_enriched_count": 6,
+    "high_confidence_dose_count": 6,
+    "dose_withheld_count": 257,
     "dose_extraction_note": "Dose/frequency is shown only for an explicit cancer-specific dosage subsection or a single-indication licence. Multi-indication labels without a target-cancer dosage subsection are linked but dose is withheld."
   },
   "byIndicationId": {
@@ -38,17 +38,17 @@ window.TFDA_LABELS = {
         "每四週",
         "每三週"
       ],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.6 膽道癌 \n建議劑量及給藥方式 \n使用單一藥物: \nGemcitabine 的建議劑量 1000 mg/m2,以靜脈輸注 30 分鐘。以四週為一治療週期,每週給藥一次,連續給藥三週,接著休\n息一週,重複以上的方式(每四週為一週期)接受治療,應依據病人發生毒性反應之嚴重程度,於治療週期間 或治療週期內\n降低劑量。 \n併用其他藥物: \nGemcitabine 併用 cisplatin 時,以 21 天為一治療週期,以每週期的第 1, 8 天靜脈輸注 cisplatin 25 mg/m2,靜脈輸注 30 分鐘\n給予 Gemcitabine 1000 mg/m2。 重複以上的方式(每三週為一週期)接受治療 。 每次給予化療之前應依據病人發生毒性反應之\n嚴重程度,適當的降低劑量。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -84,21 +84,21 @@ window.TFDA_LABELS = {
     "btc-pemigatinib": {
       "status": "matched",
       "drug": "Pemigatinib",
-      "permit": "衛部藥輸字第028063號",
-      "product_zh": "達伯坦錠4.5毫克",
-      "product_en": "PEMAZYRE Tablets 4.5 mg",
+      "permit": "衛部藥輸字第028064號",
+      "product_zh": "達伯坦錠9毫克",
+      "product_en": "PEMAZYRE Tablets 9 mg",
       "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "錠劑",
       "indication": "適用於成人接受過全身性藥物治療、腫瘤具有FGFR2融合或重排、不可手術切除的局部晚期或轉移性膽管癌。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028063號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028064號",
       "license_modified": "2025/11/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028063號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028064號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -186,14 +186,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -257,13 +257,13 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 18,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -353,17 +353,17 @@ window.TFDA_LABELS = {
         "175 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.2 乳癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1250 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘,包含 Paclitaxel。第一天\n輸注 Gemcitabine 前,應先輸注 Paclitaxel 175 mg/m2 3 小時。 \n劑量調整 \n若發生骨髓抑制,應依據表十四調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見\n【劑量與給藥方式】(6.7)。 \n表十四、乳癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降建議 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 暫停給藥 \n第 8 天 ≥1200 且 ≥75,000 100 \n 1000-1299 或 50,000-75,000 75 \n 700-999 且 ≥50,000 50 \n <700 或 <50,000 暫停給藥",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -524,7 +524,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -593,7 +593,7 @@ window.TFDA_LABELS = {
       "product_en": "ENHERTU 100 mg powder for concentrate for solution for infusion",
       "applicant": "台灣第一三共股份有限公司",
       "form": "凍晶注射劑",
-      "indication": "一、 轉移性乳癌(BC) 1. HER2陽性： (1) 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 (2) 單獨使用於具有無法切除或轉移性HER2陽性乳癌(IHC 3+或ISH陽性)，且曾於以下狀況接受過抗HER2療程的成人病人： 甲、轉移性癌症治療；或 乙、術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 2. HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)： (1) 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 (2) 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 二、 無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 三、 局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 四、 其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
+      "indication": "一、HER2 陽性早期乳癌(eBC)：本品之後接續使用THP (taxane 類藥物、trastuzumab及pertuzumab)，作為HER2陽性(IHC 3+ or ISH+)第2或第3期乳癌成人病人的前導性治療。 二、HER2 陽性轉移性乳癌(mBC) 1. 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 2. 單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌，且曾於以下狀況接受過抗HER2療程的成人病人： (1) 轉移性癌症治療；或 (2) 術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 三、HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)轉移性乳癌(mBC) 1. 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 2. 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 四、無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 五、局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 六、其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
@@ -661,21 +661,21 @@ window.TFDA_LABELS = {
     "bc-palbo-fulvestrant": {
       "status": "matched",
       "drug": "Palbociclib",
-      "permit": "衛部藥輸字第028006號",
-      "product_zh": "愛乳適膜衣錠100毫克",
-      "product_en": "Ibrance Film-coated Tablets 100 mg",
+      "permit": "衛部藥輸字第027102號",
+      "product_zh": "愛乳適 膠囊75毫克",
+      "product_en": "IBRANCE Capsules 75 mg",
       "applicant": "輝瑞大藥廠股份有限公司",
-      "form": "膜衣錠",
-      "indication": "(1) 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性， IBRANCE 可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 (2) 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，IBRANCE可合併fulvestrant用於先前曾接受過內分泌治療者。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
+      "form": "膠囊劑",
+      "indication": "1. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性，IBRANCE 可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 2. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，IBRANCE 可合併fulvestrant 用於先前曾接受過內分泌治療者。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
       "dosage": "詳細內容請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028006號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號",
       "license_modified": "2026/04/01",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028006號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -804,7 +804,7 @@ window.TFDA_LABELS = {
       "product_en": "ENHERTU 100 mg powder for concentrate for solution for infusion",
       "applicant": "台灣第一三共股份有限公司",
       "form": "凍晶注射劑",
-      "indication": "一、 轉移性乳癌(BC) 1. HER2陽性： (1) 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 (2) 單獨使用於具有無法切除或轉移性HER2陽性乳癌(IHC 3+或ISH陽性)，且曾於以下狀況接受過抗HER2療程的成人病人： 甲、轉移性癌症治療；或 乙、術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 2. HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)： (1) 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 (2) 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 二、 無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 三、 局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 四、 其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
+      "indication": "一、HER2 陽性早期乳癌(eBC)：本品之後接續使用THP (taxane 類藥物、trastuzumab及pertuzumab)，作為HER2陽性(IHC 3+ or ISH+)第2或第3期乳癌成人病人的前導性治療。 二、HER2 陽性轉移性乳癌(mBC) 1. 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 2. 單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌，且曾於以下狀況接受過抗HER2療程的成人病人： (1) 轉移性癌症治療；或 (2) 術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 三、HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)轉移性乳癌(mBC) 1. 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 2. 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 四、無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 五、局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 六、其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
@@ -1171,21 +1171,21 @@ window.TFDA_LABELS = {
     "mpn-momelotinib": {
       "status": "matched",
       "drug": "Momelotinib",
-      "permit": "衛部藥輸字第028862號",
-      "product_zh": "奧莫嘉膜衣錠200毫克",
-      "product_en": "OMJJARA Film-Coated Tablets 200 mg",
+      "permit": "衛部藥輸字第028860號",
+      "product_zh": "奧莫嘉膜衣錠100毫克",
+      "product_en": "OMJJARA Film-Coated Tablets 100 mg",
       "applicant": "荷商葛蘭素史克藥廠股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "適用於有貧血的中度或高風險骨髓纖維化(包括原發性骨髓纖維化、真性紅血球增多症後骨髓纖維化、或血小板增多症後骨髓纖維化)成人病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028860號",
       "license_modified": "2025/02/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028860號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1194,21 +1194,21 @@ window.TFDA_LABELS = {
     "crc-bev-1l": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1217,21 +1217,21 @@ window.TFDA_LABELS = {
     "crc-bev-2l": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1296,7 +1296,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -1318,16 +1318,16 @@ window.TFDA_LABELS = {
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 1,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "crc-lonsurf": {
@@ -1379,21 +1379,21 @@ window.TFDA_LABELS = {
     "crc-fruquintinib": {
       "status": "matched",
       "drug": "Fruquintinib",
-      "permit": "衛部藥輸字第028887號",
-      "product_zh": "伏腸剋膠囊5毫克",
-      "product_en": "FRUZAQLA capsules 5 mg",
+      "permit": "衛部藥輸字第028886號",
+      "product_zh": "伏腸剋膠囊1毫克",
+      "product_en": "FRUZAQLA capsules 1 mg",
       "applicant": "台灣武田藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)成人病人，包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子(anti-VEGF)等療法；若KRAS 為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028887號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028886號",
       "license_modified": "2026/03/20",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 4,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028887號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028886號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1790,21 +1790,21 @@ window.TFDA_LABELS = {
     "hcc-bev-atezo-support": {
       "status": "generic-label",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1893,21 +1893,21 @@ window.TFDA_LABELS = {
     "brain-bevacizumab": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2013,7 +2013,7 @@ window.TFDA_LABELS = {
       "product_en": "ENHERTU 100 mg powder for concentrate for solution for infusion",
       "applicant": "台灣第一三共股份有限公司",
       "form": "凍晶注射劑",
-      "indication": "一、 轉移性乳癌(BC) 1. HER2陽性： (1) 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 (2) 單獨使用於具有無法切除或轉移性HER2陽性乳癌(IHC 3+或ISH陽性)，且曾於以下狀況接受過抗HER2療程的成人病人： 甲、轉移性癌症治療；或 乙、術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 2. HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)： (1) 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 (2) 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 二、 無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 三、 局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 四、 其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
+      "indication": "一、HER2 陽性早期乳癌(eBC)：本品之後接續使用THP (taxane 類藥物、trastuzumab及pertuzumab)，作為HER2陽性(IHC 3+ or ISH+)第2或第3期乳癌成人病人的前導性治療。 二、HER2 陽性轉移性乳癌(mBC) 1. 與pertuzumab合併使用於無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌的成人病人，以作為第一線治療。 2. 單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+或ISH陽性)乳癌，且曾於以下狀況接受過抗HER2療程的成人病人： (1) 轉移性癌症治療；或 (2) 術前或術後輔助治療，且於治療期間或完成治療後6個月內癌症復發。 三、HER2弱陽性(HER2-Low)和HER2微陽性(HER2-Ultralow)轉移性乳癌(mBC) 1. 單獨使用於具有無法切除或轉移性荷爾蒙受體(HR)陽性、HER2弱陽性(IHC 1+或IHC 2+/ISH-)或HER2微陽性(IHC 0且有細胞膜染色)乳癌，在轉移情況下至少接受過一次荷爾蒙療法且認為不適合接受荷爾蒙療法作為下一線治療的成人病人。 2. 單獨使用於具有無法切除或轉移性HER2弱陽性(IHC 1+或IHC 2+/ISH-)乳癌，且曾接受過針對轉移性乳癌之化學療法，或在進行輔助化療(adjuvant chemotherapy)期間或完成輔助化療後6個月內癌症復發的成人病人。 四、無法切除或轉移性非小細胞肺癌(NSCLC)：單獨使用於具有無法切除或轉移性非小細胞肺癌(NSCLC)的成人病人，其腫瘤具有活化型HER2(ERBB2)突變，且先前曾接受過全身性治療。 五、局部晚期或轉移性胃癌(GC)：單獨使用於先前曾接受過trastuzumab療程的局部晚期或轉移性HER2陽性(IHC3+ 或IHC 2+/ISH陽性)胃癌或胃食道接合處(GEJ)腺癌成人病人。 六、其他無法切除或轉移性實體腫瘤(solid tumors)：單獨使用於具有無法切除或轉移性HER2陽性(IHC 3+)實體腫瘤，先前曾接受過全身性治療且無其他適當替代治療選項的成人病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
@@ -2135,17 +2135,17 @@ window.TFDA_LABELS = {
         "800 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超過 5 天 \n 顆粒性白血球之絕對值<100x106/L 超過 3 天 \n 發熱性嗜中性白血球減少症 \n 血小板數<25000x106/L \n 因毒性導致療程延遲超過一週 \n第 1、8 天的 Gemcitabine 劑\n量永久地降為 800 mg/m2 \n再次發生 若起始劑量已調降,但上述毒性反應仍發生 Gemcitabine 劑量永久地降為\n800 mg/m2,僅於第 1 天輸注",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -2222,21 +2222,21 @@ window.TFDA_LABELS = {
     "ov-bev-firstline": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2245,21 +2245,21 @@ window.TFDA_LABELS = {
     "ov-bev-platinum-sensitive": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2347,21 +2347,21 @@ window.TFDA_LABELS = {
     "cx-bev-cis-pac": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2370,21 +2370,21 @@ window.TFDA_LABELS = {
     "cx-bev-topotecan-pac": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2520,27 +2520,19 @@ window.TFDA_LABELS = {
       "form": "膜衣錠",
       "indication": "大腸直腸癌： Regorafenib適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)患者，療法包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子((anti-VEGF)等療法；若KRAS為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。 腸胃道間質腫瘤： 適用於治療先前曾接受imatinib mesylate和sunitinib malate患者之局部晚期、無法切除或轉移性的胃腸道間質瘤。 肝細胞癌： 適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病患。",
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
-      "dose_mentions": [
-        "160 mg",
-        "40 mg"
-      ],
-      "frequency_mentions": [
-        "每日一次"
-      ],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "dose_mentions": [],
+      "frequency_mentions": [],
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 1,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2"
       ],
-      "dosage_excerpt": "(3) 肝細胞癌 \n適用於治療曾接受sorafenib治療的肝細胞癌(HCC)病人。 \n3. 用法及用量 \n3.1 用法用量 \n(1) 建議劑量 \n一個服藥週期為 28 天,建議劑量為每個週期的前 21 天,每日一次口服 160 mg STIVARGA \n(四顆 40 mg 藥錠)。持續接受治療直到病況惡化或發生無法接受的毒性。 \n請於每日同一時間服用STIVARGA。請在食用一份所含熱量不到600卡路里且所含脂肪不到\n30%的低脂餐點後,配水吞服整顆藥錠 [",
-      "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
-      "dose_indication_specific": true,
-      "dose_confidence": "high",
-      "dose_match_basis": "cancer-specific dosage subsection"
+      "dose_confidence": "withheld",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
+      "dose_indication_specific": false
     },
     "hcc-ramucirumab": {
       "status": "matched",
@@ -2624,7 +2616,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -2647,7 +2639,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -2964,21 +2956,21 @@ window.TFDA_LABELS = {
     "aml-momelotinib-exclusion": {
       "status": "generic-label",
       "drug": "Momelotinib",
-      "permit": "衛部藥輸字第028862號",
-      "product_zh": "奧莫嘉膜衣錠200毫克",
-      "product_en": "OMJJARA Film-Coated Tablets 200 mg",
+      "permit": "衛部藥輸字第028860號",
+      "product_zh": "奧莫嘉膜衣錠100毫克",
+      "product_en": "OMJJARA Film-Coated Tablets 100 mg",
       "applicant": "荷商葛蘭素史克藥廠股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "適用於有貧血的中度或高風險骨髓纖維化(包括原發性骨髓纖維化、真性紅血球增多症後骨髓纖維化、或血小板增多症後骨髓纖維化)成人病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028860號",
       "license_modified": "2025/02/10",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028860號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3263,21 +3255,21 @@ window.TFDA_LABELS = {
     "cml-asciminib": {
       "status": "matched",
       "drug": "Asciminib",
-      "permit": "衛部藥輸字第028556號",
-      "product_zh": "欣覓力40毫克膜衣錠",
-      "product_en": "Scemblix 40mg Film-Coated Tablets",
+      "permit": "衛部藥輸字第028555號",
+      "product_zh": "欣覓力20毫克膜衣錠",
+      "product_en": "Scemblix 20mg Film-Coated Tablets",
       "applicant": "台灣諾華股份有限公司",
       "form": "膜衣錠",
-      "indication": "１、治療新診斷的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。２、治療曾接受酪胺酸激酶抑制劑治療的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。３、治療慢性期費城染色體陽性且帶有T315I突變之慢性骨髓性白血病(Ph+CML-CP with T315I mutation)成人病人。",
+      "indication": "１、治療新診斷的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。 ２、治療曾接受酪胺酸激酶抑制劑治療的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。 ３、治療慢性期費城染色體陽性且帶有T315I突變之慢性骨髓性白血病(Ph+CML-CP with T315I mutation)成人病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028556號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028555號",
       "license_modified": "2025/10/28",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 9,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028556號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028555號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3368,17 +3360,17 @@ window.TFDA_LABELS = {
         "每 4 週",
         "每 3 週"
       ],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.3 非小細胞肺癌 \n建議劑量及給藥方式 \n每 4 週為一週期的治療方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於第 1、8、15 天,靜脈輸注 30 分鐘給予 Gemcitabine 與 Cisplatin 療程;第一天輸\n注完 Gemcitabine 後再靜脈給予 Cisplatin 100 mg/m2。 \n每 3 週為一週期的治療方式 \nGemcitabine 的建議劑量為 1250 mg/m 2,於第 1、8 天靜脈輸注 30 分鐘給予 Gemcitabine 與 Cisplatin 療程;第一天輸注完\nGemcitabine 後再靜脈給予 Cisplatin 100 mg/m2。 \n劑量調整 \n若發生骨髓抑制,應依據表 十五調整劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見【劑量與給\n藥方式】(6.7)。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -3418,14 +3410,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -3526,21 +3518,21 @@ window.TFDA_LABELS = {
     "lc-bev-erlotinib": {
       "status": "matched",
       "drug": "Bevacizumab",
-      "permit": "衛部菌疫輸字第001245號",
-      "product_zh": "衛癌瑪注射液",
-      "product_en": "Vegzelma concentrate for solution for infusion",
-      "applicant": "台灣賽特瑞恩有限公司",
+      "permit": "衛部菌疫輸字第001117號",
+      "product_zh": "艾法施注射液",
+      "product_en": "MVASI Solution for Injection",
+      "applicant": "台灣安進藥品有限公司",
       "form": "注射液劑",
-      "indication": "轉移性大腸直腸癌(mCRC) 與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。 與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。 與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過Vegzelma 併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 轉移性乳癌(mBC) 與paclitaxel合併使用，可以做為HER2 (-)轉移性乳癌病人的第一線治療。 惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤 單獨使用可用於治療曾接受標準放射線治療且含Temozolomide 在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC) 與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。 併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 卵巢上皮細胞、輸卵管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer) 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。 與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(Platinum-based) 化學治療間隔至少6個月再復發 (即，對含鉑藥物具感受性)，且未曾接受過bevacizumab或其他血管內皮細胞生長因子 (VEGF) 抑制劑或血管內皮細胞生長因子接受器之標靶藥物 (VEGF receptor-targeted agents) 治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 與carboplatin及paclitaxel合併使用，接著單獨使用Vegzelma治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物 (platinum-based)化療治療後6個月內再復發(即，對含鉑藥物具抗藥性)、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。 持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer) 與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。",
+      "indication": "1.轉移性大腸直腸癌(mCRC)：(1)與含有5-fluorouracil為基礎的化學療法合併使用，可以作為轉移性大腸或直腸癌病人的第一線治療。(2)與含有5-fluorouracil/leucovorin/oxaliplatin的化學療法合併使用，可以作為先前接受過以 fluoropyrimidine為基礎的化學療法無效且未曾接受過bevacizumab治療的轉移性大腸或直腸癌病人的治療。(3)與含有fluoropyrimidine-irinotecan-或fluoropyrimidine-oxaliplatin-為基礎的化學療法合併使用，可以做為第一線已接受過以MVASI併用化療後惡化之轉移性大腸或直腸癌病人的第二線治療。 2.轉移性乳癌(mBC)：與paclitaxel合併使用，可以做為HER2(-)轉移性乳癌病人的第一線治療。 3.惡性神經膠質瘤(WHO第4級)-神經膠母細胞瘤：單獨使用可用於治療曾接受標準放射線治療且含temozolomide在內之化學藥物治療失敗之多型性神經膠母細胞瘤(Glioblastoma multiforme)復發之成人病人。 4.晚期、轉移性或復發性非鱗狀非小細胞肺癌(NSCLC)：(1)與carboplatin及paclitaxel合併使用，可以作為無法切除的晚期、轉移性或復發性非鱗狀非小細胞肺癌病人的第一線治療。(2)併用erlotinib，可作為無法手術切除的晚期、轉移性或復發性且帶有表皮生長因子受體(EGFR)活化性突變的非鱗狀非小細胞肺癌病人的第一線治療。 5.持續性、復發性或轉移性之子宮頸癌(Persistent, Recurrent, or Metastatic Cervical Cancer)：(1)與paclitaxel及cisplatin合併使用可用於治療持續性、復發性或轉移性之子宮頸癌。(2)與paclitaxel及topotecan合併使用可用於無法接受含鉑類藥物治療(platinum therapy)病人之持續性、復發性或轉移性子宮頸癌。 6.卵巢上皮細胞、輸管或原發性腹膜癌(Epithelial Ovarian, Fallopian Tube or Primary Peritoneal Cancer)：(1)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI，可以做為第三期或第四期卵巢上皮細胞、輸卵管或原發性腹膜癌病人接受初次手術切除後之治療。(2)與carboplatin及gemcitabine合併使用，可以做為曾接受過第一線含鉑類藥物(platinum-based)化學治療間隔至少6個月再復發（即，對含鉑藥物具感受性），且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)治療之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(3)與carboplatin及paclitaxel合併使用，接著單獨使用MVASI治療，可以做為對含鉑藥物具感受性之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。(4)併用paclitaxel、topotecan或pegylated liposomal doxorubicin可以做為接受過含鉑類藥物(platinum-based)化療治療後6個月內再復發（即，對含鉑藥物具抗藥性）、之前接受不超過2種化療療程且未曾接受過bevacizumab或其他血管內皮細胞生長因子(VEGF)抑制劑或血管內皮細胞生長因子接受器之標靶藥物(VEGF receptor-targeted agents)之復發性卵巢上皮細胞、輸卵管或原發性腹膜癌病人的治療。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號",
-      "license_modified": "2026/08/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001245號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001117號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3701,7 +3693,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -3724,7 +3716,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -3773,14 +3765,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書後使用",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_55fa4b80-4196-4490-94cf-41a5dbffb7fb?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_95f480d6-7470-47c1-9dcd-de1fbb677668?c=2",
       "license_modified": "2026/07/28",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_55fa4b80-4196-4490-94cf-41a5dbffb7fb?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_95f480d6-7470-47c1-9dcd-de1fbb677668?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_0f149194-d9ef-4109-8de5-5add10fd11be?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_0f149194-d9ef-4109-8de5-5add10fd11be?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_55fa4b80-4196-4490-94cf-41a5dbffb7fb?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
@@ -4648,13 +4640,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
       "license_modified": "2022/12/05",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9b4f9e56-6863-4d9f-b3ca-c9bc02c37cff?c=2"
       ],
       "dose_confidence": "withheld",
@@ -4664,21 +4656,21 @@ window.TFDA_LABELS = {
     "mm-lenalidomide-1l": {
       "status": "matched",
       "drug": "Lenalidomide",
-      "permit": "衛部藥輸字第028282號",
-      "product_zh": "萊利邁膠囊25毫克",
-      "product_en": "LELIMIDE 25 (Lenalidomide Capsules 25mg)",
+      "permit": "衛部藥輸字第028702號",
+      "product_zh": "萊利邁膠囊5毫克",
+      "product_en": "LELIMIDE 5 (Lenalidomide Capsules 5 mg)",
       "applicant": "凱沛爾藥品有限公司",
       "form": "膠囊劑",
-      "indication": "1. 多發性骨髓瘤(Multiple Myeloma，MM)： (1) 與dexamethasone、與bortezomib及dexamethasone、或與melphalan及prednisone合併使用治療不適合接受移植之新診斷多發性骨髓瘤(multiple myeloma，MM)成年病人。 (2) 單一療法適用於做為已接受自體造血幹細胞移植之新診斷多發性骨髓瘤成年病人的維持治療用藥。 (3) 與dexamethasone合併使用可治療先前已接受至少一種治療失敗之多發性骨髓瘤病人。 2. 骨髓增生不良症候群(Myelodysplastic syndromes，MDS)：在其他治療方式不佳的情況下，Lenalidomide可單獨用於治療IPSS分級為低或中度(Intermediate-1)風險且單獨伴隨染色體5q缺失之骨髓增生不良症候群(Myelodysplastic syndromes，MDS)所導致的輸血依賴型貧血之成人病人。",
-      "dosage": "請詳見仿單",
+      "indication": "1. 多發性骨髓瘤（Multiple Myeloma，MM）： （1）與dexamethasone、與bortezomib及dexamethasone、或與melphalan及prednisone合併使用治療不適合接受移植之新診斷多發性骨髓瘤（multiple myeloma，MM）成年病人。 （2）單一療法適用於做為已接受自體造血幹細胞移植之新診斷多發性骨髓瘤成年病人的維持治療用藥。 （3）與dexamethasone合併使用可治療先前已接受至少一種治療失敗之多發性骨髓瘤病人。 2. 骨髓增生不良症候群（Myelodysplastic syndromes，MDS）：在其他治療方式不佳的情況下，Lenalidomide可單獨用於治療IPSS分級為低或中度（Intermediate-1）風險且單獨伴隨染色體5q缺失之骨髓增生不良症候群（Myelodysplastic syndromes，MDS）所導致的輸血依賴型貧血之成人病人。",
+      "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028282號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028702號",
       "license_modified": "2026/04/30",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 35,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028282號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028702號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4687,21 +4679,21 @@ window.TFDA_LABELS = {
     "mm-lenalidomide-relapse": {
       "status": "matched",
       "drug": "Lenalidomide",
-      "permit": "衛部藥輸字第028282號",
-      "product_zh": "萊利邁膠囊25毫克",
-      "product_en": "LELIMIDE 25 (Lenalidomide Capsules 25mg)",
+      "permit": "衛部藥輸字第028702號",
+      "product_zh": "萊利邁膠囊5毫克",
+      "product_en": "LELIMIDE 5 (Lenalidomide Capsules 5 mg)",
       "applicant": "凱沛爾藥品有限公司",
       "form": "膠囊劑",
-      "indication": "1. 多發性骨髓瘤(Multiple Myeloma，MM)： (1) 與dexamethasone、與bortezomib及dexamethasone、或與melphalan及prednisone合併使用治療不適合接受移植之新診斷多發性骨髓瘤(multiple myeloma，MM)成年病人。 (2) 單一療法適用於做為已接受自體造血幹細胞移植之新診斷多發性骨髓瘤成年病人的維持治療用藥。 (3) 與dexamethasone合併使用可治療先前已接受至少一種治療失敗之多發性骨髓瘤病人。 2. 骨髓增生不良症候群(Myelodysplastic syndromes，MDS)：在其他治療方式不佳的情況下，Lenalidomide可單獨用於治療IPSS分級為低或中度(Intermediate-1)風險且單獨伴隨染色體5q缺失之骨髓增生不良症候群(Myelodysplastic syndromes，MDS)所導致的輸血依賴型貧血之成人病人。",
-      "dosage": "請詳見仿單",
+      "indication": "1. 多發性骨髓瘤（Multiple Myeloma，MM）： （1）與dexamethasone、與bortezomib及dexamethasone、或與melphalan及prednisone合併使用治療不適合接受移植之新診斷多發性骨髓瘤（multiple myeloma，MM）成年病人。 （2）單一療法適用於做為已接受自體造血幹細胞移植之新診斷多發性骨髓瘤成年病人的維持治療用藥。 （3）與dexamethasone合併使用可治療先前已接受至少一種治療失敗之多發性骨髓瘤病人。 2. 骨髓增生不良症候群（Myelodysplastic syndromes，MDS）：在其他治療方式不佳的情況下，Lenalidomide可單獨用於治療IPSS分級為低或中度（Intermediate-1）風險且單獨伴隨染色體5q缺失之骨髓增生不良症候群（Myelodysplastic syndromes，MDS）所導致的輸血依賴型貧血之成人病人。",
+      "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028282號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028702號",
       "license_modified": "2026/04/30",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 35,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028282號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028702號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4733,21 +4725,21 @@ window.TFDA_LABELS = {
     "mm-carfilzomib": {
       "status": "matched",
       "drug": "Carfilzomib",
-      "permit": "衛部藥輸字第027068號",
-      "product_zh": "凱博斯凍晶注射劑",
-      "product_en": "Kyprolis for injection",
+      "permit": "衛部藥輸字第027490號",
+      "product_zh": "凱博斯凍晶注射劑30毫克",
+      "product_en": "Kyprolis for injection 30mg",
       "applicant": "台灣安進藥品有限公司",
       "form": "凍晶注射劑",
       "indication": "復發型或頑固型多發性骨髓瘤 與下列藥物併用，治療之前曾用過 1 到 3 種療法之復發型或頑固型多發性骨髓瘤成年病人： • Lenalidomide 和 dexamethasone；或 • Dexamethasone；或 • 靜脈注射劑型Daratumumab 和 dexamethasone；或 • 皮下注射劑型Daratumumab 和 dexamethasone。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027068號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027490號",
       "license_modified": "2026/07/08",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 5,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027068號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027490號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4917,21 +4909,21 @@ window.TFDA_LABELS = {
     "mm-teclistamab": {
       "status": "matched",
       "drug": "Teclistamab",
-      "permit": "衛部菌疫輸字第001216號",
-      "product_zh": "特飛立 注射劑 10毫克/毫升",
-      "product_en": "Tecvayli injection 10mg/ml",
+      "permit": "衛部菌疫輸字第001217號",
+      "product_zh": "特飛立 注射劑 90毫克/毫升",
+      "product_en": "Tecvayli injection 90mg/ml",
       "applicant": "嬌生股份有限公司",
       "form": "注射液劑",
       "indication": "適用於治療先前曾接受至少四線療法(包括一種蛋白酶體抑制劑、一種免疫調節劑和一種抗CD38單株抗體)的復發性或難治性多發性骨髓瘤成人病人。",
       "dosage": "詳如電子仿單核定本。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001216號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001217號",
       "license_modified": "2026/07/31",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001216號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001217號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4951,17 +4943,17 @@ window.TFDA_LABELS = {
         "1000 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.4 胰臟癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2 的劑量以 30 分鐘靜脈輸注,建議給藥方式為: \n第 1 至 8 週:每週一次連續給藥 7 週,接著休息一週。 \n第 8 週以後:每週給藥一次,於 28 天週期的第 1、8、15 天給予 Gemcitabine。 \n劑量調整 \n若發生骨髓抑制,應依據表 十五調整劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見【劑量與給\n藥方式】(6.7)。 \n使用 Gemcitabine 之病人,每次給藥前應測量 CBC (complete blood count ,全血球數),包括白血球分類與血小板數目。若\n發現骨髓抑制之現象,應依據表十五調整劑量或暫停給藥。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -5595,7 +5587,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
-      "license_modified": "2026/03/04",
+      "license_modified": "2026/08/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
@@ -5617,13 +5609,13 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 18,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -5641,13 +5633,13 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 18,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -5670,7 +5662,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
-      "license_modified": "2026/03/04",
+      "license_modified": "2026/08/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
@@ -5766,13 +5758,13 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 18,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -5970,7 +5962,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
-      "license_modified": "2026/03/04",
+      "license_modified": "2026/08/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
@@ -5992,16 +5984,16 @@ window.TFDA_LABELS = {
       "dosage": "一個服藥週期為28天，建議劑量為每周期的前21天，每天口服160mg regorafenib 1次(四顆40mg藥錠)。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
       "license_modified": "2023/08/15",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 1,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_7a653531-e29c-4233-8626-20699002eb0b?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_8d23bb3a-bcd0-42a9-9737-8a9be1aeb0c7?c=2"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "gist-ripretinib": {
@@ -6030,21 +6022,21 @@ window.TFDA_LABELS = {
     "gist-avapritinib": {
       "status": "generic-label",
       "drug": "Avapritinib",
-      "permit": "衛部藥輸字第028030號",
-      "product_zh": "泰時維膜衣錠200毫克",
-      "product_en": "AYVAKIT film-coated tablets 200mg",
+      "permit": "衛部藥輸字第028029號",
+      "product_zh": "泰時維膜衣錠100毫克",
+      "product_en": "AYVAKIT film-coated tablets 100mg",
       "applicant": "臺灣基石藥業有限公司",
       "form": "膜衣錠",
       "indication": "治療具有血小板衍生生長因子α受體(PDGFRA)D842V突變，無法切除或轉移性腸胃道間質瘤的成年病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號",
       "license_modified": "2025/12/11",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6226,17 +6218,17 @@ window.TFDA_LABELS = {
         "70 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
       "dosage_excerpt": "6.5 膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \n建議劑量及給藥方式 \n以 28 天為一週期 , 每週期的第1、8、15 天給予 Gemcitabine 1000 mg/m2, 靜脈輸注30 分鐘 , 每週期的第1 天給予 Cisplatin \n70 mg/m2。定義此四週期為一治療療程。Cisplatin 的使用方法與水分補充,請參見其藥品仿單。 \n劑量調整 \n參見非小細胞肺癌及胰臟癌之劑量調整。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -6254,7 +6246,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -6323,7 +6315,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001025號",
-      "license_modified": "2025/09/02",
+      "license_modified": "2026/08/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 7,
       "label_urls": [
@@ -6359,21 +6351,21 @@ window.TFDA_LABELS = {
     "uc-enfortumab": {
       "status": "matched",
       "drug": "Enfortumab vedotin",
-      "permit": "衛部菌疫輸字第001212號",
-      "product_zh": "備思復凍晶注射劑20毫克",
-      "product_en": "PADCEV powder for concentrate for solution for infusion 20 mg",
+      "permit": "衛部菌疫輸字第001213號",
+      "product_zh": "備思復凍晶注射劑30毫克",
+      "product_en": "PADCEV powder for concentrate for solution for infusion 30 mg",
       "applicant": "台灣安斯泰來製藥股份有限公司",
       "form": "凍晶注射劑",
       "indication": "１、單獨使用適用於治療患有局部晚期或轉移性泌尿道上皮癌（mUC）的成人病人： (１)先前接受過PD-1（programmed death receptor-1）或PDL1（programmed death-ligand 1）抑制劑和含鉑化學治療；或 (２)不適合接受含cisplatin 化學治療，且先前接受過一線以上治療。 ２、併用pembrolizumab適用於治療局部晚期或轉移性泌尿道上皮癌（mUC）的成人病人。 ３、與pembrolizumab併用，治療不適合接受含cisplatin化學治療的肌肉侵犯性膀胱癌(MIBC)成人病人，作為其根治性膀胱切除術(radical cystectomy)的前導性治療(neoadjuvant therapy)，並於術後繼續併用作為輔助治療(adjuvant therapy)。",
       "dosage": "請參閱仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001212號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001213號",
       "license_modified": "2026/05/08",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001212號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001213號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
