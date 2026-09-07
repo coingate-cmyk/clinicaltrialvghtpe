@@ -4,7 +4,7 @@
     "transport": "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-E41001-001",
     "resource_id": "A21030000I-E41001-001",
     "dataset": "健保用藥品項查詢項目檔",
-    "fetched_at": "2026-08-31T08:51:19.046900Z",
+    "fetched_at": "2026-09-07T07:30:21.062525Z",
     "scope": "active oncology-related NHI listed products; top-level Chapter 9 and oncology ATC/category filters",
     "product_count": 1576,
     "ingredient_count": 434,
@@ -1112,9 +1112,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01AA09",
       "chapter": "9.42.",
-      "price": "7417.00",
-      "effective_from": "1130401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "BC25401255",
@@ -1164,9 +1164,9 @@
       "manufacturer": "NATCO PHARMA LIMITED",
       "atc": "L01AA09",
       "chapter": "9.42.",
-      "price": "1806.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "BC28134240",
@@ -1190,9 +1190,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01AA09",
       "chapter": "9.42.",
-      "price": "1798.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "BC27303240",
@@ -2334,9 +2334,9 @@
       "manufacturer": "REMEDICA LTD.",
       "atc": "L01BC06",
       "chapter": "9.17.",
-      "price": "24.80",
-      "effective_from": "1070201",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B022408100",
@@ -5220,9 +5220,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01CD02",
       "chapter": "9.3.",
-      "price": "6838.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC57971219",
@@ -5298,9 +5298,9 @@
       "manufacturer": "NIPRO PHARMA CORPORATION ODATE PLANT",
       "atc": "L01CD02",
       "chapter": "9.3.",
-      "price": "6838.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B025289209",
@@ -6338,9 +6338,9 @@
       "manufacturer": "PATHEON ITALIA S.P.A. MONZA OPERATIONS",
       "atc": "L01FX08",
       "chapter": "9.111.",
-      "price": "25451.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "24178.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "KC01021271",
@@ -6351,9 +6351,9 @@
       "manufacturer": "PATHEON ITALIA S.P.A. MONZA OPERATIONS",
       "atc": "L01FX08",
       "chapter": "9.111.",
-      "price": "34353.00",
-      "effective_from": "1130901",
-      "effective_to": "1150831"
+      "price": "32635.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "KC012612A7",
@@ -9055,9 +9055,9 @@
       "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
       "atc": "L01BC05",
       "chapter": "9.4.",
-      "price": "1475.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "1537.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC59784209",
@@ -9250,9 +9250,9 @@
       "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
       "atc": "L01BC05",
       "chapter": "9.4.",
-      "price": "311.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "328.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC59784263",
@@ -9380,9 +9380,9 @@
       "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
       "atc": "L01BC05",
       "chapter": "9.4.",
-      "price": "1708.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "1690.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AB47872223",
@@ -10381,9 +10381,9 @@
       "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
       "atc": "L01CE02",
       "chapter": "9.12.1.",
-      "price": "931.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B024875212",
@@ -12292,9 +12292,9 @@
       "manufacturer": "PFIZER ITALIA S.R.L.",
       "atc": "L02AB02",
       "chapter": "",
-      "price": "37.70",
-      "effective_from": "1120401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B021150100",
@@ -13514,9 +13514,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01BA01",
       "chapter": "",
-      "price": "869.00",
-      "effective_from": "1060801",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC59414212",
@@ -13527,9 +13527,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01BA01",
       "chapter": "",
-      "price": "89.00",
-      "effective_from": "1060801",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC59414226",
@@ -13540,9 +13540,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01BA01",
       "chapter": "",
-      "price": "211.00",
-      "effective_from": "1060801",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B019712212",
@@ -15386,9 +15386,9 @@
       "manufacturer": "健亞生物科技股份有限公司",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "876.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC45331221",
@@ -15412,9 +15412,9 @@
       "manufacturer": "健亞生物科技股份有限公司",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "631.00",
-      "effective_from": "1150401",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "AC45331235",
@@ -15880,9 +15880,9 @@
       "manufacturer": "HETERO LABS LIMITED",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "7726.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "BC275042E2",
@@ -15893,9 +15893,9 @@
       "manufacturer": "HETERO LABS LIMITED",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "832.00",
-      "effective_from": "1150601",
-      "effective_to": "1150831"
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "A044466221",
