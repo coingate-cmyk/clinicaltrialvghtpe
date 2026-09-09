@@ -1,0 +1,173 @@
+name: Repair AJCC core staging safely
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/repair_ajcc_core_staging.py'
+      - '.github/workflows/repair-ajcc-core-staging.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply core AJCC repair
+        run: python scripts/repair_ajcc_core_staging.py
+
+      - name: Validate Breast anatomic rules and Stomach basis separation
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, json, re
+          from pathlib import Path
+
+          def rows(fn):
+              return list(csv.DictReader(open(fn, encoding='utf-8-sig', newline='')))
+
+          def prefix(v):
+              s=str(v or '')
+              if re.fullmatch(r'T1mi',s,re.I): return 'T1'
+              return re.sub(r'[a-d]$','',s,flags=re.I)
+
+          def toks(v):
+              s=str(v or 'Any').strip()
+              return [x.strip() for x in re.split(r'[|/;]+|\s+or\s+|\s*,\s*',s,flags=re.I) if x.strip()]
+
+          def ok(rule,user):
+              for tok in toks(rule):
+                  if tok=='Any' or user=='Any' or tok==user or tok==prefix(user) or prefix(tok)==user:
+                      return True
+              return False
+
+          def classok(rule,user):
+              r=(rule or 'any').lower(); u=(user or 'any').lower()
+              return r=='any' or u=='any' or r==u
+
+          def match_stage(data, site, edition, cls, t, n, m):
+              hits=[]
+              for r in data:
+                  if r['site'] != site or r['edition'] != edition: continue
+                  if not classok(r.get('classification'),cls): continue
+                  if ok(r['t'],t) and ok(r['n'],n) and ok(r['m'],m): hits.append(r)
+              if not hits: return None
+              def exact(v,u):
+                  if v==u:return 3
+                  if u in toks(v):return 2.5
+                  if v=='Any':return 0
+                  return 1 if ok(v,u) else -99
+              def cexact(v,u):
+                  v=(v or 'any').lower();u=(u or 'any').lower()
+                  return 3 if v==u else (0 if v=='any' else -99)
+              hits.sort(key=lambda r: (cexact(r.get('classification'),cls)+exact(r['t'],t)+exact(r['n'],n)+exact(r['m'],m)), reverse=True)
+              top_score=(cexact(hits[0].get('classification'),cls)+exact(hits[0]['t'],t)+exact(hits[0]['n'],n)+exact(hits[0]['m'],m))
+              top=[r for r in hits if cexact(r.get('classification'),cls)+exact(r['t'],t)+exact(r['n'],n)+exact(r['m'],m)==top_score]
+              stages={r['stage'] for r in top}
+              if len(stages)>1:
+                  raise AssertionError(f'Ambiguous top match {site} {edition} {cls} {t}{n}{m}: {stages}')
+              return top[0]['stage']
+
+          r7=rows('tools/staging_rules_7.csv'); r8=rows('tools/staging_rules_8.csv')
+          for edition,data in [('AJCC7',r7),('AJCC8',r8)]:
+              br=[r for r in data if r['site']=='Breast']
+              print(edition,'Breast rows',len(br))
+              assert len(br)==12, (edition,len(br))
+              assert all((r.get('classification') or '').lower()=='any' for r in br)
+              assert all('auto_extracted' not in (r.get('note') or '').lower() for r in br)
+              assert all('extra_factors' not in (r.get('note') or '').lower() for r in br)
+              sentinels=[
+                  ('any','Tis','N0','M0','0'),
+                  ('clinical','T1','N0','M0','IA'),
+                  ('pathological','T1mi','N0','M0','IA'),
+                  ('pathological','T0','N1mi','M0','IB'),
+                  ('clinical','T2','N0','M0','IIA'),
+                  ('pathological','T2','N1','M0','IIB'),
+                  ('clinical','T3','N1','M0','IIIA'),
+                  ('pathological','T4d','N1','M0','IIIB'),
+                  ('clinical','T2','N3a','M0','IIIC'),
+                  ('pathological','T1','N0','M1','IV'),
+              ]
+              for cls,t,n,m,expected in sentinels:
+                  got=match_stage(data,'Breast',edition,cls,t,n,m)
+                  assert got==expected, (edition,cls,t,n,m,got,expected)
+
+          stomach8=[
+              ('clinical','T1','N1','M0','IIA'),
+              ('pathological','T1','N1','M0','IB'),
+              ('clinical','T3','N1','M0','III'),
+              ('pathological','T3','N1','M0','IIB'),
+              ('pathological','T4b','N3b','M0','IIIC'),
+              ('yp','T2','N3a','M0','III'),
+              ('pathological','T1','N0','M1','IV'),
+          ]
+          for cls,t,n,m,expected in stomach8:
+              got=match_stage(r8,'Stomach','AJCC8',cls,t,n,m)
+              assert got==expected, ('Stomach AJCC8',cls,t,n,m,got,expected)
+
+          stomach7=[
+              ('clinical','T1','N1','M0','IB'),
+              ('pathological','T3','N1','M0','IIB'),
+              ('clinical','T1','N0','M1','IV'),
+          ]
+          for cls,t,n,m,expected in stomach7:
+              got=match_stage(r7,'Stomach','AJCC7',cls,t,n,m)
+              assert got==expected, ('Stomach AJCC7',cls,t,n,m,got,expected)
+
+          # Breast exact duplicate-key conflicts are forbidden.
+          for edition,data in [('AJCC7',r7),('AJCC8',r8)]:
+              seen={}
+              for r in [x for x in data if x['site']=='Breast']:
+                  key=tuple(r[c] for c in ['site','edition','classification','t','n','m','grade','location'])
+                  seen.setdefault(key,set()).add(r['stage'])
+              bad={k:v for k,v in seen.items() if len(v)>1}
+              assert not bad, bad
+
+          html=Path('tools/quick-staging.html').read_text(encoding='utf-8')
+          assert 'value="" selected>請先選擇 / Select basis' in html
+          assert '系統不再替你默認其中一種' in html
+          assert "if(/^T1mi$/i.test(s))return'T1'" in html
+          assert 'Quick mode 僅顯示 AJCC anatomic stage group（TNM）' in html
+          assert html.count('"site":"Breast"')==24, html.count('"site":"Breast"')
+          assert 'provenance=auto_extracted_from_uploaded_manuals_v1_0' not in ''.join(re.findall(r'\{"site":"Breast"[^}]*\}',html))
+
+          scripts=[]
+          for attrs,body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>',html,flags=re.I):
+              if 'src=' not in attrs.lower() and body.strip(): scripts.append(body)
+          Path('/tmp/ajcc-core.js').write_text('\n'.join(scripts),encoding='utf-8')
+          print('AJCC core staging regression PASS')
+          PY
+          node --check /tmp/ajcc-core.js
+
+      - name: Commit repaired canonical rules and single-file tool
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/staging_rules_7.csv tools/staging_rules_8.csv tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Repair Breast anatomic staging and require stage basis"
+            git push origin main
+          fi
+          cp tools/quick-staging.html /tmp/quick-staging.html
+
+      - name: Publish repaired AJCC tool to live Pages
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools
+          cp /tmp/quick-staging.html tools/quick-staging.html
+          git add tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish AJCC core staging repair"
+            git push origin pages-clean-ajcc-v2-3
+          fi
