@@ -50,6 +50,18 @@ def clean_breast(path, edition):
     write_rows(path, rows + breast)
     return len(rows), len(breast)
 
+def replace_embedded_rules(html, name, rows):
+    payload = json.dumps(
+        [{c:(r.get(c,'') or '').strip() for c in COLS} for r in rows],
+        ensure_ascii=False,
+        separators=(',',':')
+    )
+    pat = rf'const\s+{re.escape(name)}\s*=\s*\[[\s\S]*?\];'
+    html, n = re.subn(pat, f'const {name}={payload};', html, count=1)
+    if n != 1:
+        raise SystemExit(f'Could not locate {name}')
+    return html
+
 def patch_html():
     html = HTML.read_text(encoding='utf-8')
 
@@ -104,16 +116,13 @@ def patch_html():
     elif new_lookup not in html:
         raise SystemExit('Could not patch lookup basis guard')
 
-    # Re-embed canonical rules after cleaning CSVs.
-    allrows = read_rows(RULE7) + read_rows(RULE8)
-    payload = json.dumps([{c:(r.get(c,'') or '').strip() for c in COLS} for r in allrows], ensure_ascii=False, separators=(',',':'))
-    patterns = [r'const staticRules\s*=\s*\[[\s\S]*?\];', r'let staticRules\s*=\s*\[[\s\S]*?\];']
-    for pat in patterns:
-        if re.search(pat, html):
-            html = re.sub(pat, 'const staticRules='+payload+';', html, count=1)
-            break
-    else:
-        raise SystemExit('Could not locate embedded staticRules')
+    # IMPORTANT: canonical CSVs rebuild the EMBEDDED packs used by boot().
+    # Do not stuff data into staticRules and never convert its mutable declaration to const.
+    html = replace_embedded_rules(html, 'EMBEDDED_RULES_7', read_rows(RULE7))
+    html = replace_embedded_rules(html, 'EMBEDDED_RULES_8', read_rows(RULE8))
+    html = re.sub(r'(?:const|let)\s+staticRules\s*=\s*\[[\s\S]*?\];', 'let staticRules=[];', html, count=1)
+    if 'let staticRules=[];' not in html or 'const staticRules=' in html:
+        raise SystemExit('staticRules runtime store must remain mutable')
 
     HTML.write_text(html, encoding='utf-8')
 
