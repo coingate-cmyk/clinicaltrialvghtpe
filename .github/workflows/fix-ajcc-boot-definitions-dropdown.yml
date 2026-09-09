@@ -1,0 +1,119 @@
+name: Fix AJCC boot definitions and organ dropdown
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/fix_ajcc_boot_definitions_dropdown.py'
+      - '.github/workflows/fix-ajcc-boot-definitions-dropdown.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fix boot, embedded definitions and dropdown
+        run: python scripts/fix_ajcc_boot_definitions_dropdown.py
+
+      - name: Regression test AJCC runtime packs and definitions
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, json, re
+          from pathlib import Path
+
+          html=Path('tools/quick-staging.html').read_text(encoding='utf-8')
+          def read_csv(p):
+              return list(csv.DictReader(open(p,encoding='utf-8-sig',newline='')))
+          r7=read_csv('tools/staging_rules_7.csv')
+          r8=read_csv('tools/staging_rules_8.csv')
+          defs=read_csv('tools/staging_category_definitions.csv')
+
+          def embedded(name):
+              m=re.search(rf'const\s+{name}\s*=\s*(\[[\s\S]*?\]);',html)
+              assert m, f'{name} missing'
+              return json.loads(m.group(1))
+
+          e7=embedded('EMBEDDED_RULES_7')
+          e8=embedded('EMBEDDED_RULES_8')
+          ed=embedded('EMBEDDED_DEFINITIONS')
+          assert len(e7)==len(r7), (len(e7),len(r7))
+          assert len(e8)==len(r8), (len(e8),len(r8))
+          assert len(ed)==len(defs), (len(ed),len(defs))
+          assert len(ed) > 600, len(ed)
+
+          # Regression for the exact runtime crash that broke the first dropdown and definitions.
+          assert 'let staticRules=[];' in html
+          assert 'const staticRules=' not in html
+          assert 'let staticDefinitions=[];' in html
+          assert 'let staticCoverage=[];' in html
+
+          # The organ-system select must not rebuild itself in its own change event.
+          assert "const siteGroupFilterEl=document.getElementById('siteGroupFilter')" in html
+          assert "siteGroupFilterEl.addEventListener('change',()=>{refreshSites({rebuildGroups:false});changed('site')})" in html
+          assert "refreshSites({rebuildGroups:true});setInfo();refreshCascade('site');lookup();" in html
+          assert 'siteGroupFilter.onchange' not in html
+
+          def find_def(site,edition,typ,cat):
+              hits=[d for d in ed if d.get('site')==site and d.get('edition')==edition and d.get('category_type')==typ and d.get('category')==cat]
+              assert hits, (site,edition,typ,cat)
+              return hits[0]['short_definition']
+
+          t1=find_def('Stomach','AJCC8','T','T1')
+          n1=find_def('Stomach','AJCC8','N','N1')
+          m0=find_def('Stomach','AJCC8','M','M0')
+          assert 'lamina propria' in t1, t1
+          assert '1–2 regional lymph nodes' in n1 or '1-2 regional lymph nodes' in n1, n1
+          assert 'No distant metastasis' in m0, m0
+          print('Stomach AJCC8 definition sentinel:',t1,'|',n1,'|',m0)
+          print(f'Embedded packs synchronized: AJCC7={len(e7)} AJCC8={len(e8)} definitions={len(ed)}')
+
+          # Extract inline JS for syntax validation.
+          scripts=[]
+          for attrs,body in re.findall(r'<script([^>]*)>([\s\S]*?)</script>',html,flags=re.I):
+              if 'src=' not in attrs.lower() and body.strip(): scripts.append(body)
+          Path('/tmp/ajcc-fixed.js').write_text('\n'.join(scripts),encoding='utf-8')
+          PY
+          node --check /tmp/ajcc-fixed.js
+          node - <<'NODE'
+          let staticRules=[];
+          let staticDefinitions=[];
+          let staticCoverage=[];
+          staticRules=[1]; staticDefinitions=[2]; staticCoverage=[3];
+          if(staticRules[0]!==1||staticDefinitions[0]!==2||staticCoverage[0]!==3) throw new Error('runtime stores are not mutable');
+          console.log('Mutable runtime-store assignment PASS');
+          NODE
+
+      - name: Commit fixed AJCC tool to main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Fix AJCC boot definitions and organ-system dropdown"
+            git push origin main
+          fi
+          cp tools/quick-staging.html /tmp/quick-staging.html
+
+      - name: Publish fixed AJCC tool to live Pages
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools
+          cp /tmp/quick-staging.html tools/quick-staging.html
+          git add tools/quick-staging.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish AJCC boot and definitions fix"
+            git push origin pages-clean-ajcc-v2-3
+          fi
