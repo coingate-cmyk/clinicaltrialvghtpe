@@ -82,7 +82,7 @@ def patch_html():
     # Give a truthful Breast note: anatomic stage is supported; prognostic stage is not guessed.
     old_breast_note = ('"Breast": "Smart-form needed before validated release.；Required extra inputs: '
                        'grade/G; ER/PR/HER2; Oncotype/multigene；Stage table metadata only; rule rows require separate validation."')
-    new_breast_note = ('"Breast": "Quick mode 顯示 AJCC anatomic stage group（TNM） בלבד；不以隱藏的 grade/ER/PR/HER2 或 multigene 資料推算 prognostic stage。若要 prognostic stage，需另用完整乳癌 smart-form。"')
+    new_breast_note = ('"Breast": "Quick mode 僅顯示 AJCC anatomic stage group（TNM）；不以隱藏的 grade/ER/PR/HER2 或 multigene 資料推算 prognostic stage。若要 prognostic stage，需另用完整乳癌 smart-form。"')
     if old_breast_note in html:
         html = html.replace(old_breast_note, new_breast_note, 1)
     elif new_breast_note not in html:
