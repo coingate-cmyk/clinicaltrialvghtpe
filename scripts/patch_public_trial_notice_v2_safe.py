@@ -55,6 +55,56 @@ if 'const normalizePublicStudyTitle' not in text:
         raise SystemExit('shouldPublishPublicTrial anchor not found')
     text = text.replace(anchor, helper + anchor, 1)
 text = text.replace("studyTitle: normalizePublicText(trial.studyTitle || ''),", "studyTitle: normalizePublicStudyTitle(trial.studyTitle || ''),", 1)
+
+# The strict-public-schema patch historically replaced the whole block beginning at
+# getPublicPhysicians and accidentally swallowed these two status helpers.  They are
+# required by buildPublicTrialsDataset(), so restore them after every safe patch run.
+status_label_helper = r"""const getPublicTrialStatusLabel = (trial) => {
+    if (!trial) return '狀態未明';
+    if (trial.isArchived) return '已封存';
+    const status = normalizeText(trial.status || '');
+    if (statusIncludesAny(status, ['需問slot', '需問 slot', '需問名額'])) return '需問名額';
+    if (statusIncludesAny(status, ['暫停收案', 'paused', 'suspended'])) return '暫停收案';
+    if (statusIncludesAny(status, ['名額已滿', '已收滿', '滿額', '收滿', '沒有slot', '暫無slot', 'no slot', 'full'])) return '名額已滿';
+    if (statusIncludesAny(status, ['停止收案', '試驗結束', '試驗終了', '結束收案', '收案結束', 'closed', 'terminated', 'completed', 'closeout'])) return '停止收案';
+    if (statusIncludesAny(status, ['還未siv', '未siv'])) return '尚未開放';
+    if (statusIncludesAny(status, ['預備中'])) return '預備中';
+    if (isExplicitOpenStatusText(status) || trialHasOpenEnrollment(trial)) return '收案中';
+    if (isTrialNumericallyFull(trial)) return '名額已滿';
+    return status || '狀態未明';
+};
+
+"""
+status_class_helper = r"""const getPublicStatusClass = (label) => {
+    const n = normalizeFilterValue(label);
+    if (n.includes('收案中')) return 'open';
+    if (n.includes('需問')) return 'ask';
+    if (n.includes('暫停')) return 'paused';
+    if (n.includes('滿')) return 'full';
+    if (n.includes('停止') || n.includes('結束') || n.includes('終了')) return 'closed';
+    if (n.includes('尚未') || n.includes('預備')) return 'preparing';
+    return 'unknown';
+};
+
+"""
+status_anchor = "const shouldPublishPublicTrial = (trial, publicStatus) => !!("
+if status_anchor not in text:
+    raise SystemExit('shouldPublishPublicTrial anchor not found while restoring public status helpers')
+if 'const getPublicTrialStatusLabel = (trial) => {' not in text:
+    text = text.replace(status_anchor, status_label_helper + status_anchor, 1)
+if 'const getPublicStatusClass = (label) => {' not in text:
+    text = text.replace(status_anchor, status_class_helper + status_anchor, 1)
+
+# Hard regression guards: publishing must never ship with call sites but no helpers.
+if text.count('const getPublicTrialStatusLabel = (trial) => {') != 1:
+    raise SystemExit('getPublicTrialStatusLabel definition missing or duplicated')
+if text.count('const getPublicStatusClass = (label) => {') != 1:
+    raise SystemExit('getPublicStatusClass definition missing or duplicated')
+if 'const publicStatus = getPublicTrialStatusLabel(trial);' not in text:
+    raise SystemExit('public dataset status call site missing')
+if 'statusClass: getPublicStatusClass(publicStatus),' not in text:
+    raise SystemExit('public dataset status-class call site missing')
+
 INDEX.write_text(text, encoding='utf-8')
 
 
@@ -77,4 +127,4 @@ if FALLBACK.exists():
         trial['studyTitle'] = clean_public_title(trial.get('studyTitle', ''))
     FALLBACK.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
-print('normalized public notice JS escapes, legacy publish behavior, and public titles')
+print('normalized public notice JS escapes, legacy publish behavior, public titles, and restored status helpers')
