@@ -132,6 +132,26 @@ const normalizeStudyCodeForImport = (value) => {
 };
 
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
+const STUDY_TITLE_IMPORT_PATCH_VERSION = 'v4.3.7-20260917-study-title-import';
+const normalizeStudyTitleHeaderToken = (value) => String(value || '')
+    .toLowerCase()
+    .replace(/[\s_\-（）()\/:：.]+/g, '');
+const isStudyTitleHeaderText = (value) => {
+    const token = normalizeStudyTitleHeaderToken(value);
+    return /^(?:study(?:title|tittle)|trialtitle|protocoltitle|試驗名稱|試驗標題|計畫名稱)$/.test(token);
+};
+const normalizeImportedStudyTitle = (value) => {
+    const lines = String(value || '').replace(/\r/g, '\n').split(/\n+/)
+        .map(line => String(line || '').replace(/^\s*(?:study\s*(?:title|tittle)|trial\s*title|protocol\s*title|試驗名稱|試驗標題|計畫名稱)\s*(?:[:：\-–—]\s*)?/i, '').trim())
+        .filter(Boolean)
+        .filter(line => !isStudyTitleHeaderText(line));
+    return normalizeText(lines.join(' '));
+};
+const chooseImportedStudyTitle = (previousValue, incomingValue) => {
+    const previous = normalizeImportedStudyTitle(previousValue);
+    const incoming = normalizeImportedStudyTitle(incomingValue);
+    return incoming || previous;
+};
 const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）\.]+/g, '').trim();
 const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
 const LINE_NUMERAL = { '1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六', '7': '七', '8': '八', '9': '九', '１': '一', '２': '二', '３': '三', '４': '四', '５': '五', '６': '六', '７': '七', '８': '八', '９': '九' };
@@ -820,7 +840,7 @@ const cleanTrialForSave = (trial) => {
     const cleaned = { ...(trial || {}) };
     if (!cleaned.code) return null;
     cleaned.code = normalizeCode(cleaned.code);
-    cleaned.studyTitle = normalizeText(cleaned.studyTitle);
+    cleaned.studyTitle = normalizeImportedStudyTitle(cleaned.studyTitle);
     cleaned.sponsor = normalizeText(cleaned.sponsor);
     cleaned.pi = sanitizePiField(cleaned.pi, [cleaned.pi, cleaned.nurse, cleaned.studyTitle, cleaned.inclusion].filter(Boolean).join('\n'));
     cleaned.nurse = sanitizeNurseField(cleaned.nurse);
@@ -845,7 +865,7 @@ const cleanTrialForSave = (trial) => {
 const normalizeFirestoreTrial = (raw) => {
     const trial = { ...(raw || {}) };
     trial.code = normalizeCode(trial.code);
-    trial.studyTitle = normalizeText(trial.studyTitle);
+    trial.studyTitle = normalizeImportedStudyTitle(trial.studyTitle);
     trial.sponsor = normalizeText(trial.sponsor);
     trial.pi = sanitizePiField(trial.pi, [trial.pi, trial.nurse, trial.studyTitle, trial.inclusion].filter(Boolean).join('\n'));
     trial.nurse = sanitizeNurseField(trial.nurse);
@@ -1023,6 +1043,32 @@ const normalizePublicStudyTitle = (value) => {
     return normalizePublicText((kept.length ? kept : lines.slice(0, 1)).join(' '));
 };
 
+const getPublicTrialStatusLabel = (trial) => {
+    if (!trial) return '狀態未明';
+    if (trial.isArchived) return '已封存';
+    const status = normalizeText(trial.status || '');
+    if (statusIncludesAny(status, ['需問slot', '需問 slot', '需問名額'])) return '需問名額';
+    if (statusIncludesAny(status, ['暫停收案', 'paused', 'suspended'])) return '暫停收案';
+    if (statusIncludesAny(status, ['名額已滿', '已收滿', '滿額', '收滿', '沒有slot', '暫無slot', 'no slot', 'full'])) return '名額已滿';
+    if (statusIncludesAny(status, ['停止收案', '試驗結束', '試驗終了', '結束收案', '收案結束', 'closed', 'terminated', 'completed', 'closeout'])) return '停止收案';
+    if (statusIncludesAny(status, ['還未siv', '未siv'])) return '尚未開放';
+    if (statusIncludesAny(status, ['預備中'])) return '預備中';
+    if (isExplicitOpenStatusText(status) || trialHasOpenEnrollment(trial)) return '收案中';
+    if (isTrialNumericallyFull(trial)) return '名額已滿';
+    return status || '狀態未明';
+};
+
+const getPublicStatusClass = (label) => {
+    const n = normalizeFilterValue(label);
+    if (n.includes('收案中')) return 'open';
+    if (n.includes('需問')) return 'ask';
+    if (n.includes('暫停')) return 'paused';
+    if (n.includes('滿')) return 'full';
+    if (n.includes('停止') || n.includes('結束') || n.includes('終了')) return 'closed';
+    if (n.includes('尚未') || n.includes('預備')) return 'preparing';
+    return 'unknown';
+};
+
 const shouldPublishPublicTrial = (trial, publicStatus) => !!(
     trial && trial.publicDisclosureApproved !== false && !trial.isArchived && PUBLIC_VISIBLE_STATUSES.has(publicStatus)
 );
@@ -1084,7 +1130,7 @@ const FIELD_ALIASES = {
     cancerType: ['cancertype','cancer type','癌別','疾病別','適應症','fff'],
     line: ['line','treatment line','線別','治療線別'],
     code: ['code','trial code','study code','protocol','protocol no','protocol number','試驗代碼','計畫代碼','案號','代號'],
-    studyTitle: ['studytitle','study title','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
+    studyTitle: ['studytitle','study title','studytittle','study tittle','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
     inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','inclusion','eligibility','主要條件'],
     exclusion: ['排除條件','主要排除條件','exclusion','exclusioncriteria','exclusion criteria','排除標準'],
     phase: ['phase','期別'],
@@ -1500,6 +1546,7 @@ const applyStudyStatusSnapshot20260901 = (trial) => {
 
 const sanitizeTrialForRuntime = (trial) => {
     let t = { ...(trial || {}) };
+    t.studyTitle = normalizeImportedStudyTitle(t.studyTitle);
     t = sanitizePersonFields(t);
     t.code = normalizeCode(t.code);
     t = applyStudyStatusSnapshot20260822(t);
@@ -1618,6 +1665,7 @@ const splitEligibilitySections = (inclusionText, exclusionText = '') => {
 
 const normalizeImportedTrialFields = (item, options = {}) => {
     let out = { ...(item || {}) };
+    out.studyTitle = normalizeImportedStudyTitle(out.studyTitle);
     out = sanitizePersonFields(out, [out.pi, out.nurse, out.studyTitle, out.inclusion, out.comments].filter(Boolean).join('\n'));
     if (out.cancerType) out.cancerType = normalizeCancerTypeLabel(out.cancerType);
     if (out.line) out.line = normalizeTreatmentLine(out.line);
@@ -1717,6 +1765,10 @@ const consolidateParsedTrials = (rows) => {
         const merged = { ...current };
         Object.entries(row || {}).forEach(([field, value]) => {
             if (field === 'cancerTypes') return;
+            if (field === 'studyTitle') {
+                merged.studyTitle = chooseImportedStudyTitle(merged.studyTitle, value);
+                return;
+            }
             if (field === 'status') {
                 merged.status = chooseMergedTrialStatus(merged.status, value, {
                     incomingDetectedFromText: Boolean(row.statusDetectedFromText),
@@ -1892,7 +1944,7 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             ...incomingForMerge,
             id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
             code: key,
-            studyTitle: normalizeText(incomingForMerge.studyTitle || prev.studyTitle),
+            studyTitle: chooseImportedStudyTitle(prev.studyTitle, incomingForMerge.studyTitle),
             inclusion: normalizeCellText(incomingForMerge.inclusion || prev.inclusion),
             exclusion: normalizeCellText(incomingForMerge.exclusion || prev.exclusion),
             sponsor: normalizeText(incomingForMerge.sponsor || prev.sponsor),
@@ -1951,7 +2003,7 @@ const parseStudyStatusCsv = (csvText) => {
 
 const rowsContainStudyStatusHeader = (rows) => {
     const joined = (rows || []).map(r => (r || []).join(' ')).join(' ');
-    return /(Study\s*title|試驗名稱|計畫名稱).{0,80}(代號|code|protocol)|主要收案條件|Study\s*Nurse/i.test(joined);
+    return /(Study\s*(?:title|tittle)|試驗名稱|計畫名稱).{0,80}(代號|code|protocol)|主要收案條件|Study\s*Nurse/i.test(joined);
 };
 
 const getRowsFromWorkbookSheet = (wb, sheetName) => {
@@ -2013,6 +2065,7 @@ const cleanPdfLineList = (text) => normalizePdfTextForCodeSearch(text)
 
 const firstLineMatching = (lines, regex, start = 0) => {
     for (let i = Math.max(0, start); i < lines.length; i++) {
+        if (isStudyTitleHeaderText(lines[i])) continue;
         if (regex.test(lines[i])) return { index: i, value: lines[i] };
     }
     return { index: -1, value: '' };
@@ -2332,7 +2385,7 @@ const repairKnownStudyStatusPdfRows = (rows, sourceText) => {
 
 const pdfPageHasStudyStatusHeader = (pageData) => {
     const joined = ((pageData && pageData.items) || []).map(item => String(item.str || '')).join(' ');
-    return /Study\s*title/i.test(joined) && /代號/.test(joined) && /(主要收案條件|概要)/.test(joined);
+    return /Study\s*(?:title|tittle)/i.test(joined) && /代號/.test(joined) && /(主要收案條件|概要)/.test(joined);
 };
 
 const pdfRegionText = (lines, topStart, topEnd) => (lines || [])
@@ -2396,7 +2449,7 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
         const titleLines = pdfColumnLines(pageItems, pdfColumnRangeForPage(pageData, 'studyTitle'), dataTop, dataBottom);
         const codeLines = pdfColumnLines(pageItems, pdfColumnRangeForPage(pageData, 'code'), pageHeight * (80 / PDF_REFERENCE_HEIGHT), dataBottom);
         const titleBlocks = pdfLinesToBlocks(titleLines, pageHeight * (15 / PDF_REFERENCE_HEIGHT))
-            .filter(block => block.text && block.text.length > 4 && !/Study\s*title/i.test(block.text));
+            .filter(block => block.text && block.text.length > 4 && !/Study\s*(?:title|tittle)/i.test(block.text));
         const codeBlocks = pdfLinesToBlocks(codeLines, pageHeight * (12 / PDF_REFERENCE_HEIGHT))
             .filter(block => isLikelyPdfCodeCell(block.text));
 
@@ -2523,7 +2576,7 @@ const parseWideSingleTrialPdfPage = (pageData) => {
     const titleLines = pdfColumnLines(titleItems, [-Infinity, Infinity], dataTop, dataBottom, 4.5);
     const titleBlocks = pdfLinesToBlocks(titleLines, Math.max(26, pageHeight * 0.075));
     const titleBlock = titleBlocks
-        .filter(block => /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)
+        .filter(block => !isStudyTitleHeaderText(block.text) && /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)
         .sort((a, b) => b.text.length - a.text.length)[0];
 
     const inclusionItems = pageItems.filter(item => item.top >= dataTop && item.top <= dataBottom && item.centerX > codeX1 + 8 && item.centerX < phaseHeader.centerX - 18);
@@ -2630,7 +2683,8 @@ const parsePdfFile = async (file) => {
     parsedRows = repairKnownStudyStatusPdfRows(parsedRows, text);
     const suspicious = parsedRows.filter(row => {
         const progress = [row.targetNum, row.enrolled, row.monthSigned, row.monthEnrolled].map(v => String(v || '')).join(' ');
-        return /(?:吳\s*佳\s*勳|王\s*秋\s*眉|陳\s*秀\s*玲|孔\s*亭\s*方|張\s*台\s*依)/.test(progress)
+        return !normalizeImportedStudyTitle(row.studyTitle)
+            || /(?:吳\s*佳\s*勳|王\s*秋\s*眉|陳\s*秀\s*玲|孔\s*亭\s*方|張\s*台\s*依)/.test(progress)
             || /(?:reen\d|f\d?ailure\)|佳\s*勳\s*\d)/i.test(progress);
     }).map(row => row.code);
 
