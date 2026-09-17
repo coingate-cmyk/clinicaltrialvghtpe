@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 
 INDEX = Path('index.html')
+TITLE_IMPORT_PATCH_VERSION = 'v4.3.7-20260917-study-title-import'
 NEW_TRIALS = [
     {
         'cancerType': '胰臟癌',
@@ -55,6 +56,150 @@ NEW_TRIALS = [
 ]
 
 
+def replace_required(text, old, new, label, count=1):
+    if new in text:
+        return text
+    if old not in text:
+        raise SystemExit(f'{label} anchor not found')
+    return text.replace(old, new, count)
+
+
+def patch_study_title_import(html):
+    marker = f"const STUDY_TITLE_IMPORT_PATCH_VERSION = '{TITLE_IMPORT_PATCH_VERSION}';"
+    if marker in html:
+        return html
+
+    normalize_text_anchor = r"const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();"
+    title_helpers = normalize_text_anchor + f"""
+const STUDY_TITLE_IMPORT_PATCH_VERSION = '{TITLE_IMPORT_PATCH_VERSION}';
+const normalizeStudyTitleHeaderToken = (value) => String(value || '')
+    .toLowerCase()
+    .replace(/[\\s_\\-（）()\\/:：.]+/g, '');
+const isStudyTitleHeaderText = (value) => {{
+    const token = normalizeStudyTitleHeaderToken(value);
+    return /^(?:study(?:title|tittle)|trialtitle|protocoltitle|試驗名稱|試驗標題|計畫名稱)$/.test(token);
+}};
+const normalizeImportedStudyTitle = (value) => {{
+    const lines = String(value || '').replace(/\\r/g, '\\n').split(/\\n+/)
+        .map(line => String(line || '').replace(/^\\s*(?:study\\s*(?:title|tittle)|trial\\s*title|protocol\\s*title|試驗名稱|試驗標題|計畫名稱)\\s*(?:[:：\\-–—]\\s*)?/i, '').trim())
+        .filter(Boolean)
+        .filter(line => !isStudyTitleHeaderText(line));
+    return normalizeText(lines.join(' '));
+}};
+const chooseImportedStudyTitle = (previousValue, incomingValue) => {{
+    const previous = normalizeImportedStudyTitle(previousValue);
+    const incoming = normalizeImportedStudyTitle(incomingValue);
+    return incoming || previous;
+}};"""
+    html = replace_required(html, normalize_text_anchor, title_helpers, 'normalizeText')
+
+    html = replace_required(
+        html,
+        "'studytitle','study title','title','trial title','protocol title'",
+        "'studytitle','study title','studytittle','study tittle','title','trial title','protocol title'",
+        'studyTitle aliases'
+    )
+
+    # Accept the common typo in PDF/worksheet headers everywhere the standard header is recognized.
+    html = html.replace(r'Study\s*title', r'Study\s*(?:title|tittle)')
+
+    old_runtime = """const sanitizeTrialForRuntime = (trial) => {
+    let t = { ...(trial || {}) };
+    t = sanitizePersonFields(t);"""
+    new_runtime = """const sanitizeTrialForRuntime = (trial) => {
+    let t = { ...(trial || {}) };
+    t.studyTitle = normalizeImportedStudyTitle(t.studyTitle);
+    t = sanitizePersonFields(t);"""
+    html = replace_required(html, old_runtime, new_runtime, 'sanitizeTrialForRuntime')
+
+    html = replace_required(
+        html,
+        'cleaned.studyTitle = normalizeText(cleaned.studyTitle);',
+        'cleaned.studyTitle = normalizeImportedStudyTitle(cleaned.studyTitle);',
+        'cleanTrialForSave studyTitle'
+    )
+    html = replace_required(
+        html,
+        'trial.studyTitle = normalizeText(trial.studyTitle);',
+        'trial.studyTitle = normalizeImportedStudyTitle(trial.studyTitle);',
+        'normalizeFirestoreTrial studyTitle'
+    )
+
+    old_import_normalize = """const normalizeImportedTrialFields = (item, options = {}) => {
+    let out = { ...(item || {}) };
+    out = sanitizePersonFields(out, [out.pi, out.nurse, out.studyTitle, out.inclusion, out.comments].filter(Boolean).join('\\n'));"""
+    new_import_normalize = """const normalizeImportedTrialFields = (item, options = {}) => {
+    let out = { ...(item || {}) };
+    out.studyTitle = normalizeImportedStudyTitle(out.studyTitle);
+    out = sanitizePersonFields(out, [out.pi, out.nurse, out.studyTitle, out.inclusion, out.comments].filter(Boolean).join('\\n'));"""
+    html = replace_required(html, old_import_normalize, new_import_normalize, 'normalizeImportedTrialFields studyTitle')
+
+    old_merge_fields = """        Object.entries(row || {}).forEach(([field, value]) => {
+            if (field === 'cancerTypes') return;
+            if (field === 'status') {"""
+    new_merge_fields = """        Object.entries(row || {}).forEach(([field, value]) => {
+            if (field === 'cancerTypes') return;
+            if (field === 'studyTitle') {
+                merged.studyTitle = chooseImportedStudyTitle(merged.studyTitle, value);
+                return;
+            }
+            if (field === 'status') {"""
+    html = replace_required(html, old_merge_fields, new_merge_fields, 'consolidateParsedTrials studyTitle merge')
+
+    html = replace_required(
+        html,
+        'studyTitle: normalizeText(incomingForMerge.studyTitle || prev.studyTitle),',
+        'studyTitle: chooseImportedStudyTitle(prev.studyTitle, incomingForMerge.studyTitle),',
+        'upsertTrialsByCode studyTitle merge'
+    )
+
+    old_first_line = """const firstLineMatching = (lines, regex, start = 0) => {
+    for (let i = Math.max(0, start); i < lines.length; i++) {
+        if (regex.test(lines[i])) return { index: i, value: lines[i] };
+    }
+    return { index: -1, value: '' };
+};"""
+    new_first_line = """const firstLineMatching = (lines, regex, start = 0) => {
+    for (let i = Math.max(0, start); i < lines.length; i++) {
+        if (isStudyTitleHeaderText(lines[i])) continue;
+        if (regex.test(lines[i])) return { index: i, value: lines[i] };
+    }
+    return { index: -1, value: '' };
+};"""
+    html = replace_required(html, old_first_line, new_first_line, 'firstLineMatching header guard')
+
+    html = replace_required(
+        html,
+        ".filter(block => /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)",
+        ".filter(block => !isStudyTitleHeaderText(block.text) && /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)",
+        'wide PDF title header guard'
+    )
+
+    # A standard PDF should carry a real title. Surface blank-title rows in the existing warning list,
+    # but do not reject them because status-only updates are allowed and must preserve the previous title.
+    old_suspicious = """        return /(?:吳\\s*佳\\s*勳|王\\s*秋\\s*眉|陳\\s*秀\\s*玲|孔\\s*亭\\s*方|張\\s*台\\s*依)/.test(progress)
+            || /(?:reen\\d|f\\d?ailure\\)|佳\\s*勳\\s*\\d)/i.test(progress);"""
+    new_suspicious = """        return !normalizeImportedStudyTitle(row.studyTitle)
+            || /(?:吳\\s*佳\\s*勳|王\\s*秋\\s*眉|陳\\s*秀\\s*玲|孔\\s*亭\\s*方|張\\s*台\\s*依)/.test(progress)
+            || /(?:reen\\d|f\\d?ailure\\)|佳\\s*勳\\s*\\d)/i.test(progress);"""
+    html = replace_required(html, old_suspicious, new_suspicious, 'PDF blank-title warning')
+
+    required = [
+        marker,
+        "'studytittle','study tittle'",
+        't.studyTitle = normalizeImportedStudyTitle(t.studyTitle);',
+        'out.studyTitle = normalizeImportedStudyTitle(out.studyTitle);',
+        'chooseImportedStudyTitle(prev.studyTitle, incomingForMerge.studyTitle)',
+        'merged.studyTitle = chooseImportedStudyTitle(merged.studyTitle, value);',
+        r'Study\s*(?:title|tittle)',
+        'if (isStudyTitleHeaderText(lines[i])) continue;'
+    ]
+    missing = [item for item in required if item not in html]
+    if missing:
+        raise SystemExit('Study title import patch incomplete: ' + ', '.join(missing))
+    return html
+
+
 def main():
     html = INDEX.read_text(encoding='utf-8')
     if 'const STUDY_STATUS_NEW_TRIALS_20260901' not in html:
@@ -85,8 +230,9 @@ const sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20260901
     elif 'const ensureStudyStatusAdditions20260901' not in html:
         raise SystemExit('sanitizeTrialListForRuntime anchor not found')
 
+    html = patch_study_title_import(html)
     INDEX.write_text(html, encoding='utf-8')
-    print('Ensured RMC-6236-303 and XL092-311 remain visible when Firestore still has the older collection.')
+    print('Ensured latest Study Status additions and hardened study-title import/header handling.')
 
 
 if __name__ == '__main__':
