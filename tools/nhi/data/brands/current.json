@@ -4,10 +4,10 @@
     "transport": "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-E41001-001",
     "resource_id": "A21030000I-E41001-001",
     "dataset": "健保用藥品項查詢項目檔",
-    "fetched_at": "2026-09-21T08:09:34.729564Z",
+    "fetched_at": "2026-10-05T09:32:06.151744Z",
     "scope": "active oncology-related NHI listed products; top-level Chapter 9 and oncology ATC/category filters",
-    "product_count": 1576,
-    "ingredient_count": 434,
+    "product_count": 1583,
+    "ingredient_count": 440,
     "classification_note": "Official NHI dataset does not reliably label originator vs generic; products are indexed as NHI-listed brand names. Known originator brand aliases remain separately curated in the UI."
   },
   "products": [
@@ -285,6 +285,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "B026033100",
+      "brand_en": "Giotrif Film-Coated Tablets 40 mg",
+      "brand_zh": "妥復克膜衣錠40毫克",
+      "ingredient": "AFATINIB DIMALEATE 40 MG",
+      "company": "台灣百靈佳殷格翰股份有限公司",
+      "manufacturer": "BOEHRINGER INGELHEIM PHARMA GMBH ＆ CO. KG.",
+      "atc": "L01EB03",
+      "chapter": "9.45.",
+      "price": "0.00",
+      "effective_from": "1040701",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC26033100",
       "brand_en": "Giotrif Film-Coated Tablets 40 mg",
       "brand_zh": "妥復克膜衣錠40毫克",
@@ -298,10 +311,10 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B026033100",
-      "brand_en": "Giotrif Film-Coated Tablets 40 mg",
-      "brand_zh": "妥復克膜衣錠40毫克",
-      "ingredient": "AFATINIB DIMALEATE 40 MG",
+      "code": "B026034100",
+      "brand_en": "Giotrif Film-Coated Tablets 50 mg",
+      "brand_zh": "妥復克膜衣錠50毫克",
+      "ingredient": "AFATINIB DIMALEATE 50 MG",
       "company": "台灣百靈佳殷格翰股份有限公司",
       "manufacturer": "BOEHRINGER INGELHEIM PHARMA GMBH ＆ CO. KG.",
       "atc": "L01EB03",
@@ -321,19 +334,6 @@
       "chapter": "9.45.",
       "price": "0.00",
       "effective_from": "1140101",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "B026034100",
-      "brand_en": "Giotrif Film-Coated Tablets 50 mg",
-      "brand_zh": "妥復克膜衣錠50毫克",
-      "ingredient": "AFATINIB DIMALEATE 50 MG",
-      "company": "台灣百靈佳殷格翰股份有限公司",
-      "manufacturer": "BOEHRINGER INGELHEIM PHARMA GMBH ＆ CO. KG.",
-      "atc": "L01EB03",
-      "chapter": "9.45.",
-      "price": "0.00",
-      "effective_from": "1040701",
       "effective_to": "9991231"
     },
     {
@@ -597,19 +597,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AB47539100",
-      "brand_en": "ANAZO F.C. TABLETS",
-      "brand_zh": "安納柔膜衣錠",
-      "ingredient": "ANASTROZOLE 1 MG",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司六堵廠",
-      "atc": "L02BG03",
-      "chapter": "9.1.2.",
-      "price": "28.10",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A047539100",
       "brand_en": "ANAZO F.C. TABLETS",
       "brand_zh": "安納柔膜衣錠",
@@ -621,6 +608,19 @@
       "price": "112.00",
       "effective_from": "950201",
       "effective_to": "980930"
+    },
+    {
+      "code": "AB47539100",
+      "brand_en": "ANAZO F.C. TABLETS",
+      "brand_zh": "安納柔膜衣錠",
+      "ingredient": "ANASTROZOLE 1 MG",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司六堵廠",
+      "atc": "L02BG03",
+      "chapter": "9.1.2.",
+      "price": "28.10",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
     },
     {
       "code": "AA55555100",
@@ -662,19 +662,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AB48909100",
-      "brand_en": "Ansuzole F.C. Tablets 1 mg",
-      "brand_zh": "安斯如膜衣錠 1 毫克",
-      "ingredient": "ANASTROZOLE 1 MG",
-      "company": "美時化學製藥股份有限公司",
-      "manufacturer": "美時化學製藥股份有限公司南投廠",
-      "atc": "L02BG03",
-      "chapter": "9.1.2.",
-      "price": "28.10",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AC48909100",
       "brand_en": "Ansuzole F.C. Tablets 1 mg",
       "brand_zh": "安斯如膜衣錠 1 毫克",
@@ -698,6 +685,19 @@
       "chapter": "9.1.2.",
       "price": "0.00",
       "effective_from": "1030101",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AB48909100",
+      "brand_en": "Ansuzole F.C. Tablets 1 mg",
+      "brand_zh": "安斯如膜衣錠 1 毫克",
+      "ingredient": "ANASTROZOLE 1 MG",
+      "company": "美時化學製藥股份有限公司",
+      "manufacturer": "美時化學製藥股份有限公司南投廠",
+      "atc": "L02BG03",
+      "chapter": "9.1.2.",
+      "price": "28.10",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -922,6 +922,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "KC01312212",
+      "brand_en": "YESCARTA SUSPENSION FOR INTRAVENOUS INFUSION",
+      "brand_zh": "悅卡達靜脈輸注用懸浮液",
+      "ingredient": "AXICABTAGENE CILOLEUCEL 2 x10^6 CAR-",
+      "company": "香港商吉立亞醫藥有限公司台灣分公司",
+      "manufacturer": "KITE PHARMA, INC.",
+      "atc": "L01XL03",
+      "chapter": "",
+      "price": "8198096.0",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC25853100",
       "brand_en": "INLYTA Film-Coated Tablets 1 mg",
       "brand_zh": "抑癌特膜衣錠 1 毫克",
@@ -969,9 +982,9 @@
       "manufacturer": "霖揚生技製藥股份有限公司",
       "atc": "L01BC07",
       "chapter": "9.44.",
-      "price": "3333.00",
-      "effective_from": "1140801",
-      "effective_to": "1150930"
+      "price": "0.00",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
     },
     {
       "code": "AC61049255",
@@ -1148,7 +1161,7 @@
       "brand_zh": "寧癌平凍晶注射劑",
       "ingredient": "BENDAMUSTINE HYDROCHLORIDE 100 MG",
       "company": "友華生技醫藥股份有限公司",
-      "manufacturer": "ONCOMED MANUFACTURING A.S.",
+      "manufacturer": "",
       "atc": "L01AA09",
       "chapter": "9.42.",
       "price": "6979.00",
@@ -1200,7 +1213,7 @@
       "brand_zh": "寧癌平凍晶注射劑",
       "ingredient": "BENDAMUSTINE HYDROCHLORIDE 25 MG",
       "company": "友華生技醫藥股份有限公司",
-      "manufacturer": "ONCOMED MANUFACTURING A.S.",
+      "manufacturer": "",
       "atc": "L01AA09",
       "chapter": "9.42.",
       "price": "0.00",
@@ -1637,19 +1650,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC25087100",
-      "brand_en": "pms-BICALUTAMIDE 50mg F.C. Tablets",
-      "brand_zh": "欣益健膜衣錠 50 毫克",
-      "ingredient": "BICALUTAMIDE 50 MG",
-      "company": "健喬信元醫藥生技股份有限公司",
-      "manufacturer": "PHARMASCIENCE INC.",
-      "atc": "L02BB03",
-      "chapter": "9.40.",
-      "price": "0.00",
-      "effective_from": "1050901",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BA25087100",
       "brand_en": "pms-BICALUTAMIDE 50mg F.C. Tablets",
       "brand_zh": "欣益健膜衣錠 50 毫克",
@@ -1660,6 +1660,19 @@
       "chapter": "9.40.",
       "price": "0.00",
       "effective_from": "1140601",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC25087100",
+      "brand_en": "pms-BICALUTAMIDE 50mg F.C. Tablets",
+      "brand_zh": "欣益健膜衣錠 50 毫克",
+      "ingredient": "BICALUTAMIDE 50 MG",
+      "company": "健喬信元醫藥生技股份有限公司",
+      "manufacturer": "PHARMASCIENCE INC.",
+      "atc": "L02BB03",
+      "chapter": "9.40.",
+      "price": "0.00",
+      "effective_from": "1050901",
       "effective_to": "9991231"
     },
     {
@@ -2105,6 +2118,19 @@
       "effective_to": "890331"
     },
     {
+      "code": "B021575222",
+      "brand_en": "SUPREMON INJECTABLE SOLUTION",
+      "brand_zh": "舒培盟注射液",
+      "ingredient": "BUSERELIN (ACETATE) 1 MG/ML",
+      "company": "賽諾菲股份有限公司",
+      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
+      "atc": "L02AE01",
+      "chapter": "5.5.1.,9.39.",
+      "price": "1500.00",
+      "effective_from": "870101",
+      "effective_to": "920228"
+    },
+    {
       "code": "BC21575222",
       "brand_en": "SUPREMON INJECTABLE SOLUTION",
       "brand_zh": "舒培盟注射液",
@@ -2118,15 +2144,15 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B021575222",
-      "brand_en": "SUPREMON INJECTABLE SOLUTION",
-      "brand_zh": "舒培盟注射液",
-      "ingredient": "BUSERELIN (ACETATE) 1 MG/ML",
+      "code": "B021686429",
+      "brand_en": "SUPREMON NASAL SOLUTION",
+      "brand_zh": "舒培盟噴鼻液",
+      "ingredient": "BUSERELIN (ACETATE) 1.05 MCG/MG (=U",
       "company": "賽諾菲股份有限公司",
       "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
       "atc": "L02AE01",
       "chapter": "5.5.1.,9.39.",
-      "price": "1500.00",
+      "price": "2400.00",
       "effective_from": "870101",
       "effective_to": "920228"
     },
@@ -2144,19 +2170,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B021686429",
-      "brand_en": "SUPREMON NASAL SOLUTION",
-      "brand_zh": "舒培盟噴鼻液",
-      "ingredient": "BUSERELIN (ACETATE) 1.05 MCG/MG (=U",
-      "company": "賽諾菲股份有限公司",
-      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
-      "atc": "L02AE01",
-      "chapter": "5.5.1.,9.39.",
-      "price": "2400.00",
-      "effective_from": "870101",
-      "effective_to": "920228"
-    },
-    {
       "code": "B021686499",
       "brand_en": "SUPREMON NASAL SOLUTION",
       "brand_zh": "舒培盟噴鼻液",
@@ -2170,6 +2183,19 @@
       "effective_to": "920228"
     },
     {
+      "code": "B021573429",
+      "brand_en": "SUPRECUR NASAL SOLUTION",
+      "brand_zh": "適爾克噴鼻液",
+      "ingredient": "BUSERELIN (ACETATE) 1.5 MCG/MG (=U",
+      "company": "賽諾菲股份有限公司",
+      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
+      "atc": "L02AE01",
+      "chapter": "5.5.1.,9.39.",
+      "price": "0.00",
+      "effective_from": "940401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B018902429",
       "brand_en": "SUPRECUR NASAL SOLUTION",
       "brand_zh": "適爾克噴鼻液",
@@ -2181,19 +2207,6 @@
       "price": "0.00",
       "effective_from": "840301",
       "effective_to": "851031"
-    },
-    {
-      "code": "B021573429",
-      "brand_en": "SUPRECUR NASAL SOLUTION",
-      "brand_zh": "適爾克噴鼻液",
-      "ingredient": "BUSERELIN (ACETATE) 1.5 MCG/MG (=U",
-      "company": "賽諾菲股份有限公司",
-      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
-      "atc": "L02AE01",
-      "chapter": "5.5.1.,9.39.",
-      "price": "3000.00",
-      "effective_from": "870101",
-      "effective_to": "920228"
     },
     {
       "code": "B009115100",
@@ -2846,32 +2859,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24074235",
-      "brand_en": "PARAPLATIN IV INJECTION",
-      "brand_zh": "佳鉑帝靜脈注射液",
-      "ingredient": "CARBOPLATIN 10 MG/ML",
-      "company": "台灣大昌華嘉股份有限公司",
-      "manufacturer": "LATINA PHARMA S.P.A.",
-      "atc": "L01XA02",
-      "chapter": "9.2.",
-      "price": "1201.00",
-      "effective_from": "1120401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC240742AP",
-      "brand_en": "PARAPLATIN IV INJECTION",
-      "brand_zh": "佳鉑帝靜脈注射液",
-      "ingredient": "CARBOPLATIN 10 MG/ML",
-      "company": "台灣大昌華嘉股份有限公司",
-      "manufacturer": "LATINA PHARMA S.P.A.",
-      "atc": "L01XA02",
-      "chapter": "9.2.",
-      "price": "2662.00",
-      "effective_from": "1120401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024074235",
       "brand_en": "PARAPLATIN IV INJECTION",
       "brand_zh": "佳鉑帝靜脈注射液",
@@ -2898,6 +2885,32 @@
       "effective_to": "951031"
     },
     {
+      "code": "BC240742AP",
+      "brand_en": "PARAPLATIN IV INJECTION",
+      "brand_zh": "佳鉑帝靜脈注射液",
+      "ingredient": "CARBOPLATIN 10 MG/ML",
+      "company": "台灣大昌華嘉股份有限公司",
+      "manufacturer": "LATINA PHARMA S.P.A.",
+      "atc": "L01XA02",
+      "chapter": "9.2.",
+      "price": "2662.00",
+      "effective_from": "1120401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24074235",
+      "brand_en": "PARAPLATIN IV INJECTION",
+      "brand_zh": "佳鉑帝靜脈注射液",
+      "ingredient": "CARBOPLATIN 10 MG/ML",
+      "company": "台灣大昌華嘉股份有限公司",
+      "manufacturer": "LATINA PHARMA S.P.A.",
+      "atc": "L01XA02",
+      "chapter": "9.2.",
+      "price": "1201.00",
+      "effective_from": "1120401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B018696261",
       "brand_en": "PARAPLATIN FOR INJECTION",
       "brand_zh": "佳鉑帝凍晶注射劑",
@@ -2906,9 +2919,9 @@
       "manufacturer": "BRISTOL-MYERS SQUIBB CARIBBEAN COMPANY",
       "atc": "L01XA02",
       "chapter": "9.2.",
-      "price": "3211.00",
-      "effective_from": "951101",
-      "effective_to": "970930"
+      "price": "3547.00",
+      "effective_from": "840301",
+      "effective_to": "920228"
     },
     {
       "code": "B017782261",
@@ -2921,6 +2934,19 @@
       "chapter": "9.2.",
       "price": "3547.00",
       "effective_from": "840301",
+      "effective_to": "890331"
+    },
+    {
+      "code": "B020966248",
+      "brand_en": "CARBOPLATIN FOR INJECTION",
+      "brand_zh": "克本瘤注射液",
+      "ingredient": "CARBOPLATIN 450 MG",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01XA02",
+      "chapter": "9.2.",
+      "price": "1043.20",
+      "effective_from": "851101",
       "effective_to": "890331"
     },
     {
@@ -2946,19 +2972,6 @@
       "atc": "L01XA02",
       "chapter": "9.2.",
       "price": "7721.60",
-      "effective_from": "851101",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B020966248",
-      "brand_en": "CARBOPLATIN FOR INJECTION",
-      "brand_zh": "克本瘤注射液",
-      "ingredient": "CARBOPLATIN 450 MG",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01XA02",
-      "chapter": "9.2.",
-      "price": "1043.20",
       "effective_from": "851101",
       "effective_to": "890331"
     },
@@ -3036,9 +3049,9 @@
       "manufacturer": "DAIICHI SANKYO PROPHARMA CO., LTD. (HIRATSUKA PLANT)",
       "atc": "L01AC03",
       "chapter": "",
-      "price": "303.00",
-      "effective_from": "900401",
-      "effective_to": "920228"
+      "price": "357.30",
+      "effective_from": "840301",
+      "effective_to": "890331"
     },
     {
       "code": "BC27490243",
@@ -3163,7 +3176,7 @@
       "brand_zh": "爾必得舒 注射液 5 毫克/毫升",
       "ingredient": "CETUXIMAB, CHIMERIC ANTIBODY 5 MG/ML",
       "company": "台灣默克股份有限公司",
-      "manufacturer": "Merck Healthcare KGaA",
+      "manufacturer": "MERCK SERONO SA， AUBONNE BRANCH",
       "atc": "L01FE01",
       "chapter": "9.27.",
       "price": "7982.00",
@@ -3176,7 +3189,7 @@
       "brand_zh": "爾必得舒 注射液 5 毫克/毫升",
       "ingredient": "CETUXIMAB, CHIMERIC ANTIBODY 5 MG/ML",
       "company": "台灣默克股份有限公司",
-      "manufacturer": "Merck Healthcare KGaA",
+      "manufacturer": "MERCK SERONO SA， AUBONNE BRANCH",
       "atc": "L01FE01",
       "chapter": "9.27.",
       "price": "4850.00",
@@ -3205,9 +3218,9 @@
       "manufacturer": "EXCELLA GMBH ＆ CO. KG",
       "atc": "L01AA02",
       "chapter": "",
-      "price": "12.70",
-      "effective_from": "920301",
-      "effective_to": "980930"
+      "price": "12.79",
+      "effective_from": "840301",
+      "effective_to": "920228"
     },
     {
       "code": "BC09146100",
@@ -3236,6 +3249,19 @@
       "effective_to": "890331"
     },
     {
+      "code": "B020937238",
+      "brand_en": "ABIPLATIN INJECTION 0.5MG/ML",
+      "brand_zh": "阿樂癌注射液０．５公絲/公撮",
+      "ingredient": "CISPLATIN (=CIS-DDP=DDP) .5 MG/ML",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01XA01",
+      "chapter": "",
+      "price": "79.00",
+      "effective_from": "860401",
+      "effective_to": "900331"
+    },
+    {
       "code": "B020937255",
       "brand_en": "ABIPLATIN INJECTION 0.5MG/ML",
       "brand_zh": "阿樂癌注射液０．５公絲/公撮",
@@ -3260,19 +3286,6 @@
       "price": "421.20",
       "effective_from": "860601",
       "effective_to": "890331"
-    },
-    {
-      "code": "B020937238",
-      "brand_en": "ABIPLATIN INJECTION 0.5MG/ML",
-      "brand_zh": "阿樂癌注射液０．５公絲/公撮",
-      "ingredient": "CISPLATIN (=CIS-DDP=DDP) .5 MG/ML",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01XA01",
-      "chapter": "",
-      "price": "79.00",
-      "effective_from": "860401",
-      "effective_to": "900331"
     },
     {
       "code": "B018873238",
@@ -3387,9 +3400,9 @@
       "manufacturer": "Corden Pharma Latina S.p.A.",
       "atc": "L01XA01",
       "chapter": "",
-      "price": "256.00",
-      "effective_from": "890201",
-      "effective_to": "920228"
+      "price": "171.00",
+      "effective_from": "940901",
+      "effective_to": "990630"
     },
     {
       "code": "B022602255",
@@ -3535,7 +3548,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC27762248",
+      "code": "BC27762229",
       "brand_en": "Cisplatin Taxo Injection 1mg/mL Concentrate Solution for Infusion",
       "brand_zh": "喜思鉑\"泰和碩\"注射劑",
       "ingredient": "CISPLATIN (=CIS-DDP=DDP) 1 MG/ML",
@@ -3548,7 +3561,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC27762229",
+      "code": "BC27762248",
       "brand_en": "Cisplatin Taxo Injection 1mg/mL Concentrate Solution for Infusion",
       "brand_zh": "喜思鉑\"泰和碩\"注射劑",
       "ingredient": "CISPLATIN (=CIS-DDP=DDP) 1 MG/ML",
@@ -3587,19 +3600,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC25744248",
-      "brand_en": "Kemoplat Injection 1mg/ml",
-      "brand_zh": "克莫抗癌注射劑1毫克/毫升",
-      "ingredient": "CISPLATIN (=CIS-DDP=DDP) 1 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01XA01",
-      "chapter": "",
-      "price": "350.00",
-      "effective_from": "1040101",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC25744229",
       "brand_en": "Kemoplat Injection 1mg/ml",
       "brand_zh": "克莫抗癌注射劑1毫克/毫升",
@@ -3610,6 +3610,19 @@
       "chapter": "",
       "price": "0.00",
       "effective_from": "1080701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC25744248",
+      "brand_en": "Kemoplat Injection 1mg/ml",
+      "brand_zh": "克莫抗癌注射劑1毫克/毫升",
+      "ingredient": "CISPLATIN (=CIS-DDP=DDP) 1 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01XA01",
+      "chapter": "",
+      "price": "350.00",
+      "effective_from": "1040101",
       "effective_to": "9991231"
     },
     {
@@ -3699,9 +3712,9 @@
       "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
       "atc": "L01BB04",
       "chapter": "",
-      "price": "16262.00",
-      "effective_from": "880401",
-      "effective_to": "920228"
+      "price": "0.00",
+      "effective_from": "1040301",
+      "effective_to": "9991231"
     },
     {
       "code": "BC21992229",
@@ -3816,9 +3829,9 @@
       "manufacturer": "ORION CORPORATION ORION PHARMA， TURKU PLANT",
       "atc": "L01AA01",
       "chapter": "",
-      "price": "66.00",
-      "effective_from": "920301",
-      "effective_to": "940331"
+      "price": "72.00",
+      "effective_from": "840301",
+      "effective_to": "920228"
     },
     {
       "code": "B017105209",
@@ -3946,22 +3959,9 @@
       "manufacturer": "BAXTER ONCOLOGY GMBH",
       "atc": "L01AA01",
       "chapter": "",
-      "price": "88.00",
-      "effective_from": "861001",
-      "effective_to": "920228"
-    },
-    {
-      "code": "BC21304263",
-      "brand_en": "Endoxan Injection",
-      "brand_zh": "癌得星注射劑",
-      "ingredient": "CYCLOPHOSPHAMIDE 200 MG",
-      "company": "百特醫療產品股份有限公司",
-      "manufacturer": "BAXTER ONCOLOGY GMBH",
-      "atc": "L01AA01",
-      "chapter": "",
-      "price": "112.00",
-      "effective_from": "1140701",
-      "effective_to": "9991231"
+      "price": "86.00",
+      "effective_from": "920301",
+      "effective_to": "951031"
     },
     {
       "code": "B013680263",
@@ -4011,22 +4011,9 @@
       "manufacturer": "BAXTER ONCOLOGY GMBH",
       "atc": "L01AA01",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "1040301",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC21304277",
-      "brand_en": "Endoxan Injection",
-      "brand_zh": "癌得星注射劑",
-      "ingredient": "CYCLOPHOSPHAMIDE 500 MG",
-      "company": "百特醫療產品股份有限公司",
-      "manufacturer": "BAXTER ONCOLOGY GMBH",
-      "atc": "L01AA01",
-      "chapter": "",
-      "price": "253.00",
-      "effective_from": "1140701",
-      "effective_to": "9991231"
+      "price": "220.00",
+      "effective_from": "861001",
+      "effective_to": "920228"
     },
     {
       "code": "B013563277",
@@ -4042,6 +4029,45 @@
       "effective_to": "890331"
     },
     {
+      "code": "BC21304209",
+      "brand_en": "Endoxan Injection",
+      "brand_zh": "癌得星注射劑",
+      "ingredient": "CYCLOPHOSPHAMIDE MONOHYDRATE 1000 MG",
+      "company": "百特醫療產品股份有限公司",
+      "manufacturer": "BAXTER ONCOLOGY GMBH",
+      "atc": "L01AA01",
+      "chapter": "",
+      "price": "455.00",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC21304263",
+      "brand_en": "Endoxan Injection",
+      "brand_zh": "癌得星注射劑",
+      "ingredient": "CYCLOPHOSPHAMIDE MONOHYDRATE 213.8 MG",
+      "company": "百特醫療產品股份有限公司",
+      "manufacturer": "BAXTER ONCOLOGY GMBH",
+      "atc": "L01AA01",
+      "chapter": "",
+      "price": "112.00",
+      "effective_from": "1140701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC21304277",
+      "brand_en": "Endoxan Injection",
+      "brand_zh": "癌得星注射劑",
+      "ingredient": "CYCLOPHOSPHAMIDE MONOHYDRATE 534.5 MG",
+      "company": "百特醫療產品股份有限公司",
+      "manufacturer": "BAXTER ONCOLOGY GMBH",
+      "atc": "L01AA01",
+      "chapter": "",
+      "price": "253.00",
+      "effective_from": "1140701",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B018023209",
       "brand_en": "CYTOSAR STERILE POWDER 1G VIAL",
       "brand_zh": "賽德薩滅菌粉１公克",
@@ -4050,9 +4076,9 @@
       "manufacturer": "PFIZER MANUFACTURING BELGIUM NV",
       "atc": "L01BC01",
       "chapter": "",
-      "price": "1259.74",
-      "effective_from": "890401",
-      "effective_to": "900331"
+      "price": "0.00",
+      "effective_from": "840301",
+      "effective_to": "851031"
     },
     {
       "code": "B015503255",
@@ -4068,6 +4094,19 @@
       "effective_to": "851031"
     },
     {
+      "code": "BC25603277",
+      "brand_en": "Cytarine Injection",
+      "brand_zh": "思得靈注射液",
+      "ingredient": "CYTARABINE 100 MG",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01BC01",
+      "chapter": "",
+      "price": "442.00",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B001878255",
       "brand_en": "CYTOSAR FREEZE-DRIED POWDER FOR INJECTION 100MG",
       "brand_zh": "賽德薩注射劑100毫克",
@@ -4076,9 +4115,9 @@
       "manufacturer": "ACTAVIS ITALY S.P.A",
       "atc": "L01BC01",
       "chapter": "",
-      "price": "155.00",
-      "effective_from": "951101",
-      "effective_to": "960831"
+      "price": "255.00",
+      "effective_from": "840301",
+      "effective_to": "920228"
     },
     {
       "code": "BC01878255",
@@ -4120,6 +4159,19 @@
       "effective_to": "890331"
     },
     {
+      "code": "B021721238",
+      "brand_en": "CYTARABINE INJECTION 1000MG/10ML, 2000MG/20ML",
+      "brand_zh": "斯德律比注射液",
+      "ingredient": "CYTARABINE 100 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01BC01",
+      "chapter": "",
+      "price": "1968.00",
+      "effective_from": "861001",
+      "effective_to": "890331"
+    },
+    {
       "code": "B019994229",
       "brand_en": "CYTARABINE INJECTION 1000MG/10ML, 2000MG/20ML",
       "brand_zh": "斯德律比注射液",
@@ -4144,19 +4196,6 @@
       "price": "0.00",
       "effective_from": "840301",
       "effective_to": "860228"
-    },
-    {
-      "code": "B021721238",
-      "brand_en": "CYTARABINE INJECTION 1000MG/10ML, 2000MG/20ML",
-      "brand_zh": "斯德律比注射液",
-      "ingredient": "CYTARABINE 100 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01BC01",
-      "chapter": "",
-      "price": "1968.00",
-      "effective_from": "861001",
-      "effective_to": "890331"
     },
     {
       "code": "B021695209",
@@ -4375,9 +4414,9 @@
       "manufacturer": "PFIZER MANUFACTURING BELGIUM NV",
       "atc": "L01BC01",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "840301",
-      "effective_to": "851031"
+      "price": "2262.01",
+      "effective_from": "890401",
+      "effective_to": "900331"
     },
     {
       "code": "B001664209",
@@ -4388,9 +4427,9 @@
       "manufacturer": "NIPPON SHINYAKU CO.， LTD. ODAWARA CENTRAL FACTORY.",
       "atc": "L01BC01",
       "chapter": "",
-      "price": "76.40",
-      "effective_from": "840301",
-      "effective_to": "920228"
+      "price": "76.00",
+      "effective_from": "920301",
+      "effective_to": "990930"
     },
     {
       "code": "B001663216",
@@ -4609,9 +4648,9 @@
       "manufacturer": "BAXTER ONCOLOGY GMBH",
       "atc": "L01DA01",
       "chapter": "",
-      "price": "199.00",
-      "effective_from": "900401",
-      "effective_to": "941130"
+      "price": "177.00",
+      "effective_from": "840301",
+      "effective_to": "891231"
     },
     {
       "code": "X000168277",
@@ -4640,19 +4679,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "KC01056221",
-      "brand_en": "Darzalex Concentrate for solution for infusion 20mg/ml",
-      "brand_zh": "兆科注射劑20毫克/毫升",
-      "ingredient": "DARATUMUMAB 20 MG/ML",
-      "company": "嬌生股份有限公司",
-      "manufacturer": "VETTER PHARMA-FERTIGUNG GMBH ＆ CO KG",
-      "atc": "L01FC01",
-      "chapter": "9.78.",
-      "price": "10895.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "KC01056238",
       "brand_en": "Darzalex Concentrate for solution for infusion 20mg/ml",
       "brand_zh": "兆科注射劑20毫克/毫升",
@@ -4662,6 +4688,19 @@
       "atc": "L01FC01",
       "chapter": "9.78.",
       "price": "39317.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "KC01056221",
+      "brand_en": "Darzalex Concentrate for solution for infusion 20mg/ml",
+      "brand_zh": "兆科注射劑20毫克/毫升",
+      "ingredient": "DARATUMUMAB 20 MG/ML",
+      "company": "嬌生股份有限公司",
+      "manufacturer": "VETTER PHARMA-FERTIGUNG GMBH ＆ CO KG",
+      "atc": "L01FC01",
+      "chapter": "9.78.",
+      "price": "10895.00",
       "effective_from": "1150401",
       "effective_to": "9991231"
     },
@@ -4692,19 +4731,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24813100",
-      "brand_en": "SPRYCEL Film-coated Tablets 20mg",
-      "brand_zh": "柏萊膜衣錠 20 毫克",
-      "ingredient": "DASATINIB 20 MG",
-      "company": "台灣必治妥施貴寶股份有限公司",
-      "manufacturer": "Patheon Inc.",
-      "atc": "L01EA02",
-      "chapter": "9.30.",
-      "price": "478.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024813100",
       "brand_en": "SPRYCEL Film-coated Tablets 20mg",
       "brand_zh": "柏萊膜衣錠 20 毫克",
@@ -4715,6 +4741,19 @@
       "chapter": "9.30.",
       "price": "0.00",
       "effective_from": "1040301",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24813100",
+      "brand_en": "SPRYCEL Film-coated Tablets 20mg",
+      "brand_zh": "柏萊膜衣錠 20 毫克",
+      "ingredient": "DASATINIB 20 MG",
+      "company": "台灣必治妥施貴寶股份有限公司",
+      "manufacturer": "Patheon Inc.",
+      "atc": "L01EA02",
+      "chapter": "9.30.",
+      "price": "478.00",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -4732,7 +4771,7 @@
     },
     {
       "code": "BC29158100",
-      "brand_en": "PMS-DASATINIB FILM-COATED TABLETS 50 MG",
+      "brand_en": "pms-Dasatinib film-coated tablets 50 mg",
       "brand_zh": "得塞尼膜衣錠50毫克",
       "ingredient": "DASATINIB 50 MG",
       "company": "運和生技有限公司",
@@ -4913,19 +4952,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B025883257",
-      "brand_en": "Firmagon 120mg, Powder and Solvent for Solution for Injection",
-      "brand_zh": "輔美康注射劑120毫克",
-      "ingredient": "Degarelix 120 MG",
-      "company": "輝凌藥品股份有限公司",
-      "manufacturer": "FERRING GMBH",
-      "atc": "L02BX02",
-      "chapter": "5.5.1.1.",
-      "price": "0.00",
-      "effective_from": "1040301",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC25883257",
       "brand_en": "Firmagon 120mg, Powder and Solvent for Solution for Injection",
       "brand_zh": "輔美康注射劑120毫克",
@@ -4936,6 +4962,19 @@
       "chapter": "5.5.1.1.",
       "price": "2184.00",
       "effective_from": "1141201",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "B025883257",
+      "brand_en": "Firmagon 120mg, Powder and Solvent for Solution for Injection",
+      "brand_zh": "輔美康注射劑120毫克",
+      "ingredient": "Degarelix 120 MG",
+      "company": "輝凌藥品股份有限公司",
+      "manufacturer": "FERRING GMBH",
+      "atc": "L02BX02",
+      "chapter": "5.5.1.1.",
+      "price": "0.00",
+      "effective_from": "1040301",
       "effective_to": "9991231"
     },
     {
@@ -5056,7 +5095,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BB25600226",
+      "code": "BB25600212",
       "brand_en": "Hospira Docetaxel Injection",
       "brand_zh": "多泰舒靜脈注射劑",
       "ingredient": "DOCETAXEL 10 MG/ML",
@@ -5069,7 +5108,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BB25600212",
+      "code": "BB25600226",
       "brand_en": "Hospira Docetaxel Injection",
       "brand_zh": "多泰舒靜脈注射劑",
       "ingredient": "DOCETAXEL 10 MG/ML",
@@ -5095,19 +5134,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC26334219",
-      "brand_en": "Daxotel Injection Concentrate 20mg/ml",
-      "brand_zh": "易剔癌注射液20毫克/毫升",
-      "ingredient": "DOCETAXEL 20 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01CD02",
-      "chapter": "9.3.",
-      "price": "6838.00",
-      "effective_from": "1150601",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC26334209",
       "brand_en": "Daxotel Injection Concentrate 20mg/ml",
       "brand_zh": "易剔癌注射液20毫克/毫升",
@@ -5117,6 +5143,19 @@
       "atc": "L01CD02",
       "chapter": "9.3.",
       "price": "1914.00",
+      "effective_from": "1150601",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC26334219",
+      "brand_en": "Daxotel Injection Concentrate 20mg/ml",
+      "brand_zh": "易剔癌注射液20毫克/毫升",
+      "ingredient": "DOCETAXEL 20 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CD02",
+      "chapter": "9.3.",
+      "price": "6838.00",
       "effective_from": "1150601",
       "effective_to": "9991231"
     },
@@ -5225,19 +5264,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC57971219",
-      "brand_en": "Nolbaxol Injection 20mg/ml \"Yung Shin\"",
-      "brand_zh": "\"永信\"活克癌注射液20毫克/毫升",
-      "ingredient": "DOCETAXEL 20 MG/ML",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L01CD02",
-      "chapter": "9.3.",
-      "price": "6838.00",
-      "effective_from": "1150601",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AC57971209",
       "brand_en": "Nolbaxol Injection 20mg/ml \"Yung Shin\"",
       "brand_zh": "\"永信\"活克癌注射液20毫克/毫升",
@@ -5251,16 +5277,16 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC58581209",
-      "brand_en": "Phyxotere 20mg/mL Concentrate for solution for infusion",
-      "brand_zh": "輝克特爾20毫克/毫升注射液",
+      "code": "AC57971219",
+      "brand_en": "Nolbaxol Injection 20mg/ml \"Yung Shin\"",
+      "brand_zh": "\"永信\"活克癌注射液20毫克/毫升",
       "ingredient": "DOCETAXEL 20 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "霖揚生技製藥股份有限公司",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
       "atc": "L01CD02",
       "chapter": "9.3.",
-      "price": "1914.00",
-      "effective_from": "1150801",
+      "price": "6838.00",
+      "effective_from": "1150601",
       "effective_to": "9991231"
     },
     {
@@ -5290,6 +5316,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AC58581209",
+      "brand_en": "Phyxotere 20mg/mL Concentrate for solution for infusion",
+      "brand_zh": "輝克特爾20毫克/毫升注射液",
+      "ingredient": "DOCETAXEL 20 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "霖揚生技製藥股份有限公司",
+      "atc": "L01CD02",
+      "chapter": "9.3.",
+      "price": "1914.00",
+      "effective_from": "1150801",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC27525219",
       "brand_en": "Taxohope-N 20mg/ml concentrate for Solution for infusion",
       "brand_zh": "舒癌寧20毫克/毫升單支注射液",
@@ -5300,6 +5339,19 @@
       "chapter": "9.3.",
       "price": "0.00",
       "effective_from": "1150901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC25289219",
+      "brand_en": "Taxotere 20mg/ml Concentrate for solution for infusion",
+      "brand_zh": "剋癌易20毫克/毫升單支注射液",
+      "ingredient": "DOCETAXEL 20 MG/ML",
+      "company": "賽諾菲股份有限公司",
+      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
+      "atc": "L01CD02",
+      "chapter": "9.3.",
+      "price": "6838.00",
+      "effective_from": "1150601",
       "effective_to": "9991231"
     },
     {
@@ -5326,19 +5378,6 @@
       "chapter": "9.3.",
       "price": "0.00",
       "effective_from": "1040301",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC25289219",
-      "brand_en": "Taxotere 20mg/ml Concentrate for solution for infusion",
-      "brand_zh": "剋癌易20毫克/毫升單支注射液",
-      "ingredient": "DOCETAXEL 20 MG/ML",
-      "company": "賽諾菲股份有限公司",
-      "manufacturer": "SANOFI-AVENTIS DEUTSCHLAND GMBH",
-      "atc": "L01CD02",
-      "chapter": "9.3.",
-      "price": "6838.00",
-      "effective_from": "1150601",
       "effective_to": "9991231"
     },
     {
@@ -5675,9 +5714,9 @@
       "manufacturer": "ACTAVIS ITALY S.P.A",
       "atc": "L01DB01",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "880701",
-      "effective_to": "9991231"
+      "price": "950.00",
+      "effective_from": "840301",
+      "effective_to": "880630"
     },
     {
       "code": "B018580229",
@@ -5688,9 +5727,9 @@
       "manufacturer": "ACTAVIS ITALY S.P.A",
       "atc": "L01DB01",
       "chapter": "",
-      "price": "1050.00",
-      "effective_from": "840301",
-      "effective_to": "900331"
+      "price": "0.00",
+      "effective_from": "1040201",
+      "effective_to": "9991231"
     },
     {
       "code": "B018580299",
@@ -5727,9 +5766,9 @@
       "manufacturer": "南光化學製藥股份有限公司",
       "atc": "L01DB01",
       "chapter": "",
-      "price": "518.00",
-      "effective_from": "960901",
-      "effective_to": "980930"
+      "price": "0.00",
+      "effective_from": "1040201",
+      "effective_to": "9991231"
     },
     {
       "code": "AA36418229",
@@ -6031,6 +6070,45 @@
       "effective_to": "851031"
     },
     {
+      "code": "B020335229",
+      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
+      "brand_zh": "得甦幸注射劑",
+      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
+      "company": "美商康穗股份有限公司台灣分公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01DB01",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "880701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "B020335240",
+      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
+      "brand_zh": "得甦幸注射劑",
+      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
+      "company": "美商康穗股份有限公司台灣分公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01DB01",
+      "chapter": "",
+      "price": "3078.00",
+      "effective_from": "860301",
+      "effective_to": "880630"
+    },
+    {
+      "code": "B021718240",
+      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
+      "brand_zh": "得甦幸注射劑",
+      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
+      "company": "法瑪西亞股份有限公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01DB01",
+      "chapter": "",
+      "price": "2830.27",
+      "effective_from": "890401",
+      "effective_to": "900331"
+    },
+    {
       "code": "B021718221",
       "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
       "brand_zh": "得甦幸注射劑",
@@ -6057,19 +6135,6 @@
       "effective_to": "890331"
     },
     {
-      "code": "B021718240",
-      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
-      "brand_zh": "得甦幸注射劑",
-      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
-      "company": "法瑪西亞股份有限公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01DB01",
-      "chapter": "",
-      "price": "3078.00",
-      "effective_from": "861001",
-      "effective_to": "890331"
-    },
-    {
       "code": "B020335221",
       "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
       "brand_zh": "得甦幸注射劑",
@@ -6080,58 +6145,6 @@
       "chapter": "",
       "price": "760.00",
       "effective_from": "840301",
-      "effective_to": "880630"
-    },
-    {
-      "code": "B020335229",
-      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
-      "brand_zh": "得甦幸注射劑",
-      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
-      "company": "美商康穗股份有限公司台灣分公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01DB01",
-      "chapter": "",
-      "price": "1368.00",
-      "effective_from": "860301",
-      "effective_to": "880630"
-    },
-    {
-      "code": "B020335240",
-      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML",
-      "brand_zh": "得甦幸注射劑",
-      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
-      "company": "美商康穗股份有限公司台灣分公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01DB01",
-      "chapter": "",
-      "price": "3078.00",
-      "effective_from": "860301",
-      "effective_to": "880630"
-    },
-    {
-      "code": "B021576240",
-      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML \"DBL\"",
-      "brand_zh": "德壽魯素注射液２公絲／公撮",
-      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
-      "company": "新加坡商赫士睿股份有限公司台灣分公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01DB01",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1040201",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "B021576248",
-      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML \"DBL\"",
-      "brand_zh": "德壽魯素注射液２公絲／公撮",
-      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
-      "company": "新加坡商赫士睿股份有限公司台灣分公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01DB01",
-      "chapter": "",
-      "price": "3078.00",
-      "effective_from": "870501",
       "effective_to": "880630"
     },
     {
@@ -6146,6 +6159,32 @@
       "price": "760.00",
       "effective_from": "870501",
       "effective_to": "890331"
+    },
+    {
+      "code": "B021576240",
+      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML \"DBL\"",
+      "brand_zh": "德壽魯素注射液２公絲／公撮",
+      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
+      "company": "新加坡商赫士睿股份有限公司台灣分公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01DB01",
+      "chapter": "",
+      "price": "3078.00",
+      "effective_from": "880401",
+      "effective_to": "900331"
+    },
+    {
+      "code": "B021576248",
+      "brand_en": "DOXORUBICIN HYDROCHLORIDE INJECTION 2MG/ML \"DBL\"",
+      "brand_zh": "德壽魯素注射液２公絲／公撮",
+      "ingredient": "DOXORUBICIN HCL 2 MG/ML",
+      "company": "新加坡商赫士睿股份有限公司台灣分公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01DB01",
+      "chapter": "",
+      "price": "3078.00",
+      "effective_from": "870501",
+      "effective_to": "880630"
     },
     {
       "code": "BC21576221",
@@ -6234,9 +6273,9 @@
       "manufacturer": "DONG-A PHARMACEUTICAL CO.， LTD. (ANYANG FACTORY)",
       "atc": "L01DB01",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "920301",
-      "effective_to": "9991231"
+      "price": "3800.00",
+      "effective_from": "840301",
+      "effective_to": "890331"
     },
     {
       "code": "B022207229",
@@ -6278,19 +6317,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A041037229",
-      "brand_en": "LIPO-DOX LIPOSOME INJECTION 2MG/ML(DOXORUBICIN HYDROCHLORIDE)",
-      "brand_zh": "力得微脂體注射劑2毫克/毫升（鹽酸杜薩魯比辛）",
-      "ingredient": "DOXORUBICIN HYDROCHLORIDE (LIPOSOME) 2 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01DB01",
-      "chapter": "9.14.",
-      "price": "17007.00",
-      "effective_from": "910301",
-      "effective_to": "951031"
-    },
-    {
       "code": "AB41037229",
       "brand_en": "LIPO-DOX LIPOSOME INJECTION 2MG/ML(DOXORUBICIN HYDROCHLORIDE)",
       "brand_zh": "力得微脂體注射劑2毫克/毫升（鹽酸杜薩魯比辛）",
@@ -6302,6 +6328,19 @@
       "price": "13184.00",
       "effective_from": "1150401",
       "effective_to": "9991231"
+    },
+    {
+      "code": "A041037229",
+      "brand_en": "LIPO-DOX LIPOSOME INJECTION 2MG/ML(DOXORUBICIN HYDROCHLORIDE)",
+      "brand_zh": "力得微脂體注射劑2毫克/毫升（鹽酸杜薩魯比辛）",
+      "ingredient": "DOXORUBICIN HYDROCHLORIDE (LIPOSOME) 2 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01DB01",
+      "chapter": "9.14.",
+      "price": "17007.00",
+      "effective_from": "910301",
+      "effective_to": "951031"
     },
     {
       "code": "AC41037229",
@@ -6473,6 +6512,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "BC29003100",
+      "brand_en": "LANZOTRED (ENZALUTAMIDE SOFT CAPSULES 40 MG)",
+      "brand_zh": "蘭諾德軟膠囊40毫克",
+      "ingredient": "ENZALUTAMIDE 40 MG",
+      "company": "台灣瑞迪博士有限公司",
+      "manufacturer": "DR. REDDY`S LABORATORIES LIMITED, FTO-SEZ-PROCESS UNIT-02",
+      "atc": "L02BB04",
+      "chapter": "9.54.",
+      "price": "340.00",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC28434100",
       "brand_en": "Xtandi film-coated tablets 40 mg",
       "brand_zh": "安可坦膜衣錠40毫克",
@@ -6577,19 +6629,6 @@
       "effective_to": "860531"
     },
     {
-      "code": "AB47557229",
-      "brand_en": "EPICIN LYO INJECTION 10 MG",
-      "brand_zh": "克癌凍晶注射劑10毫克",
-      "ingredient": "EPIRUBICIN HCL 10 MG",
-      "company": "育新企業股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1100501",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A047557229",
       "brand_en": "EPICIN LYO INJECTION 10 MG",
       "brand_zh": "克癌凍晶注射劑10毫克",
@@ -6601,6 +6640,19 @@
       "price": "809.00",
       "effective_from": "950101",
       "effective_to": "980930"
+    },
+    {
+      "code": "AB47557229",
+      "brand_en": "EPICIN LYO INJECTION 10 MG",
+      "brand_zh": "克癌凍晶注射劑10毫克",
+      "ingredient": "EPIRUBICIN HCL 10 MG",
+      "company": "育新企業股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1100501",
+      "effective_to": "9991231"
     },
     {
       "code": "B019120229",
@@ -6642,32 +6694,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B024762240",
-      "brand_en": "Anthracin for IV Injection",
-      "brand_zh": "癌療信靜脈注射液(2毫克/毫升)",
-      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1031101",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "B024762221",
-      "brand_en": "Anthracin for IV Injection",
-      "brand_zh": "癌療信靜脈注射液(2毫克/毫升)",
-      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "797.00",
-      "effective_from": "970501",
-      "effective_to": "980930"
-    },
-    {
       "code": "BC24762221",
       "brand_en": "Anthracin for IV Injection",
       "brand_zh": "癌療信靜脈注射液(2毫克/毫升)",
@@ -6692,6 +6718,32 @@
       "price": "0.00",
       "effective_from": "1100701",
       "effective_to": "9991231"
+    },
+    {
+      "code": "B024762221",
+      "brand_en": "Anthracin for IV Injection",
+      "brand_zh": "癌療信靜脈注射液(2毫克/毫升)",
+      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "797.00",
+      "effective_from": "970501",
+      "effective_to": "980930"
+    },
+    {
+      "code": "B024762240",
+      "brand_en": "Anthracin for IV Injection",
+      "brand_zh": "癌療信靜脈注射液(2毫克/毫升)",
+      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "3824.00",
+      "effective_from": "970501",
+      "effective_to": "991231"
     },
     {
       "code": "BC26699221",
@@ -6720,7 +6772,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC47003221",
+      "code": "AB47003240",
       "brand_en": "EPICIN INJECTION",
       "brand_zh": "益彼欣注射液",
       "ingredient": "EPIRUBICIN HCL 2 MG/ML",
@@ -6728,22 +6780,9 @@
       "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
       "atc": "L01DB03",
       "chapter": "",
-      "price": "697.00",
-      "effective_from": "990401",
-      "effective_to": "990930"
-    },
-    {
-      "code": "AC47003240",
-      "brand_en": "EPICIN INJECTION",
-      "brand_zh": "益彼欣注射液",
-      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "3562.00",
-      "effective_from": "990401",
-      "effective_to": "990930"
+      "price": "1751.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
     },
     {
       "code": "AB47003221",
@@ -6768,19 +6807,6 @@
       "atc": "L01DB03",
       "chapter": "",
       "price": "854.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AB47003240",
-      "brand_en": "EPICIN INJECTION",
-      "brand_zh": "益彼欣注射液",
-      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "1751.00",
       "effective_from": "1150401",
       "effective_to": "9991231"
     },
@@ -6824,7 +6850,33 @@
       "effective_to": "980930"
     },
     {
-      "code": "BB25968221",
+      "code": "AC47003221",
+      "brand_en": "EPICIN INJECTION",
+      "brand_zh": "益彼欣注射液",
+      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "697.00",
+      "effective_from": "990401",
+      "effective_to": "990930"
+    },
+    {
+      "code": "AC47003240",
+      "brand_en": "EPICIN INJECTION",
+      "brand_zh": "益彼欣注射液",
+      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "3562.00",
+      "effective_from": "990401",
+      "effective_to": "990930"
+    },
+    {
+      "code": "BB25968240",
       "brand_en": "Epirubicin \"Alvogen\" 2mg/ml Injection solution",
       "brand_zh": "艾泌平\"艾威群\"注射劑2毫克/毫升",
       "ingredient": "EPIRUBICIN HCL 2 MG/ML",
@@ -6837,7 +6889,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BB25968240",
+      "code": "BB25968221",
       "brand_en": "Epirubicin \"Alvogen\" 2mg/ml Injection solution",
       "brand_zh": "艾泌平\"艾威群\"注射劑2毫克/毫升",
       "ingredient": "EPIRUBICIN HCL 2 MG/ML",
@@ -7019,6 +7071,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AC57985240",
+      "brand_en": "Epirudo Injection 2mg/ml \"Sinphar\"",
+      "brand_zh": "\"杏輝\"伊碧欣注射液2毫克/毫升",
+      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "霖揚生技製藥股份有限公司",
+      "atc": "L01DB03",
+      "chapter": "",
+      "price": "1751.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "AC57985221",
       "brand_en": "Epirudo Injection 2mg/ml \"Sinphar\"",
       "brand_zh": "\"杏輝\"伊碧欣注射液2毫克/毫升",
@@ -7045,19 +7110,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC57985240",
-      "brand_en": "Epirudo Injection 2mg/ml \"Sinphar\"",
-      "brand_zh": "\"杏輝\"伊碧欣注射液2毫克/毫升",
-      "ingredient": "EPIRUBICIN HCL 2 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "霖揚生技製藥股份有限公司",
-      "atc": "L01DB03",
-      "chapter": "",
-      "price": "1751.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AC61126229",
       "brand_en": "Epistar Injection 2mg/mL \"L.L\"",
       "brand_zh": "\"意欣\"醫庇速達注射液2毫克/毫升",
@@ -7071,7 +7123,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A047552229",
+      "code": "A047552240",
       "brand_en": "Panbicin Injection 2mg/ml \"Panbiotic\"",
       "brand_zh": "\"汎生\" 柔比信注射液 (2毫克/毫升)",
       "ingredient": "EPIRUBICIN HCL 2 MG/ML",
@@ -7084,7 +7136,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A047552240",
+      "code": "A047552229",
       "brand_en": "Panbicin Injection 2mg/ml \"Panbiotic\"",
       "brand_zh": "\"汎生\" 柔比信注射液 (2毫克/毫升)",
       "ingredient": "EPIRUBICIN HCL 2 MG/ML",
@@ -7092,9 +7144,9 @@
       "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
       "atc": "L01DB03",
       "chapter": "",
-      "price": "3824.00",
-      "effective_from": "971101",
-      "effective_to": "991231"
+      "price": "1457.00",
+      "effective_from": "950101",
+      "effective_to": "980930"
     },
     {
       "code": "BC22695221",
@@ -7263,7 +7315,7 @@
       "chapter": "9.29.",
       "price": "455.00",
       "effective_from": "1150401",
-      "effective_to": "9991231"
+      "effective_to": "1151031"
     },
     {
       "code": "BC28645100",
@@ -7393,7 +7445,7 @@
       "chapter": "9.29.",
       "price": "522.00",
       "effective_from": "1150401",
-      "effective_to": "9991231"
+      "effective_to": "1151031"
     },
     {
       "code": "BC28644100",
@@ -7430,9 +7482,9 @@
       "manufacturer": "Kremers Urban Pharmaceuticals Inc",
       "atc": "L01EB02",
       "chapter": "9.29.",
-      "price": "0.00",
-      "effective_from": "1041101",
-      "effective_to": "9991231"
+      "price": "2256.00",
+      "effective_from": "960601",
+      "effective_to": "971231"
     },
     {
       "code": "BC24407100",
@@ -7508,9 +7560,9 @@
       "manufacturer": "PFIZER ITALIA S.R.L.",
       "atc": "L01XX11",
       "chapter": "9.19.",
-      "price": "0.00",
-      "effective_from": "1040201",
-      "effective_to": "9991231"
+      "price": "40.00",
+      "effective_from": "910401",
+      "effective_to": "960831"
     },
     {
       "code": "BC22995100",
@@ -7547,9 +7599,9 @@
       "manufacturer": "PHARMACHEMIE B.V.",
       "atc": "L01CB01",
       "chapter": "",
-      "price": "892.00",
-      "effective_from": "920301",
-      "effective_to": "951031"
+      "price": "892.96",
+      "effective_from": "911001",
+      "effective_to": "920228"
     },
     {
       "code": "B023436240",
@@ -7565,19 +7617,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B021714221",
-      "brand_en": "ETOPOSIDE INJECTION",
-      "brand_zh": "依托普塞注射液",
-      "ingredient": "ETOPOSIDE 20 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01CB01",
-      "chapter": "",
-      "price": "1052.00",
-      "effective_from": "861001",
-      "effective_to": "890331"
-    },
-    {
       "code": "B020480221",
       "brand_en": "ETOPOSIDE INJECTION",
       "brand_zh": "依托普塞注射液",
@@ -7588,6 +7627,19 @@
       "chapter": "",
       "price": "1200.00",
       "effective_from": "840301",
+      "effective_to": "890331"
+    },
+    {
+      "code": "B021714221",
+      "brand_en": "ETOPOSIDE INJECTION",
+      "brand_zh": "依托普塞注射液",
+      "ingredient": "ETOPOSIDE 20 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01CB01",
+      "chapter": "",
+      "price": "1052.00",
+      "effective_from": "861001",
       "effective_to": "890331"
     },
     {
@@ -7916,19 +7968,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC23097100",
-      "brand_en": "AROMASIN SUGAR COATED TABLETS 25MG",
-      "brand_zh": "諾曼癌素 糖衣錠２５毫克",
-      "ingredient": "EXEMESTANE 25 MG",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "PFIZER ITALIA S.R.L.",
-      "atc": "L02BG06",
-      "chapter": "9.1.1.",
-      "price": "40.20",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B023097100",
       "brand_en": "AROMASIN SUGAR COATED TABLETS 25MG",
       "brand_zh": "諾曼癌素 糖衣錠２５毫克",
@@ -7940,6 +7979,19 @@
       "price": "156.00",
       "effective_from": "901001",
       "effective_to": "951031"
+    },
+    {
+      "code": "BC23097100",
+      "brand_en": "AROMASIN SUGAR COATED TABLETS 25MG",
+      "brand_zh": "諾曼癌素 糖衣錠２５毫克",
+      "ingredient": "EXEMESTANE 25 MG",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "PFIZER ITALIA S.R.L.",
+      "atc": "L02BG06",
+      "chapter": "9.1.1.",
+      "price": "40.20",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
     },
     {
       "code": "BC26224100",
@@ -8228,19 +8280,6 @@
       "effective_to": "851031"
     },
     {
-      "code": "AA58033255",
-      "brand_en": "5-Fu Injection 50mg/ml",
-      "brand_zh": "好復注射液50毫克/毫升",
-      "ingredient": "FLUOROURACIL 50 MG/ML",
-      "company": "南光化學製藥股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
-      "atc": "L01BC02",
-      "chapter": "",
-      "price": "414.00",
-      "effective_from": "1050201",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AA58033238",
       "brand_en": "5-Fu Injection 50mg/ml",
       "brand_zh": "好復注射液50毫克/毫升",
@@ -8263,6 +8302,19 @@
       "atc": "L01BC02",
       "chapter": "",
       "price": "230.00",
+      "effective_from": "1050201",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AA58033255",
+      "brand_en": "5-Fu Injection 50mg/ml",
+      "brand_zh": "好復注射液50毫克/毫升",
+      "ingredient": "FLUOROURACIL 50 MG/ML",
+      "company": "南光化學製藥股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01BC02",
+      "chapter": "",
+      "price": "414.00",
       "effective_from": "1050201",
       "effective_to": "9991231"
     },
@@ -8475,6 +8527,19 @@
       "effective_to": "890331"
     },
     {
+      "code": "B020807221",
+      "brand_en": "FLUOROURACIL INJECTION 50MG/ML",
+      "brand_zh": "服樂癌注射液５０公絲／公撮",
+      "ingredient": "FLUOROURACIL 50 MG/ML",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01BC02",
+      "chapter": "",
+      "price": "25.60",
+      "effective_from": "860601",
+      "effective_to": "890331"
+    },
+    {
       "code": "B020807229",
       "brand_en": "FLUOROURACIL INJECTION 50MG/ML",
       "brand_zh": "服樂癌注射液５０公絲／公撮",
@@ -8483,9 +8548,9 @@
       "manufacturer": "PHARMACHEMIE B.V.",
       "atc": "L01BC02",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "1040901",
-      "effective_to": "9991231"
+      "price": "64.00",
+      "effective_from": "851101",
+      "effective_to": "900331"
     },
     {
       "code": "B020807238",
@@ -8497,19 +8562,6 @@
       "atc": "L01BC02",
       "chapter": "",
       "price": "92.16",
-      "effective_from": "860601",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B020807221",
-      "brand_en": "FLUOROURACIL INJECTION 50MG/ML",
-      "brand_zh": "服樂癌注射液５０公絲／公撮",
-      "ingredient": "FLUOROURACIL 50 MG/ML",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01BC02",
-      "chapter": "",
-      "price": "25.60",
       "effective_from": "860601",
       "effective_to": "890331"
     },
@@ -8579,32 +8631,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B019186221",
-      "brand_en": "FLUOROURACIL INJECTION VIAL \"DBL\"",
-      "brand_zh": "佛羅西注射液小瓶",
-      "ingredient": "FLUOROURACIL 50 MG/ML",
-      "company": "恆振企業有限公司",
-      "manufacturer": "DAVID BULL LABORATORIES",
-      "atc": "L01BC02",
-      "chapter": "",
-      "price": "32.80",
-      "effective_from": "840301",
-      "effective_to": "851031"
-    },
-    {
-      "code": "B019186229",
-      "brand_en": "FLUOROURACIL INJECTION VIAL \"DBL\"",
-      "brand_zh": "佛羅西注射液小瓶",
-      "ingredient": "FLUOROURACIL 50 MG/ML",
-      "company": "恆振企業有限公司",
-      "manufacturer": "DAVID BULL LABORATORIES",
-      "atc": "L01BC02",
-      "chapter": "",
-      "price": "64.00",
-      "effective_from": "840301",
-      "effective_to": "890331"
-    },
-    {
       "code": "B021689221",
       "brand_en": "FLUOROURACIL INJECTION VIAL \"DBL\"",
       "brand_zh": "佛羅西注射液小瓶",
@@ -8642,6 +8668,32 @@
       "price": "175.00",
       "effective_from": "951201",
       "effective_to": "970930"
+    },
+    {
+      "code": "B019186221",
+      "brand_en": "FLUOROURACIL INJECTION VIAL \"DBL\"",
+      "brand_zh": "佛羅西注射液小瓶",
+      "ingredient": "FLUOROURACIL 50 MG/ML",
+      "company": "恆振企業有限公司",
+      "manufacturer": "DAVID BULL LABORATORIES",
+      "atc": "L01BC02",
+      "chapter": "",
+      "price": "32.80",
+      "effective_from": "840301",
+      "effective_to": "851031"
+    },
+    {
+      "code": "B019186229",
+      "brand_en": "FLUOROURACIL INJECTION VIAL \"DBL\"",
+      "brand_zh": "佛羅西注射液小瓶",
+      "ingredient": "FLUOROURACIL 50 MG/ML",
+      "company": "恆振企業有限公司",
+      "manufacturer": "DAVID BULL LABORATORIES",
+      "atc": "L01BC02",
+      "chapter": "",
+      "price": "64.00",
+      "effective_from": "840301",
+      "effective_to": "890331"
     },
     {
       "code": "BC21689221",
@@ -8730,8 +8782,21 @@
       "manufacturer": "SCHERING-PLOUGH CANADA INC.",
       "atc": "L02BB01",
       "chapter": "9.39.",
-      "price": "0.00",
-      "effective_from": "1040401",
+      "price": "52.00",
+      "effective_from": "840301",
+      "effective_to": "920228"
+    },
+    {
+      "code": "AC46018100",
+      "brand_en": "FUPROSTATE TABLETS",
+      "brand_zh": "護腺寧錠",
+      "ingredient": "FLUTAMIDE 250 MG",
+      "company": "寶齡富錦生技股份有限公司",
+      "manufacturer": "寶齡富錦生技股份有限公司平鎮廠",
+      "atc": "L02BB01",
+      "chapter": "9.39.",
+      "price": "29.10",
+      "effective_from": "1130401",
       "effective_to": "9991231"
     },
     {
@@ -8746,19 +8811,6 @@
       "price": "43.20",
       "effective_from": "930301",
       "effective_to": "990131"
-    },
-    {
-      "code": "AC46018100",
-      "brand_en": "FUPROSTATE TABLETS",
-      "brand_zh": "護腺寧錠",
-      "ingredient": "FLUTAMIDE 250 MG",
-      "company": "寶齡富錦生技股份有限公司",
-      "manufacturer": "寶齡富錦生技股份有限公司平鎮廠",
-      "atc": "L02BB01",
-      "chapter": "9.39.",
-      "price": "29.10",
-      "effective_from": "1130401",
-      "effective_to": "9991231"
     },
     {
       "code": "BC28886100",
@@ -8847,9 +8899,9 @@
       "manufacturer": "NIPRO PHARMA CORPORATION KAGAMIISHI PLANT",
       "atc": "L01EB01",
       "chapter": "9.24.",
-      "price": "2093.00",
-      "effective_from": "931101",
-      "effective_to": "950331"
+      "price": "0.00",
+      "effective_from": "1040501",
+      "effective_to": "9991231"
     },
     {
       "code": "BC23808100",
@@ -9016,9 +9068,9 @@
       "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
       "atc": "L01BC05",
       "chapter": "9.4.",
-      "price": "5305.00",
-      "effective_from": "971101",
-      "effective_to": "980930"
+      "price": "0.00",
+      "effective_from": "1040201",
+      "effective_to": "9991231"
     },
     {
       "code": "BC24846209",
@@ -9099,19 +9151,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC25183263",
-      "brand_en": "DBL Gemcitabine For Injection",
-      "brand_zh": "健達必凍晶注射劑",
-      "ingredient": "GEMCITABINE HYDROCHLORIDE 200 MG",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01BC05",
-      "chapter": "9.4.",
-      "price": "0.00",
-      "effective_from": "1030301",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BB25183263",
       "brand_en": "DBL Gemcitabine For Injection",
       "brand_zh": "健達必凍晶注射劑",
@@ -9122,6 +9161,19 @@
       "chapter": "9.4.",
       "price": "0.00",
       "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC25183263",
+      "brand_en": "DBL Gemcitabine For Injection",
+      "brand_zh": "健達必凍晶注射劑",
+      "ingredient": "GEMCITABINE HYDROCHLORIDE 200 MG",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01BC05",
+      "chapter": "9.4.",
+      "price": "0.00",
+      "effective_from": "1030301",
       "effective_to": "9991231"
     },
     {
@@ -9281,19 +9333,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B021841263",
-      "brand_en": "GEMZAR",
-      "brand_zh": "健擇注射劑",
-      "ingredient": "GEMCITABINE HYDROCHLORIDE 200 MG",
-      "company": "台灣禮來股份有限公司",
-      "manufacturer": "ELI LILLY AND COMPANY",
-      "atc": "L01BC05",
-      "chapter": "9.4.",
-      "price": "1520.00",
-      "effective_from": "870201",
-      "effective_to": "940930"
-    },
-    {
       "code": "B023298263",
       "brand_en": "GEMZAR",
       "brand_zh": "健擇注射劑",
@@ -9304,6 +9343,19 @@
       "chapter": "9.4.",
       "price": "1520.00",
       "effective_from": "911001",
+      "effective_to": "940930"
+    },
+    {
+      "code": "B021841263",
+      "brand_en": "GEMZAR",
+      "brand_zh": "健擇注射劑",
+      "ingredient": "GEMCITABINE HYDROCHLORIDE 200 MG",
+      "company": "台灣禮來股份有限公司",
+      "manufacturer": "ELI LILLY AND COMPANY",
+      "atc": "L01BC05",
+      "chapter": "9.4.",
+      "price": "1520.00",
+      "effective_from": "870201",
       "effective_to": "940930"
     },
     {
@@ -9372,32 +9424,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AB47872243",
-      "brand_en": "Gemmis Injection 38 mg/ml",
-      "brand_zh": "健仕注射液38毫克/毫升",
-      "ingredient": "GEMCITABINE HYDROCHLORIDE 38 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01BC05",
-      "chapter": "9.4.",
-      "price": "1690.00",
-      "effective_from": "1150901",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AB47872223",
-      "brand_en": "Gemmis Injection 38 mg/ml",
-      "brand_zh": "健仕注射液38毫克/毫升",
-      "ingredient": "GEMCITABINE HYDROCHLORIDE 38 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01BC05",
-      "chapter": "9.4.",
-      "price": "360.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A047872223",
       "brand_en": "Gemmis Injection 38 mg/ml",
       "brand_zh": "健仕注射液38毫克/毫升",
@@ -9422,6 +9448,32 @@
       "price": "5305.00",
       "effective_from": "950601",
       "effective_to": "980930"
+    },
+    {
+      "code": "AB47872223",
+      "brand_en": "Gemmis Injection 38 mg/ml",
+      "brand_zh": "健仕注射液38毫克/毫升",
+      "ingredient": "GEMCITABINE HYDROCHLORIDE 38 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01BC05",
+      "chapter": "9.4.",
+      "price": "360.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AB47872243",
+      "brand_en": "Gemmis Injection 38 mg/ml",
+      "brand_zh": "健仕注射液38毫克/毫升",
+      "ingredient": "GEMCITABINE HYDROCHLORIDE 38 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01BC05",
+      "chapter": "9.4.",
+      "price": "1690.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
     },
     {
       "code": "B025899221",
@@ -9718,9 +9770,9 @@
       "manufacturer": "永豐製藥股份有限公司新莊工廠",
       "atc": "L02AA91",
       "chapter": "",
-      "price": "1.50",
-      "effective_from": "840301",
-      "effective_to": "860331"
+      "price": "0.98",
+      "effective_from": "900401",
+      "effective_to": "920228"
     },
     {
       "code": "B023135100",
@@ -10230,19 +10282,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B022473221",
-      "brand_en": "CAMPTO CONC. SOLUTION FOR I.V. INFUSION",
-      "brand_zh": "抗癌妥靜脈輸注濃縮液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "9984.00",
-      "effective_from": "881001",
-      "effective_to": "900930"
-    },
-    {
       "code": "B022473212",
       "brand_en": "CAMPTO CONC. SOLUTION FOR I.V. INFUSION",
       "brand_zh": "抗癌妥靜脈輸注濃縮液",
@@ -10252,6 +10291,19 @@
       "atc": "L01CE02",
       "chapter": "9.12.1.",
       "price": "4437.00",
+      "effective_from": "881001",
+      "effective_to": "900930"
+    },
+    {
+      "code": "B022473221",
+      "brand_en": "CAMPTO CONC. SOLUTION FOR I.V. INFUSION",
+      "brand_zh": "抗癌妥靜脈輸注濃縮液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "9984.00",
       "effective_from": "881001",
       "effective_to": "900930"
     },
@@ -10282,7 +10334,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC48941212",
+      "code": "A048941212",
       "brand_en": "Herocan Conc. Solution for I.V. Infusion 20 mg/ml",
       "brand_zh": "喜康寧靜脈輸注濃縮液 20毫克/毫升",
       "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
@@ -10291,7 +10343,7 @@
       "atc": "L01CE02",
       "chapter": "9.12.1.",
       "price": "0.00",
-      "effective_from": "1100701",
+      "effective_from": "1000701",
       "effective_to": "9991231"
     },
     {
@@ -10308,6 +10360,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AC48941212",
+      "brand_en": "Herocan Conc. Solution for I.V. Infusion 20 mg/ml",
+      "brand_zh": "喜康寧靜脈輸注濃縮液 20毫克/毫升",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "南光化學製藥股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
       "code": "AC48941221",
       "brand_en": "Herocan Conc. Solution for I.V. Infusion 20 mg/ml",
       "brand_zh": "喜康寧靜脈輸注濃縮液 20毫克/毫升",
@@ -10321,19 +10386,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A048941212",
-      "brand_en": "Herocan Conc. Solution for I.V. Infusion 20 mg/ml",
-      "brand_zh": "喜康寧靜脈輸注濃縮液 20毫克/毫升",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "南光化學製藥股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1000701",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A049890212",
       "brand_en": "Innocan Conc. Solution for I.V. Infusion 20mg/ml",
       "brand_zh": "癌可癒 靜脈輸注濃縮液 20 毫克/毫升",
@@ -10344,19 +10396,6 @@
       "chapter": "9.12.1.",
       "price": "0.00",
       "effective_from": "1000601",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC49890221",
-      "brand_en": "Innocan Conc. Solution for I.V. Infusion 20mg/ml",
-      "brand_zh": "癌可癒 靜脈輸注濃縮液 20 毫克/毫升",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "1367.00",
-      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -10386,6 +10425,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AC49890221",
+      "brand_en": "Innocan Conc. Solution for I.V. Infusion 20mg/ml",
+      "brand_zh": "癌可癒 靜脈輸注濃縮液 20 毫克/毫升",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "1367.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B024875212",
       "brand_en": "Irenax Injection 40mg/100mg",
       "brand_zh": "怡瑞納靜脈注射劑",
@@ -10409,32 +10461,6 @@
       "chapter": "9.12.1.",
       "price": "0.00",
       "effective_from": "1040501",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC48587212",
-      "brand_en": "Irican Solution for I.V. Infusion \"Sinphar\"",
-      "brand_zh": "\"杏輝\" 艾益康靜脈輸注液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1111001",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC48587221",
-      "brand_en": "Irican Solution for I.V. Infusion \"Sinphar\"",
-      "brand_zh": "\"杏輝\" 艾益康靜脈輸注液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "1367.00",
-      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -10464,6 +10490,32 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AC48587212",
+      "brand_en": "Irican Solution for I.V. Infusion \"Sinphar\"",
+      "brand_zh": "\"杏輝\" 艾益康靜脈輸注液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1111001",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC48587221",
+      "brand_en": "Irican Solution for I.V. Infusion \"Sinphar\"",
+      "brand_zh": "\"杏輝\" 艾益康靜脈輸注液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "1367.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "AA47170212",
       "brand_en": "IRINO SOLUTION FOR I.V. INFUSION",
       "brand_zh": "益立諾靜脈輸注液",
@@ -10487,32 +10539,6 @@
       "chapter": "9.12.1.",
       "price": "1367.00",
       "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AB47170212",
-      "brand_en": "IRINO SOLUTION FOR I.V. INFUSION",
-      "brand_zh": "益立諾靜脈輸注液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1050301",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AB47170221",
-      "brand_en": "IRINO SOLUTION FOR I.V. INFUSION",
-      "brand_zh": "益立諾靜脈輸注液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1050301",
       "effective_to": "9991231"
     },
     {
@@ -10540,6 +10566,32 @@
       "price": "6752.00",
       "effective_from": "940701",
       "effective_to": "980930"
+    },
+    {
+      "code": "AB47170212",
+      "brand_en": "IRINO SOLUTION FOR I.V. INFUSION",
+      "brand_zh": "益立諾靜脈輸注液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1050301",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AB47170221",
+      "brand_en": "IRINO SOLUTION FOR I.V. INFUSION",
+      "brand_zh": "益立諾靜脈輸注液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1050301",
+      "effective_to": "9991231"
     },
     {
       "code": "B025728212",
@@ -10620,32 +10672,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B024617212",
-      "brand_en": "Irinotecan Injection Concentrate",
-      "brand_zh": "依瑞諾丁濃縮注射液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "美商惠氏藥廠（亞洲）股份有限公司台灣分公司",
-      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1020901",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "B024617221",
-      "brand_en": "Irinotecan Injection Concentrate",
-      "brand_zh": "依瑞諾丁濃縮注射液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "美商惠氏藥廠（亞洲）股份有限公司台灣分公司",
-      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1020901",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BB24617212",
       "brand_en": "Irinotecan Injection Concentrate",
       "brand_zh": "依瑞諾丁濃縮注射液",
@@ -10669,6 +10695,32 @@
       "chapter": "9.12.1.",
       "price": "1367.00",
       "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "B024617212",
+      "brand_en": "Irinotecan Injection Concentrate",
+      "brand_zh": "依瑞諾丁濃縮注射液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "美商惠氏藥廠（亞洲）股份有限公司台灣分公司",
+      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1020901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "B024617221",
+      "brand_en": "Irinotecan Injection Concentrate",
+      "brand_zh": "依瑞諾丁濃縮注射液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "美商惠氏藥廠（亞洲）股份有限公司台灣分公司",
+      "manufacturer": "ZYDUS HOSPIRA ONCOLOGY PRIVATE LIMITED",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1020901",
       "effective_to": "9991231"
     },
     {
@@ -10776,19 +10828,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC48840221",
-      "brand_en": "Irinotecan Solution for I.V. Infusion \"LOTUS\"",
-      "brand_zh": "\"美時\"瑞諾克靜脈輸注液",
-      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "美時化學製藥股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CE02",
-      "chapter": "9.12.1.",
-      "price": "0.00",
-      "effective_from": "1121001",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A048840212",
       "brand_en": "Irinotecan Solution for I.V. Infusion \"LOTUS\"",
       "brand_zh": "\"美時\"瑞諾克靜脈輸注液",
@@ -10815,16 +10854,16 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B024625212",
-      "brand_en": "Irinotel Injection",
-      "brand_zh": "癌治佳靜脈輸注濃縮液",
+      "code": "AC48840221",
+      "brand_en": "Irinotecan Solution for I.V. Infusion \"LOTUS\"",
+      "brand_zh": "\"美時\"瑞諾克靜脈輸注液",
       "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "company": "美時化學製藥股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
       "atc": "L01CE02",
       "chapter": "9.12.1.",
       "price": "0.00",
-      "effective_from": "1040201",
+      "effective_from": "1121001",
       "effective_to": "9991231"
     },
     {
@@ -10841,7 +10880,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24625212",
+      "code": "B024625212",
       "brand_en": "Irinotel Injection",
       "brand_zh": "癌治佳靜脈輸注濃縮液",
       "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
@@ -10850,7 +10889,7 @@
       "atc": "L01CE02",
       "chapter": "9.12.1.",
       "price": "0.00",
-      "effective_from": "1100701",
+      "effective_from": "1040201",
       "effective_to": "9991231"
     },
     {
@@ -10864,6 +10903,19 @@
       "chapter": "9.12.1.",
       "price": "1367.00",
       "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24625212",
+      "brand_en": "Irinotel Injection",
+      "brand_zh": "癌治佳靜脈輸注濃縮液",
+      "ingredient": "IRINOTECAN HYDROCHLORIDE TRIHYDRATE 20 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CE02",
+      "chapter": "9.12.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
       "effective_to": "9991231"
     },
     {
@@ -10914,8 +10966,8 @@
       "manufacturer": "BAXTER ONCOLOGY GMBH",
       "atc": "L01DC04",
       "chapter": "9.88.",
-      "price": "8087.00",
-      "effective_from": "1140601",
+      "price": "7957.00",
+      "effective_from": "1151001",
       "effective_to": "9991231"
     },
     {
@@ -11548,7 +11600,7 @@
       "brand_zh": "復乳納膜衣錠2.5毫克",
       "ingredient": "LETROZOLE 2.5 MG",
       "company": "台灣諾華股份有限公司",
-      "manufacturer": "NOVARTIS PHARMA STEIN AG",
+      "manufacturer": "NOVARTIS FARMA S.P.A.",
       "atc": "L02BG04",
       "chapter": "9.1.3.",
       "price": "156.00",
@@ -11561,7 +11613,7 @@
       "brand_zh": "復乳納膜衣錠2.5毫克",
       "ingredient": "LETROZOLE 2.5 MG",
       "company": "台灣諾華股份有限公司",
-      "manufacturer": "NOVARTIS PHARMA STEIN AG",
+      "manufacturer": "NOVARTIS FARMA S.P.A.",
       "atc": "L02BG04",
       "chapter": "9.1.3.",
       "price": "21.10",
@@ -11818,7 +11870,7 @@
     {
       "code": "BC263052FQ",
       "brand_en": "Eligard 22.5 mg, powder and solvent for solution for injection",
-      "brand_zh": "癌立佳持續性藥效皮下注射劑22.5毫克",
+      "brand_zh": "愛立佳持續性藥效皮下注射劑22.5毫克",
       "ingredient": "LEUPRORELIN ACETATE 22.5 MG",
       "company": "健喬信元醫藥生技股份有限公司",
       "manufacturer": "TOLMAR INC.",
@@ -11922,7 +11974,7 @@
     {
       "code": "BC263062AP",
       "brand_en": "Eligard 45 mg, powder and solvent for solution for injection",
-      "brand_zh": "癌立佳持續性藥效皮下注射劑45毫克",
+      "brand_zh": "愛立佳持續性藥效皮下注射劑45毫克",
       "ingredient": "LEUPRORELIN ACETATE 45 MG",
       "company": "健喬信元醫藥生技股份有限公司",
       "manufacturer": "TOLMAR INC.",
@@ -11954,9 +12006,9 @@
       "manufacturer": "H. LUNDBECK A/S",
       "atc": "L01AD02",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "901001",
-      "effective_to": "9991231"
+      "price": "84.00",
+      "effective_from": "840301",
+      "effective_to": "890331"
     },
     {
       "code": "B006293100",
@@ -11980,9 +12032,9 @@
       "manufacturer": "H. LUNDBECK A/S",
       "atc": "L01AD02",
       "chapter": "",
-      "price": "252.00",
-      "effective_from": "840301",
-      "effective_to": "890331"
+      "price": "213.91",
+      "effective_from": "900401",
+      "effective_to": "900930"
     },
     {
       "code": "B006294100",
@@ -12089,19 +12141,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC54975100",
-      "brand_en": "Meterone Tablets 100 mg",
-      "brand_zh": "美得樂 錠 100 毫克",
-      "ingredient": "MEDROXYPROGESTERONE ACETATE 100 MG",
-      "company": "永茂藥業股份有限公司",
-      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
-      "atc": "L02AB02",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A054975100",
       "brand_en": "Meterone Tablets 100 mg",
       "brand_zh": "美得樂 錠 100 毫克",
@@ -12112,6 +12151,19 @@
       "chapter": "",
       "price": "0.00",
       "effective_from": "1040501",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC54975100",
+      "brand_en": "Meterone Tablets 100 mg",
+      "brand_zh": "美得樂 錠 100 毫克",
+      "ingredient": "MEDROXYPROGESTERONE ACETATE 100 MG",
+      "company": "永茂藥業股份有限公司",
+      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
+      "atc": "L02AB02",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1100701",
       "effective_to": "9991231"
     },
     {
@@ -12219,6 +12271,19 @@
       "effective_to": "851031"
     },
     {
+      "code": "B003919209",
+      "brand_en": "DEPO-PROVERA",
+      "brand_zh": "延效保衛胎注射液",
+      "ingredient": "MEDROXYPROGESTERONE ACETATE 50 MG/ML",
+      "company": "法瑪西亞股份有限公司",
+      "manufacturer": "PFIZER MANUFACTURING BELGIUM NV",
+      "atc": "L02AB02",
+      "chapter": "",
+      "price": "58.89",
+      "effective_from": "840301",
+      "effective_to": "890331"
+    },
+    {
       "code": "B003919216",
       "brand_en": "DEPO-PROVERA",
       "brand_zh": "延效保衛胎注射液",
@@ -12241,19 +12306,6 @@
       "atc": "L02AB02",
       "chapter": "",
       "price": "238.50",
-      "effective_from": "840301",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B003919209",
-      "brand_en": "DEPO-PROVERA",
-      "brand_zh": "延效保衛胎注射液",
-      "ingredient": "MEDROXYPROGESTERONE ACETATE 50 MG/ML",
-      "company": "法瑪西亞股份有限公司",
-      "manufacturer": "PFIZER MANUFACTURING BELGIUM NV",
-      "atc": "L02AB02",
-      "chapter": "",
-      "price": "58.89",
       "effective_from": "840301",
       "effective_to": "890331"
     },
@@ -12336,19 +12388,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A047788100",
-      "brand_en": "MEPRO TABLETS 500MG",
-      "brand_zh": "美普羅錠500毫克",
-      "ingredient": "MEDROXYPROGESTERONE ACETATE 500 MG",
-      "company": "健喬信元醫藥生技股份有限公司",
-      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
-      "atc": "L02AB02",
-      "chapter": "",
-      "price": "71.00",
-      "effective_from": "950501",
-      "effective_to": "980930"
-    },
-    {
       "code": "AC47788100",
       "brand_en": "MEPRO TABLETS 500MG",
       "brand_zh": "美普羅錠500毫克",
@@ -12362,17 +12401,17 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC52430100",
-      "brand_en": "Meterone Tablets 500 mg",
-      "brand_zh": "美得樂錠500毫克",
+      "code": "A047788100",
+      "brand_en": "MEPRO TABLETS 500MG",
+      "brand_zh": "美普羅錠500毫克",
       "ingredient": "MEDROXYPROGESTERONE ACETATE 500 MG",
-      "company": "永茂藥業股份有限公司",
+      "company": "健喬信元醫藥生技股份有限公司",
       "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
       "atc": "L02AB02",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
+      "price": "71.00",
+      "effective_from": "950501",
+      "effective_to": "980930"
     },
     {
       "code": "A052430100",
@@ -12385,6 +12424,19 @@
       "chapter": "",
       "price": "0.00",
       "effective_from": "1040501",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC52430100",
+      "brand_en": "Meterone Tablets 500 mg",
+      "brand_zh": "美得樂錠500毫克",
+      "ingredient": "MEDROXYPROGESTERONE ACETATE 500 MG",
+      "company": "永茂藥業股份有限公司",
+      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
+      "atc": "L02AB02",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1100701",
       "effective_to": "9991231"
     },
     {
@@ -12466,19 +12518,6 @@
       "effective_to": "951031"
     },
     {
-      "code": "AC48182100",
-      "brand_en": "MEGEJOHN TABLETS 160MG",
-      "brand_zh": "美雅祥錠160毫克",
-      "ingredient": "MEGESTROL ACETATE 160 MG",
-      "company": "健喬信元醫藥生技股份有限公司",
-      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
-      "atc": "L02AB01",
-      "chapter": "",
-      "price": "36.10",
-      "effective_from": "1130401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A048182100",
       "brand_en": "MEGEJOHN TABLETS 160MG",
       "brand_zh": "美雅祥錠160毫克",
@@ -12492,6 +12531,19 @@
       "effective_to": "960831"
     },
     {
+      "code": "AC48182100",
+      "brand_en": "MEGEJOHN TABLETS 160MG",
+      "brand_zh": "美雅祥錠160毫克",
+      "ingredient": "MEGESTROL ACETATE 160 MG",
+      "company": "健喬信元醫藥生技股份有限公司",
+      "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
+      "atc": "L02AB01",
+      "chapter": "",
+      "price": "36.10",
+      "effective_from": "1130401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "A043470100",
       "brand_en": "MEKEI TABLETS \"PANBIOTIC\"",
       "brand_zh": "美克怡錠〝汎生〞",
@@ -12500,9 +12552,9 @@
       "manufacturer": "臺灣汎生製藥廠股份有限公司",
       "atc": "L02AB01",
       "chapter": "",
-      "price": "0.00",
-      "effective_from": "1111001",
-      "effective_to": "9991231"
+      "price": "66.50",
+      "effective_from": "890601",
+      "effective_to": "920228"
     },
     {
       "code": "A049396100",
@@ -12591,9 +12643,9 @@
       "manufacturer": "健喬信元醫藥生技股份有限公司健喬廠",
       "atc": "L02AB01",
       "chapter": "",
-      "price": "16.30",
-      "effective_from": "971101",
-      "effective_to": "980930"
+      "price": "0.00",
+      "effective_from": "1050101",
+      "effective_to": "9991231"
     },
     {
       "code": "AC49343100",
@@ -12700,45 +12752,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC46991157",
-      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
-      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
-      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
-      "company": "晟德大藥廠股份有限公司",
-      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
-      "atc": "L02AB01",
-      "chapter": "5.3.6.",
-      "price": "0.00",
-      "effective_from": "1010101",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC46991161",
-      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
-      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
-      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
-      "company": "晟德大藥廠股份有限公司",
-      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
-      "atc": "L02AB01",
-      "chapter": "5.3.6.",
-      "price": "713.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC46991164",
-      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
-      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
-      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
-      "company": "晟德大藥廠股份有限公司",
-      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
-      "atc": "L02AB01",
-      "chapter": "5.3.6.",
-      "price": "0.00",
-      "effective_from": "1010101",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AB46991157",
       "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
       "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
@@ -12789,6 +12802,45 @@
       "price": "3532.00",
       "effective_from": "940501",
       "effective_to": "980930"
+    },
+    {
+      "code": "AC46991157",
+      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
+      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
+      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
+      "company": "晟德大藥廠股份有限公司",
+      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
+      "atc": "L02AB01",
+      "chapter": "5.3.6.",
+      "price": "0.00",
+      "effective_from": "1010101",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC46991161",
+      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
+      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
+      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
+      "company": "晟德大藥廠股份有限公司",
+      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
+      "atc": "L02AB01",
+      "chapter": "5.3.6.",
+      "price": "713.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC46991164",
+      "brand_en": "MEGEST ORAL SUSPENSION 40MG/ML",
+      "brand_zh": "麥格斯口服懸液劑 40 毫克/毫升",
+      "ingredient": "MEGESTROL ACETATE 40 MG/ML",
+      "company": "晟德大藥廠股份有限公司",
+      "manufacturer": "晟德大藥廠股份有限公司新竹廠",
+      "atc": "L02AB01",
+      "chapter": "5.3.6.",
+      "price": "0.00",
+      "effective_from": "1010101",
+      "effective_to": "9991231"
     },
     {
       "code": "AC61067157",
@@ -12869,19 +12921,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B021073248",
-      "brand_en": "ALKERAN INJECTION",
-      "brand_zh": "威克瘤注射劑５０毫克",
-      "ingredient": "MELPHALAN 50 MG",
-      "company": "安沛國際有限公司",
-      "manufacturer": "GLAXOSMITHKLINE MANUFACTURING S.P.A.",
-      "atc": "L01AA03",
-      "chapter": "",
-      "price": "1472.00",
-      "effective_from": "861001",
-      "effective_to": "900331"
-    },
-    {
       "code": "BC21073248",
       "brand_en": "ALKERAN INJECTION",
       "brand_zh": "威克瘤注射劑５０毫克",
@@ -12893,6 +12932,19 @@
       "price": "1550.00",
       "effective_from": "1120801",
       "effective_to": "9991231"
+    },
+    {
+      "code": "B021073248",
+      "brand_en": "ALKERAN INJECTION",
+      "brand_zh": "威克瘤注射劑５０毫克",
+      "ingredient": "MELPHALAN 50 MG",
+      "company": "安沛國際有限公司",
+      "manufacturer": "GLAXOSMITHKLINE MANUFACTURING S.P.A.",
+      "atc": "L01AA03",
+      "chapter": "",
+      "price": "1472.00",
+      "effective_from": "861001",
+      "effective_to": "900331"
     },
     {
       "code": "X000213248",
@@ -12931,6 +12983,19 @@
       "chapter": "",
       "price": "0.00",
       "effective_from": "1101001",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "X000384248",
+      "brand_en": "MELPHATHER 50(MELPHALAN FOR INJECTION BP 50MG)",
+      "brand_zh": "MELPHATHER 50(Melphalan for injection BP 50mg)",
+      "ingredient": "MELPHALAN 50 MG",
+      "company": "凱沛爾藥品有限公司",
+      "manufacturer": "TherDose Pharma Pvt. Ltd.",
+      "atc": "L01AA03",
+      "chapter": "",
+      "price": "0",
+      "effective_from": "1160905",
       "effective_to": "9991231"
     },
     {
@@ -13051,6 +13116,32 @@
       "effective_to": "890331"
     },
     {
+      "code": "B008859245",
+      "brand_en": "EMTHEXATE PF",
+      "brand_zh": "易滅得庇福注射液２５公絲/公撮",
+      "ingredient": "METHOTREXATE (SODIUM) 25 MG/ML",
+      "company": "民橋企業股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "1022.00",
+      "effective_from": "951101",
+      "effective_to": "960831"
+    },
+    {
+      "code": "B008859263",
+      "brand_en": "EMTHEXATE PF",
+      "brand_zh": "易滅得庇福注射液２５公絲/公撮",
+      "ingredient": "METHOTREXATE (SODIUM) 25 MG/ML",
+      "company": "民橋企業股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "6210.00",
+      "effective_from": "860601",
+      "effective_to": "890331"
+    },
+    {
       "code": "B008859238",
       "brand_en": "EMTHEXATE PF",
       "brand_zh": "易滅得庇福注射液２５公絲/公撮",
@@ -13074,32 +13165,6 @@
       "chapter": "",
       "price": "150.00",
       "effective_from": "840301",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B008859245",
-      "brand_en": "EMTHEXATE PF",
-      "brand_zh": "易滅得庇福注射液２５公絲/公撮",
-      "ingredient": "METHOTREXATE (SODIUM) 25 MG/ML",
-      "company": "民橋企業股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "1380.00",
-      "effective_from": "860601",
-      "effective_to": "900331"
-    },
-    {
-      "code": "B008859263",
-      "brand_en": "EMTHEXATE PF",
-      "brand_zh": "易滅得庇福注射液２５公絲/公撮",
-      "ingredient": "METHOTREXATE (SODIUM) 25 MG/ML",
-      "company": "民橋企業股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "6210.00",
-      "effective_from": "860601",
       "effective_to": "890331"
     },
     {
@@ -13332,9 +13397,9 @@
       "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
       "atc": "L01BA01",
       "chapter": "",
-      "price": "1136.00",
-      "effective_from": "920301",
-      "effective_to": "951031"
+      "price": "1407.00",
+      "effective_from": "871101",
+      "effective_to": "900331"
     },
     {
       "code": "BC22132229",
@@ -13389,6 +13454,19 @@
       "effective_to": "890331"
     },
     {
+      "code": "B021713229",
+      "brand_en": "METHOTREXATE INJECTIONS BP 100MG/ML",
+      "brand_zh": "麥勒崔斯德注射液",
+      "ingredient": "METHOTREXATE 100 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "1380.00",
+      "effective_from": "861001",
+      "effective_to": "890331"
+    },
+    {
       "code": "B019707299",
       "brand_en": "METHOTREXATE INJECTIONS BP 100MG/ML",
       "brand_zh": "麥勒崔斯德注射液",
@@ -13400,19 +13478,6 @@
       "price": "138.00",
       "effective_from": "860301",
       "effective_to": "890331"
-    },
-    {
-      "code": "B021713229",
-      "brand_en": "METHOTREXATE INJECTIONS BP 100MG/ML",
-      "brand_zh": "麥勒崔斯德注射液",
-      "ingredient": "METHOTREXATE 100 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "PFIZER (PERTH) PTY LIMITED",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1040201",
-      "effective_to": "9991231"
     },
     {
       "code": "BC21713229",
@@ -13454,6 +13519,19 @@
       "effective_to": "900331"
     },
     {
+      "code": "B020808238",
+      "brand_en": "ABITREXATE INJECTION, 25MG/ML",
+      "brand_zh": "必除癌注射液２５公絲／公撮",
+      "ingredient": "METHOTREXATE 25 MG/ML",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1040901",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B020808212",
       "brand_en": "ABITREXATE INJECTION, 25MG/ML",
       "brand_zh": "必除癌注射液２５公絲／公撮",
@@ -13464,19 +13542,6 @@
       "chapter": "",
       "price": "179.00",
       "effective_from": "860601",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B020808238",
-      "brand_en": "ABITREXATE INJECTION, 25MG/ML",
-      "brand_zh": "必除癌注射液２５公絲／公撮",
-      "ingredient": "METHOTREXATE 25 MG/ML",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "613.33",
-      "effective_from": "861001",
       "effective_to": "890331"
     },
     {
@@ -13493,32 +13558,6 @@
       "effective_to": "951031"
     },
     {
-      "code": "AC59414238",
-      "brand_en": "Methoate Injection 25mg/ml",
-      "brand_zh": "滅癌寧注射液25毫克/毫升",
-      "ingredient": "METHOTREXATE 25 MG/ML",
-      "company": "南光化學製藥股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1150901",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC59414245",
-      "brand_en": "Methoate Injection 25mg/ml",
-      "brand_zh": "滅癌寧注射液25毫克/毫升",
-      "ingredient": "METHOTREXATE 25 MG/ML",
-      "company": "南光化學製藥股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "0.00",
-      "effective_from": "1150901",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AC59414212",
       "brand_en": "Methoate Injection 25mg/ml",
       "brand_zh": "滅癌寧注射液25毫克/毫升",
@@ -13533,6 +13572,32 @@
     },
     {
       "code": "AC59414226",
+      "brand_en": "Methoate Injection 25mg/ml",
+      "brand_zh": "滅癌寧注射液25毫克/毫升",
+      "ingredient": "METHOTREXATE 25 MG/ML",
+      "company": "南光化學製藥股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC59414238",
+      "brand_en": "Methoate Injection 25mg/ml",
+      "brand_zh": "滅癌寧注射液25毫克/毫升",
+      "ingredient": "METHOTREXATE 25 MG/ML",
+      "company": "南光化學製藥股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC59414245",
       "brand_en": "Methoate Injection 25mg/ml",
       "brand_zh": "滅癌寧注射液25毫克/毫升",
       "ingredient": "METHOTREXATE 25 MG/ML",
@@ -13597,6 +13662,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "B021696212",
+      "brand_en": "METHOTREXATE INJECTION \"DBL\"",
+      "brand_zh": "盈壽求得注射液",
+      "ingredient": "METHOTREXATE 25 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01BA01",
+      "chapter": "",
+      "price": "179.00",
+      "effective_from": "870501",
+      "effective_to": "890331"
+    },
+    {
       "code": "B011734212",
       "brand_en": "METHOTREXATE INJECTION \"DBL\"",
       "brand_zh": "盈壽求得注射液",
@@ -13620,19 +13698,6 @@
       "chapter": "",
       "price": "179.00",
       "effective_from": "840301",
-      "effective_to": "890331"
-    },
-    {
-      "code": "B021696212",
-      "brand_en": "METHOTREXATE INJECTION \"DBL\"",
-      "brand_zh": "盈壽求得注射液",
-      "ingredient": "METHOTREXATE 25 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01BA01",
-      "chapter": "",
-      "price": "179.00",
-      "effective_from": "870501",
       "effective_to": "890331"
     },
     {
@@ -13683,9 +13748,9 @@
       "manufacturer": "輝瑞生技股份有限公司新竹廠",
       "atc": "L01BA01",
       "chapter": "",
-      "price": "415.00",
-      "effective_from": "840301",
-      "effective_to": "890331"
+      "price": "0.00",
+      "effective_from": "890401",
+      "effective_to": "9991231"
     },
     {
       "code": "B015983212",
@@ -14013,6 +14078,19 @@
       "effective_to": "951031"
     },
     {
+      "code": "KC01279221",
+      "brand_en": "POTELIGEO 4 mg/mL concentrate for solution forinfusion",
+      "brand_zh": "波替立久濃縮靜脈輸注液",
+      "ingredient": "MOGAMULIZUMAB 20 MG",
+      "company": "台灣協和麒麟股份有限公司",
+      "manufacturer": "OTSU PHARMACEUTICALS PLANT, TOYOBO CO., LTD.",
+      "atc": "L01FX09",
+      "chapter": "",
+      "price": "35955.00",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC28860100",
       "brand_en": "OMJJARA Film-Coated Tablets 100 mg",
       "brand_zh": "奧莫嘉膜衣錠100毫克",
@@ -14078,19 +14156,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24834100",
-      "brand_en": "Tasigna Capsules 200 mg",
-      "brand_zh": "泰息安 膠囊 200 毫克",
-      "ingredient": "NILOTINIB HYDROCHLORIDE MONOHYDRATE 200 MG",
-      "company": "台灣諾華股份有限公司",
-      "manufacturer": "NOVARTIS PHARMA STEIN AG",
-      "atc": "L01EA03",
-      "chapter": "9.32.1.",
-      "price": "805.00",
-      "effective_from": "1130201",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024834100",
       "brand_en": "Tasigna Capsules 200 mg",
       "brand_zh": "泰息安 膠囊 200 毫克",
@@ -14102,6 +14167,19 @@
       "price": "1252.00",
       "effective_from": "980601",
       "effective_to": "991031"
+    },
+    {
+      "code": "BC24834100",
+      "brand_en": "Tasigna Capsules 200 mg",
+      "brand_zh": "泰息安 膠囊 200 毫克",
+      "ingredient": "NILOTINIB HYDROCHLORIDE MONOHYDRATE 200 MG",
+      "company": "台灣諾華股份有限公司",
+      "manufacturer": "NOVARTIS PHARMA STEIN AG",
+      "atc": "L01EA03",
+      "chapter": "9.32.1.",
+      "price": "805.00",
+      "effective_from": "1130201",
+      "effective_to": "9991231"
     },
     {
       "code": "B019951240",
@@ -14118,7 +14196,7 @@
     },
     {
       "code": "AC62132100",
-      "brand_en": "BOSETEN SOFT CAPSULES 100MG",
+      "brand_en": "Boseten Soft Capsules 100mg",
       "brand_zh": "肺脈寧軟膠囊100毫克",
       "ingredient": "NINTEDANIB ESYLATE 120.4 MG",
       "company": "瑩碩生技醫藥股份有限公司",
@@ -14131,7 +14209,7 @@
     },
     {
       "code": "AC62131100",
-      "brand_en": "BOSETEN SOFT CAPSULES 150MG",
+      "brand_en": "Boseten Soft Capsules 150mg",
       "brand_zh": "肺脈寧軟膠囊150毫克",
       "ingredient": "NINTEDANIB ESYLATE 180.6 MG",
       "company": "瑩碩生技醫藥股份有限公司",
@@ -14494,19 +14572,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC48561229",
-      "brand_en": "OLATIN I.V. INJECTION 5MG/ML",
-      "brand_zh": "優鉑廷靜脈注射液5毫克/毫升",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "美時化學製藥股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "0.00",
-      "effective_from": "1110801",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A048561229",
       "brand_en": "Olatin I.V. Injection 5mg/ml",
       "brand_zh": "優鉑廷靜脈注射液5毫克/毫升",
@@ -14515,9 +14580,9 @@
       "manufacturer": "杏輝藥品工業股份有限公司",
       "atc": "L01XA03",
       "chapter": "9.10.",
-      "price": "5758.00",
-      "effective_from": "980201",
-      "effective_to": "980930"
+      "price": "6125.00",
+      "effective_from": "960601",
+      "effective_to": "980131"
     },
     {
       "code": "A048561238",
@@ -14533,16 +14598,16 @@
       "effective_to": "9991231"
     },
     {
-      "code": "AC48838229",
-      "brand_en": "Opatin I.V. Injection 5mg/ml",
-      "brand_zh": "奧力美靜脈注射液5毫克/毫升",
+      "code": "AC48561229",
+      "brand_en": "OLATIN I.V. INJECTION 5MG/ML",
+      "brand_zh": "優鉑廷靜脈注射液5毫克/毫升",
       "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "南光化學製藥股份有限公司",
-      "manufacturer": "南光化學製藥股份有限公司",
+      "company": "美時化學製藥股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
       "atc": "L01XA03",
       "chapter": "9.10.",
-      "price": "679.00",
-      "effective_from": "1150401",
+      "price": "0.00",
+      "effective_from": "1110801",
       "effective_to": "9991231"
     },
     {
@@ -14556,6 +14621,19 @@
       "chapter": "9.10.",
       "price": "0.00",
       "effective_from": "1010701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC48838229",
+      "brand_en": "Opatin I.V. Injection 5mg/ml",
+      "brand_zh": "奧力美靜脈注射液5毫克/毫升",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "南光化學製藥股份有限公司",
+      "manufacturer": "南光化學製藥股份有限公司",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "679.00",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -14598,58 +14676,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A044508229",
-      "brand_en": "OXALIP INJECTION",
-      "brand_zh": "歐力普注射劑",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "7394.00",
-      "effective_from": "901201",
-      "effective_to": "910930"
-    },
-    {
-      "code": "A044508238",
-      "brand_en": "OXALIP INJECTION",
-      "brand_zh": "歐力普注射劑",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "9337.00",
-      "effective_from": "981001",
-      "effective_to": "990131"
-    },
-    {
-      "code": "AA44508229",
-      "brand_en": "OXALIP INJECTION",
-      "brand_zh": "歐力普注射劑",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "679.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AA44508238",
-      "brand_en": "OXALIP INJECTION",
-      "brand_zh": "歐力普注射劑",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "2207.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AB44508229",
       "brand_en": "OXALIP INJECTION",
       "brand_zh": "歐力普注射劑",
@@ -14674,6 +14700,58 @@
       "price": "0.00",
       "effective_from": "1050301",
       "effective_to": "9991231"
+    },
+    {
+      "code": "AA44508238",
+      "brand_en": "OXALIP INJECTION",
+      "brand_zh": "歐力普注射劑",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "2207.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AA44508229",
+      "brand_en": "OXALIP INJECTION",
+      "brand_zh": "歐力普注射劑",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "679.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "A044508229",
+      "brand_en": "OXALIP INJECTION",
+      "brand_zh": "歐力普注射劑",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "7394.00",
+      "effective_from": "901201",
+      "effective_to": "910930"
+    },
+    {
+      "code": "A044508238",
+      "brand_en": "OXALIP INJECTION",
+      "brand_zh": "歐力普注射劑",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "9337.00",
+      "effective_from": "981001",
+      "effective_to": "990131"
     },
     {
       "code": "AC44508229",
@@ -14806,19 +14884,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC27082245",
-      "brand_en": "Oxaliplatin Mylan",
-      "brand_zh": "鉑善寧注射液5毫克/毫升",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣邁蘭有限公司",
-      "manufacturer": "MYLAN LABORATORIES LIMITED-OTL",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "0.00",
-      "effective_from": "1131001",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC27082229",
       "brand_en": "Oxaliplatin Mylan",
       "brand_zh": "鉑善寧注射液5毫克/毫升",
@@ -14833,6 +14898,19 @@
     },
     {
       "code": "BC27082238",
+      "brand_en": "Oxaliplatin Mylan",
+      "brand_zh": "鉑善寧注射液5毫克/毫升",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣邁蘭有限公司",
+      "manufacturer": "MYLAN LABORATORIES LIMITED-OTL",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "0.00",
+      "effective_from": "1131001",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC27082245",
       "brand_en": "Oxaliplatin Mylan",
       "brand_zh": "鉑善寧注射液5毫克/毫升",
       "ingredient": "OXALIPLATIN 5 MG/ML",
@@ -14884,19 +14962,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B024850255",
-      "brand_en": "Oxaliplatine-Mylan 5mg/ml Powder for Solution for Infusion",
-      "brand_zh": "歐莎力-邁蘭 5 毫克/毫升靜脈凍晶注射劑",
-      "ingredient": "OXALIPLATIN 5 MG/ML",
-      "company": "台灣邁蘭有限公司",
-      "manufacturer": "VIANEX S.A. (PLANT C)",
-      "atc": "L01XA03",
-      "chapter": "9.10.",
-      "price": "0.00",
-      "effective_from": "1040201",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024850248",
       "brand_en": "Oxaliplatine-Mylan 5mg/ml Powder for Solution for Infusion",
       "brand_zh": "歐莎力-邁蘭 5 毫克/毫升靜脈凍晶注射劑",
@@ -14910,7 +14975,20 @@
       "effective_to": "980131"
     },
     {
-      "code": "BC24850255",
+      "code": "B024850255",
+      "brand_en": "Oxaliplatine-Mylan 5mg/ml Powder for Solution for Infusion",
+      "brand_zh": "歐莎力-邁蘭 5 毫克/毫升靜脈凍晶注射劑",
+      "ingredient": "OXALIPLATIN 5 MG/ML",
+      "company": "台灣邁蘭有限公司",
+      "manufacturer": "VIANEX S.A. (PLANT C)",
+      "atc": "L01XA03",
+      "chapter": "9.10.",
+      "price": "9932.00",
+      "effective_from": "971101",
+      "effective_to": "980131"
+    },
+    {
+      "code": "BC24850248",
       "brand_en": "Oxaliplatine-Mylan 5mg/ml Powder for Solution for Infusion",
       "brand_zh": "歐莎力-邁蘭 5 毫克/毫升靜脈凍晶注射劑",
       "ingredient": "OXALIPLATIN 5 MG/ML",
@@ -14923,7 +15001,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24850248",
+      "code": "BC24850255",
       "brand_en": "Oxaliplatine-Mylan 5mg/ml Powder for Solution for Infusion",
       "brand_zh": "歐莎力-邁蘭 5 毫克/毫升靜脈凍晶注射劑",
       "ingredient": "OXALIPLATIN 5 MG/ML",
@@ -15235,19 +15313,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B022400240",
-      "brand_en": "ANZATAX PACLITAXEL 6MG/ML",
-      "brand_zh": "安素泰 注射劑",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1040601",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B022400221",
       "brand_en": "ANZATAX PACLITAXEL 6MG/ML",
       "brand_zh": "安素泰 注射劑",
@@ -15261,6 +15326,19 @@
       "effective_to": "881130"
     },
     {
+      "code": "B022400240",
+      "brand_en": "ANZATAX PACLITAXEL 6MG/ML",
+      "brand_zh": "安素泰 注射劑",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "24858.00",
+      "effective_from": "880401",
+      "effective_to": "881130"
+    },
+    {
       "code": "A044601221",
       "brand_en": "FORMOXOL INJECTION",
       "brand_zh": "\"永信\" 伏摩素注射液",
@@ -15269,9 +15347,48 @@
       "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "4354.00",
+      "price": "3047.00",
+      "effective_from": "960901",
+      "effective_to": "980930"
+    },
+    {
+      "code": "A044601229",
+      "brand_en": "FORMOXOL INJECTION",
+      "brand_zh": "\"永信\" 伏摩素注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1000601",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "A0446012E2",
+      "brand_en": "FORMOXOL INJECTION",
+      "brand_zh": "\"永信\" 伏摩素注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "14150.00",
       "effective_from": "901101",
-      "effective_to": "951031"
+      "effective_to": "960331"
+    },
+    {
+      "code": "A0446012FG",
+      "brand_en": "FORMOXOL INJECTION",
+      "brand_zh": "\"永信\" 伏摩素注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "14150.00",
+      "effective_from": "960101",
+      "effective_to": "980930"
     },
     {
       "code": "AC44601221",
@@ -15326,45 +15443,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A044601229",
-      "brand_en": "FORMOXOL INJECTION",
-      "brand_zh": "\"永信\" 伏摩素注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1000601",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "A0446012E2",
-      "brand_en": "FORMOXOL INJECTION",
-      "brand_zh": "\"永信\" 伏摩素注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "14150.00",
-      "effective_from": "901101",
-      "effective_to": "960331"
-    },
-    {
-      "code": "A0446012FG",
-      "brand_en": "FORMOXOL INJECTION",
-      "brand_zh": "\"永信\" 伏摩素注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "14150.00",
-      "effective_from": "960101",
-      "effective_to": "980930"
-    },
-    {
       "code": "A044611221",
       "brand_en": "GENAXOL INJECTION 6MG/ML \"GENTLE\"",
       "brand_zh": "\"政德\" 淨癌順注射液６毫克/毫升",
@@ -15376,84 +15454,6 @@
       "price": "4354.00",
       "effective_from": "901001",
       "effective_to": "951031"
-    },
-    {
-      "code": "AC453312E2",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1150901",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC45331221",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "376.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC45331229",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1150901",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC45331235",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC45331240",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AC45331248",
-      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
-      "brand_zh": "欣沛方注射液 6 毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "健亞生物科技股份有限公司",
-      "manufacturer": "健亞生物科技股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
     },
     {
       "code": "A045331221",
@@ -15534,6 +15534,136 @@
       "effective_to": "980930"
     },
     {
+      "code": "AC45331229",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC45331235",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC45331240",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC45331248",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC453312E2",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1150901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "AC45331221",
+      "brand_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "brand_zh": "欣沛方注射液 6 毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "健亞生物科技股份有限公司",
+      "manufacturer": "健亞生物科技股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "376.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24738221",
+      "brand_en": "Intaxel Injection",
+      "brand_zh": "癌克平注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "357.00",
+      "effective_from": "1150601",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24738248",
+      "brand_en": "Intaxel Injection",
+      "brand_zh": "癌克平注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC247382BE",
+      "brand_en": "Intaxel Injection",
+      "brand_zh": "癌克平注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC247382FG",
+      "brand_en": "Intaxel Injection",
+      "brand_zh": "癌克平注射液",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣費森尤斯卡比股份有限公司",
+      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "832.00",
+      "effective_from": "1150601",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B024738221",
       "brand_en": "Intaxel Injection",
       "brand_zh": "癌克平注射液",
@@ -15586,58 +15716,6 @@
       "effective_to": "980930"
     },
     {
-      "code": "BC24738248",
-      "brand_en": "Intaxel Injection",
-      "brand_zh": "癌克平注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC247382BE",
-      "brand_en": "Intaxel Injection",
-      "brand_zh": "癌克平注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC24738221",
-      "brand_en": "Intaxel Injection",
-      "brand_zh": "癌克平注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "357.00",
-      "effective_from": "1150601",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC247382FG",
-      "brand_en": "Intaxel Injection",
-      "brand_zh": "癌克平注射液",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣費森尤斯卡比股份有限公司",
-      "manufacturer": "FRESENIUS KABI ONCOLOGY LIMITED",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "832.00",
-      "effective_from": "1150601",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A046429221",
       "brand_en": "PACLITAXEL INJECTION",
       "brand_zh": "\"天擎\"紫杉醇注射液",
@@ -15649,32 +15727,6 @@
       "price": "4354.00",
       "effective_from": "940301",
       "effective_to": "951031"
-    },
-    {
-      "code": "BC27434221",
-      "brand_en": "Paclitaxel Injection 6mg/ml Sandoz",
-      "brand_zh": "\"山德士\"帕瘤鎖注射劑6毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣山德士藥業股份有限公司",
-      "manufacturer": "FAREVA Unterach GmbH",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1140201",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC27434240",
-      "brand_en": "Paclitaxel Injection 6mg/ml Sandoz",
-      "brand_zh": "\"山德士\"帕瘤鎖注射劑6毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣山德士藥業股份有限公司",
-      "manufacturer": "FAREVA Unterach GmbH",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1140201",
-      "effective_to": "9991231"
     },
     {
       "code": "BC27434248",
@@ -15717,6 +15769,32 @@
     },
     {
       "code": "BC274342E2",
+      "brand_en": "Paclitaxel Injection 6mg/ml Sandoz",
+      "brand_zh": "\"山德士\"帕瘤鎖注射劑6毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣山德士藥業股份有限公司",
+      "manufacturer": "FAREVA Unterach GmbH",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1140201",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC27434221",
+      "brand_en": "Paclitaxel Injection 6mg/ml Sandoz",
+      "brand_zh": "\"山德士\"帕瘤鎖注射劑6毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣山德士藥業股份有限公司",
+      "manufacturer": "FAREVA Unterach GmbH",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1140201",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC27434240",
       "brand_en": "Paclitaxel Injection 6mg/ml Sandoz",
       "brand_zh": "\"山德士\"帕瘤鎖注射劑6毫克/毫升",
       "ingredient": "PACLITAXEL 6 MG/ML",
@@ -15898,97 +15976,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "A044466221",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "4354.00",
-      "effective_from": "900801",
-      "effective_to": "951031"
-    },
-    {
-      "code": "A044466229",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "7837.00",
-      "effective_from": "910201",
-      "effective_to": "970930"
-    },
-    {
-      "code": "A0444662E2",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1010501",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "A0444662FG",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "14150.00",
-      "effective_from": "980401",
-      "effective_to": "980930"
-    },
-    {
-      "code": "A044466235",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "11755.00",
-      "effective_from": "910201",
-      "effective_to": "951031"
-    },
-    {
-      "code": "A044466240",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "19594.00",
-      "effective_from": "980401",
-      "effective_to": "980930"
-    },
-    {
-      "code": "A044466248",
-      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
-      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "杏輝藥品工業股份有限公司",
-      "manufacturer": "杏輝藥品工業股份有限公司",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1030901",
-      "effective_to": "9991231"
-    },
-    {
       "code": "AB444662FG",
       "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
       "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
@@ -16028,6 +16015,45 @@
       "effective_to": "9991231"
     },
     {
+      "code": "A044466221",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "4354.00",
+      "effective_from": "900801",
+      "effective_to": "951031"
+    },
+    {
+      "code": "A044466229",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "7837.00",
+      "effective_from": "910201",
+      "effective_to": "970930"
+    },
+    {
+      "code": "A044466235",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "11755.00",
+      "effective_from": "910201",
+      "effective_to": "951031"
+    },
+    {
       "code": "AB44466235",
       "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
       "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
@@ -16041,6 +16067,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "A044466240",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "19594.00",
+      "effective_from": "980401",
+      "effective_to": "980930"
+    },
+    {
       "code": "AB44466240",
       "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
       "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
@@ -16052,6 +16091,45 @@
       "price": "2121.00",
       "effective_from": "1150801",
       "effective_to": "9991231"
+    },
+    {
+      "code": "A044466248",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1030901",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "A0444662E2",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "14150.00",
+      "effective_from": "921001",
+      "effective_to": "980930"
+    },
+    {
+      "code": "A0444662FG",
+      "brand_en": "PHYXOL INJECTION 6MG/ML \"SINPHAR\"",
+      "brand_zh": "\"杏輝\" 輝克癒蘇注射劑６毫克/毫升",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "杏輝藥品工業股份有限公司",
+      "manufacturer": "杏輝藥品工業股份有限公司",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "14150.00",
+      "effective_from": "980401",
+      "effective_to": "980930"
     },
     {
       "code": "AB44466248",
@@ -16080,20 +16158,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BB21157221",
-      "brand_en": "TAXOL (PACLITAXEL) INJECTION 30MG/5ML",
-      "brand_zh": "汰癌勝注射液（派立達師）",
-      "ingredient": "PACLITAXEL 6 MG/ML",
-      "company": "台灣大昌華嘉股份有限公司",
-      "manufacturer": "LATINA PHARMA S.P.A.",
-      "atc": "L01CD01",
-      "chapter": "9.5.1.",
-      "price": "376.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BB211572E2",
+      "code": "BC21157221",
       "brand_en": "TAXOL (PACLITAXEL) INJECTION 30MG/5ML",
       "brand_zh": "汰癌勝注射液（派立達師）",
       "ingredient": "PACLITAXEL 6 MG/ML",
@@ -16102,7 +16167,20 @@
       "atc": "L01CD01",
       "chapter": "9.5.1.",
       "price": "0.00",
-      "effective_from": "1100701",
+      "effective_from": "1050101",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC211572E2",
+      "brand_en": "TAXOL (PACLITAXEL) INJECTION 30MG/5ML",
+      "brand_zh": "汰癌勝注射液（派立達師）",
+      "ingredient": "PACLITAXEL 6 MG/ML",
+      "company": "台灣大昌華嘉股份有限公司",
+      "manufacturer": "LATINA PHARMA S.P.A.",
+      "atc": "L01CD01",
+      "chapter": "9.5.1.",
+      "price": "0.00",
+      "effective_from": "1050101",
       "effective_to": "9991231"
     },
     {
@@ -16132,7 +16210,7 @@
       "effective_to": "980930"
     },
     {
-      "code": "BC21157221",
+      "code": "BB211572E2",
       "brand_en": "TAXOL (PACLITAXEL) INJECTION 30MG/5ML",
       "brand_zh": "汰癌勝注射液（派立達師）",
       "ingredient": "PACLITAXEL 6 MG/ML",
@@ -16141,11 +16219,11 @@
       "atc": "L01CD01",
       "chapter": "9.5.1.",
       "price": "0.00",
-      "effective_from": "1050101",
+      "effective_from": "1100701",
       "effective_to": "9991231"
     },
     {
-      "code": "BC211572E2",
+      "code": "BB21157221",
       "brand_en": "TAXOL (PACLITAXEL) INJECTION 30MG/5ML",
       "brand_zh": "汰癌勝注射液（派立達師）",
       "ingredient": "PACLITAXEL 6 MG/ML",
@@ -16153,8 +16231,8 @@
       "manufacturer": "LATINA PHARMA S.P.A.",
       "atc": "L01CD01",
       "chapter": "9.5.1.",
-      "price": "0.00",
-      "effective_from": "1050101",
+      "price": "376.00",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -16275,19 +16353,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B025433100",
-      "brand_en": "Votrient (Pazopanib HCl) film-coated tablets 200mg",
-      "brand_zh": "福退癌膜衣錠200毫克",
-      "ingredient": "PAZOPANIB HYDROCHLORIDE 200 MG",
-      "company": "台灣諾華股份有限公司",
-      "manufacturer": "Novartis Pharmaceutical Manufacturing LLC",
-      "atc": "L01EX03",
-      "chapter": "9.41.",
-      "price": "0.00",
-      "effective_from": "1040301",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC25433100",
       "brand_en": "Votrient (Pazopanib HCl) film-coated tablets 200mg",
       "brand_zh": "福退癌膜衣錠200毫克",
@@ -16298,6 +16363,19 @@
       "chapter": "9.41.",
       "price": "506.00",
       "effective_from": "1130401",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "B025433100",
+      "brand_en": "Votrient (Pazopanib HCl) film-coated tablets 200mg",
+      "brand_zh": "福退癌膜衣錠200毫克",
+      "ingredient": "PAZOPANIB HYDROCHLORIDE 200 MG",
+      "company": "台灣諾華股份有限公司",
+      "manufacturer": "Novartis Pharmaceutical Manufacturing LLC",
+      "atc": "L01EX03",
+      "chapter": "9.41.",
+      "price": "0.00",
+      "effective_from": "1040301",
       "effective_to": "9991231"
     },
     {
@@ -16314,19 +16392,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC28481219",
-      "brand_en": "Pemetrexed Sandoz 25mg/mL Concentrate for solution for Infusion",
-      "brand_zh": "癌沛特\"山德士\"25毫克/毫升注射劑",
-      "ingredient": "PEMETREXED DISODIUM 2.5 HYDRATE 25 MG/ML",
-      "company": "台灣山德士藥業股份有限公司",
-      "manufacturer": "FAREVA Unterach GmbH",
-      "atc": "L01BA04",
-      "chapter": "9.26.",
-      "price": "1666.00",
-      "effective_from": "1140801",
-      "effective_to": "9991231"
-    },
-    {
       "code": "BC28481238",
       "brand_en": "Pemetrexed Sandoz 25mg/mL Concentrate for solution for Infusion",
       "brand_zh": "癌沛特\"山德士\"25毫克/毫升注射劑",
@@ -16336,6 +16401,19 @@
       "atc": "L01BA04",
       "chapter": "9.26.",
       "price": "7500.00",
+      "effective_from": "1140801",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC28481219",
+      "brand_en": "Pemetrexed Sandoz 25mg/mL Concentrate for solution for Infusion",
+      "brand_zh": "癌沛特\"山德士\"25毫克/毫升注射劑",
+      "ingredient": "PEMETREXED DISODIUM 2.5 HYDRATE 25 MG/ML",
+      "company": "台灣山德士藥業股份有限公司",
+      "manufacturer": "FAREVA Unterach GmbH",
+      "atc": "L01BA04",
+      "chapter": "9.26.",
+      "price": "1666.00",
       "effective_from": "1140801",
       "effective_to": "9991231"
     },
@@ -16522,19 +16600,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24084277",
-      "brand_en": "ALIMTA (PEMETREXED FOR INJECTION) 500MG",
-      "brand_zh": "愛寧達注射劑",
-      "ingredient": "PEMETREXED DISODIUM HEPTAHYDRATE 500 MG",
-      "company": "美時化學製藥股份有限公司",
-      "manufacturer": "",
-      "atc": "L01BA04",
-      "chapter": "9.26.",
-      "price": "18168.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024084277",
       "brand_en": "ALIMTA (PEMETREXED FOR INJECTION) 500MG",
       "brand_zh": "愛寧達注射劑",
@@ -16545,6 +16610,19 @@
       "chapter": "9.26.",
       "price": "0.00",
       "effective_from": "1040201",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC24084277",
+      "brand_en": "ALIMTA (PEMETREXED FOR INJECTION) 500MG",
+      "brand_zh": "愛寧達注射劑",
+      "ingredient": "PEMETREXED DISODIUM HEPTAHYDRATE 500 MG",
+      "company": "美時化學製藥股份有限公司",
+      "manufacturer": "",
+      "atc": "L01BA04",
+      "chapter": "9.26.",
+      "price": "18168.00",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -17146,19 +17224,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "KC00928248",
-      "brand_en": "Mabthera solution for IV Infusion",
-      "brand_zh": "莫須瘤注射劑",
-      "ingredient": "RITUXIMAB 10 MG/ML",
-      "company": "羅氏大藥廠股份有限公司",
-      "manufacturer": "GENENTECH INC.",
-      "atc": "L01FA01",
-      "chapter": "8.2.7.,9.20.",
-      "price": "31006.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "K000928229",
       "brand_en": "Mabthera solution for IV Infusion",
       "brand_zh": "莫須瘤注射劑",
@@ -17198,16 +17263,16 @@
       "effective_to": "9991231"
     },
     {
-      "code": "KC01284229",
-      "brand_en": "REDDITUX CONCENTRATE FOR SOLUTION FOR INFUSION",
-      "brand_zh": "瑞迪圖克斯注射劑",
+      "code": "KC00928248",
+      "brand_en": "Mabthera solution for IV Infusion",
+      "brand_zh": "莫須瘤注射劑",
       "ingredient": "RITUXIMAB 10 MG/ML",
-      "company": "台灣瑞迪博士有限公司",
-      "manufacturer": "DR. REDDY`S LABORATORIES LTD.",
+      "company": "羅氏大藥廠股份有限公司",
+      "manufacturer": "GENENTECH INC.",
       "atc": "L01FA01",
       "chapter": "8.2.7.,9.20.",
-      "price": "3248.00",
-      "effective_from": "1150801",
+      "price": "31006.00",
+      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -17220,6 +17285,19 @@
       "atc": "L01FA01",
       "chapter": "8.2.7.,9.20.",
       "price": "16240.00",
+      "effective_from": "1150801",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "KC01284229",
+      "brand_en": "REDDITUX CONCENTRATE FOR SOLUTION FOR INFUSION",
+      "brand_zh": "瑞迪圖克斯注射劑",
+      "ingredient": "RITUXIMAB 10 MG/ML",
+      "company": "台灣瑞迪博士有限公司",
+      "manufacturer": "DR. REDDY`S LABORATORIES LTD.",
+      "atc": "L01FA01",
+      "chapter": "8.2.7.,9.20.",
+      "price": "3248.00",
       "effective_from": "1150801",
       "effective_to": "9991231"
     },
@@ -17731,19 +17809,6 @@
       "effective_to": "890331"
     },
     {
-      "code": "B022154100",
-      "brand_en": "NOLVADEX TABLETS 10MG",
-      "brand_zh": "諾瓦得士錠１０公絲",
-      "ingredient": "TAMOXIFEN (CITRATE) 10 MG",
-      "company": "臺灣阿斯特捷利康股份有限公司",
-      "manufacturer": "ASTRAZENECA UK LIMITED",
-      "atc": "L02BA01",
-      "chapter": "",
-      "price": "10.80",
-      "effective_from": "880101",
-      "effective_to": "900331"
-    },
-    {
       "code": "B005588100",
       "brand_en": "NOLVADEX TABLETS 10MG",
       "brand_zh": "諾瓦得士錠１０公絲",
@@ -17757,6 +17822,19 @@
       "effective_to": "880331"
     },
     {
+      "code": "B022154100",
+      "brand_en": "NOLVADEX TABLETS 10MG",
+      "brand_zh": "諾瓦得士錠１０公絲",
+      "ingredient": "TAMOXIFEN (CITRATE) 10 MG",
+      "company": "臺灣阿斯特捷利康股份有限公司",
+      "manufacturer": "ASTRAZENECA UK LIMITED",
+      "atc": "L02BA01",
+      "chapter": "",
+      "price": "10.80",
+      "effective_from": "880101",
+      "effective_to": "900331"
+    },
+    {
       "code": "B016717100",
       "brand_en": "NOVOFEN TABLETS 10MG",
       "brand_zh": "諾普惠錠１０公絲",
@@ -17765,9 +17843,9 @@
       "manufacturer": "REMEDICA LTD.",
       "atc": "L02BA01",
       "chapter": "",
-      "price": "6.50",
-      "effective_from": "881101",
-      "effective_to": "951031"
+      "price": "3.41",
+      "effective_from": "951101",
+      "effective_to": "960831"
     },
     {
       "code": "BC16717100",
@@ -17861,19 +17939,6 @@
       "effective_to": "900331"
     },
     {
-      "code": "AC44672100",
-      "brand_en": "TAXIFEN FILM COATED TABLETS 10MG \"YUNG SHIN\"",
-      "brand_zh": "癌喜芬膜衣錠１０公絲〝永信〞",
-      "ingredient": "TAMOXIFEN (CITRATE) 10 MG",
-      "company": "永信藥品工業股份有限公司",
-      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
-      "atc": "L02BA01",
-      "chapter": "",
-      "price": "5.20",
-      "effective_from": "1140401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "A044672100",
       "brand_en": "TAXIFEN FILM COATED TABLETS 10MG \"YUNG SHIN\"",
       "brand_zh": "癌喜芬膜衣錠１０公絲〝永信〞",
@@ -17885,6 +17950,19 @@
       "price": "4.47",
       "effective_from": "910201",
       "effective_to": "951031"
+    },
+    {
+      "code": "AC44672100",
+      "brand_en": "TAXIFEN FILM COATED TABLETS 10MG \"YUNG SHIN\"",
+      "brand_zh": "癌喜芬膜衣錠１０公絲〝永信〞",
+      "ingredient": "TAMOXIFEN (CITRATE) 10 MG",
+      "company": "永信藥品工業股份有限公司",
+      "manufacturer": "永信藥品工業股份有限公司台中幼獅廠",
+      "atc": "L02BA01",
+      "chapter": "",
+      "price": "5.20",
+      "effective_from": "1140401",
+      "effective_to": "9991231"
     },
     {
       "code": "B015682100",
@@ -17999,9 +18077,9 @@
       "manufacturer": "GENERICS (UK) LTD.",
       "atc": "L02BA01",
       "chapter": "",
-      "price": "6.20",
-      "effective_from": "900401",
-      "effective_to": "951031"
+      "price": "7.35",
+      "effective_from": "840301",
+      "effective_to": "890331"
     },
     {
       "code": "BC22154100",
@@ -18014,7 +18092,7 @@
       "chapter": "",
       "price": "5.20",
       "effective_from": "1140401",
-      "effective_to": "9991231"
+      "effective_to": "1151130"
     },
     {
       "code": "B018568100",
@@ -18090,9 +18168,9 @@
       "manufacturer": "TAIHO PHARMACEUTICAL CO. LTD. (TOKUSHIMA PLANT)",
       "atc": "L01BC53",
       "chapter": "9.11.",
-      "price": "77.00",
-      "effective_from": "910901",
-      "effective_to": "940831"
+      "price": "0.00",
+      "effective_from": "1040201",
+      "effective_to": "9991231"
     },
     {
       "code": "BC23484100",
@@ -18584,9 +18662,9 @@
       "manufacturer": "ORION CORPORATION",
       "atc": "L01AX03",
       "chapter": "9.25.",
-      "price": "0.00",
-      "effective_from": "1040301",
-      "effective_to": "9991231"
+      "price": "4270.00",
+      "effective_from": "940301",
+      "effective_to": "961231"
     },
     {
       "code": "BC23324100",
@@ -18797,6 +18875,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "AB48969100",
+      "brand_en": "Thado Capsules 50 mg",
+      "brand_zh": "賽得膠囊 50 毫克",
+      "ingredient": "THALIDOMIDE 50 MG",
+      "company": "台灣東洋藥品工業股份有限公司",
+      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
+      "atc": "L04AX02",
+      "chapter": "9.33.",
+      "price": "240.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "A048969100",
       "brand_en": "Thado Capsules 50 mg",
       "brand_zh": "賽得膠囊 50 毫克",
@@ -18820,19 +18911,6 @@
       "chapter": "9.33.",
       "price": "0.00",
       "effective_from": "1020201",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "AB48969100",
-      "brand_en": "Thado Capsules 50 mg",
-      "brand_zh": "賽得膠囊 50 毫克",
-      "ingredient": "THALIDOMIDE 50 MG",
-      "company": "台灣東洋藥品工業股份有限公司",
-      "manufacturer": "台灣東洋藥品工業股份有限公司中壢廠",
-      "atc": "L04AX02",
-      "chapter": "9.33.",
-      "price": "240.00",
-      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -18888,6 +18966,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "KC01299229",
+      "brand_en": "Tevimbra Concentrated Solution for Infusion",
+      "brand_zh": "汰瘤安注射劑",
+      "ingredient": "TISLELIZUMAB 10 MG/ML",
+      "company": "臺灣百濟神州有限公司",
+      "manufacturer": "NOVARTIS PHARMA STEIN AG",
+      "atc": "L01FF09",
+      "chapter": "",
+      "price": "37000",
+      "effective_from": "1151001",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B025244100",
       "brand_en": "HYCAMTIN CAPSULES 0.25MG",
       "brand_zh": "癌康定膠囊0.25毫克",
@@ -18940,19 +19031,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC26307209",
-      "brand_en": "Topotecan BioPro Powder for concentrate for solution for infusion",
-      "brand_zh": "百博拓普康注射劑",
-      "ingredient": "TOPOTECAN HYDROCHLORIDE 1 MG",
-      "company": "百博生技有限公司",
-      "manufacturer": "S. C. SINDAN-PHARMA S.R.L.",
-      "atc": "L01CE01",
-      "chapter": "9.16.1.",
-      "price": "0.00",
-      "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B026307209",
       "brand_en": "Topotecan BioPro Powder for concentrate for solution for infusion",
       "brand_zh": "百博拓普康注射劑",
@@ -18963,6 +19041,19 @@
       "chapter": "9.16.1.",
       "price": "0.00",
       "effective_from": "1040501",
+      "effective_to": "9991231"
+    },
+    {
+      "code": "BC26307209",
+      "brand_en": "Topotecan BioPro Powder for concentrate for solution for infusion",
+      "brand_zh": "百博拓普康注射劑",
+      "ingredient": "TOPOTECAN HYDROCHLORIDE 1 MG",
+      "company": "百博生技有限公司",
+      "manufacturer": "S. C. SINDAN-PHARMA S.R.L.",
+      "atc": "L01CE01",
+      "chapter": "9.16.1.",
+      "price": "0.00",
+      "effective_from": "1100701",
       "effective_to": "9991231"
     },
     {
@@ -19005,6 +19096,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "BC25791219",
+      "brand_en": "HYCAMTIN 1mg/ml concentration for solution for Infusion",
+      "brand_zh": "癌康定1毫克/毫升注射劑",
+      "ingredient": "TOPOTECAN HYDROCHLORIDE 1 MG/ML",
+      "company": "台灣山德士藥業股份有限公司",
+      "manufacturer": "FAREVA Unterach GmbH",
+      "atc": "L01CE01",
+      "chapter": "9.16.1.",
+      "price": "5551.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
+    },
+    {
       "code": "BC25791209",
       "brand_en": "HYCAMTIN 1mg/ml concentration for solution for Infusion",
       "brand_zh": "癌康定1毫克/毫升注射劑",
@@ -19028,19 +19132,6 @@
       "chapter": "9.16.1.",
       "price": "0.00",
       "effective_from": "1100701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC25791219",
-      "brand_en": "HYCAMTIN 1mg/ml concentration for solution for Infusion",
-      "brand_zh": "癌康定1毫克/毫升注射劑",
-      "ingredient": "TOPOTECAN HYDROCHLORIDE 1 MG/ML",
-      "company": "台灣山德士藥業股份有限公司",
-      "manufacturer": "FAREVA Unterach GmbH",
-      "atc": "L01CE01",
-      "chapter": "9.16.1.",
-      "price": "5551.00",
-      "effective_from": "1150401",
       "effective_to": "9991231"
     },
     {
@@ -19104,9 +19195,9 @@
       "manufacturer": "ORION CORPORATION ORION PHARMA， TURKU PLANT",
       "atc": "L02BA02",
       "chapter": "9.8.",
-      "price": "0.00",
-      "effective_from": "1040301",
-      "effective_to": "9991231"
+      "price": "31.70",
+      "effective_from": "960901",
+      "effective_to": "980930"
     },
     {
       "code": "BC22310100",
@@ -19460,19 +19551,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC208272AA",
-      "brand_en": "DECAPEPTYL CR",
-      "brand_zh": "弟凱得注射劑",
-      "ingredient": "TRIPTORELIN ACETATE 3.75 MG",
-      "company": "輝凌藥品股份有限公司",
-      "manufacturer": "FERRING GMBH",
-      "atc": "L02AE04",
-      "chapter": "5.5.1.",
-      "price": "2858.00",
-      "effective_from": "1150401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B0208272AA",
       "brand_en": "DECAPEPTYL CR",
       "brand_zh": "弟凱得注射劑",
@@ -19484,6 +19562,19 @@
       "price": "8500.00",
       "effective_from": "840301",
       "effective_to": "870930"
+    },
+    {
+      "code": "BC208272AA",
+      "brand_en": "DECAPEPTYL CR",
+      "brand_zh": "弟凱得注射劑",
+      "ingredient": "TRIPTORELIN ACETATE 3.75 MG",
+      "company": "輝凌藥品股份有限公司",
+      "manufacturer": "FERRING GMBH",
+      "atc": "L02AE04",
+      "chapter": "5.5.1.",
+      "price": "2858.00",
+      "effective_from": "1150401",
+      "effective_to": "9991231"
     },
     {
       "code": "B0202062AA",
@@ -19499,19 +19590,6 @@
       "effective_to": "870930"
     },
     {
-      "code": "B0243822AA",
-      "brand_en": "Diphereline P.R. 3.75mg",
-      "brand_zh": "達菲林長效注射劑3.75毫克",
-      "ingredient": "TRIPTORELIN ACETATE 3.75 MG",
-      "company": "法商益普生股份有限公司台灣分公司",
-      "manufacturer": "IPSEN PHARMA BIOTECH",
-      "atc": "L02AE04",
-      "chapter": "5.5.1.",
-      "price": "6654.00",
-      "effective_from": "951201",
-      "effective_to": "980930"
-    },
-    {
       "code": "BC243822AA",
       "brand_en": "Diphereline P.R. 3.75mg",
       "brand_zh": "達菲林長效注射劑3.75毫克",
@@ -19523,6 +19601,19 @@
       "price": "2858.00",
       "effective_from": "1150401",
       "effective_to": "9991231"
+    },
+    {
+      "code": "B0243822AA",
+      "brand_en": "Diphereline P.R. 3.75mg",
+      "brand_zh": "達菲林長效注射劑3.75毫克",
+      "ingredient": "TRIPTORELIN ACETATE 3.75 MG",
+      "company": "法商益普生股份有限公司台灣分公司",
+      "manufacturer": "IPSEN PHARMA BIOTECH",
+      "atc": "L02AE04",
+      "chapter": "5.5.1.",
+      "price": "6654.00",
+      "effective_from": "951201",
+      "effective_to": "980930"
     },
     {
       "code": "B0233082AA",
@@ -19663,8 +19754,8 @@
       "manufacturer": "Delpharm Milano S.r.l.",
       "atc": "L01EC01",
       "chapter": "9.52.",
-      "price": "673.00",
-      "effective_from": "1150401",
+      "price": "635.00",
+      "effective_from": "1151001",
       "effective_to": "9991231"
     },
     {
@@ -19837,6 +19928,19 @@
       "effective_to": "9991231"
     },
     {
+      "code": "B022167221",
+      "brand_en": "VINCRISTINE-TEVA SOLUTION 1MG/ML",
+      "brand_zh": "敏克瘤注射液１公絲/公撮",
+      "ingredient": "VINCRISTINE (SULFATE) 1 MG/ML",
+      "company": "海喬國際股份有限公司",
+      "manufacturer": "PHARMACHEMIE B.V.",
+      "atc": "L01CA02",
+      "chapter": "",
+      "price": "0.00",
+      "effective_from": "1040601",
+      "effective_to": "9991231"
+    },
+    {
       "code": "B022167209",
       "brand_en": "VINCRISTINE-TEVA SOLUTION 1MG/ML",
       "brand_zh": "敏克瘤注射液１公絲/公撮",
@@ -19859,19 +19963,6 @@
       "atc": "L01CA02",
       "chapter": "",
       "price": "354.60",
-      "effective_from": "880101",
-      "effective_to": "900331"
-    },
-    {
-      "code": "B022167221",
-      "brand_en": "VINCRISTINE-TEVA SOLUTION 1MG/ML",
-      "brand_zh": "敏克瘤注射液１公絲/公撮",
-      "ingredient": "VINCRISTINE (SULFATE) 1 MG/ML",
-      "company": "海喬國際股份有限公司",
-      "manufacturer": "PHARMACHEMIE B.V.",
-      "atc": "L01CA02",
-      "chapter": "",
-      "price": "797.00",
       "effective_from": "880101",
       "effective_to": "900331"
     },
@@ -20032,19 +20123,6 @@
       "effective_to": "860331"
     },
     {
-      "code": "B022047212",
-      "brand_en": "VINCRISTINE SULPHATE INJECTION 1MG/1ML \"DBL\"",
-      "brand_zh": "文克斯汀注射液１毫克/１毫升",
-      "ingredient": "VINCRISTINE SULFATE 1 MG/ML",
-      "company": "輝瑞大藥廠股份有限公司",
-      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
-      "atc": "L01CA02",
-      "chapter": "",
-      "price": "319.14",
-      "effective_from": "890401",
-      "effective_to": "900331"
-    },
-    {
       "code": "B022047209",
       "brand_en": "VINCRISTINE SULPHATE INJECTION 1MG/1ML \"DBL\"",
       "brand_zh": "文克斯汀注射液１毫克/１毫升",
@@ -20056,6 +20134,19 @@
       "price": "197.00",
       "effective_from": "870501",
       "effective_to": "951031"
+    },
+    {
+      "code": "B022047212",
+      "brand_en": "VINCRISTINE SULPHATE INJECTION 1MG/1ML \"DBL\"",
+      "brand_zh": "文克斯汀注射液１毫克/１毫升",
+      "ingredient": "VINCRISTINE SULFATE 1 MG/ML",
+      "company": "輝瑞大藥廠股份有限公司",
+      "manufacturer": "HOSPIRA AUSTRALIA PTY LTD.",
+      "atc": "L01CA02",
+      "chapter": "",
+      "price": "354.60",
+      "effective_from": "870501",
+      "effective_to": "890331"
     },
     {
       "code": "BC22047209",
@@ -20118,9 +20209,9 @@
       "manufacturer": "PFIZER (PERTH) PTY LIMITED",
       "atc": "L01CA02",
       "chapter": "",
-      "price": "196.00",
-      "effective_from": "840301",
-      "effective_to": "880630"
+      "price": "0.00",
+      "effective_from": "880701",
+      "effective_to": "9991231"
     },
     {
       "code": "B019708212",
@@ -20292,7 +20383,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24472209",
+      "code": "BC24472221",
       "brand_en": "Vinorelbine Injection Concentrate",
       "brand_zh": "必諾賓濃縮注射液",
       "ingredient": "VINORELBINE TARTRATE 10 MG/ML",
@@ -20305,7 +20396,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24472221",
+      "code": "BC24472209",
       "brand_en": "Vinorelbine Injection Concentrate",
       "brand_zh": "必諾賓濃縮注射液",
       "ingredient": "VINORELBINE TARTRATE 10 MG/ML",
@@ -20331,7 +20422,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC25898209",
+      "code": "B025898209",
       "brand_en": "Vinorelbine Sandoz 10mg/ml concentrate for solution for infusion",
       "brand_zh": "畢諾彬\"山德士\"10毫克/毫升注射液",
       "ingredient": "VINORELBINE TARTRATE 10 MG/ML",
@@ -20340,7 +20431,7 @@
       "atc": "L01CA04",
       "chapter": "9.9.",
       "price": "0.00",
-      "effective_from": "1091201",
+      "effective_from": "1040701",
       "effective_to": "9991231"
     },
     {
@@ -20357,7 +20448,7 @@
       "effective_to": "9991231"
     },
     {
-      "code": "B025898209",
+      "code": "BC25898209",
       "brand_en": "Vinorelbine Sandoz 10mg/ml concentrate for solution for infusion",
       "brand_zh": "畢諾彬\"山德士\"10毫克/毫升注射液",
       "ingredient": "VINORELBINE TARTRATE 10 MG/ML",
@@ -20366,20 +20457,7 @@
       "atc": "L01CA04",
       "chapter": "9.9.",
       "price": "0.00",
-      "effective_from": "1040701",
-      "effective_to": "9991231"
-    },
-    {
-      "code": "BC24269100",
-      "brand_en": "NAVELBINE 20MG, SOFT CAPSULE",
-      "brand_zh": "溫諾平20毫克軟膠囊",
-      "ingredient": "VINORELBINE TARTRATE 20 MG",
-      "company": "友華生技醫藥股份有限公司",
-      "manufacturer": "CATALENT GERMANY EBERBACH GMBH",
-      "atc": "L01CA04",
-      "chapter": "9.9.",
-      "price": "2272.00",
-      "effective_from": "1120401",
+      "effective_from": "1091201",
       "effective_to": "9991231"
     },
     {
@@ -20394,6 +20472,19 @@
       "price": "2690.00",
       "effective_from": "950601",
       "effective_to": "960831"
+    },
+    {
+      "code": "BC24269100",
+      "brand_en": "NAVELBINE 20MG, SOFT CAPSULE",
+      "brand_zh": "溫諾平20毫克軟膠囊",
+      "ingredient": "VINORELBINE TARTRATE 20 MG",
+      "company": "友華生技醫藥股份有限公司",
+      "manufacturer": "CATALENT GERMANY EBERBACH GMBH",
+      "atc": "L01CA04",
+      "chapter": "9.9.",
+      "price": "2272.00",
+      "effective_from": "1120401",
+      "effective_to": "9991231"
     },
     {
       "code": "X000218100",
@@ -20422,19 +20513,6 @@
       "effective_to": "9991231"
     },
     {
-      "code": "BC24268100",
-      "brand_en": "NAVELBINE 30MG SOFT CAPSULE",
-      "brand_zh": "溫諾平30毫克軟膠囊",
-      "ingredient": "VINORELBINE TARTRATE 30 MG",
-      "company": "友華生技醫藥股份有限公司",
-      "manufacturer": "CATALENT GERMANY EBERBACH GMBH",
-      "atc": "L01CA04",
-      "chapter": "9.9.",
-      "price": "3287.00",
-      "effective_from": "1120401",
-      "effective_to": "9991231"
-    },
-    {
       "code": "B024268100",
       "brand_en": "NAVELBINE 30MG SOFT CAPSULE",
       "brand_zh": "溫諾平30毫克軟膠囊",
@@ -20446,6 +20524,19 @@
       "price": "3631.00",
       "effective_from": "950601",
       "effective_to": "960831"
+    },
+    {
+      "code": "BC24268100",
+      "brand_en": "NAVELBINE 30MG SOFT CAPSULE",
+      "brand_zh": "溫諾平30毫克軟膠囊",
+      "ingredient": "VINORELBINE TARTRATE 30 MG",
+      "company": "友華生技醫藥股份有限公司",
+      "manufacturer": "CATALENT GERMANY EBERBACH GMBH",
+      "atc": "L01CA04",
+      "chapter": "9.9.",
+      "price": "3287.00",
+      "effective_from": "1120401",
+      "effective_to": "9991231"
     },
     {
       "code": "AC60608100",
