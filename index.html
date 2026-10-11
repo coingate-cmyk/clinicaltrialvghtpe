@@ -126,6 +126,8 @@ const isLikelyStudyCode = (value) => {
 
 const normalizeStudyCodeForImport = (value) => {
     const raw = String(value || '').replace(/\u00A0/g, ' ').trim();
+    const rawCompact = normalizeProtocolCodeText(raw).replace(/[\s\r\n]+/g, '');
+    if (/^DESTINY-BILIARY-?TRACT$/i.test(rawCompact)) return 'DESTINY-BILIARY TRACT';
     const lineCandidates = raw.split(/[\r\n]+/)
         .map(line => line.replace(/^[\s(（]+|[\s)）]+$/g, '').trim())
         .filter(Boolean);
