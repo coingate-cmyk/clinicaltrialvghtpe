@@ -1,10 +1,10 @@
 {
   "status": "ok",
-  "fetched_at": "2026-09-21T07:56:22Z",
-  "official_section_count": 138,
+  "fetched_at": "2026-10-12T09:39:07Z",
+  "official_section_count": 140,
   "curated_record_count": 300,
-  "candidate_pair_count": 226,
-  "missing_candidate_count": 0,
+  "candidate_pair_count": 228,
+  "missing_candidate_count": 1,
   "orphan_count": 0,
   "by_cancer": [
     {
@@ -249,6 +249,7 @@
         "9.1",
         "9.2",
         "9.3",
+        "9.4",
         "9.5",
         "9.8",
         "9.9",
@@ -274,7 +275,7 @@
         "9.130",
         "9.135"
       ],
-      "candidate_count": 27,
+      "candidate_count": 28,
       "curated_sections": [
         "9.1",
         "9.2",
@@ -663,9 +664,10 @@
         "9.110",
         "9.120",
         "9.121",
-        "9.124"
+        "9.124",
+        "9.140"
       ],
-      "candidate_count": 16,
+      "candidate_count": 17,
       "curated_sections": [
         "9.20",
         "9.28",
@@ -685,7 +687,7 @@
         "9.124"
       ],
       "curated_count": 16,
-      "missing_count": 0
+      "missing_count": 1
     },
     {
       "cancer": "myeloma",
@@ -701,8 +703,8 @@
         "9.78",
         "9.108",
         "9.111",
-        "9.118",
-        "9.119"
+        "9.117",
+        "9.118"
       ],
       "candidate_count": 11,
       "curated_sections": [
@@ -858,7 +860,15 @@
       "missing_count": 0
     }
   ],
-  "missing_candidates": [],
+  "missing_candidates": [
+    {
+      "section_id": "9.140",
+      "cancer": "nhl",
+      "cancer_name": "非霍奇金淋巴瘤",
+      "title": "9.140. Axicabtagene ciloleucel （如 Yescarta ）：（115/10/1)",
+      "reason": "Official section mentions this cancer, but curated navigator has no matching section+cancer record."
+    }
+  ],
   "orphans": [],
   "normalization": "Curated subsection IDs are matched to official top-level 9.x sections."
 }

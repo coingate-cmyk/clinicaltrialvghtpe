@@ -1,7 +1,7 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-09-21T07:56:22Z",
-    "source_update": "115.8.21",
+    "fetched_at": "2026-10-12T09:39:07Z",
+    "source_update": "115.9.22",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
   },
@@ -34,7 +34,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.18",
-          "title": "Trastuzumab (如 Herceptin)",
+          "title": "Trastuzumab ( 如 Herceptin)",
           "official_only": true
         },
         {
@@ -44,12 +44,12 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.66",
-          "title": "Trifluridine/tipiracil( 如Lonsurf)",
+          "title": "Trifluridine /tipiracil( 如 Lonsurf)",
           "official_only": true
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -72,7 +72,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -125,12 +125,12 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.66",
-          "title": "Trifluridine/tipiracil( 如Lonsurf)",
+          "title": "Trifluridine /tipiracil( 如 Lonsurf)",
           "official_only": true
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -178,7 +178,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -206,7 +206,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -337,12 +337,12 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.60",
-          "title": "Alectinib( 如 Alecensa)",
+          "title": "Alectinib( 如 Alecensa )",
           "official_only": true
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -377,7 +377,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.101",
-          "title": "Tepotinib ( 如 Tepmetko)",
+          "title": "Tepotinib ( 如 Tepmetko )",
           "official_only": true
         },
         {
@@ -387,7 +387,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.131",
-          "title": "Repotrectinib( 如 Augtyro )",
+          "title": "Repotrectinib( 如 Augtyro)",
           "official_only": true
         },
         {
@@ -410,7 +410,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -418,7 +418,7 @@ window.NHI_CANDIDATES = {
     "breast": {
       "name": "乳癌",
       "group": "Breast",
-      "candidate_count": 27,
+      "candidate_count": 28,
       "curated_count": 28,
       "candidates": [
         {
@@ -434,6 +434,11 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.3",
           "title": "Docetaxel",
+          "official_only": true
+        },
+        {
+          "section_id": "9.4",
+          "title": "Gemcitabine （如 Gemzar ）",
           "official_only": true
         },
         {
@@ -468,7 +473,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.18",
-          "title": "Trastuzumab (如 Herceptin)",
+          "title": "Trastuzumab ( 如 Herceptin)",
           "official_only": true
         },
         {
@@ -488,7 +493,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -523,7 +528,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.107",
-          "title": "Abemaciclib ( 如 Verzenio)",
+          "title": "Abemaciclib (如 Verzenio)",
           "official_only": true
         },
         {
@@ -543,7 +548,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.129",
-          "title": "Alpelisib ( 如 Piqray ）",
+          "title": "Alpelisib (如 Piqray ）",
           "official_only": true
         },
         {
@@ -553,7 +558,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.135",
-          "title": "Capivasertib ( 如 Truqap)",
+          "title": "Capivasertib (如 Truqap)",
           "official_only": true
         }
       ]
@@ -576,7 +581,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -589,7 +594,7 @@ window.NHI_CANDIDATES = {
       "candidates": [
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -645,7 +650,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -693,7 +698,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -716,7 +721,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -784,7 +789,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.137",
-          "title": "Cabazitaxel( 如 Cabazred)",
+          "title": "Cabazitaxel (如 Cabazred)",
           "official_only": true
         }
       ]
@@ -875,7 +880,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -898,7 +903,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         },
         {
@@ -976,7 +981,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.123",
-          "title": "Ripretinib( 如 Qinlock ）",
+          "title": "Ripretinib (如 Qinlock ）",
           "official_only": true
         }
       ]
@@ -1017,7 +1022,7 @@ window.NHI_CANDIDATES = {
       "candidates": [
         {
           "section_id": "9.69",
-          "title": "免 疫 檢 查 點 抑 制 劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；ce…",
+          "title": "免疫檢查點抑制劑 (如 atezolizumab ；nivolumab ；pembrolizumab ；avelumab ； ipilimumab ；durvalumab ；tremelimumab ；cemiplima…",
           "official_only": true
         }
       ]
@@ -1025,7 +1030,7 @@ window.NHI_CANDIDATES = {
     "nhl": {
       "name": "非霍奇金淋巴瘤",
       "group": "Hematologic",
-      "candidate_count": 16,
+      "candidate_count": 17,
       "curated_count": 16,
       "candidates": [
         {
@@ -1055,7 +1060,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.61",
-          "title": "Ibrutinib (如 Imbruvica)",
+          "title": "Ibrutinib ( 如 Imbruvica)",
           "official_only": true
         },
         {
@@ -1065,7 +1070,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.79",
-          "title": "Obinutuzumab( 如 Gazyva )",
+          "title": "Obinutuzumab( 如 Gazyva)",
           "official_only": true
         },
         {
@@ -1080,7 +1085,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.104",
-          "title": "Zanubrutinib( 如 Brukinsa)",
+          "title": "Zanubrutinib (如 Brukinsa)",
           "official_only": true
         },
         {
@@ -1106,6 +1111,11 @@ window.NHI_CANDIDATES = {
         {
           "section_id": "9.124",
           "title": "Tafasitamab （如 Minjuvi ）",
+          "official_only": true
+        },
+        {
+          "section_id": "9.140",
+          "title": "Axicabtagene ciloleucel （如 Yescarta ）",
           "official_only": true
         }
       ]
@@ -1148,7 +1158,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.78",
-          "title": "Daratumumab( 如 Darzalex 靜脈注射劑與皮下注射劑 )",
+          "title": "Daratumumab (如 Darzalex 靜脈注射劑與皮下注射劑 )",
           "official_only": true
         },
         {
@@ -1158,17 +1168,17 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.111",
-          "title": "Elotuzumab ( 如 Empliciti)",
+          "title": "Elotuzumab ( 如 Empliciti )",
+          "official_only": true
+        },
+        {
+          "section_id": "9.117",
+          "title": "Selinexor (如 Xpovio)",
           "official_only": true
         },
         {
           "section_id": "9.118",
-          "title": "Elranatamab ( 如 Elrexfio)",
-          "official_only": true
-        },
-        {
-          "section_id": "9.119",
-          "title": "Teclistamab ( 如 Tecvayli)",
+          "title": "Elranatamab (如 Elrexfio)",
           "official_only": true
         }
       ]
@@ -1186,7 +1196,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.55",
-          "title": "Ruxolitinib( 如Jakavi)",
+          "title": "Ruxolitinib (如 Jakavi)",
           "official_only": true
         },
         {
@@ -1226,7 +1236,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.127",
-          "title": "Momelotinib ( 如 Omjjara)",
+          "title": "Momelotinib (如 Omjjara)",
           "official_only": true
         }
       ]
@@ -1244,7 +1254,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.30",
-          "title": "Dasatinib( 如 Sprycel )",
+          "title": "Dasatinib( 如 Sprycel)",
           "official_only": true
         },
         {
@@ -1254,7 +1264,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.64",
-          "title": "Blinatumomab( 如 Blincyto)",
+          "title": "Blinatumomab (如 Blincyto)",
           "official_only": true
         },
         {
@@ -1282,7 +1292,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.30",
-          "title": "Dasatinib( 如 Sprycel )",
+          "title": "Dasatinib( 如 Sprycel)",
           "official_only": true
         },
         {
@@ -1297,12 +1307,12 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.122",
-          "title": "As ciminib ( 如 Scemblix) ：(114 /9/1) 1. 限用於治療先前曾接受 2種以上的酪胺酸激酶抑制劑治療，且發生耐受性不良或治療無 效的慢性期費城染色體陽性之慢性骨髓性白血病 (Ph+ CML…",
+          "title": "As ciminib (如 Scemblix) ：(114 /9/1) 1. 限用於治療先前曾接受 2種以上的酪胺酸激酶抑制劑治療，且發生耐受性不良或治 療無效的慢性期費城染色體陽性之慢性骨髓性白血病 (Ph+ CML…",
           "official_only": true
         },
         {
           "section_id": "9.132",
-          "title": "B osutinib( 如 Bostini)",
+          "title": "Bosutinib (如 Bostini)",
           "official_only": true
         }
       ]
@@ -1330,7 +1340,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.61",
-          "title": "Ibrutinib (如 Imbruvica)",
+          "title": "Ibrutinib ( 如 Imbruvica)",
           "official_only": true
         },
         {
@@ -1340,7 +1350,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.79",
-          "title": "Obinutuzumab( 如 Gazyva )",
+          "title": "Obinutuzumab( 如 Gazyva)",
           "official_only": true
         },
         {
@@ -1350,7 +1360,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.104",
-          "title": "Zanubrutinib( 如 Brukinsa)",
+          "title": "Zanubrutinib (如 Brukinsa)",
           "official_only": true
         }
       ]
@@ -1373,7 +1383,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.55",
-          "title": "Ruxolitinib( 如Jakavi)",
+          "title": "Ruxolitinib (如 Jakavi)",
           "official_only": true
         },
         {
@@ -1393,7 +1403,7 @@ window.NHI_CANDIDATES = {
         },
         {
           "section_id": "9.127",
-          "title": "Momelotinib ( 如 Omjjara)",
+          "title": "Momelotinib (如 Omjjara)",
           "official_only": true
         }
       ]
