@@ -14,6 +14,7 @@ import csv
 import io
 import json
 import re
+import time
 import unicodedata
 import zipfile
 from datetime import datetime, timezone
@@ -42,6 +43,7 @@ SESSION.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/142 Safari/537.36",
     "Accept": "application/json,text/plain,*/*",
     "Referer": "https://data.fda.gov.tw/",
+    "Accept-Encoding": "identity",  # Avoid truncated compressed/chunked TFDA responses.
 })
 
 STOP_WORDS = {
@@ -95,30 +97,45 @@ def unpack_response(blob: bytes) -> tuple[str, str]:
 
 
 def fetch_rows(url: str) -> list[dict]:
-    r = SESSION.get(url, timeout=180)
-    r.raise_for_status()
-    if len(r.content) < 100:
-        raise RuntimeError(f"TFDA response unexpectedly small: {len(r.content)} bytes")
-    text, name = unpack_response(r.content)
-    stripped = text.lstrip("\ufeff \r\n\t")
-    if stripped.startswith("[") or stripped.startswith("{"):
-        payload = json.loads(stripped)
-        if isinstance(payload, list):
-            return [x for x in payload if isinstance(x, dict)]
-        if isinstance(payload, dict):
-            for key in ("data", "result", "results", "records", "items"):
-                if isinstance(payload.get(key), list):
-                    return [x for x in payload[key] if isinstance(x, dict)]
-            for value in payload.values():
-                if isinstance(value, list) and value and isinstance(value[0], dict):
-                    return value
-        raise RuntimeError(f"Cannot locate row array in TFDA JSON ({name})")
-    reader = csv.DictReader(io.StringIO(text))
-    rows = [dict(r) for r in reader]
-    if not rows:
-        raise RuntimeError(f"No rows parsed from TFDA payload ({name})")
-    return rows
-
+    """Retry interrupted official downloads; never reuse stale labels on failure."""
+    last_error = None
+    for attempt in range(1, 5):
+        try:
+            with SESSION.get(url, timeout=(30, 180)) as response:
+                response.raise_for_status()
+                blob = response.content  # ChunkedEncodingError can occur here, after HTTP 200.
+            if len(blob) < 100:
+                raise ValueError(f"TFDA response unexpectedly small: {len(blob)} bytes")
+            text, name = unpack_response(blob)
+            stripped = text.lstrip("\ufeff \r\n\t")
+            if stripped.startswith("[") or stripped.startswith("{"):
+                payload = json.loads(stripped)
+                if isinstance(payload, list):
+                    rows = [x for x in payload if isinstance(x, dict)]
+                elif isinstance(payload, dict):
+                    rows = []
+                    for key in ("data", "result", "results", "records", "items"):
+                        if isinstance(payload.get(key), list):
+                            rows = [x for x in payload[key] if isinstance(x, dict)]
+                            break
+                    if not rows:
+                        for value in payload.values():
+                            if isinstance(value, list) and value and isinstance(value[0], dict):
+                                rows = value
+                                break
+                else:
+                    rows = []
+            else:
+                rows = [dict(r) for r in csv.DictReader(io.StringIO(text))]
+            if len(rows) < 1000:
+                raise ValueError(f"TFDA dataset parsed only {len(rows)} rows ({name})")
+            return rows
+        except (requests.RequestException, ValueError, zipfile.BadZipFile) as exc:
+            last_error = exc
+            print(f"TFDA download attempt {attempt}/4 failed: {type(exc).__name__}: {exc}", flush=True)
+            if attempt < 4:
+                time.sleep(min(2 ** attempt, 12))
+    raise RuntimeError(f"TFDA official dataset unavailable after 4 attempts: {url}") from last_error
 
 def pick(row: dict, *names: str) -> str:
     for name in names:
