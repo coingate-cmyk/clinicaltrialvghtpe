@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from pathlib import Path
 
 import requests
@@ -23,14 +24,45 @@ UA = "Mozilla/5.0 (compatible; clinicaltrialvghtpe NHI reader fallback/1.3)"
 
 
 def reader_get(url: str) -> str:
-    target = READER + url
-    r = requests.get(target, timeout=120, headers={"User-Agent": UA, "Accept": "text/plain,text/markdown,*/*"})
-    r.raise_for_status()
-    text = r.text
-    if len(text) < 5000:
-        raise RuntimeError(f"Reader response unexpectedly small for {url}: {len(text)} chars")
-    return text
+    """Read public source with bounded retries; reject proxy error/short pages."""
+    last_error = None
+    for attempt in range(1, 4):
+        try:
+            response = requests.get(
+                READER + url, timeout=(25, 120),
+                headers={"User-Agent": UA, "Accept": "text/plain,text/markdown,*/*"},
+            )
+            response.raise_for_status()
+            text = response.text
+            if len(text) < 5000:
+                raise ValueError(f"Reader response unexpectedly small for {url}: {len(text)} chars")
+            return text
+        except (requests.RequestException, ValueError) as exc:
+            last_error = exc
+            print(f"Reader attempt {attempt}/3 failed ({type(exc).__name__}) for {url}", flush=True)
+            if attempt < 3:
+                time.sleep(2 ** attempt)
+    raise RuntimeError(f"Reader transport failed for {url}") from last_error
 
+
+def official_pdf_from_previous(previous: dict) -> dict:
+    """Only reuse an official PDF URL from our last validated snapshot.
+
+    The page update date is deliberately left unknown, never guessed from a cached label.
+    """
+    old = previous.get("source", {}) if isinstance(previous, dict) else {}
+    pdf = str(old.get("pdf", ""))
+    if not re.fullmatch(r"https://www\\.nhi\\.gov\\.tw/ch/dl-[A-Za-z0-9-]+\\.pdf", pdf):
+        raise RuntimeError("No previously verified official NHI chapter-9 PDF URL")
+    return {
+        "page": PAGE_URL,
+        "pdf": pdf,
+        "transport": "reader-proxy",
+        "label": "第九節 抗癌瘤藥物（來源頁面暫不可讀；公告版本待核）",
+        "source_update": "",
+        "source_page_verified": False,
+        "source_discovery": "last-verified-official-pdf-link",
+    }
 
 def discover_from_markdown(md: str) -> dict:
     marker = re.search(r"第九節\s*抗癌瘤藥物[^\n]*", md)
@@ -152,13 +184,20 @@ def main():
         raise RuntimeError("Cancer alias taxonomy looks incomplete")
 
     fetched_at = now_iso()
-    page_md = reader_get(PAGE_URL)
-    sources = discover_from_markdown(page_md)
-    print("Reader selected official chapter-9 PDF:", sources["pdf"])
+    previous = load_json(CURRENT_FILE, {})
+    try:
+        page_md = reader_get(PAGE_URL)
+        sources = discover_from_markdown(page_md)
+        sources["source_page_verified"] = True
+        sources["source_discovery"] = "official-page"
+    except (RuntimeError, requests.RequestException, ValueError) as exc:
+        print(f"Official page discovery unavailable: {exc}; attempting last verified PDF URL.", flush=True)
+        sources = official_pdf_from_previous(previous)
+    print("Reader selected official chapter-9 PDF:", sources["pdf"],
+          "verified_page:", sources["source_page_verified"])
     pdf_md = reader_get(sources["pdf"])
     document_text = clean_reader_text(pdf_md)
     sections = split_reader_sections(document_text)
-    previous = load_json(CURRENT_FILE, {})
     old_sections = previous.get("sections", {}) if isinstance(previous, dict) else {}
 
     source_hash = sha(pdf_md)
@@ -202,6 +241,7 @@ def main():
         **changes,
         "transport": "reader-proxy",
         "source_update": sources.get("source_update", ""),
+        "source_page_verified": sources.get("source_page_verified", False),
         "source_label": sources.get("label", ""),
         "source_url": sources.get("pdf") or sources.get("page"),
         "section_count": len(sections),
@@ -214,6 +254,7 @@ def main():
     STATUS_JS.write_text("window.NHI_CHANGES = " + json.dumps(status, ensure_ascii=False, indent=2) + ";\n", encoding="utf-8")
     print(json.dumps({
         "transport": "reader-proxy",
+        "source_page_verified": sources.get("source_page_verified", False),
         "source_update": sources.get("source_update"),
         "sections": len(sections),
         "changes": changes.get("change_count", 0),
