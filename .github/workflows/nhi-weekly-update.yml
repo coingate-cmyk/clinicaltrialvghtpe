@@ -3,7 +3,7 @@ name: Weekly NHI Oncology Update
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron uses UTC: Monday 02:15 = Taiwan Monday 10:15
+    # GitHub Actions uses UTC; Taiwan Monday 10:15.
     - cron: '15 2 * * 1'
   push:
     branches: [main]
@@ -12,15 +12,6 @@ on:
       - 'scripts/nhi_update_reader.py'
       - 'scripts/normalize_nhi_coverage.py'
       - 'scripts/build_nhi_candidates.py'
-      - 'scripts/tfda_label_update.py'
-      - 'scripts/tfda_regimen_match_safety.py'
-      - 'scripts/tfda_label_pdf_enrich.py'
-      - 'scripts/patch_nhi_tfda_ui.py'
-      - 'scripts/patch_nhi_tfda_ui_safe.py'
-      - 'scripts/patch_nhi_tfda_safety.py'
-      - 'tools/nhi/assets/drug-dose-ui.js'
-      - 'tools/nhi/config/cancer_aliases.json'
-      - 'tools/nhi/config/tfda_drug_aliases.json'
       - '.github/workflows/nhi-weekly-update.yml'
 
 permissions:
@@ -33,6 +24,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 22
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,144 +35,95 @@ jobs:
       - name: Install parser dependencies
         run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pypdf
 
-      - name: Use browser-compatible NHI request headers
+      - name: Fetch official NHI chapter 9 with verified-source fallback
         shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('scripts/nhi_update.py')
-          s=p.read_text(encoding='utf-8')
-          old='SESSION.headers.update({"User-Agent": "clinicaltrialvghtpe NHI updater/1.0 (+GitHub Actions; clinical reference mirror)"})'
-          new='SESSION.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.7", "Referer": "https://www.nhi.gov.tw/"})'
-          if old not in s:
-              raise SystemExit('NHI session header anchor missing')
-          p.write_text(s.replace(old,new,1),encoding='utf-8')
-          PY
-
-      - name: Fetch NHI chapter 9 and TFDA labels
-        shell: bash
-        run: |
-          set -uo pipefail
+          set -euo pipefail
           if python scripts/nhi_update.py; then
             echo 'Direct official NHI ODT fetch succeeded.'
           else
-            echo 'Direct NHI fetch blocked/failed; trying reader transport against official page/PDF.'
+            echo 'Direct NHI access unavailable; trying reader and the last verified official PDF link.'
             python scripts/nhi_update_reader.py
           fi
           python scripts/normalize_nhi_coverage.py
           python scripts/build_nhi_candidates.py
-          python scripts/tfda_label_update.py
-          python scripts/tfda_regimen_match_safety.py
-          python scripts/tfda_label_pdf_enrich.py
-          python scripts/patch_nhi_tfda_ui_safe.py
-          python scripts/patch_nhi_tfda_safety.py
 
-      - name: Validate generated NHI and TFDA files
+      - name: Validate new NHI snapshot before publishing
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json, re
+          import json
           from pathlib import Path
-          current=json.loads(Path('tools/nhi/data/raw/current.json').read_text(encoding='utf-8'))
-          coverage=json.loads(Path('tools/nhi/data/coverage-report.json').read_text(encoding='utf-8'))
-          review=json.loads(Path('tools/nhi/data/review-queue.json').read_text(encoding='utf-8'))
-          tfda_review=json.loads(Path('tools/nhi/data/tfda-label-review.json').read_text(encoding='utf-8'))
-          tfda_src=Path('tools/nhi/assets/tfda-labels.js').read_text(encoding='utf-8')
-          m=re.match(r'window\.TFDA_LABELS\s*=\s*(\{[\s\S]*\});\s*$', tfda_src)
-          assert m, 'TFDA JS payload malformed'
-          tfda=json.loads(m.group(1))
-          meta=tfda.get('meta',{})
-          assert current['section_count'] >= 80, current['section_count']
-          assert coverage['status'] == 'ok'
-          assert review['status'] == 'ok'
-          assert tfda_review['status'] == 'ok'
-          assert current['source'].get('page','').startswith('https://www.nhi.gov.tw/')
+          root = Path('tools/nhi')
+          current = json.loads((root / 'data/raw/current.json').read_text(encoding='utf-8'))
+          coverage = json.loads((root / 'data/coverage-report.json').read_text(encoding='utf-8'))
+          review = json.loads((root / 'data/review-queue.json').read_text(encoding='utf-8'))
+          src = current.get('source', {})
+          assert current['section_count'] >= 80, 'Official NHI chapter 9 appears truncated'
+          assert '9.1' in current['sections'], 'Chapter 9 missing first section'
+          assert coverage['status'] == 'ok' and review['status'] == 'ok'
           assert coverage.get('orphan_count', 0) == 0, coverage.get('orphans')
-          assert Path('tools/nhi/assets/nhi-status.js').stat().st_size > 50
-          assert Path('tools/nhi/assets/nhi-candidates.js').stat().st_size > 500
-          assert Path('tools/nhi/assets/drug-dose-ui.js').stat().st_size > 1000
-          assert meta.get('active_row_count',0) > 1000, meta
-          assert meta.get('insert_row_count',0) > 1000, meta
-          assert meta.get('matched_indication_count',0) >= 10, meta
-          assert meta.get('package_insert_pdf_attempted_count',0) >= 1, meta
-          assert meta.get('package_insert_pdf_parsed_count',0) >= 1, meta
-          assert meta.get('high_confidence_dose_count',0) >= 1, meta
-          assert meta.get('dose_withheld_count',0) >= 1, meta
-          assert meta.get('combination_regimen_withheld_count',0) >= 1, meta
-          app=Path('tools/nhi/assets/app.js').read_text(encoding='utf-8')
-          index=Path('tools/nhi/index.html').read_text(encoding='utf-8')
-          assert 'TFDA 核准仿單' in app
-          assert "t.dose_confidence === 'high'" in app
-          assert '此癌種劑量未安全自動拆出' in app
-          assert 'assets/tfda-labels.js' in index
-          assert 'assets/drug-dose-ui.js' in index
-          # Regression guards: withheld mappings must not retain searchable dose chips.
-          for entry in tfda.get('byIndicationId',{}).values():
-              if not isinstance(entry,dict):
-                  continue
-              if entry.get('dose_confidence') == 'withheld':
-                  assert not entry.get('dose_mentions'), entry.get('permit')
-                  assert not entry.get('frequency_mentions'), entry.get('permit')
-              if entry.get('status') == 'regimen-components-required':
-                  assert not entry.get('permit'), entry
-                  assert not entry.get('label_url'), entry
-          print('NHI/TFDA validation OK:', current['section_count'], 'NHI sections;', meta.get('matched_indication_count'), 'TFDA indication mappings;', meta.get('high_confidence_dose_count'), 'high-confidence doses;', meta.get('dose_withheld_count'), 'dose withheld;', meta.get('combination_regimen_withheld_count'), 'combination regimens withheld;', meta.get('review_count'), 'permit reviews')
+          assert src.get('page') == 'https://www.nhi.gov.tw/ch/cp-7593-ad2a9-3397-1.html'
+          if src.get('source_discovery') == 'last-verified-official-pdf-link':
+              assert src.get('pdf', '').startswith('https://www.nhi.gov.tw/ch/dl-')
+              assert not src.get('source_update'), 'Cached link must not assert a fresh source date'
+              print('WARNING: PDF link is official, but current official page date could not be verified.')
+          assert (root / 'assets/nhi-status.js').stat().st_size > 50
+          assert (root / 'assets/nhi-candidates.js').stat().st_size > 500
+          print('NHI validation OK:', current['section_count'], 'sections;',
+                current.get('fetched_at'), 'source update:', src.get('source_update', 'unverified'))
           PY
-          node --check tools/nhi/assets/app.js
-          node --check tools/nhi/assets/drug-dose-ui.js
 
-      - name: Commit official snapshots, TFDA index and UI to main
+      - name: Commit validated NHI snapshots and candidate index to main
         shell: bash
         run: |
           set -euo pipefail
-          # Do not commit the temporary runtime NHI header substitution.
-          git checkout -- scripts/nhi_update.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add tools/nhi/data \
+          git add tools/nhi/data/raw/current.json \
+                  tools/nhi/data/snapshots \
+                  tools/nhi/data/changes.json \
+                  tools/nhi/data/coverage-report.json \
+                  tools/nhi/data/review-queue.json \
                   tools/nhi/assets/nhi-status.js \
-                  tools/nhi/assets/nhi-candidates.js \
-                  tools/nhi/assets/tfda-labels.js \
-                  tools/nhi/assets/app.js \
-                  tools/nhi/assets/style.css \
-                  tools/nhi/assets/drug-dose-ui.js \
-                  tools/nhi/index.html
+                  tools/nhi/assets/nhi-candidates.js
           if ! git diff --cached --quiet; then
-            git commit -m 'Update NHI and TFDA oncology label data'
+            git commit -m 'Update official NHI oncology coverage snapshot'
+            git pull --rebase origin main
             git push origin main
           fi
           rm -rf /tmp/nhi-publish
-          mkdir -p /tmp/nhi-publish/assets
-          cp -a tools/nhi/data /tmp/nhi-publish/data
-          cp tools/nhi/assets/nhi-status.js /tmp/nhi-publish/assets/nhi-status.js
-          cp tools/nhi/assets/nhi-candidates.js /tmp/nhi-publish/assets/nhi-candidates.js
-          cp tools/nhi/assets/tfda-labels.js /tmp/nhi-publish/assets/tfda-labels.js
-          cp tools/nhi/assets/app.js /tmp/nhi-publish/assets/app.js
-          cp tools/nhi/assets/style.css /tmp/nhi-publish/assets/style.css
-          cp tools/nhi/assets/drug-dose-ui.js /tmp/nhi-publish/assets/drug-dose-ui.js
-          cp tools/nhi/index.html /tmp/nhi-publish/index.html
+          mkdir -p /tmp/nhi-publish/data/raw /tmp/nhi-publish/data/snapshots /tmp/nhi-publish/assets
+          cp tools/nhi/data/raw/current.json /tmp/nhi-publish/data/raw/current.json
+          cp -a tools/nhi/data/snapshots/. /tmp/nhi-publish/data/snapshots/
+          for f in changes.json coverage-report.json review-queue.json; do
+            cp "tools/nhi/data/$f" "/tmp/nhi-publish/data/$f"
+          done
+          cp tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js /tmp/nhi-publish/assets/
 
-      - name: Publish NHI + TFDA data and UI to live Pages branch
+      - name: Publish NHI-only assets to Pages without overwriting TFDA or brands
         shell: bash
         run: |
           set -euo pipefail
           git fetch origin pages-clean-ajcc-v2-3
           git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
-          rm -rf tools/nhi/data
-          mkdir -p tools/nhi/assets
-          cp -a /tmp/nhi-publish/data tools/nhi/data
-          cp /tmp/nhi-publish/assets/nhi-status.js tools/nhi/assets/nhi-status.js
-          cp /tmp/nhi-publish/assets/nhi-candidates.js tools/nhi/assets/nhi-candidates.js
-          cp /tmp/nhi-publish/assets/tfda-labels.js tools/nhi/assets/tfda-labels.js
-          cp /tmp/nhi-publish/assets/app.js tools/nhi/assets/app.js
-          cp /tmp/nhi-publish/assets/style.css tools/nhi/assets/style.css
-          cp /tmp/nhi-publish/assets/drug-dose-ui.js tools/nhi/assets/drug-dose-ui.js
-          cp /tmp/nhi-publish/index.html tools/nhi/index.html
-          git add tools/nhi/data tools/nhi/assets/nhi-status.js tools/nhi/assets/nhi-candidates.js tools/nhi/assets/tfda-labels.js tools/nhi/assets/app.js tools/nhi/assets/style.css tools/nhi/assets/drug-dose-ui.js tools/nhi/index.html
+          mkdir -p tools/nhi/data/raw tools/nhi/data/snapshots tools/nhi/assets
+          cp /tmp/nhi-publish/data/raw/current.json tools/nhi/data/raw/current.json
+          cp -a /tmp/nhi-publish/data/snapshots/. tools/nhi/data/snapshots/
+          for f in changes.json coverage-report.json review-queue.json; do
+            cp "/tmp/nhi-publish/data/$f" "tools/nhi/data/$f"
+          done
+          cp /tmp/nhi-publish/assets/nhi-status.js /tmp/nhi-publish/assets/nhi-candidates.js tools/nhi/assets/
+          git add tools/nhi/data/raw/current.json \
+                  tools/nhi/data/snapshots \
+                  tools/nhi/data/changes.json \
+                  tools/nhi/data/coverage-report.json \
+                  tools/nhi/data/review-queue.json \
+                  tools/nhi/assets/nhi-status.js \
+                  tools/nhi/assets/nhi-candidates.js
           if ! git diff --cached --quiet; then
-            git commit -m 'Publish NHI and TFDA oncology label update'
+            git commit -m 'Publish official NHI oncology coverage snapshot'
+            git pull --rebase origin pages-clean-ajcc-v2-3
             git push origin pages-clean-ajcc-v2-3
           fi
-
-# v0.9 NHI + TFDA label-dose enrichment; unified detail UI persists across weekly refreshes.
