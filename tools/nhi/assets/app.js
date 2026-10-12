@@ -12,6 +12,11 @@
   const state = { cancer: null, query: '', line: '', biomarker: '', auth: '' };
   const cancerMap = Object.fromEntries(data.cancers.map(c => [c.id, c]));
   const sourcePdf = changes.source_url || data.meta.source_url;
+  const lastNhiSyncMs = Date.parse(changes.fetched_at || '');
+  const nhiSyncStale = !Number.isFinite(lastNhiSyncMs) || Date.now() - lastNhiSyncMs > 14 * 86400000;
+  const nhiPageUnverified = changes.source_page_verified === false;
+  const tfdaSyncMs = Date.parse(tfda.meta?.fetched_at || '');
+  const tfdaSyncStale = !Number.isFinite(tfdaSyncMs) || Date.now() - tfdaSyncMs > 14 * 86400000;
 
   function esc(s='') {
     return String(s).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
@@ -22,9 +27,13 @@
   function pdfLink(item) { return `${sourcePdf}#page=${Number(item.pdf_page || 1)}`; }
 
   function renderHeader() {
-    const sourceUpdate = changes.source_update || data.meta.source_update;
-    $('sourceBadge').textContent = `官方來源 ${sourceUpdate}`;
-    $('footerMeta').textContent = `${data.meta.source_name}｜資料核對 ${data.meta.verified_on}｜${data.meta.scope}`;
+    const sourceUpdate = changes.source_update || data.meta.source_update || '未確認';
+    const nhiRefreshDate = changes.fetched_at ? String(changes.fetched_at).slice(0,10) : '未知';
+    const tfdaRefreshDate = tfda.meta?.fetched_at ? String(tfda.meta.fetched_at).slice(0,10) : '未知';
+    const nhiWarning = nhiSyncStale ? `｜⚠ 健保條文同步逾 14 天（${nhiRefreshDate}）` : '';
+    const officialWarning = nhiPageUnverified ? '｜⚠ 官網公告版本待核' : '';
+    $('sourceBadge').textContent = `官方來源 ${sourceUpdate}${nhiWarning}${officialWarning}`;
+    $('footerMeta').textContent = `${data.meta.source_name}｜資料核對 ${data.meta.verified_on}｜${data.meta.scope}｜TFDA 仿單同步 ${tfdaRefreshDate}${tfdaSyncStale ? '（⚠ 逾 14 天）' : ''}`;
     const curatedCancers = new Set(data.indications.map(x => x.cancer)).size;
     const authCount = data.indications.filter(x => x.prior_auth).length;
     const biomarkerCount = data.indications.filter(x => x.biomarker && x.biomarker !== '—').length;
@@ -39,7 +48,10 @@
     const gaps = Number(changes.coverage?.missing_candidate_count || 0);
     const sections = Number(changes.section_count || 0);
     if (changes.status === 'ok') {
-      const headline = n ? `本次偵測到 ${n} 個第 9 節條文章節變更` : '第 9 節自動擷取與比對成功';
+      const headline = nhiSyncStale
+        ? `⚠ 健保第 9 節資料超過 14 天未成功同步（${changes.fetched_at ? String(changes.fetched_at).slice(0,10) : '未知'}）`
+        : nhiPageUnverified ? '⚠ 官方 PDF 已取得，但公告更新日期尚未核對'
+        : n ? `偵測到 ${n} 個第 9 節條文章節變更，需人工核對` : '第 9 節自動擷取與比對成功';
       const detail = `${sections ? `已解析 ${sections} 個 9.x 章節；` : ''}漏項偵測目前有 ${gaps} 個「癌種 × 條文」候選待人工核對。curated 臨床摘要不會自動覆寫。`;
       panel.innerHTML = `<div><strong>${esc(headline)}</strong><span>${esc(detail)}</span></div>${n ? '<button class="ghost-button compact" id="showChanges">查看變更</button>' : ''}`;
       if (n) $('showChanges').addEventListener('click', () => showChangesDialog());
