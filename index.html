@@ -125,7 +125,33 @@ const isLikelyStudyCode = (value) => {
 };
 
 const normalizeStudyCodeForImport = (value) => {
-    const normalized = normalizeProtocolCodeText(value);
+    const raw = String(value || '').replace(/\u00A0/g, ' ').trim();
+    const rawCompact = normalizeProtocolCodeText(raw).replace(/[\s\r\n]+/g, '');
+    if (/^DESTINY-BILIARY-?TRACT$/i.test(rawCompact)) return 'DESTINY-BILIARY TRACT';
+    const lineCandidates = raw.split(/[\r\n]+/)
+        .map(line => line.replace(/^[\s(（]+|[\s)）]+$/g, '').trim())
+        .filter(Boolean);
+
+    // Some Study status cells contain a primary protocol code plus an alias on
+    // the next line, e.g. GCT1184-09 / (RAINFOL-09), or a sponsor code on line 2.
+    // Use the first code-looking line as the stable import key rather than
+    // concatenating both lines into one invalid protocol code.
+    for (const candidate of lineCandidates) {
+        const normalizedLine = normalizeProtocolCodeText(candidate);
+        const compactLine = normalizedLine.replace(/[\s\r\n]+/g, '');
+        if (/^DESTINY-BILIARY-?TRACT$/i.test(compactLine)) return 'DESTINY-BILIARY TRACT';
+        if (isLikelyStudyCode(compactLine)) return compactLine;
+        if (/^[A-Z0-9][A-Z0-9_-]{3,41}$/i.test(compactLine)
+            && /[A-Z]/i.test(compactLine)
+            && /\d/.test(compactLine)
+            && /[-_]/.test(compactLine)) return compactLine;
+    }
+
+    // Same-line aliases: keep the first protocol-like token before parentheses.
+    const head = raw.match(/^\s*([A-Z0-9_]+(?:-[A-Z0-9]+)+)\b/i);
+    if (head) return normalizeProtocolCodeText(head[1]).replace(/[\s\r\n]+/g, '');
+
+    const normalized = normalizeProtocolCodeText(raw);
     const compact = normalized.replace(/[\s\r\n]+/g, '');
     if (/^DESTINY-BILIARY-?TRACT$/i.test(compact)) return 'DESTINY-BILIARY TRACT';
     return compact;
@@ -2225,6 +2251,31 @@ const PDF_COLUMN_RANGES = {
     presentationDate: [779.1, 803.1]
 };
 
+// v4.3.8-20261011: Google Sheets Study status added/repositioned columns
+// (notably 試驗經費 between 合約編號 and comments). Keep the legacy map
+// for old PDFs and switch per-page only when the new header is actually present.
+const PDF_COLUMN_RANGES_202610 = {
+    cancerLine: [18.8, 32.5],
+    studyTitle: [32.5, 189.2],
+    code: [189.2, 240.8],
+    inclusion: [240.8, 410.0],
+    phase: [410.0, 438.8],
+    sponsor: [438.8, 467.9],
+    targetNum: [467.9, 489.1],
+    enrolled: [489.1, 522.0],
+    monthSigned: [522.0, 565.9],
+    monthEnrolled: [565.9, 603.4],
+    pi: [603.4, 625.4],
+    nurse: [625.4, 664.8],
+    contractNo: [664.8, 694.1],
+    comments: [729.2, 758.4],
+    presenter: [758.4, 783.2],
+    presentationDate: [783.2, 805.4]
+};
+
+const pdfUses202610StudyStatusLayout = (pageData) =>
+    ((pageData && pageData.items) || []).some(item => /試驗經費/.test(String(item.str || '')));
+
 const pdfSmartJoinLineItems = (items) => {
     const sorted = (items || []).slice().sort((a, b) => a.x - b.x);
     let out = '';
@@ -2264,7 +2315,8 @@ const normalizePdfPageItems = (pageData) => {
 const pdfColumnRangeForPage = (pageData, field) => {
     const width = Number(pageData && pageData.width) || PDF_REFERENCE_WIDTH;
     const scale = width / PDF_REFERENCE_WIDTH;
-    const ref = PDF_COLUMN_RANGES[field] || [0, PDF_REFERENCE_WIDTH];
+    const ranges = pdfUses202610StudyStatusLayout(pageData) ? PDF_COLUMN_RANGES_202610 : PDF_COLUMN_RANGES;
+    const ref = ranges[field] || PDF_COLUMN_RANGES[field] || [0, PDF_REFERENCE_WIDTH];
     return [ref[0] * scale, ref[1] * scale];
 };
 
@@ -2307,7 +2359,7 @@ const pdfLinesToBlocks = (lines, maxLineGap) => {
 
 const isLikelyPdfCodeCell = (value) => {
     const code = normalizeStudyCodeForImport(value);
-    if (isLikelyStudyCode(code)) return true;
+    if (isLikelyStudyCode(code) || isSpecialLegacyStudyCode(code)) return true;
     if (!code || code.length < 4 || code.length > 42 || /[\u4e00-\u9fff]/.test(code)) return false;
     if (/^(STUDY|TITLE|PHASE|SPONSOR|TARGET|INCLUSION|EXCLUSION|COMMENTS?|NURSE)/i.test(code)) return false;
     // 少數 protocol code 沒有數字，例如 DESTINY-Biliary Tract；只在「代號欄」內允許。
