@@ -1,0 +1,144 @@
+name: Weekly TFDA Oncology Label Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Separate TFDA job: Taiwan Monday 11:15; never blocks NHI chapter-9 publishing.
+    - cron: '15 3 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/tfda_label_update.py'
+      - 'scripts/tfda_regimen_match_safety.py'
+      - 'scripts/tfda_label_pdf_enrich.py'
+      - 'scripts/patch_nhi_tfda_ui.py'
+      - 'scripts/patch_nhi_tfda_ui_safe.py'
+      - 'scripts/patch_nhi_tfda_safety.py'
+      - 'tools/nhi/config/tfda_drug_aliases.json'
+      - 'tools/nhi/assets/drug-dose-ui.js'
+      - '.github/workflows/tfda-weekly-update.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tfda-weekly-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install official-data parser dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pypdf
+
+      - name: Fetch and conservatively match TFDA drug labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/tfda_label_update.py
+          python scripts/tfda_regimen_match_safety.py
+          python scripts/tfda_label_pdf_enrich.py
+          python scripts/patch_nhi_tfda_ui_safe.py
+          python scripts/patch_nhi_tfda_safety.py
+
+      - name: Validate TFDA labels and safe dose presentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+          base = Path('tools/nhi')
+          review = json.loads((base / 'data/tfda-label-review.json').read_text(encoding='utf-8'))
+          src = (base / 'assets/tfda-labels.js').read_text(encoding='utf-8')
+          match = re.match(r'window\.TFDA_LABELS\s*=\s*(\{[\s\S]*\});\s*$', src)
+          assert match, 'TFDA data JavaScript malformed'
+          data = json.loads(match.group(1))
+          meta = data.get('meta', {})
+          assert review['status'] == 'ok'
+          assert meta.get('active_row_count', 0) > 1000, meta
+          assert meta.get('insert_row_count', 0) > 1000, meta
+          assert meta.get('matched_indication_count', 0) >= 10, meta
+          assert meta.get('package_insert_pdf_attempted_count', 0) >= 1, meta
+          assert meta.get('package_insert_pdf_parsed_count', 0) >= 1, meta
+          assert meta.get('high_confidence_dose_count', 0) >= 1, meta
+          assert meta.get('dose_withheld_count', 0) >= 1, meta
+          assert meta.get('combination_regimen_withheld_count', 0) >= 1, meta
+          app = (base / 'assets/app.js').read_text(encoding='utf-8')
+          index = (base / 'index.html').read_text(encoding='utf-8')
+          assert 'TFDA 核准仿單' in app
+          assert "t.dose_confidence === 'high'" in app
+          assert '此癌種劑量未安全自動拆出' in app
+          assert 'assets/tfda-labels.js' in index
+          assert 'assets/drug-dose-ui.js' in index
+          for entry in data.get('byIndicationId', {}).values():
+              if not isinstance(entry, dict):
+                  continue
+              if entry.get('dose_confidence') == 'withheld':
+                  assert not entry.get('dose_mentions'), entry.get('permit')
+                  assert not entry.get('frequency_mentions'), entry.get('permit')
+              if entry.get('status') == 'regimen-components-required':
+                  assert not entry.get('permit'), entry
+                  assert not entry.get('label_url'), entry
+          print('TFDA validation OK:', meta.get('active_row_count'), 'licences;',
+                meta.get('matched_indication_count'), 'indication mappings;',
+                meta.get('high_confidence_dose_count'), 'high-confidence doses;',
+                meta.get('dose_withheld_count'), 'withheld.')
+          PY
+          node --check tools/nhi/assets/app.js
+          node --check tools/nhi/assets/drug-dose-ui.js
+
+      - name: Commit validated TFDA data without touching NHI snapshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/nhi/data/tfda-label-review.json \
+                  tools/nhi/assets/tfda-labels.js \
+                  tools/nhi/assets/app.js \
+                  tools/nhi/assets/style.css \
+                  tools/nhi/assets/drug-dose-ui.js \
+                  tools/nhi/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update official TFDA oncology labels'
+            git pull --rebase origin main
+            git push origin main
+          fi
+          rm -rf /tmp/tfda-publish
+          mkdir -p /tmp/tfda-publish/assets /tmp/tfda-publish/data
+          cp tools/nhi/data/tfda-label-review.json /tmp/tfda-publish/data/
+          cp tools/nhi/assets/tfda-labels.js tools/nhi/assets/app.js \
+             tools/nhi/assets/style.css tools/nhi/assets/drug-dose-ui.js \
+             /tmp/tfda-publish/assets/
+          cp tools/nhi/index.html /tmp/tfda-publish/index.html
+
+      - name: Publish TFDA-only data and UI without touching NHI snapshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin pages-clean-ajcc-v2-3
+          git switch -C pages-clean-ajcc-v2-3 origin/pages-clean-ajcc-v2-3
+          mkdir -p tools/nhi/data tools/nhi/assets
+          cp /tmp/tfda-publish/data/tfda-label-review.json tools/nhi/data/
+          cp /tmp/tfda-publish/assets/* tools/nhi/assets/
+          cp /tmp/tfda-publish/index.html tools/nhi/index.html
+          git add tools/nhi/data/tfda-label-review.json \
+                  tools/nhi/assets/tfda-labels.js \
+                  tools/nhi/assets/app.js \
+                  tools/nhi/assets/style.css \
+                  tools/nhi/assets/drug-dose-ui.js \
+                  tools/nhi/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish updated TFDA oncology labels'
+            git pull --rebase origin pages-clean-ajcc-v2-3
+            git push origin pages-clean-ajcc-v2-3
+          fi
