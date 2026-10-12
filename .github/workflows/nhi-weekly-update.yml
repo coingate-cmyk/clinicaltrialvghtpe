@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: nhi-weekly-update
+  group: nhi-weekly-update-v2
   cancel-in-progress: false
 
 jobs:
