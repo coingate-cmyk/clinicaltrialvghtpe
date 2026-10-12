@@ -1,6 +1,6 @@
 window.NHI_CANDIDATES = {
   "meta": {
-    "fetched_at": "2026-10-12T09:39:07Z",
+    "fetched_at": "2026-10-12T09:39:34Z",
     "source_update": "115.9.22",
     "source_url": "https://www.nhi.gov.tw/ch/dl-55685-99c675b771ab4b2789c891bc8db447ce-1.pdf",
     "note": "Official-section candidates only; not yet clinically curated."
