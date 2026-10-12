@@ -52,7 +52,7 @@ def official_pdf_from_previous(previous: dict) -> dict:
     """
     old = previous.get("source", {}) if isinstance(previous, dict) else {}
     pdf = str(old.get("pdf", ""))
-    if not re.fullmatch(r"https://www\\.nhi\\.gov\\.tw/ch/dl-[A-Za-z0-9-]+\\.pdf", pdf):
+    if not re.fullmatch(r"https://www\.nhi\.gov\.tw/ch/dl-[A-Za-z0-9-]+\.pdf", pdf):
         raise RuntimeError("No previously verified official NHI chapter-9 PDF URL")
     return {
         "page": PAGE_URL,
