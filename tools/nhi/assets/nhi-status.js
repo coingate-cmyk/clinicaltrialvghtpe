@@ -1,6 +1,6 @@
 window.NHI_CHANGES = {
   "status": "ok",
-  "fetched_at": "2026-10-12T09:39:34Z",
+  "fetched_at": "2026-10-19T07:43:52Z",
   "change_count": 0,
   "changes": [],
   "transport": "reader-proxy",
