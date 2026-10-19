@@ -4,7 +4,7 @@
     "transport": "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-E41001-001",
     "resource_id": "A21030000I-E41001-001",
     "dataset": "健保用藥品項查詢項目檔",
-    "fetched_at": "2026-10-12T09:38:14.109485Z",
+    "fetched_at": "2026-10-19T08:02:51.465544Z",
     "scope": "active oncology-related NHI listed products; top-level Chapter 9 and oncology ATC/category filters",
     "product_count": 1583,
     "ingredient_count": 440,
