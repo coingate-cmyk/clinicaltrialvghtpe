@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "fetched_at": "2026-10-26T08:48:23Z",
+  "fetched_at": "2026-11-02T10:55:35Z",
   "item_count": 5,
   "items": [
     {
@@ -32,6 +32,13 @@
       "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
       "candidates": [
         {
+          "permit": "衛署藥製字第044508號",
+          "product": "歐力普注射劑",
+          "dosage": "詳見仿單",
+          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        },
+        {
           "permit": "衛部藥製字第060917號",
           "product": "\"意欣\"歐效立注射劑5毫克/毫升",
           "dosage": "請詳見仿單",
@@ -44,13 +51,6 @@
           "dosage": "請詳見仿單",
           "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和fluoropyrimidine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
           "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025631號"
-        },
-        {
-          "permit": "衛署藥製字第044508號",
-          "product": "歐力普注射劑",
-          "dosage": "詳見仿單",
-          "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
         },
         {
           "permit": "衛署藥製字第048838號",
@@ -97,6 +97,13 @@
       "reason": "Multiple active licences have differing dosage text without a reliable cancer-specific winner.",
       "candidates": [
         {
+          "permit": "衛署藥輸字第024738號",
+          "product": "癌克平注射液",
+          "dosage": "詳見仿單。",
+          "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        },
+        {
           "permit": "衛部藥輸字第027504號",
           "product": "克抑癌注射液",
           "dosage": "請詳見仿單",
@@ -109,13 +116,6 @@
           "dosage": "詳見仿單。",
           "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(doxorubicin)在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用anthracycline抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過anthracycline之局部復發且無法手術切除或轉移性之乳癌病人、與Herceptin併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
           "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044601號"
-        },
-        {
-          "permit": "衛署藥輸字第024738號",
-          "product": "癌克平注射液",
-          "dosage": "詳見仿單。",
-          "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-          "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
         },
         {
           "permit": "衛署藥輸字第025586號",
