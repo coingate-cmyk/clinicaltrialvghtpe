@@ -1,17 +1,17 @@
 window.TFDA_LABELS = {
   "meta": {
     "schema_version": "tfda-oncology-label-v1",
-    "fetched_at": "2026-11-02T10:55:35Z",
+    "fetched_at": "2026-11-09T11:23:32Z",
     "active_dataset": "https://data.gov.tw/dataset/9123",
     "insert_dataset": "https://data.gov.tw/dataset/9117",
-    "active_row_count": 25964,
-    "insert_row_count": 29903,
+    "active_row_count": 25977,
+    "insert_row_count": 29913,
     "curated_indication_count": 300,
     "matched_indication_count": 266,
     "review_count": 5,
     "note": "Dose/interval is derived only from official TFDA licence dosage text. Ambiguous mappings are withheld for review.",
     "combination_regimen_withheld_count": 14,
-    "multi_insert_link_normalized_count": 20,
+    "multi_insert_link_normalized_count": 17,
     "package_insert_pdf_attempted_count": 130,
     "package_insert_pdf_parsed_count": 10,
     "indication_dose_enriched_count": 6,
@@ -107,21 +107,21 @@ window.TFDA_LABELS = {
     "btc-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -186,14 +186,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -257,16 +257,15 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 19,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "bc-ixabepilone": {
@@ -371,21 +370,21 @@ window.TFDA_LABELS = {
     "bc-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛部藥輸字第027504號",
+      "product_zh": "克抑癌注射液",
+      "product_en": "Paclitero (Paclitaxel Injection 6mg/ml)",
+      "applicant": "凱沛爾藥品有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(DOXORUBICIN)在內之輔助化學療法、已使用合併療法(除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥)失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號",
       "license_modified": "2026/09/09",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -537,21 +536,21 @@ window.TFDA_LABELS = {
     "bc-olaparib-adjuvant": {
       "status": "matched",
       "drug": "Olaparib",
-      "permit": "衛部藥輸字第027445號",
-      "product_zh": "令癌莎膜衣錠100毫克",
-      "product_en": "Lynparza Film-coated Tablets 100mg",
+      "permit": "衛部藥輸字第027446號",
+      "product_zh": "令癌莎膜衣錠150毫克",
+      "product_en": "Lynparza Film-coated Tablets 150mg",
       "applicant": "臺灣阿斯特捷利康股份有限公司",
       "form": "膜衣錠",
       "indication": "１、單一療法可用於： ● 晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且具遺傳性或體細胞BRCA1/2 (germlineorsomatic BRCA1/2)致病性或疑似致病性突變，對第一線含鉑化療有反應(完全反應或部分反應)之成年病人作為維持治療。 ● 對先前含鉑藥物敏感且復發之高度惡性上皮卵巢、輸卵管腫瘤或原發性腹膜癌，在復發後對含鉑化療有反應(完全反應或部分反應)之成人病人，作為維持治療。 ２、併用bevacizumab可用於晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且對第一線含鉑化療合併bevacizumab有反應(完全反應或部分反應)之成年病人，做為維持治療。且其癌症帶有下列任一定義的DNA同源修復系統缺失 (homologous recombination deficiency, HRD)： ● 致病性或疑似致病性 BRCA 突變，及/或 ● 基因體不穩定(genomic instability)。 ３、適用於曾接受前導性化療或術後輔助性化療，且具遺傳性BRCA1/2(germline BRCA1/2)突變併HER2陰性而有高復發風險之早期乳癌成年病人術後輔助治療。 ４、單一療法可用於治療曾接受前導性、術後輔助性或轉移性化療，且具遺傳性BRCA1/2 (germline BRCA1/2)致病性或疑似致病性突變的HER2(-)轉移性乳癌成人病人。針對荷爾蒙受體陽性的乳癌病人，本品應在曾經接受過荷爾蒙治療、或不適合使用荷爾蒙治療之狀況下使用。 ５、單一療法之維持治療，可用於遺傳性BRCA突變且經第一線含鉑化療至少16週後疾病未惡化之轉移性胰腺癌成年病人。 ６、單一療法用於去勢療法無效的轉移性攝護腺癌(mCRPC)，且具BRCA1/2(遺傳性及/或體細胞)致病性或疑似致病性突變、先前曾接受新荷爾蒙藥物(novel hormonal agents)治療後惡化之成人病人。 ７、併用abiraterone及prednisone或prednisolone，用於治療轉移性去勢療法抗性攝護腺癌且尚未需要使用化學治療的成人病人。 ８、與durvalumab併用，可作為durvalumab合併含鉑化療的第一線治療後，其病情未惡化之原發性晚期或復發性子宮內膜癌之錯配修復功能正常 (Mismatch Repair Proficient, pMMR)的成人病人維持治療。",
       "dosage": "請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號",
       "license_modified": "2025/11/01",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 4,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -661,21 +660,21 @@ window.TFDA_LABELS = {
     "bc-palbo-fulvestrant": {
       "status": "matched",
       "drug": "Palbociclib",
-      "permit": "衛部藥輸字第028005號",
-      "product_zh": "愛乳適膜衣錠75毫克",
-      "product_en": "Ibrance Film-coated Tablets 75 mg",
+      "permit": "衛部藥輸字第027102號",
+      "product_zh": "愛乳適 膠囊75毫克",
+      "product_en": "IBRANCE Capsules 75 mg",
       "applicant": "輝瑞大藥廠股份有限公司",
-      "form": "膜衣錠",
-      "indication": "一、 HER2陰性乳癌 1. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性，本品可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 2. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，本品可合併fulvestrant用於先前曾接受過內分泌治療者。 二、 HER2陽性乳癌：對於接受誘導治療後之荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陽性之局部晚期或轉移性乳癌成人病人，本品可合併trastuzumab及內分泌治療，可併用或不併用pertuzumab，作為維持治療。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
+      "form": "膠囊劑",
+      "indication": "一、 HER2陰性乳癌 1. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性，本品可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 2. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，本品可合併fulvestrant 用於先前曾接受過內分泌治療者。 二、 HER2陽性乳癌：對於接受誘導治療後之荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陽性之局部晚期或轉移性乳癌成人病人，本品可合併trastuzumab及內分泌治療，可併用或不併用pertuzumab，作為維持治療。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
       "dosage": "詳細內容請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028005號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號",
       "license_modified": "2026/09/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028005號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -684,21 +683,21 @@ window.TFDA_LABELS = {
     "bc-alpelisib": {
       "status": "matched",
       "drug": "Alpelisib",
-      "permit": "衛部藥輸字第027995號",
-      "product_zh": "愛克利150毫克膜衣錠",
-      "product_en": "PIQRAY 150 mg Film-Coated Tablets",
+      "permit": "衛部藥輸字第027994號",
+      "product_zh": "愛克利50毫克膜衣錠",
+      "product_en": "PIQRAY 50 mg Film-Coated Tablets",
       "applicant": "台灣諾華股份有限公司",
       "form": "膜衣錠",
       "indication": "與fulvestrant併用可治療患有荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性及PIK3CA突變的局部晚期或轉移性乳癌，且曾接受內分泌治療但疾病惡化的停經後女性及男性病人。",
       "dosage": "詳見中文仿單擬稿。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027995號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027994號",
       "license_modified": "2025/07/14",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 9,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027995號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027994號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1022,7 +1021,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028160號",
       "license_modified": "2026/09/03",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 4,
+      "candidate_count": 6,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028160號"
       ],
@@ -1033,21 +1032,21 @@ window.TFDA_LABELS = {
     "mds-imatinib-pdgfr": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1171,21 +1170,21 @@ window.TFDA_LABELS = {
     "mpn-momelotinib": {
       "status": "matched",
       "drug": "Momelotinib",
-      "permit": "衛部藥輸字第028861號",
-      "product_zh": "奧莫嘉膜衣錠150毫克",
-      "product_en": "OMJJARA Film-Coated Tablets 150 mg",
+      "permit": "衛部藥輸字第028862號",
+      "product_zh": "奧莫嘉膜衣錠200毫克",
+      "product_en": "OMJJARA Film-Coated Tablets 200 mg",
       "applicant": "荷商葛蘭素史克藥廠股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "適用於有貧血的中度或高風險骨髓纖維化(包括原發性骨髓纖維化、真性紅血球增多症後骨髓纖維化、或血小板增多症後骨髓纖維化)成人病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028861號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號",
       "license_modified": "2025/02/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028861號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1206,7 +1205,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -1229,7 +1228,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -1766,21 +1765,21 @@ window.TFDA_LABELS = {
     "crc-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1801,7 +1800,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分（跨適應症仿單）",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -1849,13 +1848,13 @@ window.TFDA_LABELS = {
       "dosage": "新診斷的多形神經膠母細胞瘤的成年病人：同步治療期：Temodal口服投予四十二天，每天七十五毫克/平方公尺體表面積，與放射治療 (60 Gy，分成三十次投予) 同步進行，接著給予六個療程的輔助性Temodal。輔助性治療期：完成Temodal與放射治療同步治療之後四週，再給予六個療程的Temodal輔助性治療。患有復發性或進行神經膠質瘤的成人：先前未曾接受過化學治療的病人：每二十八天為一個療程，投予五天，每天一次，口服Temodal二百毫克/平方公尺體表面積。患有復發性或進行性神經膠質瘤的兒童病人：三歲或更大的兒童病人：每二十八天為一個療程，投予五天，每天一次，口服Temodal二百毫克/平方公尺體表面積。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
       "license_modified": "2026/05/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 16,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
@@ -1873,13 +1872,13 @@ window.TFDA_LABELS = {
       "dosage": "新診斷的多形神經膠母細胞瘤的成年病人：同步治療期：Temodal口服投予四十二天，每天七十五毫克/平方公尺體表面積，與放射治療 (60 Gy，分成三十次投予) 同步進行，接著給予六個療程的輔助性Temodal。輔助性治療期：完成Temodal與放射治療同步治療之後四週，再給予六個療程的Temodal輔助性治療。患有復發性或進行神經膠質瘤的成人：先前未曾接受過化學治療的病人：每二十八天為一個療程，投予五天，每天一次，口服Temodal二百毫克/平方公尺體表面積。患有復發性或進行性神經膠質瘤的兒童病人：三歲或更大的兒童病人：每二十八天為一個療程，投予五天，每天一次，口服Temodal二百毫克/平方公尺體表面積。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
       "license_modified": "2026/05/26",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 16,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_3a7aa4d6-8336-438c-aefe-bae70ffeaeb8?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_eb1678d4-a1bd-4926-b77c-e847288f1fa5?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
@@ -1904,7 +1903,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -1915,21 +1914,21 @@ window.TFDA_LABELS = {
     "brain-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1961,21 +1960,21 @@ window.TFDA_LABELS = {
     "gc-s1-adj": {
       "status": "matched",
       "drug": "Tegafur/gimeracil/oteracil (S-1)",
-      "permit": "衛部藥製字第060482號",
-      "product_zh": "\"杏輝\"剋伏膠囊20毫克",
-      "product_en": "Golfer Capsules 20mg \"Sinphar\"",
+      "permit": "衛部藥製字第060480號",
+      "product_zh": "\"杏輝\"剋伏膠囊25毫克",
+      "product_en": "Golfer Capsules 25mg \"Sinphar\"",
       "applicant": "杏輝藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "(一)胃癌：1、胃癌術後輔助性化療，本品用於罹患TNM STAGE II (排除TI)，IIIA或IIIB胃癌且接受過胃癌根除性手術之成年患者。2、本品適用於治療無法切除之晚期胃癌。(二)胰臟癌：本品適用於治療局部晚期或轉移性胰臟癌患者。(三)大腸直腸癌：本品與Irinotecan 合併使用於已使用含有Oxaliplatin化學療法失敗之轉移性大腸直腸癌患者。 (四)晚期非小細胞肺癌：適用於對含鉑之化學療法治療失敗的局部晚期或轉移性之非小細胞肺癌。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號",
-      "license_modified": "2026/08/31",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號",
+      "license_modified": "2026/10/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2142,7 +2141,7 @@ window.TFDA_LABELS = {
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
       ],
-      "dosage_excerpt": "6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超過 5 天 \n 顆粒性白血球之絕對值<100x106/L 超過 3 天 \n 發熱性嗜中性白血球減少症 \n 血小板數<25000x106/L \n 因毒性導致療程延遲超過一週 \n第 1、8 天的 Gemcitabine 劑\n量永久地降為 800 mg/m2 \n再次發生 若起始劑量已調降,但上述毒性反應仍發生 Gemcitabine 劑量永久地降為800 mg/m2,僅於第 1 天輸注",
+      "dosage_excerpt": "6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超過 5 天 \n 顆粒性白血球之絕對值<100x106/L 超過 3 天 \n 發熱性嗜中性白血球減少症 \n 血小板數<25000x106/L \n 因毒性導致療程延遲超過一週 \n第 1、8 天的 Gemcitabine 劑\n量永久地降為 800 mg/m2 \n再次發生 若起始劑量已調降,但上述毒性反應仍發生 Gemcitabine 劑量永久地降為 800 mg/m2,僅於第 1 天輸注",
       "dose_source": "TFDA 官方仿單 PDF",
       "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
       "dose_indication_specific": true,
@@ -2152,21 +2151,21 @@ window.TFDA_LABELS = {
     "ov-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛部藥輸字第027504號",
+      "product_zh": "克抑癌注射液",
+      "product_en": "Paclitero (Paclitaxel Injection 6mg/ml)",
+      "applicant": "凱沛爾藥品有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(DOXORUBICIN)在內之輔助化學療法、已使用合併療法(除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥)失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號",
       "license_modified": "2026/09/09",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2233,7 +2232,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -2256,7 +2255,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -2272,21 +2271,21 @@ window.TFDA_LABELS = {
     "ov-olaparib-maint": {
       "status": "matched",
       "drug": "Olaparib",
-      "permit": "衛部藥輸字第027445號",
-      "product_zh": "令癌莎膜衣錠100毫克",
-      "product_en": "Lynparza Film-coated Tablets 100mg",
+      "permit": "衛部藥輸字第027446號",
+      "product_zh": "令癌莎膜衣錠150毫克",
+      "product_en": "Lynparza Film-coated Tablets 150mg",
       "applicant": "臺灣阿斯特捷利康股份有限公司",
       "form": "膜衣錠",
       "indication": "１、單一療法可用於： ● 晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且具遺傳性或體細胞BRCA1/2 (germlineorsomatic BRCA1/2)致病性或疑似致病性突變，對第一線含鉑化療有反應(完全反應或部分反應)之成年病人作為維持治療。 ● 對先前含鉑藥物敏感且復發之高度惡性上皮卵巢、輸卵管腫瘤或原發性腹膜癌，在復發後對含鉑化療有反應(完全反應或部分反應)之成人病人，作為維持治療。 ２、併用bevacizumab可用於晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且對第一線含鉑化療合併bevacizumab有反應(完全反應或部分反應)之成年病人，做為維持治療。且其癌症帶有下列任一定義的DNA同源修復系統缺失 (homologous recombination deficiency, HRD)： ● 致病性或疑似致病性 BRCA 突變，及/或 ● 基因體不穩定(genomic instability)。 ３、適用於曾接受前導性化療或術後輔助性化療，且具遺傳性BRCA1/2(germline BRCA1/2)突變併HER2陰性而有高復發風險之早期乳癌成年病人術後輔助治療。 ４、單一療法可用於治療曾接受前導性、術後輔助性或轉移性化療，且具遺傳性BRCA1/2 (germline BRCA1/2)致病性或疑似致病性突變的HER2(-)轉移性乳癌成人病人。針對荷爾蒙受體陽性的乳癌病人，本品應在曾經接受過荷爾蒙治療、或不適合使用荷爾蒙治療之狀況下使用。 ５、單一療法之維持治療，可用於遺傳性BRCA突變且經第一線含鉑化療至少16週後疾病未惡化之轉移性胰腺癌成年病人。 ６、單一療法用於去勢療法無效的轉移性攝護腺癌(mCRPC)，且具BRCA1/2(遺傳性及/或體細胞)致病性或疑似致病性突變、先前曾接受新荷爾蒙藥物(novel hormonal agents)治療後惡化之成人病人。 ７、併用abiraterone及prednisone或prednisolone，用於治療轉移性去勢療法抗性攝護腺癌且尚未需要使用化學治療的成人病人。 ８、與durvalumab併用，可作為durvalumab合併含鉑化療的第一線治療後，其病情未惡化之原發性晚期或復發性子宮內膜癌之錯配修復功能正常 (Mismatch Repair Proficient, pMMR)的成人病人維持治療。",
       "dosage": "請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號",
       "license_modified": "2025/11/01",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 4,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2358,7 +2357,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -2381,7 +2380,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -2412,21 +2411,21 @@ window.TFDA_LABELS = {
     "ec-paclitaxel-support": {
       "status": "review",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛部藥輸字第027504號",
+      "product_zh": "克抑癌注射液",
+      "product_en": "Paclitero (Paclitaxel Injection 6mg/ml)",
+      "applicant": "凱沛爾藥品有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(DOXORUBICIN)在內之輔助化學療法、已使用合併療法(除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥)失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號",
       "license_modified": "2026/09/09",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號"
       ]
     },
     "ec-dostarlimab": {
@@ -2464,13 +2463,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2954,21 +2953,21 @@ window.TFDA_LABELS = {
     "aml-momelotinib-exclusion": {
       "status": "generic-label",
       "drug": "Momelotinib",
-      "permit": "衛部藥輸字第028861號",
-      "product_zh": "奧莫嘉膜衣錠150毫克",
-      "product_en": "OMJJARA Film-Coated Tablets 150 mg",
+      "permit": "衛部藥輸字第028862號",
+      "product_zh": "奧莫嘉膜衣錠200毫克",
+      "product_en": "OMJJARA Film-Coated Tablets 200 mg",
       "applicant": "荷商葛蘭素史克藥廠股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "適用於有貧血的中度或高風險骨髓纖維化(包括原發性骨髓纖維化、真性紅血球增多症後骨髓纖維化、或血小板增多症後骨髓纖維化)成人病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028861號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號",
       "license_modified": "2025/02/10",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028861號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028862號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2977,21 +2976,21 @@ window.TFDA_LABELS = {
     "all-imatinib": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3161,21 +3160,21 @@ window.TFDA_LABELS = {
     "cml-imatinib": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3376,21 +3375,21 @@ window.TFDA_LABELS = {
     "lc-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛部藥輸字第027504號",
+      "product_zh": "克抑癌注射液",
+      "product_en": "Paclitero (Paclitaxel Injection 6mg/ml)",
+      "applicant": "凱沛爾藥品有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛(DOXORUBICIN)在內之輔助化學療法、已使用合併療法(除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥)失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號",
       "license_modified": "2026/09/09",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027504號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3408,14 +3407,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
@@ -3493,21 +3492,21 @@ window.TFDA_LABELS = {
     "lc-erlotinib": {
       "status": "matched",
       "drug": "Erlotinib",
-      "permit": "衛部藥輸字第028117號",
-      "product_zh": "安適伏膜衣錠100毫克",
-      "product_en": "Zyceva 100 (Erlotinib Tablets 100mg)",
+      "permit": "衛部藥輸字第028116號",
+      "product_zh": "安適伏膜衣錠150毫克",
+      "product_en": "Zyceva 150 (Erlotinib Tablets 150mg)",
       "applicant": "毅有生技醫藥股份有限公司",
       "form": "膜衣錠",
       "indication": "適用於具有EGFR-TK突變之局部侵犯性或轉移性之非小細胞肺癌(NSCLC)病患之第一線及維持治療。適用於先前已接受過化學治療後，但仍局部惡化或轉移之肺腺癌病患之第二線用藥。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028117號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028116號",
       "license_modified": "2026/06/03",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 23,
+      "candidate_count": 21,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028117號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028116號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3528,7 +3527,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號",
       "license_modified": "2026/10/22",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 14,
+      "candidate_count": 15,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001156號"
       ],
@@ -3585,21 +3584,21 @@ window.TFDA_LABELS = {
     "lc-ts1": {
       "status": "matched",
       "drug": "Tegafur/gimeracil/oteracil (S-1)",
-      "permit": "衛部藥製字第060482號",
-      "product_zh": "\"杏輝\"剋伏膠囊20毫克",
-      "product_en": "Golfer Capsules 20mg \"Sinphar\"",
+      "permit": "衛部藥製字第060480號",
+      "product_zh": "\"杏輝\"剋伏膠囊25毫克",
+      "product_en": "Golfer Capsules 25mg \"Sinphar\"",
       "applicant": "杏輝藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "(一)胃癌：1、胃癌術後輔助性化療，本品用於罹患TNM STAGE II (排除TI)，IIIA或IIIB胃癌且接受過胃癌根除性手術之成年患者。2、本品適用於治療無法切除之晚期胃癌。(二)胰臟癌：本品適用於治療局部晚期或轉移性胰臟癌患者。(三)大腸直腸癌：本品與Irinotecan 合併使用於已使用含有Oxaliplatin化學療法失敗之轉移性大腸直腸癌患者。 (四)晚期非小細胞肺癌：適用於對含鉑之化學療法治療失敗的局部晚期或轉移性之非小細胞肺癌。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號",
-      "license_modified": "2026/08/31",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號",
+      "license_modified": "2026/10/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4060,21 +4059,21 @@ window.TFDA_LABELS = {
     "lc-larotrectinib-ntrk": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4457,7 +4456,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028160號",
       "license_modified": "2026/09/03",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 4,
+      "candidate_count": 6,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028160號"
       ],
@@ -4638,13 +4637,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
       "license_modified": "2022/12/05",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9b4f9e56-6863-4d9f-b3ca-c9bc02c37cff?c=2"
       ],
       "dose_confidence": "withheld",
@@ -4723,21 +4722,21 @@ window.TFDA_LABELS = {
     "mm-carfilzomib": {
       "status": "matched",
       "drug": "Carfilzomib",
-      "permit": "衛部藥輸字第027068號",
-      "product_zh": "凱博斯凍晶注射劑",
-      "product_en": "Kyprolis for injection",
+      "permit": "衛部藥輸字第027490號",
+      "product_zh": "凱博斯凍晶注射劑30毫克",
+      "product_en": "Kyprolis for injection 30mg",
       "applicant": "台灣安進藥品有限公司",
       "form": "凍晶注射劑",
       "indication": "復發型或頑固型多發性骨髓瘤 與下列藥物併用，治療之前曾用過 1 到 3 種療法之復發型或頑固型多發性骨髓瘤成年病人： • Lenalidomide 和 dexamethasone；或 • Dexamethasone；或 • 靜脈注射劑型Daratumumab 和 dexamethasone；或 • 皮下注射劑型Daratumumab 和 dexamethasone。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027068號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027490號",
       "license_modified": "2026/07/08",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 5,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027068號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027490號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4907,21 +4906,21 @@ window.TFDA_LABELS = {
     "mm-teclistamab": {
       "status": "matched",
       "drug": "Teclistamab",
-      "permit": "衛部菌疫輸字第001217號",
-      "product_zh": "特飛立 注射劑 90毫克/毫升",
-      "product_en": "Tecvayli injection 90mg/ml",
+      "permit": "衛部菌疫輸字第001216號",
+      "product_zh": "特飛立 注射劑 10毫克/毫升",
+      "product_en": "Tecvayli injection 10mg/ml",
       "applicant": "嬌生股份有限公司",
       "form": "注射液劑",
       "indication": "適用於治療先前曾接受至少四線療法(包括一種蛋白酶體抑制劑、一種免疫調節劑和一種抗CD38單株抗體)的復發性或難治性多發性骨髓瘤成人病人。",
       "dosage": "詳如電子仿單核定本。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001217號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001216號",
       "license_modified": "2026/07/31",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 14,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001217號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001216號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5032,21 +5031,21 @@ window.TFDA_LABELS = {
     "pc-s1": {
       "status": "matched",
       "drug": "Tegafur/gimeracil/oteracil (S-1)",
-      "permit": "衛部藥製字第060482號",
-      "product_zh": "\"杏輝\"剋伏膠囊20毫克",
-      "product_en": "Golfer Capsules 20mg \"Sinphar\"",
+      "permit": "衛部藥製字第060480號",
+      "product_zh": "\"杏輝\"剋伏膠囊25毫克",
+      "product_en": "Golfer Capsules 25mg \"Sinphar\"",
       "applicant": "杏輝藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "(一)胃癌：1、胃癌術後輔助性化療，本品用於罹患TNM STAGE II (排除TI)，IIIA或IIIB胃癌且接受過胃癌根除性手術之成年患者。2、本品適用於治療無法切除之晚期胃癌。(二)胰臟癌：本品適用於治療局部晚期或轉移性胰臟癌患者。(三)大腸直腸癌：本品與Irinotecan 合併使用於已使用含有Oxaliplatin化學療法失敗之轉移性大腸直腸癌患者。 (四)晚期非小細胞肺癌：適用於對含鉑之化學療法治療失敗的局部晚期或轉移性之非小細胞肺癌。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號",
-      "license_modified": "2026/08/31",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號",
+      "license_modified": "2026/10/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060482號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060480號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5055,21 +5054,21 @@ window.TFDA_LABELS = {
     "pc-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5086,24 +5085,26 @@ window.TFDA_LABELS = {
     "pc-bicalutamide": {
       "status": "matched",
       "drug": "Bicalutamide",
-      "permit": "衛部藥輸字第026566號",
-      "product_zh": "癌攝妥膜衣錠50毫克",
-      "product_en": "Bicatero 50",
-      "applicant": "上亞科技股份有限公司",
+      "permit": "衛部藥輸字第026239號",
+      "product_zh": "祿荅膜衣錠50毫克",
+      "product_en": "Bicalutamide \"Lotus\" Film Coated Tablets 50mg",
+      "applicant": "美時化學製藥股份有限公司",
       "form": "膜衣錠",
       "indication": "與LHRH類似劑療法或手術去勢療法併用於進展性攝護腺癌。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026566號",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d560d62e-b6d4-417a-b9df-c450a96e07f1?c=2",
       "license_modified": "2026/10/16",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026566號"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d560d62e-b6d4-417a-b9df-c450a96e07f1?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f7bc1a6-0070-4d5c-9628-42347865f201?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d045a19b-97a5-4955-9c37-1d1c65bb8d3f?c=2"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
+      "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
       "dose_indication_specific": false
     },
     "pc-docetaxel": {
@@ -5385,21 +5386,21 @@ window.TFDA_LABELS = {
     "pc-olaparib-mcrpc": {
       "status": "matched",
       "drug": "Olaparib",
-      "permit": "衛部藥輸字第027445號",
-      "product_zh": "令癌莎膜衣錠100毫克",
-      "product_en": "Lynparza Film-coated Tablets 100mg",
+      "permit": "衛部藥輸字第027446號",
+      "product_zh": "令癌莎膜衣錠150毫克",
+      "product_en": "Lynparza Film-coated Tablets 150mg",
       "applicant": "臺灣阿斯特捷利康股份有限公司",
       "form": "膜衣錠",
       "indication": "１、單一療法可用於： ● 晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且具遺傳性或體細胞BRCA1/2 (germlineorsomatic BRCA1/2)致病性或疑似致病性突變，對第一線含鉑化療有反應(完全反應或部分反應)之成年病人作為維持治療。 ● 對先前含鉑藥物敏感且復發之高度惡性上皮卵巢、輸卵管腫瘤或原發性腹膜癌，在復發後對含鉑化療有反應(完全反應或部分反應)之成人病人，作為維持治療。 ２、併用bevacizumab可用於晚期高度惡性上皮卵巢癌、輸卵管腫瘤或原發性腹膜癌，且對第一線含鉑化療合併bevacizumab有反應(完全反應或部分反應)之成年病人，做為維持治療。且其癌症帶有下列任一定義的DNA同源修復系統缺失 (homologous recombination deficiency, HRD)： ● 致病性或疑似致病性 BRCA 突變，及/或 ● 基因體不穩定(genomic instability)。 ３、適用於曾接受前導性化療或術後輔助性化療，且具遺傳性BRCA1/2(germline BRCA1/2)突變併HER2陰性而有高復發風險之早期乳癌成年病人術後輔助治療。 ４、單一療法可用於治療曾接受前導性、術後輔助性或轉移性化療，且具遺傳性BRCA1/2 (germline BRCA1/2)致病性或疑似致病性突變的HER2(-)轉移性乳癌成人病人。針對荷爾蒙受體陽性的乳癌病人，本品應在曾經接受過荷爾蒙治療、或不適合使用荷爾蒙治療之狀況下使用。 ５、單一療法之維持治療，可用於遺傳性BRCA突變且經第一線含鉑化療至少16週後疾病未惡化之轉移性胰腺癌成年病人。 ６、單一療法用於去勢療法無效的轉移性攝護腺癌(mCRPC)，且具BRCA1/2(遺傳性及/或體細胞)致病性或疑似致病性突變、先前曾接受新荷爾蒙藥物(novel hormonal agents)治療後惡化之成人病人。 ７、併用abiraterone及prednisone或prednisolone，用於治療轉移性去勢療法抗性攝護腺癌且尚未需要使用化學治療的成人病人。 ８、與durvalumab併用，可作為durvalumab合併含鉑化療的第一線治療後，其病情未惡化之原發性晚期或復發性子宮內膜癌之錯配修復功能正常 (Mismatch Repair Proficient, pMMR)的成人病人維持治療。",
       "dosage": "請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號",
       "license_modified": "2025/11/01",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 4,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027445號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027446號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5468,13 +5469,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5506,21 +5507,21 @@ window.TFDA_LABELS = {
     "thy-cabozantinib": {
       "status": "matched",
       "drug": "Cabozantinib",
-      "permit": "衛部藥輸字第027511號",
-      "product_zh": "癌必定膜衣錠 20毫克",
-      "product_en": "CABOMETYX film-coated tablet 20mg",
+      "permit": "衛部藥輸字第027513號",
+      "product_zh": "癌必定膜衣錠 60毫克",
+      "product_en": "CABOMETYX film-coated tablet 60mg",
       "applicant": "法商益普生股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "1. 腎細胞癌：單一療法適用於：(1)未曾接受治療的中度/重度風險晚期腎細胞癌病人。(2)先前經抗血管新生療法治療 (anti-angiogenic therapy) 的晚期腎細胞癌病人。本品與nivolumab合併療法適用於未曾接受治療的晚期腎細胞癌病人。 2. 肝細胞癌：適用於曾接受sorafenib治療之肝細胞癌病人。 3. 分化型甲狀腺癌：適用於12歲以上曾接受VEGFR標靶治療後惡化、放射碘治療無效或不適用放射碘治療的局部晚期或轉移性分化型甲狀腺癌病人。 4. 神經內分泌腫瘤：適用於12歲以上曾接受治療之無法切除、局部晚期或轉移性、分化良好的胰臟神經內分泌腫瘤(pNET)及胰臟外神經內分泌腫瘤(epNET)病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號",
       "license_modified": "2025/09/25",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5552,21 +5553,21 @@ window.TFDA_LABELS = {
     "thy-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5607,16 +5608,15 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 19,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "net-everolimus-gi-lung": {
@@ -5631,16 +5631,15 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 19,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "rcc-aldesleukin": {
@@ -5696,21 +5695,21 @@ window.TFDA_LABELS = {
     "rcc-cabozantinib-1l": {
       "status": "matched",
       "drug": "Cabozantinib",
-      "permit": "衛部藥輸字第027511號",
-      "product_zh": "癌必定膜衣錠 20毫克",
-      "product_en": "CABOMETYX film-coated tablet 20mg",
+      "permit": "衛部藥輸字第027513號",
+      "product_zh": "癌必定膜衣錠 60毫克",
+      "product_en": "CABOMETYX film-coated tablet 60mg",
       "applicant": "法商益普生股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "1. 腎細胞癌：單一療法適用於：(1)未曾接受治療的中度/重度風險晚期腎細胞癌病人。(2)先前經抗血管新生療法治療 (anti-angiogenic therapy) 的晚期腎細胞癌病人。本品與nivolumab合併療法適用於未曾接受治療的晚期腎細胞癌病人。 2. 肝細胞癌：適用於曾接受sorafenib治療之肝細胞癌病人。 3. 分化型甲狀腺癌：適用於12歲以上曾接受VEGFR標靶治療後惡化、放射碘治療無效或不適用放射碘治療的局部晚期或轉移性分化型甲狀腺癌病人。 4. 神經內分泌腫瘤：適用於12歲以上曾接受治療之無法切除、局部晚期或轉移性、分化良好的胰臟神經內分泌腫瘤(pNET)及胰臟外神經內分泌腫瘤(epNET)病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號",
       "license_modified": "2025/09/25",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5732,13 +5731,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5756,16 +5755,15 @@ window.TFDA_LABELS = {
       "dosage": "詳如仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號",
       "license_modified": "2025/02/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 19,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_868bb0a5-927b-4582-8e08-65441324d7cc?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9eb912f6-4b06-4fcd-ab67-1eefa7577f23?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025165號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "multi-indication licence without an explicit target-cancer dosage subsection",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "rcc-axitinib": {
@@ -5794,21 +5792,21 @@ window.TFDA_LABELS = {
     "rcc-cabozantinib-post-antiangiogenic": {
       "status": "matched",
       "drug": "Cabozantinib",
-      "permit": "衛部藥輸字第027511號",
-      "product_zh": "癌必定膜衣錠 20毫克",
-      "product_en": "CABOMETYX film-coated tablet 20mg",
+      "permit": "衛部藥輸字第027513號",
+      "product_zh": "癌必定膜衣錠 60毫克",
+      "product_en": "CABOMETYX film-coated tablet 60mg",
       "applicant": "法商益普生股份有限公司台灣分公司",
       "form": "膜衣錠",
       "indication": "1. 腎細胞癌：單一療法適用於：(1)未曾接受治療的中度/重度風險晚期腎細胞癌病人。(2)先前經抗血管新生療法治療 (anti-angiogenic therapy) 的晚期腎細胞癌病人。本品與nivolumab合併療法適用於未曾接受治療的晚期腎細胞癌病人。 2. 肝細胞癌：適用於曾接受sorafenib治療之肝細胞癌病人。 3. 分化型甲狀腺癌：適用於12歲以上曾接受VEGFR標靶治療後惡化、放射碘治療無效或不適用放射碘治療的局部晚期或轉移性分化型甲狀腺癌病人。 4. 神經內分泌腫瘤：適用於12歲以上曾接受治療之無法切除、局部晚期或轉移性、分化良好的胰臟神經內分泌腫瘤(pNET)及胰臟外神經內分泌腫瘤(epNET)病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號",
       "license_modified": "2025/09/25",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027511號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027513號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5881,21 +5879,21 @@ window.TFDA_LABELS = {
     "mel-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5904,21 +5902,21 @@ window.TFDA_LABELS = {
     "gist-imatinib-advanced": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5927,21 +5925,21 @@ window.TFDA_LABELS = {
     "gist-imatinib-adj": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6019,21 +6017,21 @@ window.TFDA_LABELS = {
     "gist-avapritinib": {
       "status": "generic-label",
       "drug": "Avapritinib",
-      "permit": "衛部藥輸字第028029號",
-      "product_zh": "泰時維膜衣錠100毫克",
-      "product_en": "AYVAKIT film-coated tablets 100mg",
+      "permit": "衛部藥輸字第028030號",
+      "product_zh": "泰時維膜衣錠200毫克",
+      "product_en": "AYVAKIT film-coated tablets 200mg",
       "applicant": "臺灣基石藥業有限公司",
       "form": "膜衣錠",
       "indication": "治療具有血小板衍生生長因子α受體(PDGFRA)D842V突變，無法切除或轉移性腸胃道間質瘤的成年病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號",
       "license_modified": "2025/12/11",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6042,21 +6040,21 @@ window.TFDA_LABELS = {
     "gist-larotrectinib": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6111,21 +6109,21 @@ window.TFDA_LABELS = {
     "sarcoma-imatinib-dfsp": {
       "status": "matched",
       "drug": "Imatinib",
-      "permit": "衛部藥輸字第027372號",
-      "product_zh": "安滅靈膜衣錠100毫克",
-      "product_en": "Imarem 100mg Film-Coated Tablets",
-      "applicant": "富富企業股份有限公司",
+      "permit": "衛部藥製字第058288號",
+      "product_zh": "癌微可膜衣錠100毫克",
+      "product_en": "Ivic Film-Coated Tablets 100mg",
+      "applicant": "台灣東洋藥品工業股份有限公司",
       "form": "膜衣錠",
-      "indication": "治療正值急性轉化期（blast crisis）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初診斷慢性骨髓性白血病（CML）的病人。●治療初診斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與／或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD 117）陽性胃腸道基質瘤完全切除後（complete gross resection）之術後輔助治療。●治療無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
+      "indication": "治療正值急性轉化期（BLAST CRISIS）、加速期或經ALPHA-干擾素治療無效之慢性期的慢性骨髓性白血病（CML）患者。治療成年人無法手術切除或轉移的惡性胃腸道基質瘤。用於治療初疹斷為慢性骨髓性白血病（CML）的病人。●治療初疹斷為費城染色體陽性急性淋巴性白血病（Ph+ALL）且併用化療之成年及兒童患者。●做為治療成人復發性或難治性費城染色體陽性急性淋巴性白血病（Ph+ALL）之單一療法。●治療患有與血小板衍生生長因子受體（PDGFR）基因重組相關之骨髓發育不全症候群（MDS）／骨髓增生性疾病（MPD）之成人患者。●治療患有系統性肥大細胞增生症（SM），限具FIP1L1-PDGFR基因變異且不具有c-Kit基因D816V突變之成人患者。●治療嗜伊紅性白血球增加症候群（HES）與或慢性嗜伊紅性白血病（CEL）且有血小板衍生生長因子受體（PDGFR）基因重組之成人患者。●作為成人KIT（CD117）陽性胃腸道基質瘤完全切除（complete gross resection）後之術後輔助治療。治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體（PDGFR）基因重組之隆突性皮膚纖維肉瘤（DFSP）之成人患者。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號",
-      "license_modified": "2026/08/11",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
+      "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 26,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027372號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6134,21 +6132,21 @@ window.TFDA_LABELS = {
     "sarcoma-larotrectinib-sts": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6157,21 +6155,21 @@ window.TFDA_LABELS = {
     "sarcoma-larotrectinib-bone": {
       "status": "generic-label",
       "drug": "Larotrectinib",
-      "permit": "衛部藥輸字第027747號",
-      "product_zh": "維泰凱 膠囊25毫克",
-      "product_en": "VITRAKVI 25mg capsule",
+      "permit": "衛部藥輸字第027748號",
+      "product_zh": "維泰凱 膠囊100毫克",
+      "product_en": "VITRAKVI 100mg capsule",
       "applicant": "台灣拜耳股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於有NTRK 基因融合的實體腫瘤之成人和兒童病人，並應符合以下三項條件: 1、具NTRK基因融合且無已知的後天阻抗性突變(acquired resistance mutation)； 2、為轉移性實體腫瘤，或手術切除極可能造成嚴重病症(severe morbidity)； 3、沒有合適的替代治療選項，或於治療後發生疾病惡化。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號",
-      "license_modified": "2026/02/10",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號",
+      "license_modified": "2026/11/02",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 6,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027747號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027748號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6289,7 +6287,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部菌疫輸字第001085號",
-      "license_modified": "2026/02/10",
+      "license_modified": "2026/10/27",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 2,
       "label_urls": [
