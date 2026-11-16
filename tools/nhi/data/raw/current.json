@@ -1,6 +1,6 @@
 {
   "schema_version": "nhi-ch9-source-v1",
-  "fetched_at": "2026-11-09T09:44:58Z",
+  "fetched_at": "2026-11-16T09:36:34Z",
   "source": {
     "page": "https://www.nhi.gov.tw/ch/cp-7593-ad2a9-3397-1.html",
     "label": "第九節 抗癌瘤藥物(115.9.22更新)",
@@ -12,7 +12,7 @@
     "source_page_verified": true,
     "source_discovery": "official-page"
   },
-  "odt_sha256": "486f643981fe228639dbdd368c2cb889bf7fea3aeea52c2f40213c0dd8ca2f76",
+  "odt_sha256": "38bb8991c7b7e3fe6dea431e31847423b7e0ee26ba851f19afa4773690e13f38",
   "transport_note": "Text fetched through reader proxy because nhi.gov.tw blocks GitHub-hosted runner IPs; official source URL retained.",
   "paragraph_count": 3079,
   "section_count": 140,
