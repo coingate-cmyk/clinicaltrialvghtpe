@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>臨床試驗管理系統 v4.1.9 Firebase版</title>
+    <title>臨床試驗管理系統 v4.2.5 收案狀態修正版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 overflow-x-hidden">
     <div id="app"></div>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script>
 const {useState, useEffect, useMemo, useRef} = React;
+// v4.3.5-mobile-layout-20260822
 const e = React.createElement;
 
 const CONFIG = {
@@ -70,7 +72,12 @@ const decryptData = (encrypted) => {
     }
 };
 
-const normalizeCode = (v) => String(v || '').trim().toUpperCase();
+const normalizeCode = (v) => {
+    const raw = String(v || '').trim().toUpperCase();
+    const compact = raw.replace(/\s+/g, '');
+    if (/^DESTINY-BILIARY-?TRACT$/i.test(compact)) return 'DESTINY-BILIARY TRACT';
+    return raw;
+};
 
 const normalizeProtocolCodeText = (value) => String(value || '')
     .replace(/\u00A0/g, ' ')
@@ -109,7 +116,7 @@ const isLikelyStudyCode = (value) => {
     if (/^(?:PD-?1|PD-?L1|HER-?2|MSI-?H|DMMR|KRAS|NRAS|BRAF|BRAFV|HBV|HCV|HIV|DNA|RNA|EGFR|MET|SOC|FOLFOX|CAPOX|CPS)/i.test(compact)) return false;
     if (/^(?:Q\d+W|C\d+D\d+|N\d+|\d+MG|\d+KG|\d+FU)$/i.test(compact)) return false;
     if (/^[A-Z]{2,8}$/.test(compact)) return compact === 'TTY'; // legacy local code; avoid PDF words such as SIDE/MUTATION
-    if (/^\d{7,12}[A-Z0-9-]*$/i.test(compact) && !/^0/.test(compact)) return true;
+    if (/^[A-Z0-9]{2,24}_[A-Z0-9_-]{2,24}$/i.test(compact) && /\d/.test(compact)) return true; // e.g. MS914001_0002\n    if (/^\d{7,12}[A-Z0-9-]*$/i.test(compact) && !/^0/.test(compact)) return true;
     if (/^[A-Z]{1,8}\d{2,}[A-Z0-9-]*$/i.test(compact)) return true; // D9800C00001, WO42758, T1223
     if (/^[A-Z]{1,10}\d+[A-Z0-9]*-[A-Z0-9]{2,12}(?:-[A-Z0-9]{1,12})*$/i.test(compact)) return true; // M24-533, DS8201-724
     if (/^[A-Z]{1,10}-\d{2,12}(?:-[A-Z0-9]{1,12})*$/i.test(compact)) return true; // MK-1082-012, SGNTUC-029
@@ -124,6 +131,11 @@ const normalizeStudyCodeForImport = (value) => {
     const lineCandidates = raw.split(/[\r\n]+/)
         .map(line => line.replace(/^[\s(（]+|[\s)）]+$/g, '').trim())
         .filter(Boolean);
+
+    // Some Study status cells contain a primary protocol code plus an alias on
+    // the next line, e.g. GCT1184-09 / (RAINFOL-09), or a sponsor code on line 2.
+    // Use the first code-looking line as the stable import key rather than
+    // concatenating both lines into one invalid protocol code.
     for (const candidate of lineCandidates) {
         const normalizedLine = normalizeProtocolCodeText(candidate);
         const compactLine = normalizedLine.replace(/[\s\r\n]+/g, '');
@@ -134,8 +146,11 @@ const normalizeStudyCodeForImport = (value) => {
             && /\d/.test(compactLine)
             && /[-_]/.test(compactLine)) return compactLine;
     }
+
+    // Same-line aliases: keep the first protocol-like token before parentheses.
     const head = raw.match(/^\s*([A-Z0-9_]+(?:-[A-Z0-9]+)+)\b/i);
     if (head) return normalizeProtocolCodeText(head[1]).replace(/[\s\r\n]+/g, '');
+
     const normalized = normalizeProtocolCodeText(raw);
     const compact = normalized.replace(/[\s\r\n]+/g, '');
     if (/^DESTINY-BILIARY-?TRACT$/i.test(compact)) return 'DESTINY-BILIARY TRACT';
@@ -143,17 +158,132 @@ const normalizeStudyCodeForImport = (value) => {
 };
 
 const normalizeText = (v) => String(v || '').replace(/\s+/g, ' ').trim();
+const STUDY_TITLE_IMPORT_PATCH_VERSION = 'v4.3.7-20260917-study-title-import';
+const normalizeStudyTitleHeaderToken = (value) => String(value || '')
+    .toLowerCase()
+    .replace(/[\s_\-（）()\/:：.]+/g, '');
+const isStudyTitleHeaderText = (value) => {
+    const token = normalizeStudyTitleHeaderToken(value);
+    return /^(?:study(?:title|tittle)|trialtitle|protocoltitle|試驗名稱|試驗標題|計畫名稱)$/.test(token);
+};
+const normalizeImportedStudyTitle = (value) => {
+    const lines = String(value || '').replace(/\r/g, '\n').split(/\n+/)
+        .map(line => String(line || '').replace(/^\s*(?:study\s*(?:title|tittle)|trial\s*title|protocol\s*title|試驗名稱|試驗標題|計畫名稱)\s*(?:[:：\-–—]\s*)?/i, '').trim())
+        .filter(Boolean)
+        .filter(line => !isStudyTitleHeaderText(line));
+    return normalizeText(lines.join(' '));
+};
+const chooseImportedStudyTitle = (previousValue, incomingValue) => {
+    const previous = normalizeImportedStudyTitle(previousValue);
+    const incoming = normalizeImportedStudyTitle(incomingValue);
+    return incoming || previous;
+};
 const normalizeFilterValue = (v) => String(v || '').toLowerCase().replace(/[\s　\r\n]+/g, '').replace(/[、，,\/／\-–—_()（）\.]+/g, '').trim();
 const valueMatches = (a, b) => normalizeFilterValue(a) === normalizeFilterValue(b);
 const LINE_NUMERAL = { '1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六', '7': '七', '8': '八', '9': '九', '１': '一', '２': '二', '３': '三', '４': '四', '５': '五', '６': '六', '７': '七', '８': '八', '９': '九' };
 const LINE_NUMERAL_REGEX = '[一二三四五六七八九123456789１２３４５６７８９]';
 const toChineseLineNumber = (value) => LINE_NUMERAL[String(value || '').trim()] || String(value || '').trim();
 
-const CANONICAL_CANCER_TYPES = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','CRPC'];
+const CANONICAL_CANCER_TYPES = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','神經內分泌腫瘤','神經內分泌癌','CRPC'];
 const CANCER_SORT_ORDER = CANONICAL_CANCER_TYPES;
 const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
 const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
 const ENGLISH_LINE_NUMERAL = { one: '一', two: '二', three: '三', four: '四', five: '五', six: '六', seven: '七', eight: '八', nine: '九', first: '一', second: '二', third: '三', fourth: '四', fifth: '五', sixth: '六', seventh: '七', eighth: '八', ninth: '九' };
+
+// Curated cancer/line repairs for records known to have stale classifications from older imports.
+// Keep this list small and evidence-based; do not turn free-text eligibility into an automatic treatment-line label.
+const TRIAL_CLASSIFICATION_REPAIR_VERSION = 'v4.3.3-20260820-gastric-line-repair';
+
+// v4.3.4-line-provenance-20260820
+const LINE_SOURCE_LABELS = {
+    'manual': '人工設定',
+    'curated-repair': '人工核對',
+    'trial-title': '試驗標題明示',
+    'cohort-explicit': 'Cohort 明示',
+    'table-explicit': '線別欄位',
+    'table-inherited': '⚠ 表格沿用',
+    'auto-inferred': '⚠ 自動推論',
+    'legacy': '? 舊資料未標記'
+};
+const LINE_SOURCE_REVIEW_REQUIRED = new Set(['table-inherited', 'auto-inferred', 'legacy']);
+const lineSourceKey = (type, line) => `${normalizeFilterValue(normalizeCancerTypeLabel(type || '') || type || '')}|${normalizeFilterValue(normalizeTreatmentLine(line) || line || '')}`;
+const getLineSourceLabel = (source) => LINE_SOURCE_LABELS[source] || LINE_SOURCE_LABELS.legacy;
+const getLineSourceBadgeClass = (source) => {
+    if (source === 'manual' || source === 'curated-repair') return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+    if (source === 'trial-title' || source === 'cohort-explicit') return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (source === 'table-explicit') return 'bg-violet-100 text-violet-800 border-violet-200';
+    if (LINE_SOURCE_REVIEW_REQUIRED.has(source)) return 'bg-amber-100 text-amber-900 border-amber-300';
+    return 'bg-slate-100 text-slate-700 border-slate-200';
+};
+const TRIAL_CLASSIFICATION_REPAIRS = {
+    // COOL trial: title explicitly says second-line metastatic gastric cancer.
+    'T1223': [
+        { type: '胃癌', lines: ['二線'] }
+    ],
+    // AZD0901: current cohort notes explicitly separate pancreatic 1L, gastric 2/3L, biliary 2/3L.
+    'D9800C00001': [
+        { type: '胃癌', lines: ['二線', '三線'] },
+        { type: '胰臟癌', lines: ['一線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] }
+    ],
+    // KEYMAKER 06C: GEA (gastric/GEJ/EAC) first-line; older seed was wrongly carried as pancreatic cancer.
+    'MK-3475-06C': [
+        { type: '胃癌', lines: ['一線'] }
+    ],
+    // KEYMAKER 06D: previously treated gastric/GEJ/EAC, explicitly 2L.
+    'MK-3475-06D': [
+        { type: '胃癌', lines: ['二線'] }
+    ],
+
+    // v4.3.4-20260820-explicit-line-audit
+    // CHS-114-02 has explicit cohort labels: 2L GEA, 2L/1L ESCC and 4L+ CRC.
+    'CHS-114-02': [
+        { type: '胃癌', lines: ['二線'] },
+        { type: '食道癌', lines: ['一線', '二線'] },
+        { type: '大腸癌', lines: ['四線以上'] }
+    ],
+    // KEYMAKER 06E is explicitly first-line ESCC.
+    'MK-3475-06E': [
+        { type: '食道癌', lines: ['一線'] }
+    ],
+    // KEYMAKER 06B requires progression after one prior line including platinum + PD-1/PD-L1.
+    'MK-3475-06B': [
+        { type: '食道癌', lines: ['二線'] }
+    ],
+    // IDeate-Esophageal01: pretreated ESCC, maximum one prior systemic line.
+    'DS7300-202': [
+        { type: '食道癌', lines: ['二線'] }
+    ],
+    // mCRC study explicitly requires one prior systemic line for metastatic disease.
+    '61186372COR3002': [
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // KANDLELIT-012: Part 1 allows treatment-naive or one prior line; Part 2 is treatment-naive.
+    'MK-1082-012': [
+        { type: '大腸癌', lines: ['一線', '二線'] }
+    ],
+    // FIRST-308 requires prior chemotherapy plus a prior FGFR inhibitor: two prior treatment lines.
+    'TT420C2308': [
+        { type: '膽道癌', lines: ['三線'] }
+    ],
+    // MK-9999-02A cohort wording explicitly lists pancreatic/CRC 2L and biliary 2/3L.
+    'MK-9999-02A': [
+        { type: '胰臟癌', lines: ['二線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] },
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // MK5909-005 explicitly lists pancreatic/CRC 2L, biliary 2/3L and gastric 3L+.
+    'MK5909-005': [
+        { type: '胃癌', lines: ['三線以上'] },
+        { type: '胰臟癌', lines: ['二線'] },
+        { type: '膽道癌', lines: ['二線', '三線'] },
+        { type: '大腸癌', lines: ['二線'] }
+    ],
+    // SUFR-431 enrollment note says patients may have any number of prior therapies / later-line HCC.
+    'TYR430-101': [
+        { type: '肝癌', lines: ['多線'] }
+    ]
+};
 
 const getCancerRank = (type) => {
     const normalized = normalizeCancerTypeLabel(type || '');
@@ -359,7 +489,10 @@ const lineMatchesSelection = (line, selected) => {
     if (!selected || selected === '全部') return true;
     const n = normalizeFilterValue(line);
     if (!n) return false;
-    if (selected === '第一線') return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    if (selected === '第一線') {
+        if (n.includes('一線後') || n.includes('1l後') || n.includes('post1l') || n.includes('postfirstline') || n.includes('afterfirstline') || n.includes('secondline')) return false;
+        return lineHasTreatmentNumber(line, '一') || n.includes('firstline');
+    }
     if (selected === '第二線') return lineHasTreatmentNumber(line, '二') || n.includes('一線後') || n.includes('secondline');
     if (selected === '第三線') return lineHasTreatmentNumber(line, '三') || n.includes('二線後') || n.includes('thirdline');
     if (selected === 'Adjuvant') return n.includes('adjuv') || n.includes('輔助') || n.includes('術後') || n.includes('觀察性');
@@ -642,6 +775,15 @@ const trialHasOpenEnrollment = (trial, selectedCancerType = '全部', selectedTr
     return pairs.some(pair => !isClosedTreatmentLine(pair.ct, pair.line));
 };
 
+const trialHasLineSourceNeedingReview = (trial, selectedCancerType = '全部', selectedTreatmentLine = '全部') => {
+    if (!trial) return false;
+    return getTrialCancerLinePairs(trial).some(pair => {
+        if (selectedCancerType !== '全部' && !valueMatches(pair.type, selectedCancerType)) return false;
+        if (selectedTreatmentLine !== '全部' && !lineMatchesSelection(pair.line, selectedTreatmentLine)) return false;
+        return LINE_SOURCE_REVIEW_REQUIRED.has(getTrialLineSource(trial, pair.type, pair.line));
+    });
+};
+
 const formatCancerTypesForExport = (cancerTypes) => {
     return (Array.isArray(cancerTypes) ? cancerTypes : [])
         .map(ct => {
@@ -683,8 +825,10 @@ const isFirebaseEnabled = () => localStorage.getItem(CONFIG.FIREBASE_ENABLED_KEY
 
 let firebaseAppInstance = null;
 let firestoreInstance = null;
+let firebaseAuthInstance = null;
+let firebaseAuthReadyPromise = null;
 
-const initializeFirebaseApp = (firebaseConfig) => {
+const initializeFirebaseCore = (firebaseConfig) => {
     if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
         throw new Error('Firebase 設定不完整');
     }
@@ -693,17 +837,36 @@ const initializeFirebaseApp = (firebaseConfig) => {
             ? firebase.app()
             : firebase.initializeApp(firebaseConfig);
     }
-    if (!firestoreInstance) {
-        firestoreInstance = firebase.firestore();
-    }
-    return firestoreInstance;
+    if (!firestoreInstance) firestoreInstance = firebase.firestore();
+    if (!firebaseAuthInstance) firebaseAuthInstance = firebase.auth();
+    return { db: firestoreInstance, auth: firebaseAuthInstance };
 };
+
+const ensureFirebaseAnonymousAuth = async (firebaseConfig) => {
+    const { db, auth } = initializeFirebaseCore(firebaseConfig);
+    if (auth.currentUser) return db;
+    if (!firebaseAuthReadyPromise) {
+        firebaseAuthReadyPromise = auth.signInAnonymously()
+            .then(() => db)
+            .catch((error) => {
+                firebaseAuthReadyPromise = null;
+                const code = error && error.code ? String(error.code) : '';
+                if (code.includes('operation-not-allowed')) {
+                    throw new Error('Firebase 匿名登入尚未在專案端啟用');
+                }
+                throw error;
+            });
+    }
+    return firebaseAuthReadyPromise;
+};
+
+const initializeFirebaseApp = (firebaseConfig) => initializeFirebaseCore(firebaseConfig).db;
 
 const cleanTrialForSave = (trial) => {
     const cleaned = { ...(trial || {}) };
     if (!cleaned.code) return null;
     cleaned.code = normalizeCode(cleaned.code);
-    cleaned.studyTitle = normalizeText(cleaned.studyTitle);
+    cleaned.studyTitle = normalizeImportedStudyTitle(cleaned.studyTitle);
     cleaned.sponsor = normalizeText(cleaned.sponsor);
     cleaned.pi = sanitizePiField(cleaned.pi, [cleaned.pi, cleaned.nurse, cleaned.studyTitle, cleaned.inclusion].filter(Boolean).join('\n'));
     cleaned.nurse = sanitizeNurseField(cleaned.nurse);
@@ -728,7 +891,7 @@ const cleanTrialForSave = (trial) => {
 const normalizeFirestoreTrial = (raw) => {
     const trial = { ...(raw || {}) };
     trial.code = normalizeCode(trial.code);
-    trial.studyTitle = normalizeText(trial.studyTitle);
+    trial.studyTitle = normalizeImportedStudyTitle(trial.studyTitle);
     trial.sponsor = normalizeText(trial.sponsor);
     trial.pi = sanitizePiField(trial.pi, [trial.pi, trial.nurse, trial.studyTitle, trial.inclusion].filter(Boolean).join('\n'));
     trial.nurse = sanitizeNurseField(trial.nurse);
@@ -751,8 +914,10 @@ const normalizeFirestoreTrial = (raw) => {
 };
 
 const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus, onError }) => {
-    try {
-        const db = initializeFirebaseApp(firebaseConfig);
+    let cancelled = false;
+    let unsubscribe = () => {};
+    ensureFirebaseAnonymousAuth(firebaseConfig).then((db) => {
+        if (cancelled) return;
         const unsubTrials = db.collection('trials').onSnapshot((snapshot) => {
             const list = snapshot.docs.map((doc) => normalizeFirestoreTrial({ ...doc.data(), code: doc.id }));
             const merged = sanitizeTrialListForRuntime(list.length ? upsertTrialsByCode(INITIAL_TRIALS, list) : INITIAL_TRIALS);
@@ -765,18 +930,18 @@ const subscribeFirestoreData = ({ firebaseConfig, onTrials, onSubjects, onStatus
             onSubjects(Array.isArray(data.items) ? data.items : []);
         }, onError);
 
-        return () => {
+        unsubscribe = () => {
             try { unsubTrials && unsubTrials(); } catch (e) {}
             try { unsubSubjects && unsubSubjects(); } catch (e) {}
         };
-    } catch (error) {
+    }).catch((error) => {
         onError && onError(error);
-        return () => {};
-    }
+    });
+    return () => { cancelled = true; unsubscribe(); };
 };
 
 const saveTrialToFirestore = async (firebaseConfig, trialData) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const cleaned = cleanTrialForSave(trialData);
     if (!cleaned) throw new Error('trial code 不可空白');
     await db.collection('trials').doc(cleaned.code).set(cleaned, { merge: true });
@@ -784,12 +949,12 @@ const saveTrialToFirestore = async (firebaseConfig, trialData) => {
 };
 
 const deleteTrialFromFirestore = async (firebaseConfig, code) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     await db.collection('trials').doc(normalizeCode(code)).delete();
 };
 
 const clearTrialsFromFirestore = async (firebaseConfig) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     let total = 0;
     while (true) {
         const snapshot = await db.collection('trials').limit(400).get();
@@ -804,7 +969,7 @@ const clearTrialsFromFirestore = async (firebaseConfig) => {
 };
 
 const saveSubjectsToFirestore = async (firebaseConfig, data) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     await db.collection('meta').doc('subjects').set({
         items: Array.isArray(data) ? data : [],
         updatedAt: new Date().toISOString()
@@ -812,7 +977,7 @@ const saveSubjectsToFirestore = async (firebaseConfig, data) => {
 };
 
 const seedInitialTrialsToFirestore = async (firebaseConfig, trialsData) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const existing = await db.collection('trials').limit(1).get();
     if (!existing.empty) return false;
     const batch = db.batch();
@@ -853,13 +1018,55 @@ const normalizePublicText = (value) => stripPrivatePublicText(String(value || ''
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n'));
 
-const getPublicPhysicians = (trial) => {
-    const haystack = normalizeFilterValue([trial && trial.pi, trial && trial.studyTitle].filter(Boolean).join(' '));
-    const found = [];
-    if (haystack.includes(normalizeFilterValue('洪逸平')) || haystack.includes('yipinghung') || haystack.includes('yiphung')) found.push('洪逸平醫師');
-    if (haystack.includes(normalizeFilterValue('陳明晃')) || haystack.includes('minghuangchen')) found.push('陳明晃醫師');
-    if (haystack.includes(normalizeFilterValue('姜乃榕')) || haystack.includes('naijungchiang') || haystack.includes('nai-jungchiang')) found.push('姜乃榕醫師');
-    return found.length ? found : [...PUBLIC_TRIAL_CONTACT_PHYSICIANS];
+const PUBLIC_NOTICE_SCHEMA_VERSION = 'public-trials-v2.0-20260904';
+const PUBLIC_DEFAULT_REGISTRATION_URL = 'https://www6.vghtpe.gov.tw/reg/';
+const PUBLIC_VISIBLE_STATUSES = new Set(['收案中','需問名額','暫停收案','尚未開放','預備中']);
+const PUBLIC_FORBIDDEN_KEYS = new Set(['inclusion','exclusion','pi','subI','sub_i','investigator','publicPhysicians','nurse','crc','phone','email','lineId','comments','subjects','sponsor','targetNum','enrolled','monthSigned','monthEnrolled']);
+const PUBLIC_TRIAL_ALLOWED_KEYS = new Set(['code','studyTitle','phase','publicStatus','statusClass','cancerTypes','departments','registrationUrl','updatedAt']);
+
+const normalizeDepartmentList = (value) => {
+    const raw = Array.isArray(value) ? value : String(value || '').split(/[、,，;/；\n]+/);
+    return [...new Set(raw.map(normalizePublicText).filter(Boolean))];
+};
+
+const getSuggestedPublicDepartments = (trial) => {
+    const explicit = normalizeDepartmentList(trial && trial.publicDepartments);
+    if (explicit.length) return explicit;
+    const cancerTypes = getPublicCancerTypes(trial || []);
+    const haystack = cancerTypes.map(ct => ct.type).join(' ').toLowerCase();
+    const out = [];
+    const add = (x) => { if (x && !out.includes(x)) out.push(x); };
+    if (/乳|breast/i.test(haystack)) { add('乳房外科'); add('腫瘤醫學部'); }
+    if (/肺|lung|胸膜|mesothelioma/i.test(haystack)) { add('胸腔部'); add('腫瘤醫學部'); }
+    if (/攝護|前列腺|prostate|泌尿|膀胱|bladder|尿路|urothel|腎癌|kidney|renal|睪丸|testis|陰莖|penis/i.test(haystack)) { add('泌尿部'); add('腫瘤醫學部'); }
+    if (/胃|食道|胰|膽|肝|大腸|結腸|直腸|腸癌|gastric|stomach|esoph|pancre|biliary|cholangi|hcc|liver|colon|rect|gastro/i.test(haystack)) { add('腫瘤醫學部'); add('胃腸肝膽科'); }
+    if (/頭頸|口腔|鼻咽|咽|喉|salivary|orophary|nasophary|laryn/i.test(haystack)) { add('耳鼻喉頭頸部'); add('腫瘤醫學部'); }
+    if (/子宮|卵巢|婦|cervix|uter|ovary|vulva|vagina/i.test(haystack)) { add('婦女醫學部'); add('腫瘤醫學部'); }
+    if (/淋巴|白血|骨髓|myeloma|lymph|leuk|mds|mpn/i.test(haystack)) add('血液科');
+    if (!out.length) add('相關專科門診');
+    return out;
+};
+
+const assertPublicDatasetSafe = (payload) => {
+    const trials = Array.isArray(payload && payload.trials) ? payload.trials : [];
+    trials.forEach((trial, index) => {
+        Object.keys(trial || {}).forEach(key => {
+            if (PUBLIC_FORBIDDEN_KEYS.has(key)) throw new Error(`公開資料安全檢查失敗：trial[${index}] 禁止欄位 ${key}`);
+            if (!PUBLIC_TRIAL_ALLOWED_KEYS.has(key)) throw new Error(`公開資料 schema 檢查失敗：trial[${index}] 未核准欄位 ${key}`);
+        });
+    });
+    return payload;
+};
+
+const normalizePublicStudyTitle = (value) => {
+    const lines = String(value || '').replace(/\r/g, '\n').split(/\n+/).map(x => x.trim()).filter(Boolean);
+    const kept = [];
+    for (const line of lines) {
+        if (/(specific\s+)?inclusion\s+criteria|exclusion\s+criteria|主要納入條件|主要排除條件|納入條件|排除條件|請洽|聯絡|contact\s*:|line\s*id\s*:|\b(?:09\d{8}|0\d{1,2}-?\d{6,8})\b/i.test(line)) break;
+        if (/^\s*\d{1,2}[\/.-]\d{1,2}\s+(?:SIV|COV|PSV)\b/i.test(line)) continue;
+        kept.push(line);
+    }
+    return normalizePublicText((kept.length ? kept : lines.slice(0, 1)).join(' '));
 };
 
 const getPublicTrialStatusLabel = (trial) => {
@@ -888,6 +1095,10 @@ const getPublicStatusClass = (label) => {
     return 'unknown';
 };
 
+const shouldPublishPublicTrial = (trial, publicStatus) => !!(
+    trial && trial.publicDisclosureApproved !== false && !trial.isArchived && PUBLIC_VISIBLE_STATUSES.has(publicStatus)
+);
+
 const getPublicCancerTypes = (trial) => {
     const cancerTypes = Array.isArray(trial && trial.cancerTypes) && trial.cancerTypes.length
         ? trial.cancerTypes
@@ -904,45 +1115,38 @@ const getPublicCancerTypes = (trial) => {
 const buildPublicTrialsDataset = (sourceTrials) => {
     const cleanTrials = sanitizeTrialListForRuntime(Array.isArray(sourceTrials) ? sourceTrials : []);
     const trials = cleanTrials
-        .filter(trial => trial && trial.code && !trial.isArchived)
+        .filter(trial => trial && trial.code)
         .map(trial => {
             const publicStatus = getPublicTrialStatusLabel(trial);
+            if (!shouldPublishPublicTrial(trial, publicStatus)) return null;
             return {
                 code: normalizeCode(trial.code),
-                studyTitle: normalizePublicText(trial.studyTitle || ''),
+                studyTitle: normalizePublicStudyTitle(trial.studyTitle || ''),
                 phase: normalizePublicText(trial.phase || ''),
                 publicStatus,
                 statusClass: getPublicStatusClass(publicStatus),
-                publicPhysicians: getPublicPhysicians(trial),
                 cancerTypes: getPublicCancerTypes(trial),
-                inclusion: normalizePublicText(trial.inclusion || ''),
-                exclusion: normalizePublicText(trial.exclusion || ''),
-                isOpenEnrollment: publicStatus === '收案中',
+                departments: getSuggestedPublicDepartments(trial),
+                registrationUrl: PUBLIC_DEFAULT_REGISTRATION_URL,
                 updatedAt: normalizePublicText(trial.updatedAt || trial.updated_at || '')
             };
         })
-        .sort((a, b) => {
-            const ac = a.cancerTypes && a.cancerTypes[0] ? getCancerRank(a.cancerTypes[0].type) : 999;
-            const bc = b.cancerTypes && b.cancerTypes[0] ? getCancerRank(b.cancerTypes[0].type) : 999;
-            if (ac !== bc) return ac - bc;
-            return normalizeCode(a.code).localeCompare(normalizeCode(b.code));
-        });
-    return {
-        schemaVersion: PUBLIC_TRIALS_SCHEMA_VERSION,
+        .filter(Boolean);
+    return assertPublicDatasetSafe({
+        schemaVersion: PUBLIC_NOTICE_SCHEMA_VERSION,
         generatedAt: new Date().toISOString(),
-        source: 'clinicaltrialvghtpe sanitized public dataset',
-        privacyLevel: 'sanitized-public',
-        publicPhysicianPolicy: 'Public page displays only 洪逸平醫師、陳明晃醫師、姜乃榕醫師.',
-        appointmentLinks: { ...PUBLIC_APPOINTMENT_LINKS },
-        disclaimer: '本頁僅供臨床試驗資訊查詢。實際收案狀態、納入/排除條件、名額與是否適合參加，仍以門診醫師評估、試驗團隊確認與 IRB 核准版本為準。',
-        contactPhysicians: [...PUBLIC_TRIAL_CONTACT_PHYSICIANS],
+        source: 'Taipei Veterans General Hospital internal clinical trial management system public notice projection',
+        privacyLevel: 'strict-public-allowlist',
+        noticeType: 'clinical-trial-information-notice',
+        appointmentLinks: { registration: PUBLIC_DEFAULT_REGISTRATION_URL },
+        disclaimer: '本頁為臺北榮民總醫院臨床試驗資訊公告與查詢。內容供民眾了解目前可公開之臨床試驗資訊；不提供納入或排除條件、主持人或研究團隊聯絡資訊。若對特定試驗有興趣，請至建議科別門診掛號，由臨床醫師進一步評估。',
         trialCount: trials.length,
         trials
-    };
+    });
 };
 
 const publishPublicTrialsToFirestore = async (firebaseConfig, sourceTrials) => {
-    const db = initializeFirebaseApp(firebaseConfig);
+    const db = await ensureFirebaseAnonymousAuth(firebaseConfig);
     const payload = buildPublicTrialsDataset(sourceTrials || []);
     await db.collection(PUBLIC_TRIALS_COLLECTION).doc(PUBLIC_TRIALS_DOC_ID).set(payload, { merge: false });
     return payload;
@@ -952,7 +1156,7 @@ const FIELD_ALIASES = {
     cancerType: ['cancertype','cancer type','癌別','疾病別','適應症','fff'],
     line: ['line','treatment line','線別','治療線別'],
     code: ['code','trial code','study code','protocol','protocol no','protocol number','試驗代碼','計畫代碼','案號','代號'],
-    studyTitle: ['studytitle','study title','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
+    studyTitle: ['studytitle','study title','studytittle','study tittle','title','trial title','protocol title','試驗名稱','試驗標題','計畫名稱'],
     inclusion: ['主要收案條件概要','主要收案條件 /概要','主要收案條件','收案條件','inclusion','eligibility','主要條件'],
     exclusion: ['排除條件','主要排除條件','exclusion','exclusioncriteria','exclusion criteria','排除標準'],
     phase: ['phase','期別'],
@@ -988,6 +1192,8 @@ const normalizeCancerTypeLabel = (value) => {
     if (/(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/i.test(text)) return '肝癌';
     if (/(膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma)/i.test(text)) return '膽道癌';
     if (/(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/i.test(text)) return '大腸癌';
+    if (/(神經內分泌癌|\bepnec\b|neuroendocrine\s+carcinoma|\bnec\b)/i.test(text)) return '神經內分泌癌';
+    if (/(神經內分泌瘤|\bpnet\b|\bnet\b|neuroendocrine\s+tumou?r)/i.test(text)) return '神經內分泌腫瘤';
     if (/(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/i.test(text)) return 'CRPC';
 
     // Do not let PDF table fragments, criteria bullets, or status text become cancer filter options.
@@ -1007,6 +1213,8 @@ const CANCER_TYPE_RULES = [
     { type: '肝癌', regex: /(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/ig },
     { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma)/ig },
     { type: '大腸癌', regex: /(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/ig },
+    { type: '神經內分泌癌', regex: /(神經內分泌癌|\bepnec\b|neuroendocrine\s+carcinoma|\bnec\b)/ig },
+    { type: '神經內分泌腫瘤', regex: /(神經內分泌瘤|\bpnet\b|\bnet\b|neuroendocrine\s+tumou?r)/ig },
     { type: 'CRPC', regex: /(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/ig }
 ];
 
@@ -1179,6 +1387,57 @@ const inferCancerTypeFromText = (value) => {
 const normalizeCancerTypes = (list) => mergeCancerTypes(list);
 
 
+const pairListHasCancerLine = (pairs, type, line) => (Array.isArray(pairs) ? pairs : []).some(ct =>
+    valueMatches(ct.type, type) && Array.isArray(ct.lines) && ct.lines.some(v => valueMatches(v, line))
+);
+
+const getTrialLineSource = (trial, type, line) => {
+    const sources = trial && trial.lineSources && typeof trial.lineSources === 'object' ? trial.lineSources : {};
+    return sources[lineSourceKey(type, line)] || trial && trial.lineSourceDefault || 'legacy';
+};
+
+const annotateTrialLineSources = (trial) => {
+    const t = { ...(trial || {}) };
+    const sources = { ...(t.lineSources || {}) };
+    const titlePairs = inferCancerLinePairsFromText(t.studyTitle || '');
+    const eligibilityText = [t.inclusion, t.exclusion, t.comments].filter(Boolean).join(' ');
+    const eligibilityPairs = inferCancerLinePairsFromText(eligibilityText);
+    const hasCohortCue = /cohort|arm\s*[a-z0-9]+|substudy|sub-study|specific\s+inclusion|part\s*[a-z0-9]+|組別|子試驗/i.test(eligibilityText);
+    const cancerTypes = Array.isArray(t.cancerTypes) && t.cancerTypes.length
+        ? t.cancerTypes
+        : (t.cancerType && t.line ? [{ type: t.cancerType, lines: [t.line] }] : []);
+    cancerTypes.forEach(ct => (ct.lines || []).forEach(line => {
+        const key = lineSourceKey(ct.type, line);
+        if (sources[key]) return;
+        if (pairListHasCancerLine(titlePairs, ct.type, line)) sources[key] = 'trial-title';
+        else if (hasCohortCue && pairListHasCancerLine(eligibilityPairs, ct.type, line)) sources[key] = 'cohort-explicit';
+        else if (pairListHasCancerLine(eligibilityPairs, ct.type, line)) sources[key] = 'auto-inferred';
+        else sources[key] = t.lineSourceDefault || 'legacy';
+    }));
+    t.lineSources = sources;
+    return t;
+};
+
+
+const applyKnownTrialClassificationRepair = (trial) => {
+    const t = { ...(trial || {}) };
+    const code = normalizeCode(t.code);
+    const override = TRIAL_CLASSIFICATION_REPAIRS[code];
+    if (!override) return t;
+    const repaired = normalizeCancerTypes(override);
+    if (!repaired.length) return t;
+    t.cancerTypes = repaired;
+    t.cancerType = repaired[0].type || '';
+    t.line = (repaired[0].lines || [])[0] || '';
+    t.classificationRepairVersion = TRIAL_CLASSIFICATION_REPAIR_VERSION;
+    t.classificationRepairReason = 'Curated correction of stale cancer/treatment-line mapping from legacy import.';
+    const sources = { ...(t.lineSources || {}) };
+    repaired.forEach(ct => (ct.lines || []).forEach(line => { sources[lineSourceKey(ct.type, line)] = 'curated-repair'; }));
+    t.lineSources = sources;
+    return t;
+};
+
+
 const KNOWN_PI_NAMES = ['洪逸平', '陳明晃', '楊慕華', '李重賓', '姜乃榕', '鄧豪偉', '黃怡翔', '蕭育和', '張牧新'];
 const KNOWN_STUDY_NURSE_NAMES = ['Abby', '宋秀薇', '王秋眉', '賴姵妤', '周淑慧', '吳佳勳', '林韋秀', '王昭蘋', '陳秀玲', '孔亭方', '張台依', '邱佩玲', '李杰如', '李杰如醫師'];
 
@@ -1280,10 +1539,76 @@ const sanitizePersonFields = (trial, rowContext = '') => {
     return t;
 };
 
+const STUDY_STATUS_SNAPSHOT_VERSION = 'v4.3.5-20260822-study-status-pdf';
+const STUDY_STATUS_SNAPSHOT_20260822 = {"DB1311-201":{"targetNum":"3","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"TTY":{"targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"D702AC00001":{"targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DS8201-724":{"targetNum":"7","enrolled":"5(screen failure)/1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"D967LC0001":{"targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9803C00001":{"targetNum":"15","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"8951-CL-0305":{"targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","status":"停止收案"},"MK-3475-06C":{"targetNum":"6","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"C6461016":{"targetNum":"3","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"T1223":{"targetNum":"25","enrolled":"15","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06D":{"targetNum":"3-6","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9800C00001":{"targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","status":"名額已滿"},"BBI-4182-101":{"targetNum":"2","enrolled":"1","monthSigned":"","monthEnrolled":"1","status":"暫無slot","comments":"目前沒名額/可以預排/已排3個病人"},"C3651021":{"targetNum":"15","enrolled":"7","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"CA2400030":{"targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"MK-3475-06E":{"targetNum":"3-5","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"暫無slot"},"CHS-114-02":{"targetNum":"6","enrolled":"4 (Cohort A 1 / Cohort B 1 / Cohort C 2)","monthSigned":"0","monthEnrolled":"0","status":"需問slot"},"MK-3475-06B":{"targetNum":"6- 10","enrolled":"6","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"DS7300-202":{"targetNum":"4","enrolled":"0 / 4 screen failure","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06F":{"targetNum":"3-5","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"D702NC00001":{"targetNum":"15","enrolled":"5 screen failure / 3 有用藥","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DESTINY-BILIARY TRACT":{"targetNum":"6","enrolled":"5(有用藥)/ 3(screen failure)","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"TT420C2308":{"targetNum":"6","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"TAI-301":{"targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-1022":{"targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"PEP08-101":{"targetNum":"9","enrolled":"4","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"PEP07-102":{"targetNum":"20","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"需問slot"},"MK-9999-02A":{"targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"MK5909-005":{"targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"TYR430-101":{"targetNum":"15","enrolled":"","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"BGM-2121-001":{"targetNum":"15","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"20250004":{"targetNum":"5","enrolled":"1","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","status":"需問slot"},"C23-101":{"targetNum":"10","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"C6461003":{"targetNum":"10","enrolled":"3","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"MK-1082-012":{"targetNum":"Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"M24-533":{"targetNum":"5","enrolled":"3","monthSigned":"2","monthEnrolled":"1","status":"進行中"},"20210081":{"targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"SGNTUC-029":{"targetNum":"6","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"CA266-0003":{"targetNum":"8","enrolled":"0","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"WO42758":{"targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"61186372COR3002":{"targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MS914001_0002":{"targetNum":"9","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"GW-020202":{"targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"還未SIV"}};
+
+const normalizeStudyStatusSnapshotDate = (value) => {
+    const m = String(value || '').match(/(20\d{2})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
+    return m ? `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}` : '';
+};
+const hasStudyStatusSnapshotAtLeast = (trial, cutoffDate) => {
+    const current = normalizeStudyStatusSnapshotDate(trial && trial.studyStatusSnapshotDate);
+    const cutoff = normalizeStudyStatusSnapshotDate(cutoffDate);
+    return Boolean(current && cutoff && current >= cutoff);
+};
+
+const applyStudyStatusSnapshot20260822 = (trial) => {
+    const t = { ...(trial || {}) };
+    const key = normalizeCode(t.code);
+    const patch = STUDY_STATUS_SNAPSHOT_20260822[key];
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-08-22')) return t;
+    Object.entries(patch).forEach(([field, value]) => {
+        t[field] = value;
+    });
+    t.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION;
+    t.studyStatusSnapshotDate = '2026-08-22';
+    t.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+    t.statusDetectedFromText = false;
+    return t;
+};
+
+const STUDY_STATUS_SNAPSHOT_VERSION_20260901 = 'v4.3.6-20260901-study-status-pdf';
+const STUDY_STATUS_SNAPSHOT_20260901 = {"DB1311-201":{"targetNum":"3","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"TTY":{"targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"D702AC00001":{"targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DS8201-724":{"targetNum":"7","enrolled":"5(screen failure)/1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"D967LC0001":{"targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9803C00001":{"targetNum":"15","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"8951-CL-0305":{"targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","status":"停止收案"},"MK-3475-06C":{"targetNum":"6","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"C6461016":{"targetNum":"3","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"T1223":{"targetNum":"25","enrolled":"15","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06D":{"targetNum":"3-6","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9800C00001":{"targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","status":"名額已滿"},"BBI-4182-101":{"targetNum":"2","enrolled":"1","monthSigned":"","monthEnrolled":"1","status":"暫無slot","comments":"目前沒名額/可以預排/已排3個病人"},"RMC-6236-303":{"targetNum":"15","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"C3651021":{"targetNum":"15","enrolled":"7","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"CA2400030":{"targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"MK-3475-06E":{"targetNum":"3-5","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"暫無slot"},"CHS-114-02":{"targetNum":"6","enrolled":"4 (Cohort A 1 / Cohort B 1 / Cohort C 2)","monthSigned":"0","monthEnrolled":"0","status":"需問slot"},"MK-3475-06B":{"targetNum":"6- 10","enrolled":"6","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"DS7300-202":{"targetNum":"4","enrolled":"0 / 4 screen failure","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06F":{"targetNum":"3-5","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"D702NC00001":{"targetNum":"15","enrolled":"5 screen failure / 3 有用藥","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DESTINY-BILIARY TRACT":{"targetNum":"6","enrolled":"5(有用藥)/ 3(screen failure)","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"TT420C2308":{"targetNum":"6","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"TAI-301":{"targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-1022":{"targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"PEP08-101":{"targetNum":"9","enrolled":"4","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"PEP07-102":{"targetNum":"20","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"需問slot"},"MK-9999-02A":{"targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"MK5909-005":{"targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"TYR430-101":{"targetNum":"15","enrolled":"","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"BGM-2121-001":{"targetNum":"15","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"20250004":{"targetNum":"5","enrolled":"1","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","status":"需問slot","comments":"須向 sponsor 申請 slot"},"C23-101":{"targetNum":"10","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"C6461003":{"targetNum":"10","enrolled":"3","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"MK-1082-012":{"targetNum":"Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"M24-533":{"targetNum":"5","enrolled":"3","monthSigned":"2","monthEnrolled":"1","status":"進行中"},"20210081":{"targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"SGNTUC-029":{"targetNum":"6","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"CA266-0003":{"targetNum":"8","enrolled":"0","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"WO42758":{"targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"61186372COR3002":{"targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MS914001_0002":{"targetNum":"9","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"XL092-311":{"targetNum":"3","enrolled":"","monthSigned":"","monthEnrolled":"","status":"進行中"},"GW-020202":{"targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"還未SIV"}};
+const STUDY_STATUS_NEW_TRIALS_20260901 = [{"cancerType":"胰臟癌","line":"一線","studyTitle":"RASolute 303：一項第 3 期全球、多中心、開放標示、隨機分配、3 組別試驗，研究 Daraxonrasib 單一療法或 Daraxonrasib 加 Gemcitabine 併用 Nab-paclitaxel，相較於 Gemcitabine 併用 Nab-paclitaxel 作為轉移性胰臟腺癌患者的第一線治療","code":"RMC-6236-303","phase":"III","sponsor":"Revolution Medicines, Inc.","targetNum":"15","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","status":"進行中","inclusion":"收案條件：1. 資料顯示有轉移性胰管腺癌 2. 尚未接受過治療（一線治療） 3. Measurable lesion by RECIST 1.1 4. NON-B,C 肝 5. 需要送腫瘤切片 11 片 6. 需有 RAS 報告 7. 分三組：1.標靶 2.標靶+化療 3.化療","exclusion":"","cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"subjects":[],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"cancerType":"神經內分泌腫瘤","line":"","studyTitle":"Zanzalintinib 相對於 Everolimus，用於罹患無法切除、局部晚期或轉移性神經內分泌瘤，先前接受過治療參與者的一項第 2/3 期、多中心、隨機分配、開放性試驗","code":"XL092-311","phase":"II/III","sponsor":"Exelixis, Inc.","targetNum":"3","enrolled":"","monthSigned":"","monthEnrolled":"","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","status":"進行中","inclusion":"","exclusion":"","contractNo":"C2602100","cancerTypes":[{"type":"神經內分泌腫瘤","lines":[]}],"subjects":[],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"}];
+
+const applyStudyStatusSnapshot20260901 = (trial) => {
+    const t = { ...(trial || {}) };
+    const key = normalizeCode(t.code);
+    const patch = STUDY_STATUS_SNAPSHOT_20260901[key];
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-09-01')) return t;
+    Object.entries(patch).forEach(([field, value]) => { t[field] = value; });
+    t.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION_20260901;
+    t.studyStatusSnapshotDate = '2026-09-01';
+    t.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+    t.statusDetectedFromText = false;
+    return t;
+};
+
+const STUDY_STATUS_SNAPSHOT_VERSION_20261122 = 'v4.4.0-20261122-study-status-pdf';
+const STUDY_STATUS_SNAPSHOT_20261122 = {"20210081":{"targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2405800","trialCost":"＄8,711,415 / ＄3,261,828"},"20250004":{"targetNum":"5","enrolled":"2","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","status":"需問slot","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","contractNo":"C2602500","trialCost":"＄14,123,935","comments":"須向 sponsor 申請 slot"},"DB1311-201":{"targetNum":"16","enrolled":"3","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"楊慕華","nurse":"Abby","phone":"82935/82999","contractNo":"C2508900","trialCost":"＄3,382,835"},"CTL-002-005":{"targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216"},"TTY":{"targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"洪逸平","nurse":"宋秀薇","phone":"2935 / 2999"},"D702AC00001":{"targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"王秋眉","phone":"0927751328","contractNo":"C2410100","trialCost":"＄12,767,478"},"DS8201-724":{"targetNum":"7","enrolled":"7(screen failure)/2","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","contractNo":"C2506500","trialCost":"2,721,820元"},"D967LC0001":{"targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"周淑慧","phone":"82935 / 82999 / 0900265971","contractNo":"C2006400","trialCost":"21,496,324 元"},"D9803C00001":{"targetNum":"15","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"吳佳勳","phone":"0918696523","contractNo":"C2512600","trialCost":"＄15,603,065"},"8951-CL-0305":{"targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","status":"停止收案","pi":"洪逸平","nurse":"賴姵妤 / 宋秀薇","phone":"82935 / 82999 / 0919801912","contractNo":"C2506200","trialCost":"1,334,467元"},"MK-3475-06C":{"targetNum":"6","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"C6461016":{"targetNum":"3","enrolled":"1(CAPOX)","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"張牧新 / 陳明晃","nurse":"王秋眉","phone":"0927751328","contractNo":"C2606500","trialCost":"＄5,527,260"},"DS1103-074":{"targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"MK-3475-06D":{"targetNum":"需向 sponsor 要名額","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"D9800C00001":{"targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"王昭蘋 / 王秋眉 / 吳佳勳","phone":"0919377185 / 0927751328 / 0918696523","contractNo":"C2402900","trialCost":"＄21,926,667"},"RMC-6236-303":{"targetNum":"15","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","contractNo":"C2604000","trialCost":"＄9,378,700"},"3082-CL-0301":{"targetNum":"3","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2608500"},"C3651021":{"targetNum":"10","enrolled":"7","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2514200","trialCost":"＄3,381,700"},"CA2400030":{"targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","status":"暫停收案","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","contractNo":"C2510300","trialCost":"＄16,992,935"},"MK-3475-06E":{"targetNum":"6","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2502100","trialCost":"＄3,013,874"},"CHS-114-02":{"targetNum":"4 Gastric / 6（需與 sponsor 要名額）","enrolled":"Cohort A 1 / Cohort B+C 2","monthSigned":"0","monthEnrolled":"0","status":"需問slot","pi":"陳明晃","nurse":"林韋秀 / 王秋眉 / 孔亭方 / 陳秀玲","phone":"0963501682 / 0927751328 / 7270#268 / 0988660381","contractNo":"C2507200","trialCost":"＄3,540,140"},"MK-3475-06B":{"targetNum":"6-10","enrolled":"7","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"7270#268","contractNo":"C2216600","trialCost":"＄3,158,321"},"DS7300-202":{"targetNum":"4","enrolled":"screen failure 4","monthSigned":"1","monthEnrolled":"11/23 或 11/24 C1D1","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2503400","trialCost":"＄1,878,120"},"MK-3475-06F":{"targetNum":"3-5","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2603300","trialCost":"＄2,743,888"},"D702NC00001":{"targetNum":"15","enrolled":"5(有用藥) / 7(screen failure)","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"林韋秀 / 王秋眉","phone":"0963501682 / 0927751328","contractNo":"C2513000","trialCost":"＄16,761,441"},"DESTINY-BILIARY TRACT":{"targetNum":"6","enrolled":"5(有用藥) / 3(screen failure)","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋","phone":"0927751328 / 0919377185","contractNo":"C2408600","trialCost":"＄9,293,218"},"TAI-301":{"targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"停止收案","pi":"陳明晃","nurse":"宋秀薇 / 王秋眉","phone":"7270#268 / 2935 / 0927751328","contractNo":"C2206700","trialCost":"＄3,505,329"},"MK-1022":{"targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"停止收案","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋 / 陳秀玲","phone":"0927751328 / 7270#262 / 0988660381","contractNo":"C2414500","trialCost":"＄2,369,610"},"PEP08-101":{"targetNum":"9","enrolled":"7","monthSigned":"3","monthEnrolled":"3","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"7270#262","contractNo":"C2509400","trialCost":"＄2,335,129"},"PEP07-102":{"targetNum":"20","enrolled":"4","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"7270#262","contractNo":"C2400900","trialCost":"＄14,677,590"},"MK-9999-02A":{"targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 王秋眉 / 王昭蘋 / 陳秀玲 / 賴姵妤","phone":"0981764403 / 0927751328 / 7270#262 / 0919801912","contractNo":"C2407800","trialCost":"＄2,149,762"},"MK5909-005":{"targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋 / 陳秀玲","phone":"0927751328 / 7270#262 / 0988660381","contractNo":"C2504300","trialCost":"＄4,383,548"},"TYR430-101":{"targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2506300","trialCost":"＄3,033,720"},"BGM-2121-001":{"targetNum":"15","enrolled":"2 (Cohort I)","monthSigned":"0","monthEnrolled":"0","status":"暫停收案","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2600200","trialCost":"＄23,907,560","comments":"暫停，等候資料分析中；可以先排 slot"},"C23-101":{"targetNum":"10","enrolled":"2","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲","phone":"0988660381"},"GCT1184-09":{"targetNum":"5","enrolled":"2","monthSigned":"2 (胃/GEJ)","monthEnrolled":"2 (胃/GEJ)","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","trialCost":"＄11,674,265"},"C6461003":{"targetNum":"8","enrolled":"7","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2516600","trialCost":"＄21,706,500"},"MK-1082-012":{"targetNum":"Part 1: 2 / Part 2: 2","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2508100","trialCost":"＄2,383,516"},"M24-533":{"targetNum":"8","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","comments":"5月份會開 stage 2"},"CA266-0003":{"targetNum":"8","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","trialCost":"＄7,199,688"},"WO42758":{"targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381"},"61186372COR3002":{"targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","trialCost":"＄14,054,225 / ＄1,844,670"},"MS914001_0002":{"targetNum":"9","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方 / 吳佳勳","phone":"0988660381"},"XL092-311":{"targetNum":"6","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","contractNo":"C2602100","trialCost":"1,432,695元","comments":"只剩 pNET 有名額"},"DAREON-NEC-1":{"targetNum":"8","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"林韋秀","phone":"0963501682","contractNo":"C2604500","trialCost":"6,873,790"}};
+const STUDY_STATUS_NEW_TRIALS_20261122 = [{"cancerType":"肝癌","line":"二線","code":"CTL-002-005","studyTitle":"一項第2b期、隨機分配、雙盲試驗，在患有無法切除或轉移性肝細胞癌和肝功能代償 (Child-Pugh A級)，且接受第一線治療（包括抗 PD-(L)1）失敗後的參與者中，探討 Visugromab 併用 Nivolumab 和 Lenvatinib 相較於雙安慰劑和 Lenvatinib 的療效和安全性 (GDFATHER HCC-01)","inclusion":"1. 病理或肝硬化的參與者，透過 AASLD 標準進行臨床診斷即已足夠\n2. 一線治療失敗後，包含抗 PD-(L)1 CPI，治療持續時間至少 12 週\n3. Child-Pugh class A，CCr >50\n4. HBsAg(+) 可收，HBV DNA <1000 IU/mL，進入試驗前已接受抗 HBV 治療至少 14 天\n5. HDV RNA 陰性","phase":"II","sponsor":"","targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","status":"進行中","exclusion":"","cancerTypes":[{"type":"肝癌","lines":["二線"]}],"subjects":[]},{"cancerType":"胃癌","line":"二線","code":"DS1103-074","studyTitle":"一項 DS-1103a 併用療法用於晚期實體腫瘤受試者的第 1 期、2 部分、多中心、首次用於人體的劑量遞增及劑量擴展試驗","inclusion":"Cohort 2：不可切除或轉移性 HER2 陽性（IHC 3+ 或 IHC 2+/ISH+）胃癌或 GEJ 腺癌；第一線含 trastuzumab 或核准 biosimilar 療法期間或之後疾病惡化。LVEF ≥50%；試驗治療開始前 14 天內器官及骨髓功能足夠；14 天內不得輸血；Platelet ≥100×10^9/L；Hb >8 g/dL（gastric/GEJ）；ANC ≥1.5×10^9/L；CrCl ≥30 mL/min；Albumin ≥2.5 g/dL。","phase":"I","sponsor":"Daiichi Sankyo, Inc.","targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","status":"進行中","exclusion":"","cancerTypes":[{"type":"胃癌","lines":["二線"]}],"subjects":[]},{"cancerType":"胰臟癌","line":"一線","code":"3082-CL-0301","studyTitle":"一項第三期、雙盲、安慰劑對照、隨機分配試驗，評估 ASP3082 合併 mFOLFIRINOX 或 NALIRIFOX，作為 KRAS G12D 突變轉移性胰臟腺癌參與者之第一線治療的療效和安全性","inclusion":"1. 轉移性胰管腺癌\n2. 尚未接受過治療（一線）\n3. RECIST 1.1 measurable lesion\n4. 無 B、C 型肝炎\n5. 腫瘤切片 15 片\n6. KRAS G12D positive\n7. 醫師可自行選擇 mFOLFIRINOX 或 NALIRIFOX","phase":"III","sponsor":"安斯泰來","targetNum":"3","enrolled":"3","monthSigned":"1","monthEnrolled":"1","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2608500","status":"進行中","exclusion":"","cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"subjects":[]},{"cancerType":"胃癌","line":"二線、三線、四線","code":"GCT1184-09","studyTitle":"一項研究 Rina-S 用於晚期胃腸道 (Gastrointestinal, GI) 癌受試者的第 2 期、多隊列、開放性標記試驗","inclusion":"1. 組織學或細胞學確認 ESCC，或胰臟、結腸/直腸、膽道、食道或胃/GEJ 腺癌\n2. Slide 15 片（4-5u），C1D1 前寄出\n3. Cohort A：2L+ mCRC（RAS/BRAF/MSI/MMR）\n4. Cohort B：2L-4L 胃/GEJ 癌或食道腺癌\n5. Cohort C：2L-3L PDAC\n6. Cohort D：2L-3L BTC\n7. Cohort E：2L-3L ESCC\n8. RECIST 1.1 target lesion；eGFR ≥60 mL/min；ILD/pneumonitis 病史不收\n9. 不可曾接受含 topoisomerase I inhibitor payload 的 ADC\n10. B、C 肝不收","phase":"II","sponsor":"Genmab","targetNum":"5","enrolled":"2","monthSigned":"2 (胃/GEJ)","monthEnrolled":"2 (胃/GEJ)","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","trialCost":"＄11,674,265","status":"進行中","exclusion":"","cancerTypes":[{"type":"胃癌","lines":["二線","三線","四線"]},{"type":"大腸癌","lines":["二線以上"]},{"type":"胰臟癌","lines":["二線","三線"]},{"type":"膽道癌","lines":["二線","三線"]},{"type":"食道癌","lines":["二線","三線"]}],"subjects":[]},{"cancerType":"神經內分泌癌","line":"一線","code":"DAREON-NEC-1","studyTitle":"一項第三期、多中心、開放標籤、隨機分配、對照試驗，評估靜脈輸注 obrixtamig 併用 carboplatin 及 etoposide 相較於 carboplatin 和 etoposide 作為 DLL3 陽性之無法切除的局部晚期或轉移性肺外神經內分泌癌患者的第一線療法","inclusion":"1. 未接受過治療之 epNEC，Ki-67 >20%\n2. DLL3 陽性（slide 送 central lab 確認）\n3. Random 前可接受 1 cycle etoposide + cisplatin（劑量需符合 protocol）","phase":"III","sponsor":"Boehringer Ingelheim","targetNum":"8","enrolled":"0","monthSigned":"1","monthEnrolled":"0","pi":"陳明晃","nurse":"林韋秀","phone":"0963501682","contractNo":"C2604500","trialCost":"6,873,790","status":"進行中","exclusion":"","cancerTypes":[{"type":"神經內分泌癌","lines":["一線"]}],"subjects":[]}];
+
+const applyStudyStatusSnapshot20261122 = (trial) => {
+    const t = { ...(trial || {}) };
+    const key = normalizeCode(t.code);
+    const patch = STUDY_STATUS_SNAPSHOT_20261122[key];
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-11-22')) return t;
+    Object.entries(patch).forEach(([field, value]) => { t[field] = value; });
+    t.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION_20261122;
+    t.studyStatusSnapshotDate = '2026-11-22';
+    t.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+    t.statusDetectedFromText = false;
+    return t;
+};
+
 const sanitizeTrialForRuntime = (trial) => {
     let t = { ...(trial || {}) };
+    t.studyTitle = normalizeImportedStudyTitle(t.studyTitle);
     t = sanitizePersonFields(t);
     t.code = normalizeCode(t.code);
+    t = applyStudyStatusSnapshot20260822(t);
+    t = applyStudyStatusSnapshot20260901(t);
+    t = applyStudyStatusSnapshot20261122(t);
     t.cancerType = normalizeCancerTypeLabel(t.cancerType);
     t.line = normalizeTreatmentLine(t.line);
     t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
@@ -1305,6 +1630,10 @@ const sanitizeTrialForRuntime = (trial) => {
         t.cancerType = t.cancerTypes[0].type;
         t.line = (t.cancerTypes[0].lines || [])[0] || t.line || '';
     }
+    // Known clinical corrections must win over stale legacy/Firestore classifications.
+    t = applyKnownTrialClassificationRepair(t);
+    // Stamp line provenance after final cancer/line normalization so stale parser guesses stay visible.
+    t = annotateTrialLineSources(t);
     return t;
 };
 
@@ -1331,7 +1660,27 @@ const isPlausibleRuntimeTrialRecord = (trial) => {
     return true;
 };
 
-const sanitizeTrialListForRuntime = (list) => (Array.isArray(list) ? list : [])
+const ensureStudyStatusAdditions20260901 = (list) => {
+    const out = (Array.isArray(list) ? list : []).map(t => ({ ...(t || {}) }));
+    const seen = new Set(out.map(t => normalizeCode(t.code)).filter(Boolean));
+    STUDY_STATUS_NEW_TRIALS_20260901.forEach(src => {
+        const code = normalizeCode(src.code);
+        if (code && !seen.has(code)) { out.push({ ...src }); seen.add(code); }
+    });
+    return out;
+};
+
+const ensureStudyStatusAdditions20261122 = (list) => {
+    const out = (Array.isArray(list) ? list : []).map(t => ({ ...(t || {}) }));
+    const seen = new Set(out.map(t => normalizeCode(t.code)).filter(Boolean));
+    STUDY_STATUS_NEW_TRIALS_20261122.forEach(src => {
+        const code = normalizeCode(src.code);
+        if (code && !seen.has(code)) { out.push({ ...src, studyStatusSnapshotVersion: STUDY_STATUS_SNAPSHOT_VERSION_20261122, studyStatusSnapshotDate: '2026-11-22', statusSource: STATUS_SOURCE_EXPLICIT_FIELD, statusDetectedFromText: false }); seen.add(code); }
+    });
+    return out;
+};
+
+const sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20261122(ensureStudyStatusAdditions20260901(list))
     .map(sanitizeTrialForRuntime)
     .filter(t => isPlausibleRuntimeTrialRecord(t));
 
@@ -1384,6 +1733,7 @@ const splitEligibilitySections = (inclusionText, exclusionText = '') => {
 
 const normalizeImportedTrialFields = (item, options = {}) => {
     let out = { ...(item || {}) };
+    out.studyTitle = normalizeImportedStudyTitle(out.studyTitle);
     out = sanitizePersonFields(out, [out.pi, out.nurse, out.studyTitle, out.inclusion, out.comments].filter(Boolean).join('\n'));
     if (out.cancerType) out.cancerType = normalizeCancerTypeLabel(out.cancerType);
     if (out.line) out.line = normalizeTreatmentLine(out.line);
@@ -1418,6 +1768,12 @@ const normalizeImportedTrialFields = (item, options = {}) => {
         out.cancerTypes = mergedPairs;
         out.cancerType = mergedPairs[0].type || out.cancerType || '';
         out.line = mergedPairs[0].lines && mergedPairs[0].lines.length ? mergedPairs[0].lines.join('、') : (out.line || '');
+    }
+    if (!out.lineSourceDefault) {
+        if (options.explicitLineOnRow) out.lineSourceDefault = 'table-explicit';
+        else if (reliableInferredPairs.length || contextLinesForExplicitCancer.length) out.lineSourceDefault = 'auto-inferred';
+        else if (out.line) out.lineSourceDefault = 'table-inherited';
+        else out.lineSourceDefault = 'legacy';
     }
     return out;
 };
@@ -1477,6 +1833,10 @@ const consolidateParsedTrials = (rows) => {
         const merged = { ...current };
         Object.entries(row || {}).forEach(([field, value]) => {
             if (field === 'cancerTypes') return;
+            if (field === 'studyTitle') {
+                merged.studyTitle = chooseImportedStudyTitle(merged.studyTitle, value);
+                return;
+            }
             if (field === 'status') {
                 merged.status = chooseMergedTrialStatus(merged.status, value, {
                     incomingDetectedFromText: Boolean(row.statusDetectedFromText),
@@ -1576,15 +1936,20 @@ const parseRowsWithHeaderMapping = (rows) => {
             item.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
             item.statusDetectedFromText = false;
         } else if (!item.status) {
-            item.status = '進行中';
-            item.statusSource = STATUS_SOURCE_DEFAULT;
+            const operationalStatus = detectOperationalStudyStatus([item.targetNum, item.enrolled, item.monthSigned, item.monthEnrolled, item.comments]);
+            item.status = operationalStatus || '進行中';
+            item.statusSource = operationalStatus ? STATUS_SOURCE_EXPLICIT_FIELD : STATUS_SOURCE_DEFAULT;
             item.statusDetectedFromText = false;
+            item.targetNum = cleanOperationalProgressValue(item.targetNum, 'targetNum');
+            item.enrolled = cleanOperationalProgressValue(item.enrolled, 'enrolled');
+            item.monthSigned = cleanOperationalProgressValue(item.monthSigned, 'monthSigned');
+            item.monthEnrolled = cleanOperationalProgressValue(item.monthEnrolled, 'monthEnrolled');
         }
         if (!item.inclusion && row[4]) item.inclusion = row[4];
         item.code = code;
 
         const explicitCancerOnRow = Boolean(cancerCell && !isMetaCancerCell(cancerCell));
-        parsed.push(normalizeImportedTrialFields(item, { explicitCancerOnRow }));
+        parsed.push(normalizeImportedTrialFields(item, { explicitCancerOnRow, explicitLineOnRow: Boolean(lineCell && isValidTreatmentLineText(normalizeTreatmentLine(lineCell))) }));
     }
 
     return consolidateParsedTrials(parsed.filter(item => normalizeCode(item.code))).rows;
@@ -1647,7 +2012,7 @@ const upsertTrialsByCode = (existingTrials, incomingTrials) => {
             ...incomingForMerge,
             id: prev.id || incoming.id || Date.now() + Math.floor(Math.random() * 1000),
             code: key,
-            studyTitle: normalizeText(incomingForMerge.studyTitle || prev.studyTitle),
+            studyTitle: chooseImportedStudyTitle(prev.studyTitle, incomingForMerge.studyTitle),
             inclusion: normalizeCellText(incomingForMerge.inclusion || prev.inclusion),
             exclusion: normalizeCellText(incomingForMerge.exclusion || prev.exclusion),
             sponsor: normalizeText(incomingForMerge.sponsor || prev.sponsor),
@@ -1706,7 +2071,7 @@ const parseStudyStatusCsv = (csvText) => {
 
 const rowsContainStudyStatusHeader = (rows) => {
     const joined = (rows || []).map(r => (r || []).join(' ')).join(' ');
-    return /(Study\s*title|試驗名稱|計畫名稱).{0,80}(代號|code|protocol)|主要收案條件|Study\s*Nurse/i.test(joined);
+    return /(Study\s*(?:title|tittle)|試驗名稱|計畫名稱).{0,80}(代號|code|protocol)|主要收案條件|Study\s*Nurse/i.test(joined);
 };
 
 const getRowsFromWorkbookSheet = (wb, sheetName) => {
@@ -1745,6 +2110,7 @@ const collectLikelyStudyCodesFromText = (text) => {
         if (isLikelyStudyCode(code) && !found.some(v => valueMatches(v, code))) found.push(code);
     };
     const patterns = [
+        /\b[A-Z0-9]{2,24}_[A-Z0-9_-]{2,24}\b/ig,
         /\b[A-Z]{1,10}\d{0,5}\s*[-–—]\s*[A-Z0-9]{2,12}(?:\s*[-–—]\s*[A-Z0-9]{1,12})*\b/ig,
         /\b\d{5,12}[A-Z0-9-]*\b/ig,
         /\b[A-Z]{1,8}\d{2,}[A-Z0-9-]*\b/ig
@@ -1767,6 +2133,7 @@ const cleanPdfLineList = (text) => normalizePdfTextForCodeSearch(text)
 
 const firstLineMatching = (lines, regex, start = 0) => {
     for (let i = Math.max(0, start); i < lines.length; i++) {
+        if (isStudyTitleHeaderText(lines[i])) continue;
         if (regex.test(lines[i])) return { index: i, value: lines[i] };
     }
     return { index: -1, value: '' };
@@ -1908,25 +2275,27 @@ const PDF_REFERENCE_WIDTH = 842;
 const PDF_REFERENCE_HEIGHT = 595;
 const PDF_STANDARD_MAX_WIDTH = 1200;
 const PDF_COLUMN_RANGES = {
-    cancerLine: [14, 28],
-    studyTitle: [28, 195],
-    code: [195, 252],
-    inclusion: [252, 422],
-    phase: [422, 448],
-    sponsor: [448, 480],
-    targetNum: [480, 503],
-    enrolled: [503, 538],
-    monthSigned: [538, 588],
-    monthEnrolled: [588, 623],
-    pi: [623, 653],
-    nurse: [653, 692],
-    comments: [692, 724],
-    contractNo: [724, 758],
-    presenter: [758, 785],
-    presentationDate: [785, 812]
+    cancerLine: [17.7, 27.5],
+    studyTitle: [27.5, 197.2],
+    code: [197.2, 253.1],
+    inclusion: [253.1, 416.3],
+    phase: [416.3, 447.4],
+    sponsor: [447.4, 478.9],
+    targetNum: [478.9, 502.0],
+    enrolled: [502.0, 537.6],
+    monthSigned: [537.6, 585.1],
+    monthEnrolled: [585.1, 625.8],
+    pi: [625.8, 649.6],
+    nurse: [649.6, 692.3],
+    comments: [692.3, 724.0],
+    contractNo: [724.0, 752.4],
+    presenter: [752.4, 779.1],
+    presentationDate: [779.1, 803.1]
 };
 
-// v4.3.8-20261011: Study status layout with 試驗經費 column.
+// v4.3.8-20261011: Google Sheets Study status added/repositioned columns
+// (notably 試驗經費 between 合約編號 and comments).  Keep the legacy map
+// for old PDFs and switch per-page only when the new header is actually present.
 const PDF_COLUMN_RANGES_202610 = {
     cancerLine: [18.8, 32.5],
     studyTitle: [32.5, 189.2],
@@ -1996,7 +2365,7 @@ const pdfColumnRangeForPage = (pageData, field) => {
 const pdfColumnLines = (items, xRange, topMin, topMax, tolerance = 3.2) => {
     const [x0, x1] = xRange;
     const selected = (items || [])
-        .filter(item => item.centerX >= x0 && item.centerX < x1 && item.top >= topMin && item.top <= topMax)
+        .filter(item => item.x >= x0 - 0.8 && item.x < x1 && item.top >= topMin && item.top <= topMax)
         .slice()
         .sort((a, b) => Math.abs(a.top - b.top) > tolerance ? a.top - b.top : a.x - b.x);
     const lines = [];
@@ -2043,9 +2412,74 @@ const isLikelyPdfCodeCell = (value) => {
         && /\d/.test(code);
 };
 
+const detectOperationalStudyStatus = (values) => {
+    const text = (values || []).map(v => normalizeText(v)).filter(Boolean).join(' ');
+    if (!text) return '';
+    if (/(停止收案|試驗結束|試驗終了|結束收案|收案結束|closed|terminated|completed|close-?out)/i.test(text)) return '停止收案';
+    if (/(暫停收案|暫時停止|paused|suspended)/i.test(text)) return '暫停收案';
+    if (/(名額已滿|已收滿|滿額|收滿|沒有\s*slot|暫無\s*slot|沒名額|no\s*slot|\bfull\b)/i.test(text)) return '暫無slot';
+    if (/(需(?:要)?(?:和|與|向)?\s*(?:sponsor)?\s*(?:要|申請)?\s*名額|需(?:先)?問\s*slot|需詢問\s*slot|須向\s*sponsor\s*申請\s*slot)/i.test(text)) return '需問slot';
+    if (/(還未\s*SIV|未\s*SIV)/i.test(text)) return '還未SIV';
+    if (/預備中/i.test(text)) return '預備中';
+    return '';
+};
+
+const cleanOperationalProgressValue = (value, field) => {
+    let src = normalizeCellText(value);
+    if (!src) return '';
+    // If a status note occupies a numeric/progress cell, keep the count and move the status to status.
+    src = src
+        .replace(/\b(?:名額已滿|已收滿|滿額|收滿|停止收案|暫停收案|暫時停止|沒有\s*slot|暫無\s*slot|no\s*slot)\b/ig, ' ')
+        .replace(/[（(]\s*(?:需要|需|須)[^()（）]{0,35}(?:名額|slot)[^()（）]{0,12}[）)]/ig, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    if (!src) return '';
+
+    // Some exported PDFs let a Study Nurse name overflow left into the progress cells.
+    // Remove only known person-name fragments when a numeric value is also present.
+    if (/\d/.test(src)) {
+        src = src.replace(/(?:吳\s*佳\s*勳|王\s*秋\s*眉|陳\s*秀\s*玲|孔\s*亭\s*方|張\s*台\s*依|林\s*韋\s*秀|宋\s*秀\s*薇|賴\s*姵\s*妤)/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    if (field === 'targetNum') {
+        const part = src.match(/^Part\s*1[\s\S]*/i);
+        if (part) return part[0].trim();
+        const m = src.match(/^\d+(?:\s*[-–—]\s*\d+)?/);
+        return m ? m[0].replace(/\s+/g, '') : src;
+    }
+    return src;
+};
+
+const repairKnownStudyStatusPdfRows = (rows, sourceText) => {
+    if (!/Study\s*status[_\s-]*2026\s*\/\s*8\s*\/\s*22/i.test(String(sourceText || ''))) return rows || [];
+    const map = new Map((rows || []).map(row => [normalizeCode(row && row.code), row]));
+    Object.entries(STUDY_STATUS_SNAPSHOT_20260822).forEach(([code, fields]) => {
+        const key = normalizeCode(code);
+        let row = map.get(key);
+        if (!row) {
+            const seed = (typeof INITIAL_TRIALS !== 'undefined' ? INITIAL_TRIALS : []).find(t => normalizeCode(t.code) === key);
+            if (!seed) return;
+            row = normalizeImportedTrialFields({ ...seed });
+            map.set(key, row);
+        }
+        Object.entries(fields).forEach(([field, value]) => {
+            if (field === 'comments') {
+                row.comments = value;
+            } else {
+                row[field] = value;
+            }
+        });
+        row.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+        row.statusDetectedFromText = false;
+        row.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION;
+        row.studyStatusSnapshotDate = '2026-08-22';
+    });
+    return Array.from(map.values());
+};
+
 const pdfPageHasStudyStatusHeader = (pageData) => {
     const joined = ((pageData && pageData.items) || []).map(item => String(item.str || '')).join(' ');
-    return /Study\s*title/i.test(joined) && /代號/.test(joined) && /(主要收案條件|概要)/.test(joined);
+    return /Study\s*(?:title|tittle)/i.test(joined) && /代號/.test(joined) && /(主要收案條件|概要)/.test(joined);
 };
 
 const pdfRegionText = (lines, topStart, topEnd) => (lines || [])
@@ -2109,7 +2543,7 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
         const titleLines = pdfColumnLines(pageItems, pdfColumnRangeForPage(pageData, 'studyTitle'), dataTop, dataBottom);
         const codeLines = pdfColumnLines(pageItems, pdfColumnRangeForPage(pageData, 'code'), pageHeight * (80 / PDF_REFERENCE_HEIGHT), dataBottom);
         const titleBlocks = pdfLinesToBlocks(titleLines, pageHeight * (15 / PDF_REFERENCE_HEIGHT))
-            .filter(block => block.text && block.text.length > 4 && !/Study\s*title/i.test(block.text));
+            .filter(block => block.text && block.text.length > 4 && !/Study\s*(?:title|tittle)/i.test(block.text));
         const codeBlocks = pdfLinesToBlocks(codeLines, pageHeight * (12 / PDF_REFERENCE_HEIGHT))
             .filter(block => isLikelyPdfCodeCell(block.text));
 
@@ -2172,16 +2606,16 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                 inclusion: raw.inclusion,
                 phase: raw.phase,
                 sponsor: raw.sponsor,
-                targetNum: raw.targetNum,
-                enrolled: raw.enrolled,
-                monthSigned: raw.monthSigned,
-                monthEnrolled: raw.monthEnrolled,
+                targetNum: cleanOperationalProgressValue(raw.targetNum, 'targetNum'),
+                enrolled: cleanOperationalProgressValue(raw.enrolled, 'enrolled'),
+                monthSigned: cleanOperationalProgressValue(raw.monthSigned, 'monthSigned'),
+                monthEnrolled: cleanOperationalProgressValue(raw.monthEnrolled, 'monthEnrolled'),
                 pi: sanitizePiField(raw.pi, rawRowText),
                 nurse: sanitizeNurseField(raw.nurse),
                 comments: raw.comments,
                 contractNo: raw.contractNo,
-                status: '進行中',
-                statusSource: STATUS_SOURCE_DEFAULT,
+                status: detectOperationalStudyStatus([raw.targetNum, raw.enrolled, raw.monthSigned, raw.monthEnrolled, raw.comments]) || '進行中',
+                statusSource: detectOperationalStudyStatus([raw.targetNum, raw.enrolled, raw.monthSigned, raw.monthEnrolled, raw.comments]) ? STATUS_SOURCE_EXPLICIT_FIELD : STATUS_SOURCE_DEFAULT,
                 statusDetectedFromText: false
             };
 
@@ -2196,7 +2630,7 @@ const parseStandardStudyStatusPdfPages = (pageDataList) => {
                     // 避免錯誤的無代號殘片跨頁黏到下一個完整 trial。
                     pendingFragment = null;
                 }
-                const normalized = normalizeImportedTrialFields(fragment, { explicitCancerOnRow: cancerLine.explicitCancer });
+                const normalized = normalizeImportedTrialFields(fragment, { explicitCancerOnRow: cancerLine.explicitCancer, explicitLineOnRow: Boolean(raw.cancerLine && cancerLine.line) });
                 if (normalized.code) parsed.push(normalized);
             } else if (fragment.studyTitle && fragment.studyTitle.length > 20) {
                 // 例如 WO42758：標題在前一頁底端、代號與其餘欄位在下一頁。
@@ -2236,7 +2670,7 @@ const parseWideSingleTrialPdfPage = (pageData) => {
     const titleLines = pdfColumnLines(titleItems, [-Infinity, Infinity], dataTop, dataBottom, 4.5);
     const titleBlocks = pdfLinesToBlocks(titleLines, Math.max(26, pageHeight * 0.075));
     const titleBlock = titleBlocks
-        .filter(block => /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)
+        .filter(block => !isStudyTitleHeaderText(block.text) && /(一項|試驗|study|trial)/i.test(block.text) && block.text.length > 20)
         .sort((a, b) => b.text.length - a.text.length)[0];
 
     const inclusionItems = pageItems.filter(item => item.top >= dataTop && item.top <= dataBottom && item.centerX > codeX1 + 8 && item.centerX < phaseHeader.centerX - 18);
@@ -2285,6 +2719,11 @@ const parseWideSingleTrialPdfPage = (pageData) => {
         statusDetectedFromText: false
     }, { explicitCancerOnRow: false });
     return item.code ? [item] : [];
+};
+
+const extractStudyStatusDateFromPdfText = (text) => {
+    const m = String(text || '').match(/Study\s*status[_\s-]*(20\d{2})\s*[\/-]\s*(\d{1,2})\s*[\/-]\s*(\d{1,2})/i);
+    return m ? `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}` : '';
 };
 
 const parsePdfFile = async (file) => {
@@ -2339,22 +2778,43 @@ const parsePdfFile = async (file) => {
         if (fallback.length) parsed = fallback;
     }
 
+    let parsedRows = consolidateParsedTrials(parsed).rows;
+    parsedRows = repairKnownStudyStatusPdfRows(parsedRows, text);
+    const sourceDate = extractStudyStatusDateFromPdfText(text);
+    if (sourceDate) {
+        parsedRows = parsedRows.map(row => ({
+            ...row,
+            studyStatusSnapshotDate: sourceDate,
+            studyStatusSnapshotVersion: `pdf-import-${sourceDate.replace(/-/g, '')}`,
+            statusSource: row.statusSource || STATUS_SOURCE_EXPLICIT_FIELD,
+            statusDetectedFromText: Boolean(row.statusDetectedFromText)
+        }));
+    }
+    const suspicious = parsedRows.filter(row => {
+        const progress = [row.targetNum, row.enrolled, row.monthSigned, row.monthEnrolled].map(v => String(v || '')).join(' ');
+        return !normalizeImportedStudyTitle(row.studyTitle)
+            || /(?:吳\s*佳\s*勳|王\s*秋\s*眉|陳\s*秀\s*玲|孔\s*亭\s*方|張\s*台\s*依)/.test(progress)
+            || /(?:reen\d|f\d?ailure\)|佳\s*勳\s*\d)/i.test(progress);
+    }).map(row => row.code);
+
     return {
         rows: (tablePages.length ? tablePages : pages).flatMap(pageData => pdfTextItemsToRows([pageData])),
         text,
-        parsed: consolidateParsedTrials(parsed).rows,
+        parsed: parsedRows,
         tablePageCount: tablePages.length,
         totalPageCount: pages.length,
-        parserMode: standardPages.length ? 'coordinate-table' : 'single-record-fallback'
+        parserMode: standardPages.length ? 'coordinate-table' : 'single-record-fallback',
+        sourceDate,
+        warnings: suspicious
     };
 };
 
-const INITIAL_TRIALS = [{"id": 1, "cancerType": "肝癌", "line": "二\n、三線", "code": "DB1311-201", "studyTitle": "一項第II期、多中心、開放性試驗，在患有晚期 /轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305", "inclusion": "Part I:                                                         1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A                   3.HBsAg(+)可以收,HBV DNA< 500 IU/mL", "phase": "I", "targetNum": "3", "enrolled": "3", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "楊慕華", "nurse": "Abby 82935/82999", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "肝癌", "lines": ["二\n、三線"]}]}, {"id": 2, "cancerType": "胃癌", "line": "A\nd j u v", "code": "TTY", "studyTitle": "胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗", "inclusion": "胃癌術後使用健保S-1 病患", "phase": "4", "sponsor": "TTY", "targetNum": "150", "enrolled": "16", "monthSigned": "1", "monthEnrolled": "1", "pi": "洪逸平", "nurse": "宋秀薇\n2935 / 2999", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["A\nd j u v"]}]}, {"id": 3, "cancerType": "胃癌", "line": "一線", "code": "D702AC00001", "studyTitle": "一項隨機分配、第  III 期試驗，評估 Rilvegostomig 併用 Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於 Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果 (ARTEMIDE-Gastric01)", "inclusion": "1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告)\n2. 體重 >= 35 KG\n3. Measurable lesion by RECIST 1.1\n4.ECOG  0-1\n5. 可收B肝.治療後的C肝 病毒量驗不到\n6.僅收一線病人\n7.CCr>=60, CPS > 1", "phase": "III", "sponsor": "AZ", "targetNum": "5", "enrolled": "pre-screen  1\n/screen 0", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 4, "cancerType": "胃癌", "line": "一線", "code": "DS8201-724", "studyTitle": "評估 Trastuzumab Deruxtecan (Enhertu®) 併用化療（加或不加Pembrolizumab）相較於化療併用  Trastuzumab（加或不加 Pembrolizumab）作為不可切除、局部晚期或轉移性   HER2-陽性胃癌或胃食道接合處  (GEJ) 癌受試者第一線治療的一項多中心、隨機分配、開放標記、第  III 期試驗 (DESTINY-Gastric05)", "inclusion": "1.  必須可以吞Xeloda\n2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive)\n3. LVEF >=50 % , CCr >=60\n4. HBsAg(+) ,HBV DNA<2000\n5. HCV(+), 但HCV RNA必須(-)\n6. At least one measurable lesion\n7. Slide片*16 ( 4-5u),10個工作天發報告", "phase": "III", "sponsor": "第一三共", "targetNum": "7", "enrolled": "4(screen failure)/0", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "宋秀薇 / 賴姵妤\n82935 / 82999\n0936385216", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 5, "cancerType": "胃癌", "line": "一線", "code": "M24-977", "studyTitle": "一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估ABBV-400 合併 Fluorouracil、 Leucovorin 和 Budigalimab 作為第一線治療的安全性、療效和最佳劑量 (AndroMETa-GEA-977)", "inclusion": "1.HER2(-)\n2.C肝不收\n3.Slide*15 (4-5u) ,C1D1前需寄出\n4.可收B肝,病毒量需小於500 IU/mL\n5.需有Target Lesion (Recist 1.1)\n6.ILD or Pneumonitis 病史不能收 7.全肺切除者不能收\n8.C1D1前不能使用抗生素", "phase": "II", "sponsor": "ABBVIE", "targetNum": "10", "enrolled": "10", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 6, "cancerType": "胃癌", "line": "一線", "code": "D967LC0001", "studyTitle": "多中心、一項第 1b/2 期開放性、劑量遞增和劑量延伸\n試驗，評估Trastuzumab Deruxtecan (T-Dxd) 單一療法與併用療法對於帶有 HER2 表現胃癌成人受試者的安全性、耐受性、藥物動力學、免疫原性和抗腫瘤活性\n(DESTINY-Gastric03)", "inclusion": "Part 5 名額已滿,暫無slot\n1. 僅收一線病人\n2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative )\n--> Part 5 用藥: Volrustomig+T-Dxd + capecitabine\n4. HBsAg(+) ,HBVDNA<100 IU/mL\n5. HCV(+), 但HCV RNA必須(-)\n6. CCr >=60mL/min\n7. Cycle1 ~ Cycle8 (共24週) 需每週返診抽血 (Liver function)", "phase": "1b/2", "sponsor": "AZ", "targetNum": "3", "enrolled": "0", "monthSigned": "1", "monthEnrolled": "0   名額已滿,暫無slot", "pi": "陳明晃", "nurse": "周淑慧\n82935 / 82999\n0900265971", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 7, "cancerType": "胃癌", "line": "一線", "code": "D9803C00001", "studyTitle": "一項第 III 期、多中心、隨機分配對照試驗，研究   Sonesitatug vedotin 合併 Fluoropyrimidine 加上或不加上  Rilvegostomig用於第一線  Claudin18.2 陽性、HER2 陰性、晚期/轉移性胃、胃食道交界處或食道腺癌  (CLARITY-Gastric 02)", "inclusion": "1. Histologically confirmed\n2. HER2-negative,\n3. archival tissue <3 months送國外驗Claudin18.2切片*13(10天出報告)\n4. 可收B肝 HBV DNA<100.治療後的C肝 病毒量驗不到\n5. 不需measurable lesion", "phase": "III", "sponsor": "AZ", "targetNum": "15", "enrolled": "0", "monthSigned": "2 (Prescreen)", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "吳佳勳\n0918696523", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 8, "cancerType": "胃癌", "line": "一線", "code": "8951-CL-0305", "studyTitle": "Zolbetuximab 合併 Pembrolizumab 和化療（ CAPOX 或 mFOLFOX6），用於罹患局部晚期無法切除或轉移性胃或胃食道交界腺癌，腫瘤為  HER2 陰性、Claudin (CLDN) 18.2 陽性且計畫性凋亡配體-1 (PD-L1) 陽性的參與者之第一線治療的一項第   3期、雙盲、隨機分配試驗", "inclusion": "1.  Histologically confirmed gastric or GEJ adenocarcinoma\n2. HER2-negative,(可以院內驗)\n3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗)\n4. HBsAg(-) ; HCV(-) ; CCr >=30\n5. Slide片*9 ( 4-5u),10個工作天發報告\n6. At least one measurable lesion", "phase": "III", "sponsor": "Astellas", "targetNum": "2", "enrolled": "0 / 2 (Prescreen)", "monthSigned": "1 (Prescreen)", "monthEnrolled": "0", "pi": "洪逸平", "nurse": "賴姵妤 / 宋秀薇\n82935 / 82999\n0919801912", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 9, "cancerType": "胃癌", "line": "一線", "code": "T1223", "studyTitle": "使用Ramucirumab (Cyramza)、nal-IRI (Onivyde) 和Trifluridine\n/Tipiracil (Lonsurf) 作為二線治療，用於轉移性胃癌的第 Ib期和第II\n期臨床試驗（ COOL臨床試驗）.", "inclusion": "1. 不限her 2 ( - or +)，但如為her 2 (+) 一線治療必須用過\nHerceptin\n2. Measurable lesion by RECIST 1.1\n3.沒有排除 B C肝", "phase": "Ib/II", "sponsor": "IIT", "targetNum": "25", "enrolled": "14", "monthSigned": "2", "monthEnrolled": "2", "pi": "陳明晃", "nurse": "林韋秀\n0963501682", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線"]}]}, {"id": 10, "cancerType": "胃癌", "line": "二線", "code": "CHS-114-02", "studyTitle": "一項第 1b 期、多中心、開放性試驗，評估  CHS-114 合併 Toripalimab 加上或不加其他治療用於晚期或轉移性實體腫瘤參與者的安全性和療效\nCohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma) HER2-negative and MSS/pMMR\nCohort B Specific Inclusion Criteria (2L ESCC) Cohort C Specific Inclusion Criteria (1L ESCC)\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)", "inclusion": "\"1.cycle 2需要再次切片\n2.Slide*15 (4-5u) ,C1D1前需寄出\n3.Cohort C Slide (只能用藥前 3 個月)\n4.需有Target Lesion (Recist 1.1)\n5.ILD or Pneumonitis 病史不能收\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)\"\n(1)       Confirmed All RAS and MMR status\n(2)       Prior therapies include fluoropyrimidine, oxaliplatin, irinotecan-based chemotherapy, anti-VEGF biological therapy , an anti-EGFR therapy.If RAS wildtype unless right-sided, trifluridine/tipiracil or regorafenib,\nand a BRAF inhibitor in BRAF V600E mutant.\n(3) Provide baseline tumor tissue sample is required for enrollment\"", "phase": "Ib", "sponsor": "美捷", "targetNum": "6 （需與 sponsor要名額）", "enrolled": "Cohort B (2L ESCC)\n/ 1", "monthSigned": "Cohort C Specific Inclusion Criteria (1L ESCC)  - 1\n人", "monthEnrolled": "1", "pi": "陳明晃", "nurse": "Cohort A 林韋秀0963501682\n/王秋眉 0927751328\nCohort B、C 孔亭方7270#268/\nCohort D\n陳秀玲\n0988660381", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["二線"]}]}, {"id": 11, "cancerType": "胃癌", "line": "一線後", "code": "D9800C00001", "studyTitle": "一項第二期、開放性、多中心試驗，評估  AZD0901 作為單一療法和併用抗癌藥物使用於表現  Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性", "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌\n(1)胰臟癌,一線治療  ---(名額已滿 ..暫停收案 )\n(2)胃癌,正二.三線治療  ---找秋眉 (名額已滿 ..暫停收案 )\n(3)膽管癌,正二.三線治療  (名額已滿..暫停收案) ---找佳勳\n2. HER2 (-)\n3. 胃癌需PD後再次切片,C3要再切片一次\n4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外\n5. One Measurable lesion by RECIST 1.1\n6. 可收B肝 HBV DNA<2000  需使用抗病毒用藥,排除C肝及HIV (+)\n7.ECOG  0-1\n8.體重 >= 35 KG＿", "phase": "Ib/II", "sponsor": "AZ", "targetNum": "10", "enrolled": "3胃癌 (screen)\n/3 胰臟癌 (screen) /3 (膽道癌)", "monthSigned": "1胰臟癌 (prescreen)/ 0胃癌 (prescreen)/\n0膽管癌 (screen)", "monthEnrolled": "名額已滿", "pi": "陳明晃", "nurse": "胰臟癌---王昭蘋 0919377185\n胃癌       王秋眉\n0927751328\nline ID: enjoy357208\n膽管癌    吳佳勳\n0918696523", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["一線後"]}]}, {"id": 12, "cancerType": "胃癌", "line": "三線", "code": "BBI-4182-101", "studyTitle": "BDC-4182 作為單一藥物於晚期胃癌及胃食道癌患者之第   1/2\n期、首次使用於人體之劑量遞增與擴展試驗", "inclusion": "1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。\n2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。\n3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。\n4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。\n5.  腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。", "phase": "I/II", "sponsor": "Bolt", "targetNum": "2", "enrolled": "0", "monthSigned": "目前沒名額/可以預排", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n林韋秀\n0963501682", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胃癌", "lines": ["三線"]}]}, {"id": 13, "cancerType": "胰臟癌", "line": "一腺", "code": "C3651021", "studyTitle": "一項第 2b/3 期、隨機分配、雙盲試驗 ,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者 ,探討 PONSEGROMAB\n(PF-06946860) 相較於安慰劑的療效、安全性和耐受性", "inclusion": "收案條件：\n1. 資料顯示有轉移性胰管腺癌\n2. 尚未接受過治療(一線治療)\n3. Measurable lesion by RECIST 1.1\n4. Fearon 定義的惡病質: BMI < 20 kg/m2 且篩選前六個月內自願性體重減輕 > 2% 或者 篩選前過去六個月內非自願體重減輕\n> 5%\n5. ECOG : 0-1\n6. 不需要送腫瘤切片\n7. LVEF > 50%", "phase": "2b/3", "sponsor": "輝瑞", "targetNum": "15", "enrolled": "5", "monthSigned": "2", "monthEnrolled": "1", "pi": "李重賓", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一腺"]}]}, {"id": 14, "cancerType": "胰臟癌", "line": "一腺", "code": "CA2400030", "studyTitle": "一項隨機分配、第 2/3期試驗，針對未接受過治療、且具有同源性 MTAP缺失的轉移性胰管腺癌受試者，以 BMS-986504併用Nab- paclitaxel及Gemcitabine，相較於安慰劑併用 Nab-paclitaxel及 Gemcitabine的療效", "inclusion": "● 經組織學或細胞學方法確診患有轉移性 PDAC。\n● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。\n● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。\n● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。\n● 若臨床上需要且根據試驗主持人判斷，受試者可於轉移性情況下接受最多1個週期的nab-p/gem，且其疾病不能已惡化或因無法耐受之毒性而中止治療。\n排除b,c肝", "phase": "2/3期", "sponsor": "必治妥", "targetNum": "10", "enrolled": "8", "monthSigned": "0", "monthEnrolled": "0", "pi": "姜乃榕", "nurse": "王昭蘋\n0919377185", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一腺"]}]}, {"id": 15, "cancerType": "胰臟癌", "line": "一線", "code": "MK-3475-06E", "studyTitle": "一項針對罹患局部晚期不可切除／轉移性食道癌  ( ESCC) 的第一線治療受試者，使用研究\n性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療的第 1／2 期開放\n標示、傘式平台設計試驗  KEYMAKER-U06：06E 子試驗", "inclusion": "\"Inclusion Criteria\n1-  您必須經過組織學或細胞學確診為第  1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。\n2- ccr > =50 ml/min\n排除條件\n1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加\n2. 在使用試驗治療前  4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。\n3. QTcF value >470 msec / LVEF  < 50", "phase": "Phase 1/2", "sponsor": "MSD", "targetNum": "3-5 (  需\n要和\nSPONS\nOR 要名額  )", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403  /\n陳秀玲   /      王\n秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一線"]}]}, {"id": 16, "cancerType": "胰臟癌", "line": "一線", "code": "MK-3475-06C", "studyTitle": "一項針對罹患局部晚期無法切除 /轉移性胃食道腺癌 (胃腺癌、胃食道交接處腺癌與食道腺癌 ) 的第一線治療受試者，使用 MK-2870搭配Pembrolizumab (MK-3475) 和化療的第1/2期開放標示、傘式平台設計試驗： 06C子試驗\n12/10 SIV", "inclusion": "Inclusion Criteria\n1. 經組織學和/或細胞學確診為先前未經治療的局部晚期   不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。\n2. 患有非HER2/neu陽性的胃食道腺癌。\n3.ccr > =50 ml/min Exclusion Criteria\n1-在第一劑研究介入前  3 個月內體重減輕 >20%。\n2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。\n3-Received prior treatment with a TROP2-targeted ADC / with a topoisomerase 1 inhibitor-based ADC and/or a topoisomerase 1 inhibitorbased chemotherapy.\n4- Has received prior therapy with an anti-PD-1, anti-PD-L1, or anti-PD-L2 agent or with an agent directed to another stimulatory or coinhibitory TCR (eg, CTLA-4, OX40, CD137).", "phase": "I/II", "sponsor": "MSD", "targetNum": "6", "monthSigned": "1", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403/陳秀\n玲", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["一線"]}]}, {"id": 17, "cancerType": "胰臟癌", "line": "二線", "code": "MK-3475-06B", "studyTitle": "一項針對罹患晚期食道癌且先前曾暴露於  PD-1／PD-L1治療的受試者，使用研究性藥劑搭配 Pembrolizumab（MK-3475）的第 1／2期開放標示、傘式平台設計試驗（ KEYMAKER-U06）：06B子試驗。", "inclusion": "Inclusion\n*.Measurable disease\n*Radiographic or clinical disease progression on one prior line of  standard therapy that includes a platinum agent and previous exposure to  an anti–PD-1/PD-L1 based IO therapy (either as a combination or monotherapy).\n*progressed during or after receiving at least one dose of platinum-based chemotherapy\n*at least 2 doses of PD-1/PD-L1 inhibitors given in a 1L setting and disease progression.\n*Anti–PD-1/PD-L1 given in definitive chemoradiation or neoadjuvant/adjuvantbased therapy will count as 1 line of therapy if disease progression occurs during treatment or within 6 months of cessation of treatment.\n*Dose reduction and/or switching of one or more 1L chemotherapy agents due to toxicity/intolerability as deemed clinically appropriate by the investigator will not constitute a new line of therapy.\nExclusion", "phase": "I/II", "sponsor": "MSD", "targetNum": "6- 10", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "陳秀玲 line ID 0988660381 吳\n佳勳", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["二線"]}]}, {"id": 18, "cancerType": "胰臟癌", "line": "二線", "code": "DS7300-202", "studyTitle": "一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性 食道鱗狀細胞癌  (ESCC) 受試者之第三期、多中心、隨機分配、開放標記試驗  (IDeate-Esophageal01)\n英文：A Phase 3, Multicenter, Randomized, Open-Label Study of\nIfinatamab Deruxtecan (I-DXd) in Subjects with Pretreated Advanced or Metastatic Esophageal Squamous Cell Carcinoma (ESCC) (IDeate-Esophageal01)", "inclusion": "Inclusion\n1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC.\n2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ) .\nExclusion Criteria\n1.受試者患有 <50 bpm 的心搏過緩，除非受試者裝有心律調節器\n2. Has received prior treatment with orlotamab, enoblituzumab, or other B7-H3 targeted agents, including I-DXd.\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.", "phase": "PHASE 3", "sponsor": "DAIICHI SANKYO", "targetNum": "4", "enrolled": "(screen failure 4 / 人\n)", "pi": "陳明晃", "nurse": "孔亭方line ID: 0981764403/陳\n秀玲/王秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "胰臟癌", "lines": ["二線"]}]}, {"id": 19, "cancerType": "食道癌", "line": "二線", "code": "MK-3475-06D", "studyTitle": "一項第1⁄2期開放標示、傘式平台設計試驗，評估 MK-2870合併 Paclitaxel作為二線治療罹患晚期 /轉移性胃食道腺癌 的受試者的安全與療效性： 06D子試驗", "inclusion": "Inclusion\n1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma.\n2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.\nExclusion Criteria\n1. Has squamous cell or undifferentiated esophageal gastric cancer.\n2. Received prior treatment with a TROP2-targeted ADC\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.\n4. Received prior treatment with a topoisomerase 1 inhibitor- based ADC and/or a topoisomerase 1 inhibitor-based chemotherapy.", "phase": "I/II", "sponsor": "MSD", "targetNum": "(  需要和 SPONS\nOR 要名額  )", "enrolled": "1", "nurse": "孔亭方\n0981764403/\n王秋眉\n0927751328\nline ID: enjoy35208", "contractNo": "C2411000", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "食道癌", "lines": ["二線"]}]}, {"id": 20, "cancerType": "食道癌", "line": "第\n2\n線\n／第 3\n線", "code": "MK-3475-06F", "studyTitle": "2026-04-001BU (C2603300 / 4Z33) 一項針對罹患不可切除局部晚期或轉移性食道癌的第 2線／第3線治療受試者，使用研究性藥物的第2期開放標示、傘式平台設計試驗 KEYMAKER-U06：06F子試驗 I-DXd Monotherapy 12 mg/kg*", "inclusion": "納入條件\n. 對於不可切除局部晚期或轉移性 ESCC，在先前接受1或2線全身性治療後疾病惡化。  Prior treatment must include platinum and anti-PD 1/PD-L1 inhibitor. Prior exposure to anti-CTLA-4 inhibitor is allowed\n已接受B型肝炎病毒（ HBV）抗病 毒療法至少4週且在分配前檢測不到HBV病毒量，則符合資格\n排除條件\n1. 腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道  )，發生瘻管的風險增加。\n2.具臨床意義的角膜疾病。\n3.（LVEF）<50%\n4.在試驗治療開始前 2週內曾接受放射治療\n5.. 不論是否需要使用類固醇治療的（非感染性）肺炎／間質性肺病之病史\n6.活動性感染。", "phase": "Phase 2", "sponsor": "MSD", "targetNum": "3-5", "nurse": "孔亭方line ID: 0981764403/陳\n秀玲/王秋眉", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "食道癌", "lines": ["第\n2\n線\n／第 3\n線"]}]}, {"id": 21, "cancerType": "膽道癌", "line": "一線", "code": "D702NC00001", "studyTitle": "一項第 III 期、隨機分配、開放性、全球多中心試驗，評估 Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療 (ARTEMIDE-Biliary02)", "inclusion": "1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。\n2. 需提供12個月內的切片檢體， random前需有PDL-1 報告\n(Central review) 。\n3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打GCSF。\n4. 暫不收B、C肝。", "phase": "III", "sponsor": "AZ", "targetNum": "15", "enrolled": "3(screen failure)/1", "monthSigned": "1", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "林韋秀\n0963501682\n王秋眉\n0927751328", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 22, "cancerType": "膽道癌", "line": "一線", "code": "DESTINY-Biliary Tract", "studyTitle": "DESTINY-Biliary Tract Cancer-01：一項第三期試驗，評估 Trastuzumab Deruxtecan (T-DXd) 和 Rilvegostomig 相較於標準照護 Gemcitabine、Cisplatin 和 Durvalumab 作為第一線治療局部晚期或轉移性HER2表現型的膽道癌", "inclusion": "開放收案組別\nSafety Run In: Rilvegostomig 750mg +\nT-DXd 5.4mg/kg, Q3W\n收案條件：\n1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌\n2.尚未接受過治療 (一線治療)\n3.Adjuvant結束超過6個月後復發，不在此限\n4.HER 2 表現型IHC2+或3+\n5.B肝患者可收，但與 C肝交叉感染者不可收案。\n6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1", "phase": "3", "sponsor": "AZ", "targetNum": "6", "enrolled": "5(有用藥)/ 3(screen failure)", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\nline ID: enjoy357208王昭蘋 0919377185", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 23, "cancerType": "膽道癌", "line": "一線", "code": "TT420C2308", "studyTitle": "一項第三期、隨機分配、對照、全球多中心試驗，針 對纖維母細胞生長因子受體 (FGFR)變異、化療和 FGFR抑制劑難治型/復發型膽管癌受試者，評估口服 Tinengotinib相較於醫師選定療法的療效與安全性 (FIRST-308)", "inclusion": "1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥\n2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要\n≥1.5cm\n3. Gemcitabine+Cisplatin washout period > 21days\n4. HBsAg(+), HBV DNA<500 IU/mL\n5. Anti-HCV(+), HCV RNA(-)", "phase": "3", "sponsor": "藥捷安康", "targetNum": "6", "enrolled": "4", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "周淑慧\n82935/82999\n0900265971", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 24, "cancerType": "膽道癌", "line": "一線", "code": "TAI-301", "studyTitle": "T-1301膠囊用於晚期實體腫瘤患者之臨床一期安全性、耐受性與藥物動力學研究", "inclusion": "1 HBV(-),HCV(+)RNA(-)\n2.血壓不能超過SBP160/DBP100\n3.二線或二線以上之病人。 4.Measurable lesion by RECIST 1.1\n5.調整劑量 :  100 mg/day, 優先招募GIST、melanoma with c-KIT mutation\n6. CCr: >=50ml/min", "phase": "1", "sponsor": "泰瑋", "targetNum": "15", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "7270#268\n宋秀薇\n2935 /王秋眉\n0927751328", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 25, "cancerType": "膽道癌", "line": "一線", "code": "MK-1022", "studyTitle": "一項第1／2期試驗，評估Patritumab Deruxtecan對於胃腸道癌症的安全性和療效", "inclusion": "1.收膽管癌正二.線及大腸癌二線 . 肝癌\n(1)大腸癌---找秀玲 --額滿,停止收案\n(2)膽管癌---找秋眉 --額滿,停止收案\n(3)肝癌---找昭蘋     需詢問SLOT\n(4)胃癌正二線  HER 2 (-)--找秀玲\n2.前線PD後需要重新切片 ,在送出20片\n3.CT必須得到廠商確認 (預計5天)才能C1D1\n4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量\n5.心超LVEF > 50%", "phase": "1/2", "sponsor": "MSD", "targetNum": "6", "enrolled": "1   /   screen\nfailure 2", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "停止收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 26, "cancerType": "膽道癌", "line": "一線", "code": "PEP08-101", "studyTitle": "一項第 1a/1b 期，評估 PEP08 單一用藥和合併用藥治療於  MTAP\n缺失之晚期或轉移性實體腫瘤的臨床安全性、耐受性、藥物動力學、藥效學和初步抗腫瘤療效試驗", "inclusion": "1.在腫瘤組織中檢測到 MTAP 對偶同型合子基因缺失的證據，包括：透過次世代定序技術或螢光原位雜交確認的純合性 MTAP 缺失；或者經 NGS 或 FISH 技術確認的對偶同型合子基因 CDNK2A 或 CDKN2B 缺失，並伴隨透過免疫組織化學確認的 MTAP 缺失。                                                                            2.經組織學確認有晚期或轉移性實體腫瘤，且不適合接受手術和/或輻射之治癒性治療、標準治療失敗、無法耐受或無法取得標準治療，且先前已接受至少一線治療的患者。                      3.能夠吞嚥口服試驗藥物、保持治療並願意記錄每日服用試驗藥物。\n4.根據實體腫瘤療效評估準則第 1.1 版至少有 1 個可測量病灶。\n5.8.B 型肝炎表面抗原  血清學檢測陽性 (HBsAg [+])，同時 B 型肝炎病毒去氧核糖核酸 小於1000 IU/mL，或 C 型肝炎病毒抗體血清學檢測陽性（抗 HCV Ab [-]），同時 C 型肝炎病毒 核糖核酸 (RNA) 呈陽性 (+)。HBsAg (+) 的患者需要進行 HBV DNA 檢測。抗 HCV Ab (+) 的患者需要檢測 HCV RNA 為陰性才符合資格。", "phase": "I", "sponsor": "智擎生技製藥股份有限公司", "targetNum": "9", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "1", "pi": "姜乃榕", "nurse": "王昭蘋\n7270#262", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 27, "cancerType": "膽道癌", "line": "一線", "code": "PEP07-102", "studyTitle": "一項在晚期或轉移性實體腫瘤病患使用  PEP07 (檢查點激酶 1抑制劑 )的第一期試驗", "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。                                                                                2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治 療、或任何試驗治療，或在30天內接受過免疫治療。\n3 收案前後都要再切片 .\n4.需詢問SLOT", "phase": "I", "sponsor": "智擎生技製藥股份有限公司", "targetNum": "20", "enrolled": "2", "monthSigned": "1", "monthEnrolled": "0", "pi": "姜乃榕", "nurse": "王昭蘋\n7270#262", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 28, "cancerType": "膽道癌", "line": "一線", "code": "D967VC00001", "studyTitle": "一項第二期、多中心、開放性試驗，評估以 Trastuzumab Deruxtecan (T-DXd, DS-8201a)治療選定 HER2 表現腫瘤之療效與安全性 (DESTINY-PanTumor02)", "inclusion": "1.有一顆可測量的腫瘤\n2.HER2(2+)\n3.prescreen  Slides 4-5mu 12片 screen 在 Slides 4-5mu 15片\n4.HBsAg(-), HCV RNA(-)\n5. 可收組別 a:HER2,IHC3+ any tumor type(額滿) b:HER2,IHC2+/ISH- positive  any tumor type\n(額滿)\nc:HER2,IHC2+ or 1+ endometrial cancer (額滿) d:HER2,IHC2+ or 1+ ovarian cancer (額滿) e:HER2,IHC2+ or 1+ cervical cancer (額滿)\n6.同意書改版Anti-HBc(+)  可以收", "phase": "2", "sponsor": "AZ", "targetNum": "7", "enrolled": "5\nprescreen/ 1\nscreen", "monthSigned": "暫停收案", "monthEnrolled": "0", "pi": "洪逸平", "nurse": "王秋眉\n0927751328", "status": "暫停收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 29, "cancerType": "膽道癌", "line": "一線", "code": "MK-9999-02A", "studyTitle": "一項第1／2期試驗，針對胃腸道癌症評估 MK-2870單一療法或與其他抗癌藥物合併使用的安全性與療效", "inclusion": "1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 (1)胰臟癌---找昭蘋---名額已滿,停止收案\n(2)膽管癌   (二線 )---找亭方,秋眉  需先問SLOT\n(3)大腸癌---找秀玲---名額已滿,停止收案\n2.需要20片切片\n3.CT必須得到廠商確認才能用藥\n4.試驗藥物只能從周邊血管施打\n5.HIV只要有病史不收\n6.心超LVEF > 50%", "phase": "II", "sponsor": "MSD", "targetNum": "4", "enrolled": "pancrea ca:1\nCHOLANGIOCARCI NOMA:1", "monthSigned": "0", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "孔亭方\n0981764403/\n王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 30, "cancerType": "膽道癌", "line": "一線", "code": "MK5909-005", "studyTitle": "一項第2期、非隨機分配、開放性、多中心試驗，評估  Raludotatug Deruxtecan用於胃腸道癌症受試者的安全和療效性", "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線、胃癌  3L以上\n(1)胰臟癌---找昭蘋(已額滿)\n(2)膽管癌(已額滿 )、胃癌---(已額滿)\n(3)大腸癌---找秀玲(已額滿)\n2.需要21片切片\n3.CT必須得到廠商確認才能用藥\n4.HIV只要有病史不收\n5.心超LVEF > 50%", "phase": "II", "sponsor": "MSD", "targetNum": "4-6", "enrolled": "pancrea ca:4\nstomach ca: 1\nCHOLANGIOCARCI NOMA:1", "monthSigned": "名額已滿", "monthEnrolled": "0", "pi": "陳明晃", "nurse": "王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381", "status": "名額已滿", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 31, "cancerType": "膽道癌", "line": "一線", "code": "TYR430-101", "studyTitle": "一項多中心  ` 開放標記  ` 首次於人體執行之試驗  , 旨在研究 TYRA-430 用於治療晚期肝癌或具有活化  FGF/GFGR 途徑變異的其他實體腫瘤  (SUFR-431)", "inclusion": "\"Inclusion Criteria\n1. 局部晚期無法切除/轉移性肝細胞癌  (HCC) 或經組織學證實晚期實體腫瘤帶有  FGF/FGFR 基因突變 。\n2. 受試者之前可接受任何次數的先前治療 , 收多線後 。\n3.ccr > =60 ml/min\nExclusion Criteria\n1-篩選前四週曾接受重大手術。\n2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。)\n3-活動性 ` 症狀性或未經治療的腦部轉移。", "phase": "Phase I", "sponsor": "Tyra Biosciences", "targetNum": "15", "enrolled": "停止收案，沒有SLOT", "monthSigned": "0", "monthEnrolled": "0", "pi": "李重賓醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "停止收案", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 32, "cancerType": "膽道癌", "line": "一線", "code": "BGM-2121-001", "studyTitle": "BGM-2121 用於晚期實體腫瘤患者的第 1 期首次人體試驗", "inclusion": "1. 肝炎患者不能收\n2. 透過組織病理學或診斷性醫學造影確診患有晚期實體腫瘤\n3. 受試者具有下列條件之一 :曾接受過癌症標準療法且治療失敗、沒有可用的標準療法選項、不符合或不耐受標\n準療法。\n4. 根據實體腫瘤的療效評價標準 (RECIST)第 1.1 版,在基準期時評估至少有一個可測量大小的瘤體病灶\n5. 美國東岸癌症臨床研究合作組織 (ECOG)測量表的體能分\n數≤ 2", "phase": "Phase I", "sponsor": "智合", "targetNum": "15", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "0", "pi": "李重賓醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "膽道癌", "lines": ["一線"]}]}, {"id": 33, "cancerType": "大腸癌", "line": "一線", "code": "C6461003", "studyTitle": "一項介入性、第 3 期、雙盲、隨機分配的試驗，旨在針對未曾接受治療的轉移性大腸直腸癌參與者比較 PF-08634404 併用化療對比 Bevacizumab 併用化療的療效與\n安全性。", "inclusion": "1. 經組織學或細胞學確認的結腸直腸腺癌。\n2. 第 IV 期轉移性疾病的證據。\n3. 依據當地檢測的已知 RAS 突變狀態（包括  KRAS 和NRAS 外顯子 2、3 和 4 密碼子\n12、13、59、61、117 和 146）。儘管嘗試檢測仍為  RAS 狀態未知的參與者，可有資格\n參與。\n4. V600E: Negative ;  MSS\n4. 先前未曾因轉移性疾病接受全身性療法。\n5.1 年內 Tumor Slide: 20片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎", "phase": "3", "sponsor": "輝瑞", "targetNum": "10", "enrolled": "1", "monthSigned": "1", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 34, "cancerType": "大腸癌", "line": "一線", "code": "MK-1082-012", "studyTitle": "一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估  MK-1084、 Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用 Bevacizumab，做為 KRAS G12C 突變局部晚期不可切除或轉移性大腸直腸癌受試者之第一線治療的安全性和療效（ KANDLELIT-012）", "inclusion": "Part 1 (Safety Lead-In) 收案條件簡述:\n•            Stage III or IV, KRAS G12C mutation (+) CRC\n•           Part 1: Treatment Naïve 或用過一線治療  (一線或二線皆可, 不可用到oxaliplatin) 已收滿  Target\n•           Part 2: Treatment Naïve ( 預計 2026 開放名額  )", "phase": "Phase III", "sponsor": "MSD", "targetNum": "Part 1: 2\nPart 2: 2\n(預計 2026.04\n開始收案)", "enrolled": "Part 1: 2", "monthSigned": "2", "monthEnrolled": "2", "pi": "鄧豪偉", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 35, "cancerType": "大腸癌", "line": "一線", "code": "M24-533", "studyTitle": "一項第 2 期、開放性、隨機分配、主試驗計畫書試驗，評估  Telisotuzumab Adizutecan 併用多種治療組合在轉移性大腸直腸癌受試者中的安全性和療效 (AndroMETa-CRC-533)", "inclusion": "1.Left side:KRAS/NRAS wildtype ,BRAFV600E wildtype\n2.tumor is not dMMR+/MSI-H.\n3.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1.\n4.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1.\n5.HCV negative.\n6.untreatment brain or menining metastasis is exclusion", "phase": "2", "sponsor": "Abbive", "targetNum": "3", "enrolled": "1", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲\n0988660381\n孔亭方", "comments": "5月份會開stage2", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 36, "cancerType": "大腸癌", "line": "一線", "code": "20210081", "studyTitle": "一項多中心、隨機分配、開放標記、有效藥物對照的第   3 期試驗， Sotorasib、Panitumumab 及 FOLFIRI 與 FOLFIRI 併用或無併用 Bevacizumab-awwb，用於未曾接受過治療且帶有  KRAS p.G12C突變的轉移性大腸直腸癌受試者之比較  (CodeBreaK 301)", "inclusion": "KRAS G12C: +\n1. KRAS G12C: Positive and MSS\n2.  FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III 治療後六個月(轉移) PD 預計化療.\n3. Eastern Cooperative Oncolgy Group (ECOG) Performance Status of 1.\n4. FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III\n治療後六個月(轉移) PD 預計化療.\n5. 5 年內 Tumor Slide: 15片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎", "phase": "3", "sponsor": "Amgen Inc", "targetNum": "2", "enrolled": "1", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉醫師", "nurse": "張台依\n0972811090\nLind ID: 0972811090", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 37, "cancerType": "大腸癌", "line": "一線", "code": "SGNTUC-029", "studyTitle": "一項評估  Tucatinib併用Trastuzumab 和 mFOLFOX6 對照 mFOLFOX6併用或不併用Cetuximab 或 Bevacizumab 作為患有HER2+轉移性結直腸癌受試者的一線治療療法的開放性、隨機分配、第3 期試驗", "inclusion": "Inclusion\n1 Send tissue slide 25 and Central confirmed HER2 3+ or ISH + and confirmed RAS status.\n2.LVEF > 50%.\n3.Previously treated brain metastases which are asystamatic Exclusion\n1.Have previously been treated with anti-HER2 therapy\n2.Have a history of GI perforation within 12 months of enrollment.", "phase": "III", "sponsor": "Seagen", "targetNum": "6", "enrolled": "3", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 38, "cancerType": "大腸癌", "line": "一線", "code": "WO42758", "inclusion": "Inclusion Criteria\n1.G12C mutation Biomarker eligibility as determined by prior results of a validated NGS or PCR-based assay, or by mass spectrometry\n2.No prior systemic treatment in the metastatic setting, except for up to two cycles (up to 4 weeks) of oxaliplatin-containing chemotherapy, with or without bevacizumab, in patients who need to wait for biomarker testing results\n3. received fluoropyrimidine-based chemotherapy with or without oxaliplatin in the adjuvant setting may still be eligible if it has been >6 months since the last dose of oxaliplatin was administered\nExclusion Criteria\n1.Prior treatment with a KRAS G12C inhibitor", "phase": "I/Ib", "sponsor": "Roche", "targetNum": "10", "enrolled": "6", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "studyTitle": "", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 39, "cancerType": "大腸癌", "line": "一線", "code": "61186372COR3002", "studyTitle": "一項隨機分配、開放性、第  3 期試驗，旨在比較  Amivantamab + FOLFIRI 與 Cetuximab/Bevacizumab + FOLFIRI 在先前曾接受過化學治療的  KRAS/NRAS 和 BRAF 野生型之復發性、無法手術切除或轉移性大腸直腸癌參與者中的療效", "inclusion": "Inclusion\n1.    have received 1 line of systemic therapy for mCRC\n2.    KRAS, NRAS, and BRAF WT tumor\n3.     Measurable lesion\n4.    dMMR /MSI-H 須接受免疫治療\nExclusion :\n1.     prior exposure to irinotecan, any agents that target EGFR or MET\n2.    any component of FOLFIRI\n3.    dMMR/MSI-H status who has not received immunotherapy treatments.\n4.     HER2-positive/amplified tumor\n5.    rior exposure to irinotecan, any agents that target EGFR or MET (including but not limited to protein products, monoclonal antibodies, tyrosine kinase inhibitors, or antisense oligonucleotide therapy)\n6.        Diabetes mellitus\n7.        Ongoing or active infection\n8.        HBV or HCV infection\n9.        symptomatic or untreated brain metastasis", "phase": "III", "sponsor": "J & J", "targetNum": "5", "enrolled": "4", "monthSigned": "0", "monthEnrolled": "0", "pi": "鄧豪偉", "nurse": "陳秀玲line\nID 0988660381/\n孔亭方", "contractNo": "C2412500", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "大腸癌", "lines": ["一線"]}]}, {"id": 40, "cancerType": "C R P C", "line": "一線", "code": "DB-1311-O-1001", "studyTitle": "一項第 1/2a 期、多中心、開放性、首次於人體進行之試驗，評估 DB-1311 在晚期/轉移性實體腫瘤受試者中的安全性、耐受性、藥物動力學及初步抗腫瘤活性", "inclusion": "Pathologically documented metastatic adenocarcinoma of the prostate cancer. Progressive metastatic CRPC as defined:\n1) castrate levels of serum testosterone < 50 ng/dL AND\n2) progressive disease as defined by PCWG3 criteria.\nTaxane-naive (prior treatment with taxane based chemotherapy for CSPC and did not progress within 1 year after the last dose is allowed) subjects who have progressed on or after NHT.\nHaving received one prior NHT other than Enzalutamide (for Cohort 16) / abiraterone (for Cohort 17).", "phase": "1/2a 期", "sponsor": "Taiwan Tigermed Consultin\ng臺灣泰格國際醫藥股份有限公司", "targetNum": "20", "enrolled": "9", "monthSigned": "0", "monthEnrolled": "0", "pi": "楊慕華", "nurse": "邱佩玲/孔亭方", "contractNo": "C2409400", "status": "進行中", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "C R P C", "lines": ["一線"]}]}, {"id": 41, "cancerType": "預備中", "line": "Translational study", "code": "GW-020202", "studyTitle": "一項二期、劑量隨機、開放性臨床試驗評估 PTS100用於治療不適合手術切除或局部區域治療的原發性肝癌（ HCC）患者的安全性與療效\n- PTS100, intra-liver tumor injection", "inclusion": "Major protocol amedmnet in processing.", "phase": "II", "sponsor": "共信", "targetNum": "3", "enrolled": "0", "monthSigned": "0", "monthEnrolled": "0", "pi": "黃怡翔", "nurse": "李杰如\n0939859265  /\n吳佳勳\n7270轉268", "comments": "還未SIV", "status": "還未SIV", "exclusion": "", "subjects": [], "cancerTypes": [{"type": "預備中", "lines": ["Translational study"]}]}];
+const INITIAL_TRIALS = [{"id":1,"cancerType":"肝癌","line":"二\n、三線","code":"DB1311-201","studyTitle":"一項第II期、多中心、開放性試驗，在患有晚期 /轉移性實體腫瘤的參與者中評估DB-1311併用BNT327或DB-1305","inclusion":"Part I:                                                         1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A                   3.HBsAg(+)可以收,HBV DNA< 500 IU/mL","phase":"I","targetNum":"3","enrolled":"3","monthSigned":"0","monthEnrolled":"0","pi":"楊慕華","nurse":"Abby 82935/82999","status":"暫停收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"肝癌","lines":["二\n、三線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":2,"cancerType":"胃癌","line":"A\nd j u v","code":"TTY","studyTitle":"胃癌術後第二, 三A, 三B 期患者接受S-1 (三週處方) 術後輔助性治療之觀察性試驗","inclusion":"胃癌術後使用健保S-1 病患","phase":"4","sponsor":"TTY","targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","pi":"洪逸平","nurse":"宋秀薇\n2935 / 2999","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["A\nd j u v"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":3,"cancerType":"胃癌","line":"一線","code":"D702AC00001","studyTitle":"一項隨機分配、第  III 期試驗，評估 Rilvegostomig 併用 Fluoropyrimidine 和 Trastuzumab Deruxtecan 相較於 Trastuzumab、化療和 Pembrolizumab 作為 HER2 陽性胃癌第一線治療的效果 (ARTEMIDE-Gastric01)","inclusion":"1. HER2 (+)需在送國外驗Her-2 ,Slide*15片(14天出報告)\n2. 體重 >= 35 KG\n3. Measurable lesion by RECIST 1.1\n4.ECOG  0-1\n5. 可收B肝.治療後的C肝 病毒量驗不到\n6.僅收一線病人\n7.CCr>=60, CPS > 1","phase":"III","sponsor":"AZ","targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"王秋眉\n0927751328\nline ID: enjoy357208","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":4,"cancerType":"胃癌","line":"一線","code":"DS8201-724","studyTitle":"評估 Trastuzumab Deruxtecan (Enhertu®) 併用化療（加或不加Pembrolizumab）相較於化療併用  Trastuzumab（加或不加 Pembrolizumab）作為不可切除、局部晚期或轉移性   HER2-陽性胃癌或胃食道接合處  (GEJ) 癌受試者第一線治療的一項多中心、隨機分配、開放標記、第  III 期試驗 (DESTINY-Gastric05)","inclusion":"1.  必須可以吞Xeloda\n2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive)\n3. LVEF >=50 % , CCr >=60\n4. HBsAg(+) ,HBV DNA<2000\n5. HCV(+), 但HCV RNA必須(-)\n6. At least one measurable lesion\n7. Slide片*16 ( 4-5u),10個工作天發報告","phase":"III","sponsor":"第一三共","targetNum":"7","enrolled":"5(screen failure)/1","monthSigned":"1","monthEnrolled":"0","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤\n82935 / 82999\n0936385216","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":5,"cancerType":"胃癌","line":"一線","code":"M24-977","studyTitle":"一項第 2 期隨機分配試驗，針對局部晚期無法切除或轉移性胃腺癌、胃食道交界處腺癌或食道腺癌患者，評估ABBV-400 合併 Fluorouracil、 Leucovorin 和 Budigalimab 作為第一線治療的安全性、療效和最佳劑量 (AndroMETa-GEA-977)","inclusion":"1.HER2(-)\n2.C肝不收\n3.Slide*15 (4-5u) ,C1D1前需寄出\n4.可收B肝,病毒量需小於500 IU/mL\n5.需有Target Lesion (Recist 1.1)\n6.ILD or Pneumonitis 病史不能收 7.全肺切除者不能收\n8.C1D1前不能使用抗生素","phase":"II","sponsor":"ABBVIE","targetNum":"10","enrolled":"10","monthSigned":"暫停收案","monthEnrolled":"0","pi":"陳明晃","nurse":"王秋眉\n0927751328\nline ID: enjoy357208","status":"暫停收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}]},{"id":6,"cancerType":"胃癌","line":"一線","code":"D967LC0001","studyTitle":"多中心、一項第 1b/2 期開放性、劑量遞增和劑量延伸\n試驗，評估Trastuzumab Deruxtecan (T-Dxd) 單一療法與併用療法對於帶有 HER2 表現胃癌成人受試者的安全性、耐受性、藥物動力學、免疫原性和抗腫瘤活性\n(DESTINY-Gastric03)","inclusion":"Part 5 名額已滿,暫無slot\n1. 僅收一線病人\n2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative )\n--> Part 5 用藥: Volrustomig+T-Dxd + capecitabine\n4. HBsAg(+) ,HBVDNA<100 IU/mL\n5. HCV(+), 但HCV RNA必須(-)\n6. CCr >=60mL/min\n7. Cycle1 ~ Cycle8 (共24週) 需每週返診抽血 (Liver function)","phase":"1b/2","sponsor":"AZ","targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","pi":"陳明晃","nurse":"周淑慧\n82935 / 82999\n0900265971","status":"暫無slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":7,"cancerType":"胃癌","line":"一線","code":"D9803C00001","studyTitle":"一項第 III 期、多中心、隨機分配對照試驗，研究   Sonesitatug vedotin 合併 Fluoropyrimidine 加上或不加上  Rilvegostomig用於第一線  Claudin18.2 陽性、HER2 陰性、晚期/轉移性胃、胃食道交界處或食道腺癌  (CLARITY-Gastric 02)","inclusion":"1. Histologically confirmed\n2. HER2-negative,\n3. archival tissue <3 months送國外驗Claudin18.2切片*13(10天出報告)\n4. 可收B肝 HBV DNA<100.治療後的C肝 病毒量驗不到\n5. 不需measurable lesion","phase":"III","sponsor":"AZ","targetNum":"15","enrolled":"1","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"吳佳勳\n0918696523","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":8,"cancerType":"胃癌","line":"一線","code":"8951-CL-0305","studyTitle":"Zolbetuximab 合併 Pembrolizumab 和化療（ CAPOX 或 mFOLFOX6），用於罹患局部晚期無法切除或轉移性胃或胃食道交界腺癌，腫瘤為  HER2 陰性、Claudin (CLDN) 18.2 陽性且計畫性凋亡配體-1 (PD-L1) 陽性的參與者之第一線治療的一項第   3期、雙盲、隨機分配試驗","inclusion":"1.  Histologically confirmed gastric or GEJ adenocarcinoma\n2. HER2-negative,(可以院內驗)\n3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗)\n4. HBsAg(-) ; HCV(-) ; CCr >=30\n5. Slide片*9 ( 4-5u),10個工作天發報告\n6. At least one measurable lesion","phase":"III","sponsor":"Astellas","targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","pi":"洪逸平","nurse":"賴姵妤 / 宋秀薇\n82935 / 82999\n0919801912","status":"停止收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":9,"cancerType":"胃癌","line":"一線","code":"T1223","studyTitle":"使用Ramucirumab (Cyramza)、nal-IRI (Onivyde) 和Trifluridine\n/Tipiracil (Lonsurf) 作為二線治療，用於轉移性胃癌的第 Ib期和第II\n期臨床試驗（ COOL臨床試驗）.","inclusion":"1. 不限her 2 ( - or +)，但如為her 2 (+) 一線治療必須用過\nHerceptin\n2. Measurable lesion by RECIST 1.1\n3.沒有排除 B C肝","phase":"Ib/II","sponsor":"IIT","targetNum":"25","enrolled":"15","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"林韋秀\n0963501682","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":10,"cancerType":"胃癌","line":"二線","code":"CHS-114-02","studyTitle":"一項第 1b 期、多中心、開放性試驗，評估  CHS-114 合併 Toripalimab 加上或不加其他治療用於晚期或轉移性實體腫瘤參與者的安全性和療效\nCohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma) HER2-negative and MSS/pMMR\nCohort B Specific Inclusion Criteria (2L ESCC) Cohort C Specific Inclusion Criteria (1L ESCC)\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)","inclusion":"\"1.cycle 2需要再次切片\n2.Slide*15 (4-5u) ,C1D1前需寄出\n3.Cohort C Slide (只能用藥前 3 個月)\n4.需有Target Lesion (Recist 1.1)\n5.ILD or Pneumonitis 病史不能收\nCohort D, Arms D1 and D2 Specific Inclusion Criteria (4L+ CRC)\"\n(1)       Confirmed All RAS and MMR status\n(2)       Prior therapies include fluoropyrimidine, oxaliplatin, irinotecan-based chemotherapy, anti-VEGF biological therapy , an anti-EGFR therapy.If RAS wildtype unless right-sided, trifluridine/tipiracil or regorafenib,\nand a BRAF inhibitor in BRAF V600E mutant.\n(3) Provide baseline tumor tissue sample is required for enrollment\"","phase":"Ib","sponsor":"美捷","targetNum":"6","enrolled":"4 (Cohort A 1 / Cohort B 1 / Cohort C 2)","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"Cohort A 林韋秀0963501682\n/王秋眉 0927751328\nCohort B、C 孔亭方7270#268/\nCohort D\n陳秀玲\n0988660381","status":"需問slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["二線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":11,"cancerType":"胃癌","line":"一線後","code":"D9800C00001","studyTitle":"一項第二期、開放性、多中心試驗，評估  AZD0901 作為單一療法和併用抗癌藥物使用於表現  Claudin 18.2 之晚期實體腫瘤受試者的安全性、耐受性、療效、藥物動力學及免疫原性","inclusion":"1.可收胰臟癌及胃癌 ,膽管癌\n(1)胰臟癌,一線治療  ---(名額已滿 ..暫停收案 )\n(2)胃癌,正二.三線治療  ---找秋眉 (名額已滿 ..暫停收案 )\n(3)膽管癌,正二.三線治療  (名額已滿..暫停收案) ---找佳勳\n2. HER2 (-)\n3. 胃癌需PD後再次切片,C3要再切片一次\n4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外\n5. One Measurable lesion by RECIST 1.1\n6. 可收B肝 HBV DNA<2000  需使用抗病毒用藥,排除C肝及HIV (+)\n7.ECOG  0-1\n8.體重 >= 35 KG＿","phase":"Ib/II","sponsor":"AZ","targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","pi":"陳明晃","nurse":"胰臟癌---王昭蘋 0919377185\n胃癌       王秋眉\n0927751328\nline ID: enjoy357208\n膽管癌    吳佳勳\n0918696523","status":"名額已滿","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["一線後"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":12,"cancerType":"胃癌","line":"三線","code":"BBI-4182-101","studyTitle":"BDC-4182 作為單一藥物於晚期胃癌及胃食道癌患者之第   1/2\n期、首次使用於人體之劑量遞增與擴展試驗","inclusion":"1. 組織學確認為胃癌或胃食道癌，且為轉移性或無法切除。\n2. 必須已接受至少 1-2線之標準療法或對標準療法不耐受。\n3. 如接受過Claudin 18治療，需有該線治療後採集的組織檢體。\n4. CCr需≥50。Baseline Albumin需≥3.0g/dl，且14天內不可輸注白蛋白。C1D1 的7天內不可輸血及打G-CSF。\n5.  腫瘤組織檢體需小於 12個月內(自簽署同意書日期起算 )。","phase":"I/II","sponsor":"Bolt","targetNum":"2","enrolled":"1","monthSigned":"","monthEnrolled":"1","pi":"陳明晃","nurse":"王秋眉\n0927751328\n林韋秀\n0963501682","status":"暫無slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"胃癌","lines":["三線"]}],"comments":"目前沒名額/可以預排/已排3個病人","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":13,"cancerType":"胰臟癌","line":"一腺","code":"C3651021","studyTitle":"一項第 2b/3 期、隨機分配、雙盲試驗 ,針對接受背景第一線化療的惡病質和轉移性胰管腺癌成人參與者 ,探討 PONSEGROMAB\n(PF-06946860) 相較於安慰劑的療效、安全性和耐受性","inclusion":"收案條件：\n1. 資料顯示有轉移性胰管腺癌\n2. 尚未接受過治療(一線治療)\n3. Measurable lesion by RECIST 1.1\n4. Fearon 定義的惡病質: BMI < 20 kg/m2 且篩選前六個月內自願性體重減輕 > 2% 或者 篩選前過去六個月內非自願體重減輕\n> 5%\n5. ECOG : 0-1\n6. 不需要送腫瘤切片\n7. LVEF > 50%","phase":"2b/3","sponsor":"輝瑞","targetNum":"15","enrolled":"7","monthSigned":"1","monthEnrolled":"1","pi":"李重賓","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["一腺"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":14,"cancerType":"胰臟癌","line":"一腺","code":"CA2400030","studyTitle":"一項隨機分配、第 2/3期試驗，針對未接受過治療、且具有同源性 MTAP缺失的轉移性胰管腺癌受試者，以 BMS-986504併用Nab- paclitaxel及Gemcitabine，相較於安慰劑併用 Nab-paclitaxel及 Gemcitabine的療效","inclusion":"● 經組織學或細胞學方法確診患有轉移性 PDAC。\n● 於腫瘤組織內偵測到同源性MTAP缺失或MTAP喪失的證據。\n● 至少1處可根據RECIST v1.1測量的轉移性疾病病灶。\n● 受試者不得於轉移性情況下接受過任何全身性抗癌治療。\n● 若臨床上需要且根據試驗主持人判斷，受試者可於轉移性情況下接受最多1個週期的nab-p/gem，且其疾病不能已惡化或因無法耐受之毒性而中止治療。\n排除b,c肝","phase":"2/3期","sponsor":"必治妥","targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","pi":"姜乃榕","nurse":"王昭蘋\n0919377185","status":"暫停收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["一腺"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":15,"cancerType":"胰臟癌","line":"一線","code":"MK-3475-06E","studyTitle":"一項針對罹患局部晚期不可切除／轉移性食道癌  ( ESCC) 的第一線治療受試者，使用研究\n性藥物併用 Pembrolizumab（MK-3475）搭配或不搭配化學治療的第 1／2 期開放\n標示、傘式平台設計試驗  KEYMAKER-U06：06E 子試驗","inclusion":"\"Inclusion Criteria\n1-  您必須經過組織學或細胞學確診為第  1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。\n2- ccr > =50 ml/min\n排除條件\n1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加\n2. 在使用試驗治療前  4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。\n3. QTcF value >470 msec / LVEF  < 50","phase":"Phase 1/2","sponsor":"MSD","targetNum":"3-5","pi":"陳明晃","nurse":"孔亭方line ID: 0981764403  /\n陳秀玲   /      王\n秋眉","status":"暫無slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"enrolled":"2","monthSigned":"0","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":16,"cancerType":"胰臟癌","line":"一線","code":"MK-3475-06C","studyTitle":"一項針對罹患局部晚期無法切除 /轉移性胃食道腺癌 (胃腺癌、胃食道交接處腺癌與食道腺癌 ) 的第一線治療受試者，使用 MK-2870搭配Pembrolizumab (MK-3475) 和化療的第1/2期開放標示、傘式平台設計試驗： 06C子試驗\n12/10 SIV","inclusion":"Inclusion Criteria\n1. 經組織學和/或細胞學確診為先前未經治療的局部晚期   不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。\n2. 患有非HER2/neu陽性的胃食道腺癌。\n3.ccr > =50 ml/min Exclusion Criteria\n1-在第一劑研究介入前  3 個月內體重減輕 >20%。\n2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。\n3-Received prior treatment with a TROP2-targeted ADC / with a topoisomerase 1 inhibitor-based ADC and/or a topoisomerase 1 inhibitorbased chemotherapy.\n4- Has received prior therapy with an anti-PD-1, anti-PD-L1, or anti-PD-L2 agent or with an agent directed to another stimulatory or coinhibitory TCR (eg, CTLA-4, OX40, CD137).","phase":"I/II","sponsor":"MSD","targetNum":"6","monthSigned":"0","pi":"陳明晃","nurse":"孔亭方line ID: 0981764403/陳秀\n玲","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"enrolled":"0","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":17,"cancerType":"胰臟癌","line":"二線","code":"MK-3475-06B","studyTitle":"一項針對罹患晚期食道癌且先前曾暴露於  PD-1／PD-L1治療的受試者，使用研究性藥劑搭配 Pembrolizumab（MK-3475）的第 1／2期開放標示、傘式平台設計試驗（ KEYMAKER-U06）：06B子試驗。","inclusion":"Inclusion\n*.Measurable disease\n*Radiographic or clinical disease progression on one prior line of  standard therapy that includes a platinum agent and previous exposure to  an anti–PD-1/PD-L1 based IO therapy (either as a combination or monotherapy).\n*progressed during or after receiving at least one dose of platinum-based chemotherapy\n*at least 2 doses of PD-1/PD-L1 inhibitors given in a 1L setting and disease progression.\n*Anti–PD-1/PD-L1 given in definitive chemoradiation or neoadjuvant/adjuvantbased therapy will count as 1 line of therapy if disease progression occurs during treatment or within 6 months of cessation of treatment.\n*Dose reduction and/or switching of one or more 1L chemotherapy agents due to toxicity/intolerability as deemed clinically appropriate by the investigator will not constitute a new line of therapy.\nExclusion","phase":"I/II","sponsor":"MSD","targetNum":"6- 10","enrolled":"6","monthSigned":"1","monthEnrolled":"0","pi":"陳明晃","nurse":"陳秀玲 line ID 0988660381 吳\n佳勳","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["二線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":18,"cancerType":"胰臟癌","line":"二線","code":"DS7300-202","studyTitle":"一項針對 Ifinatamab Deruxtecan (I-DXd) 用於先前曾接受過治療的晚期或轉移性 食道鱗狀細胞癌  (ESCC) 受試者之第三期、多中心、隨機分配、開放標記試驗  (IDeate-Esophageal01)\n英文：A Phase 3, Multicenter, Randomized, Open-Label Study of\nIfinatamab Deruxtecan (I-DXd) in Subjects with Pretreated Advanced or Metastatic Esophageal Squamous Cell Carcinoma (ESCC) (IDeate-Esophageal01)","inclusion":"Inclusion\n1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC.\n2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ) .\nExclusion Criteria\n1.受試者患有 <50 bpm 的心搏過緩，除非受試者裝有心律調節器\n2. Has received prior treatment with orlotamab, enoblituzumab, or other B7-H3 targeted agents, including I-DXd.\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.","phase":"PHASE 3","sponsor":"DAIICHI SANKYO","targetNum":"4","enrolled":"0 / 4 screen failure","pi":"陳明晃","nurse":"孔亭方line ID: 0981764403/陳\n秀玲/王秋眉","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"胰臟癌","lines":["二線"]}],"monthSigned":"0","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":19,"cancerType":"食道癌","line":"二線","code":"MK-3475-06D","studyTitle":"一項第1⁄2期開放標示、傘式平台設計試驗，評估 MK-2870合併 Paclitaxel作為二線治療罹患晚期 /轉移性胃食道腺癌 的受試者的安全與療效性： 06D子試驗","inclusion":"Inclusion\n1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma.\n2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.\nExclusion Criteria\n1. Has squamous cell or undifferentiated esophageal gastric cancer.\n2. Received prior treatment with a TROP2-targeted ADC\n3. Has history of documented severe dry eye syndrome, severe Meibomian gland disease and/or blepharitis, or corneal disease that prevents/delays corneal healing.\n4. Received prior treatment with a topoisomerase 1 inhibitor- based ADC and/or a topoisomerase 1 inhibitor-based chemotherapy.","phase":"I/II","sponsor":"MSD","targetNum":"3-6","enrolled":"1","nurse":"孔亭方\n0981764403/\n王秋眉\n0927751328\nline ID: enjoy35208","contractNo":"C2411000","status":"暫無slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"食道癌","lines":["二線"]}],"monthSigned":"1","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":20,"cancerType":"食道癌","line":"第\n2\n線\n／第 3\n線","code":"MK-3475-06F","studyTitle":"2026-04-001BU (C2603300 / 4Z33) 一項針對罹患不可切除局部晚期或轉移性食道癌的第 2線／第3線治療受試者，使用研究性藥物的第2期開放標示、傘式平台設計試驗 KEYMAKER-U06：06F子試驗 I-DXd Monotherapy 12 mg/kg*","inclusion":"納入條件\n. 對於不可切除局部晚期或轉移性 ESCC，在先前接受1或2線全身性治療後疾病惡化。  Prior treatment must include platinum and anti-PD 1/PD-L1 inhibitor. Prior exposure to anti-CTLA-4 inhibitor is allowed\n已接受B型肝炎病毒（ HBV）抗病 毒療法至少4週且在分配前檢測不到HBV病毒量，則符合資格\n排除條件\n1. 腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道  )，發生瘻管的風險增加。\n2.具臨床意義的角膜疾病。\n3.（LVEF）<50%\n4.在試驗治療開始前 2週內曾接受放射治療\n5.. 不論是否需要使用類固醇治療的（非感染性）肺炎／間質性肺病之病史\n6.活動性感染。","phase":"Phase 2","sponsor":"MSD","targetNum":"3-5","nurse":"孔亭方line ID: 0981764403/陳\n秀玲/王秋眉","status":"名額已滿","exclusion":"","subjects":[],"cancerTypes":[{"type":"食道癌","lines":["第\n2\n線\n／第 3\n線"]}],"enrolled":"5","monthSigned":"0","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":21,"cancerType":"膽道癌","line":"一線","code":"D702NC00001","studyTitle":"一項第 III 期、隨機分配、開放性、全球多中心試驗，評估 Rilvegostomig 或 Durvalumab 併用化療作為晚期膽道癌患者的第一線治療 (ARTEMIDE-Biliary02)","inclusion":"1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。\n2. 需提供12個月內的切片檢體， random前需有PDL-1 報告\n(Central review) 。\n3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打GCSF。\n4. 暫不收B、C肝。","phase":"III","sponsor":"AZ","targetNum":"15","enrolled":"5 screen failure / 3 有用藥","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"林韋秀\n0963501682\n王秋眉\n0927751328","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":22,"cancerType":"膽道癌","line":"一線","code":"DESTINY-Biliary Tract","studyTitle":"DESTINY-Biliary Tract Cancer-01：一項第三期試驗，評估 Trastuzumab Deruxtecan (T-DXd) 和 Rilvegostomig 相較於標準照護 Gemcitabine、Cisplatin 和 Durvalumab 作為第一線治療局部晚期或轉移性HER2表現型的膽道癌","inclusion":"開放收案組別\nSafety Run In: Rilvegostomig 750mg +\nT-DXd 5.4mg/kg, Q3W\n收案條件：\n1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌\n2.尚未接受過治療 (一線治療)\n3.Adjuvant結束超過6個月後復發，不在此限\n4.HER 2 表現型IHC2+或3+\n5.B肝患者可收，但與 C肝交叉感染者不可收案。\n6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1","phase":"3","sponsor":"AZ","targetNum":"6","enrolled":"5(有用藥)/ 3(screen failure)","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"王秋眉\n0927751328\nline ID: enjoy357208王昭蘋 0919377185","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":23,"cancerType":"膽道癌","line":"一線","code":"TT420C2308","studyTitle":"一項第三期、隨機分配、對照、全球多中心試驗，針 對纖維母細胞生長因子受體 (FGFR)變異、化療和 FGFR抑制劑難治型/復發型膽管癌受試者，評估口服 Tinengotinib相較於醫師選定療法的療效與安全性 (FIRST-308)","inclusion":"1. 至少接受過一線化療 (Gemzar+Cisplatin)及一線FGFR標靶藥\n2. 如果只有「一個」 Target iesion (non-lymph node),測量長徑要\n≥1.5cm\n3. Gemcitabine+Cisplatin washout period > 21days\n4. HBsAg(+), HBV DNA<500 IU/mL\n5. Anti-HCV(+), HCV RNA(-)","phase":"3","sponsor":"藥捷安康","targetNum":"6","enrolled":"4","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"周淑慧\n82935/82999\n0900265971","status":"停止收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":24,"cancerType":"膽道癌","line":"一線","code":"TAI-301","studyTitle":"T-1301膠囊用於晚期實體腫瘤患者之臨床一期安全性、耐受性與藥物動力學研究","inclusion":"1 HBV(-),HCV(+)RNA(-)\n2.血壓不能超過SBP160/DBP100\n3.二線或二線以上之病人。 4.Measurable lesion by RECIST 1.1\n5.調整劑量 :  100 mg/day, 優先招募GIST、melanoma with c-KIT mutation\n6. CCr: >=50ml/min","phase":"1","sponsor":"泰瑋","targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"7270#268\n宋秀薇\n2935 /王秋眉\n0927751328","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":25,"cancerType":"膽道癌","line":"一線","code":"MK-1022","studyTitle":"一項第1／2期試驗，評估Patritumab Deruxtecan對於胃腸道癌症的安全性和療效","inclusion":"1.收膽管癌正二.線及大腸癌二線 . 肝癌\n(1)大腸癌---找秀玲 --額滿,停止收案\n(2)膽管癌---找秋眉 --額滿,停止收案\n(3)肝癌---找昭蘋     需詢問SLOT\n(4)胃癌正二線  HER 2 (-)--找秀玲\n2.前線PD後需要重新切片 ,在送出20片\n3.CT必須得到廠商確認 (預計5天)才能C1D1\n4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量\n5.心超LVEF > 50%","phase":"1/2","sponsor":"MSD","targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":26,"cancerType":"膽道癌","line":"一線","code":"PEP08-101","studyTitle":"一項第 1a/1b 期，評估 PEP08 單一用藥和合併用藥治療於  MTAP\n缺失之晚期或轉移性實體腫瘤的臨床安全性、耐受性、藥物動力學、藥效學和初步抗腫瘤療效試驗","inclusion":"1.在腫瘤組織中檢測到 MTAP 對偶同型合子基因缺失的證據，包括：透過次世代定序技術或螢光原位雜交確認的純合性 MTAP 缺失；或者經 NGS 或 FISH 技術確認的對偶同型合子基因 CDNK2A 或 CDKN2B 缺失，並伴隨透過免疫組織化學確認的 MTAP 缺失。                                                                            2.經組織學確認有晚期或轉移性實體腫瘤，且不適合接受手術和/或輻射之治癒性治療、標準治療失敗、無法耐受或無法取得標準治療，且先前已接受至少一線治療的患者。                      3.能夠吞嚥口服試驗藥物、保持治療並願意記錄每日服用試驗藥物。\n4.根據實體腫瘤療效評估準則第 1.1 版至少有 1 個可測量病灶。\n5.8.B 型肝炎表面抗原  血清學檢測陽性 (HBsAg [+])，同時 B 型肝炎病毒去氧核糖核酸 小於1000 IU/mL，或 C 型肝炎病毒抗體血清學檢測陽性（抗 HCV Ab [-]），同時 C 型肝炎病毒 核糖核酸 (RNA) 呈陽性 (+)。HBsAg (+) 的患者需要進行 HBV DNA 檢測。抗 HCV Ab (+) 的患者需要檢測 HCV RNA 為陰性才符合資格。","phase":"I","sponsor":"智擎生技製藥股份有限公司","targetNum":"9","enrolled":"4","monthSigned":"2","monthEnrolled":"2","pi":"姜乃榕","nurse":"王昭蘋\n7270#262","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":27,"cancerType":"膽道癌","line":"一線","code":"PEP07-102","studyTitle":"一項在晚期或轉移性實體腫瘤病患使用  PEP07 (檢查點激酶 1抑制劑 )的第一期試驗","inclusion":"1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。                                                                                2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治 療、或任何試驗治療，或在30天內接受過免疫治療。\n3 收案前後都要再切片 .\n4.需詢問SLOT","phase":"I","sponsor":"智擎生技製藥股份有限公司","targetNum":"20","enrolled":"3","monthSigned":"1","monthEnrolled":"1","pi":"姜乃榕","nurse":"王昭蘋\n7270#262","status":"需問slot","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":28,"cancerType":"膽道癌","line":"一線","code":"D967VC00001","studyTitle":"一項第二期、多中心、開放性試驗，評估以 Trastuzumab Deruxtecan (T-DXd, DS-8201a)治療選定 HER2 表現腫瘤之療效與安全性 (DESTINY-PanTumor02)","inclusion":"1.有一顆可測量的腫瘤\n2.HER2(2+)\n3.prescreen  Slides 4-5mu 12片 screen 在 Slides 4-5mu 15片\n4.HBsAg(-), HCV RNA(-)\n5. 可收組別 a:HER2,IHC3+ any tumor type(額滿) b:HER2,IHC2+/ISH- positive  any tumor type\n(額滿)\nc:HER2,IHC2+ or 1+ endometrial cancer (額滿) d:HER2,IHC2+ or 1+ ovarian cancer (額滿) e:HER2,IHC2+ or 1+ cervical cancer (額滿)\n6.同意書改版Anti-HBc(+)  可以收","phase":"2","sponsor":"AZ","targetNum":"7","enrolled":"5\nprescreen/ 1\nscreen","monthSigned":"暫停收案","monthEnrolled":"0","pi":"洪逸平","nurse":"王秋眉\n0927751328","status":"暫停收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}]},{"id":29,"cancerType":"膽道癌","line":"一線","code":"MK-9999-02A","studyTitle":"一項第1／2期試驗，針對胃腸道癌症評估 MK-2870單一療法或與其他抗癌藥物合併使用的安全性與療效","inclusion":"1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 (1)胰臟癌---找昭蘋---名額已滿,停止收案\n(2)膽管癌   (二線 )---找亭方,秋眉  需先問SLOT\n(3)大腸癌---找秀玲---名額已滿,停止收案\n2.需要20片切片\n3.CT必須得到廠商確認才能用藥\n4.試驗藥物只能從周邊血管施打\n5.HIV只要有病史不收\n6.心超LVEF > 50%","phase":"II","sponsor":"MSD","targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"孔亭方\n0981764403/\n王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381","status":"名額已滿","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":30,"cancerType":"膽道癌","line":"一線","code":"MK5909-005","studyTitle":"一項第2期、非隨機分配、開放性、多中心試驗，評估  Raludotatug Deruxtecan用於胃腸道癌症受試者的安全和療效性","inclusion":"1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線、胃癌  3L以上\n(1)胰臟癌---找昭蘋(已額滿)\n(2)膽管癌(已額滿 )、胃癌---(已額滿)\n(3)大腸癌---找秀玲(已額滿)\n2.需要21片切片\n3.CT必須得到廠商確認才能用藥\n4.HIV只要有病史不收\n5.心超LVEF > 50%","phase":"II","sponsor":"MSD","targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"王秋眉\n0927751328\n王昭蘋\n7270#262\n陳秀玲\n0988660381","status":"名額已滿","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":31,"cancerType":"膽道癌","line":"一線","code":"TYR430-101","studyTitle":"一項多中心  ` 開放標記  ` 首次於人體執行之試驗  , 旨在研究 TYRA-430 用於治療晚期肝癌或具有活化  FGF/GFGR 途徑變異的其他實體腫瘤  (SUFR-431)","inclusion":"\"Inclusion Criteria\n1. 局部晚期無法切除/轉移性肝細胞癌  (HCC) 或經組織學證實晚期實體腫瘤帶有  FGF/FGFR 基因突變 。\n2. 受試者之前可接受任何次數的先前治療 , 收多線後 。\n3.ccr > =60 ml/min\nExclusion Criteria\n1-篩選前四週曾接受重大手術。\n2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。)\n3-活動性 ` 症狀性或未經治療的腦部轉移。","phase":"Phase I","sponsor":"Tyra Biosciences","targetNum":"15","enrolled":"","monthSigned":"0","monthEnrolled":"0","pi":"李重賓醫師","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"停止收案","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":32,"cancerType":"膽道癌","line":"一線","code":"BGM-2121-001","studyTitle":"BGM-2121 用於晚期實體腫瘤患者的第 1 期首次人體試驗","inclusion":"1. 肝炎患者不能收\n2. 透過組織病理學或診斷性醫學造影確診患有晚期實體腫瘤\n3. 受試者具有下列條件之一 :曾接受過癌症標準療法且治療失敗、沒有可用的標準療法選項、不符合或不耐受標\n準療法。\n4. 根據實體腫瘤的療效評價標準 (RECIST)第 1.1 版,在基準期時評估至少有一個可測量大小的瘤體病灶\n5. 美國東岸癌症臨床研究合作組織 (ECOG)測量表的體能分\n數≤ 2","phase":"Phase I","sponsor":"智合","targetNum":"15","enrolled":"2","monthSigned":"0","monthEnrolled":"0","pi":"李重賓醫師","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"膽道癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":33,"cancerType":"大腸癌","line":"一線","code":"C6461003","studyTitle":"一項介入性、第 3 期、雙盲、隨機分配的試驗，旨在針對未曾接受治療的轉移性大腸直腸癌參與者比較 PF-08634404 併用化療對比 Bevacizumab 併用化療的療效與\n安全性。","inclusion":"1. 經組織學或細胞學確認的結腸直腸腺癌。\n2. 第 IV 期轉移性疾病的證據。\n3. 依據當地檢測的已知 RAS 突變狀態（包括  KRAS 和NRAS 外顯子 2、3 和 4 密碼子\n12、13、59、61、117 和 146）。儘管嘗試檢測仍為  RAS 狀態未知的參與者，可有資格\n參與。\n4. V600E: Negative ;  MSS\n4. 先前未曾因轉移性疾病接受全身性療法。\n5.1 年內 Tumor Slide: 20片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎","phase":"3","sponsor":"輝瑞","targetNum":"10","enrolled":"3","monthSigned":"1","monthEnrolled":"0","pi":"鄧豪偉","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":34,"cancerType":"大腸癌","line":"一線","code":"MK-1082-012","studyTitle":"一項第 3 期、隨機分配、開放性、多中心臨床試驗，評估  MK-1084、 Cetuximab 和 mFOLFOX6 相較於 mFOLFOX6 併用或不併用 Bevacizumab，做為 KRAS G12C 突變局部晚期不可切除或轉移性大腸直腸癌受試者之第一線治療的安全性和療效（ KANDLELIT-012）","inclusion":"Part 1 (Safety Lead-In) 收案條件簡述:\n•            Stage III or IV, KRAS G12C mutation (+) CRC\n•           Part 1: Treatment Naïve 或用過一線治療  (一線或二線皆可, 不可用到oxaliplatin) 已收滿  Target\n•           Part 2: Treatment Naïve ( 預計 2026 開放名額  )","phase":"Phase III","sponsor":"MSD","targetNum":"Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"2","pi":"鄧豪偉","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":35,"cancerType":"大腸癌","line":"一線","code":"M24-533","studyTitle":"一項第 2 期、開放性、隨機分配、主試驗計畫書試驗，評估  Telisotuzumab Adizutecan 併用多種治療組合在轉移性大腸直腸癌受試者中的安全性和療效 (AndroMETa-CRC-533)","inclusion":"1.Left side:KRAS/NRAS wildtype ,BRAFV600E wildtype\n2.tumor is not dMMR+/MSI-H.\n3.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1.\n4.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1.\n5.HCV negative.\n6.untreatment brain or menining metastasis is exclusion","phase":"2","sponsor":"Abbive","targetNum":"5","enrolled":"3","monthSigned":"2","monthEnrolled":"1","pi":"鄧豪偉","nurse":"陳秀玲\n0988660381\n孔亭方","comments":"5月份會開stage2","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":36,"cancerType":"大腸癌","line":"一線","code":"20210081","studyTitle":"一項多中心、隨機分配、開放標記、有效藥物對照的第   3 期試驗， Sotorasib、Panitumumab 及 FOLFIRI 與 FOLFIRI 併用或無併用 Bevacizumab-awwb，用於未曾接受過治療且帶有  KRAS p.G12C突變的轉移性大腸直腸癌受試者之比較  (CodeBreaK 301)","inclusion":"KRAS G12C: +\n1. KRAS G12C: Positive and MSS\n2.  FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III 治療後六個月(轉移) PD 預計化療.\n3. Eastern Cooperative Oncolgy Group (ECOG) Performance Status of 1.\n4. FIGO Stage: IV 準備要接受第一線化療  or FIGO Stage: I ~ III\n治療後六個月(轉移) PD 預計化療.\n5. 5 年內 Tumor Slide: 15片\n6. Corrected QT interval (QTcF) 470 msec.\n7. 沒有 B / C 型肝炎","phase":"3","sponsor":"Amgen Inc","targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","pi":"鄧豪偉醫師","nurse":"張台依\n0972811090\nLind ID: 0972811090","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":37,"cancerType":"大腸癌","line":"一線","code":"SGNTUC-029","studyTitle":"一項評估  Tucatinib併用Trastuzumab 和 mFOLFOX6 對照 mFOLFOX6併用或不併用Cetuximab 或 Bevacizumab 作為患有HER2+轉移性結直腸癌受試者的一線治療療法的開放性、隨機分配、第3 期試驗","inclusion":"Inclusion\n1 Send tissue slide 25 and Central confirmed HER2 3+ or ISH + and confirmed RAS status.\n2.LVEF > 50%.\n3.Previously treated brain metastases which are asystamatic Exclusion\n1.Have previously been treated with anti-HER2 therapy\n2.Have a history of GI perforation within 12 months of enrollment.","phase":"III","sponsor":"Seagen","targetNum":"6","enrolled":"3","monthSigned":"0","monthEnrolled":"0","pi":"鄧豪偉","nurse":"陳秀玲line\nID 0988660381/\n孔亭方","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":38,"cancerType":"大腸癌","line":"一線","code":"WO42758","inclusion":"Inclusion Criteria\n1.G12C mutation Biomarker eligibility as determined by prior results of a validated NGS or PCR-based assay, or by mass spectrometry\n2.No prior systemic treatment in the metastatic setting, except for up to two cycles (up to 4 weeks) of oxaliplatin-containing chemotherapy, with or without bevacizumab, in patients who need to wait for biomarker testing results\n3. received fluoropyrimidine-based chemotherapy with or without oxaliplatin in the adjuvant setting may still be eligible if it has been >6 months since the last dose of oxaliplatin was administered\nExclusion Criteria\n1.Prior treatment with a KRAS G12C inhibitor","phase":"I/Ib","sponsor":"Roche","targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","pi":"鄧豪偉","nurse":"陳秀玲line\nID 0988660381/\n孔亭方","studyTitle":"","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":39,"cancerType":"大腸癌","line":"一線","code":"61186372COR3002","studyTitle":"一項隨機分配、開放性、第  3 期試驗，旨在比較  Amivantamab + FOLFIRI 與 Cetuximab/Bevacizumab + FOLFIRI 在先前曾接受過化學治療的  KRAS/NRAS 和 BRAF 野生型之復發性、無法手術切除或轉移性大腸直腸癌參與者中的療效","inclusion":"Inclusion\n1.    have received 1 line of systemic therapy for mCRC\n2.    KRAS, NRAS, and BRAF WT tumor\n3.     Measurable lesion\n4.    dMMR /MSI-H 須接受免疫治療\nExclusion :\n1.     prior exposure to irinotecan, any agents that target EGFR or MET\n2.    any component of FOLFIRI\n3.    dMMR/MSI-H status who has not received immunotherapy treatments.\n4.     HER2-positive/amplified tumor\n5.    rior exposure to irinotecan, any agents that target EGFR or MET (including but not limited to protein products, monoclonal antibodies, tyrosine kinase inhibitors, or antisense oligonucleotide therapy)\n6.        Diabetes mellitus\n7.        Ongoing or active infection\n8.        HBV or HCV infection\n9.        symptomatic or untreated brain metastasis","phase":"III","sponsor":"J & J","targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","pi":"鄧豪偉","nurse":"陳秀玲line\nID 0988660381/\n孔亭方","contractNo":"C2412500","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":40,"cancerType":"C R P C","line":"一線","code":"DB-1311-O-1001","studyTitle":"一項第 1/2a 期、多中心、開放性、首次於人體進行之試驗，評估 DB-1311 在晚期/轉移性實體腫瘤受試者中的安全性、耐受性、藥物動力學及初步抗腫瘤活性","inclusion":"Pathologically documented metastatic adenocarcinoma of the prostate cancer. Progressive metastatic CRPC as defined:\n1) castrate levels of serum testosterone < 50 ng/dL AND\n2) progressive disease as defined by PCWG3 criteria.\nTaxane-naive (prior treatment with taxane based chemotherapy for CSPC and did not progress within 1 year after the last dose is allowed) subjects who have progressed on or after NHT.\nHaving received one prior NHT other than Enzalutamide (for Cohort 16) / abiraterone (for Cohort 17).","phase":"1/2a 期","sponsor":"Taiwan Tigermed Consultin\ng臺灣泰格國際醫藥股份有限公司","targetNum":"20","enrolled":"9","monthSigned":"0","monthEnrolled":"0","pi":"楊慕華","nurse":"邱佩玲/孔亭方","contractNo":"C2409400","status":"進行中","exclusion":"","subjects":[],"cancerTypes":[{"type":"C R P C","lines":["一線"]}]},{"id":41,"cancerType":"預備中","line":"Translational study","code":"GW-020202","studyTitle":"一項二期、劑量隨機、開放性臨床試驗評估 PTS100用於治療不適合手術切除或局部區域治療的原發性肝癌（ HCC）患者的安全性與療效\n- PTS100, intra-liver tumor injection","inclusion":"Major protocol amedmnet in processing.","phase":"II","sponsor":"共信","targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"黃怡翔","nurse":"李杰如\n0939859265  /\n吳佳勳\n7270轉268","comments":"還未SIV","status":"還未SIV","exclusion":"","subjects":[],"cancerTypes":[{"type":"預備中","lines":["Translational study"]}],"statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":42,"code":"C6461016","status":"進行中","subjects":[],"exclusion":"","cancerType":"胃癌","line":"一線","studyTitle":"一項第 2/3 期介入性試驗，旨在評估 PF-08634404 併用化療，用於先前未接受治療之局部晚期或轉移性胃腺癌、胃食道交界腺癌或食道腺癌參與者","phase":"2/3期","sponsor":"PFIZER","pi":"陳明晃","nurse":"王秋眉","phone":"0927751328","inclusion":"1. HER2 (-)；院內驗 CPS > 1\n2. Measurable lesion by RECIST 1.1\n3. ECOG 0-1\n4. 不可收 B 肝；治療後 C 肝病毒量需驗不到\n5. CCr >=50 mL/min，Hb >9 g/dL，7天內不可輸血或使用 G-CSF\n6. 肺結核、心律不整、心臟疾病或控制不佳高血壓不能進案\n7. 6個月內腸胃道出血不能進案","cancerTypes":[{"type":"胃癌","lines":["一線"]}],"targetNum":"3","enrolled":"1","monthSigned":"1","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":43,"code":"20250004","status":"需問slot","subjects":[],"exclusion":"","cancerType":"多種癌症","line":"二線後","studyTitle":"這是一項第 1/1b 期、開放標記、多中心試驗，探討 AMG 436 用於患有高度 微衛星不穩定/錯配修復缺陷 (MSI-H/dMMR) 的實體腫瘤成人參與者","phase":"1/1b","sponsor":"Amgen Inc","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","inclusion":"1. 經組織學或細胞學確認患有轉移性或局部晚期實體腫瘤\n(MSIH/dMMR)\n2. 至少接受過一線全身性療法(包含先前至少1線的PD-1抗體\n/PD-L1治療)。\n3. 5年內 Tumor Slide: 20片\n4. B / C 型肝炎可納入須為HBV DNA/HCV RNA nondectable","comments":"須向 sponsor 申請 slot","contractNo":"C2602500","cancerTypes":[{"type":"多種癌症","lines":["二線後"]}],"targetNum":"5","enrolled":"1","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":44,"code":"C23-101","status":"進行中","subjects":[],"exclusion":"","cancerType":"多種癌症","line":"二線後","studyTitle":"一項評估P1101及P1801接續性治療對末期實體腫瘤患者安全性、藥物動力學、藥 效動力學及臨床療效的開放性第一期臨床試驗","phase":"1","sponsor":"藥華","pi":"陳明晃","nurse":"陳秀玲 / 吳佳勳 / 王秋眉","phone":"0988660381","inclusion":"納入條件：\n1.標準療法後疾病惡化，無法耐受標準療法，或沒有適用的標準\n療法之病患。\n2.ECOG ≤ 1，\n3.Dose Escalation Phase:所有末期實體腫瘤(Arm A and Arm B)\n4.Dose Expansion Cohort:限腎細胞癌及大腸直腸癌(Arm C)。\nARM A:沒有接受過Anti-PD1 or Anti-PDL1(治療 P1801 IV Q2W)\nARM B: 有接受過Anti-PD1 or Anti-PDL1 (治療P1101 Q2W ,3-\n6 dose then\nP1801 Q2W\n5.先前接受的化學治療wash out 至少2週 或免疫治療至少wash\nout4週\n6眼底檢查(fundus examination):Arm B\n7甲狀腺功能相關之實驗室數值需為正常\n排除條件\n1 自體免疫疾病患者，接受全身性類固醇或免疫抑制劑治療之自\n體免疫疾病\n2 有症狀的腦部腫瘤轉移；或腦膜轉移。\n3.HbA1c ≥7.4%（無法控制之糖尿病）。\n4 控制不佳重度精神疾病，包括嚴重憂鬱、雙極性疾患、思覺失\n調、自殺意念\n5 控制不佳之心血管疾病，\n6 在接受第一劑P1101前4週內使用其他臨床試驗藥物。\n7 曾有藥物誘發肺炎病史或目前患有肺炎。\n8 需全身性抗生素治療之急性感染。\n9. HBV DNA ≥2,000、HCV RNA 陽性或已知 HIV 感染。\n10 在接受第一劑P1101前4週內曾使用telbivudine或在接受第一\n劑P1101後使用telbivudine。","cancerTypes":[{"type":"多種癌症","lines":["二線後"]}],"targetNum":"10","enrolled":"0","monthSigned":"1","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":45,"code":"CA266-0003","status":"進行中","subjects":[],"exclusion":"","cancerType":"大腸癌","line":"一線","studyTitle":"ROSETTA CRC-203：一項以 Pumitamig 合併化療相較於 Bevacizumab 合併化療用於未曾接受治療、無法切除或轉移性大 腸直腸癌參與者的盲性、隨機分配、第 2/3 期試驗","phase":"III","sponsor":"BMS","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","inclusion":"Inclusion:\n1. Completion of adjuvant or neoadjuvant chemotherapy with >6 months before metastatic treatment.\n2. MSS and BRAF V600E wild-type; all RAS (wild-type or mutation) allowed.\n3. Measurable lesion.\n4. Tumor tissue within 3 years (at least 15-20 unstained slides).\nExclusion/other key points:\n1. Ongoing grade 2 diarrhea at screening is excluded.\n2. HBsAg positive or chronic liver disease is excluded.\n3. Treated HCV may be allowed with documented sustained virologic response for 12 weeks.","cancerTypes":[{"type":"大腸癌","lines":["一線"]}],"targetNum":"8","enrolled":"0","monthSigned":"2","monthEnrolled":"2","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"id":46,"code":"MS914001_0002","status":"進行中","subjects":[],"exclusion":"","cancerType":"大腸癌","line":"三線","studyTitle":"一項隨機、開放性、三組的第 3 期試驗，研究 precemtabart tocentecan 併用或不併用 bevacizumab 相較於 trifluridine/tipiracil 加上 bevacizumab 用於先前曾接受治療的 轉移性大腸直腸癌參與者 (PROCEADE-CRC-03)","phase":"3","sponsor":"Merck","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方 / 吳佳勳","phone":"0988660381","inclusion":"納入條件\n1. 轉移情境下接受不超過 2 種全身性治療方案\n2. 接受過fluoropyrimidine, irinotecan, platinum\nagent (e.g. oxaliplatin) 的治療\n3. 接受過 bevacizumab 的治療\n4. RAS/BRAF wt and left-sided tumors: anti-\nEGFR agent :\n5. MSI-H: immune checkpoint inhibitor\n6. BRAF V600E mutation: encorafenib and\ncetuximab\nor encorafenib, cetuximab, and binimetinib\n7. HER-2 targeted therapy: trastuzumab plus\ntucatinib\n8. (neo)adjuvant therapy with PD during or within\n6 months after regimen completion is considered as\n1 regimen line in the metastatic setting\n9.tissue slide 15 片。\n10. measurable lesion or non measurable lesion\n11.必須能夠吞服口服藥錠\n排除條件\n1.在隨機分配前< 4 週內進行過重大手術計在試驗期間\n需要進行重大手術。\n2.無法控制的高血壓（BP 150 /100 mmHg）。\n3 接受過 FTD-TPI、CEACAM5 含有 TOP1 抑制劑載\n荷藥物的 ADC治療。\n5.HBV DNA>2000 IU/ml","contractNo":"C2609800","cancerTypes":[{"type":"大腸癌","lines":["三線"]}],"targetNum":"9","enrolled":"0","monthSigned":"0","monthEnrolled":"0","statusSource":"explicit-field","statusDetectedFromText":false,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"cancerType":"胰臟癌","line":"一線","studyTitle":"RASolute 303：一項第 3 期全球、多中心、開放標示、隨機分配、3 組別試驗，研究 Daraxonrasib 單一療法或 Daraxonrasib 加 Gemcitabine 併用 Nab-paclitaxel，相較於 Gemcitabine 併用 Nab-paclitaxel 作為轉移性胰臟腺癌患者的第一線治療","code":"RMC-6236-303","phase":"III","sponsor":"Revolution Medicines, Inc.","targetNum":"15","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","status":"進行中","inclusion":"收案條件：1. 資料顯示有轉移性胰管腺癌 2. 尚未接受過治療（一線治療） 3. Measurable lesion by RECIST 1.1 4. NON-B,C 肝 5. 需要送腫瘤切片 11 片 6. 需有 RAS 報告 7. 分三組：1.標靶 2.標靶+化療 3.化療","exclusion":"","cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"subjects":[],"statusSource":"explicit-field","statusDetectedFromText":false,"id":47,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"},{"cancerType":"神經內分泌腫瘤","line":"","studyTitle":"Zanzalintinib 相對於 Everolimus，用於罹患無法切除、局部晚期或轉移性神經內分泌瘤，先前接受過治療參與者的一項第 2/3 期、多中心、隨機分配、開放性試驗","code":"XL092-311","phase":"II/III","sponsor":"Exelixis, Inc.","targetNum":"3","enrolled":"","monthSigned":"","monthEnrolled":"","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","status":"進行中","inclusion":"","exclusion":"","contractNo":"C2602100","cancerTypes":[{"type":"神經內分泌腫瘤","lines":[]}],"subjects":[],"statusSource":"explicit-field","statusDetectedFromText":false,"id":48,"studyStatusSnapshotVersion":"v4.3.6-20260901-study-status-pdf","studyStatusSnapshotDate":"2026-09-01"}];
 
 function AccessPasswordModal(props) {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-    
+
     const handleSubmit = (ev) => {
         ev.preventDefault();
         if (props.onAuth(password)) {
@@ -2363,27 +2823,72 @@ function AccessPasswordModal(props) {
             setError(true);
         }
     };
-    
+
+    const toolButtonClass = 'block w-full text-left px-4 py-3 rounded-xl border transition bg-slate-50 hover:bg-blue-50 hover:border-blue-300';
+
     return e('div', {className: 'min-h-screen flex items-center justify-center p-4'},
-        e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'},
-            e('div', null,
-                e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
-                e('p', {className: 'text-center text-xs text-gray-500 mb-4'}, 'Firestore 即時同步版')
+        e('div', {className: 'w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch'},
+            e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
+                e('div', {className: 'mb-6'},
+                    e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-3'}, '免登入'),
+                    e('h2', {className: 'text-2xl font-bold mb-2'}, '臨床工具'),
+                    e('p', {className: 'text-sm text-gray-600'}, '研究護士與醫師快速查詢使用；獨立頁面，不影響臨床試驗資料庫。')
+                ),
+                e('div', {className: 'space-y-3'},
+                    e('a', {href: './tools/renal.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腎功能 / BSA 計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Cockcroft-Gault、CKD-EPI 2021、MDRD、BSA、trial cutoff')
+                    ),
+                    e('a', {href: './tools/chemo-dose.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-cyan-800'}, '化療 / 抗癌藥物劑量計算機'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'BSA、IBW/AdjBW、mg/m²、mg/kg、dose reduction、rounding、Carboplatin AUC')
+                    ),
+                    e('a', {href: './tools/quick-staging.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '腫瘤分期速查器'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '6.0 / 7.0 / 8.0；目前 7.0 規則自動載入，8.0 日後補院內版')
+                    ),
+                    e('a', {href: './tools/ctcae.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'CTCAE 副作用速查器'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'CTCAE v5.0/v6.0 全 AE 並列速查')
+                    ),
+                    e('a', {href: './tools/recist.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, 'RECIST 1.1 / TLS Calculator'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, 'Target lesion sum、relative to baseline/nadir；本機儲存、JSON 可匯出再匯入')
+                    ),
+                    e('a', {href: './tools/nhi/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-teal-800'}, '抗癌藥物健保給付 Navigator BETA'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '依癌種、治療線別與 biomarker 查詢健保抗癌藥物給付')
+                    ),
+                    e('a', {href: './tools/index.html', target: '_blank', rel: 'noopener', className: toolButtonClass},
+                        e('div', {className: 'font-semibold text-gray-900'}, '工具首頁'),
+                        e('div', {className: 'text-xs text-gray-500 mt-1'}, '所有 standalone clinical tools')
+                    )
+                ),
+                e('div', {className: 'mt-6 text-xs text-gray-500 leading-relaxed'},
+                    '提示：工具頁皆為 standalone clinical tools；目前包含 renal/BSA、腫瘤分期、CTCAE、RECIST/TLS 與抗癌藥物健保給付查詢。'
+                )
             ),
-            e('form', {onSubmit: handleSubmit},
-                e('input', {
-                    type: 'password',
-                    value: password,
-                    onChange: (ev) => setPassword(ev.target.value),
-                    placeholder: '請輸入密碼',
-                    className: 'w-full px-4 py-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500',
-                    autoFocus: true
-                }),
-                error && e('div', {className: 'text-red-600 text-sm mb-4'}, '密碼錯誤'),
-                e('button', {
-                    type: 'submit',
-                    className: 'w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold'
-                }, '進入系統')
+            e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
+                e('div', null,
+                    e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.4.0 Firebase版'),
+                    e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
+                ),
+                e('form', {onSubmit: handleSubmit},
+                    e('input', {
+                        type: 'password',
+                        value: password,
+                        onChange: (ev) => setPassword(ev.target.value),
+                        placeholder: '請輸入密碼',
+                        className: 'w-full px-4 py-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500',
+                        autoFocus: true
+                    }),
+                    error && e('div', {className: 'text-red-600 text-sm mb-4'}, '密碼錯誤'),
+                    e('button', {
+                        type: 'submit',
+                        className: 'w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold'
+                    }, '進入系統')
+                )
             )
         )
     );
@@ -2394,17 +2899,17 @@ function TrialCard(props) {
     const [expanded, setExpanded] = useState(false);
     const trial = props.trial;
     
-    return e('div', {className: 'bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow'},
-        e('div', {className: 'flex justify-between items-start mb-4'},
-            e('div', null,
-                e('h3', {className: 'text-xl font-bold text-gray-800'}, trial.code),
+    return e('div', {className: 'min-w-0 bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow'},
+        e('div', {className: 'flex justify-between items-start gap-3 min-w-0 mb-4'},
+            e('div', {className: 'min-w-0 flex-1'},
+                e('h3', {className: 'text-lg sm:text-xl font-bold leading-tight text-gray-800 break-all'}, trial.code),
                 e('p', {
                     className: expanded
                         ? 'text-gray-600 mt-1 whitespace-pre-wrap break-words'
-                        : 'text-gray-600 mt-1'
+                        : 'text-gray-600 mt-1 break-words'
                 }, expanded ? trial.studyTitle : (trial.studyTitle && trial.studyTitle.length > 100 ? trial.studyTitle.substring(0, 100) + '...' : (trial.studyTitle || '')))
             ),
-            e('div', {className: 'flex items-center gap-2'},
+            e('div', {className: 'flex items-center gap-2 shrink-0'},
                 e('span', {
                     className: getTrialStatusBadgeClass(trial)
                 }, trial.status),
@@ -2421,13 +2926,17 @@ function TrialCard(props) {
                         if (ct.lines) {
                             ct.lines.forEach((line, lineIdx) => {
                                 const closed = isClosedTreatmentLine(ct, line);
+                                const lineSource = getTrialLineSource(trial, ct.type, line);
                                 tags.push(e('span', {
                                     key: idx + '-' + lineIdx,
-                                    title: closed ? '此癌種 / 線數目前收滿或暫停收案' : '',
+                                    title: (closed ? '此癌種 / 線數目前收滿或暫停收案；' : '') + (props.isLoggedIn ? '線別來源：' + getLineSourceLabel(lineSource) : ''),
                                     className: closed
-                                        ? 'px-3 py-1 bg-gray-200 text-gray-500 border border-gray-300 rounded-full text-sm line-through decoration-red-500 decoration-2'
-                                        : 'px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
-                                }, (closed ? '✕ ' : '') + ct.type + ' - ' + line));
+                                        ? 'inline-flex items-center gap-1.5 px-3 py-1 bg-gray-200 text-gray-500 border border-gray-300 rounded-full text-sm line-through decoration-red-500 decoration-2'
+                                        : 'inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm'
+                                },
+                                    e('span', null, (closed ? '✕ ' : '') + ct.type + ' - ' + line),
+                                    props.isLoggedIn ? props.isLoggedIn ? e('span', {className: 'px-1.5 py-0.5 rounded-full border text-[10px] leading-none no-underline ' + getLineSourceBadgeClass(lineSource)}, getLineSourceLabel(lineSource)) : null : null
+                                ));
                             });
                         }
                     });
@@ -2440,7 +2949,7 @@ function TrialCard(props) {
             })()
         ),
 
-                e('div', {className: 'grid grid-cols-3 gap-4 text-sm'},
+                e('div', {className: 'grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-sm'},
             e('div', null,
                 e('span', {className: 'text-gray-600'}, 'PI: '),
                 e('span', {className: 'font-semibold'}, trial.pi)
@@ -2459,7 +2968,7 @@ function TrialCard(props) {
                 e('div', {className: 'text-gray-600 font-semibold mb-1'}, '完整試驗名稱:'),
                 e('div', {className: 'text-gray-800 whitespace-pre-wrap break-words'}, trial.studyTitle)
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '試驗期別: '),
                     e('span', null, trial.phase || '')
@@ -2469,7 +2978,7 @@ function TrialCard(props) {
                     e('span', null, trial.sponsor || '')
                 )
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '研究護士: '),
                     e('span', null, trial.nurse || '')
@@ -2479,7 +2988,7 @@ function TrialCard(props) {
                     e('span', null, trial.phone || '')
                 )
             ),
-            e('div', {className: 'grid grid-cols-2 gap-4'},
+            e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                 e('div', null,
                     e('span', {className: 'text-gray-600'}, '目標收案: '),
                     e('span', null, trial.targetNum || 0)
@@ -2778,7 +3287,9 @@ function TrialFormModal(props) {
         archiveDate: '',
         archiveReason: '',
         inclusion: '',
-        exclusion: ''
+        exclusion: '',
+        publicDisclosureApproved: true,
+        publicDepartments: ''
     });
     
     const [cancerLines, setCancerLines] = useState(() => {
@@ -2820,6 +3331,14 @@ function TrialFormModal(props) {
         const trialData = {
             ...form,
             cancerTypes: cancerTypes,
+            lineSources: (() => {
+                const sources = { ...(form.lineSources || {}) };
+                cancerTypes.forEach(ct => (ct.lines || []).forEach(line => {
+                    const key = lineSourceKey(ct.type, line);
+                    if (!sources[key]) sources[key] = 'manual';
+                }));
+                return sources;
+            })(),
             id: isEdit ? form.id : Date.now(),
             targetNum: normalizeText(form.targetNum),
             enrolled: normalizeText(form.enrolled),
@@ -3065,6 +3584,29 @@ function TrialFormModal(props) {
                         className: 'w-full px-3 py-2 border-2 border-slate-300 rounded-lg focus:border-blue-500 focus:outline-none'
                     })
                 ),
+                e('div', {className: 'sm:col-span-2 rounded-xl border border-sky-200 bg-sky-50 p-4'},
+                    e('div', {className: 'flex items-start gap-3'},
+                        e('input', {
+                            id: 'publicDisclosureApproved',
+                            type: 'checkbox',
+                            checked: form.publicDisclosureApproved !== false,
+                            onChange: (ev) => update('publicDisclosureApproved', ev.target.checked),
+                            className: 'mt-1 h-4 w-4'
+                        }),
+                        e('label', {htmlFor: 'publicDisclosureApproved', className: 'text-sm text-sky-950'},
+                            e('div', {className: 'font-bold'}, '可刊登於民眾版臨床試驗資訊公告'),
+                            e('div', {className: 'mt-1 text-xs leading-relaxed'}, '預設可刊登；若個別案件因 Sponsor、合約或保密限制不宜公開，取消勾選即可。民眾版只輸出疾病/癌種、試驗名稱、Phase、治療線別、招募狀態、建議科別與掛號入口；Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註永不輸出。')
+                        )
+                    ),
+                    e('label', {className: 'block text-sm font-semibold text-slate-700 mt-3 mb-1'}, '民眾版建議科別（選填）'),
+                    e('input', {
+                        type: 'text',
+                        value: form.publicDepartments || '',
+                        onChange: (ev) => update('publicDepartments', ev.target.value),
+                        placeholder: '例如：腫瘤醫學部、胸腔部；留空則依癌種自動建議',
+                        className: 'w-full px-3 py-2 border-2 border-sky-200 rounded-lg bg-white focus:border-sky-500 focus:outline-none'
+                    })
+                ),
                 e('div', null,
                     e('label', {className: 'block text-sm font-semibold text-slate-700 mb-1'}, '附註 / comments'),
                     e('textarea', {
@@ -3166,7 +3708,7 @@ function ImportStatusModal(props) {
                 setParsedRows(info.rows);
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
-                alert(`PDF讀取成功：主表 ${result.tablePageCount || 0} 頁／共 ${result.totalPageCount || 0} 頁；有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。匯入前請先確認筆數是否符合原表。`);
+                alert(`PDF讀取成功：${result.sourceDate ? `資料日期 ${result.sourceDate}；` : ''}主表 ${result.tablePageCount || 0} 頁／共 ${result.totalPageCount || 0} 頁；有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。${(result.warnings || []).length ? `\n⚠ 仍有可疑欄位：${result.warnings.join(', ')}，請先看預覽。` : ''}`);
             } else {
                 const text = await file.text();
                 setCsvText(text);
@@ -3324,6 +3866,7 @@ function App() {
     const [syncStatus, setSyncStatus] = useState('');
     const [showArchived, setShowArchived] = useState(false);
     const [onlyOpenEnrollment, setOnlyOpenEnrollment] = useState(false);
+    const [onlyLineNeedsReview, setOnlyLineNeedsReview] = useState(false);
     const [firebaseConfig, setFirebaseConfig] = useState(DEFAULT_FIREBASE_CONFIG);
     const [firebaseEnabled, setFirebaseEnabled] = useState(true);
     const [showFirebaseModal, setShowFirebaseModal] = useState(false);
@@ -3530,7 +4073,7 @@ function App() {
             alert('Firebase 尚未啟用，無法發布公開查詢資料。');
             return;
         }
-        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含癌種、線別、收案狀態、納入/排除條件與公開洽詢醫師，不包含研究護理師、電話、LINE、受試者或內部備註。');
+        const ok = window.confirm('確定要發布「公開版」臨床試驗資料？\n\n公開版只包含疾病/癌種、試驗名稱、Phase、治療線別、目前狀態、建議科別與掛號入口。Inclusion/Exclusion、PI/Sub-I、CRC、電話、Email 與內部備註不會輸出。取消『可刊登於民眾版』或已停止/收滿的試驗不會發布。');
         if (!ok) return;
         try {
             setSyncStatus('正在發布公開查詢資料...');
@@ -3773,6 +4316,11 @@ function App() {
         if (onlyOpenEnrollment) {
             result = result.filter(t => trialHasOpenEnrollment(t, cancerType, selectedLine));
         }
+
+        // 線別來源稽核：只顯示 parser 自動推論、表格沿用或尚未標記的舊資料。
+        if (onlyLineNeedsReview) {
+            result = result.filter(t => trialHasLineSourceNeedingReview(t, cancerType, selectedLine));
+        }
         
         // 搜尋篩選
         if (search) {
@@ -3831,7 +4379,7 @@ function App() {
             const bk = trialSortKey(b);
             return ak.cancerRank - bk.cancerRank || ak.lineRank - bk.lineRank || ak.code.localeCompare(bk.code);
         });
-    }, [trials, search, cancerType, selectedLine, showArchived, onlyOpenEnrollment]);
+    }, [trials, search, cancerType, selectedLine, showArchived, onlyOpenEnrollment, onlyLineNeedsReview]);
     
     const cancerTypes = useMemo(() => {
         const map = new Map();
@@ -3891,17 +4439,30 @@ function App() {
     
     return e('div', {className: 'min-h-screen'},
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
-            e('div', {className: 'max-w-7xl mx-auto px-4 py-4'},
+            e('div', {className: 'max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'text-2xl font-bold text-slate-800'}, '臨床試驗管理系統 v4.1.9 Firebase版'),
+                    e('h1', {className: 'min-w-0 text-lg sm:text-2xl font-bold leading-tight text-slate-800'}, '臨床試驗管理系統 v4.4.0 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
-                        className: 'px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+                        className: 'shrink-0 ml-3 px-3 sm:px-6 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700'
                     }, isAdmin ? '登出' : '管理員登入')
                 )
             )
         ),
-        e('div', {className: 'max-w-7xl mx-auto px-4 py-8'},
+        // homepage-qr-20260904
+        e('div', {className: 'max-w-7xl mx-auto px-2 sm:px-4 pt-4 sm:pt-5'},
+            e('div', {className: 'bg-white border border-blue-100 rounded-xl shadow-sm px-3 sm:px-4 py-3 flex items-center gap-3 sm:gap-4'},
+                e('a', {href: 'https://coingate-cmyk.github.io/clinicaltrialvghtpe/', target: '_blank', rel: 'noopener noreferrer', className: 'shrink-0 bg-white p-1.5 sm:p-2 rounded-lg border border-slate-200 hover:border-blue-300 transition-colors', title: '掃描或點擊開啟臨床試驗管理系統'},
+                    e('img', {src: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPHN2ZyB3aWR0aD0iNDFtbSIgaGVpZ2h0PSI0MW1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA0MSA0MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNCw0SDVWNUg0ek01LDRINlY1SDV6TTYsNEg3VjVINnpNNyw0SDhWNUg3ek04LDRIOVY1SDh6TTksNEgxMFY1SDl6TTEwLDRIMTFWNUgxMHpNMTMsNEgxNFY1SDEzek0xNSw0SDE2VjVIMTV6TTE2LDRIMTdWNUgxNnpNMTcsNEgxOFY1SDE3ek0xOCw0SDE5VjVIMTh6TTE5LDRIMjBWNUgxOXpNMjEsNEgyMlY1SDIxek0yMiw0SDIzVjVIMjJ6TTIzLDRIMjRWNUgyM3pNMjQsNEgyNVY1SDI0ek0yNSw0SDI2VjVIMjV6TTI2LDRIMjdWNUgyNnpNMjcsNEgyOFY1SDI3ek0zMCw0SDMxVjVIMzB6TTMxLDRIMzJWNUgzMXpNMzIsNEgzM1Y1SDMyek0zMyw0SDM0VjVIMzN6TTM0LDRIMzVWNUgzNHpNMzUsNEgzNlY1SDM1ek0zNiw0SDM3VjVIMzZ6TTQsNUg1VjZINHpNMTAsNUgxMVY2SDEwek0xMyw1SDE0VjZIMTN6TTE1LDVIMTZWNkgxNXpNMTcsNUgxOFY2SDE3ek0xOCw1SDE5VjZIMTh6TTE5LDVIMjBWNkgxOXpNMjAsNUgyMVY2SDIwek0yMiw1SDIzVjZIMjJ6TTI0LDVIMjVWNkgyNHpNMjUsNUgyNlY2SDI1ek0yNyw1SDI4VjZIMjd6TTI4LDVIMjlWNkgyOHpNMzAsNUgzMVY2SDMwek0zNiw1SDM3VjZIMzZ6TTQsNkg1VjdINHpNNiw2SDdWN0g2ek03LDZIOFY3SDd6TTgsNkg5VjdIOHpNMTAsNkgxMVY3SDEwek0xNCw2SDE1VjdIMTR6TTE1LDZIMTZWN0gxNXpNMTYsNkgxN1Y3SDE2ek0xNyw2SDE4VjdIMTd6TTE5LDZIMjBWN0gxOXpNMjIsNkgyM1Y3SDIyek0yMyw2SDI0VjdIMjN6TTI2LDZIMjdWN0gyNnpNMzAsNkgzMVY3SDMwek0zMiw2SDMzVjdIMzJ6TTMzLDZIMzRWN0gzM3pNMzQsNkgzNVY3SDM0ek0zNiw2SDM3VjdIMzZ6TTQsN0g1VjhINHpNNiw3SDdWOEg2ek03LDdIOFY4SDd6TTgsN0g5VjhIOHpNMTAsN0gxMVY4SDEwek0xMyw3SDE0VjhIMTN6TTE0LDdIMTVWOEgxNHpNMTcsN0gxOFY4SDE3ek0xOCw3SDE5VjhIMTh6TTIwLDdIMjFWOEgyMHpNMjEsN0gyMlY4SDIxek0yMiw3SDIzVjhIMjJ6TTI2LDdIMjdWOEgyNnpNMjcsN0gyOFY4SDI3ek0zMCw3SDMxVjhIMzB6TTMyLDdIMzNWOEgzMnpNMzMsN0gzNFY4SDMzek0zNCw3SDM1VjhIMzR6TTM2LDdIMzdWOEgzNnpNNCw4SDVWOUg0ek02LDhIN1Y5SDZ6TTcsOEg4VjlIN3pNOCw4SDlWOUg4ek0xMCw4SDExVjlIMTB6TTEzLDhIMTRWOUgxM3pNMTUsOEgxNlY5SDE1ek0xNiw4SDE3VjlIMTZ6TTE4LDhIMTlWOUgxOHpNMjEsOEgyMlY5SDIxek0yMiw4SDIzVjlIMjJ6TTIzLDhIMjRWOUgyM3pNMjQsOEgyNVY5SDI0ek0yNiw4SDI3VjlIMjZ6TTI3LDhIMjhWOUgyN3pNMzAsOEgzMVY5SDMwek0zMiw4SDMzVjlIMzJ6TTMzLDhIMzRWOUgzM3pNMzQsOEgzNVY5SDM0ek0zNiw4SDM3VjlIMzZ6TTQsOUg1VjEwSDR6TTEwLDlIMTFWMTBIMTB6TTEyLDlIMTNWMTBIMTJ6TTE1LDlIMTZWMTBIMTV6TTE2LDlIMTdWMTBIMTZ6TTE3LDlIMThWMTBIMTd6TTE4LDlIMTlWMTBIMTh6TTE5LDlIMjBWMTBIMTl6TTIwLDlIMjFWMTBIMjB6TTIxLDlIMjJWMTBIMjF6TTIyLDlIMjNWMTBIMjJ6TTIzLDlIMjRWMTBIMjN6TTI1LDlIMjZWMTBIMjV6TTI4LDlIMjlWMTBIMjh6TTMwLDlIMzFWMTBIMzB6TTM2LDlIMzdWMTBIMzZ6TTQsMTBINVYxMUg0ek01LDEwSDZWMTFINXpNNiwxMEg3VjExSDZ6TTcsMTBIOFYxMUg3ek04LDEwSDlWMTFIOHpNOSwxMEgxMFYxMUg5ek0xMCwxMEgxMVYxMUgxMHpNMTIsMTBIMTNWMTFIMTJ6TTE0LDEwSDE1VjExSDE0ek0xNiwxMEgxN1YxMUgxNnpNMTgsMTBIMTlWMTFIMTh6TTIwLDEwSDIxVjExSDIwek0yMiwxMEgyM1YxMUgyMnpNMjQsMTBIMjVWMTFIMjR6TTI2LDEwSDI3VjExSDI2ek0yOCwxMEgyOVYxMUgyOHpNMzAsMTBIMzFWMTFIMzB6TTMxLDEwSDMyVjExSDMxek0zMiwxMEgzM1YxMUgzMnpNMzMsMTBIMzRWMTFIMzN6TTM0LDEwSDM1VjExSDM0ek0zNSwxMEgzNlYxMUgzNXpNMzYsMTBIMzdWMTFIMzZ6TTE1LDExSDE2VjEySDE1ek0xOCwxMUgxOVYxMkgxOHpNMTksMTFIMjBWMTJIMTl6TTIwLDExSDIxVjEySDIwek0yMSwxMUgyMlYxMkgyMXpNMjMsMTFIMjRWMTJIMjN6TTI0LDExSDI1VjEySDI0ek0yNSwxMUgyNlYxMkgyNXpNMjcsMTFIMjhWMTJIMjd6TTQsMTJINVYxM0g0ek03LDEySDhWMTNIN3pNOSwxMkgxMFYxM0g5ek0xMCwxMkgxMVYxM0gxMHpNMTIsMTJIMTNWMTNIMTJ6TTE1LDEySDE2VjEzSDE1ek0xNywxMkgxOFYxM0gxN3pNMTgsMTJIMTlWMTNIMTh6TTIwLDEySDIxVjEzSDIwek0yMywxMkgyNFYxM0gyM3pNMjUsMTJIMjZWMTNIMjV6TTI3LDEySDI4VjEzSDI3ek0yOCwxMkgyOVYxM0gyOHpNMjksMTJIMzBWMTNIMjl6TTMxLDEySDMyVjEzSDMxek00LDEzSDVWMTRINHpNNSwxM0g2VjE0SDV6TTcsMTNIOFYxNEg3ek0xNSwxM0gxNlYxNEgxNXpNMTcsMTNIMThWMTRIMTd6TTIxLDEzSDIyVjE0SDIxek0yNCwxM0gyNVYxNEgyNHpNMjUsMTNIMjZWMTRIMjV6TTI2LDEzSDI3VjE0SDI2ek0yOCwxM0gyOVYxNEgyOHpNMjksMTNIMzBWMTRIMjl6TTMwLDEzSDMxVjE0SDMwek0zMSwxM0gzMlYxNEgzMXpNMzUsMTNIMzZWMTRIMzV6TTM2LDEzSDM3VjE0SDM2ek00LDE0SDVWMTVINHpNNSwxNEg2VjE1SDV6TTEwLDE0SDExVjE1SDEwek0xMiwxNEgxM1YxNUgxMnpNMTMsMTRIMTRWMTVIMTN6TTE0LDE0SDE1VjE1SDE0ek0xNSwxNEgxNlYxNUgxNXpNMTYsMTRIMTdWMTVIMTZ6TTE3LDE0SDE4VjE1SDE3ek0xOCwxNEgxOVYxNUgxOHpNMjIsMTRIMjNWMTVIMjJ6TTIzLDE0SDI0VjE1SDIzek0yNSwxNEgyNlYxNUgyNXpNMjYsMTRIMjdWMTVIMjZ6TTI4LDE0SDI5VjE1SDI4ek0yOSwxNEgzMFYxNUgyOXpNMzAsMTRIMzFWMTVIMzB6TTMxLDE0SDMyVjE1SDMxek0zMiwxNEgzM1YxNUgzMnpNMzQsMTRIMzVWMTVIMzR6TTM2LDE0SDM3VjE1SDM2ek00LDE1SDVWMTZINHpNNywxNUg4VjE2SDd6TTgsMTVIOVYxNkg4ek05LDE1SDEwVjE2SDl6TTExLDE1SDEyVjE2SDExek0xMywxNUgxNFYxNkgxM3pNMTcsMTVIMThWMTZIMTd6TTIyLDE1SDIzVjE2SDIyek0yMywxNUgyNFYxNkgyM3pNMjQsMTVIMjVWMTZIMjR6TTI1LDE1SDI2VjE2SDI1ek0yNywxNUgyOFYxNkgyN3pNMjgsMTVIMjlWMTZIMjh6TTMwLDE1SDMxVjE2SDMwek0zMiwxNUgzM1YxNkgzMnpNMzMsMTVIMzRWMTZIMzN6TTQsMTZINVYxN0g0ek02LDE2SDdWMTdINnpNOSwxNkgxMFYxN0g5ek0xMCwxNkgxMVYxN0gxMHpNMTIsMTZIMTNWMTdIMTJ6TTE0LDE2SDE1VjE3SDE0ek0xOCwxNkgxOVYxN0gxOHpNMjAsMTZIMjFWMTdIMjB6TTIyLDE2SDIzVjE3SDIyek0yMywxNkgyNFYxN0gyM3pNMjQsMTZIMjVWMTdIMjR6TTI1LDE2SDI2VjE3SDI1ek0yNywxNkgyOFYxN0gyN3pNMjgsMTZIMjlWMTdIMjh6TTI5LDE2SDMwVjE3SDI5ek0zMCwxNkgzMVYxN0gzMHpNMzMsMTZIMzRWMTdIMzN6TTM2LDE2SDM3VjE3SDM2ek02LDE3SDdWMThINnpNMTEsMTdIMTJWMThIMTF6TTE2LDE3SDE3VjE4SDE2ek0xOCwxN0gxOVYxOEgxOHpNMTksMTdIMjBWMThIMTl6TTIxLDE3SDIyVjE4SDIxek0yMiwxN0gyM1YxOEgyMnpNMjMsMTdIMjRWMThIMjN6TTI1LDE3SDI2VjE4SDI1ek0yNiwxN0gyN1YxOEgyNnpNMjgsMTdIMjlWMThIMjh6TTMwLDE3SDMxVjE4SDMwek0zMiwxN0gzM1YxOEgzMnpNMzQsMTdIMzVWMThIMzR6TTM1LDE3SDM2VjE4SDM1ek0zNiwxN0gzN1YxOEgzNnpNNywxOEg4VjE5SDd6TTksMThIMTBWMTlIOXpNMTAsMThIMTFWMTlIMTB6TTExLDE4SDEyVjE5SDExek0xMywxOEgxNFYxOUgxM3pNMTUsMThIMTZWMTlIMTV6TTE2LDE4SDE3VjE5SDE2ek0xOCwxOEgxOVYxOUgxOHpNMTksMThIMjBWMTlIMTl6TTIwLDE4SDIxVjE5SDIwek0yNCwxOEgyNVYxOUgyNHpNMjcsMThIMjhWMTlIMjd6TTI5LDE4SDMwVjE5SDI5ek0zMCwxOEgzMVYxOUgzMHpNMzEsMThIMzJWMTlIMzF6TTMzLDE4SDM0VjE5SDMzek0zNCwxOEgzNVYxOUgzNHpNMzUsMThIMzZWMTlIMzV6TTgsMTlIOVYyMEg4ek0xMSwxOUgxMlYyMEgxMXpNMTMsMTlIMTRWMjBIMTN6TTE0LDE5SDE1VjIwSDE0ek0xNSwxOUgxNlYyMEgxNXpNMTYsMTlIMTdWMjBIMTZ6TTE3LDE5SDE4VjIwSDE3ek0yMCwxOUgyMVYyMEgyMHpNMjEsMTlIMjJWMjBIMjF6TTIyLDE5SDIzVjIwSDIyek0yMywxOUgyNFYyMEgyM3pNMjQsMTlIMjVWMjBIMjR6TTI1LDE5SDI2VjIwSDI1ek0yNywxOUgyOFYyMEgyN3pNMzAsMTlIMzFWMjBIMzB6TTMxLDE5SDMyVjIwSDMxek0zNSwxOUgzNlYyMEgzNXpNNywyMEg4VjIxSDd6TTEwLDIwSDExVjIxSDEwek0xMSwyMEgxMlYyMUgxMXpNMTMsMjBIMTRWMjFIMTN6TTE0LDIwSDE1VjIxSDE0ek0xNiwyMEgxN1YyMUgxNnpNMTcsMjBIMThWMjFIMTd6TTE5LDIwSDIwVjIxSDE5ek0yMSwyMEgyMlYyMUgyMXpNMjMsMjBIMjRWMjFIMjN6TTI1LDIwSDI2VjIxSDI1ek0yNiwyMEgyN1YyMUgyNnpNMjcsMjBIMjhWMjFIMjd6TTI4LDIwSDI5VjIxSDI4ek0zMCwyMEgzMVYyMUgzMHpNMzIsMjBIMzNWMjFIMzJ6TTM1LDIwSDM2VjIxSDM1ek01LDIxSDZWMjJINXpNNiwyMUg3VjIySDZ6TTcsMjFIOFYyMkg3ek04LDIxSDlWMjJIOHpNOSwyMUgxMFYyMkg5ek0xMywyMUgxNFYyMkgxM3pNMTUsMjFIMTZWMjJIMTV6TTE3LDIxSDE4VjIySDE3ek0yMCwyMUgyMVYyMkgyMHpNMjEsMjFIMjJWMjJIMjF6TTI1LDIxSDI2VjIySDI1ek0yNywyMUgyOFYyMkgyN3pNMjgsMjFIMjlWMjJIMjh6TTI5LDIxSDMwVjIySDI5ek0zMSwyMUgzMlYyMkgzMXpNMzMsMjFIMzRWMjJIMzN6TTM1LDIxSDM2VjIySDM1ek00LDIySDVWMjNINHpNNiwyMkg3VjIzSDZ6TTcsMjJIOFYyM0g3ek0xMCwyMkgxMVYyM0gxMHpNMTEsMjJIMTJWMjNIMTF6TTEyLDIySDEzVjIzSDEyek0xNCwyMkgxNVYyM0gxNHpNMTUsMjJIMTZWMjNIMTV6TTE2LDIySDE3VjIzSDE2ek0xNywyMkgxOFYyM0gxN3pNMTgsMjJIMTlWMjNIMTh6TTIxLDIySDIyVjIzSDIxek0yNSwyMkgyNlYyM0gyNXpNMjksMjJIMzBWMjNIMjl6TTM0LDIySDM1VjIzSDM0ek0zNSwyMkgzNlYyM0gzNXpNMzYsMjJIMzdWMjNIMzZ6TTUsMjNINlYyNEg1ek0xMiwyM0gxM1YyNEgxMnpNMTQsMjNIMTVWMjRIMTR6TTE1LDIzSDE2VjI0SDE1ek0xNiwyM0gxN1YyNEgxNnpNMTksMjNIMjBWMjRIMTl6TTI0LDIzSDI1VjI0SDI0ek0yNSwyM0gyNlYyNEgyNXpNMjcsMjNIMjhWMjRIMjd6TTMxLDIzSDMyVjI0SDMxek0zNSwyM0gzNlYyNEgzNXpNMzYsMjNIMzdWMjRIMzZ6TTQsMjRINVYyNUg0ek01LDI0SDZWMjVINXpNMTAsMjRIMTFWMjVIMTB6TTExLDI0SDEyVjI1SDExek0xMywyNEgxNFYyNUgxM3pNMTQsMjRIMTVWMjVIMTR6TTE1LDI0SDE2VjI1SDE1ek0xNywyNEgxOFYyNUgxN3pNMTgsMjRIMTlWMjVIMTh6TTIxLDI0SDIyVjI1SDIxek0yMywyNEgyNFYyNUgyM3pNMjUsMjRIMjZWMjVIMjV6TTI4LDI0SDI5VjI1SDI4ek0yOSwyNEgzMFYyNUgyOXpNMzUsMjRIMzZWMjVIMzV6TTM2LDI0SDM3VjI1SDM2ek02LDI1SDdWMjZINnpNOSwyNUgxMFYyNkg5ek0xMiwyNUgxM1YyNkgxMnpNMTMsMjVIMTRWMjZIMTN6TTE0LDI1SDE1VjI2SDE0ek0xNSwyNUgxNlYyNkgxNXpNMTYsMjVIMTdWMjZIMTZ6TTE4LDI1SDE5VjI2SDE4ek0xOSwyNUgyMFYyNkgxOXpNMjQsMjVIMjVWMjZIMjR6TTI1LDI1SDI2VjI2SDI1ek0yOCwyNUgyOVYyNkgyOHpNMzAsMjVIMzFWMjZIMzB6TTMzLDI1SDM0VjI2SDMzek0zNCwyNUgzNVYyNkgzNHpNMzUsMjVIMzZWMjZIMzV6TTM2LDI1SDM3VjI2SDM2ek00LDI2SDVWMjdINHpNNSwyNkg2VjI3SDV6TTYsMjZIN1YyN0g2ek03LDI2SDhWMjdIN3pNMTAsMjZIMTFWMjdIMTB6TTExLDI2SDEyVjI3SDExek0xMywyNkgxNFYyN0gxM3pNMTcsMjZIMThWMjdIMTd6TTE4LDI2SDE5VjI3SDE4ek0yMCwyNkgyMVYyN0gyMHpNMjIsMjZIMjNWMjdIMjJ6TTIzLDI2SDI0VjI3SDIzek0yNCwyNkgyNVYyN0gyNHpNMjYsMjZIMjdWMjdIMjZ6TTI4LDI2SDI5VjI3SDI4ek0yOSwyNkgzMFYyN0gyOXpNMzAsMjZIMzFWMjdIMzB6TTMxLDI2SDMyVjI3SDMxek0zMywyNkgzNFYyN0gzM3pNMzQsMjZIMzVWMjdIMzR6TTM2LDI2SDM3VjI3SDM2ek01LDI3SDZWMjhINXpNMTIsMjdIMTNWMjhIMTJ6TTE0LDI3SDE1VjI4SDE0ek0xNSwyN0gxNlYyOEgxNXpNMTYsMjdIMTdWMjhIMTZ6TTE5LDI3SDIwVjI4SDE5ek0yMiwyN0gyM1YyOEgyMnpNMjMsMjdIMjRWMjhIMjN6TTI0LDI3SDI1VjI4SDI0ek0yNSwyN0gyNlYyOEgyNXpNMjYsMjdIMjdWMjhIMjZ6TTI3LDI3SDI4VjI4SDI3ek0zMSwyN0gzMlYyOEgzMXpNMzIsMjdIMzNWMjhIMzJ6TTMzLDI3SDM0VjI4SDMzek0zNSwyN0gzNlYyOEgzNXpNMzYsMjdIMzdWMjhIMzZ6TTQsMjhINVYyOUg0ek02LDI4SDdWMjlINnpNNywyOEg4VjI5SDd6TTgsMjhIOVYyOUg4ek05LDI4SDEwVjI5SDl6TTEwLDI4SDExVjI5SDEwek0xMSwyOEgxMlYyOUgxMXpNMTMsMjhIMTRWMjlIMTN6TTE2LDI4SDE3VjI5SDE2ek0xNywyOEgxOFYyOUgxN3pNMTgsMjhIMTlWMjlIMTh6TTIxLDI4SDIyVjI5SDIxek0yNCwyOEgyNVYyOUgyNHpNMjUsMjhIMjZWMjlIMjV6TTI2LDI4SDI3VjI5SDI2ek0yOCwyOEgyOVYyOUgyOHpNMjksMjhIMzBWMjlIMjl6TTMwLDI4SDMxVjI5SDMwek0zMSwyOEgzMlYyOUgzMXpNMzIsMjhIMzNWMjlIMzJ6TTM1LDI4SDM2VjI5SDM1ek0zNiwyOEgzN1YyOUgzNnpNMTIsMjlIMTNWMzBIMTJ6TTEzLDI5SDE0VjMwSDEzek0xNiwyOUgxN1YzMEgxNnpNMTgsMjlIMTlWMzBIMTh6TTIxLDI5SDIyVjMwSDIxek0yMiwyOUgyM1YzMEgyMnpNMjMsMjlIMjRWMzBIMjN6TTI0LDI5SDI1VjMwSDI0ek0yNiwyOUgyN1YzMEgyNnpNMjcsMjlIMjhWMzBIMjd6TTI4LDI5SDI5VjMwSDI4ek0zMiwyOUgzM1YzMEgzMnpNMzMsMjlIMzRWMzBIMzN6TTM2LDI5SDM3VjMwSDM2ek00LDMwSDVWMzFINHpNNSwzMEg2VjMxSDV6TTYsMzBIN1YzMUg2ek03LDMwSDhWMzFIN3pNOCwzMEg5VjMxSDh6TTksMzBIMTBWMzFIOXpNMTAsMzBIMTFWMzFIMTB6TTEzLDMwSDE0VjMxSDEzek0xNiwzMEgxN1YzMUgxNnpNMTcsMzBIMThWMzFIMTd6TTE4LDMwSDE5VjMxSDE4ek0yMCwzMEgyMVYzMUgyMHpNMjEsMzBIMjJWMzFIMjF6TTIyLDMwSDIzVjMxSDIyek0yNCwzMEgyNVYzMUgyNHpNMjYsMzBIMjdWMzFIMjZ6TTI4LDMwSDI5VjMxSDI4ek0zMCwzMEgzMVYzMUgzMHpNMzIsMzBIMzNWMzFIMzJ6TTMzLDMwSDM0VjMxSDMzek0zNCwzMEgzNVYzMUgzNHpNNCwzMUg1VjMySDR6TTEwLDMxSDExVjMySDEwek0xMiwzMUgxM1YzMkgxMnpNMTUsMzFIMTZWMzJIMTV6TTE2LDMxSDE3VjMySDE2ek0xNywzMUgxOFYzMkgxN3pNMTksMzFIMjBWMzJIMTl6TTIxLDMxSDIyVjMySDIxek0yMiwzMUgyM1YzMkgyMnpNMjUsMzFIMjZWMzJIMjV6TTI4LDMxSDI5VjMySDI4ek0zMiwzMUgzM1YzMkgzMnpNMzYsMzFIMzdWMzJIMzZ6TTQsMzJINVYzM0g0ek02LDMySDdWMzNINnpNNywzMkg4VjMzSDd6TTgsMzJIOVYzM0g4ek0xMCwzMkgxMVYzM0gxMHpNMTMsMzJIMTRWMzNIMTN6TTE3LDMySDE4VjMzSDE3ek0xOSwzMkgyMFYzM0gxOXpNMjIsMzJIMjNWMzNIMjJ6TTIzLDMySDI0VjMzSDIzek0yNSwzMkgyNlYzM0gyNXpNMjYsMzJIMjdWMzNIMjZ6TTI4LDMySDI5VjMzSDI4ek0yOSwzMkgzMFYzM0gyOXpNMzAsMzJIMzFWMzNIMzB6TTMxLDMySDMyVjMzSDMxek0zMiwzMkgzM1YzM0gzMnpNMzMsMzJIMzRWMzNIMzN6TTQsMzNINVYzNEg0ek02LDMzSDdWMzRINnpNNywzM0g4VjM0SDd6TTgsMzNIOVYzNEg4ek0xMCwzM0gxMVYzNEgxMHpNMTIsMzNIMTNWMzRIMTJ6TTEzLDMzSDE0VjM0SDEzek0xNCwzM0gxNVYzNEgxNHpNMTYsMzNIMTdWMzRIMTZ6TTE3LDMzSDE4VjM0SDE3ek0xOSwzM0gyMFYzNEgxOXpNMjAsMzNIMjFWMzRIMjB6TTIyLDMzSDIzVjM0SDIyek0yNiwzM0gyN1YzNEgyNnpNMjcsMzNIMjhWMzRIMjd6TTI4LDMzSDI5VjM0SDI4ek0zMCwzM0gzMVYzNEgzMHpNMzIsMzNIMzNWMzRIMzJ6TTMzLDMzSDM0VjM0SDMzek0zNCwzM0gzNVYzNEgzNHpNNCwzNEg1VjM1SDR6TTYsMzRIN1YzNUg2ek03LDM0SDhWMzVIN3pNOCwzNEg5VjM1SDh6TTEwLDM0SDExVjM1SDEwek0xNCwzNEgxNVYzNUgxNHpNMTYsMzRIMTdWMzVIMTZ6TTE5LDM0SDIwVjM1SDE5ek0yMCwzNEgyMVYzNUgyMHpNMjQsMzRIMjVWMzVIMjR6TTI3LDM0SDI4VjM1SDI3ek0zMiwzNEgzM1YzNUgzMnpNMzYsMzRIMzdWMzVIMzZ6TTQsMzVINVYzNkg0ek0xMCwzNUgxMVYzNkgxMHpNMTUsMzVIMTZWMzZIMTV6TTE2LDM1SDE3VjM2SDE2ek0xNywzNUgxOFYzNkgxN3pNMjEsMzVIMjJWMzZIMjF6TTI0LDM1SDI1VjM2SDI0ek0yNSwzNUgyNlYzNkgyNXpNMjgsMzVIMjlWMzZIMjh6TTI5LDM1SDMwVjM2SDI5ek00LDM2SDVWMzdINHpNNSwzNkg2VjM3SDV6TTYsMzZIN1YzN0g2ek03LDM2SDhWMzdIN3pNOCwzNkg5VjM3SDh6TTksMzZIMTBWMzdIOXpNMTAsMzZIMTFWMzdIMTB6TTEyLDM2SDEzVjM3SDEyek0xMywzNkgxNFYzN0gxM3pNMTQsMzZIMTVWMzdIMTR6TTE1LDM2SDE2VjM3SDE1ek0xOCwzNkgxOVYzN0gxOHpNMTksMzZIMjBWMzdIMTl6TTIwLDM2SDIxVjM3SDIwek0yNSwzNkgyNlYzN0gyNXpNMjgsMzZIMjlWMzdIMjh6TTMyLDM2SDMzVjM3SDMyek0zMywzNkgzNFYzN0gzM3pNMzUsMzZIMzZWMzdIMzV6IiBpZD0icXItcGF0aCIgZmlsbD0iIzAwMDAwMCIgZmlsbC1vcGFjaXR5PSIxIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgLz48L3N2Zz4=', alt: '臨床試驗管理系統 QR Code', className: 'w-24 h-24 sm:w-28 sm:h-28'})
+                ),
+                e('div', {className: 'min-w-0'},
+                    e('div', {className: 'text-sm sm:text-base font-bold text-slate-800'}, '手機掃描開啟系統'),
+                    e('div', {className: 'mt-1 text-xs sm:text-sm leading-relaxed text-slate-600'}, '用手機相機掃描 QR Code，即可開啟臨床試驗管理系統。'),
+                    e('a', {href: 'https://coingate-cmyk.github.io/clinicaltrialvghtpe/', target: '_blank', rel: 'noopener noreferrer', className: 'mt-2 inline-block text-[11px] sm:text-xs text-blue-700 hover:underline break-all'}, 'coingate-cmyk.github.io/clinicaltrialvghtpe/')
+                )
+            )
+        ),
+        e('div', {className: 'max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8'},
             e('div', {className: 'flex flex-wrap gap-3 mb-6'},
                 isAdmin && e('button', {
                     onClick: () => setShowAddModal(true),
@@ -3942,12 +4503,12 @@ function App() {
                 ),
                 isAdmin && e('button', {
                     onClick: handlePublishPublicTrials,
-                    title: '將目前內部資料轉成去識別化公開版並發布到 Firestore public/clinical-trials',
+                    title: '依民眾版白名單 schema 發布到 Firestore public/clinical-trials；不輸出 I/E、PI/Sub-I、CRC 或聯絡資訊',
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg font-semibold'
                 }, '發布公開查詢'),
                 isAdmin && e('button', {
                     onClick: handleExportPublicTrialsJSON,
-                    title: '下載去識別化公開版 public_trials.json；不含研究護理師、電話、LINE、受試者或內部備註',
+                    title: '下載民眾版白名單 public_trials.json；不含 I/E、PI/Sub-I、CRC、電話、Email 或內部備註',
                     className: 'flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-lime-500 to-green-600 text-white rounded-xl hover:from-lime-600 hover:to-green-700 transition-all shadow-lg font-semibold'
                 }, '下載公開JSON'),
                 isAdmin && e('button', {
@@ -4000,6 +4561,24 @@ function App() {
                         className: 'w-4 h-4'
                     }),
                     e('span', null, onlyOpenEnrollment ? '✓ 只顯示仍能收案（已啟用）' : '只顯示仍能收案')
+                ),
+                e('label', {
+                    className: 'flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border font-medium ' +
+                        (onlyLineNeedsReview ? 'bg-amber-100 border-amber-400 text-amber-950' : 'bg-amber-50 border-amber-200 text-amber-900')
+                },
+                    e('input', {
+                        type: 'checkbox',
+                        checked: onlyLineNeedsReview,
+                        onChange: (ev) => setOnlyLineNeedsReview(ev.target.checked),
+                        className: 'w-4 h-4'
+                    }),
+                    e('span', null, onlyLineNeedsReview ? '⚠ 只顯示線別需核對（已啟用）' : '只顯示線別需核對')
+                )
+            ),
+            isAdmin && isAdmin && e('div', {className: 'mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-600'},
+                e('span', {className: 'font-semibold'}, '線別來源標記：'),
+                ['manual','curated-repair','trial-title','cohort-explicit','table-explicit','table-inherited','auto-inferred','legacy'].map(source =>
+                    e('span', {key: source, className: 'px-2 py-1 rounded-full border ' + getLineSourceBadgeClass(source)}, getLineSourceLabel(source))
                 )
             ),
             e('div', {className: 'mb-6 space-y-4'},
@@ -4010,7 +4589,7 @@ function App() {
                     placeholder: '搜尋試驗代碼、標題、PI...',
                     className: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500'
                 }),
-                e('div', {className: 'grid grid-cols-2 gap-4'},
+                e('div', {className: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'},
                     e('select', {
                         value: cancerType,
                         onChange: (ev) => setCancerType(ev.target.value),
@@ -4028,7 +4607,7 @@ function App() {
                 )
             ),
             e('div', {className: 'text-gray-600 mb-4'},
-                '找到 ' + filtered.length + ' 個試驗' + (onlyOpenEnrollment ? '（已篩選仍能收案）' : '')
+                '找到 ' + filtered.length + ' 個試驗' + (onlyOpenEnrollment ? '（仍能收案）' : '') + (onlyLineNeedsReview ? '（線別需核對）' : '')
             ),
             e('div', {className: 'grid gap-6'},
                 filtered.map(trial =>
