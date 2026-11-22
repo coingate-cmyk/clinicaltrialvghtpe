@@ -184,7 +184,7 @@ const LINE_NUMERAL = { '1': '一', '2': '二', '3': '三', '4': '四', '5': '五
 const LINE_NUMERAL_REGEX = '[一二三四五六七八九123456789１２３４５６７８９]';
 const toChineseLineNumber = (value) => LINE_NUMERAL[String(value || '').trim()] || String(value || '').trim();
 
-const CANONICAL_CANCER_TYPES = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','CRPC'];
+const CANONICAL_CANCER_TYPES = ['肝癌','胃癌','胰臟癌','食道癌','膽道癌','大腸癌','神經內分泌腫瘤','神經內分泌癌','CRPC'];
 const CANCER_SORT_ORDER = CANONICAL_CANCER_TYPES;
 const LINE_ORDER = ['一','二','三','四','五','六','七','八','九'];
 const LINE_SORT_ORDER = ['一線','二線','三線','四線','四線以上','五線','五線以上','六線','六線以上','七線','七線以上','八線','八線以上','九線','九線以上','多線','後線','Adjuvant','Translational study'];
@@ -1192,6 +1192,8 @@ const normalizeCancerTypeLabel = (value) => {
     if (/(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/i.test(text)) return '肝癌';
     if (/(膽道癌|膽管癌|膽管細胞癌|biliary|cholangiocarcinoma)/i.test(text)) return '膽道癌';
     if (/(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/i.test(text)) return '大腸癌';
+    if (/(神經內分泌癌|\bepnec\b|neuroendocrine\s+carcinoma|\bnec\b)/i.test(text)) return '神經內分泌癌';
+    if (/(神經內分泌瘤|\bpnet\b|\bnet\b|neuroendocrine\s+tumou?r)/i.test(text)) return '神經內分泌腫瘤';
     if (/(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/i.test(text)) return 'CRPC';
 
     // Do not let PDF table fragments, criteria bullets, or status text become cancer filter options.
@@ -1211,6 +1213,8 @@ const CANCER_TYPE_RULES = [
     { type: '肝癌', regex: /(肝癌|肝細胞癌|\bhcc\b|hepatocellular)/ig },
     { type: '膽道癌', regex: /(膽道癌|膽管癌|biliary|cholangiocarcinoma)/ig },
     { type: '大腸癌', regex: /(大腸癌|大腸直腸癌|結直腸癌|結腸直腸|結直腸|colorectal|colon|\bcrc\b)/ig },
+    { type: '神經內分泌癌', regex: /(神經內分泌癌|\bepnec\b|neuroendocrine\s+carcinoma|\bnec\b)/ig },
+    { type: '神經內分泌腫瘤', regex: /(神經內分泌瘤|\bpnet\b|\bnet\b|neuroendocrine\s+tumou?r)/ig },
     { type: 'CRPC', regex: /(攝護腺癌|前列腺癌|prostate|\bcrpc\b|c\s*r\s*p\s*c)/ig }
 ];
 
@@ -1538,11 +1542,21 @@ const sanitizePersonFields = (trial, rowContext = '') => {
 const STUDY_STATUS_SNAPSHOT_VERSION = 'v4.3.5-20260822-study-status-pdf';
 const STUDY_STATUS_SNAPSHOT_20260822 = {"DB1311-201":{"targetNum":"3","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"TTY":{"targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"D702AC00001":{"targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DS8201-724":{"targetNum":"7","enrolled":"5(screen failure)/1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"D967LC0001":{"targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9803C00001":{"targetNum":"15","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"8951-CL-0305":{"targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","status":"停止收案"},"MK-3475-06C":{"targetNum":"6","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"C6461016":{"targetNum":"3","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"T1223":{"targetNum":"25","enrolled":"15","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06D":{"targetNum":"3-6","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot"},"D9800C00001":{"targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","status":"名額已滿"},"BBI-4182-101":{"targetNum":"2","enrolled":"1","monthSigned":"","monthEnrolled":"1","status":"暫無slot","comments":"目前沒名額/可以預排/已排3個病人"},"C3651021":{"targetNum":"15","enrolled":"7","monthSigned":"1","monthEnrolled":"1","status":"進行中"},"CA2400030":{"targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","status":"暫停收案"},"MK-3475-06E":{"targetNum":"3-5","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"暫無slot"},"CHS-114-02":{"targetNum":"6","enrolled":"4 (Cohort A 1 / Cohort B 1 / Cohort C 2)","monthSigned":"0","monthEnrolled":"0","status":"需問slot"},"MK-3475-06B":{"targetNum":"6- 10","enrolled":"6","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"DS7300-202":{"targetNum":"4","enrolled":"0 / 4 screen failure","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-3475-06F":{"targetNum":"3-5","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"D702NC00001":{"targetNum":"15","enrolled":"5 screen failure / 3 有用藥","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"DESTINY-BILIARY TRACT":{"targetNum":"6","enrolled":"5(有用藥)/ 3(screen failure)","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"TT420C2308":{"targetNum":"6","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"TAI-301":{"targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MK-1022":{"targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"PEP08-101":{"targetNum":"9","enrolled":"4","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"PEP07-102":{"targetNum":"20","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"需問slot"},"MK-9999-02A":{"targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"MK5909-005":{"targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"名額已滿"},"TYR430-101":{"targetNum":"15","enrolled":"","monthSigned":"0","monthEnrolled":"0","status":"停止收案"},"BGM-2121-001":{"targetNum":"15","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"20250004":{"targetNum":"5","enrolled":"1","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","status":"需問slot"},"C23-101":{"targetNum":"10","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"C6461003":{"targetNum":"10","enrolled":"3","monthSigned":"1","monthEnrolled":"0","status":"進行中"},"MK-1082-012":{"targetNum":"Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"M24-533":{"targetNum":"5","enrolled":"3","monthSigned":"2","monthEnrolled":"1","status":"進行中"},"20210081":{"targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"SGNTUC-029":{"targetNum":"6","enrolled":"3","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"CA266-0003":{"targetNum":"8","enrolled":"0","monthSigned":"2","monthEnrolled":"2","status":"進行中"},"WO42758":{"targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"61186372COR3002":{"targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"MS914001_0002":{"targetNum":"9","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中"},"GW-020202":{"targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"還未SIV"}};
 
+const normalizeStudyStatusSnapshotDate = (value) => {
+    const m = String(value || '').match(/(20\d{2})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
+    return m ? `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}` : '';
+};
+const hasStudyStatusSnapshotAtLeast = (trial, cutoffDate) => {
+    const current = normalizeStudyStatusSnapshotDate(trial && trial.studyStatusSnapshotDate);
+    const cutoff = normalizeStudyStatusSnapshotDate(cutoffDate);
+    return Boolean(current && cutoff && current >= cutoff);
+};
+
 const applyStudyStatusSnapshot20260822 = (trial) => {
     const t = { ...(trial || {}) };
     const key = normalizeCode(t.code);
     const patch = STUDY_STATUS_SNAPSHOT_20260822[key];
-    if (!patch || t.studyStatusSnapshotVersion === STUDY_STATUS_SNAPSHOT_VERSION) return t;
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-08-22')) return t;
     Object.entries(patch).forEach(([field, value]) => {
         t[field] = value;
     });
@@ -1561,10 +1575,27 @@ const applyStudyStatusSnapshot20260901 = (trial) => {
     const t = { ...(trial || {}) };
     const key = normalizeCode(t.code);
     const patch = STUDY_STATUS_SNAPSHOT_20260901[key];
-    if (!patch || t.studyStatusSnapshotVersion === STUDY_STATUS_SNAPSHOT_VERSION_20260901) return t;
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-09-01')) return t;
     Object.entries(patch).forEach(([field, value]) => { t[field] = value; });
     t.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION_20260901;
     t.studyStatusSnapshotDate = '2026-09-01';
+    t.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
+    t.statusDetectedFromText = false;
+    return t;
+};
+
+const STUDY_STATUS_SNAPSHOT_VERSION_20261122 = 'v4.4.0-20261122-study-status-pdf';
+const STUDY_STATUS_SNAPSHOT_20261122 = {"20210081":{"targetNum":"2","enrolled":"1","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2405800","trialCost":"＄8,711,415 / ＄3,261,828"},"20250004":{"targetNum":"5","enrolled":"2","monthSigned":"1 (planning on 2026/8/24)","monthEnrolled":"0","status":"需問slot","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","contractNo":"C2602500","trialCost":"＄14,123,935","comments":"須向 sponsor 申請 slot"},"DB1311-201":{"targetNum":"16","enrolled":"3","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"楊慕華","nurse":"Abby","phone":"82935/82999","contractNo":"C2508900","trialCost":"＄3,382,835"},"CTL-002-005":{"targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216"},"TTY":{"targetNum":"150","enrolled":"16","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"洪逸平","nurse":"宋秀薇","phone":"2935 / 2999"},"D702AC00001":{"targetNum":"5","enrolled":"pre-screen 1 /screen 0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"王秋眉","phone":"0927751328","contractNo":"C2410100","trialCost":"＄12,767,478"},"DS8201-724":{"targetNum":"7","enrolled":"7(screen failure)/2","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","contractNo":"C2506500","trialCost":"2,721,820元"},"D967LC0001":{"targetNum":"3","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"周淑慧","phone":"82935 / 82999 / 0900265971","contractNo":"C2006400","trialCost":"21,496,324 元"},"D9803C00001":{"targetNum":"15","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"吳佳勳","phone":"0918696523","contractNo":"C2512600","trialCost":"＄15,603,065"},"8951-CL-0305":{"targetNum":"2","enrolled":"0 / 6 Prescreen","monthSigned":"1 screen","monthEnrolled":"0","status":"停止收案","pi":"洪逸平","nurse":"賴姵妤 / 宋秀薇","phone":"82935 / 82999 / 0919801912","contractNo":"C2506200","trialCost":"1,334,467元"},"MK-3475-06C":{"targetNum":"6","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"C6461016":{"targetNum":"3","enrolled":"1(CAPOX)","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"張牧新 / 陳明晃","nurse":"王秋眉","phone":"0927751328","contractNo":"C2606500","trialCost":"＄5,527,260"},"DS1103-074":{"targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"MK-3475-06D":{"targetNum":"需向 sponsor 要名額","enrolled":"1","monthSigned":"1","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403"},"D9800C00001":{"targetNum":"10","enrolled":"3胃癌(screen) / 3胰臟癌(screen) / 3膽道癌","monthSigned":"1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"王昭蘋 / 王秋眉 / 吳佳勳","phone":"0919377185 / 0927751328 / 0918696523","contractNo":"C2402900","trialCost":"＄21,926,667"},"RMC-6236-303":{"targetNum":"15","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","contractNo":"C2604000","trialCost":"＄9,378,700"},"3082-CL-0301":{"targetNum":"3","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2608500"},"C3651021":{"targetNum":"10","enrolled":"7","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2514200","trialCost":"＄3,381,700"},"CA2400030":{"targetNum":"12","enrolled":"10","monthSigned":"0","monthEnrolled":"0","status":"暫停收案","pi":"姜乃榕","nurse":"王昭蘋","phone":"0919377185","contractNo":"C2510300","trialCost":"＄16,992,935"},"MK-3475-06E":{"targetNum":"6","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2502100","trialCost":"＄3,013,874"},"CHS-114-02":{"targetNum":"4 Gastric / 6（需與 sponsor 要名額）","enrolled":"Cohort A 1 / Cohort B+C 2","monthSigned":"0","monthEnrolled":"0","status":"需問slot","pi":"陳明晃","nurse":"林韋秀 / 王秋眉 / 孔亭方 / 陳秀玲","phone":"0963501682 / 0927751328 / 7270#268 / 0988660381","contractNo":"C2507200","trialCost":"＄3,540,140"},"MK-3475-06B":{"targetNum":"6-10","enrolled":"7","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"7270#268","contractNo":"C2216600","trialCost":"＄3,158,321"},"DS7300-202":{"targetNum":"4","enrolled":"screen failure 4","monthSigned":"1","monthEnrolled":"11/23 或 11/24 C1D1","status":"進行中","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2503400","trialCost":"＄1,878,120"},"MK-3475-06F":{"targetNum":"3-5","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","contractNo":"C2603300","trialCost":"＄2,743,888"},"D702NC00001":{"targetNum":"15","enrolled":"5(有用藥) / 7(screen failure)","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"林韋秀 / 王秋眉","phone":"0963501682 / 0927751328","contractNo":"C2513000","trialCost":"＄16,761,441"},"DESTINY-BILIARY TRACT":{"targetNum":"6","enrolled":"5(有用藥) / 3(screen failure)","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋","phone":"0927751328 / 0919377185","contractNo":"C2408600","trialCost":"＄9,293,218"},"TAI-301":{"targetNum":"15","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"停止收案","pi":"陳明晃","nurse":"宋秀薇 / 王秋眉","phone":"7270#268 / 2935 / 0927751328","contractNo":"C2206700","trialCost":"＄3,505,329"},"MK-1022":{"targetNum":"6","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"停止收案","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋 / 陳秀玲","phone":"0927751328 / 7270#262 / 0988660381","contractNo":"C2414500","trialCost":"＄2,369,610"},"PEP08-101":{"targetNum":"9","enrolled":"7","monthSigned":"3","monthEnrolled":"3","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"7270#262","contractNo":"C2509400","trialCost":"＄2,335,129"},"PEP07-102":{"targetNum":"20","enrolled":"4","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"姜乃榕","nurse":"王昭蘋","phone":"7270#262","contractNo":"C2400900","trialCost":"＄14,677,590"},"MK-9999-02A":{"targetNum":"4","enrolled":"pancrea ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"孔亭方 / 王秋眉 / 王昭蘋 / 陳秀玲 / 賴姵妤","phone":"0981764403 / 0927751328 / 7270#262 / 0919801912","contractNo":"C2407800","trialCost":"＄2,149,762"},"MK5909-005":{"targetNum":"4-6","enrolled":"pancrea ca:4 / stomach ca:1 / CHOLANGIOCARCINOMA:1","monthSigned":"0","monthEnrolled":"0","status":"暫無slot","pi":"陳明晃","nurse":"王秋眉 / 王昭蘋 / 陳秀玲","phone":"0927751328 / 7270#262 / 0988660381","contractNo":"C2504300","trialCost":"＄4,383,548"},"TYR430-101":{"targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2506300","trialCost":"＄3,033,720"},"BGM-2121-001":{"targetNum":"15","enrolled":"2 (Cohort I)","monthSigned":"0","monthEnrolled":"0","status":"暫停收案","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2600200","trialCost":"＄23,907,560","comments":"暫停，等候資料分析中；可以先排 slot"},"C23-101":{"targetNum":"10","enrolled":"2","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲","phone":"0988660381"},"GCT1184-09":{"targetNum":"5","enrolled":"2","monthSigned":"2 (胃/GEJ)","monthEnrolled":"2 (胃/GEJ)","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","trialCost":"＄11,674,265"},"C6461003":{"targetNum":"8","enrolled":"7","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2516600","trialCost":"＄21,706,500"},"MK-1082-012":{"targetNum":"Part 1: 2 / Part 2: 2","enrolled":"Part 1: 2","monthSigned":"2","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"張台依","phone":"0972811090","contractNo":"C2508100","trialCost":"＄2,383,516"},"M24-533":{"targetNum":"8","enrolled":"5","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","comments":"5月份會開 stage 2"},"CA266-0003":{"targetNum":"8","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","trialCost":"＄7,199,688"},"WO42758":{"targetNum":"10","enrolled":"6","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381"},"61186372COR3002":{"targetNum":"5","enrolled":"4","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方","phone":"0988660381","trialCost":"＄14,054,225 / ＄1,844,670"},"MS914001_0002":{"targetNum":"9","enrolled":"2","monthSigned":"0","monthEnrolled":"0","status":"進行中","pi":"鄧豪偉","nurse":"陳秀玲 / 孔亭方 / 吳佳勳","phone":"0988660381"},"XL092-311":{"targetNum":"6","enrolled":"3","monthSigned":"1","monthEnrolled":"1","status":"進行中","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","contractNo":"C2602100","trialCost":"1,432,695元","comments":"只剩 pNET 有名額"},"DAREON-NEC-1":{"targetNum":"8","enrolled":"0","monthSigned":"1","monthEnrolled":"0","status":"進行中","pi":"陳明晃","nurse":"林韋秀","phone":"0963501682","contractNo":"C2604500","trialCost":"6,873,790"}};
+const STUDY_STATUS_NEW_TRIALS_20261122 = [{"cancerType":"肝癌","line":"二線","code":"CTL-002-005","studyTitle":"一項第2b期、隨機分配、雙盲試驗，在患有無法切除或轉移性肝細胞癌和肝功能代償 (Child-Pugh A級)，且接受第一線治療（包括抗 PD-(L)1）失敗後的參與者中，探討 Visugromab 併用 Nivolumab 和 Lenvatinib 相較於雙安慰劑和 Lenvatinib 的療效和安全性 (GDFATHER HCC-01)","inclusion":"1. 病理或肝硬化的參與者，透過 AASLD 標準進行臨床診斷即已足夠\n2. 一線治療失敗後，包含抗 PD-(L)1 CPI，治療持續時間至少 12 週\n3. Child-Pugh class A，CCr >50\n4. HBsAg(+) 可收，HBV DNA <1000 IU/mL，進入試驗前已接受抗 HBV 治療至少 14 天\n5. HDV RNA 陰性","phase":"II","sponsor":"","targetNum":"3","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","status":"進行中","exclusion":"","cancerTypes":[{"type":"肝癌","lines":["二線"]}],"subjects":[]},{"cancerType":"胃癌","line":"二線","code":"DS1103-074","studyTitle":"一項 DS-1103a 併用療法用於晚期實體腫瘤受試者的第 1 期、2 部分、多中心、首次用於人體的劑量遞增及劑量擴展試驗","inclusion":"Cohort 2：不可切除或轉移性 HER2 陽性（IHC 3+ 或 IHC 2+/ISH+）胃癌或 GEJ 腺癌；第一線含 trastuzumab 或核准 biosimilar 療法期間或之後疾病惡化。LVEF ≥50%；試驗治療開始前 14 天內器官及骨髓功能足夠；14 天內不得輸血；Platelet ≥100×10^9/L；Hb >8 g/dL（gastric/GEJ）；ANC ≥1.5×10^9/L；CrCl ≥30 mL/min；Albumin ≥2.5 g/dL。","phase":"I","sponsor":"Daiichi Sankyo, Inc.","targetNum":"5","enrolled":"0","monthSigned":"0","monthEnrolled":"0","pi":"陳明晃","nurse":"孔亭方 / 陳秀玲 / 王秋眉","phone":"0981764403","status":"進行中","exclusion":"","cancerTypes":[{"type":"胃癌","lines":["二線"]}],"subjects":[]},{"cancerType":"胰臟癌","line":"一線","code":"3082-CL-0301","studyTitle":"一項第三期、雙盲、安慰劑對照、隨機分配試驗，評估 ASP3082 合併 mFOLFIRINOX 或 NALIRIFOX，作為 KRAS G12D 突變轉移性胰臟腺癌參與者之第一線治療的療效和安全性","inclusion":"1. 轉移性胰管腺癌\n2. 尚未接受過治療（一線）\n3. RECIST 1.1 measurable lesion\n4. 無 B、C 型肝炎\n5. 腫瘤切片 15 片\n6. KRAS G12D positive\n7. 醫師可自行選擇 mFOLFIRINOX 或 NALIRIFOX","phase":"III","sponsor":"安斯泰來","targetNum":"3","enrolled":"3","monthSigned":"1","monthEnrolled":"1","pi":"李重賓","nurse":"張台依","phone":"0972811090","contractNo":"C2608500","status":"進行中","exclusion":"","cancerTypes":[{"type":"胰臟癌","lines":["一線"]}],"subjects":[]},{"cancerType":"胃癌","line":"二線、三線、四線","code":"GCT1184-09","studyTitle":"一項研究 Rina-S 用於晚期胃腸道 (Gastrointestinal, GI) 癌受試者的第 2 期、多隊列、開放性標記試驗","inclusion":"1. 組織學或細胞學確認 ESCC，或胰臟、結腸/直腸、膽道、食道或胃/GEJ 腺癌\n2. Slide 15 片（4-5u），C1D1 前寄出\n3. Cohort A：2L+ mCRC（RAS/BRAF/MSI/MMR）\n4. Cohort B：2L-4L 胃/GEJ 癌或食道腺癌\n5. Cohort C：2L-3L PDAC\n6. Cohort D：2L-3L BTC\n7. Cohort E：2L-3L ESCC\n8. RECIST 1.1 target lesion；eGFR ≥60 mL/min；ILD/pneumonitis 病史不收\n9. 不可曾接受含 topoisomerase I inhibitor payload 的 ADC\n10. B、C 肝不收","phase":"II","sponsor":"Genmab","targetNum":"5","enrolled":"2","monthSigned":"2 (胃/GEJ)","monthEnrolled":"2 (胃/GEJ)","pi":"陳明晃","nurse":"宋秀薇 / 賴姵妤","phone":"82935 / 82999 / 0936385216","trialCost":"＄11,674,265","status":"進行中","exclusion":"","cancerTypes":[{"type":"胃癌","lines":["二線","三線","四線"]},{"type":"大腸癌","lines":["二線以上"]},{"type":"胰臟癌","lines":["二線","三線"]},{"type":"膽道癌","lines":["二線","三線"]},{"type":"食道癌","lines":["二線","三線"]}],"subjects":[]},{"cancerType":"神經內分泌癌","line":"一線","code":"DAREON-NEC-1","studyTitle":"一項第三期、多中心、開放標籤、隨機分配、對照試驗，評估靜脈輸注 obrixtamig 併用 carboplatin 及 etoposide 相較於 carboplatin 和 etoposide 作為 DLL3 陽性之無法切除的局部晚期或轉移性肺外神經內分泌癌患者的第一線療法","inclusion":"1. 未接受過治療之 epNEC，Ki-67 >20%\n2. DLL3 陽性（slide 送 central lab 確認）\n3. Random 前可接受 1 cycle etoposide + cisplatin（劑量需符合 protocol）","phase":"III","sponsor":"Boehringer Ingelheim","targetNum":"8","enrolled":"0","monthSigned":"1","monthEnrolled":"0","pi":"陳明晃","nurse":"林韋秀","phone":"0963501682","contractNo":"C2604500","trialCost":"6,873,790","status":"進行中","exclusion":"","cancerTypes":[{"type":"神經內分泌癌","lines":["一線"]}],"subjects":[]}];
+
+const applyStudyStatusSnapshot20261122 = (trial) => {
+    const t = { ...(trial || {}) };
+    const key = normalizeCode(t.code);
+    const patch = STUDY_STATUS_SNAPSHOT_20261122[key];
+    if (!patch || hasStudyStatusSnapshotAtLeast(t, '2026-11-22')) return t;
+    Object.entries(patch).forEach(([field, value]) => { t[field] = value; });
+    t.studyStatusSnapshotVersion = STUDY_STATUS_SNAPSHOT_VERSION_20261122;
+    t.studyStatusSnapshotDate = '2026-11-22';
     t.statusSource = STATUS_SOURCE_EXPLICIT_FIELD;
     t.statusDetectedFromText = false;
     return t;
@@ -1577,6 +1608,7 @@ const sanitizeTrialForRuntime = (trial) => {
     t.code = normalizeCode(t.code);
     t = applyStudyStatusSnapshot20260822(t);
     t = applyStudyStatusSnapshot20260901(t);
+    t = applyStudyStatusSnapshot20261122(t);
     t.cancerType = normalizeCancerTypeLabel(t.cancerType);
     t.line = normalizeTreatmentLine(t.line);
     t.cancerTypes = normalizeCancerTypes(t.cancerTypes);
@@ -1638,7 +1670,17 @@ const ensureStudyStatusAdditions20260901 = (list) => {
     return out;
 };
 
-const sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20260901(list)
+const ensureStudyStatusAdditions20261122 = (list) => {
+    const out = (Array.isArray(list) ? list : []).map(t => ({ ...(t || {}) }));
+    const seen = new Set(out.map(t => normalizeCode(t.code)).filter(Boolean));
+    STUDY_STATUS_NEW_TRIALS_20261122.forEach(src => {
+        const code = normalizeCode(src.code);
+        if (code && !seen.has(code)) { out.push({ ...src, studyStatusSnapshotVersion: STUDY_STATUS_SNAPSHOT_VERSION_20261122, studyStatusSnapshotDate: '2026-11-22', statusSource: STATUS_SOURCE_EXPLICIT_FIELD, statusDetectedFromText: false }); seen.add(code); }
+    });
+    return out;
+};
+
+const sanitizeTrialListForRuntime = (list) => ensureStudyStatusAdditions20261122(ensureStudyStatusAdditions20260901(list))
     .map(sanitizeTrialForRuntime)
     .filter(t => isPlausibleRuntimeTrialRecord(t));
 
@@ -2679,6 +2721,11 @@ const parseWideSingleTrialPdfPage = (pageData) => {
     return item.code ? [item] : [];
 };
 
+const extractStudyStatusDateFromPdfText = (text) => {
+    const m = String(text || '').match(/Study\s*status[_\s-]*(20\d{2})\s*[\/-]\s*(\d{1,2})\s*[\/-]\s*(\d{1,2})/i);
+    return m ? `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}` : '';
+};
+
 const parsePdfFile = async (file) => {
     if (!window.pdfjsLib) {
         throw new Error('PDF.js 尚未載入，無法讀取 PDF');
@@ -2733,6 +2780,16 @@ const parsePdfFile = async (file) => {
 
     let parsedRows = consolidateParsedTrials(parsed).rows;
     parsedRows = repairKnownStudyStatusPdfRows(parsedRows, text);
+    const sourceDate = extractStudyStatusDateFromPdfText(text);
+    if (sourceDate) {
+        parsedRows = parsedRows.map(row => ({
+            ...row,
+            studyStatusSnapshotDate: sourceDate,
+            studyStatusSnapshotVersion: `pdf-import-${sourceDate.replace(/-/g, '')}`,
+            statusSource: row.statusSource || STATUS_SOURCE_EXPLICIT_FIELD,
+            statusDetectedFromText: Boolean(row.statusDetectedFromText)
+        }));
+    }
     const suspicious = parsedRows.filter(row => {
         const progress = [row.targetNum, row.enrolled, row.monthSigned, row.monthEnrolled].map(v => String(v || '')).join(' ');
         return !normalizeImportedStudyTitle(row.studyTitle)
@@ -2747,6 +2804,7 @@ const parsePdfFile = async (file) => {
         tablePageCount: tablePages.length,
         totalPageCount: pages.length,
         parserMode: standardPages.length ? 'coordinate-table' : 'single-record-fallback',
+        sourceDate,
         warnings: suspicious
     };
 };
@@ -2813,7 +2871,7 @@ function AccessPasswordModal(props) {
             e('div', {className: 'bg-white rounded-2xl shadow-2xl p-8'},
                 e('div', null,
                     e('div', {className: 'inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold mb-3'}, '需密碼'),
-                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.3.8 Firebase版'),
+                    e('h2', {className: 'text-2xl font-bold text-center mb-2'}, '臨床試驗管理系統 v4.4.0 Firebase版'),
                     e('p', {className: 'text-center text-xs text-gray-500 mb-6'}, 'Firestore 即時同步版')
                 ),
                 e('form', {onSubmit: handleSubmit},
@@ -3650,7 +3708,7 @@ function ImportStatusModal(props) {
                 setParsedRows(info.rows);
                 setImportInfo(info);
                 setPreviewCount(info.uniqueCount);
-                alert(`PDF讀取成功：主表 ${result.tablePageCount || 0} 頁／共 ${result.totalPageCount || 0} 頁；有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。${(result.warnings || []).length ? `\n⚠ 仍有可疑欄位：${result.warnings.join(', ')}，請先看預覽。` : ''}`);
+                alert(`PDF讀取成功：${result.sourceDate ? `資料日期 ${result.sourceDate}；` : ''}主表 ${result.tablePageCount || 0} 頁／共 ${result.totalPageCount || 0} 頁；有效 ${info.validCount} 筆，合併重複 ${info.duplicateCount} 筆，將匯入 ${info.uniqueCount} 筆。${(result.warnings || []).length ? `\n⚠ 仍有可疑欄位：${result.warnings.join(', ')}，請先看預覽。` : ''}`);
             } else {
                 const text = await file.text();
                 setCsvText(text);
@@ -4383,7 +4441,7 @@ function App() {
         e('div', {className: 'bg-white shadow-lg mt-16 sticky top-0 z-50'},
             e('div', {className: 'max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4'},
                 e('div', {className: 'flex items-center justify-between'},
-                    e('h1', {className: 'min-w-0 text-lg sm:text-2xl font-bold leading-tight text-slate-800'}, '臨床試驗管理系統 v4.3.8 Firebase版'),
+                    e('h1', {className: 'min-w-0 text-lg sm:text-2xl font-bold leading-tight text-slate-800'}, '臨床試驗管理系統 v4.4.0 Firebase版'),
                     e('button', {
                         onClick: isAdmin ? () => setIsAdmin(false) : handleLogin,
                         className: 'shrink-0 ml-3 px-3 sm:px-6 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700'
