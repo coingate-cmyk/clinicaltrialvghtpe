@@ -8,14 +8,14 @@
       "code": "DB1311-201",
       "phase": "I",
       "sponsor": "",
-      "targetNum": "3",
+      "targetNum": "16",
       "enrolled": "3",
-      "monthSigned": "0",
+      "monthSigned": "1",
       "monthEnrolled": "0",
       "pi": "楊慕華",
       "nurse": "Abby",
       "phone": "82935/82999",
-      "status": "暫停收案",
+      "status": "進行中",
       "inclusion": "Part I: 1.復發轉移後一或二線失敗的病人 2.Child-Pugh class A 3.HBsAg(+)可以收,HBV DNA< 500 IU/mL",
       "exclusion": "",
       "cancerTypes": [
@@ -30,8 +30,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2508900",
+      "trialCost": "＄3,382,835"
     },
     {
       "id": 2,
@@ -47,7 +49,7 @@
       "monthEnrolled": "1",
       "pi": "洪逸平",
       "nurse": "宋秀薇",
-      "phone": "2935/2999",
+      "phone": "2935 / 2999",
       "status": "進行中",
       "inclusion": "胃癌術後使用健保S-1 病患",
       "exclusion": "",
@@ -62,8 +64,8 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "id": 3,
@@ -122,8 +124,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2410100",
+      "trialCost": "＄12,767,478"
     },
     {
       "id": 5,
@@ -195,7 +199,7 @@
       "monthEnrolled": "0",
       "pi": "陳明晃",
       "nurse": "周淑慧",
-      "phone": "82935/82999",
+      "phone": "82935 / 82999 / 0900265971",
       "status": "暫無slot",
       "inclusion": "目前 4A,4B cohort已滿,暫停收案。1. 僅收一線病人 2. HER2 low ( IHC 1+ / IHC 2+ with FISH-negative ) --> Arm 4B 用藥: T-Dxd + capecitabine + rilvegostomig 3. HER2 high ( IHC 3+ / IHC 2+ with FISH-positive ) --> Arm 4A 4. HBsAg(-) , anti-HBc(+) --> B肝不能收 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion",
       "exclusion": "B肝",
@@ -210,8 +214,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2006400",
+      "trialCost": "21,496,324 元"
     },
     {
       "id": 8,
@@ -226,8 +232,8 @@
       "monthSigned": "1 screen",
       "monthEnrolled": "0",
       "pi": "洪逸平",
-      "nurse": "賴姵妤, 宋秀薇",
-      "phone": "82935/82999",
+      "nurse": "賴姵妤 / 宋秀薇",
+      "phone": "82935 / 82999 / 0919801912",
       "status": "停止收案",
       "inclusion": "1. Histologically confirmed gastric or GEJ adenocarcinoma 2. HER2-negative,(可以院內驗) 3. CLDN18.2 陽性和 PD-L1 陽性,CPS>=1 (central 驗) 4. HBsAg(-) ; HCV(-) ; CCr >=30 5. Slide片*9 ( 4-5u),10個工作天發報告 6. At least one measurable lesion",
       "exclusion": "HBsAg(+), HCV(+)",
@@ -242,8 +248,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2506200",
+      "trialCost": "1,334,467元"
     },
     {
       "id": 9,
@@ -254,12 +262,12 @@
       "phase": "III",
       "sponsor": "第一三共",
       "targetNum": "7",
-      "enrolled": "5(screen failure)/1",
-      "monthSigned": "1",
+      "enrolled": "7(screen failure)/2",
+      "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "宋秀薇, 賴姵妤",
-      "phone": "82935/82999",
+      "nurse": "宋秀薇 / 賴姵妤",
+      "phone": "82935 / 82999 / 0936385216",
       "status": "進行中",
       "inclusion": "1. 必須可以吞Xeloda 2. HER2-postive (IHC 3+ / IHC 2+ with FISH-postive) 3. LVEF >=50 % , CCr >=60 4. HBsAg(+) ,HBV DNA<2000 5. HCV(+), 但HCV RNA必須(-) 6. At least one measurable lesion 7. Slide片*16 ( 4-5u),10個工作天發報告",
       "exclusion": "",
@@ -274,8 +282,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2506500",
+      "trialCost": "2,721,820元"
     },
     {
       "id": 10,
@@ -345,13 +355,13 @@
       "code": "CHS-114-02",
       "phase": "Ib",
       "sponsor": "美捷",
-      "targetNum": "6",
-      "enrolled": "4 (Cohort A 1 / Cohort B 1 / Cohort C 2)",
+      "targetNum": "4 Gastric / 6（需與 sponsor 要名額）",
+      "enrolled": "Cohort A 1 / Cohort B+C 2",
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "林韋秀, 王秋眉",
-      "phone": "0963501682",
+      "nurse": "林韋秀 / 王秋眉 / 孔亭方 / 陳秀玲",
+      "phone": "0963501682 / 0927751328 / 7270#268 / 0988660381",
       "status": "需問slot",
       "inclusion": "1.C2需要再次切片 2.Slide*15 (4-5u) ,C1D1前需寄出 4.需有Target Lesion (Recist 1.1) 5.ILD or Pneumonitis 病史不能收 Cohort A (2L Gastric, GEJ, and Esophageal Adenocarcinoma)",
       "exclusion": "ILD或Pneumonitis病史",
@@ -366,8 +376,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2507200",
+      "trialCost": "＄3,540,140"
     },
     {
       "id": 13,
@@ -382,9 +394,9 @@
       "monthSigned": "1胰臟癌(prescreen) / 0胃癌(prescreen) / 0膽管癌(screen)",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "王秋眉, 王昭蘋, 吳佳勳",
-      "phone": "0927751328",
-      "status": "名額已滿",
+      "nurse": "王昭蘋 / 王秋眉 / 吳佳勳",
+      "phone": "0919377185 / 0927751328 / 0918696523",
+      "status": "暫無slot",
       "inclusion": "1.可收胰臟癌及胃癌 ,膽管癌 (1)胰臟癌 ,一線治療 (2)胃癌,正二.三線治療 (3)膽管癌,正二.三線治療 2. HER2 (-) 3. 胃癌需PD後再次切片,C3要再切片一次 4. archival tissue <24 months送國外驗Claudin18.2切片6片 (14個工作天出報告 ) , 進案時需再送14片給國外 5. One Measurable lesion by RECIST 1.1 6. 可收B肝 HBV DNA<2000 需使用抗病毒用藥 ,排除C肝及HIV(+) 7.ECOG 0-1 8.體重 >= 35 KG",
       "exclusion": "C肝, HIV(+)",
       "cancerTypes": [
@@ -398,8 +410,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2402900",
+      "trialCost": "＄21,926,667"
     },
     {
       "id": 14,
@@ -498,14 +512,14 @@
       "code": "MK-3475-06E",
       "phase": "I/II",
       "sponsor": "MSD",
-      "targetNum": "3-5",
-      "enrolled": "2",
-      "monthSigned": "0",
-      "monthEnrolled": "0",
+      "targetNum": "6",
+      "enrolled": "3",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
       "pi": "陳明晃",
-      "nurse": "孔亭方, 陳秀玲, 王秋眉",
+      "nurse": "孔亭方 / 陳秀玲 / 王秋眉",
       "phone": "0981764403",
-      "status": "暫無slot",
+      "status": "進行中",
       "inclusion": "1- 您必須經過組織學或細胞學確診為第 1 線（1L） 治療中的局部晚期不可切除或轉移性食道鱗狀細胞癌。2- ccr > =50 ml/min",
       "exclusion": "1-腫瘤侵入食道病變部位附近的器官（如主動脈或呼吸道），經試驗主持人評估，發生瘻管的風險增加 2. 在使用試驗治療前 4 週內曾接受試驗性藥物或曾使用試驗性醫療器材。3. QTcF value >470 msec / LVEF < 50",
       "cancerTypes": [
@@ -519,8 +533,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2502100",
+      "trialCost": "＄3,013,874"
     },
     {
       "id": 18,
@@ -531,13 +547,13 @@
       "phase": "I/II",
       "sponsor": "MSD",
       "targetNum": "6",
-      "enrolled": "0",
-      "monthSigned": "0",
+      "enrolled": "1",
+      "monthSigned": "1",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "孔亭方, 陳秀玲",
+      "nurse": "孔亭方 / 陳秀玲 / 王秋眉",
       "phone": "0981764403",
-      "status": "進行中",
+      "status": "暫無slot",
       "inclusion": "1. 經組織學和/或細胞學確診為先前未經治療的局部晚期 不可切除或轉移性 1L 胃食道腺癌（胃腺癌、胃食道腺癌）交界腺癌，或稱食道腺癌）。有資格接受放射治療或新輔助治療的參與者不符合資格。2. 患有非HER2/neu陽性的胃食道腺癌。3.ccr > =50 ml/min",
       "exclusion": "1-在第一劑研究介入前 3 個月內體重減輕 >20%。2- 有嚴重乾眼症候群、嚴重瞼板腺疾病和 /延遲角膜癒合的角膜疾病病史。",
       "cancerTypes": [
@@ -551,8 +567,8 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "id": 19,
@@ -563,11 +579,11 @@
       "phase": "III",
       "sponsor": "DAIICHI SANKYO",
       "targetNum": "4",
-      "enrolled": "0 / 4 screen failure",
-      "monthSigned": "0",
-      "monthEnrolled": "0",
+      "enrolled": "screen failure 4",
+      "monthSigned": "1",
+      "monthEnrolled": "11/23 或 11/24 C1D1",
       "pi": "陳明晃",
-      "nurse": "孔亭方, 陳秀玲, 王秋眉",
+      "nurse": "孔亭方 / 陳秀玲 / 王秋眉",
       "phone": "0981764403",
       "status": "進行中",
       "inclusion": "1-Has disease progression post platinum-based and ICI treatment per global or local guidelines, with a maximum of 1 prior line of systemic therapy for unresectable advanced or metastatic ESCC. 2- The subject must provide adequate baseline tumor samples collected from a biopsy performed within 6 months of consent (15 片 ).",
@@ -583,8 +599,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2503400",
+      "trialCost": "＄1,878,120"
     },
     {
       "id": 20,
@@ -594,12 +612,12 @@
       "code": "MK-3475-06D",
       "phase": "I/II",
       "sponsor": "MSD",
-      "targetNum": "3-6",
+      "targetNum": "需向 sponsor 要名額",
       "enrolled": "1",
       "monthSigned": "1",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "孔亭方, 王秋眉",
+      "nurse": "孔亭方 / 陳秀玲 / 王秋眉",
       "phone": "0981764403",
       "status": "暫無slot",
       "inclusion": "1-Has histologically and/or cytologically confirmed diagnosis of previously treated, 2L(received 1L treatment) gastric adenocarcinoma, GEJ adenocarcinoma, or esophageal adenocarcinoma. 2- Has experienced documented objective radiographic or clinical disease progression during or after 1L therapy containing any platinum/fluoropyrimidine doublet with or without immunotherapy.",
@@ -615,8 +633,8 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "id": 21,
@@ -626,10 +644,10 @@
       "code": "C3651021",
       "phase": "2b/3",
       "sponsor": "輝瑞",
-      "targetNum": "15",
+      "targetNum": "10",
       "enrolled": "7",
-      "monthSigned": "1",
-      "monthEnrolled": "1",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "李重賓",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -647,8 +665,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2514200",
+      "trialCost": "＄3,381,700"
     },
     {
       "id": 22,
@@ -707,8 +727,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2510300",
+      "trialCost": "＄16,992,935"
     },
     {
       "id": 24,
@@ -719,12 +741,12 @@
       "phase": "III",
       "sponsor": "AZ",
       "targetNum": "15",
-      "enrolled": "5 screen failure / 3 有用藥",
-      "monthSigned": "0",
+      "enrolled": "5(有用藥) / 7(screen failure)",
+      "monthSigned": "2",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "林韋秀, 王秋眉",
-      "phone": "0963501682",
+      "nurse": "林韋秀 / 王秋眉",
+      "phone": "0963501682 / 0927751328",
       "status": "進行中",
       "inclusion": "1. 經組織學確認患有膽道線癌，包括 iCCA、eCCA和膽道癌。不收壺腹癌。2. 需提供12個月內的切片檢體，random前需有PDL-1 報告(Central review) 。3. CCr ≥ 50 ml/min，C1D1前14天不可輸血、打 GCSF。4. 暫不收B、C肝。",
       "exclusion": "B肝, C肝, 壺腹癌",
@@ -739,8 +761,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2513000",
+      "trialCost": "＄16,761,441"
     },
     {
       "id": 25,
@@ -751,12 +775,12 @@
       "phase": "3",
       "sponsor": "AZ",
       "targetNum": "6",
-      "enrolled": "5(有用藥)/ 3(screen failure)",
+      "enrolled": "5(有用藥) / 3(screen failure)",
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "王秋眉, 王昭蘋",
-      "phone": "0927751328",
+      "nurse": "王秋眉 / 王昭蘋",
+      "phone": "0927751328 / 0919377185",
       "status": "進行中",
       "inclusion": "1.局部晚期或轉移性 HER2表現型的膽道癌、膽囊癌 2.尚未接受過治療 (一線治療) 3.Adjuvant結束超過6個月後復發，不在此限 4.HER 2 表現型IHC2+或3+ 5.B肝患者可收，但與 C肝交叉感染者不可收案。6.仍需在15-20片切片檢驗HER2 7.Measurable lesion by RECIST 1.1",
       "exclusion": "B肝與C肝交叉感染",
@@ -771,8 +795,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2408600",
+      "trialCost": "＄9,293,218"
     },
     {
       "id": 26,
@@ -842,10 +868,10 @@
       "code": "MK-1082-012",
       "phase": "III",
       "sponsor": "MSD",
-      "targetNum": "Part 1: 2 Part 2: 2 (預計 2026.04 開始收案)",
+      "targetNum": "Part 1: 2 / Part 2: 2",
       "enrolled": "Part 1: 2",
       "monthSigned": "2",
-      "monthEnrolled": "2",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
       "nurse": "張台依",
       "phone": "0972811090",
@@ -863,8 +889,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2508100",
+      "trialCost": "＄2,383,516"
     },
     {
       "id": 29,
@@ -874,12 +902,12 @@
       "code": "M24-533",
       "phase": "2",
       "sponsor": "Abbive",
-      "targetNum": "5",
-      "enrolled": "3",
-      "monthSigned": "2",
-      "monthEnrolled": "1",
+      "targetNum": "8",
+      "enrolled": "5",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "pi": "鄧豪偉",
-      "nurse": "陳秀玲, 吳佳勳, 孔亭方",
+      "nurse": "陳秀玲 / 孔亭方",
       "phone": "0988660381",
       "status": "進行中",
       "inclusion": "1.right side:KRAS/NRAS wildtype or mutation ,BRAFV600E wildtype 2. left side :KRAS/NRAS mutation,BRAF V600F wild type 3.tumor is not dMMR+/MSI-H. 4.Received prior adjuvant chemotherapy (FOLFOX.CAPOX) more than 12 months have passed before C1D1. 5.HBV DNA<500 IU/ml and anti-HBV treatment for a minimun of 14 days prior to 14 days prior to C1D1. 6.HCV negative.",
@@ -895,8 +923,9 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "comments": "5月份會開 stage 2"
     },
     {
       "id": 30,
@@ -927,8 +956,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2405800",
+      "trialCost": "＄8,711,415 / ＄3,261,828"
     },
     {
       "id": 31,
@@ -975,7 +1006,7 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "鄧豪偉",
-      "nurse": "陳秀玲, 孔亭方",
+      "nurse": "陳秀玲 / 孔亭方",
       "phone": "0988660381",
       "status": "進行中",
       "inclusion": "1.KRAS G12C mututation arm, mCRC 1 line Diva + Bevacizumab +FOLFOX General Inclusion Criteria: 1.Histologically confirmed adenocarcinoma originating from the colon or rectum 2.Metastatic disease 3.Measurable disease General Exclusion Criteria: 1.Symptomatic, untreated, or actively progressing CNS metastases 2.History of malignancy other than CRC within 2 years prior to screening",
@@ -991,8 +1022,8 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "id": 33,
@@ -1035,7 +1066,7 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "鄧豪偉",
-      "nurse": "陳秀玲, 孔亭方",
+      "nurse": "陳秀玲 / 孔亭方",
       "phone": "0988660381",
       "status": "進行中",
       "inclusion": "1. have received 1 line of systemic therapy for mCRC 2. KRAS, NRAS, and BRAF WT tumor 3. Measurable lesion 4. dMMR /MSI-H 須接受免疫治療",
@@ -1051,8 +1082,9 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "trialCost": "＄14,054,225 / ＄1,844,670"
     },
     {
       "id": 35,
@@ -1095,9 +1127,9 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "宋秀薇, 王秋眉",
-      "phone": "7270#268",
-      "status": "進行中",
+      "nurse": "宋秀薇 / 王秋眉",
+      "phone": "7270#268 / 2935 / 0927751328",
+      "status": "停止收案",
       "inclusion": "1 HBV(-),HCV(+)RNA(-) 2.血壓不能超過SBP160/DBP100 3.二線或二線以上之病人。4.Measurable lesion by RECIST 1.1 5.調整劑量 : 100 mg/day, 優先招募GIST、melanoma with c-KIT mutation 6. CCr: >=50ml/min",
       "exclusion": "HBV(+)",
       "cancerTypes": [
@@ -1111,8 +1143,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2206700",
+      "trialCost": "＄3,505,329"
     },
     {
       "id": 37,
@@ -1155,9 +1189,9 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "王秋眉, 王昭蘋, 陳秀玲",
-      "phone": "0927751328",
-      "status": "進行中",
+      "nurse": "王秋眉 / 王昭蘋 / 陳秀玲",
+      "phone": "0927751328 / 7270#262 / 0988660381",
+      "status": "停止收案",
       "inclusion": "1.收膽管癌正二.線及大腸癌二線 . 肝癌 2.前線PD後需要重新切片 ,在送出20片 3.CT必須得到廠商確認 (預計5天)才能C1D1 4.B.C肝可以收,但須使用4周抗病毒藥物及測不到病毒量 5.心超LVEF > 50%",
       "exclusion": "",
       "cancerTypes": [
@@ -1171,8 +1205,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2414500",
+      "trialCost": "＄2,369,610"
     },
     {
       "id": 39,
@@ -1183,13 +1219,13 @@
       "phase": "I",
       "sponsor": "智擎生技",
       "targetNum": "20",
-      "enrolled": "3",
+      "enrolled": "4",
       "monthSigned": "1",
       "monthEnrolled": "1",
       "pi": "姜乃榕",
       "nurse": "王昭蘋",
       "phone": "7270#262",
-      "status": "需問slot",
+      "status": "進行中",
       "inclusion": "1.根據實體腫瘤療效評估標準(RECIST)版本1.1，有至少一個可測量的病灶。2.受試者在第一劑試驗藥物治療前14天或5個半衰期內(以較短者為準)接受過抗癌治療，包括化學治療、放射治療、荷爾蒙治療、或任何試驗治療，或在30天內接受過免疫治療。 3 收案前後都要再切片 . 4.需詢問SLOT",
       "exclusion": "",
       "cancerTypes": [
@@ -1203,8 +1239,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2400900",
+      "trialCost": "＄14,677,590"
     },
     {
       "id": 40,
@@ -1247,9 +1285,9 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "王秋眉, 王昭蘋, 陳秀玲",
-      "phone": "0927751328",
-      "status": "名額已滿",
+      "nurse": "孔亭方 / 王秋眉 / 王昭蘋 / 陳秀玲 / 賴姵妤",
+      "phone": "0981764403 / 0927751328 / 7270#262 / 0919801912",
+      "status": "暫無slot",
       "inclusion": "1.收膽管癌正二.三線及胰臟癌二線 .大腸癌二線 2.需要20片切片 3.CT必須得到廠商確認才能用藥 4.試驗藥物只能從周邊血管施打 5.HIV只要有病史不收 6.心超LVEF > 50%",
       "exclusion": "HIV病史",
       "cancerTypes": [
@@ -1263,8 +1301,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2407800",
+      "trialCost": "＄2,149,762"
     },
     {
       "id": 42,
@@ -1279,9 +1319,9 @@
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "陳明晃",
-      "nurse": "王秋眉, 王昭蘋, 陳秀玲",
-      "phone": "0927751328",
-      "status": "名額已滿",
+      "nurse": "王秋眉 / 王昭蘋 / 陳秀玲",
+      "phone": "0927751328 / 7270#262 / 0988660381",
+      "status": "暫無slot",
       "inclusion": "1.收膽管癌正二 .三線及胰臟癌二線 .大腸癌二線 、胃癌3L以上 2.需要21片切片 3.CT必須得到廠商確認才能用藥 4.HIV只要有病史不收 5.心超LVEF > 50%",
       "exclusion": "HIV病史",
       "cancerTypes": [
@@ -1295,8 +1335,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2504300",
+      "trialCost": "＄4,383,548"
     },
     {
       "id": 43,
@@ -1306,14 +1348,14 @@
       "code": "TYR430-101",
       "phase": "I",
       "sponsor": "Tyra Biosciences",
-      "targetNum": "15",
-      "enrolled": "",
+      "targetNum": "5",
+      "enrolled": "0",
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "李重賓",
       "nurse": "張台依",
       "phone": "0972811090",
-      "status": "停止收案",
+      "status": "進行中",
       "inclusion": "1. 局部晚期無法切除 /轉移性肝細胞癌 (HCC) 或經組織學證實晚期實體腫瘤帶有 FGF/FGFR 基因突變 。2. 受試者之前可接受任何次數的先前治療 , 收多線後 。3.ccr > =60 ml/min",
       "exclusion": "1-篩選前四週曾接受重大手術。2- 無法控制的心血管疾病 , (NYHC: CHF 3-4 級 ; 心肌梗塞 ; 肺栓塞。) 3-活動性 ` 症狀性或未經治療的腦部轉移。",
       "cancerTypes": [
@@ -1327,8 +1369,10 @@
       "subjects": [],
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2506300",
+      "trialCost": "＄3,033,720"
     },
     {
       "id": 44,
@@ -1365,7 +1409,7 @@
     {
       "id": 45,
       "code": "C6461016",
-      "status": "進行中",
+      "status": "暫無slot",
       "subjects": [],
       "exclusion": "",
       "cancerType": "胃癌",
@@ -1373,7 +1417,7 @@
       "studyTitle": "一項第 2/3 期介入性試驗，旨在評估 PF-08634404 併用化療，用於先前未接受治療之局部晚期或轉移性胃腺癌、胃食道交界腺癌或食道腺癌參與者",
       "phase": "2/3期",
       "sponsor": "PFIZER",
-      "pi": "陳明晃",
+      "pi": "張牧新 / 陳明晃",
       "nurse": "王秋眉",
       "phone": "0927751328",
       "inclusion": "1. HER2 (-)；院內驗 CPS > 1\n2. Measurable lesion by RECIST 1.1\n3. ECOG 0-1\n4. 不可收 B 肝；治療後 C 肝病毒量需驗不到\n5. CCr >=50 mL/min，Hb >9 g/dL，7天內不可輸血或使用 G-CSF\n6. 肺結核、心律不整、心臟疾病或控制不佳高血壓不能進案\n7. 6個月內腸胃道出血不能進案",
@@ -1386,13 +1430,15 @@
         }
       ],
       "targetNum": "3",
-      "enrolled": "1",
-      "monthSigned": "1",
+      "enrolled": "1(CAPOX)",
+      "monthSigned": "0",
       "monthEnrolled": "0",
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2606500",
+      "trialCost": "＄5,527,260"
     },
     {
       "id": 46,
@@ -1420,13 +1466,14 @@
         }
       ],
       "targetNum": "5",
-      "enrolled": "1",
+      "enrolled": "2",
       "monthSigned": "1 (planning on 2026/8/24)",
       "monthEnrolled": "0",
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "trialCost": "＄14,123,935"
     },
     {
       "id": 47,
@@ -1440,7 +1487,7 @@
       "phase": "1",
       "sponsor": "藥華",
       "pi": "陳明晃",
-      "nurse": "陳秀玲 / 吳佳勳 / 王秋眉",
+      "nurse": "陳秀玲",
       "phone": "0988660381",
       "inclusion": "納入條件：\n1.標準療法後疾病惡化，無法耐受標準療法，或沒有適用的標準\n療法之病患。\n2.ECOG ≤ 1，\n3.Dose Escalation Phase:所有末期實體腫瘤(Arm A and Arm B)\n4.Dose Expansion Cohort:限腎細胞癌及大腸直腸癌(Arm C)。\nARM A:沒有接受過Anti-PD1 or Anti-PDL1(治療 P1801 IV Q2W)\nARM B: 有接受過Anti-PD1 or Anti-PDL1 (治療P1101 Q2W ,3-\n6 dose then\nP1801 Q2W\n5.先前接受的化學治療wash out 至少2週 或免疫治療至少wash\nout4週\n6眼底檢查(fundus examination):Arm B\n7甲狀腺功能相關之實驗室數值需為正常\n排除條件\n1 自體免疫疾病患者，接受全身性類固醇或免疫抑制劑治療之自\n體免疫疾病\n2 有症狀的腦部腫瘤轉移；或腦膜轉移。\n3.HbA1c ≥7.4%（無法控制之糖尿病）。\n4 控制不佳重度精神疾病，包括嚴重憂鬱、雙極性疾患、思覺失\n調、自殺意念\n5 控制不佳之心血管疾病，\n6 在接受第一劑P1101前4週內使用其他臨床試驗藥物。\n7 曾有藥物誘發肺炎病史或目前患有肺炎。\n8 需全身性抗生素治療之急性感染。\n9. HBV DNA ≥2,000、HCV RNA 陽性或已知 HIV 感染。\n10 在接受第一劑P1101前4週內曾使用telbivudine或在接受第一\n劑P1101後使用telbivudine。",
       "cancerTypes": [
@@ -1452,13 +1499,13 @@
         }
       ],
       "targetNum": "10",
-      "enrolled": "0",
-      "monthSigned": "1",
+      "enrolled": "2",
+      "monthSigned": "2",
       "monthEnrolled": "0",
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "id": 48,
@@ -1484,13 +1531,14 @@
         }
       ],
       "targetNum": "8",
-      "enrolled": "0",
-      "monthSigned": "2",
-      "monthEnrolled": "2",
+      "enrolled": "6",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "trialCost": "＄7,199,688"
     },
     {
       "id": 49,
@@ -1517,13 +1565,13 @@
         }
       ],
       "targetNum": "9",
-      "enrolled": "0",
+      "enrolled": "2",
       "monthSigned": "0",
       "monthEnrolled": "0",
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22"
     },
     {
       "cancerType": "胰臟癌",
@@ -1533,7 +1581,7 @@
       "phase": "III",
       "sponsor": "Revolution Medicines, Inc.",
       "targetNum": "15",
-      "enrolled": "0",
+      "enrolled": "5",
       "monthSigned": "0",
       "monthEnrolled": "0",
       "pi": "姜乃榕",
@@ -1554,8 +1602,10 @@
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
       "id": 50,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "contractNo": "C2604000",
+      "trialCost": "＄9,378,700"
     },
     {
       "cancerType": "神經內分泌腫瘤",
@@ -1564,10 +1614,10 @@
       "code": "XL092-311",
       "phase": "II/III",
       "sponsor": "Exelixis, Inc.",
-      "targetNum": "3",
-      "enrolled": "",
-      "monthSigned": "",
-      "monthEnrolled": "",
+      "targetNum": "6",
+      "enrolled": "3",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
       "pi": "陳明晃",
       "nurse": "宋秀薇 / 賴姵妤",
       "phone": "82935 / 82999 / 0936385216",
@@ -1585,12 +1635,207 @@
       "statusSource": "explicit-field",
       "statusDetectedFromText": false,
       "id": 51,
-      "studyStatusSnapshotVersion": "v4.3.6-20260901-study-status-pdf",
-      "studyStatusSnapshotDate": "2026-09-01"
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "trialCost": "1,432,695元",
+      "comments": "只剩 pNET 有名額"
+    },
+    {
+      "cancerType": "肝癌",
+      "line": "二線",
+      "code": "CTL-002-005",
+      "studyTitle": "一項第2b期、隨機分配、雙盲試驗，在患有無法切除或轉移性肝細胞癌和肝功能代償 (Child-Pugh A級)，且接受第一線治療（包括抗 PD-(L)1）失敗後的參與者中，探討 Visugromab 併用 Nivolumab 和 Lenvatinib 相較於雙安慰劑和 Lenvatinib 的療效和安全性 (GDFATHER HCC-01)",
+      "inclusion": "1. 病理或肝硬化的參與者，透過 AASLD 標準進行臨床診斷即已足夠\n2. 一線治療失敗後，包含抗 PD-(L)1 CPI，治療持續時間至少 12 週\n3. Child-Pugh class A，CCr >50\n4. HBsAg(+) 可收，HBV DNA <1000 IU/mL，進入試驗前已接受抗 HBV 治療至少 14 天\n5. HDV RNA 陰性",
+      "phase": "II",
+      "sponsor": "",
+      "targetNum": "3",
+      "enrolled": "0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
+      "pi": "陳明晃",
+      "nurse": "宋秀薇 / 賴姵妤",
+      "phone": "82935 / 82999 / 0936385216",
+      "status": "進行中",
+      "exclusion": "",
+      "cancerTypes": [
+        {
+          "type": "肝癌",
+          "lines": [
+            "二線"
+          ]
+        }
+      ],
+      "subjects": [],
+      "id": 52,
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "cancerType": "胃癌",
+      "line": "二線",
+      "code": "DS1103-074",
+      "studyTitle": "一項 DS-1103a 併用療法用於晚期實體腫瘤受試者的第 1 期、2 部分、多中心、首次用於人體的劑量遞增及劑量擴展試驗",
+      "inclusion": "Cohort 2：不可切除或轉移性 HER2 陽性（IHC 3+ 或 IHC 2+/ISH+）胃癌或 GEJ 腺癌；第一線含 trastuzumab 或核准 biosimilar 療法期間或之後疾病惡化。LVEF ≥50%；試驗治療開始前 14 天內器官及骨髓功能足夠；14 天內不得輸血；Platelet ≥100×10^9/L；Hb >8 g/dL（gastric/GEJ）；ANC ≥1.5×10^9/L；CrCl ≥30 mL/min；Albumin ≥2.5 g/dL。",
+      "phase": "I",
+      "sponsor": "Daiichi Sankyo, Inc.",
+      "targetNum": "5",
+      "enrolled": "0",
+      "monthSigned": "0",
+      "monthEnrolled": "0",
+      "pi": "陳明晃",
+      "nurse": "孔亭方 / 陳秀玲 / 王秋眉",
+      "phone": "0981764403",
+      "status": "進行中",
+      "exclusion": "",
+      "cancerTypes": [
+        {
+          "type": "胃癌",
+          "lines": [
+            "二線"
+          ]
+        }
+      ],
+      "subjects": [],
+      "id": 53,
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "cancerType": "胰臟癌",
+      "line": "一線",
+      "code": "3082-CL-0301",
+      "studyTitle": "一項第三期、雙盲、安慰劑對照、隨機分配試驗，評估 ASP3082 合併 mFOLFIRINOX 或 NALIRIFOX，作為 KRAS G12D 突變轉移性胰臟腺癌參與者之第一線治療的療效和安全性",
+      "inclusion": "1. 轉移性胰管腺癌\n2. 尚未接受過治療（一線）\n3. RECIST 1.1 measurable lesion\n4. 無 B、C 型肝炎\n5. 腫瘤切片 15 片\n6. KRAS G12D positive\n7. 醫師可自行選擇 mFOLFIRINOX 或 NALIRIFOX",
+      "phase": "III",
+      "sponsor": "安斯泰來",
+      "targetNum": "3",
+      "enrolled": "3",
+      "monthSigned": "1",
+      "monthEnrolled": "1",
+      "pi": "李重賓",
+      "nurse": "張台依",
+      "phone": "0972811090",
+      "contractNo": "C2608500",
+      "status": "進行中",
+      "exclusion": "",
+      "cancerTypes": [
+        {
+          "type": "胰臟癌",
+          "lines": [
+            "一線"
+          ]
+        }
+      ],
+      "subjects": [],
+      "id": 54,
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "cancerType": "胃癌",
+      "line": "二線、三線、四線",
+      "code": "GCT1184-09",
+      "studyTitle": "一項研究 Rina-S 用於晚期胃腸道 (Gastrointestinal, GI) 癌受試者的第 2 期、多隊列、開放性標記試驗",
+      "inclusion": "1. 組織學或細胞學確認 ESCC，或胰臟、結腸/直腸、膽道、食道或胃/GEJ 腺癌\n2. Slide 15 片（4-5u），C1D1 前寄出\n3. Cohort A：2L+ mCRC（RAS/BRAF/MSI/MMR）\n4. Cohort B：2L-4L 胃/GEJ 癌或食道腺癌\n5. Cohort C：2L-3L PDAC\n6. Cohort D：2L-3L BTC\n7. Cohort E：2L-3L ESCC\n8. RECIST 1.1 target lesion；eGFR ≥60 mL/min；ILD/pneumonitis 病史不收\n9. 不可曾接受含 topoisomerase I inhibitor payload 的 ADC\n10. B、C 肝不收",
+      "phase": "II",
+      "sponsor": "Genmab",
+      "targetNum": "5",
+      "enrolled": "2",
+      "monthSigned": "2 (胃/GEJ)",
+      "monthEnrolled": "2 (胃/GEJ)",
+      "pi": "陳明晃",
+      "nurse": "宋秀薇 / 賴姵妤",
+      "phone": "82935 / 82999 / 0936385216",
+      "trialCost": "＄11,674,265",
+      "status": "進行中",
+      "exclusion": "",
+      "cancerTypes": [
+        {
+          "type": "胃癌",
+          "lines": [
+            "二線",
+            "三線",
+            "四線"
+          ]
+        },
+        {
+          "type": "大腸癌",
+          "lines": [
+            "二線以上"
+          ]
+        },
+        {
+          "type": "胰臟癌",
+          "lines": [
+            "二線",
+            "三線"
+          ]
+        },
+        {
+          "type": "膽道癌",
+          "lines": [
+            "二線",
+            "三線"
+          ]
+        },
+        {
+          "type": "食道癌",
+          "lines": [
+            "二線",
+            "三線"
+          ]
+        }
+      ],
+      "subjects": [],
+      "id": 55,
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
+    },
+    {
+      "cancerType": "神經內分泌癌",
+      "line": "一線",
+      "code": "DAREON-NEC-1",
+      "studyTitle": "一項第三期、多中心、開放標籤、隨機分配、對照試驗，評估靜脈輸注 obrixtamig 併用 carboplatin 及 etoposide 相較於 carboplatin 和 etoposide 作為 DLL3 陽性之無法切除的局部晚期或轉移性肺外神經內分泌癌患者的第一線療法",
+      "inclusion": "1. 未接受過治療之 epNEC，Ki-67 >20%\n2. DLL3 陽性（slide 送 central lab 確認）\n3. Random 前可接受 1 cycle etoposide + cisplatin（劑量需符合 protocol）",
+      "phase": "III",
+      "sponsor": "Boehringer Ingelheim",
+      "targetNum": "8",
+      "enrolled": "0",
+      "monthSigned": "1",
+      "monthEnrolled": "0",
+      "pi": "陳明晃",
+      "nurse": "林韋秀",
+      "phone": "0963501682",
+      "contractNo": "C2604500",
+      "trialCost": "6,873,790",
+      "status": "進行中",
+      "exclusion": "",
+      "cancerTypes": [
+        {
+          "type": "神經內分泌癌",
+          "lines": [
+            "一線"
+          ]
+        }
+      ],
+      "subjects": [],
+      "id": 56,
+      "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+      "studyStatusSnapshotDate": "2026-11-22",
+      "statusSource": "explicit-field",
+      "statusDetectedFromText": false
     }
   ],
   "subjects": [],
-  "updatedAt": null,
-  "studyStatusSnapshotVersion": "v4.3.5-20260822-study-status-pdf",
-  "studyStatusSnapshotDate": "2026-08-22"
+  "updatedAt": "2026-11-22T12:00:00Z",
+  "studyStatusSnapshotVersion": "v4.4.0-20261122-study-status-pdf",
+  "studyStatusSnapshotDate": "2026-11-22"
 }
