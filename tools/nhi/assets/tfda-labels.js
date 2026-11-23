@@ -1,19 +1,19 @@
 window.TFDA_LABELS = {
   "meta": {
     "schema_version": "tfda-oncology-label-v1",
-    "fetched_at": "2026-11-16T11:04:19Z",
+    "fetched_at": "2026-11-23T12:22:43Z",
     "active_dataset": "https://data.gov.tw/dataset/9123",
     "insert_dataset": "https://data.gov.tw/dataset/9117",
-    "active_row_count": 25982,
-    "insert_row_count": 29920,
+    "active_row_count": 25976,
+    "insert_row_count": 29931,
     "curated_indication_count": 300,
     "matched_indication_count": 266,
     "review_count": 5,
     "note": "Dose/interval is derived only from official TFDA licence dosage text. Ambiguous mappings are withheld for review.",
     "combination_regimen_withheld_count": 14,
-    "multi_insert_link_normalized_count": 14,
+    "multi_insert_link_normalized_count": 15,
     "package_insert_pdf_attempted_count": 129,
-    "package_insert_pdf_parsed_count": 7,
+    "package_insert_pdf_parsed_count": 8,
     "indication_dose_enriched_count": 6,
     "high_confidence_dose_count": 6,
     "dose_withheld_count": 257,
@@ -38,17 +38,17 @@ window.TFDA_LABELS = {
         "每四週",
         "每三週"
       ],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.6 膽道癌 \n建議劑量及給藥方式 \n使用單一藥物: \nGemcitabine 的建議劑量 1000 mg/m2,以靜脈輸注 30 分鐘。以四週為一治療週期,每週給藥一次,連續給藥三週,接著休\n息一週,重複以上的方式(每四週為一週期)接受治療,應依據病人發生毒性反應之嚴重程度,於治療週期間或治療週期內\n降低劑量。 \n併用其他藥物: \nGemcitabine 併用 cisplatin 時,以 21 天為一治療週期,以每週期的第 1, 8 天靜脈輸注 cisplatin 25 mg/m2,靜脈輸注 30 分鐘\n給予 Gemcitabine 1000 mg/m2。重複以上的方式(每三週為一週期)接受治療。每次給予化療之前應依據病人發生毒性反應之\n嚴重程度,適當的降低劑量。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -186,13 +186,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
       ],
       "dose_confidence": "withheld",
@@ -352,17 +352,17 @@ window.TFDA_LABELS = {
         "175 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.2 乳癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1250 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘,包含 Paclitaxel。第一天\n輸注 Gemcitabine 前,應先輸注 Paclitaxel 175 mg/m2 3 小時。 \n劑量調整 \n若發生骨髓抑制,應依據表十四調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見\n【劑量與給藥方式】(6.7)。 \n表十四、乳癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降建議 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 暫停給藥 \n第 8 天 ≥1200 且 ≥75,000 100 \n 1000-1299 或 50,000-75,000 75 \n 700-999 且 ≥50,000 50 \n <700 或 <50,000 暫停給藥",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -370,21 +370,21 @@ window.TFDA_LABELS = {
     "bc-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛署藥製字第045331號",
+      "product_zh": "欣沛方注射液 6 毫克/毫升",
+      "product_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "applicant": "健亞生物科技股份有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛（DOXORUBICIN）在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
-      "license_modified": "2026/09/09",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -490,21 +490,21 @@ window.TFDA_LABELS = {
     "bc-abema-adjuvant": {
       "status": "matched",
       "drug": "Abemaciclib",
-      "permit": "衛部藥輸字第027640號",
-      "product_zh": "捷癌寧膜衣錠200毫克",
-      "product_en": "VERZENIO film-coated tablet 200mg",
+      "permit": "衛部藥輸字第027641號",
+      "product_zh": "捷癌寧膜衣錠150毫克",
+      "product_en": "VERZENIO film-coated tablet 150mg",
       "applicant": "台灣禮來股份有限公司",
       "form": "膜衣錠",
       "indication": "1. 早期乳癌：併用內分泌療法 (tamoxifen或芳香環酶抑制劑 )，可做為荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性、淋巴結陽性，高復發風險之早期乳癌成年病人的輔助治療。 2. 晚期乳癌： (1) 併用芳香環酶抑制劑(aromatase inhibitor)，可做為治療荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性之晚期或轉移性乳癌之停經後婦女及男性的第一線內分泌療法(endocrine-based therapy)。 (2) 併用fulvestrant，可治療荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性，且接受內分泌療法後疾病惡化之晚期或轉移性乳癌的成人病人。 (3) 單獨用於治療荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性，曾經接受過內分泌治療及於轉移後接受化學治療後又發生疾病惡化之晚期或轉移性乳癌的成人病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027640號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027641號",
       "license_modified": "2024/11/04",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027640號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027641號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -660,21 +660,21 @@ window.TFDA_LABELS = {
     "bc-palbo-fulvestrant": {
       "status": "matched",
       "drug": "Palbociclib",
-      "permit": "衛部藥輸字第028005號",
-      "product_zh": "愛乳適膜衣錠75毫克",
-      "product_en": "Ibrance Film-coated Tablets 75 mg",
+      "permit": "衛部藥輸字第027102號",
+      "product_zh": "愛乳適 膠囊75毫克",
+      "product_en": "IBRANCE Capsules 75 mg",
       "applicant": "輝瑞大藥廠股份有限公司",
-      "form": "膜衣錠",
-      "indication": "一、 HER2陰性乳癌 1. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性，本品可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 2. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，本品可合併fulvestrant用於先前曾接受過內分泌治療者。 二、 HER2陽性乳癌：對於接受誘導治療後之荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陽性之局部晚期或轉移性乳癌成人病人，本品可合併trastuzumab及內分泌治療，可併用或不併用pertuzumab，作為維持治療。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
+      "form": "膠囊劑",
+      "indication": "一、 HER2陰性乳癌 1. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之婦女或男性，本品可與芳香環轉化酶抑制劑(aromatase inhibitor)合併使用。 2. 對於荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陰性之局部晚期或轉移性乳癌之病人，本品可合併fulvestrant 用於先前曾接受過內分泌治療者。 二、 HER2陽性乳癌：對於接受誘導治療後之荷爾蒙受體為陽性、第二型人類表皮生長因子接受體(HER2)呈陽性之局部晚期或轉移性乳癌成人病人，本品可合併trastuzumab及內分泌治療，可併用或不併用pertuzumab，作為維持治療。 說明：停經前/停經前後(pre/perimenopause)婦女，接受內分泌治療應合併黃體生成素-釋放激素(luteinizing hormone-releasing hormone；LHRH)致效劑。",
       "dosage": "詳細內容請參閱仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028005號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號",
       "license_modified": "2026/09/29",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028005號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027102號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -683,21 +683,21 @@ window.TFDA_LABELS = {
     "bc-alpelisib": {
       "status": "matched",
       "drug": "Alpelisib",
-      "permit": "衛部藥輸字第027995號",
-      "product_zh": "愛克利150毫克膜衣錠",
-      "product_en": "PIQRAY 150 mg Film-Coated Tablets",
+      "permit": "衛部藥輸字第027996號",
+      "product_zh": "愛克利200毫克膜衣錠",
+      "product_en": "PIQRAY 200 mg Film-Coated Tablets",
       "applicant": "台灣諾華股份有限公司",
       "form": "膜衣錠",
       "indication": "與fulvestrant併用可治療患有荷爾蒙受體(HR)陽性、第二型人類表皮生長因子受體(HER2)陰性及PIK3CA突變的局部晚期或轉移性乳癌，且曾接受內分泌治療但疾病惡化的停經後女性及男性病人。",
       "dosage": "詳見中文仿單擬稿。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027995號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027996號",
       "license_modified": "2025/07/14",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 9,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027995號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027996號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1044,7 +1044,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -1377,21 +1377,21 @@ window.TFDA_LABELS = {
     "crc-fruquintinib": {
       "status": "matched",
       "drug": "Fruquintinib",
-      "permit": "衛部藥輸字第028886號",
-      "product_zh": "伏腸剋膠囊1毫克",
-      "product_en": "FRUZAQLA capsules 1 mg",
+      "permit": "衛部藥輸字第028887號",
+      "product_zh": "伏腸剋膠囊5毫克",
+      "product_en": "FRUZAQLA capsules 5 mg",
       "applicant": "台灣武田藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "適用於治療先前曾接受下列療法的轉移性大腸直腸癌(mCRC)成人病人，包括fluoropyrimidine-、oxaliplatin-、irinotecan-為基礎的化療，和抗血管內皮生長因子(anti-VEGF)等療法；若KRAS 為原生型(wild type)，則需接受過抗表皮生長因子受體(anti-EGFR)療法。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028886號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028887號",
       "license_modified": "2026/03/20",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 4,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028886號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028887號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1446,21 +1446,21 @@ window.TFDA_LABELS = {
     "gc-oxaliplatin-fp": {
       "status": "matched",
       "drug": "Oxaliplatin",
-      "permit": "衛署藥製字第044508號",
-      "product_zh": "歐力普注射劑",
-      "product_en": "OXALIP INJECTION",
-      "applicant": "台灣東洋藥品工業股份有限公司",
-      "form": "注射劑",
-      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-      "dosage": "詳見仿單",
+      "permit": "衛部藥製字第060907號",
+      "product_zh": "\"霖揚\"奧沙利鉑注射劑5毫克/毫升",
+      "product_en": "Oxaliplatin Injection 5mg/mL \"GBC\"",
+      "applicant": "霖揚生技製藥股份有限公司",
+      "form": "注射液劑",
+      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為-第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。-治療轉移性結腸直腸癌。Oxaliplatin與fluoropyrimidine類藥物併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號",
-      "license_modified": "2026/10/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1469,21 +1469,21 @@ window.TFDA_LABELS = {
     "gc-oxaliplatin-nivo-support": {
       "status": "matched",
       "drug": "Oxaliplatin",
-      "permit": "衛署藥製字第044508號",
-      "product_zh": "歐力普注射劑",
-      "product_en": "OXALIP INJECTION",
-      "applicant": "台灣東洋藥品工業股份有限公司",
-      "form": "注射劑",
-      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-      "dosage": "詳見仿單",
+      "permit": "衛部藥製字第060907號",
+      "product_zh": "\"霖揚\"奧沙利鉑注射劑5毫克/毫升",
+      "product_en": "Oxaliplatin Injection 5mg/mL \"GBC\"",
+      "applicant": "霖揚生技製藥股份有限公司",
+      "form": "注射液劑",
+      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為-第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。-治療轉移性結腸直腸癌。Oxaliplatin與fluoropyrimidine類藥物併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號",
-      "license_modified": "2026/10/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1515,41 +1515,41 @@ window.TFDA_LABELS = {
     "escc-oxaliplatin-nivo-support": {
       "status": "review",
       "drug": "Oxaliplatin",
-      "permit": "衛署藥製字第044508號",
-      "product_zh": "歐力普注射劑",
-      "product_en": "OXALIP INJECTION",
-      "applicant": "台灣東洋藥品工業股份有限公司",
-      "form": "注射劑",
-      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-      "dosage": "詳見仿單",
+      "permit": "衛部藥製字第060907號",
+      "product_zh": "\"霖揚\"奧沙利鉑注射劑5毫克/毫升",
+      "product_en": "Oxaliplatin Injection 5mg/mL \"GBC\"",
+      "applicant": "霖揚生技製藥股份有限公司",
+      "form": "注射液劑",
+      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為-第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。-治療轉移性結腸直腸癌。Oxaliplatin與fluoropyrimidine類藥物併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號",
-      "license_modified": "2026/10/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號"
       ]
     },
     "crc-oxaliplatin-folfox": {
       "status": "matched",
       "drug": "Oxaliplatin",
-      "permit": "衛署藥製字第044508號",
-      "product_zh": "歐力普注射劑",
-      "product_en": "OXALIP INJECTION",
-      "applicant": "台灣東洋藥品工業股份有限公司",
-      "form": "注射劑",
-      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-      "dosage": "詳見仿單",
+      "permit": "衛部藥製字第060907號",
+      "product_zh": "\"霖揚\"奧沙利鉑注射劑5毫克/毫升",
+      "product_en": "Oxaliplatin Injection 5mg/mL \"GBC\"",
+      "applicant": "霖揚生技製藥股份有限公司",
+      "form": "注射液劑",
+      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為-第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。-治療轉移性結腸直腸癌。Oxaliplatin與fluoropyrimidine類藥物併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號",
-      "license_modified": "2026/10/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1558,21 +1558,21 @@ window.TFDA_LABELS = {
     "crc-oxaliplatin-adjuvant": {
       "status": "matched",
       "drug": "Oxaliplatin",
-      "permit": "衛署藥製字第044508號",
-      "product_zh": "歐力普注射劑",
-      "product_en": "OXALIP INJECTION",
-      "applicant": "台灣東洋藥品工業股份有限公司",
-      "form": "注射劑",
-      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為第三期結腸癌(Duke’s C) 原發腫瘤完全切除手術後的輔助療法。治療轉移性結腸直腸癌。Oxaliplatin和Capecitabine併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
-      "dosage": "詳見仿單",
+      "permit": "衛部藥製字第060907號",
+      "product_zh": "\"霖揚\"奧沙利鉑注射劑5毫克/毫升",
+      "product_en": "Oxaliplatin Injection 5mg/mL \"GBC\"",
+      "applicant": "霖揚生技製藥股份有限公司",
+      "form": "注射液劑",
+      "indication": "和5-fluorouracil (5-FU)及folinic acid (FA)併用，作為-第三期結腸癌(Duke’s C)原發腫瘤完全切除手術後的輔助療法。-治療轉移性結腸直腸癌。Oxaliplatin與fluoropyrimidine類藥物併用可用於局部晚期及復發/轉移性胃癌之治療。與5-fluorouracil、leucovorin及irinotecan合併治療(FOLFIRINOX)，作為轉移性胰臟癌之第一線治療藥物。",
+      "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號",
-      "license_modified": "2026/10/21",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 12,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第044508號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060907號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -1729,7 +1729,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署菌疫輸字第000877號",
-      "license_modified": "2025/08/27",
+      "license_modified": "2026/11/12",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 3,
       "label_urls": [
@@ -1752,7 +1752,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署菌疫輸字第000877號",
-      "license_modified": "2025/08/27",
+      "license_modified": "2026/11/12",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 3,
       "label_urls": [
@@ -2131,17 +2131,17 @@ window.TFDA_LABELS = {
         "800 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.1 卵巢癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於 21 天週期的第 1、8 天靜脈輸注 Gemcitabine 30 分鐘。第一天輸注 Gemcitabine\n後,再靜脈輸注 Carboplatin AUC 4。請參閱 Carboplatin 仿單以獲取其他資訊。 \n劑量調整 \n若發生骨髓抑制,應依據表十二及表十三之基準調整 Gemcitabine 劑量(見【警語及注意事項】(8.2))。非血液不良反應之建\n議處理方式請見【劑量與給藥方式】(6.7)。 \n表十二、卵巢癌治療,依治療日期發生骨髓抑制,Gemcitabine 劑量調降基準 \n治療的日期 顆粒性白血球之絕對值(x106/升) 血小板數(x106/升) 全劑量之百分比 \n第 1 天 ≥1500 且 ≥100,000 100 \n <1500 或 <100,000 延遲治療週期 \n第 8 天 ≥1500 且 ≥100,000 100 \n 1000-1499 或 75,000-99,999 50 \n <1000 或 <75,000 暫停給藥 \n表十三、卵巢癌治療前一個週期若骨髓抑制,Gemcitabine 之劑量調整 \n發生時間 治療週期內發生骨髓抑制 劑量調整 \n第 1 次發生 \n 顆粒性白血球之絕對值<500x106/L 超過 5 天 \n 顆粒性白血球之絕對值<100x106/L 超過 3 天 \n 發熱性嗜中性白血球減少症 \n 血小板數<25000x106/L \n 因毒性導致療程延遲超過一週 \n第 1、8 天的 Gemcitabine 劑\n量永久地降為 800 mg/m2 \n再次發生 若起始劑量已調降,但上述毒性反應仍發生 Gemcitabine 劑量永久地降為 800 mg/m2,僅於第 1 天輸注",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -2149,21 +2149,21 @@ window.TFDA_LABELS = {
     "ov-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛署藥製字第045331號",
+      "product_zh": "欣沛方注射液 6 毫克/毫升",
+      "product_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "applicant": "健亞生物科技股份有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛（DOXORUBICIN）在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
-      "license_modified": "2026/09/09",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2409,21 +2409,21 @@ window.TFDA_LABELS = {
     "ec-paclitaxel-support": {
       "status": "review",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛署藥製字第045331號",
+      "product_zh": "欣沛方注射液 6 毫克/毫升",
+      "product_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "applicant": "健亞生物科技股份有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛（DOXORUBICIN）在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
-      "license_modified": "2026/09/09",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號"
       ]
     },
     "ec-dostarlimab": {
@@ -2461,13 +2461,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -2588,7 +2588,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署菌疫輸字第000877號",
-      "license_modified": "2025/08/27",
+      "license_modified": "2026/11/12",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 3,
       "label_urls": [
@@ -2680,7 +2680,7 @@ window.TFDA_LABELS = {
       "dose_mentions": [],
       "frequency_mentions": [],
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署菌疫輸字第000877號",
-      "license_modified": "2025/08/27",
+      "license_modified": "2026/11/12",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 3,
       "label_urls": [
@@ -2986,7 +2986,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -3170,7 +3170,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -3250,21 +3250,21 @@ window.TFDA_LABELS = {
     "cml-asciminib": {
       "status": "matched",
       "drug": "Asciminib",
-      "permit": "衛部藥輸字第028555號",
-      "product_zh": "欣覓力20毫克膜衣錠",
-      "product_en": "Scemblix 20mg Film-Coated Tablets",
+      "permit": "衛部藥輸字第028556號",
+      "product_zh": "欣覓力40毫克膜衣錠",
+      "product_en": "Scemblix 40mg Film-Coated Tablets",
       "applicant": "台灣諾華股份有限公司",
       "form": "膜衣錠",
-      "indication": "１、治療新診斷的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。 ２、治療曾接受酪胺酸激酶抑制劑治療的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。 ３、治療慢性期費城染色體陽性且帶有T315I突變之慢性骨髓性白血病(Ph+CML-CP with T315I mutation)成人病人。",
+      "indication": "１、治療新診斷的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。２、治療曾接受酪胺酸激酶抑制劑治療的慢性期費城染色體陽性之慢性骨髓性白血病(Ph+CML-CP)成人病人。３、治療慢性期費城染色體陽性且帶有T315I突變之慢性骨髓性白血病(Ph+CML-CP with T315I mutation)成人病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028555號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028556號",
       "license_modified": "2025/10/28",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 9,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028555號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028556號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3355,17 +3355,17 @@ window.TFDA_LABELS = {
         "每 4 週",
         "每 3 週"
       ],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.3 非小細胞肺癌 \n建議劑量及給藥方式 \n每 4 週為一週期的治療方式 \nGemcitabine 的建議劑量為 1000 mg/m2,於第 1、8、15 天,靜脈輸注 30 分鐘給予 Gemcitabine 與 Cisplatin 療程;第一天輸\n注完 Gemcitabine 後再靜脈給予 Cisplatin 100 mg/m2。 \n每 3 週為一週期的治療方式 \nGemcitabine 的建議劑量為 1250 mg/m 2,於第 1、8 天靜脈輸注 30 分鐘給予 Gemcitabine 與 Cisplatin 療程;第一天輸注完\nGemcitabine 後再靜脈給予 Cisplatin 100 mg/m2。 \n劑量調整 \n若發生骨髓抑制,應依據表十五調整劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見【劑量與給\n藥方式】(6.7)。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -3373,21 +3373,21 @@ window.TFDA_LABELS = {
     "lc-paclitaxel": {
       "status": "matched",
       "drug": "Paclitaxel",
-      "permit": "衛署藥輸字第024738號",
-      "product_zh": "癌克平注射液",
-      "product_en": "Intaxel Injection",
-      "applicant": "台灣費森尤斯卡比股份有限公司",
+      "permit": "衛署藥製字第045331號",
+      "product_zh": "欣沛方注射液 6 毫克/毫升",
+      "product_en": "GENETAXYL CREM LESS INJECTION 6MG/ML (PACLITAXEL)",
+      "applicant": "健亞生物科技股份有限公司",
       "form": "注射劑",
-      "indication": "晚期卵巢癌、液下淋巴轉移之乳癌，作為接續含杜薩魯比辛 (DOXORUBICIN) 在內之輔助化學療法、已使用合併療法 (除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥) 失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人。",
-      "dosage": "詳見仿單。",
+      "indication": "晚期卵巢癌、腋下淋巴轉移之乳癌，作為接續含杜薩魯比辛（DOXORUBICIN）在內之輔助化學療法、已使用合併療法（除非有禁忌，至少應包括使用ANTHRACYCLINE抗癌藥）失敗的轉移乳癌、非小細胞肺癌、愛滋病相關卡波西氏肉瘤之第二線療法；與CISPLATIN併用，作為晚期卵巢癌之第一線療法。與GEMCITABINE併用，可使用於曾經使用過ANTHRACYCLINE之局部復發且無法手術切除或轉移性之乳癌病患、與HERCEPTIN併用時，用於治療未接受過化學治療之轉移性且乳癌過度表現HER-2之病人",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號",
-      "license_modified": "2026/09/09",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號",
+      "license_modified": "2026/11/10",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 17,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024738號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥製字第045331號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3405,13 +3405,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳閱說明書",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
       "license_modified": "2026/08/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 15,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_b2f1c958-eaa8-4ed7-b41c-51d6cd5942ee?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_26be0ce1-f630-4c03-a06f-dbfb63798f21?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4dfd72ed-0f2b-4406-94e1-ca61c1ba9628?c=2"
       ],
       "dose_confidence": "withheld",
@@ -3490,21 +3490,21 @@ window.TFDA_LABELS = {
     "lc-erlotinib": {
       "status": "matched",
       "drug": "Erlotinib",
-      "permit": "衛部藥輸字第028117號",
-      "product_zh": "安適伏膜衣錠100毫克",
-      "product_en": "Zyceva 100 (Erlotinib Tablets 100mg)",
+      "permit": "衛部藥輸字第028116號",
+      "product_zh": "安適伏膜衣錠150毫克",
+      "product_en": "Zyceva 150 (Erlotinib Tablets 150mg)",
       "applicant": "毅有生技醫藥股份有限公司",
       "form": "膜衣錠",
       "indication": "適用於具有EGFR-TK突變之局部侵犯性或轉移性之非小細胞肺癌(NSCLC)病患之第一線及維持治療。適用於先前已接受過化學治療後，但仍局部惡化或轉移之肺腺癌病患之第二線用藥。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028117號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028116號",
       "license_modified": "2026/06/03",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 21,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028117號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028116號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -3960,21 +3960,21 @@ window.TFDA_LABELS = {
     "lc-crizotinib-ros1": {
       "status": "matched",
       "drug": "Crizotinib",
-      "permit": "衛署藥輸字第025938號",
-      "product_zh": "截剋瘤膠囊250毫克",
-      "product_en": "XALKORI Capsules 250mg",
+      "permit": "衛署藥輸字第025939號",
+      "product_zh": "截剋瘤膠囊200毫克",
+      "product_en": "XALKORI Capsules 200mg",
       "applicant": "輝瑞大藥廠股份有限公司",
       "form": "膠囊劑",
       "indication": "１、治療ALK陽性的晚期非小細胞肺癌病人。治療前須經衛福部核准之檢驗方式測得ALK陽性。 ２、XALKORI 適用於治療 ROS-1 陽性的晚期非小細胞肺癌(NSCLC) 病人。 ３、適用於治療患有 ALK 陽性之復發性或頑固性、全身性退行分化型大細胞淋巴瘤(ALCL) 的1歲以上兒童、青少年及年輕成人病人。 說明：尚未確定 XALKORI對於患有復發性或頑固性、全身性ALK陽性ALCL之21歲以上成人的安全性和療效。 ４、適用於治療患有無法切除、復發性或頑固性發炎性肌纖維母細胞瘤 (IMT)且ALK陽性的1歲以上病人。",
       "dosage": "請參閱仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025938號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025939號",
       "license_modified": "2023/01/12",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 5,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025938號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第025939號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4276,21 +4276,21 @@ window.TFDA_LABELS = {
     "nhl-lenalidomide-fl": {
       "status": "matched",
       "drug": "Lenalidomide",
-      "permit": "衛部藥輸字第028744號",
-      "product_zh": "蘭多美膠囊10毫克",
-      "product_en": "Lendomy Capsules 10mg",
+      "permit": "衛部藥輸字第028741號",
+      "product_zh": "蘭多美膠囊15毫克",
+      "product_en": "Lendomy Capsules 15mg",
       "applicant": "台灣邁蘭有限公司",
       "form": "膠囊劑",
       "indication": "1.多發性骨髓瘤(Multiple Myeloma，MM): (1)與dexamethasone、與bortezomib及dexamethasone、或與melphalan及prednisone合併使用治療不適合接受移植之新診斷多發性骨髓瘤(multiple myeloma，MM)成年病人。 (2)單一療法適用於做為已接受自體造血幹細胞移植之新診斷多發性骨髓瘤成年病人的維持治療用藥。 (3)與dexamethasone合併使用可治療先前已接受至少一種治療失敗之多發性骨髓瘤病人。 2.骨髓增生不良症候群(Myelodysplastic syndromes，MDS): 在其他治療方式不佳的情況下，Lenalidomide可單獨用於治療IPSS分級為低或中度(Intermediate-1)風險且單獨伴隨染色體5q缺失之骨髓增生不良症候群(Myelodysplastic syndromes，MDS)所導致的輸血依賴型貧血之成人病人。 3.濾泡性淋巴瘤(Follicular Lymphoma，FL): 與rituximab合併使用，治療先前已接受過治療之濾泡性淋巴瘤(follicular lymphoma，FL)成年病人。",
       "dosage": "詳見仿單。",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028744號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028741號",
       "license_modified": "2025/06/05",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 35,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028744號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028741號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4635,14 +4635,14 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9b4f9e56-6863-4d9f-b3ca-c9bc02c37cff?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
       "license_modified": "2022/12/05",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 6,
       "label_urls": [
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2",
         "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9b4f9e56-6863-4d9f-b3ca-c9bc02c37cff?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f1a4a8f-0405-4f94-8251-1fff4ccaed6a?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_9ffad820-4de8-48f4-ace7-7f08b95f4bae?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4743,21 +4743,21 @@ window.TFDA_LABELS = {
     "mm-ixazomib": {
       "status": "matched",
       "drug": "Ixazomib",
-      "permit": "衛部藥輸字第027326號",
-      "product_zh": "免瘤諾 膠囊2.3毫克",
-      "product_en": "NINLARO Capsules 2.3 mg",
+      "permit": "衛部藥輸字第027327號",
+      "product_zh": "免瘤諾 膠囊3毫克",
+      "product_en": "NINLARO Capsules 3 mg",
       "applicant": "台灣武田藥品工業股份有限公司",
       "form": "膠囊劑",
       "indication": "合併 lenalidomide 及 dexamethasone 用於接受過至少一線治療的多發性骨髓瘤成年病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027326號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027327號",
       "license_modified": "2023/04/19",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 9,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027326號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第027327號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -4938,17 +4938,17 @@ window.TFDA_LABELS = {
         "1000 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.4 胰臟癌 \n建議劑量及給藥方式 \nGemcitabine 的建議劑量為 1000 mg/m2 的劑量以 30 分鐘靜脈輸注,建議給藥方式為: \n第 1 至 8 週:每週一次連續給藥 7 週,接著休息一週。 \n第 8 週以後:每週給藥一次,於 28 天週期的第 1、8、15 天給予 Gemcitabine。 \n劑量調整 \n若發生骨髓抑制,應依據表十五調整劑量(見【警語及注意事項】(8.2))。非血液不良反應之建議處理方式請見【劑量與給\n藥方式】(6.7)。 \n使用 Gemcitabine 之病人,每次給藥前應測量 CBC (complete blood count ,全血球數),包括白血球分類與血小板數目。若\n發現骨髓抑制之現象,應依據表十五調整劑量或暫停給藥。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
@@ -5083,24 +5083,26 @@ window.TFDA_LABELS = {
     "pc-bicalutamide": {
       "status": "matched",
       "drug": "Bicalutamide",
-      "permit": "衛部藥輸字第026566號",
-      "product_zh": "癌攝妥膜衣錠50毫克",
-      "product_en": "Bicatero 50",
-      "applicant": "上亞科技股份有限公司",
+      "permit": "衛部藥輸字第026239號",
+      "product_zh": "祿荅膜衣錠50毫克",
+      "product_en": "Bicalutamide \"Lotus\" Film Coated Tablets 50mg",
+      "applicant": "美時化學製藥股份有限公司",
       "form": "膜衣錠",
       "indication": "與LHRH類似劑療法或手術去勢療法併用於進展性攝護腺癌。",
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026566號",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d560d62e-b6d4-417a-b9df-c450a96e07f1?c=2",
       "license_modified": "2026/10/16",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026566號"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d560d62e-b6d4-417a-b9df-c450a96e07f1?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4f7bc1a6-0070-4d5c-9628-42347865f201?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_d045a19b-97a5-4955-9c37-1d1c65bb8d3f?c=2"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
+      "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
       "dose_indication_specific": false
     },
     "pc-docetaxel": {
@@ -5138,15 +5140,15 @@ window.TFDA_LABELS = {
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號",
       "license_modified": "2026/08/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 23,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "pc-enza-mcspc": {
@@ -5299,15 +5301,15 @@ window.TFDA_LABELS = {
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號",
       "license_modified": "2026/08/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 23,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "pc-enza-mcrpc-prechemo": {
@@ -5345,15 +5347,15 @@ window.TFDA_LABELS = {
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號",
       "license_modified": "2026/08/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 23,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_352ac1e7-aace-4edc-b6be-e9528ffb3df2?c=2"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第026139號"
       ],
       "dose_confidence": "withheld",
-      "dose_withheld_reason": "single-indication dosage section found but no reliable dose token was extracted",
+      "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
       "dose_indication_specific": false
     },
     "pc-enza-postdoc": {
@@ -5465,13 +5467,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5572,21 +5574,21 @@ window.TFDA_LABELS = {
     "net-sunitinib-pnet": {
       "status": "matched",
       "drug": "Sunitinib",
-      "permit": "衛部藥製字第060583號",
-      "product_zh": "艾舒尼膠囊25毫克",
-      "product_en": "Alsuni capsules 25mg",
-      "applicant": "美時化學製藥股份有限公司",
+      "permit": "衛署藥輸字第024593號",
+      "product_zh": "紓癌特膠囊12.5毫克",
+      "product_en": "Sutent Capsules 12.5mg",
+      "applicant": "輝瑞大藥廠股份有限公司",
       "form": "膠囊劑",
-      "indication": "11.1 腸胃道間質腫瘤（GIST）：適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤（GIST）。 1.2 晚期腎細胞癌（RCC）：適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤（pNET）：適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療：適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
-      "dosage": "請詳見仿單",
+      "indication": "1.1 腸胃道間質腫瘤(GIST) 適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤(GIST)。 1.2 晚期腎細胞癌(RCC) 適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤(pNET) 適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療 適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號",
-      "license_modified": "2026/09/14",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
+      "license_modified": "2026/11/14",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5645,21 +5647,21 @@ window.TFDA_LABELS = {
     "rcc-sunitinib-1l": {
       "status": "matched",
       "drug": "Sunitinib",
-      "permit": "衛部藥製字第060583號",
-      "product_zh": "艾舒尼膠囊25毫克",
-      "product_en": "Alsuni capsules 25mg",
-      "applicant": "美時化學製藥股份有限公司",
+      "permit": "衛署藥輸字第024593號",
+      "product_zh": "紓癌特膠囊12.5毫克",
+      "product_en": "Sutent Capsules 12.5mg",
+      "applicant": "輝瑞大藥廠股份有限公司",
       "form": "膠囊劑",
-      "indication": "11.1 腸胃道間質腫瘤（GIST）：適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤（GIST）。 1.2 晚期腎細胞癌（RCC）：適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤（pNET）：適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療：適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
-      "dosage": "請詳見仿單",
+      "indication": "1.1 腸胃道間質腫瘤(GIST) 適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤(GIST)。 1.2 晚期腎細胞癌(RCC) 適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤(pNET) 適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療 適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號",
-      "license_modified": "2026/09/14",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
+      "license_modified": "2026/11/14",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5727,13 +5729,13 @@ window.TFDA_LABELS = {
       "dosage": "請詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
       "license_modified": "2026/07/07",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 8,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_54884f8a-7715-4431-8e87-6ae2a8474f05?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_ece73783-0356-48d6-ace2-1dae575df24e?c=2"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -5910,7 +5912,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -5933,7 +5935,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -5944,21 +5946,21 @@ window.TFDA_LABELS = {
     "gist-sunitinib": {
       "status": "matched",
       "drug": "Sunitinib",
-      "permit": "衛部藥製字第060583號",
-      "product_zh": "艾舒尼膠囊25毫克",
-      "product_en": "Alsuni capsules 25mg",
-      "applicant": "美時化學製藥股份有限公司",
+      "permit": "衛署藥輸字第024593號",
+      "product_zh": "紓癌特膠囊12.5毫克",
+      "product_en": "Sutent Capsules 12.5mg",
+      "applicant": "輝瑞大藥廠股份有限公司",
       "form": "膠囊劑",
-      "indication": "11.1 腸胃道間質腫瘤（GIST）：適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤（GIST）。 1.2 晚期腎細胞癌（RCC）：適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤（pNET）：適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療：適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
-      "dosage": "請詳見仿單",
+      "indication": "1.1 腸胃道間質腫瘤(GIST) 適用於imatinib mesylate治療期間出現疾病惡化或對該藥出現不能忍受之腸胃道間質腫瘤(GIST)。 1.2 晚期腎細胞癌(RCC) 適用於治療晚期或轉移性腎細胞癌。 1.3 胰臟神經內分泌腫瘤(pNET) 適用於進展性，無法切除或轉移性分化良好之胰臟神經內分泌腫瘤的成人病人。 1.4 腎細胞癌輔助治療 適用於高復發風險腎細胞癌的成人病人腎切除後的輔助治療。",
+      "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號",
-      "license_modified": "2026/09/14",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號",
+      "license_modified": "2026/11/14",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 11,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第060583號"
+        "https://mcp.fda.gov.tw/exportpdf/衛署藥輸字第024593號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6013,21 +6015,21 @@ window.TFDA_LABELS = {
     "gist-avapritinib": {
       "status": "generic-label",
       "drug": "Avapritinib",
-      "permit": "衛部藥輸字第028030號",
-      "product_zh": "泰時維膜衣錠200毫克",
-      "product_en": "AYVAKIT film-coated tablets 200mg",
+      "permit": "衛部藥輸字第028029號",
+      "product_zh": "泰時維膜衣錠100毫克",
+      "product_en": "AYVAKIT film-coated tablets 100mg",
       "applicant": "臺灣基石藥業有限公司",
       "form": "膜衣錠",
       "indication": "治療具有血小板衍生生長因子α受體(PDGFRA)D842V突變，無法切除或轉移性腸胃道間質瘤的成年病人。",
       "dosage": "詳見仿單",
       "dose_mentions": [],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號",
+      "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號",
       "license_modified": "2025/12/11",
       "match_basis": "成分（跨適應症仿單）",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028030號"
+        "https://mcp.fda.gov.tw/exportpdf/衛部藥輸字第028029號"
       ],
       "dose_confidence": "withheld",
       "dose_withheld_reason": "official insert PDF text unavailable or dosage section not machine-readable",
@@ -6117,7 +6119,7 @@ window.TFDA_LABELS = {
       "label_url": "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號",
       "license_modified": "2026/10/29",
       "match_basis": "成分 + 癌種適應症",
-      "candidate_count": 26,
+      "candidate_count": 24,
       "label_urls": [
         "https://mcp.fda.gov.tw/exportpdf/衛部藥製字第058288號"
       ],
@@ -6209,17 +6211,17 @@ window.TFDA_LABELS = {
         "70 mg/m2"
       ],
       "frequency_mentions": [],
-      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "label_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "license_modified": "2025/10/21",
       "match_basis": "成分 + 癌種適應症",
       "candidate_count": 10,
       "label_urls": [
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
-        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2"
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
+        "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2"
       ],
       "dosage_excerpt": "6.5 膀胱癌[轉移性泌尿道移形上皮細胞癌(TCC of the urothelium)] \n建議劑量及給藥方式 \n以 28 天為一週期,每週期的第 1、8、15 天給予 Gemcitabine 1000 mg/m2,靜脈輸注 30 分鐘,每週期的第 1 天給予 Cisplatin \n70 mg/m2。定義此四週期為一治療療程。Cisplatin 的使用方法與水分補充,請參見其藥品仿單。 \n劑量調整 \n參見非小細胞肺癌及胰臟癌之劑量調整。",
       "dose_source": "TFDA 官方仿單 PDF",
-      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_5e5bb292-09e8-4fc3-953a-4d6f68403b03?c=2",
+      "dose_source_url": "https://mcp.fda.gov.tw/insert/pdfcasefile/i_4131ccc0-6503-45f2-b60b-b5dd68b41706?c=2",
       "dose_indication_specific": true,
       "dose_confidence": "high",
       "dose_match_basis": "cancer-specific dosage subsection"
